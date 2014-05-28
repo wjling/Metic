@@ -51,9 +51,6 @@ enum Operation_Code
     GET_NEARBY_FRIENDS = 33,
     KANKAN = 34,
     UPLOADPHOTO = 35,
-    DELETEPHOTO = 36,
-    
-    
 };
 
 enum Return_Code

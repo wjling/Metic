@@ -140,7 +140,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Login received Data: %@",temp);
+    NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {

@@ -94,7 +94,6 @@
         case 8:
             resultCode = @"synchronize_friend";
             break;
-
             
         default:
             resultCode = @"json";
