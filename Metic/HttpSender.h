@@ -6,11 +6,9 @@
 //  Copyright (c) 2014年 mac. All rights reserved.
 //
 
+
 //该文件的内容用于向服务器发送数据
 
-
-
-//如果某个类需要向服务器发送消息，请在该类声明此协议并实现下面的方法
 @protocol HttpSenderDelegate
 
 @optional
