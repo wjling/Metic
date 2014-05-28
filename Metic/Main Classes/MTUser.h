@@ -7,9 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "../HttpSender.h"
+#import "../AppConstants.h"
 
 @interface MTUser : NSObject
+@property(nonatomic,strong)NSNumber *userid;
 @property(nonatomic,strong)NSString *name;
+@property(nonatomic,strong)NSNumber *gender;
 @property(nonatomic,strong)NSString *email;
+@property(nonatomic,strong)NSString *sign;
+@property(nonatomic,strong)NSString *phone;
+@property(nonatomic,strong)NSNumber *location;
+
 @property(nonatomic)bool logined;
+
+- (void)getInfo:(NSNumber *) uid myid:(NSNumber *)myid delegateId:(id) aDelegate;
+- (void)initWithData:(NSDictionary *)mdictionary;
+
 @end
+

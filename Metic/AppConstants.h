@@ -17,6 +17,9 @@ enum Operation_Code
 {
     REGISTER = 0,
     LOGIN = 1,
+    GET_USER_INFO = 2,
+    GET_MY_EVENTS = 3,
+    GET_EVENTS = 4,
 };
 
 enum Return_Code
