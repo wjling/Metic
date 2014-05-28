@@ -28,6 +28,8 @@
 	
 	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    
+    user = [[MTUser alloc]init];
 	
     // Override point for customization after application launch.
     return YES;

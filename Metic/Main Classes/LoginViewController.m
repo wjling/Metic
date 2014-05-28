@@ -102,6 +102,7 @@
     [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
 }
 
+
 #pragma mark - Button click
 - (IBAction)loginButtonClicked:(id)sender {
     NSLog(@"%@",[self.textField_userName text]);
@@ -168,6 +169,9 @@
         case LOGIN_SUC:
         {
             NSLog(@"login succeeded");
+            NSNumber *userid = [response1 valueForKey:@"id"];
+            [user getInfo:userid myid:userid delegateId:self];
+
             [self jumpToMainView];
         }
             break;
@@ -179,6 +183,11 @@
         case USER_NOT_FOUND:
         {
             NSLog(@"user not found");
+        }
+            break;
+        case NORMAL_REPLY:
+        {
+            [user initWithData:response1];
         }
             break;
             
