@@ -20,8 +20,6 @@ enum Operation_Code
     GET_USER_INFO = 2,
     GET_MY_EVENTS = 3,
     GET_EVENTS = 4,
-<<<<<<< HEAD
-=======
     ADD_FRIEND = 5,
     UPLOAD_PHONEBOOK = 6,
     SEARCH_FRIEND = 7,
@@ -53,10 +51,6 @@ enum Operation_Code
     GET_NEARBY_FRIENDS = 33,
     KANKAN = 34,
     UPLOADPHOTO = 35,
-    DELETEPHOTO = 36,
-    
-    
->>>>>>> dev-1
 };
 
 enum Return_Code
