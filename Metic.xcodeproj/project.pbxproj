@@ -35,6 +35,7 @@
 		51A01D0D19339EE50043963F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0C19339EE50043963F /* LoginViewController.m */; };
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
+		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,8 @@
 		51A01D0F19339F0B0043963F /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		51A01D111933A1FF0043963F /* MTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUser.h; sourceTree = "<group>"; };
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
+		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
+		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,8 +224,10 @@
 				51581D75193361A500943606 /* MenuViewController.m */,
 				51581D5C19335A8700943606 /* FriendsViewController.h */,
 				51581D5D19335A8700943606 /* FriendsViewController.m */,
-				51581D5E19335A8700943606 /* HomeViewController.h */,
 				51581D5F19335A8700943606 /* HomeViewController.m */,
+				51581D5E19335A8700943606 /* HomeViewController.h */,
+				51A01D141934EB270043963F /* MTEvent.h */,
+				51A01D151934EB270043963F /* MTEvent.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
 				51581D6219335A8700943606 /* ProfileViewController.h */,
@@ -357,6 +362,7 @@
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
+				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
@@ -498,6 +504,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
@@ -512,6 +519,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";

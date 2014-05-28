@@ -6,15 +6,9 @@
 //  Copyright (c) 2014年 mac. All rights reserved.
 //
 
-//该文件的内容用于向服务器发送数据
-
-
-
-//如果某个类需要向服务器发送消息，请在该类声明此协议并实现下面的方法
 @protocol HttpSenderDelegate
 
 @optional
-//当服务器返回数据的时候执行此方法
 -(void)finishWithReceivedData:(NSData*) rData;
 
 @end
@@ -40,7 +34,6 @@
 
 -(NSString*)parseOperationCode:(int) operationCode;
 
-//向服务器传送数据（jsonData）,操作码为operationCode，操作码可从AppConstants.h里面查找
 -(void)sendMessage:(NSData*)jsonData withOperationCode:(int)operationCode;
 
 @end
