@@ -82,8 +82,6 @@
         case 4:
             resultCode = @"get_events";
             break;
-<<<<<<< HEAD
-=======
         case 5:
             resultCode = @"add_friend";
             break;
@@ -96,8 +94,6 @@
         case 8:
             resultCode = @"synchronize_friend";
             break;
-
->>>>>>> dev-1
             
         default:
             resultCode = @"json";
