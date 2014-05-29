@@ -54,11 +54,45 @@
     [mine openMyDB:@"Metis.sqlite"];
 //    [mine execSql:sql_CreateTable];
     
-    [mine createTableWithTableName:@"USERINFO" andIndexWithProperties:@"user_id INTEGER PRIMARY KEY",@"user_name TEXT",@"gender INTEGER",nil];
+    [mine createTableWithTableName:@"USERINFO" andIndexWithProperties:@"user_id INTEGER PRIMARY KEY UNIQUE",@"user_name TEXT",@"gender INTEGER",nil];
     
-    NSArray* columns = [[NSArray alloc]initWithObjects:@"user_id", @"user_name", @"gender", nil];
-    NSArray* values = [[NSArray alloc]initWithObjects:[NSNumber numberWithInt:3],@"sb",[NSNumber numberWithInt:0], nil];
-    [mine insertToTable:@"USERINFO" withColumns:columns andItsValues:values];
+    NSArray* columns1 = [[NSArray alloc]initWithObjects:@"'user_id'", @"'user_name'", @"'gender'", nil];
+    NSArray* values1 = [[NSArray alloc]initWithObjects:@"2",@"'sb1'",@"0",nil];
+    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values1];
+    
+    NSArray* values2 = [[NSArray alloc]initWithObjects:@"5",@"'sbhhh'",@"0",nil];
+    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values2];
+    
+    NSArray* values3 = [[NSArray alloc]initWithObjects:@"3",@"'xxxxf'",@"1",nil];
+    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values3];
+
+    
+//    NSArray* columns2 = [[NSArray alloc]initWithObjects:@"'user_name'", @"'gender'", nil];
+//    NSArray* values4 = [[NSArray alloc]initWithObjects:@"'hi,sbb'",@"0",nil];
+//    [mine updateDataWitTableName:@"USERINFO" andWhere:@"user_id" andItsValue:@"5" withColumns:columns2 andValues:values4];
+    
+//    NSArray* columns3 = [[NSArray alloc]initWithObjects:@"'user_id'", @"'user_name'", nil];
+//    NSArray* values5 = [[NSArray alloc]initWithObjects:@"5",@"'hello,sbb'",nil];
+//    [mine insertToTable:@"USERINFO" withColumns:columns3 andValues:values5];
+    
+    NSDictionary* wheres = [[NSDictionary alloc]initWithObjectsAndKeys:@"5",@"user_id", nil];
+    NSDictionary* sets = [[NSDictionary alloc]initWithObjectsAndKeys:@"'yooooosb'",@"user_name",@"1",@"gender", nil];
+    [mine updateDataWitTableName:@"'USERINFO'" andWhere:wheres andSet:sets];
+    
+    NSArray* columns4 = [[NSArray alloc]initWithObjects:@"user_id", @"user_name", nil];
+    NSDictionary* wheres1 = [[NSDictionary alloc]initWithObjectsAndKeys:@"'%sb%'",@"user_name", nil];
+    NSMutableArray* results;
+    results = [mine queryTable:@"USERINFO" withSelect:columns4 andWhere:wheres1];
+    int count = results.count;
+    for (int i = 0; i<count; i++) {
+        NSLog(@"%d: %@\n",i,[results objectAtIndex:i]);
+    }
+    
+     NSDictionary* wheres2 = [[NSDictionary alloc]initWithObjectsAndKeys:@"'sb1'",@"user_name", nil];
+    [mine deleteTurpleFromTable:@"USERINFO" withWhere:wheres2];
+
+
+    [mine closeMyDB];
 }
 
 @end
