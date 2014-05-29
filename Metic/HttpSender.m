@@ -73,6 +73,15 @@
         case 1:
             resultCode = @"login";
             break;
+        case 2:
+            resultCode = @"get_user_info";
+            break;
+        case 3:
+            resultCode = @"get_my_events";
+            break;
+        case 4:
+            resultCode = @"get_events";
+            break;
             
         default:
             resultCode = @"";

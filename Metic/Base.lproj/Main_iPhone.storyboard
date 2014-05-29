@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -425,7 +425,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="JS1-Vo-g2g">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rightMenuCell" textLabel="zed-8L-ZnZ" style="IBUITableViewCellStyleDefault" id="fwj-2y-1Qb">
@@ -472,7 +472,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.96439273969999995" green="1" blue="0.19383566830000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="JS1-Vo-g2g" firstAttribute="top" secondItem="NAd-zp-e59" secondAttribute="top" id="IBg-jK-aYI"/>
+                            <constraint firstItem="JS1-Vo-g2g" firstAttribute="top" secondItem="NAd-zp-e59" secondAttribute="top" constant="20" id="IBg-jK-aYI"/>
                             <constraint firstItem="JS1-Vo-g2g" firstAttribute="leading" secondItem="NAd-zp-e59" secondAttribute="leading" id="rut-6o-Vv7"/>
                             <constraint firstItem="JS1-Vo-g2g" firstAttribute="bottom" secondItem="NAd-zp-e59" secondAttribute="bottom" id="s0T-Uc-pbc"/>
                             <constraint firstItem="JS1-Vo-g2g" firstAttribute="trailing" secondItem="NAd-zp-e59" secondAttribute="trailing" id="v4K-sE-AZ1"/>
@@ -514,27 +514,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7sI-Zx-ENd">
-                                <rect key="frame" x="87" y="201" width="136" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7sI-Zx-ENd">
+                                <rect key="frame" x="84" y="87" width="136" height="30"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Push Another Page">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is the home Page" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wx1-c2-tS2">
-                                <rect key="frame" x="75" y="126" width="170" height="21"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IQG-cW-2Pd">
+                                <rect key="frame" x="270" y="87" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" title="刷新">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="getEvent:" destination="fVV-yM-h2c" eventType="touchUpInside" id="69l-mb-uZU"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="wx1-c2-tS2" firstAttribute="top" secondItem="E10-bp-7HB" secondAttribute="top" constant="126" id="Hcj-mM-wAp"/>
-                            <constraint firstItem="7sI-Zx-ENd" firstAttribute="top" secondItem="E10-bp-7HB" secondAttribute="top" constant="201" id="aT7-ay-1cI"/>
-                            <constraint firstItem="wx1-c2-tS2" firstAttribute="leading" secondItem="E10-bp-7HB" secondAttribute="leading" constant="75" id="q6P-Dl-a8K"/>
-                            <constraint firstItem="7sI-Zx-ENd" firstAttribute="leading" secondItem="wx1-c2-tS2" secondAttribute="leading" constant="12" id="xXT-i4-jWr"/>
+                            <constraint firstItem="7sI-Zx-ENd" firstAttribute="top" secondItem="E10-bp-7HB" secondAttribute="top" constant="87" id="aT7-ay-1cI"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Home" id="T0b-XF-TMm"/>
@@ -553,8 +553,14 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+<<<<<<< HEAD
         <segue reference="Q2h-XD-GAB"/>
         <segue reference="zhP-Iy-7b9"/>
         <segue reference="vhM-dU-XM1"/>
+=======
+        <segue reference="Yr7-K8-w5t"/>
+        <segue reference="adl-bG-ei9"/>
+        <segue reference="zhP-Iy-7b9"/>
+>>>>>>> 27a3e510acdefeaa1efd4e1a9ccfb404be5f5d92
     </inferredMetricsTieBreakers>
 </document>

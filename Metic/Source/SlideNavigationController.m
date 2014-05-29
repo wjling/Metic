@@ -31,6 +31,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
+@property (nonatomic, assign) CGPoint beginPoint;
 @end
 
 @implementation SlideNavigationController
@@ -43,6 +44,7 @@
 @synthesize rightBarButtonItem;
 @synthesize enableSwipeGesture;
 
+#define PAN_EDGE_THRESHOLD 20
 #define MENU_OFFSET 60
 #define MENU_SLIDE_ANIMATION_DURATION .3
 #define MENU_QUICK_SLIDE_ANIMATION_DURATION .1
@@ -337,75 +339,81 @@ static SlideNavigationController *singletonInstance;
 	
     if (aPanRecognizer.state == UIGestureRecognizerStateBegan)
 	{
+        CGPoint currentPoint = [aPanRecognizer locationInView:self.view];
 		self.draggingPoint = translation;
+        self.beginPoint = currentPoint;
     }
 	else if (aPanRecognizer.state == UIGestureRecognizerStateChanged)
 	{
-		NSInteger movement = translation.x - self.draggingPoint.x;
-		CGRect rect = self.view.frame;
-		rect.origin.x += movement;
-		
-		if (rect.origin.x >= self.minXForDragging && rect.origin.x <= self.maxXForDragging)
-			self.view.frame = rect;
-		
-		self.draggingPoint = translation;
-		
-		if (rect.origin.x > 0)
-		{
-			[self.righMenu.view removeFromSuperview];
-			[self.view.window insertSubview:self.leftMenu.view atIndex:0];
-		}
-		else
-		{
-			[self.leftMenu.view removeFromSuperview];
-			[self.view.window insertSubview:self.righMenu.view atIndex:0];
-		}
+        //if ((self.beginPoint.x <= PAN_EDGE_THRESHOLD ) || (self.beginPoint.x >= (self.view.bounds.size.width - PAN_EDGE_THRESHOLD -50))) {
+            NSInteger movement = translation.x - self.draggingPoint.x;
+            CGRect rect = self.view.frame;
+            rect.origin.x += movement;
+            
+            if (rect.origin.x >= self.minXForDragging && rect.origin.x <= self.maxXForDragging)
+                self.view.frame = rect;
+            
+            self.draggingPoint = translation;
+            
+            if (rect.origin.x > 0)
+            {
+                [self.righMenu.view removeFromSuperview];
+                [self.view.window insertSubview:self.leftMenu.view atIndex:0];
+            }
+            else
+            {
+                [self.leftMenu.view removeFromSuperview];
+                [self.view.window insertSubview:self.righMenu.view atIndex:0];
+            }
+    //    }
 	}
 	else if (aPanRecognizer.state == UIGestureRecognizerStateEnded)
 	{
-        NSInteger currentX = self.view.frame.origin.x;
-		NSInteger currentXOffset = (currentX > 0) ? currentX : currentX * -1;
-		NSInteger positiveVelocity = (velocity.x > 0) ? velocity.x : velocity.x * -1;
-		
-		// If the speed is high enough follow direction
-		if (positiveVelocity >= velocityForFollowingDirection)
-		{
-			// Moving Right
-			if (velocity.x > 0)
-			{
-				if (currentX > 0)
-				{
-					[self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withCompletion:nil];
-				}
-				else
-				{
-					[self closeMenuWithDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
-				}
-			}
-			// Moving Left
-			else
-			{
-				if (currentX > 0)
-				{
-					[self closeMenuWithCompletion:nil];
-				}
-				else
-				{
-					Menu menu = (velocity.x > 0) ? MenuLeft : MenuRight;
-					
-					if ([self shouldDisplayMenu:menu forViewController:self.visibleViewController])
-						[self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
-				}
-			}
-		}
-		else
-		{
-			if (currentXOffset < self.view.frame.size.width/2)
-				[self closeMenuWithCompletion:nil];
-			else
-				[self openMenu:(currentX > 0) ? MenuLeft : MenuRight withCompletion:nil];
-		}
-    }
+        //if ((self.beginPoint.x <= PAN_EDGE_THRESHOLD ) || (self.beginPoint.x >= (self.view.bounds.size.width - PAN_EDGE_THRESHOLD  -50))) {
+            NSInteger currentX = self.view.frame.origin.x;
+            NSInteger currentXOffset = (currentX > 0) ? currentX : currentX * -1;
+            NSInteger positiveVelocity = (velocity.x > 0) ? velocity.x : velocity.x * -1;
+            
+            // If the speed is high enough follow direction
+            if (positiveVelocity >= velocityForFollowingDirection)
+            {
+                // Moving Right
+                if (velocity.x > 0)
+                {
+                    if (currentX > 0)
+                    {
+                        [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withCompletion:nil];
+                    }
+                    else
+                    {
+                        [self closeMenuWithDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
+                    }
+                }
+                // Moving Left
+                else
+                {
+                    if (currentX > 0)
+                    {
+                        [self closeMenuWithCompletion:nil];
+                    }
+                    else
+                    {
+                        Menu menu = (velocity.x > 0) ? MenuLeft : MenuRight;
+                        
+                        if ([self shouldDisplayMenu:menu forViewController:self.visibleViewController])
+                            [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
+                    }
+                }
+            }
+            else
+            {
+                if (currentXOffset < self.view.frame.size.width/2)
+                    [self closeMenuWithCompletion:nil];
+                else
+                    [self openMenu:(currentX > 0) ? MenuLeft : MenuRight withCompletion:nil];
+            }
+        }
+   // }
 }
 
 - (NSInteger)minXForDragging
