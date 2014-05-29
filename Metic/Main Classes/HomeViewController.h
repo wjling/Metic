@@ -15,18 +15,18 @@
 #import "MTEvent.h"
 #import "AppDelegate.h"
 #import "MTEvent.h"
+#import "MJRefreshHeaderView.h"
 
-
-@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
 
 
 
 @property(nonatomic,strong)MTUser *user;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-
+@property (strong,nonatomic) MJRefreshHeaderView *header;
 
 @property(nonatomic,strong)NSArray *eventIds;
 @property(nonatomic,strong)NSArray *events;
-- (IBAction)getEvent:(id)sender;
+
 
 @end
