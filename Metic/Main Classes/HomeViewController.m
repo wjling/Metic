@@ -15,8 +15,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    self.user = myDelegate.user;
+    //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
+    self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, 320, 420)];
     [self.tableView setDelegate:self];

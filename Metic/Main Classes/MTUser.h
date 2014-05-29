@@ -20,7 +20,7 @@
 @property(nonatomic,strong)NSNumber *location;
 
 @property(nonatomic)bool logined;
-
++ (MTUser *)sharedInstance;
 - (void)getInfo:(NSNumber *) uid myid:(NSNumber *)myid delegateId:(id) aDelegate;
 - (void)initWithData:(NSDictionary *)mdictionary;
 

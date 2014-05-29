@@ -10,7 +10,7 @@
 
 @implementation AppDelegate
 
-@synthesize user;
+//@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -28,10 +28,7 @@
 	
 	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
-    
-    user = [[MTUser alloc]init];
-	
-    // Override point for customization after application launch.
+    [[MTUser alloc]init];
     return YES;
 
 }

@@ -12,12 +12,7 @@
 #import "MTUser.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-{
-    MTUser *user;
-}
-
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, strong) MTUser *user;
 
 
 @end

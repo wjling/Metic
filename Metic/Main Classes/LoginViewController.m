@@ -40,8 +40,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    self.user = myDelegate.user;
+    //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
+    self.user = [MTUser sharedInstance];
     
     self.textField_userName.tag = Tag_userName;
     self.textField_userName.returnKeyType = UIReturnKeyDone;

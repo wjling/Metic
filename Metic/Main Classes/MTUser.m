@@ -13,10 +13,20 @@
 
 @implementation MTUser
 
+
+static MTUser *singletonInstance;
+
++ (MTUser *)sharedInstance
+{
+	return singletonInstance;
+}
+
+
 - (instancetype)init
 {
     self = [super init];
     if (self) {
+        singletonInstance = self;
     }
     return self;
 }

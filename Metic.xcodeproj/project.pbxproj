@@ -168,7 +168,6 @@
 		489DF8D419356EAC00E692DF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				5148120A1937064D00DBBED7 /* MJRefresh */,
 				489DF8DB193573D100E692DF /* AppConstants.h */,
 				489DF8D519356F3700E692DF /* CommonUtils.h */,
 				489DF8D619356F3700E692DF /* CommonUtils.m */,
@@ -241,17 +240,18 @@
 		51581D291933575300943606 /* Metic */ = {
 			isa = PBXGroup;
 			children = (
+				51581D5B19335A8700943606 /* Main Classes */,
+				51581D6B19335CDD00943606 /* Source */,
+				5148120A1937064D00DBBED7 /* MJRefresh */,
+				514812091935E00200DBBED7 /* Helper Class */,
 				489DF8D419356EAC00E692DF /* Utils */,
 				51581D321933575300943606 /* AppDelegate.h */,
 				51581D331933575300943606 /* AppDelegate.m */,
 				51581D351933575300943606 /* Main_iPhone.storyboard */,
-				514812091935E00200DBBED7 /* Helper Class */,
 				51581D381933575300943606 /* Main_iPad.storyboard */,
 				51581D3B1933575300943606 /* ViewController.h */,
 				51581D3C1933575300943606 /* ViewController.m */,
 				51581D3E1933575300943606 /* Images.xcassets */,
-				51581D6B19335CDD00943606 /* Source */,
-				51581D5B19335A8700943606 /* Main Classes */,
 				51581D2A1933575300943606 /* Supporting Files */,
 			);
 			path = Metic;
