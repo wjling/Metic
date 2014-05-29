@@ -553,14 +553,10 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-<<<<<<< HEAD
+
         <segue reference="Q2h-XD-GAB"/>
         <segue reference="zhP-Iy-7b9"/>
         <segue reference="vhM-dU-XM1"/>
-=======
-        <segue reference="Yr7-K8-w5t"/>
-        <segue reference="adl-bG-ei9"/>
-        <segue reference="zhP-Iy-7b9"/>
->>>>>>> 27a3e510acdefeaa1efd4e1a9ccfb404be5f5d92
+
     </inferredMetricsTieBreakers>
 </document>
