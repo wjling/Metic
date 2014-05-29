@@ -13,20 +13,19 @@
 {
     
     IBOutlet UILabel *eventName;
-    
     IBOutlet UILabel *beginTime;
     IBOutlet UILabel *endTime;
     IBOutlet UILabel *eventDetail;
-    
     IBOutlet UILabel *timeInfo;
+    IBOutlet UIButton *imgWall;
     IBOutlet UIButton *videoWall;
     IBOutlet UILabel *location;
-    
     IBOutlet UILabel *launcherinfo;
-    IBOutlet UIButton *imgWall;
     IBOutlet UILabel *member_count;
     
 }
+@property (strong, nonatomic) IBOutlet UIButton *jumpToPictureWall;
+@property (strong, nonatomic) IBOutlet UIButton *jumpToVideoWall;
 
 @property(nonatomic,retain) UILabel *eventName;
 @property(nonatomic,retain) UILabel *beginTime;
@@ -39,7 +38,7 @@
 @property(nonatomic,retain) UIButton *imgWall;
 @property(nonatomic,retain) UILabel *member_count;
 
-- (void)setEventNametext:(NSString *)text;
+
 
 
 @end

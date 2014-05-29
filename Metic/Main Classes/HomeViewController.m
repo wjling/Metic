@@ -22,8 +22,7 @@
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.view addSubview:self.tableView];
-//    [self getEvent];//获取event id号
-//    [self printtable];//刷新列表
+    //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
@@ -130,6 +129,12 @@
 
 	return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
+}
+
 
 
 #pragma mark 代理方法-进入刷新状态就会调用

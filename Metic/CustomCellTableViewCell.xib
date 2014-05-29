@@ -19,19 +19,19 @@
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tZR-zL-LiM">
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tZR-zL-LiM">
                         <rect key="frame" x="164" y="341" width="136" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.74901962280000001" green="0.94117653369999998" blue="0.76862752440000004" alpha="1" colorSpace="deviceRGB"/>
-                        <state key="normal" title="小电影">
+                        <state key="normal" title="视频墙">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GOZ-WO-8cX">
-                        <rect key="frame" x="25" y="341" width="131" height="29"/>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GOZ-WO-8cX">
+                        <rect key="frame" x="25" y="341" width="131" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.74901962280273438" green="0.94117653369903564" blue="0.76862752437591553" alpha="1" colorSpace="deviceRGB"/>
-                        <state key="normal" title="小照片">
+                        <state key="normal" title="照片墙">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -112,6 +112,8 @@
                 <outlet property="eventDetail" destination="SGH-Jx-5tJ" id="fak-cn-fko"/>
                 <outlet property="eventName" destination="UVV-l7-Xee" id="aPA-5h-CF7"/>
                 <outlet property="imgWall" destination="GOZ-WO-8cX" id="uqL-3Q-LN3"/>
+                <outlet property="jumpToPictureWall" destination="GOZ-WO-8cX" id="heV-ex-6XI"/>
+                <outlet property="jumpToVideoWall" destination="tZR-zL-LiM" id="yDd-82-D3o"/>
                 <outlet property="launcherinfo" destination="l6g-69-f64" id="i2c-ZC-FoC"/>
                 <outlet property="location" destination="CwJ-er-6B6" id="frV-vr-TXX"/>
                 <outlet property="member_count" destination="ouC-OU-HOl" id="17H-NW-2Wu"/>

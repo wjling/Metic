@@ -63,10 +63,6 @@
 }
 
 
-- (void)setEventNametext:(NSString *)text
-{
-    eventName.text = text;
-}
 
 
 
