@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
+		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
+		483E01F71935C7A500418A58 /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F61935C7A500418A58 /* MySqlite.m */; };
 		489DF8D919356F3700E692DF /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D619356F3700E692DF /* CommonUtils.m */; };
 		489DF8DA19356F3700E692DF /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D819356F3700E692DF /* HttpSender.m */; };
 		514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */; };
@@ -57,6 +60,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		483E01F01935C70C00418A58 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoViewController.h; sourceTree = "<group>"; };
+		483E01F11935C70C00418A58 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoViewController.m; sourceTree = "<group>"; };
+		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		483E01F51935C7A500418A58 /* MySqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySqlite.h; sourceTree = "<group>"; };
+		483E01F61935C7A500418A58 /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
 		489DF8D519356F3700E692DF /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		489DF8D619356F3700E692DF /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
 		489DF8D719356F3700E692DF /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
@@ -126,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
 				51581D241933575300943606 /* Foundation.framework in Frameworks */,
@@ -145,6 +154,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		483E01EF1935C6E400418A58 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				51581D5C19335A8700943606 /* FriendsViewController.h */,
+				51581D5D19335A8700943606 /* FriendsViewController.m */,
+				483E01F01935C70C00418A58 /* FriendInfoViewController.h */,
+				483E01F11935C70C00418A58 /* FriendInfoViewController.m */,
+			);
+			name = Friends;
+			sourceTree = "<group>";
+		};
 		489DF8D419356EAC00E692DF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +174,8 @@
 				489DF8D619356F3700E692DF /* CommonUtils.m */,
 				489DF8D719356F3700E692DF /* HttpSender.h */,
 				489DF8D819356F3700E692DF /* HttpSender.m */,
+				483E01F51935C7A500418A58 /* MySqlite.h */,
+				483E01F61935C7A500418A58 /* MySqlite.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -207,6 +229,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				483E01F31935C76F00418A58 /* libsqlite3.dylib */,
 				51581D231933575300943606 /* Foundation.framework */,
 				51581D251933575300943606 /* CoreGraphics.framework */,
 				51581D271933575300943606 /* UIKit.framework */,
@@ -266,6 +289,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				483E01EF1935C6E400418A58 /* Friends */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
 				51A01D0E19339F0B0043963F /* RegisterViewController.h */,
@@ -274,8 +298,6 @@
 				51A01D0C19339EE50043963F /* LoginViewController.m */,
 				51581D74193361A500943606 /* MenuViewController.h */,
 				51581D75193361A500943606 /* MenuViewController.m */,
-				51581D5C19335A8700943606 /* FriendsViewController.h */,
-				51581D5D19335A8700943606 /* FriendsViewController.m */,
 				51581D5F19335A8700943606 /* HomeViewController.m */,
 				51581D5E19335A8700943606 /* HomeViewController.h */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
@@ -423,6 +445,8 @@
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
+				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				483E01F71935C7A500418A58 /* MySqlite.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,

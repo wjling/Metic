@@ -29,6 +29,7 @@
 
 -(id)initWithDelegate:(id)delegate
 {
+    self = [super init];
     URL_mainServer = @"http://222.200.182.183:10087/";
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
