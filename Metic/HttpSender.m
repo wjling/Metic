@@ -29,7 +29,7 @@
 
 -(id)initWithDelegate:(id)delegate
 {
-    serverURL = @"http://222.200.182.183:10087/";
+    URL_mainServer = @"http://222.200.182.183:10087/";
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
@@ -82,9 +82,22 @@
         case 4:
             resultCode = @"get_events";
             break;
+        case 5:
+            resultCode = @"add_friend";
+            break;
+        case 6:
+            resultCode = @"upload_phonebook";
+            break;
+        case 7:
+            resultCode = @"search_friend";
+            break;
+        case 8:
+            resultCode = @"synchronize_friend";
+            break;
+
             
         default:
-            resultCode = @"";
+            resultCode = @"json";
             break;
     }
     return resultCode;
@@ -93,7 +106,7 @@
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
 {
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",serverURL,parsingOperationCode];
+    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];

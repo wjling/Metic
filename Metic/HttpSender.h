@@ -22,7 +22,7 @@
 
 @interface HttpSender: NSObject <NSURLConnectionDataDelegate>
 {
-    NSString *serverURL;
+    NSString *URL_mainServer;
     NSString *httpURL;
 }
 @property(nonatomic,strong)NSURLConnection* myConnection;
