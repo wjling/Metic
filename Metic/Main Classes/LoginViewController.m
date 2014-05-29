@@ -105,6 +105,8 @@
 
 #pragma mark - Button click
 - (IBAction)loginButtonClicked:(id)sender {
+    [sender setEnabled:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
     NSLog(@"%@",[self.textField_userName text]);
     self.logInEmail = [self.textField_userName text];
     self.logInPassword = [self.textField_password text];
@@ -170,28 +172,35 @@
         {
             NSLog(@"login succeeded");
             NSNumber *userid = [response1 valueForKey:@"id"];
-            [user getInfo:userid myid:userid delegateId:self];
-
+            [user setUserid:userid];
+            //[user getInfo:userid myid:userid delegateId:self];
+            
             [self jumpToMainView];
+            [button_login setEnabled:YES];
         }
             break;
         case PASSWD_NOT_CORRECT:
         {
+            [button_login setEnabled:YES];
             NSLog(@"password not correct");
+            
         }
             break;
         case USER_NOT_FOUND:
         {
+            [button_login setEnabled:YES];
             NSLog(@"user not found");
         }
             break;
         case NORMAL_REPLY:
         {
-            [user initWithData:response1];
+            [button_login setEnabled:YES];
         }
             break;
             
-        default:
+        default:{
+            [button_login setEnabled:YES];
+        }
             break;
     }
     
@@ -269,4 +278,8 @@
     return YES;
 }
 
+- (void) recoverloginbutton
+{
+    [button_login setEnabled:YES];
+}
 @end

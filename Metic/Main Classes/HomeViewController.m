@@ -6,19 +6,28 @@
 //  Copyright (c) 2013 Aryan Ghassemi. All rights reserved.
 //
 
+#import "../CustomCellTableViewCell.h"
 #import "HomeViewController.h"
 
-@implementation HomeViewController
 
+
+@implementation HomeViewController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.user = myDelegate.user;
+    [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
+    //self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, 320, 420)];
     [self.tableView setDelegate:self];
+    [self.tableView setDataSource:self];
+    [self.view addSubview:self.tableView];
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
+    [_header beginRefreshing];
     
-    
-//    self.eventIds = [NSMutableArray array];
 }
 
 #pragma mark - SlideNavigationController Methods -
@@ -45,14 +54,17 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if ([response1 valueForKey:@"event_list"]) {
-                self.events = [response1 valueForKey:@"event_list"];
-                [self printtable];
+            if ([response1 valueForKey:@"name"]) {//更新用户信息
                 
-                
+                [self.user initWithData:response1];
                 
             }
-            else{
+            
+            else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
+                self.events = [response1 valueForKey:@"event_list"];
+              
+            }
+            else{//获取event id 号
                 self.eventIds = [response1 valueForKey:@"sequence"];
                 [self getEvents:self.eventIds];
             }
@@ -61,13 +73,14 @@
     }
 }
 
-- (void)printtable
+- (void) getEventids
 {
-    UITableView* atable = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, 320, 420)];
-    [atable setDelegate:self];
-    [atable setDataSource:self];
-    [self.view addSubview:atable];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:_user.userid forKey:@"id"];
     
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_MY_EVENTS];
 }
 
 
@@ -81,38 +94,67 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
 }
             
-            
-            
 
-- (IBAction)getEvent:(id)sender {
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:_user.userid forKey:@"id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_MY_EVENTS];
-    
-
-}
-
+#pragma mark 代理方法-UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.events count];
+    if (self.events) {
+        return [self.events count];
+    }
+	return 0;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"test"];
+	CustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customcell"];
 	if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:@"test"] ;
+
+        cell = [[CustomCellTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
+                                             reuseIdentifier:@"customcell"] ;
+    }
+    if (self.events) {
+        NSDictionary *a = self.events[indexPath.row];
+        NSLog(@"%@",[a valueForKey:@"subject"]);
+        
+        cell.eventName.text = [a valueForKey:@"subject"];
+        cell.beginTime.text = [a valueForKey:@"time"];
+        cell.endTime.text = [a valueForKey:@"endTime"];
+        cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
+        
+        cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[a valueForKey:@"member_count"]];
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
+        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
     }
 
-    NSDictionary *a = self.events[indexPath.row];
-    NSLog(@"%@",[a valueForKey:@"subject"]);
-    cell.textLabel.text = [a valueForKey:@"subject"];
-    
-    
 	return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
+}
+
+
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    NSLog(@"begin");
+    [self getEventids];
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(tableViewReload) userInfo:nil repeats:NO];
+}
+
+
+- (void) tableViewReload
+{
+    [_header endRefreshing];
+    [self.tableView reloadData];
+}
+
+- (void)dealloc
+{
+    [_header free];
+
 }
 @end

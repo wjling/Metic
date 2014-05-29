@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		489DF8D919356F3700E692DF /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D619356F3700E692DF /* CommonUtils.m */; };
 		489DF8DA19356F3700E692DF /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D819356F3700E692DF /* HttpSender.m */; };
+		514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */; };
+		514812081935DFDB00DBBED7 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 514812061935DFDB00DBBED7 /* CustomCellTableViewCell.xib */; };
+		514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5148120B1937064D00DBBED7 /* MJRefresh.bundle */; };
+		514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5148120E1937064D00DBBED7 /* MJRefreshBaseView.m */; };
+		514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812101937064E00DBBED7 /* MJRefreshConst.m */; };
+		514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812121937064E00DBBED7 /* MJRefreshFooterView.m */; };
+		514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812141937064E00DBBED7 /* MJRefreshHeaderView.m */; };
+		5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5148121B19372B4200DBBED7 /* EventDetailViewController.m */; };
 		51581D241933575300943606 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51581D231933575300943606 /* Foundation.framework */; };
 		51581D261933575300943606 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51581D251933575300943606 /* CoreGraphics.framework */; };
 		51581D281933575300943606 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51581D271933575300943606 /* UIKit.framework */; };
@@ -54,6 +62,21 @@
 		489DF8D719356F3700E692DF /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
 		489DF8D819356F3700E692DF /* HttpSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpSender.m; sourceTree = "<group>"; };
 		489DF8DB193573D100E692DF /* AppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
+		514812041935DFDB00DBBED7 /* CustomCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellTableViewCell.h; sourceTree = "<group>"; };
+		514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCellTableViewCell.m; sourceTree = "<group>"; };
+		514812061935DFDB00DBBED7 /* CustomCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomCellTableViewCell.xib; sourceTree = "<group>"; };
+		5148120B1937064D00DBBED7 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
+		5148120C1937064D00DBBED7 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
+		5148120D1937064D00DBBED7 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
+		5148120E1937064D00DBBED7 /* MJRefreshBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshBaseView.m; sourceTree = "<group>"; };
+		5148120F1937064E00DBBED7 /* MJRefreshConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshConst.h; sourceTree = "<group>"; };
+		514812101937064E00DBBED7 /* MJRefreshConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshConst.m; sourceTree = "<group>"; };
+		514812111937064E00DBBED7 /* MJRefreshFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshFooterView.h; sourceTree = "<group>"; };
+		514812121937064E00DBBED7 /* MJRefreshFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshFooterView.m; sourceTree = "<group>"; };
+		514812131937064E00DBBED7 /* MJRefreshHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshHeaderView.h; sourceTree = "<group>"; };
+		514812141937064E00DBBED7 /* MJRefreshHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshHeaderView.m; sourceTree = "<group>"; };
+		5148121A19372B4200DBBED7 /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
+		5148121B19372B4200DBBED7 /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
 		51581D201933575300943606 /* Metic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51581D231933575300943606 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		51581D251933575300943606 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -125,6 +148,7 @@
 		489DF8D419356EAC00E692DF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				5148120A1937064D00DBBED7 /* MJRefresh */,
 				489DF8DB193573D100E692DF /* AppConstants.h */,
 				489DF8D519356F3700E692DF /* CommonUtils.h */,
 				489DF8D619356F3700E692DF /* CommonUtils.m */,
@@ -132,6 +156,33 @@
 				489DF8D819356F3700E692DF /* HttpSender.m */,
 			);
 			name = Utils;
+			sourceTree = "<group>";
+		};
+		514812091935E00200DBBED7 /* Helper Class */ = {
+			isa = PBXGroup;
+			children = (
+				514812041935DFDB00DBBED7 /* CustomCellTableViewCell.h */,
+				514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */,
+				514812061935DFDB00DBBED7 /* CustomCellTableViewCell.xib */,
+			);
+			name = "Helper Class";
+			sourceTree = "<group>";
+		};
+		5148120A1937064D00DBBED7 /* MJRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				5148120B1937064D00DBBED7 /* MJRefresh.bundle */,
+				5148120C1937064D00DBBED7 /* MJRefresh.h */,
+				5148120D1937064D00DBBED7 /* MJRefreshBaseView.h */,
+				5148120E1937064D00DBBED7 /* MJRefreshBaseView.m */,
+				5148120F1937064E00DBBED7 /* MJRefreshConst.h */,
+				514812101937064E00DBBED7 /* MJRefreshConst.m */,
+				514812111937064E00DBBED7 /* MJRefreshFooterView.h */,
+				514812121937064E00DBBED7 /* MJRefreshFooterView.m */,
+				514812131937064E00DBBED7 /* MJRefreshHeaderView.h */,
+				514812141937064E00DBBED7 /* MJRefreshHeaderView.m */,
+			);
+			path = MJRefresh;
 			sourceTree = "<group>";
 		};
 		51581D171933575300943606 = {
@@ -171,6 +222,7 @@
 				51581D321933575300943606 /* AppDelegate.h */,
 				51581D331933575300943606 /* AppDelegate.m */,
 				51581D351933575300943606 /* Main_iPhone.storyboard */,
+				514812091935E00200DBBED7 /* Helper Class */,
 				51581D381933575300943606 /* Main_iPad.storyboard */,
 				51581D3B1933575300943606 /* ViewController.h */,
 				51581D3C1933575300943606 /* ViewController.m */,
@@ -226,6 +278,8 @@
 				51581D5D19335A8700943606 /* FriendsViewController.m */,
 				51581D5F19335A8700943606 /* HomeViewController.m */,
 				51581D5E19335A8700943606 /* HomeViewController.h */,
+				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
+				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
 				51A01D141934EB270043963F /* MTEvent.h */,
 				51A01D151934EB270043963F /* MTEvent.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
@@ -336,6 +390,8 @@
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
+				514812081935DFDB00DBBED7 /* CustomCellTableViewCell.xib in Resources */,
+				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,16 +413,22 @@
 			files = (
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */,
 				489DF8DA19356F3700E692DF /* HttpSender.m in Sources */,
+				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
+				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
+				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
+				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
+				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				489DF8D919356F3700E692DF /* CommonUtils.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
