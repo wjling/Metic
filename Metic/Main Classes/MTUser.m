@@ -7,6 +7,7 @@
 //
 
 #import "MTUser.h"
+#import "../MySqlite.h"
 
 @interface MTUser ()
 @end
@@ -44,6 +45,32 @@ static MTUser *singletonInstance;
     [httpSender sendMessage:jsonData withOperationCode:GET_USER_INFO];
 }
 
+- (void)setUserid:(NSNumber *)userid
+{
+    _userid = userid;
+    [self initUserDir];
+}
+
+- (void)initUserDir
+{
+    NSString* userDir= [NSString stringWithFormat:@"%@/Documents/%@", NSHomeDirectory(), self.userid];
+    BOOL isDir = NO;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL existed = [fileManager fileExistsAtPath:userDir isDirectory:&isDir];
+    if (!(isDir == YES && existed == YES)) {
+        [fileManager createDirectoryAtPath:userDir withIntermediateDirectories:YES attributes:nil error:nil];
+        [self initUserDB];
+    }
+}
+
+- (void)initUserDB
+{
+    MySqlite * sql = [[MySqlite alloc]init];
+    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+    [sql openMyDB:path];
+    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
+    [sql closeMyDB];
+}
 
 - (void)initWithData:(NSDictionary *)mdictionary
 {
