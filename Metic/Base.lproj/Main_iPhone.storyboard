@@ -427,13 +427,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N30-cT-pAK">
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="smw-4Z-1lN">
                                 <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="cDI-rw-2Dm" id="Pio-qV-82G"/>
-                                </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9Rr-XN-lhg">
                                 <rect key="frame" x="0.0" y="108" width="320" height="372"/>
@@ -447,21 +444,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lAh-Xf-ksN">
-                                                    <rect key="frame" x="72" y="11" width="43" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lAh-Xf-ksN">
+                                                    <rect key="frame" x="72" y="11" width="215" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-Or-PIM">
-                                                    <rect key="frame" x="15" y="0.0" width="49" height="43"/>
+                                                    <rect key="frame" x="15" y="3" width="44" height="37"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="image" destination="fZ5-Or-PIM" id="mKY-gu-FeM"/>
+                                            <outlet property="avatar" destination="fZ5-Or-PIM" id="F8k-q7-NpW"/>
                                             <outlet property="title" destination="lAh-Xf-ksN" id="Hle-eK-IMG"/>
                                             <segue destination="FXr-Y8-zhi" kind="push" id="DsC-hh-HTw"/>
                                         </connections>
@@ -478,7 +475,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="name2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPn-kj-dEo">
-                                                    <rect key="frame" x="72" y="11" width="53" height="21"/>
+                                                    <rect key="frame" x="72" y="11" width="215" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -517,7 +514,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Friends" id="lJ9-SR-36x"/>
+                    <navigationItem key="navigationItem" title="Friends" id="ObQ-44-r4f">
+                        <barButtonItem key="rightBarButtonItem" title="+" id="bgG-4k-Eqe">
+                            <connections>
+                                <action selector="switchToAddFriendView:" destination="cDI-rw-2Dm" id="5Zt-6p-4mu"/>
+                                <segue destination="Sxz-YS-Xvx" kind="push" id="kmJ-aw-r9I"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="friendTableView" destination="9Rr-XN-lhg" id="39e-RR-rsg"/>
                         <outlet property="searchDisplayController" destination="GF7-hE-mQ9" id="9xT-LN-Vn9"/>
@@ -527,7 +531,6 @@
                 <searchDisplayController id="GF7-hE-mQ9">
                     <connections>
                         <outlet property="delegate" destination="cDI-rw-2Dm" id="O3X-pe-qd4"/>
-                        <outlet property="searchBar" destination="N30-cT-pAK" id="7st-U3-aNQ"/>
                         <outlet property="searchContentsController" destination="cDI-rw-2Dm" id="qBF-9X-ySV"/>
                         <outlet property="searchResultsDataSource" destination="cDI-rw-2Dm" id="5uT-8S-ndH"/>
                         <outlet property="searchResultsDelegate" destination="cDI-rw-2Dm" id="xQm-Fp-wz5"/>
@@ -580,6 +583,63 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RuH-EN-WVp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1929" y="1058"/>
+        </scene>
+        <!--Add Friend View Controller-->
+        <scene sceneID="6Zy-R9-3wh">
+            <objects>
+                <viewController id="Sxz-YS-Xvx" customClass="AddFriendViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Lem-XX-UtF"/>
+                        <viewControllerLayoutGuide type="bottom" id="lLz-nv-B4r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AGf-S8-5iu">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="egC-rh-eUW">
+                                <rect key="frame" x="0.0" y="83" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1l6-KE-ZGK">
+                                <rect key="frame" x="0.0" y="127" width="320" height="305"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="dyA-Rc-A9m" customClass="SearchedFriendTableViewCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dyA-Rc-A9m" id="jhg-Ov-HYv">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CpN-Vq-x9U">
+                                                    <rect key="frame" x="33" y="11" width="259" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="friendNameLabel" destination="CpN-Vq-x9U" id="7Xe-R6-Oyh"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="DPg-4m-rod"/>
+                    <connections>
+                        <outlet property="friendSearchBar" destination="egC-rh-eUW" id="lD3-pr-i0D"/>
+                        <outlet property="searchedFriendsTableView" destination="1l6-KE-ZGK" id="nuI-y2-ESC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jfj-ji-YPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2348" y="1058"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="flT-L7-Bbb">
@@ -839,8 +899,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Yr7-K8-w5t"/>
         <segue reference="adl-bG-ei9"/>
+        <segue reference="Yr7-K8-w5t"/>
         <segue reference="PCH-s6-XHf"/>
     </inferredMetricsTieBreakers>
 </document>

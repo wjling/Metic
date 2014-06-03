@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */; };
+		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
+		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
 		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
 		483E01F71935C7A500418A58 /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F61935C7A500418A58 /* MySqlite.m */; };
@@ -61,6 +64,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = default_avatar.jpg; path = Metic/default_avatar.jpg; sourceTree = SOURCE_ROOT; };
+		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
+		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
+		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
+		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
 		483E01F01935C70C00418A58 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoViewController.h; sourceTree = "<group>"; };
 		483E01F11935C70C00418A58 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoViewController.m; sourceTree = "<group>"; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -166,6 +174,10 @@
 				483E01F11935C70C00418A58 /* FriendInfoViewController.m */,
 				48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */,
 				48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */,
+				04D53178193E180D001EDDF4 /* AddFriendViewController.h */,
+				04D53179193E180D001EDDF4 /* AddFriendViewController.m */,
+				04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */,
+				04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -330,6 +342,7 @@
 		51581D6C19335CDD00943606 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */,
 				51581D6D19335CDD00943606 /* menu-button.png */,
 				51581D6E19335CDD00943606 /* menu-button@2x.png */,
 			);
@@ -418,6 +431,7 @@
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				514812081935DFDB00DBBED7 /* CustomCellTableViewCell.xib in Resources */,
+				04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 			);
@@ -442,6 +456,7 @@
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */,
 				489DF8DA19356F3700E692DF /* HttpSender.m in Sources */,
+				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
@@ -461,6 +476,7 @@
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				489DF8D919356F3700E692DF /* CommonUtils.m in Sources */,
+				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

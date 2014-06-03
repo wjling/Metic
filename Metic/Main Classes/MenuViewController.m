@@ -7,6 +7,7 @@
 //
 
 #import "MenuViewController.h"
+#import "FriendsViewController.h"
 
 @implementation MenuViewController
 @synthesize cellIdentifier;

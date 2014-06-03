@@ -48,7 +48,7 @@
 
 - (IBAction)testingClicked:(id)sender
 {
-    NSString* sql_CreateTable = @"CREATE TABLE IF NOT EXISTS USERINFO (user_id INTEGER PRIMARY KEY, user_name TEXT, gender INTEGER)";
+//    NSString* sql_CreateTable = @"CREATE TABLE IF NOT EXISTS USERINFO (user_id INTEGER PRIMARY KEY, user_name TEXT, gender INTEGER)";
     MySqlite* mine = [[MySqlite alloc]init];
     NSLog(@"db testing");
     [mine openMyDB:@"Metis.sqlite"];
