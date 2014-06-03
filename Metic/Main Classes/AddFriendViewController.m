@@ -133,6 +133,7 @@
 {
     SearchedFriendTableViewCell* cell = [self.searchedFriendsTableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
     if (nil == cell) {
+//        NSLog(@"create cell");
         cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
     }
     NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
@@ -143,7 +144,7 @@
 //    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
 //    cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
     if (name) {
-        cell.friendNameLabel.text = @"omg";
+        cell.friendNameLabel.text = name;
     }
     else
     {
@@ -151,13 +152,16 @@
     }
     
     //    cell.image = [[UIImage alloc]init];
+//    if (cell) {
+//        NSLog(@"cell isn't nil");
+//    }
     return cell;
 }
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//
-//}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 //
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 //{

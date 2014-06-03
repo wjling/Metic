@@ -584,7 +584,7 @@
             </objects>
             <point key="canvasLocation" x="1929" y="1058"/>
         </scene>
-        <!--Add Friend View Controller-->
+        <!--Add Friend View Controller - Add Friends-->
         <scene sceneID="6Zy-R9-3wh">
             <objects>
                 <viewController id="Sxz-YS-Xvx" customClass="AddFriendViewController" sceneMemberID="viewController">
@@ -606,7 +606,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="dyA-Rc-A9m" customClass="SearchedFriendTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="searchedfriendcell" id="dyA-Rc-A9m" customClass="SearchedFriendTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dyA-Rc-A9m" id="jhg-Ov-HYv">
@@ -631,7 +631,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="DPg-4m-rod"/>
+                    <navigationItem key="navigationItem" title="Add Friends" id="DPg-4m-rod"/>
                     <connections>
                         <outlet property="friendSearchBar" destination="egC-rh-eUW" id="lD3-pr-i0D"/>
                         <outlet property="searchedFriendsTableView" destination="1l6-KE-ZGK" id="nuI-y2-ESC"/>
