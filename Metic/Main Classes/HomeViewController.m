@@ -8,7 +8,6 @@
 
 #import "../CustomCellTableViewCell.h"
 #import "HomeViewController.h"
-#import "../NSString+JSON.h"
 
 
 
@@ -28,9 +27,7 @@
     _header.delegate = self;
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
-    self.sql = [[MySqlite alloc]init];
-    [self pullEventFromDB];
-    [self.tableView reloadData];
+    
 }
 
 #pragma mark - SlideNavigationController Methods -
@@ -51,7 +48,6 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -66,7 +62,6 @@
             
             else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 self.events = [response1 valueForKey:@"event_list"];
-                [self updateEventToDB];
               
             }
             else{//获取event id 号
@@ -77,46 +72,6 @@
             break;
     }
 }
-
-
-- (void)updateEventToDB
-{
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
-    for (NSDictionary *event in self.events) {
-
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",[NSString jsonStringWithDictionary:event]], nil];
-        
-        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
-    }
-    
-    [self.sql closeMyDB];
-}
-
-- (void)pullEventFromDB
-{
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
-    [self.events removeAllObjects];
-    self.events = [[NSMutableArray alloc]init];
-    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"1", nil];
-    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-    for (NSDictionary *temp in result) {
-        NSString *tmpa = [temp valueForKey:@"event_info"];
-        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
-        [self.events addObject:event];
-    }
-    
-    [self.sql closeMyDB];
-}
-
-
-
-
-
 
 - (void) getEventids
 {
@@ -160,6 +115,8 @@
     }
     if (self.events) {
         NSDictionary *a = self.events[indexPath.row];
+        NSLog(@"%@",[a valueForKey:@"subject"]);
+        
         cell.eventName.text = [a valueForKey:@"subject"];
         cell.beginTime.text = [a valueForKey:@"time"];
         cell.endTime.text = [a valueForKey:@"endTime"];

@@ -93,7 +93,7 @@
             resultCode = @"search_friend";
             break;
         case 8:
-            resultCode = @"synchronize_friend";
+            resultCode = @"synchronize_friends";
             break;
             
         default:
