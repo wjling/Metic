@@ -30,20 +30,10 @@
     return reString;
 }
 +(NSString *) jsonStringWithDictionary:(NSDictionary *)dictionary{
-    NSArray *keys = [dictionary allKeys];
-    NSMutableString *reString = [NSMutableString string];
-    [reString appendString:@"{"];
-    NSMutableArray *keyValues = [NSMutableArray array];
-    for (int i=0; i<[keys count]; i++) {
-        NSString *name = [keys objectAtIndex:i];
-        id valueObj = [dictionary objectForKey:name];
-        NSString *value = [NSString jsonStringWithObject:valueObj];
-        if (value) {
-            [keyValues addObject:[NSString stringWithFormat:@"\"%@\":%@",name,value]];
-        }
-    }
-    [reString appendFormat:@"%@",[keyValues componentsJoinedByString:@","]];
-    [reString appendString:@"}"];
+    NSData *tmpData = [NSJSONSerialization dataWithJSONObject:dictionary
+                                                       options:0
+                                                         error:nil];
+    NSString *reString = [[NSString alloc] initWithBytes:[tmpData bytes] length:[tmpData length] encoding:NSUTF8StringEncoding];
     return reString;
 }
 +(NSString *) jsonStringWithObject:(id) object{

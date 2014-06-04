@@ -24,20 +24,26 @@
     IBOutlet UILabel *member_count;
     
 }
-@property (strong, nonatomic) IBOutlet UIButton *jumpToPictureWall;
-@property (strong, nonatomic) IBOutlet UIButton *jumpToVideoWall;
 
-@property(nonatomic,retain) UILabel *eventName;
-@property(nonatomic,retain) UILabel *beginTime;
-@property(nonatomic,retain) UILabel *endTime;
-@property(nonatomic,retain) UILabel *timeInfo;
-@property(nonatomic,retain) UILabel *location;
-@property(nonatomic,retain) UILabel *launcherinfo;
-@property(nonatomic,retain) UILabel *eventDetail;
-@property(nonatomic,retain) UIButton *videoWall;
-@property(nonatomic,retain) UIButton *imgWall;
-@property(nonatomic,retain) UILabel *member_count;
+- (IBAction)jumpToPictureWall:(id)sender;
+- (IBAction)jumpToVideoWall:(id)sender;
 
+
+
+
+
+
+@property(nonatomic,strong) UILabel *eventName;
+@property(nonatomic,strong) UILabel *beginTime;
+@property(nonatomic,strong) UILabel *endTime;
+@property(nonatomic,strong) UILabel *timeInfo;
+@property(nonatomic,strong) UILabel *location;
+@property(nonatomic,strong) UILabel *launcherinfo;
+@property(nonatomic,strong) UILabel *eventDetail;
+@property(nonatomic,strong) UIButton *videoWall;
+@property(nonatomic,strong) UIButton *imgWall;
+@property(nonatomic,strong) UILabel *member_count;
+@property(nonatomic,strong) NSNumber *eventId;
 
 
 

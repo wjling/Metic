@@ -95,6 +95,9 @@
         case 8:
             resultCode = @"synchronize_friend";
             break;
+        case 9:
+            resultCode = @"launch_event";
+            break;
             
         default:
             resultCode = @"json";
