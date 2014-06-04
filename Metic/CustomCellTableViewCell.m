@@ -62,7 +62,11 @@
     
 }
 
+- (IBAction)jumpToPictureWall:(id)sender {
+}
 
+- (IBAction)jumpToVideoWall:(id)sender {
+}
 
 
 
@@ -70,5 +74,6 @@
     
     
 }
+
 
 @end

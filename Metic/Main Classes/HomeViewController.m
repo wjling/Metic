@@ -8,17 +8,24 @@
 
 #import "../CustomCellTableViewCell.h"
 #import "HomeViewController.h"
+#import "../NSString+JSON.h"
+#import "EventDetailViewController.h"
+
+@interface HomeViewController ()
+@property (nonatomic,strong)NSNumber *selete_Eventid;
+
+@end
+
 
 
 
 @implementation HomeViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
-    //self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 60, 320, 420)];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.view addSubview:self.tableView];
@@ -28,6 +35,10 @@
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
     
+    //[_header beginRefreshing];
+    self.sql = [[MySqlite alloc]init];
+    [self pullEventsFromDB];
+    [self.tableView reloadData];
 }
 
 #pragma mark - SlideNavigationController Methods -
@@ -73,6 +84,40 @@
     }
 }
 
+#pragma mark - 数据库操作
+- (void)updateEventToDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    for (NSDictionary *event in self.events) {
+        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",[NSString jsonStringWithDictionary:event]], nil];
+        
+        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
+    }
+    
+    [self.sql closeMyDB];
+}
+
+- (void)pullEventsFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    [self.events removeAllObjects];
+    self.events = [[NSMutableArray alloc]init];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
+    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
+    for (NSDictionary *temp in result) {
+        NSString *tmpa = [temp valueForKey:@"event_info"];
+        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+        [self.events addObject:event];
+    }
+    
+    [self.sql closeMyDB];
+}
+
 - (void) getEventids
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -82,7 +127,6 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_MY_EVENTS];
 }
-
 
 - (void) getEvents: (NSArray *)eventids
 {
@@ -125,6 +169,7 @@
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[a valueForKey:@"member_count"]];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
         cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
+        cell.eventId = [a valueForKey:@"event_id"];
     }
 
 	return cell;
@@ -132,10 +177,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    self.selete_Eventid = cell.eventId;
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
 }
 
-
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([sender isKindOfClass:[HomeViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
+            EventDetailViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.selete_Eventid;
+        }
+    }
+}
 
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView

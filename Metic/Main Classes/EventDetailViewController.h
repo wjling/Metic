@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MySqlite.h"
+#import "../CustomCellTableViewCell.h"
 
-@interface EventDetailViewController : UIViewController
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate>
+
+//@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet CustomCellTableViewCell  *eventinfocell;
+@property(nonatomic,strong)NSNumber *eventId;
+@property(nonatomic,strong)MySqlite *sql;
+
 
 @end
