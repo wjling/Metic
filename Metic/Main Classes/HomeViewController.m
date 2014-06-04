@@ -33,8 +33,6 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
-    [_header beginRefreshing];
-    
     //[_header beginRefreshing];
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
@@ -59,6 +57,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -73,7 +72,8 @@
             
             else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 self.events = [response1 valueForKey:@"event_list"];
-              
+                [self updateEventToDB];
+                
             }
             else{//获取event id 号
                 self.eventIds = [response1 valueForKey:@"sequence"];
@@ -83,6 +83,9 @@
             break;
     }
 }
+
+
+
 
 #pragma mark - 数据库操作
 - (void)updateEventToDB
@@ -118,6 +121,11 @@
     [self.sql closeMyDB];
 }
 
+
+
+
+
+
 - (void) getEventids
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -137,7 +145,7 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
 }
-            
+
 
 #pragma mark 代理方法-UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -153,14 +161,12 @@
 {
 	CustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customcell"];
 	if (cell == nil) {
-
+        
         cell = [[CustomCellTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
                                              reuseIdentifier:@"customcell"] ;
     }
     if (self.events) {
         NSDictionary *a = self.events[indexPath.row];
-        NSLog(@"%@",[a valueForKey:@"subject"]);
-        
         cell.eventName.text = [a valueForKey:@"subject"];
         cell.beginTime.text = [a valueForKey:@"time"];
         cell.endTime.text = [a valueForKey:@"endTime"];
@@ -171,7 +177,7 @@
         cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
         cell.eventId = [a valueForKey:@"event_id"];
     }
-
+    
 	return cell;
 }
 
@@ -212,6 +218,6 @@
 - (void)dealloc
 {
     [_header free];
-
+    
 }
 @end

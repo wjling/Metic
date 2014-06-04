@@ -1,5 +1,5 @@
 
- //
+//
 //  EventDetailViewController.m
 //  Metic
 //
@@ -34,12 +34,12 @@
 {
     [super viewDidLoad];
     self.sql = [[MySqlite alloc]init];
-
+    
     self.scrollView.delegate = self;
-
+    
     [self pullEventFromDB];
     
-
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -49,7 +49,7 @@
     [self.scrollView setContentSize:CGSizeMake(320, 1000)];
     [super viewDidAppear:animated];
     NSLog(@"%f",self.scrollView.contentSize.height);
-
+    
 }
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -62,17 +62,17 @@
 #pragma mark - 数据库操作
 - (void)updateEventToDB
 {
-//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [self.sql openMyDB:path];
-//    for (NSDictionary *event in self.events) {
-//        
-//        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-//        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",[NSString jsonStringWithDictionary:event]], nil];
-//        
-//        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
-//    }
-//    
-//    [self.sql closeMyDB];
+    //    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    //    [self.sql openMyDB:path];
+    //    for (NSDictionary *event in self.events) {
+    //
+    //        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
+    //        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",[NSString jsonStringWithDictionary:event]], nil];
+    //
+    //        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
+    //    }
+    //
+    //    [self.sql closeMyDB];
 }
 
 - (void)pullEventFromDB
@@ -101,7 +101,7 @@
         _eventinfocell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[_event valueForKey:@"remark"] ];
         _eventinfocell.eventId = [_event valueForKey:@"event_id"];
     }
-
+    
     
 }
 //
@@ -118,7 +118,7 @@
 //    if (self.cellcount == 0) {
 //        CustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customcell"];
 //        if (cell == nil) {
-//            
+//
 //            cell = [[CustomCellTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
 //                                                 reuseIdentifier:@"customcell"] ;
 //        }
@@ -128,7 +128,7 @@
 //            cell.beginTime.text = [a valueForKey:@"time"];
 //            cell.endTime.text = [a valueForKey:@"endTime"];
 //            cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-//            
+//
 //            cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[a valueForKey:@"member_count"]];
 //            cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
 //            cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
@@ -139,7 +139,7 @@
 //    }else{
 //        CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"commentcell"];
 //        if (cell == nil) {
-//            
+//
 //            cell = [[CommentTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
 //                                                 reuseIdentifier:@"commentcell"] ;
 //        }
