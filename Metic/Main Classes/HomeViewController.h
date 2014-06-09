@@ -16,6 +16,9 @@
 #import "AppDelegate.h"
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
+#import "../MySqlite.h"
+
+
 
 @interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
 
@@ -25,8 +28,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 
-@property(nonatomic,strong)NSArray *eventIds;
-@property(nonatomic,strong)NSArray *events;
+@property(nonatomic,strong)NSMutableArray *eventIds;
+@property(nonatomic,strong)NSMutableArray *events;
+
+@property(nonatomic,strong)MySqlite *sql;
 
 
 @end

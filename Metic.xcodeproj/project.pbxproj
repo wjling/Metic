@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */; };
+		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
+		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
+		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
+		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
+		08E7BE22193A241200354D0E /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E7BE20193A241200354D0E /* CommentTableViewCell.m */; };
+		08E7BE23193A241200354D0E /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E7BE21193A241200354D0E /* CommentTableViewCell.xib */; };
 		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
 		483E01F71935C7A500418A58 /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F61935C7A500418A58 /* MySqlite.m */; };
@@ -48,6 +55,7 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
+		51BA9ABC193ECA14005B68C2 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +69,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = default_avatar.jpg; path = Metic/default_avatar.jpg; sourceTree = SOURCE_ROOT; };
+		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
+		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
+		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
+		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
+		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
+		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
+		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		08E7BE1F193A241200354D0E /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentTableViewCell.h; path = Metic/CommentTableViewCell.h; sourceTree = SOURCE_ROOT; };
+		08E7BE20193A241200354D0E /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentTableViewCell.m; path = Metic/CommentTableViewCell.m; sourceTree = SOURCE_ROOT; };
+		08E7BE21193A241200354D0E /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = Metic/CommentTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		483E01F01935C70C00418A58 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoViewController.h; sourceTree = "<group>"; };
 		483E01F11935C70C00418A58 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoViewController.m; sourceTree = "<group>"; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -130,6 +150,8 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
+		51BA9ABA193ECA14005B68C2 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +188,10 @@
 				483E01F11935C70C00418A58 /* FriendInfoViewController.m */,
 				48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */,
 				48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */,
+				04D53178193E180D001EDDF4 /* AddFriendViewController.h */,
+				04D53179193E180D001EDDF4 /* AddFriendViewController.m */,
+				04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */,
+				04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -173,6 +199,8 @@
 		489DF8D419356EAC00E692DF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				51BA9ABA193ECA14005B68C2 /* NSString+JSON.h */,
+				51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */,
 				489DF8DB193573D100E692DF /* AppConstants.h */,
 				489DF8D519356F3700E692DF /* CommonUtils.h */,
 				489DF8D619356F3700E692DF /* CommonUtils.m */,
@@ -187,6 +215,9 @@
 		514812091935E00200DBBED7 /* Helper Class */ = {
 			isa = PBXGroup;
 			children = (
+				08E7BE1F193A241200354D0E /* CommentTableViewCell.h */,
+				08E7BE20193A241200354D0E /* CommentTableViewCell.m */,
+				08E7BE21193A241200354D0E /* CommentTableViewCell.xib */,
 				514812041935DFDB00DBBED7 /* CustomCellTableViewCell.h */,
 				514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */,
 				514812061935DFDB00DBBED7 /* CustomCellTableViewCell.xib */,
@@ -313,6 +344,10 @@
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
 				51581D6219335A8700943606 /* ProfileViewController.h */,
 				51581D6319335A8700943606 /* ProfileViewController.m */,
+				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
+				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
+				086A5AB0193D6E7500880F2F /* MainView.h */,
+				086A5AB1193D6E7500880F2F /* MainView.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -330,6 +365,7 @@
 		51581D6C19335CDD00943606 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */,
 				51581D6D19335CDD00943606 /* menu-button.png */,
 				51581D6E19335CDD00943606 /* menu-button@2x.png */,
 			);
@@ -418,7 +454,9 @@
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				514812081935DFDB00DBBED7 /* CustomCellTableViewCell.xib in Resources */,
+				04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
+				08E7BE23193A241200354D0E /* CommentTableViewCell.xib in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,10 +476,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */,
 				489DF8DA19356F3700E692DF /* HttpSender.m in Sources */,
+				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
+				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
@@ -460,7 +501,10 @@
 				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
+				51BA9ABC193ECA14005B68C2 /* NSString+JSON.m in Sources */,
 				489DF8D919356F3700E692DF /* CommonUtils.m in Sources */,
+				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
+				08E7BE22193A241200354D0E /* CommentTableViewCell.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
