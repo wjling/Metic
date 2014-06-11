@@ -22,7 +22,7 @@
 
 
 
-@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate/*,SRWebSocketDelegate*/>
+@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
 
 
 

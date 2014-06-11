@@ -11,4 +11,5 @@
 @interface SearchedFriendTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *friendNameLabel;
 
+
 @end

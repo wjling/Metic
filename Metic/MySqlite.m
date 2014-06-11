@@ -286,26 +286,11 @@
             char* columnContent = (char*)sqlite3_column_text(sql_stmt, i);
             [result setValue:[NSString stringWithCString:columnContent encoding:NSUTF8StringEncoding] forKey:[NSString stringWithCString:columnName encoding:NSUTF8StringEncoding]];
         }
-//        int index = 0;
-//        NSLog(@"query row %d: %@",index++,result);
         [results addObject:result];
-//        NSLog(@"query row %d: %@",-1,result);
     }
     sqlite3_finalize(sql_stmt);
-    NSLog(@"query result: %@",results);
+//    NSLog(@"query result: %@",results);
     return results;
-    
-//    char* error;
-//    if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
-//        sqlite3_close(self.myDB);
-//        NSLog(@"query table failed. error: %s", error);
-//        return NO;
-//    }
-//    else
-//    {
-//        NSLog(@"query table succeeded");
-//        return YES;
-//    }
     
 }
 

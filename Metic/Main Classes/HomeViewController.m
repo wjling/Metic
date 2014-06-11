@@ -11,7 +11,7 @@
 #import "../NSString+JSON.h"
 #import "EventDetailViewController.h"
 
-@interface HomeViewController ()
+@interface HomeViewController ()<SRWebSocketDelegate>
 @property (nonatomic,strong)NSNumber *selete_Eventid;
 
 @end
@@ -21,7 +21,7 @@
 
 @implementation HomeViewController
 {
-//    SRWebSocket* mySocket;
+    SRWebSocket* mySocket;
 }
 
 - (void)viewDidLoad
@@ -37,7 +37,7 @@
     _header.delegate = self;
     _header.scrollView = self.tableView;
     //[_header beginRefreshing];
-//    [self reconnect];
+    [self reconnect];
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];
@@ -225,30 +225,30 @@
     
 }
 
-//- (void)reconnect
-//{
-//    mySocket.delegate = nil;
-//    [mySocket close];
-//    
-//    NSString* str = @"http://222.200.182.183:10088/";
-//    NSURL* url = [[NSURL alloc]initWithString:str];
-//    
-//    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
-//    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
-//    mySocket.delegate = self;
-//    NSLog(@"Connecting...");
-//    [mySocket open];
-//}
-//
-//#pragma mark - SRWebSocketDelegate
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
-//{
-//    NSLog(@"Get message: %@",message);
-//}
-//
-//- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-//{
-//    NSLog(@"Websocket Connected");
-//}
+- (void)reconnect
+{
+    mySocket.delegate = nil;
+    [mySocket close];
+    
+    NSString* str = @"http://222.200.182.183:10088/";
+    NSURL* url = [[NSURL alloc]initWithString:str];
+    
+    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
+    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
+    mySocket.delegate = self;
+    NSLog(@"Connecting...");
+    [mySocket open];
+}
+
+#pragma mark - SRWebSocketDelegate
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    NSLog(@"Get message: %@",message);
+}
+
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
+{
+    NSLog(@"Websocket Connected");
+}
 @end

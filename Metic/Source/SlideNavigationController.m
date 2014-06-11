@@ -102,7 +102,7 @@ static SlideNavigationController *singletonInstance;
 	
 	[self setEnableSwipeGesture:YES];
     
-    [self reconnect];
+//    [self reconnect];
 }
 
 #pragma mark - Public Methods -

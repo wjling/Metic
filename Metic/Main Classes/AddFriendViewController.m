@@ -8,7 +8,7 @@
 
 #import "AddFriendViewController.h"
 
-@interface AddFriendViewController ()
+@interface AddFriendViewController () <UIAlertViewDelegate>
 
 @end
 
@@ -22,6 +22,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
     if (self) {
         // Custom initialization
     }
@@ -31,6 +32,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
+    {
+        self.edgesForExtendedLayout= UIRectEdgeNone;
+    }
+
     // Do any additional setup after loading the view.
     self.user = [MTUser sharedInstance];
     self.friendSearchBar.delegate = self;
@@ -120,6 +126,15 @@
     return height;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    confirmAlert.tag = indexPath.row;
+    [confirmAlert show];
+}
+
+
 
 #pragma mark - UITableViewDataSource
 
@@ -201,6 +216,35 @@
     [self.searchedFriendsTableView reloadData];
 }
 
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case 0:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSString* cm = [alertView textFieldAtIndex:0].text;
+                NSNumber* userId = user.userid;
+                NSNumber* friendId = [[searchFriendList objectAtIndex:alertView.tag] objectForKey:@"id"];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",nil];
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];;
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+    }
 
 
 

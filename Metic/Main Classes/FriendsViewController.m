@@ -8,6 +8,15 @@
 
 #import "FriendsViewController.h"
 
+
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
+//if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+//{
+//    self.edgesForExtendedLayout = UIRectEdgeNone;
+//    self.extendedLayoutIncludesOpaqueBars = NO;
+//    self.modalPresentationCapturesStatusBarAppearance = NO;
+//}
+//#endif
 @implementation FriendsViewController
 {
     NSString* DB_path;
@@ -20,6 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
+    if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
+    {
+        self.edgesForExtendedLayout= UIRectEdgeNone;
+    }
     
     self.user = [MTUser sharedInstance];
     DB_path = [NSString stringWithFormat:@"%@/db",user.userid];
