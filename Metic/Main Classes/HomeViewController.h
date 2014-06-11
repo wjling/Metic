@@ -18,9 +18,11 @@
 #import "MJRefreshHeaderView.h"
 #import "../MySqlite.h"
 
+#import "SRWebSocket.h"
 
 
-@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
+
+@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate/*,SRWebSocketDelegate*/>
 
 
 
@@ -32,6 +34,8 @@
 @property(nonatomic,strong)NSMutableArray *events;
 
 @property(nonatomic,strong)MySqlite *sql;
+
+//- (void)reconnect;
 
 
 @end

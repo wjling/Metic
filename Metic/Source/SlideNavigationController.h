@@ -27,6 +27,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "SRWebSocket.h"
 
 @protocol SlideNavigationControllerDelegate <NSObject>
 @optional
@@ -39,7 +40,7 @@ typedef  enum{
 	MenuRight,
 }Menu;
 
-@interface SlideNavigationController : UINavigationController <UINavigationControllerDelegate>
+@interface SlideNavigationController : UINavigationController <UINavigationControllerDelegate,SRWebSocketDelegate>
 
 @property (nonatomic, assign) BOOL avoidSwitchingToSameClassViewController;
 @property (nonatomic, assign) BOOL enableSwipeGesture;
@@ -50,5 +51,7 @@ typedef  enum{
 
 + (SlideNavigationController *)sharedInstance;
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
+
+- (void)reconnect;
 
 @end

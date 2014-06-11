@@ -241,7 +241,7 @@
     
     int selectsCount = selects.count;
     int wheresCount = wheres.count;
-    if (!tableName || !selectsCount || !wheresCount) {
+    if (!tableName || !selectsCount /*|| !wheresCount*/) {
         NSLog(@"input data error");
         return NO;
     }
@@ -254,8 +254,11 @@
             [sql appendString:@", "];
         }
     }
-    [sql appendFormat:@" FROM %@ WHERE ",tableName];
+    [sql appendFormat:@" FROM %@ ",tableName];
     for (int i = 0; i < wheresCount; i++) {
+        if (i==0) {
+            [sql appendString:@"WHERE "];
+        }
         NSString* key = [wheresKeys objectAtIndex:i];
         NSString* value = [wheres objectForKey:key];
         [sql appendFormat:@"%@ LIKE %@",key,value];
@@ -277,7 +280,8 @@
     
     while (sqlite3_step(sql_stmt) == SQLITE_ROW) {
         NSMutableDictionary* result = [[NSMutableDictionary alloc]init];
-        for (int i = 0; i < selectsCount; i++) {
+        int columnCount = sqlite3_column_count(sql_stmt);
+        for (int i = 0; i < columnCount; i++) {
             char* columnName = (char*)sqlite3_column_name(sql_stmt, i);
             char* columnContent = (char*)sqlite3_column_text(sql_stmt, i);
             [result setValue:[NSString stringWithCString:columnContent encoding:NSUTF8StringEncoding] forKey:[NSString stringWithCString:columnName encoding:NSUTF8StringEncoding]];
@@ -288,6 +292,7 @@
 //        NSLog(@"query row %d: %@",-1,result);
     }
     sqlite3_finalize(sql_stmt);
+    NSLog(@"query result: %@",results);
     return results;
     
 //    char* error;

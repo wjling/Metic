@@ -9,18 +9,26 @@
 #import "FriendsViewController.h"
 
 @implementation FriendsViewController
+{
+    NSString* DB_path;
+}
 @synthesize user;
 @synthesize friendList;
 @synthesize searchFriendList;
+@synthesize DB;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.user = [MTUser sharedInstance];
+    DB_path = [NSString stringWithFormat:@"%@/db",user.userid];
+    self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
     self.friendSearchBar.delegate = self;
     
+    [self createFriendTable];
     [self synchronize_friends];
     NSLog(@"did reload friends");
     [self.friendTableView reloadData];
@@ -30,8 +38,9 @@
 {
     NSNumber* userId = self.user.userid;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSMutableArray* tempFriends = [self getFriendsFromDB];
     [dictionary setValue:userId forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithInt:0] forKey:@"friends_number"];
+    [dictionary setValue:[NSNumber numberWithInt:tempFriends.count] forKey:@"friends_number"];
     NSLog(@"%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -62,6 +71,46 @@
 //        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
 //        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
 //    }
+}
+
+-(void) createFriendTable
+{
+    [self.DB openMyDB:DB_path];
+    [self.DB createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",nil];
+    [self.DB closeMyDB];
+}
+
+- (void) insertToFriendTable:(NSArray *)friends
+{
+//    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
+    [self.DB openMyDB:DB_path];
+    for (NSDictionary* friend in friends) {
+        NSString* friendEmail = [friend objectForKey:@"email"];
+        NSNumber* friendID = [friend objectForKey:@"id"];
+        NSNumber* friendGender = [friend objectForKey:@"gender"];
+        NSString* friendName = [friend objectForKey:@"name"];
+        
+        NSLog(@"email: %@, id: %@, gender: %@, name: %@",friendEmail,friendID,friendGender,friendName);
+        
+        NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'", nil];
+        NSArray* values = [[NSArray alloc]initWithObjects:
+                           [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:friendID]],
+                           [NSString stringWithFormat:@"'%@'",friendName],
+                           [NSString stringWithFormat:@"'%@'",friendEmail],
+                           [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:friendGender]], nil];
+        [self.DB insertToTable:@"friend" withColumns:columns andValues:values];
+    }
+    [self.DB closeMyDB];
+
+}
+
+- (NSMutableArray*)getFriendsFromDB
+{
+    NSMutableArray* friends;
+    [self.DB openMyDB:DB_path];
+    friends = [self.DB queryTable:@"friend" withSelect:[[NSArray alloc]initWithObjects:@"*", nil] andWhere:nil];
+    [self.DB closeMyDB];
+    return friends;
 }
 
 - (IBAction)switchToAddFriendView:(id)sender
@@ -174,9 +223,19 @@
     NSLog(@"cmd: %@",cmd);
     if (cmd) {
         if ([cmd intValue] == NORMAL_REPLY) {
-           
-            self.friendList = [response1 valueForKey:@"friend_list"];
+            NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
+            if (tempFriends.count) {
+                [self insertToFriendTable:tempFriends];
+                NSLog(@"好友列表更新完成！");
+            }
+            else
+            {
+                NSLog(@"好友列表已经是最新的啦～");
+            }
+            self.friendList = [self getFriendsFromDB];
+            
             NSLog(@"synchronize friends: %@",friendList);
+            
         }
         else
         {

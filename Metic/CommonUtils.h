@@ -26,4 +26,10 @@
 //生成简单alertView
 +(void)showSimpleAlertViewWithTitle:(NSString*)title WithMessage:(NSString*)message WithDelegate:(id)delegate WithCancelTitle:(NSString*)cancelTitle;
 
+//NSString转换成NSNumber
++ (NSNumber*)NSNumberWithNSString:(NSString*)string;
+
+//NSNumber转换成NSString
++ (NSString*)NSStringWithNSNumber:(NSNumber*)number;
+
 @end

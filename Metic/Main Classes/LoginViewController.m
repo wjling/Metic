@@ -48,14 +48,14 @@
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"185597569@qq.com";
+    self.textField_userName.text = @"111@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"538769";
+    self.textField_password.text = @"123456";
 
 }
 

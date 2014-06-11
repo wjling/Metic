@@ -17,6 +17,8 @@
 		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
 		483E01F71935C7A500418A58 /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F61935C7A500418A58 /* MySqlite.m */; };
+		4892337C1947F51D00068BBC /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892337B1947F51D00068BBC /* SRWebSocket.m */; };
+		4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4892337D1947F9BA00068BBC /* libicucore.dylib */; };
 		489DF8D919356F3700E692DF /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D619356F3700E692DF /* CommonUtils.m */; };
 		489DF8DA19356F3700E692DF /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D819356F3700E692DF /* HttpSender.m */; };
 		48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */; };
@@ -86,6 +88,9 @@
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		483E01F51935C7A500418A58 /* MySqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySqlite.h; sourceTree = "<group>"; };
 		483E01F61935C7A500418A58 /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
+		4892337A1947F51D00068BBC /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		4892337B1947F51D00068BBC /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		4892337D1947F9BA00068BBC /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		489DF8D519356F3700E692DF /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
 		489DF8D619356F3700E692DF /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
 		489DF8D719356F3700E692DF /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
@@ -159,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */,
 				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
@@ -196,9 +202,19 @@
 			name = Friends;
 			sourceTree = "<group>";
 		};
+		489233791947F3D100068BBC /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				4892337A1947F51D00068BBC /* SRWebSocket.h */,
+				4892337B1947F51D00068BBC /* SRWebSocket.m */,
+			);
+			name = WebSocket;
+			sourceTree = "<group>";
+		};
 		489DF8D419356EAC00E692DF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				489233791947F3D100068BBC /* WebSocket */,
 				51BA9ABA193ECA14005B68C2 /* NSString+JSON.h */,
 				51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */,
 				489DF8DB193573D100E692DF /* AppConstants.h */,
@@ -264,6 +280,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4892337D1947F9BA00068BBC /* libicucore.dylib */,
 				483E01F31935C76F00418A58 /* libsqlite3.dylib */,
 				51581D231933575300943606 /* Foundation.framework */,
 				51581D251933575300943606 /* CoreGraphics.framework */,
@@ -495,6 +512,7 @@
 				483E01F71935C7A500418A58 /* MySqlite.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
+				4892337C1947F51D00068BBC /* SRWebSocket.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,

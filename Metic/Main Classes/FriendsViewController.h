@@ -18,6 +18,7 @@
 //#import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "FriendTableViewCell.h"
+#import "MySqlite.h"
 
 @interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 
@@ -26,10 +27,15 @@
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
+@property (strong, nonatomic) MySqlite* DB;
 
 
 
 - (void)synchronize_friends;
 - (IBAction)search_friends:(id)sender;
 - (IBAction)switchToAddFriendView:(id)sender;
+
+- (void) createFriendTable;
+- (void) insertToFriendTable:(NSArray*)friends;
+- (NSMutableArray*)getFriendsFromDB;
 @end

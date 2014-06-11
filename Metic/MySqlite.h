@@ -50,6 +50,8 @@
 //2. wheres中键值对的键类型是（NSString*)，
 //   值的类型如果是数字，则形如：@"3"，@"3.5"
 //   值的类型如果是字符串，则要加单引号，形如：@"'2011-1-12'", @"'John'"
+//3. 如果没有where语句，可以用nil。
+//4. 如果要查询所有列，可以将select的数组设成{"*"};
 
 - (NSMutableArray*)queryTable:(NSString*)tableName withSelect:(NSArray*)selects andWhere:(NSDictionary*)wheres;
 

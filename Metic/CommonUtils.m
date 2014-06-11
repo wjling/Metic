@@ -106,5 +106,21 @@
 
 }
 
++ (NSNumber*)NSNumberWithNSString:(NSString *)string
+{
+    id result;
+    NSNumberFormatter* format = [[NSNumberFormatter alloc]init];
+    result = [format numberFromString:string];
+//    if (!result) {
+//        result = nil;
+//    }
+    return result;
+}
+
++ (NSString*)NSStringWithNSNumber:(NSNumber *)number
+{
+    NSNumberFormatter* format = [[NSNumberFormatter alloc]init];
+    return [format stringFromNumber:number];
+}
 
 @end
