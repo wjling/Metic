@@ -10,9 +10,11 @@
 #import "SlideNavigationController.h"
 #import "MenuViewController.h"
 #import "MTUser.h"
+#import "SRWebSocket.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *window;
+@property (strong,nonatomic) SRWebSocket* mySocket;
 
 
 @end

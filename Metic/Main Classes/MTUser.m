@@ -7,7 +7,7 @@
 //
 
 #import "MTUser.h"
-#import "../MySqlite.h"
+#import "MySqlite.h"
 
 @interface MTUser ()
 @end

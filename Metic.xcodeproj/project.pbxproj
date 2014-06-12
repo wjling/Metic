@@ -14,13 +14,16 @@
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08E7BE22193A241200354D0E /* CommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E7BE20193A241200354D0E /* CommentTableViewCell.m */; };
 		08E7BE23193A241200354D0E /* CommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E7BE21193A241200354D0E /* CommentTableViewCell.xib */; };
+		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
+		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
+		48151F1E194947EB009E156E /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F17194947EB009E156E /* CommonUtils.m */; };
+		48151F1F194947EB009E156E /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F19194947EB009E156E /* HttpSender.m */; };
+		48151F20194947EB009E156E /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1B194947EB009E156E /* MySqlite.m */; };
+		48151F21194947EB009E156E /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1D194947EB009E156E /* NSString+JSON.m */; };
 		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
-		483E01F71935C7A500418A58 /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F61935C7A500418A58 /* MySqlite.m */; };
-		4892337C1947F51D00068BBC /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4892337B1947F51D00068BBC /* SRWebSocket.m */; };
+		485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 485F47CF19494A30003AAD30 /* SRWebSocket.m */; };
 		4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4892337D1947F9BA00068BBC /* libicucore.dylib */; };
-		489DF8D919356F3700E692DF /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D619356F3700E692DF /* CommonUtils.m */; };
-		489DF8DA19356F3700E692DF /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 489DF8D819356F3700E692DF /* HttpSender.m */; };
 		48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */; };
 		514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812051935DFDB00DBBED7 /* CustomCellTableViewCell.m */; };
 		514812081935DFDB00DBBED7 /* CustomCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 514812061935DFDB00DBBED7 /* CustomCellTableViewCell.xib */; };
@@ -57,7 +60,6 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
-		51BA9ABC193ECA14005B68C2 /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,19 +85,24 @@
 		08E7BE1F193A241200354D0E /* CommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentTableViewCell.h; path = Metic/CommentTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08E7BE20193A241200354D0E /* CommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentTableViewCell.m; path = Metic/CommentTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08E7BE21193A241200354D0E /* CommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommentTableViewCell.xib; path = Metic/CommentTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		48151F1119493FD8009E156E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		48151F15194947EB009E156E /* AppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
+		48151F16194947EB009E156E /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
+		48151F17194947EB009E156E /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
+		48151F18194947EB009E156E /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
+		48151F19194947EB009E156E /* HttpSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpSender.m; sourceTree = "<group>"; };
+		48151F1A194947EB009E156E /* MySqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySqlite.h; sourceTree = "<group>"; };
+		48151F1B194947EB009E156E /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
+		48151F1C194947EB009E156E /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
+		48151F1D194947EB009E156E /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
 		483E01F01935C70C00418A58 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoViewController.h; sourceTree = "<group>"; };
 		483E01F11935C70C00418A58 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoViewController.m; sourceTree = "<group>"; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		483E01F51935C7A500418A58 /* MySqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySqlite.h; sourceTree = "<group>"; };
-		483E01F61935C7A500418A58 /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
-		4892337A1947F51D00068BBC /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		4892337B1947F51D00068BBC /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		485F47CD19494A30003AAD30 /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
+		485F47CE19494A30003AAD30 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		485F47CF19494A30003AAD30 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		4892337D1947F9BA00068BBC /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		489DF8D519356F3700E692DF /* CommonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtils.h; sourceTree = "<group>"; };
-		489DF8D619356F3700E692DF /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
-		489DF8D719356F3700E692DF /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
-		489DF8D819356F3700E692DF /* HttpSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpSender.m; sourceTree = "<group>"; };
-		489DF8DB193573D100E692DF /* AppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
 		48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
 		48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
 		514812041935DFDB00DBBED7 /* CustomCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCellTableViewCell.h; sourceTree = "<group>"; };
@@ -155,8 +162,6 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
-		51BA9ABA193ECA14005B68C2 /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
-		51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +169,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
+				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
 				4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */,
 				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
@@ -185,6 +192,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		48151F14194947EB009E156E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				485F47CC19494A30003AAD30 /* SocketRocket */,
+				48151F15194947EB009E156E /* AppConstants.h */,
+				48151F16194947EB009E156E /* CommonUtils.h */,
+				48151F17194947EB009E156E /* CommonUtils.m */,
+				48151F18194947EB009E156E /* HttpSender.h */,
+				48151F19194947EB009E156E /* HttpSender.m */,
+				48151F1A194947EB009E156E /* MySqlite.h */,
+				48151F1B194947EB009E156E /* MySqlite.m */,
+				48151F1C194947EB009E156E /* NSString+JSON.h */,
+				48151F1D194947EB009E156E /* NSString+JSON.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		483E01EF1935C6E400418A58 /* Friends */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,30 +226,14 @@
 			name = Friends;
 			sourceTree = "<group>";
 		};
-		489233791947F3D100068BBC /* WebSocket */ = {
+		485F47CC19494A30003AAD30 /* SocketRocket */ = {
 			isa = PBXGroup;
 			children = (
-				4892337A1947F51D00068BBC /* SRWebSocket.h */,
-				4892337B1947F51D00068BBC /* SRWebSocket.m */,
+				485F47CD19494A30003AAD30 /* SocketRocket-Prefix.pch */,
+				485F47CE19494A30003AAD30 /* SRWebSocket.h */,
+				485F47CF19494A30003AAD30 /* SRWebSocket.m */,
 			);
-			name = WebSocket;
-			sourceTree = "<group>";
-		};
-		489DF8D419356EAC00E692DF /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				489233791947F3D100068BBC /* WebSocket */,
-				51BA9ABA193ECA14005B68C2 /* NSString+JSON.h */,
-				51BA9ABB193ECA14005B68C2 /* NSString+JSON.m */,
-				489DF8DB193573D100E692DF /* AppConstants.h */,
-				489DF8D519356F3700E692DF /* CommonUtils.h */,
-				489DF8D619356F3700E692DF /* CommonUtils.m */,
-				489DF8D719356F3700E692DF /* HttpSender.h */,
-				489DF8D819356F3700E692DF /* HttpSender.m */,
-				483E01F51935C7A500418A58 /* MySqlite.h */,
-				483E01F61935C7A500418A58 /* MySqlite.m */,
-			);
-			name = Utils;
+			path = SocketRocket;
 			sourceTree = "<group>";
 		};
 		514812091935E00200DBBED7 /* Helper Class */ = {
@@ -280,6 +288,8 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				48151F1119493FD8009E156E /* CFNetwork.framework */,
+				48151F0D19493FA1009E156E /* Security.framework */,
 				4892337D1947F9BA00068BBC /* libicucore.dylib */,
 				483E01F31935C76F00418A58 /* libsqlite3.dylib */,
 				51581D231933575300943606 /* Foundation.framework */,
@@ -293,11 +303,11 @@
 		51581D291933575300943606 /* Metic */ = {
 			isa = PBXGroup;
 			children = (
+				48151F14194947EB009E156E /* Utils */,
 				51581D5B19335A8700943606 /* Main Classes */,
 				51581D6B19335CDD00943606 /* Source */,
 				5148120A1937064D00DBBED7 /* MJRefresh */,
 				514812091935E00200DBBED7 /* Helper Class */,
-				489DF8D419356EAC00E692DF /* Utils */,
 				51581D321933575300943606 /* AppDelegate.h */,
 				51581D331933575300943606 /* AppDelegate.m */,
 				51581D351933575300943606 /* Main_iPhone.storyboard */,
@@ -496,8 +506,8 @@
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				514812071935DFDB00DBBED7 /* CustomCellTableViewCell.m in Sources */,
-				489DF8DA19356F3700E692DF /* HttpSender.m in Sources */,
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
@@ -507,20 +517,20 @@
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
+				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
-				483E01F71935C7A500418A58 /* MySqlite.m in Sources */,
+				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
+				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
-				4892337C1947F51D00068BBC /* SRWebSocket.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
 				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
+				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
-				51BA9ABC193ECA14005B68C2 /* NSString+JSON.m in Sources */,
-				489DF8D919356F3700E692DF /* CommonUtils.m in Sources */,
 				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
 				08E7BE22193A241200354D0E /* CommentTableViewCell.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
@@ -659,6 +669,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
@@ -674,6 +688,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";

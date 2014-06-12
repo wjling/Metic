@@ -16,7 +16,7 @@
 #import "AppDelegate.h"
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
-#import "../MySqlite.h"
+#import "MySqlite.h"
 
 #import "SRWebSocket.h"
 

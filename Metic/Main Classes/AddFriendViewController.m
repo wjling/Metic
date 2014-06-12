@@ -13,6 +13,9 @@
 @end
 
 @implementation AddFriendViewController
+{
+    int friendPosition;
+}
 
 @synthesize user;
 @synthesize searchedFriendsTableView;
@@ -42,7 +45,7 @@
     self.friendSearchBar.delegate = self;
     self.searchedFriendsTableView.delegate = self;
     self.searchedFriendsTableView.dataSource = self;
-//    self.searchedFriendsTableView.hidden = YES;
+    self.searchedFriendsTableView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -130,7 +133,8 @@
 {
     UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    confirmAlert.tag = indexPath.row;
+    confirmAlert.tag = 0;
+    friendPosition = indexPath.row;
     [confirmAlert show];
 }
 
@@ -209,7 +213,7 @@
         {
             self.searchFriendList = [response1 objectForKey:@"friend_list"];
             NSLog(@"searched friend list: %@",self.searchFriendList);
-//            self.searchedFriendsTableView.hidden = NO;
+            self.searchedFriendsTableView.hidden = NO;
         }
     }
     NSLog(@"reload data.");
@@ -232,11 +236,12 @@
             {
                 NSString* cm = [alertView textFieldAtIndex:0].text;
                 NSNumber* userId = user.userid;
-                NSNumber* friendId = [[searchFriendList objectAtIndex:alertView.tag] objectForKey:@"id"];
+                NSNumber* friendId = [[searchFriendList objectAtIndex:friendPosition] objectForKey:@"id"];
                 NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];;
+                [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
+                NSLog(@"add friend apply: %@",json);
             }
         }
             break;

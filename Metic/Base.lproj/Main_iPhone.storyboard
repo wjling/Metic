@@ -223,48 +223,62 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx2-Pm-wXS">
-                                <rect key="frame" x="48" y="170" width="181" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wx2-Pm-wXS">
+                                <rect key="frame" x="20" y="20" width="139" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Push To Another PAge">
+                                <state key="normal" title="init push service">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="testingSocket:" destination="EgR-Pz-VaJ" eventType="touchUpInside" id="ajt-Bq-aYj"/>
+                                </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="osB-dK-Q3p">
-                                <rect key="frame" x="36" y="110" width="151" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="151" id="GGa-gC-fpC"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="Male"/>
-                                    <segment title="Female"/>
-                                </segments>
-                            </segmentedControl>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="yra-vL-ABt">
-                                <rect key="frame" x="47" y="290" width="216" height="31"/>
+                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="yra-vL-ABt">
+                                <rect key="frame" x="44" y="358" width="216" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="212" id="v0B-Zw-Ig0"/>
                                 </constraints>
                             </slider>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a7u-Ga-7Bk">
+                                <rect key="frame" x="20" y="71" width="142" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="heartbeatTesting">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="heartbeat:" destination="EgR-Pz-VaJ" eventType="touchUpInside" id="5lA-yf-NFl"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p3v-gp-Nin">
+                                <rect key="frame" x="30" y="163" width="275" height="192"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ao-NO-qTG">
+                                <rect key="frame" x="189" y="20" width="116" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="confirm push">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="confirmPush:" destination="EgR-Pz-VaJ" eventType="touchUpInside" id="ZwH-wp-2Lz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Wx2-Pm-wXS" firstAttribute="leading" secondItem="osB-dK-Q3p" secondAttribute="leading" constant="12" id="KOU-Os-gcR"/>
-                            <constraint firstItem="yra-vL-ABt" firstAttribute="top" secondItem="XW5-Il-e49" secondAttribute="top" constant="290" id="O8L-QZ-SZR"/>
-                            <constraint firstItem="osB-dK-Q3p" firstAttribute="top" secondItem="XW5-Il-e49" secondAttribute="top" constant="110" id="SJ3-gl-fLj"/>
-                            <constraint firstItem="yra-vL-ABt" firstAttribute="leading" secondItem="XW5-Il-e49" secondAttribute="leading" constant="49" id="np0-Vi-R1d"/>
-                            <constraint firstItem="Wx2-Pm-wXS" firstAttribute="top" secondItem="XW5-Il-e49" secondAttribute="top" constant="202" id="uFF-8N-ID2"/>
-                            <constraint firstItem="osB-dK-Q3p" firstAttribute="leading" secondItem="XW5-Il-e49" secondAttribute="leading" constant="36" id="y6U-66-9nA"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="Zic-II-wRo"/>
                     <connections>
+                        <outlet property="msg" destination="p3v-gp-Nin" id="0a4-A0-zmL"/>
                         <segue destination="9Ms-K8-Adc" kind="push" id="oW1-h8-amp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aSj-5z-Cup" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1466" y="395"/>
+            <point key="canvasLocation" x="1483" y="390"/>
         </scene>
         <!--Friends View Controller - Friends-->
         <scene sceneID="jJY-Vt-jgb">

@@ -8,10 +8,10 @@
 
 #import "../CustomCellTableViewCell.h"
 #import "HomeViewController.h"
-#import "../NSString+JSON.h"
+#import "NSString+JSON.h"
 #import "EventDetailViewController.h"
 
-@interface HomeViewController ()<SRWebSocketDelegate>
+@interface HomeViewController () /*<SRWebSocketDelegate>*/
 @property (nonatomic,strong)NSNumber *selete_Eventid;
 
 @end
@@ -21,7 +21,7 @@
 
 @implementation HomeViewController
 {
-    SRWebSocket* mySocket;
+//    SRWebSocket* mySocket;
 }
 
 - (void)viewDidLoad
@@ -37,7 +37,7 @@
     _header.delegate = self;
     _header.scrollView = self.tableView;
     //[_header beginRefreshing];
-    [self reconnect];
+//    [self reconnect];
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];
@@ -225,30 +225,68 @@
     
 }
 
-- (void)reconnect
-{
-    mySocket.delegate = nil;
-    [mySocket close];
-    
-    NSString* str = @"http://222.200.182.183:10088/";
-    NSURL* url = [[NSURL alloc]initWithString:str];
-    
-    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
-    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
-    mySocket.delegate = self;
-    NSLog(@"Connecting...");
-    [mySocket open];
-}
+/////////////////////////testing socket/////////////
 
-#pragma mark - SRWebSocketDelegate
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    [self reconnect];
+//}
+//
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//	[super viewDidDisappear:animated];
+//    
+//    mySocket.delegate = nil;
+//    [mySocket close];
+//    mySocket = nil;
+//}
+//
+//
+//- (void)reconnect
+//{
+//    mySocket.delegate = nil;
+//    [mySocket close];
+//    
+//    NSString* str = @"http://222.200.182.183:10088/";
+//    NSURL* url = [[NSURL alloc]initWithString:str];
+//    
+//    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
+//    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
+//    mySocket.delegate = self;
+//    NSLog(@"Connecting...");
+//    [mySocket open];
+//}
+//
+//#pragma mark - SRWebSocketDelegate
+//
+//- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
+//{
+//    NSLog(@"Get message: %@",message);
+//}
+//
+//- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
+//{
+//    NSLog(@"Websocket Connected");
+//    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:10],@"user_id",nil];
+//    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+//    [webSocket send:@""];
+//    NSLog(@"send data");
+//}
+//
+//- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
+//{
+//    NSLog(@":( Websocket Failed With Error %@", error);
+//    
+//    mySocket = nil;
+//}
+//
+//- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+//{
+//    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
+//    mySocket = nil;
+////    [self reconnect];
+//}
 
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
-{
-    NSLog(@"Get message: %@",message);
-}
 
-- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-{
-    NSLog(@"Websocket Connected");
-}
 @end

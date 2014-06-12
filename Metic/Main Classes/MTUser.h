@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "../HttpSender.h"
-#import "../AppConstants.h"
+#import "HttpSender.h"
+#import "AppConstants.h"
 
 @interface MTUser : NSObject
 @property(nonatomic,strong)NSNumber *userid;

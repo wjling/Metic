@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 @implementation AppDelegate
+@synthesize mySocket;
 
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -59,5 +60,50 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+#pragma mark - SRWebSocketDelegate
+- (void)connect
+{
+    mySocket.delegate = nil;
+    [mySocket close];
+    
+    NSString* str = @"ws://222.200.182.183:10088/";
+    //    NSString* str = @"ws://localhost:9000/chat";
+    NSURL* url = [[NSURL alloc]initWithString:str];
+    
+    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
+    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
+    mySocket.delegate = self;
+    NSLog(@"Connecting...");
+    [mySocket open];
+}
+
+#pragma mark - SRWebSocketDelegate
+
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    NSLog(@"Get message: %@",message);
+}
+
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
+{
+    NSLog(@"Websocket Connected");
+    
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
+{
+    NSLog(@":( Websocket Failed With Error %@", error);
+    mySocket = nil;
+}
+
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
+{
+    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
+    mySocket = nil;
+}
+
+
 
 @end
