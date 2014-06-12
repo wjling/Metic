@@ -20,9 +20,8 @@
 
 
 @implementation HomeViewController
-{
-//    SRWebSocket* mySocket;
-}
+
+@synthesize listenerDelegate;
 
 - (void)viewDidLoad
 {
@@ -36,8 +35,11 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
+    
+    self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [self.listenerDelegate connect];
     //[_header beginRefreshing];
-//    [self reconnect];
+
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];

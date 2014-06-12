@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
+#import "CommonUtils.h"
 #import "MenuViewController.h"
 #import "MTUser.h"
 #import "SRWebSocket.h"
@@ -16,5 +17,6 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) SRWebSocket* mySocket;
 
+- (void)connect;
 
 @end

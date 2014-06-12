@@ -17,8 +17,8 @@
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "MySqlite.h"
-
-#import "SRWebSocket.h"
+#import "AppDelegate.h"
+//#import "SRWebSocket.h"
 
 
 
@@ -35,6 +35,7 @@
 
 @property(nonatomic,strong)MySqlite *sql;
 
+@property(strong,nonatomic)AppDelegate* listenerDelegate;
 //- (void)reconnect;
 
 

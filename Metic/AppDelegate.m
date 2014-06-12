@@ -83,12 +83,39 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-    NSLog(@"Get message: %@",message);
+    NSData* temp = [[NSData alloc]init];
+    if ([message isKindOfClass:[NSString class]]) {
+        temp = [message dataUsingEncoding:NSUTF8StringEncoding];
+        NSLog(@"Get message(string): %@",message);
+    }
+    else if ([message isKindOfClass:[NSData class]])
+    {
+        temp = message;
+        NSLog(@"Get message(data): %@",message);
+    }
+    NSLog(@"Get message(data): %@",temp);
+    NSString* temp2 = [[NSString alloc]initWithData:temp encoding:NSUTF8StringEncoding];
+    NSLog(@"Transformed message(string): %@",temp2);
+    
+//    NSData* temp2 = [[NSData alloc] initWithBase64Encoding:temp];
+//    NSLog(@"transform string msg to data: %@",temp2);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:temp options:NSJSONReadingMutableLeaves error:nil];
+    NSString* cmd = [response1 objectForKey:@"cmd"];
+    if ([cmd isEqualToString:@"sync"]) {
+        ;
+    }
+    else if([cmd isEqualToString:@"message"])
+    {
+        ;
+    }
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
     NSLog(@"Websocket Connected");
+    NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"uid",nil];
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    [mySocket send:jsonData];
     
 }
 
@@ -102,6 +129,7 @@
 {
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     mySocket = nil;
+    [self connect];
 }
 
 
