@@ -11,9 +11,14 @@
 @implementation AppDelegate
 {
     BOOL isConnected;
+    int numOfSyncMessages;
+//    NSString* DB_path;
 }
 @synthesize mySocket;
 @synthesize heartBeatTimer;
+@synthesize syncMessages;
+@synthesize sql;
+//@synthesize operationQueue;
 
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,7 +38,12 @@
 	
 	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
+    
+    self.sql = [[MySqlite alloc]init];
+    self.syncMessages = [[NSMutableArray alloc]init];
+    numOfSyncMessages = -1;
     [[MTUser alloc]init];
+//    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     return YES;
 
 }
@@ -63,6 +73,31 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)insertNotificationsToDB
+{
+    while (![MTUser sharedInstance].logined) {
+        NSLog(@"undone notification");
+        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
+    NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
+    NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    for (NSDictionary* message in self.syncMessages) {
+        NSString* timeStamp = [message objectForKey:@"timestamp"];
+        NSNumber* seq = [message objectForKey:@"seq"];
+        NSString* msg = [message objectForKey:@"msg"];
+        NSArray* values = [[NSArray alloc]initWithObjects:
+                           [NSString stringWithFormat:@"%@",seq],
+                           [NSString stringWithFormat:@"'%@'",timeStamp],
+                           [NSString stringWithFormat:@"'%@'",msg], nil];
+        [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
+    }
+    [self.sql closeMyDB];
+    numOfSyncMessages = -1;
+    [self.syncMessages removeAllObjects];
 }
 
 
@@ -137,11 +172,21 @@
     
     //处理推送消息
     if ([cmd isEqualToString:@"sync"]) {
-        ;
+        if (numOfSyncMessages == -1) {
+            numOfSyncMessages = [(NSNumber*)[response1 objectForKey:@"num"] intValue];
+        };
     }
     else if([cmd isEqualToString:@"message"])
     {
-        ;
+        [self.syncMessages addObject:response1];
+        if (self.syncMessages.count == numOfSyncMessages) {
+            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertNotificationsToDB) object:nil];
+            
+            [thread start];
+            
+            
+        }
+        
     }
     else if ([cmd isEqualToString:@"init"])
     {

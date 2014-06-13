@@ -123,4 +123,10 @@
     return [format stringFromNumber:number];
 }
 
++ (NSDictionary*)NSDictionaryWithNSString:(NSString *)string
+{
+    NSData* temp1 = [string dataUsingEncoding:NSUTF8StringEncoding];
+    return [NSJSONSerialization JSONObjectWithData:temp1 options:NSJSONReadingMutableLeaves error:nil];
+}
+
 @end

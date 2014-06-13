@@ -327,5 +327,26 @@
     
 }
 
+- (BOOL)isExistTable:(NSString *)tableName
+{
+    NSString* sql_str = [NSString stringWithFormat:@"SELECT COUNT(*) FROM sqlite_master where type='table' and name='%@';",tableName];
+    char* sql_c = (char*)[sql_str UTF8String];
+    sqlite3_stmt* sql_stmt;
+//    int state = sqlite3_prepare_v2(self.myDB, sql_c, -1, &sql_stmt, nil);
+    int state = sqlite3_exec(self.myDB, sql_c, nil, nil, nil);
+    NSLog(@"HEHEHE table: %@  found, state: %d",tableName, state);
+    if (state == SQLITE_OK) {
+        NSLog(@"Has table: %@",tableName);
+        return YES;
+    }
+    else
+    {
+        NSLog(@"No table: %@  found, state: %d",tableName, state);
+
+        return NO;
+    }
+    
+}
+
 
 @end

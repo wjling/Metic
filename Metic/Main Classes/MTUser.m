@@ -48,6 +48,7 @@ static MTUser *singletonInstance;
 - (void)setUserid:(NSNumber *)userid
 {
     _userid = userid;
+    NSLog(@"set user id");
     [self initUserDir];
 }
 
@@ -59,7 +60,8 @@ static MTUser *singletonInstance;
     BOOL existed = [fileManager fileExistsAtPath:userDir isDirectory:&isDir];
     if (!(isDir == YES && existed == YES)) {
         [fileManager createDirectoryAtPath:userDir withIntermediateDirectories:YES attributes:nil error:nil];
-        [self initUserDB];
+//        [self initUserDB];
+        [self performSelectorOnMainThread:@selector(initUserDB) withObject:nil waitUntilDone:NO];
     }
 }
 
@@ -69,7 +71,9 @@ static MTUser *singletonInstance;
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
     [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
+    [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",nil];
     [sql closeMyDB];
+    self.logined = YES;
 }
 
 - (void)initWithData:(NSDictionary *)mdictionary

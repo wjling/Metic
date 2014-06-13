@@ -59,4 +59,7 @@
 //删除方法。wheres是WHERE语句的键值对，对应的说明如上的“查询方法”
 - (BOOL)deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres;
 
+//
+- (BOOL)isExistTable:(NSString*)tableName;
+
 @end
