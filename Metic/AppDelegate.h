@@ -16,7 +16,12 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) SRWebSocket* mySocket;
+@property (strong, nonatomic)NSTimer* heartBeatTimer;
 
 - (void)connect;
+- (void)scheduleHeartBeat;
+- (void)unscheduleHeartBeat;
+- (void)sendHeartBeatMessage;
+- (void)disconnect;
 
 @end

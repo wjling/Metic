@@ -9,7 +9,11 @@
 #import "AppDelegate.h"
 
 @implementation AppDelegate
+{
+    BOOL isConnected;
+}
 @synthesize mySocket;
+@synthesize heartBeatTimer;
 
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -62,13 +66,13 @@
 }
 
 
-#pragma mark - SRWebSocketDelegate
+#pragma mark - WebSocket
 - (void)connect
 {
     mySocket.delegate = nil;
     [mySocket close];
     
-    NSString* str = @"ws://222.200.182.183:10088/";
+    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
     NSURL* url = [[NSURL alloc]initWithString:str];
     
@@ -77,6 +81,37 @@
     mySocket.delegate = self;
     NSLog(@"Connecting...");
     [mySocket open];
+}
+
+- (void)scheduleHeartBeat
+{
+    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendHeartBeatMessage) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop]addTimer:heartBeatTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)unscheduleHeartBeat
+{
+    [self.heartBeatTimer invalidate];
+}
+
+- (void)sendHeartBeatMessage
+{
+    if (isConnected) {
+        
+        [mySocket send:@""];
+        NSLog(@"Heart beats_^_^_");
+    }
+    else
+    {
+        NSLog(@"Disconnected");
+    }
+    
+}
+
+- (void)disconnect
+{
+    [self.mySocket close];
+    [self unscheduleHeartBeat];
 }
 
 #pragma mark - SRWebSocketDelegate
@@ -93,14 +128,14 @@
         temp = message;
         NSLog(@"Get message(data): %@",message);
     }
-    NSLog(@"Get message(data): %@",temp);
-    NSString* temp2 = [[NSString alloc]initWithData:temp encoding:NSUTF8StringEncoding];
-    NSLog(@"Transformed message(string): %@",temp2);
-    
-//    NSData* temp2 = [[NSData alloc] initWithBase64Encoding:temp];
-//    NSLog(@"transform string msg to data: %@",temp2);
+//    NSLog(@"Get message(data): %@",temp);
+//    NSString* temp2 = [[NSString alloc]initWithData:temp encoding:NSUTF8StringEncoding];
+//    NSLog(@"Transformed message(string): %@",temp2);
+
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:temp options:NSJSONReadingMutableLeaves error:nil];
     NSString* cmd = [response1 objectForKey:@"cmd"];
+    
+    //处理推送消息
     if ([cmd isEqualToString:@"sync"]) {
         ;
     }
@@ -108,11 +143,16 @@
     {
         ;
     }
+    else if ([cmd isEqualToString:@"init"])
+    {
+        [self scheduleHeartBeat];
+    }
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
     NSLog(@"Websocket Connected");
+    isConnected = YES;
     NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"uid",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     [mySocket send:jsonData];
@@ -123,13 +163,15 @@
 {
     NSLog(@":( Websocket Failed With Error %@", error);
     mySocket = nil;
+    isConnected = NO;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     mySocket = nil;
-    [self connect];
+    isConnected = NO;
+//    [self connect];
 }
 
 

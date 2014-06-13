@@ -69,6 +69,7 @@
 			
 		case 3:
 			[[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
+            [(AppDelegate*)[UIApplication sharedApplication].delegate disconnect];
 			return;
 			break;
 
