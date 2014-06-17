@@ -24,6 +24,7 @@
 
 @property(nonatomic,strong)MTUser *user;
 @property(nonatomic,strong)NSMutableArray* friendList;
+@property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
@@ -38,4 +39,5 @@
 - (void) createFriendTable;
 - (void) insertToFriendTable:(NSArray*)friends;
 - (NSMutableArray*)getFriendsFromDB;
+- (NSMutableDictionary*)sortFriendList;
 @end

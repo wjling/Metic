@@ -23,6 +23,7 @@
 }
 @synthesize user;
 @synthesize friendList;
+@synthesize sortedFriendDic;
 @synthesize searchFriendList;
 @synthesize DB;
 
@@ -127,6 +128,40 @@
     return friends;
 }
 
+- (NSMutableDictionary*)sortFriendList
+{
+    NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
+    for (NSMutableDictionary* aFriend in friendList) {
+        NSString* fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
+        NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
+        NSMutableArray* groupOfFriends = [sortedFriendDic objectForKey:first_letter];
+        if (groupOfFriends) {
+            [groupOfFriends addObject:aFriend];
+        }
+        else
+        {
+            groupOfFriends = [[NSMutableArray alloc]init];
+            [groupOfFriends addObject:aFriend];
+        }
+    }
+    for (NSMutableArray* arr in sorted) {
+        [self rankFriendsInArray:arr];
+    }
+    return sorted;
+}
+
+- (void)rankFriendsInArray:(NSMutableArray*)friends
+{
+    NSComparator cmptor = ^(id obj1, id obj2)
+    {
+        NSString* obj1_py = [CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]];
+        NSString* obj2_py = [CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]];
+        int result = [obj1_py compare:obj2_py];
+        return result;
+    };
+    [friends sortUsingComparator:cmptor];
+}
+
 - (IBAction)switchToAddFriendView:(id)sender
 {
     
@@ -172,11 +207,11 @@
     return cell;
 }
 
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//    
-//}
-//
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 26;
+}
+
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 //{
 //    

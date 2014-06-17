@@ -77,14 +77,15 @@
 
 - (void)insertNotificationsToDB
 {
-    while (![MTUser sharedInstance].logined) {
-        NSLog(@"undone notification");
+    NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    while (![self.sql isExistTable:@"notification"]) {
+//        NSLog(@"undone notification");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
     NSLog(@"user id has set++++++++++++++++++++++++++++++++");
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
-    NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
+    
     for (NSDictionary* message in self.syncMessages) {
         NSString* timeStamp = [message objectForKey:@"timestamp"];
         NSNumber* seq = [message objectForKey:@"seq"];
@@ -107,7 +108,8 @@
     mySocket.delegate = nil;
     [mySocket close];
     
-    NSString* str = @"ws://115.29.103.9:10088/";
+    NSString* str = @"ws://42.96.203.86:10088/";
+//    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
     NSURL* url = [[NSURL alloc]initWithString:str];
     

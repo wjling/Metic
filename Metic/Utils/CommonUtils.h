@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
+#import "PinYin4Objc.h"
 
 @interface CommonUtils : NSObject
 
@@ -34,5 +35,8 @@
 
 //NSString转换成NSDictionary (通常用在将数据库中的json字符串取出后，将json字符串转换成字典)
 + (NSDictionary*)NSDictionaryWithNSString:(NSString*)string;
+
+//中文转成拼音（如果是英文还是转成英文）
++ (NSString*)pinyinFromNSString:(NSString*)str;
 
 @end

@@ -31,7 +31,8 @@
 {
     self = [super init];
 //    URL_mainServer = @"http://222.200.182.183:10087/";
-    URL_mainServer = @"http://115.29.103.9:10087/";
+//    URL_mainServer = @"http://115.29.103.9:10087/";
+    URL_mainServer = @"http://42.96.203.86:10087/";
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;

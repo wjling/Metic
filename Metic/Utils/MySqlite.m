@@ -269,12 +269,13 @@
     NSLog(@"query sql: %@",sql);
     
     char* sql_c = (char*)[sql UTF8String];
+//    char* error_msg;
     sqlite3_stmt* sql_stmt;
     int state1 = sqlite3_prepare_v2(self.myDB, sql_c, -1, &sql_stmt, nil);
     if (state1 != SQLITE_OK) {
-        NSLog(@"transforming sql to sqlite3_stmt failed");
+        NSLog(@"transforming sql to sqlite3_stmt failed, state: %d",state1);
         sqlite3_close(self.myDB);
-        return NO;
+        return nil;
     }
     
     
@@ -329,19 +330,22 @@
 
 - (BOOL)isExistTable:(NSString *)tableName
 {
-    NSString* sql_str = [NSString stringWithFormat:@"SELECT COUNT(*) FROM sqlite_master where type='table' and name='%@';",tableName];
-    char* sql_c = (char*)[sql_str UTF8String];
-    sqlite3_stmt* sql_stmt;
-//    int state = sqlite3_prepare_v2(self.myDB, sql_c, -1, &sql_stmt, nil);
-    int state = sqlite3_exec(self.myDB, sql_c, nil, nil, nil);
-    NSLog(@"HEHEHE table: %@  found, state: %d",tableName, state);
-    if (state == SQLITE_OK) {
-        NSLog(@"Has table: %@",tableName);
+//    NSString* sql_str = [NSString stringWithFormat:@"SELECT COUNT(*) FROM sqlite_master where type='table' and name='%@';",tableName];
+//    char* sql_c = (char*)[sql_str UTF8String];
+//    sqlite3_stmt* sql_stmt;
+//    sqlite3_prepare_v2(self.myDB, sql_c, -1, &sql_stmt, nil);
+////    int state = sqlite3_step(sql_stmt);//(self.myDB, sql_c, nil, nil, nil);
+//    char* error;
+//    int state = sqlite3_exec(self.myDB, sql_c, nil, nil, &error);
+////    NSLog(@"HEHEHE table: %@  found, state: %d",tableName, state);
+    NSMutableArray* state = [self queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil];
+    if (state) {
+        NSLog(@"table: %@ found",tableName);
         return YES;
     }
     else
     {
-        NSLog(@"No table: %@  found, state: %d",tableName, state);
+        NSLog(@"No table: %@  found",tableName);
 
         return NO;
     }

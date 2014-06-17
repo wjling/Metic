@@ -61,7 +61,8 @@ static MTUser *singletonInstance;
     if (!(isDir == YES && existed == YES)) {
         [fileManager createDirectoryAtPath:userDir withIntermediateDirectories:YES attributes:nil error:nil];
 //        [self initUserDB];
-        [self performSelectorOnMainThread:@selector(initUserDB) withObject:nil waitUntilDone:NO];
+        NSLog(@"init user DB");
+        [self performSelectorOnMainThread:@selector(initUserDB) withObject:nil waitUntilDone:YES];
     }
 }
 

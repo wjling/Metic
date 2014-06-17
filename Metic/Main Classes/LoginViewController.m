@@ -123,6 +123,13 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:LOGIN];
+    MySqlite* sqlite = [[MySqlite alloc]init];
+    [sqlite openMyDB:@"10/db"];
+    NSLog(@"login exist table");
+    [sqlite isExistTable:@"notification"];
+//    [sqlite queryTable:@"notification" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:nil];
+    [sqlite closeMyDB];
+    
     
 }
 

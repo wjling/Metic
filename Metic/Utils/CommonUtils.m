@@ -129,4 +129,15 @@
     return [NSJSONSerialization JSONObjectWithData:temp1 options:NSJSONReadingMutableLeaves error:nil];
 }
 
+
+//中文转拼音
++ (NSString*)pinyinFromNSString:(NSString *)str
+{
+    HanyuPinyinOutputFormat* outputFormat = [[HanyuPinyinOutputFormat alloc]init];
+    [outputFormat setToneType:ToneTypeWithoutTone];
+    [outputFormat setVCharType:VCharTypeWithV];
+    [outputFormat setCaseType:CaseTypeUppercase];
+    return [PinyinHelper toHanyuPinyinStringWithNSString:str withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
+}
+
 @end
