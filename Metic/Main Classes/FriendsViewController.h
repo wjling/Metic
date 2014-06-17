@@ -26,6 +26,7 @@
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
+@property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property (strong, nonatomic) MySqlite* DB;
@@ -40,4 +41,5 @@
 - (void) insertToFriendTable:(NSArray*)friends;
 - (NSMutableArray*)getFriendsFromDB;
 - (NSMutableDictionary*)sortFriendList;
+- (void)rankFriendsInArray:(NSMutableArray*)friends;
 @end
