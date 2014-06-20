@@ -100,7 +100,15 @@
         case 9:
             resultCode = @"launch_event";
             break;
-            
+        case 14:
+            resultCode = @"add_comment";
+            break;
+        case 15:
+            resultCode = @"delete_comment";
+            break;
+        case 16:
+            resultCode = @"get_comments";
+            break;
         default:
             resultCode = @"json";
             break;

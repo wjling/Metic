@@ -140,4 +140,48 @@
     return [PinyinHelper toHanyuPinyinStringWithNSString:str withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
 }
 
++(NSString*)SHA1EncryptionWithString:(NSString *)str
+{
+    const char *cstr = [str cStringUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = [NSData dataWithBytes:cstr length:str.length];
+    
+    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
+    
+    CC_SHA1(data.bytes, data.length, digest);
+    
+    NSMutableString* output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
+    
+    for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x", digest[i]];
+    
+    return output;
+}
+
++(UIImage*)downloadfile:(NSString*)url path:(NSString*)path
+{
+    NSURL *myurl = [NSURL URLWithString:url];
+    NSData *imgData = [NSData dataWithContentsOfURL:myurl];
+    NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),path];
+    [imgData writeToFile: filePath atomically: NO];
+    UIImage *img = [[UIImage alloc]initWithData:imgData];
+    return img;
+}
+
++(void)uploadfile:(NSString*)url path:(NSString*)path;
+{
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    NSData *imageData = [NSData dataWithContentsOfFile:path];
+    NSRange range = [path rangeOfString:@"/" options:NSBackwardsSearch];
+    NSString *fileName = [path substringFromIndex:range.location+1];
+    AFHTTPRequestOperation *op = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+        [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Success: %@ ***** %@", operation.responseString, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@ ***** %@", operation.responseString, error);
+    }];
+    [op start];
+}
+
 @end

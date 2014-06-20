@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MySqlite.h"
-#import "../HttpSender.h"
-#import "../CommonUtils.h"
+#import "HttpSender.h"
+#import "CommonUtils.h"
 
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
 

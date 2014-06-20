@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Aryan Ghassemi. All rights reserved.
 //
 
-#import "../CustomCellTableViewCell.h"
+#import "../Cell/CustomCellTableViewCell.h"
 #import "HomeViewController.h"
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
 
-@interface HomeViewController () /*<SRWebSocketDelegate>*/
+@interface HomeViewController ()
 @property (nonatomic,strong)NSNumber *selete_Eventid;
 
 @end
@@ -20,8 +20,6 @@
 
 
 @implementation HomeViewController
-
-@synthesize listenerDelegate;
 
 - (void)viewDidLoad
 {
@@ -35,11 +33,7 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
-    
-    self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    [self.listenerDelegate connect];
     //[_header beginRefreshing];
-
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];
@@ -165,12 +159,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	CustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customcell"];
-	if (cell == nil) {
-        
-        cell = [[CustomCellTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                             reuseIdentifier:@"customcell"] ;
+    static NSString *CellIdentifier = @"customcell";
+    BOOL nibsRegistered = NO;
+    if (!nibsRegistered) {
+        UINib *nib = [UINib nibWithNibName:NSStringFromClass([CustomCellTableViewCell class]) bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+        nibsRegistered = YES;
     }
+    CustomCellTableViewCell *cell = (CustomCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    
     if (self.events) {
         NSDictionary *a = self.events[indexPath.row];
         cell.eventName.text = [a valueForKey:@"subject"];
@@ -180,7 +178,7 @@
         
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[a valueForKey:@"member_count"]];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
+        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@ %@",[a valueForKey:@"remark"],@"\n \n \n \n \n \n \n \n \n \n" ];
         cell.eventId = [a valueForKey:@"event_id"];
     }
     
@@ -189,6 +187,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
@@ -226,69 +226,4 @@
     [_header free];
     
 }
-
-/////////////////////////testing socket/////////////
-
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    [self reconnect];
-//}
-//
-//- (void)viewDidDisappear:(BOOL)animated
-//{
-//	[super viewDidDisappear:animated];
-//    
-//    mySocket.delegate = nil;
-//    [mySocket close];
-//    mySocket = nil;
-//}
-//
-//
-//- (void)reconnect
-//{
-//    mySocket.delegate = nil;
-//    [mySocket close];
-//    
-//    NSString* str = @"http://222.200.182.183:10088/";
-//    NSURL* url = [[NSURL alloc]initWithString:str];
-//    
-//    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
-//    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
-//    mySocket.delegate = self;
-//    NSLog(@"Connecting...");
-//    [mySocket open];
-//}
-//
-//#pragma mark - SRWebSocketDelegate
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
-//{
-//    NSLog(@"Get message: %@",message);
-//}
-//
-//- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-//{
-//    NSLog(@"Websocket Connected");
-//    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:10],@"user_id",nil];
-//    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-//    [webSocket send:@""];
-//    NSLog(@"send data");
-//}
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
-//{
-//    NSLog(@":( Websocket Failed With Error %@", error);
-//    
-//    mySocket = nil;
-//}
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
-//{
-//    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
-//    mySocket = nil;
-////    [self reconnect];
-//}
-
-
 @end

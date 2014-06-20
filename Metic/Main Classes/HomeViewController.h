@@ -17,8 +17,6 @@
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "MySqlite.h"
-#import "AppDelegate.h"
-//#import "SRWebSocket.h"
 
 
 
@@ -34,9 +32,6 @@
 @property(nonatomic,strong)NSMutableArray *events;
 
 @property(nonatomic,strong)MySqlite *sql;
-
-@property(strong,nonatomic)AppDelegate* listenerDelegate;
-//- (void)reconnect;
 
 
 @end

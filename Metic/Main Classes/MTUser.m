@@ -54,6 +54,16 @@ static MTUser *singletonInstance;
 
 - (void)initUserDir
 {
+    if (YES) {
+        NSString* mediaDir= [NSString stringWithFormat:@"%@/Documents/media", NSHomeDirectory()];
+        NSLog(mediaDir,nil);
+        BOOL isDir = NO;
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        BOOL existed = [fileManager fileExistsAtPath:mediaDir isDirectory:&isDir];
+        if (!(isDir == YES && existed == YES)) {
+            [fileManager createDirectoryAtPath:mediaDir withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+    }
     NSString* userDir= [NSString stringWithFormat:@"%@/Documents/%@", NSHomeDirectory(), self.userid];
     BOOL isDir = NO;
     NSFileManager *fileManager = [NSFileManager defaultManager];

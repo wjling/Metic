@@ -104,7 +104,7 @@ double latitude = 999.999999;
         [self.view addSubview:self.datePickerView];
         textField.enabled = NO;
         return NO;
-
+        
     }else{
         self.scrollView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 100);
         return YES;
@@ -131,7 +131,7 @@ double latitude = 999.999999;
     int duration = 0;
     int visibility = self.canin.isOn;
     int status = 0;
-
+    
     NSString *friends = @"[]";
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([self.event_text.text isEqualToString: @""]) {
@@ -189,14 +189,14 @@ double latitude = 999.999999;
          }];
     }
     
-//    [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-//        if (placemarks.count > 0) {
-//            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-//            NSString *country = placemark.ISOcountryCode;
-//            NSString *city = placemark.locality;
-//            NSLog(@"---%@......%@...cout:%d",country,city,[placemarks count]);
-//        }
-//    }];
+    //    [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+    //        if (placemarks.count > 0) {
+    //            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+    //            NSString *country = placemark.ISOcountryCode;
+    //            NSString *city = placemark.locality;
+    //            NSLog(@"---%@......%@...cout:%d",country,city,[placemarks count]);
+    //        }
+    //    }];
     [_locManager stopUpdatingLocation];
     
 }
