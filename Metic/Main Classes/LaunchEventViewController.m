@@ -10,14 +10,24 @@
 #import "MTUser.h"
 #import "CommonUtils.h"
 
+
+
 @interface LaunchEventViewController ()
 @property (nonatomic,strong) UIDatePicker *datePicker;
 @property (nonatomic,strong) UIView *datePickerView;
 @property (nonatomic,strong) UITextField *seletedText;
 @property (nonatomic,strong) MTUser *user;
+@property (nonatomic,strong) CLLocationManager *locManager;
+@property (nonatomic,strong) CLGeocoder *geocoder;
+
+
+
 @end
 
 @implementation LaunchEventViewController
+
+double longitude = 999.999999;
+double latitude = 999.999999;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,8 +44,17 @@
     self.scrollView.delegate = self;
     self.begin_time_text.delegate = self;
     self.end_time_text.delegate = self;
+    self.event_text.delegate = self;
+    self.location_text.delegate = self;
+    self.detail_text.delegate = self;
     self.user = [MTUser sharedInstance];
-    //self.event_text.delegate = self;
+    [self.canin setOn:NO];
+    _geocoder = [[CLGeocoder alloc]init];
+    _locManager = [[CLLocationManager alloc]init];
+    _locManager.delegate = self;
+    _locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    _locManager.distanceFilter = 1000.0f;
+    _geocoder = [[CLGeocoder alloc] init];
     // Do any additional setup after loading the view.
 }
 
@@ -45,38 +64,51 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    //[self.scrollView scrollRectToVisible:CGRectMake(0, textView.frame.origin.y - 55, 320, 480) animated:YES];
+    self.scrollView.contentOffset = CGPointMake(0, textView.frame.origin.y - 55);
+    return YES;
+}
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     
-    if (self.scrollView.contentSize.height != 650) {
+    if (self.scrollView.contentSize.height != 790) {
         NSLog(@"%f",self.scrollView.contentSize.height);
-        [self.scrollView setContentSize:CGSizeMake(320, 650)];
+        [self.scrollView setContentSize:CGSizeMake(320, 790)];
         NSLog(@"%f",self.scrollView.contentSize.height);
     }
 }
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    _datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(0,0, 320, 216)];
-    [_datePicker setBackgroundColor:[UIColor whiteColor]];
     
-    
-    UIButton *confirm = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    confirm.frame = CGRectMake(0, 216, 320, 30);
-    [confirm setBackgroundColor:[UIColor grayColor]];
-    [confirm setTitle:@"确定" forState:UIControlStateNormal];
-    [confirm setTitle:@"确定" forState:UIControlStateHighlighted];
-    [confirm addTarget:self action:@selector(closeDatePicker) forControlEvents:UIControlEventTouchUpInside];
-    self.seletedText = textField;
-    _datePickerView = [[UIView alloc]initWithFrame:CGRectMake(0, 150, 320, 246)];
-    [self.datePickerView addSubview:_datePicker];
-    [self.datePickerView addSubview:confirm];
-    //[self.datePickerView setBackgroundColor:[UIColor blueColor]];
-    [self.view addSubview:self.datePickerView];
-    textField.enabled = NO;
-    return NO;
+    if (textField.tag == 1) {
+        self.scrollView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 30);
+        _datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(0,100, 320, 216)];
+        [_datePicker setBackgroundColor:[UIColor whiteColor]];
+        
+        
+        UIButton *confirm = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        confirm.frame = CGRectMake(0, 316, 320, 30);
+        [confirm setBackgroundColor:[UIColor grayColor]];
+        [confirm setTitle:@"确定" forState:UIControlStateNormal];
+        [confirm setTitle:@"确定" forState:UIControlStateHighlighted];
+        [confirm addTarget:self action:@selector(closeDatePicker) forControlEvents:UIControlEventTouchUpInside];
+        self.seletedText = textField;
+        _datePickerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        [_datePickerView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.3f]];
+        [self.datePickerView addSubview:_datePicker];
+        [self.datePickerView addSubview:confirm];
+        [self.view addSubview:self.datePickerView];
+        textField.enabled = NO;
+        return NO;
+
+    }else{
+        self.scrollView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 100);
+        return YES;
+    }
 }
 
 - (void)closeDatePicker
@@ -92,26 +124,30 @@
     
     [_datePickerView removeFromSuperview ];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)launch:(id)sender {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
-    int visibility = 0;
+    int visibility = self.canin.isOn;
     int status = 0;
-    double longitude = 999.999999;
-    double latitude = 999.999999;
+
     NSString *friends = @"[]";
-    
+    self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if ([self.event_text.text isEqualToString: @""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    if ([self.begin_time_text.text isEqualToString: @""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动开始时间不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    if ([self.end_time_text.text isEqualToString: @""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    [sender setEnabled:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
     [dictionary setValue:_user.userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
     [dictionary setValue:self.begin_time_text.text forKey:@"time"];
@@ -131,6 +167,51 @@
     
 }
 
+- (IBAction)getLoc:(id)sender {
+    [_locManager startUpdatingLocation];
+    
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation * currLocation = [locations lastObject];
+    if(currLocation){
+        latitude = currLocation.coordinate.latitude;
+        longitude = currLocation.coordinate.longitude;
+        [_geocoder reverseGeocodeLocation:currLocation completionHandler:
+         ^(NSArray* placemarks, NSError* error){
+             NSString *location = @"";
+             for (NSString* place in placemarks) {
+                 location =[location stringByAppendingString:place];
+             }
+             self.location_text.text = location;
+             NSLog(@"%@",location);
+         }];
+    }
+    
+//    [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+//        if (placemarks.count > 0) {
+//            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+//            NSString *country = placemark.ISOcountryCode;
+//            NSString *city = placemark.locality;
+//            NSLog(@"---%@......%@...cout:%d",country,city,[placemarks count]);
+//        }
+//    }];
+    [_locManager stopUpdatingLocation];
+    
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+    [_locManager stopUpdatingLocation];
+    
+}
+
+- (void) recoverButton
+{
+    [self.launch_button setEnabled:YES];
+}
 
 -(void)finishWithReceivedData:(NSData *)rData
 {

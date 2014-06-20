@@ -8,15 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "MySqlite.h"
-#import "../CustomCellTableViewCell.h"
+#import "../HttpSender.h"
+#import "../CommonUtils.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
 
-//@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet CustomCellTableViewCell  *eventinfocell;
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;
+@property (strong, nonatomic)  UIView *myComment;
+@property (strong, nonatomic)  UIButton *comment_button;
+@property (strong, nonatomic)  UITableView *tableView;
+- (void)pullMainCommentFromAir;
+
+
+
+
 
 
 @end
