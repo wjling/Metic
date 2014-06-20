@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
+#import "AFNetworking.h"
 
 @interface CommonUtils : NSObject
 
@@ -26,4 +27,17 @@
 //生成简单alertView
 +(void)showSimpleAlertViewWithTitle:(NSString*)title WithMessage:(NSString*)message WithDelegate:(id)delegate WithCancelTitle:(NSString*)cancelTitle;
 
+//为uilabel调整高度
++(void)LabelAdaptedFrame:(UILabel *)label fontsize:(float)fontsize;
+
+//对str字符串进行sha1加密
++(NSString*)SHA1EncryptionWithString:(NSString*)str;
+
+//从url下载图片，并保存到document／media下 path 为在media下的相对路径
++(UIImage*)downloadfile:(NSString*)url path:(NSString*)path;
+
+//上传图片到url path为完整路径
++(void)uploadfile:(NSString*)url path:(NSString*)path;
 @end
+
+

@@ -69,6 +69,7 @@ static MTUser *singletonInstance;
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
     [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
+    [sql createTableWithTableName:@"protrait" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updateTime",nil];
     [sql closeMyDB];
 }
 

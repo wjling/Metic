@@ -30,7 +30,7 @@
 -(id)initWithDelegate:(id)delegate
 {
     self = [super init];
-    URL_mainServer = @"http://222.200.182.183:10087/";
+    URL_mainServer = @"http://42.96.203.86:10087/";
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
@@ -93,10 +93,19 @@
             resultCode = @"search_friend";
             break;
         case 8:
-            resultCode = @"synchronize_friend";
+            resultCode = @"synchronize_friends";
             break;
         case 9:
             resultCode = @"launch_event";
+            break;
+        case 14:
+            resultCode = @"add_comment";
+            break;
+        case 15:
+            resultCode = @"delete_comment";
+            break;
+        case 16:
+            resultCode = @"get_comments";
             break;
             
         default:

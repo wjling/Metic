@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Aryan Ghassemi. All rights reserved.
 //
 
-#import "../CustomCellTableViewCell.h"
+#import "../Cell/CustomCellTableViewCell.h"
 #import "HomeViewController.h"
 #import "../NSString+JSON.h"
 #import "EventDetailViewController.h"
@@ -73,7 +73,7 @@
             else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 self.events = [response1 valueForKey:@"event_list"];
                 [self updateEventToDB];
-              
+                
             }
             else{//获取event id 号
                 self.eventIds = [response1 valueForKey:@"sequence"];
@@ -145,7 +145,7 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
 }
-            
+
 
 #pragma mark 代理方法-UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -159,12 +159,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	CustomCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"customcell"];
-	if (cell == nil) {
-
-        cell = [[CustomCellTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault
-                                             reuseIdentifier:@"customcell"] ;
+    static NSString *CellIdentifier = @"customcell";
+    BOOL nibsRegistered = NO;
+    if (!nibsRegistered) {
+        UINib *nib = [UINib nibWithNibName:NSStringFromClass([CustomCellTableViewCell class]) bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+        nibsRegistered = YES;
     }
+    CustomCellTableViewCell *cell = (CustomCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    
     if (self.events) {
         NSDictionary *a = self.events[indexPath.row];
         cell.eventName.text = [a valueForKey:@"subject"];
@@ -174,15 +178,17 @@
         
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[a valueForKey:@"member_count"]];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@",[a valueForKey:@"remark"] ];
+        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@ %@",[a valueForKey:@"remark"],@"\n \n \n \n \n \n \n \n \n \n" ];
         cell.eventId = [a valueForKey:@"event_id"];
     }
-
+    
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
@@ -218,6 +224,6 @@
 - (void)dealloc
 {
     [_header free];
-
+    
 }
 @end

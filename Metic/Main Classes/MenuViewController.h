@@ -12,5 +12,9 @@
 @interface MenuViewController : UIViewController <UITableViewDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
+@property (strong, nonatomic) IBOutlet UIImageView *img;
+@property (strong, nonatomic) IBOutlet UILabel *userName;
+@property (strong, nonatomic) IBOutlet UILabel *email;
+
 
 @end

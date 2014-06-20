@@ -8,7 +8,28 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
+#import "HttpSender.h"
+#import "CommonUtils.h"
+#import "SlideNavigationController.h"
+#import "AppConstants.h"
+#import "MTUser.h"
+//#import "MTEvent.h"
+#import "AppDelegate.h"
+//#import "MTEvent.h"
+#import "MJRefreshHeaderView.h"
+#import "FriendTableViewCell.h"
 
-@interface FriendsViewController : UITableViewController <SlideNavigationControllerDelegate>
+@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 
+@property(nonatomic,strong)MTUser *user;
+@property(nonatomic,strong)NSMutableArray* friendList;
+@property(nonatomic,strong)NSMutableArray* searchFriendList;
+@property (strong, nonatomic) IBOutlet UITableView *friendTableView;
+@property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
+
+
+
+- (void)synchronize_friends;
+- (IBAction)search_friends:(id)sender;
+- (IBAction)switchToAddFriendView:(id)sender;
 @end

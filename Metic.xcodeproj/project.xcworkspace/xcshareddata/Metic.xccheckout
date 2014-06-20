@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D36C7EF5-6647-47F1-9DD2-C52351863E3C</string>
+	<string>92DEAE38-492E-4E02-BA15-D892086ECA17</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Metic</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>0B70772E-A3A6-4683-B38D-D7BAD2001F3D</key>
+		<key>4D4DE11A-47E9-4CC6-B278-627DBBD67BDF</key>
 		<string>https://github.com/wjling/Metic.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Metic.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>0B70772E-A3A6-4683-B38D-D7BAD2001F3D</key>
+		<key>4D4DE11A-47E9-4CC6-B278-627DBBD67BDF</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,16 +25,16 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>0B70772E-A3A6-4683-B38D-D7BAD2001F3D</string>
+	<string>4D4DE11A-47E9-4CC6-B278-627DBBD67BDF</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>0B70772E-A3A6-4683-B38D-D7BAD2001F3D</string>
+			<string>4D4DE11A-47E9-4CC6-B278-627DBBD67BDF</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Metic</string>
+			<string>Metic-2</string>
 		</dict>
 	</array>
 </dict>
