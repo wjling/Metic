@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "CloudOperation.h"
 
 @interface LoginViewController ()
 {
@@ -48,14 +49,14 @@
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"111@qq.com";
+    self.textField_userName.text = @"185597569@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"123456";
+    self.textField_password.text = @"538769";
 
 }
 
@@ -290,5 +291,23 @@
 - (void) recoverloginbutton
 {
     [button_login setEnabled:YES];
+}
+-(void)finishwithOperationStatus:(BOOL) status{
+    if (status) {
+        NSLog(@"Success");
+    }else
+    {
+        NSLog(@"Fail");
+    }
+}
+-(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata
+{
+    if (type == 1) {
+        UIImage *test = [UIImage imageWithData:mdata];
+        UIImageView *tt = [[UIImageView alloc] initWithFrame:CGRectMake(0, 100, 150, 150)];
+        tt.image = test;
+                      
+        [self.view addSubview:tt];
+    }
 }
 @end

@@ -33,7 +33,7 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
-    //[_header beginRefreshing];
+    [_header beginRefreshing];
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];
@@ -102,6 +102,7 @@
     [self.sql closeMyDB];
 }
 
+
 - (void)pullEventsFromDB
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -120,7 +121,6 @@
     
     [self.sql closeMyDB];
 }
-
 
 
 

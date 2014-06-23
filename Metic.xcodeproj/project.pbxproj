@@ -12,6 +12,8 @@
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
+		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
+		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -109,6 +111,11 @@
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		08B3F7041957013F003B32B7 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		08B3F707195711A3003B32B7 /* CloudOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CloudOperation.h; path = Metic/Utils/CloudOperation.h; sourceTree = SOURCE_ROOT; };
+		08B3F708195711A3003B32B7 /* CloudOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CloudOperation.m; path = Metic/Utils/CloudOperation.m; sourceTree = SOURCE_ROOT; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -273,6 +280,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08B3F7021957013F003B32B7 /* GTMBase64 */ = {
+			isa = PBXGroup;
+			children = (
+				08B3F7031957013F003B32B7 /* GTMBase64.h */,
+				08B3F7041957013F003B32B7 /* GTMBase64.m */,
+				08B3F7051957013F003B32B7 /* GTMDefines.h */,
+			);
+			name = GTMBase64;
+			path = Metic/GTMBase64;
+			sourceTree = SOURCE_ROOT;
+		};
 		08DB696C19541F3A00F80F3F /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +363,7 @@
 		48151F14194947EB009E156E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				08B3F7021957013F003B32B7 /* GTMBase64 */,
 				48A4DDE3194FE42D0066BF8D /* PinYin4Objc */,
 				485F47CC19494A30003AAD30 /* SocketRocket */,
 				48151F15194947EB009E156E /* AppConstants.h */,
@@ -352,6 +371,8 @@
 				48151F17194947EB009E156E /* CommonUtils.m */,
 				48151F18194947EB009E156E /* HttpSender.h */,
 				48151F19194947EB009E156E /* HttpSender.m */,
+				08B3F707195711A3003B32B7 /* CloudOperation.h */,
+				08B3F708195711A3003B32B7 /* CloudOperation.m */,
 				48151F1A194947EB009E156E /* MySqlite.h */,
 				48151F1B194947EB009E156E /* MySqlite.m */,
 				48151F1C194947EB009E156E /* NSString+JSON.h */,
@@ -697,6 +718,7 @@
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
+				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
@@ -708,6 +730,7 @@
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
+				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,

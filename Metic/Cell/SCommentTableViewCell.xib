@@ -14,12 +14,22 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2r7-AY-86d">
-                        <rect key="frame" x="36" y="0.0" width="284" height="21"/>
+                        <rect key="frame" x="41" y="0.0" width="279" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.90196084976196289" green="0.90196084976196289" blue="0.90196084976196289" alpha="1" colorSpace="deviceRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="10"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSg-XS-F7f">
+                        <rect key="frame" x="277" y="0.0" width="43" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <state key="normal" title="删除">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="delete_Comment:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="7Ke-qe-eEv"/>
+                        </connections>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
         </tableViewCell>
