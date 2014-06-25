@@ -79,6 +79,7 @@
         case 9:
 			((UILabel*)[cell viewWithTag:2]).text = @"退出";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+            [(AppDelegate*)[UIApplication sharedApplication].delegate disconnect];
 			break;
 	}
     
@@ -117,9 +118,14 @@
 		case 3:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 			break;
+        case 6:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+            NSLog(@"notification center entered");
+            break;
             
         case 9:
 			[[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
+            NSLog(@"exit entered");
 			return;
 			break;
         default:

@@ -11,7 +11,7 @@
 
 @protocol HttpSenderDelegate
 
-@optional
+@required
 //当服务器返回数据的时候执行此方法
 -(void)finishWithReceivedData:(NSData*) rData;
 

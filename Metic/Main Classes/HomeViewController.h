@@ -17,6 +17,7 @@
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "MySqlite.h"
+#import "AppDelegate.h"
 
 
 
@@ -32,6 +33,9 @@
 @property(nonatomic,strong)NSMutableArray *events;
 
 @property(nonatomic,strong)MySqlite *sql;
+
+@property(strong,nonatomic)AppDelegate* listenerDelegate;
+
 
 
 @end

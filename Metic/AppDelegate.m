@@ -218,7 +218,7 @@
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     mySocket = nil;
     isConnected = NO;
-//    [self connect];
+    [self connect];
 }
 
 
