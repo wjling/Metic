@@ -9,10 +9,12 @@
 
 #import "EventDetailViewController.h"
 #import "MTUser.h"
+#import "PictureWallViewController.h"
 #import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
+#import "../Utils/PhotoGetter.h"
 
 
 @interface EventDetailViewController ()
@@ -60,14 +62,13 @@
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
     self.isKeyBoard = NO;
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
+    //self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView.layer setBorderColor:[[UIColor redColor]CGColor]];
-    [self.tableView.layer setBorderWidth:2];
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    
+    [self.inputField setPlaceholder:@"回复楼主"];
+    [self.view bringSubviewToFront:self.commentView];
     [self pullEventFromDB];
     [self pullMainCommentFromAir];
     
@@ -115,36 +116,6 @@
     
 }
 
-#pragma mark - HttpSenderDelegate
-
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            if ([response1 valueForKey:@"comment_list"]) {
-                self.comment_list = [response1 valueForKey:@"comment_list"];
-                [self.tableView reloadData];
-                //[self initCommentView];
-            }else
-            {
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
-                self.inputField.text = @"";
-                [self.inputField resignFirstResponder];
-                [self pullMainCommentFromAir];
-                
-                
-            }
-            
-        }
-            break;
-    }
-}
 
 
 
@@ -178,13 +149,6 @@
 
 
 
--(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    self.tableView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 115);
-    return YES;
-}
-
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -204,17 +168,20 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (self.isKeyBoard) {
         [self.inputField resignFirstResponder];
         return;
     }
     
-    if (indexPath.section > 0 && indexPath.row == 0) {
-        if (!self.isOpen) {
-            [self addComment];
-        }
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
-        //NSLog(@"%ld",self.mainCommentId);
+    if (indexPath.section == 0) {
+        [self.inputField setPlaceholder:@"回复楼主"];
+        self.mainCommentId = 0;
+    }
+    else if (indexPath.row == 0) {
+        MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@",cell.author]];
+        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);;
         
     }
 }
@@ -238,15 +205,28 @@
         cell.beginTime.text = [_event valueForKey:@"time"];
         cell.endTime.text = [_event valueForKey:@"endTime"];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
-        
-        cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %@ 人参加",(NSNumber*)[_event valueForKey:@"member_count"]];
+        int participator_count = [[_event valueForKey:@"member_count"] intValue];
+        cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"] ];
-        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@\n \n \n \n \n",[_event valueForKey:@"remark"]];
+        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@\n \n \n \n \n \n \n \n",[_event valueForKey:@"remark"]];
         cell.eventId = [_event valueForKey:@"event_id"];
+        cell.eventController = self;
         
+        cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
         
-        self.comment_button = cell.comment;
-        [self.comment_button addTarget:self action:@selector(addComment) forControlEvents:UIControlEventTouchUpInside];
+        NSArray *memberids = [_event valueForKey:@"member"];
+        for (int i =0; i<4; i++) {
+            UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
+            tmp.image = nil;
+            if (i < participator_count) {
+                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+                [tmpgetter getPhoto];
+            }
+            
+        }
+
+        //self.comment_button = cell.comment;
+        //[self.comment_button addTarget:self action:@selector(addComment) forControlEvents:UIControlEventTouchUpInside];
         
         return cell;
     }
@@ -260,11 +240,13 @@
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
         
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
-        [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] path:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+        [tmpgetter getPhoto];
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
         ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
         ((UILabel*)[cell viewWithTag:4]).text = [NSString stringWithFormat:@"%@\n \n \n \n",[mainCom valueForKey:@"content"]];
         cell.commentid = [mainCom valueForKey:@"comment_id"];
+        cell.author = [mainCom valueForKey:@"author"];
         cell.controller = self;
         if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
@@ -307,17 +289,13 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return 380.0f;
+        return 300.0f;
     }
     else if (indexPath.row == 0) {
-        return 95.0f;
+        return 75.0f;
         
     }else
     {
-        NSMutableArray *comments = self.comment_list[indexPath.section - 1];
-        if (indexPath.row == comments.count - 1) {
-            return 35.0f;
-        }
         return 21.0f;
     }
 }
@@ -361,7 +339,7 @@
 
 -(void) keyboardWillHide:(NSNotification *)note{
     self.isKeyBoard = NO;
-    self.inputField.text = @"";
+    //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
@@ -385,11 +363,48 @@
 #pragma mark - Scroll view delegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (self.isOpen && !self.isKeyBoard) {
-        [self.commentView setHidden:YES];
-        [self.comment_button setEnabled:YES];
-        [self.view sendSubviewToBack:self.commentView];
-        self.isOpen = NO;
+    [self.inputField resignFirstResponder];
+}
+
+
+#pragma mark - HttpSenderDelegate
+
+-(void)finishWithReceivedData:(NSData *)rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+    switch ([cmd intValue]) {
+        case NORMAL_REPLY:
+        {
+            if ([response1 valueForKey:@"comment_list"]) {
+                self.comment_list = [response1 valueForKey:@"comment_list"];
+                [self.tableView reloadData];
+            }else
+            {
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+                self.inputField.text = @"";
+                [self.inputField resignFirstResponder];
+                [self pullMainCommentFromAir];
+                
+                
+            }
+            
+        }
+            break;
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([sender isKindOfClass:[EventDetailViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
+            PictureWallViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.eventId;
+        }
     }
 }
 @end

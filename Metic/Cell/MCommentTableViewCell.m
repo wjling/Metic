@@ -23,6 +23,7 @@
 }
 
 - (IBAction)delete_Comment:(id)sender {
+
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.commentid forKey:@"comment_id"];

@@ -7,6 +7,7 @@
 //
 
 #import "LaunchEventViewController.h"
+#import "InviteFriendViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
 
@@ -19,6 +20,7 @@
 @property (nonatomic,strong) MTUser *user;
 @property (nonatomic,strong) CLLocationManager *locManager;
 @property (nonatomic,strong) CLGeocoder *geocoder;
+@property (nonatomic,strong) NSMutableSet *FriendsIds;
 
 
 
@@ -49,6 +51,7 @@ double latitude = 999.999999;
     self.detail_text.delegate = self;
     self.user = [MTUser sharedInstance];
     [self.canin setOn:NO];
+    self.FriendsIds = [[NSMutableSet alloc]init];
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
@@ -131,8 +134,16 @@ double latitude = 999.999999;
     int duration = 0;
     int visibility = self.canin.isOn;
     int status = 0;
+    NSString *friends = @"[";
+    BOOL flag = YES;
+    for (NSNumber* friendid in self.FriendsIds) {
+        friends = [friends stringByAppendingString: flag? @"%@":@",%@"];
+        if (flag) flag = NO;
+        friends = [NSString stringWithFormat:friends,friendid];
+    }
+    friends = [friends stringByAppendingString:@"]"];
     
-    NSString *friends = @"[]";
+    
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([self.event_text.text isEqualToString: @""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:self WithCancelTitle:@"确定"];
@@ -227,7 +238,15 @@ double latitude = 999.999999;
     }
     
 }
-
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([segue.destinationViewController isKindOfClass:[InviteFriendViewController class]]) {
+        InviteFriendViewController *nextViewController = segue.destinationViewController;
+        nextViewController.FriendsIds = self.FriendsIds;
+    }
+}
 
 
 @end

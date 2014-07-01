@@ -7,15 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "../Main Classes/HomeViewController.h"
 
 @interface CustomCellTableViewCell : UITableViewCell
 
 {
     
+    IBOutlet UIImageView *avatar;
     IBOutlet UILabel *eventName;
+    IBOutlet UIImageView *themePhoto;
     IBOutlet UILabel *beginTime;
     IBOutlet UILabel *endTime;
-    IBOutlet UILabel *eventDetail;
+//    IBOutlet UILabel *eventDetail;
     IBOutlet UILabel *timeInfo;
     IBOutlet UIButton *imgWall;
     IBOutlet UIButton *videoWall;
@@ -31,15 +34,16 @@
 
 
 
-
-
+@property(nonatomic,strong) HomeViewController* homeController;
+@property(nonatomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
+@property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *beginTime;
 @property(nonatomic,strong) UILabel *endTime;
 @property(nonatomic,strong) UILabel *timeInfo;
 @property(nonatomic,strong) UILabel *location;
 @property(nonatomic,strong) UILabel *launcherinfo;
-@property(nonatomic,strong) UILabel *eventDetail;
+//@property(nonatomic,strong) UILabel *eventDetail;
 @property(nonatomic,strong) UIButton *videoWall;
 @property(nonatomic,strong) UIButton *imgWall;
 @property(nonatomic,strong) UILabel *member_count;

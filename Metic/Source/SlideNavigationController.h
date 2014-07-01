@@ -30,9 +30,12 @@
 #import "SRWebSocket.h"
 
 @protocol SlideNavigationControllerDelegate <NSObject>
+@required
+- (void)sendDistance:(float)distance;
 @optional
 - (BOOL)slideNavigationControllerShouldDisplayRightMenu;
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu;
+
 @end
 
 typedef  enum{

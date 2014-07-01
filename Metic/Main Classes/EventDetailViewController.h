@@ -17,7 +17,7 @@
 @property(nonatomic,strong)MySqlite *sql;
 
 @property (strong, nonatomic)  UIButton *comment_button;
-@property (strong, nonatomic)  UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
 - (void)pullMainCommentFromAir;

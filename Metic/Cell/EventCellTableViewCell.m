@@ -10,6 +10,7 @@
 
 @implementation EventCellTableViewCell
 
+@synthesize themePhoto;
 @synthesize eventName;
 @synthesize eventDetail;
 @synthesize videoWall;
@@ -40,15 +41,15 @@
     
 }
 
-- (void)setFrame:(CGRect)frame
-{
-    frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
-    [super setFrame:frame];
-    
-}
+//- (void)setFrame:(CGRect)frame
+//{
+//    frame.origin.x += widthspace;
+//    frame.origin.y += deepspace;
+//    frame.size.width -= 2 * widthspace;
+//    frame.size.height -= 2 * deepspace;
+//    [super setFrame:frame];
+//    
+//}
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -64,6 +65,7 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
+    [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {

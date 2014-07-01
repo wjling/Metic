@@ -68,12 +68,8 @@
 {
     NSURL *myurl = [NSURL URLWithString:url];
     NSData *imgData = [NSData dataWithContentsOfURL:myurl];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),path];
-    [imgData writeToFile: filePath atomically: NO];
-    mData = imgData;
-    [self.mDelegate finishwithOperationStatus:YES type:1 data:mData];
-//    UIImage *img = [[UIImage alloc]initWithData:imgData];
-//    return img;
+    [self.mDelegate finishwithOperationStatus:YES type:1 data:imgData path:mpath];
+    
 }
 
 -(void)uploadfile:(NSString*)url path:(NSString*)path;
@@ -86,9 +82,9 @@
         
         [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self.mDelegate finishwithOperationStatus:YES type:2 data:nil];
+        [self.mDelegate finishwithOperationStatus:YES type:2 data:nil path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.mDelegate finishwithOperationStatus:NO type:2 data:nil];
+        [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
     }];
     [op start];
 }
@@ -97,9 +93,9 @@
 {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     AFHTTPRequestOperation *op = [manager DELETE:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self.mDelegate finishwithOperationStatus:YES type:3 data:nil];
+        [self.mDelegate finishwithOperationStatus:YES type:3 data:nil path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self.mDelegate finishwithOperationStatus:NO type:3 data:nil];
+        [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
     }];
     [op start];
 }

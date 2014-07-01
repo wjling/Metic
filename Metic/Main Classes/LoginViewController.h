@@ -19,6 +19,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
 @property (weak, nonatomic) IBOutlet UIButton *button_login;
 @property (weak, nonatomic) IBOutlet UIButton *button_register;
+@property (strong, nonatomic) IBOutlet UIImageView *Img_userName;
+@property (strong, nonatomic) IBOutlet UIImageView *Img_password;
+@property (strong, nonatomic) IBOutlet UIButton *Img_register;
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
 @property(nonatomic,strong)MTUser *user;
@@ -28,6 +31,7 @@
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerBtnClicked:(id)sender;
 - (IBAction)backgroundBtn:(id)sender;
+- (IBAction)text_Clear:(id)sender;
 - (void)jumpToMainView;
 - (void)jumpToRegisterView;
 
