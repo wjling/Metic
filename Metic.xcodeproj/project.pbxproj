@@ -10,6 +10,10 @@
 		04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
+		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
+		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
+		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
+		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
@@ -56,6 +60,9 @@
 		48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */; };
 		48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */; };
 		48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */; };
+		510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A2195BED3A00084014 /* PhotoGetter.m */; };
+		510BE1A6195C32FE00084014 /* MTTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A5195C32FE00084014 /* MTTableView.m */; };
+		5120883D195D18F10046766C /* MainScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5120883C195D18F10046766C /* MainScrollView.m */; };
 		514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5148120B1937064D00DBBED7 /* MJRefresh.bundle */; };
 		514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5148120E1937064D00DBBED7 /* MJRefreshBaseView.m */; };
 		514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812101937064E00DBBED7 /* MJRefreshConst.m */; };
@@ -107,6 +114,13 @@
 		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
 		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
+		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
+		08574B58196057BD00D967D4 /* PictureWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureWallViewController.h; path = "Metic/Main Classes/PictureWallViewController.h"; sourceTree = SOURCE_ROOT; };
+		08574B59196057BD00D967D4 /* PictureWallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PictureWallViewController.m; path = "Metic/Main Classes/PictureWallViewController.m"; sourceTree = SOURCE_ROOT; };
+		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
+		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
+		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
@@ -196,6 +210,12 @@
 		48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
 		48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
+		510BE1A1195BED3A00084014 /* PhotoGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGetter.h; sourceTree = "<group>"; };
+		510BE1A2195BED3A00084014 /* PhotoGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoGetter.m; sourceTree = "<group>"; };
+		510BE1A4195C32FE00084014 /* MTTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableView.h; sourceTree = "<group>"; };
+		510BE1A5195C32FE00084014 /* MTTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableView.m; sourceTree = "<group>"; };
+		5120883B195D18F10046766C /* MainScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScrollView.h; sourceTree = "<group>"; };
+		5120883C195D18F10046766C /* MainScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainScrollView.m; sourceTree = "<group>"; };
 		5148120B1937064D00DBBED7 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		5148120C1937064D00DBBED7 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		5148120D1937064D00DBBED7 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -332,6 +352,11 @@
 				08DB698A19541F3A00F80F3F /* SCommentTableViewCell.h */,
 				08DB698B19541F3A00F80F3F /* SCommentTableViewCell.m */,
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
+				08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */,
+				08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */,
+				08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */,
+				510BE1A4195C32FE00084014 /* MTTableView.h */,
+				510BE1A5195C32FE00084014 /* MTTableView.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -377,6 +402,8 @@
 				48151F1B194947EB009E156E /* MySqlite.m */,
 				48151F1C194947EB009E156E /* NSString+JSON.h */,
 				48151F1D194947EB009E156E /* NSString+JSON.m */,
+				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
+				510BE1A2195BED3A00084014 /* PhotoGetter.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -551,6 +578,8 @@
 				483E01EF1935C6E400418A58 /* Friends */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
+				51A01D141934EB270043963F /* MTEvent.h */,
+				51A01D151934EB270043963F /* MTEvent.m */,
 				51A01D0E19339F0B0043963F /* RegisterViewController.h */,
 				51A01D0F19339F0B0043963F /* RegisterViewController.m */,
 				51A01D0B19339EE50043963F /* LoginViewController.h */,
@@ -561,16 +590,20 @@
 				51581D5E19335A8700943606 /* HomeViewController.h */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
-				51A01D141934EB270043963F /* MTEvent.h */,
-				51A01D151934EB270043963F /* MTEvent.m */,
+				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
+				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
+				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
+				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
+				0842A89819588DA5003229A9 /* InviteFriendViewController.h */,
+				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
 				51581D6219335A8700943606 /* ProfileViewController.h */,
 				51581D6319335A8700943606 /* ProfileViewController.m */,
-				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
-				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
 				086A5AB0193D6E7500880F2F /* MainView.h */,
 				086A5AB1193D6E7500880F2F /* MainView.m */,
+				5120883B195D18F10046766C /* MainScrollView.h */,
+				5120883C195D18F10046766C /* MainScrollView.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -677,6 +710,7 @@
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
+				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
 				08DB69A919541F3A00F80F3F /* CustomCellTableViewCell.xib in Resources */,
@@ -709,6 +743,7 @@
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
@@ -732,7 +767,9 @@
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
+				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,
@@ -744,9 +781,11 @@
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
+				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
+				5120883D195D18F10046766C /* MainScrollView.m in Sources */,
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
 				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
@@ -756,6 +795,7 @@
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
+				08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */,
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
@@ -901,7 +941,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -920,7 +960,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

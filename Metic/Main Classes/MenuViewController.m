@@ -9,18 +9,21 @@
 #import "MenuViewController.h"
 #import "FriendsViewController.h"
 #import "MTUser.h"
+#import "PhotoGetter.h"
 
 @interface MenuViewController ()
 
 @end
 @implementation MenuViewController
 @synthesize cellIdentifier;
-
--(void)viewWillAppear:(BOOL)animated
+-(void)viewDidLoad
 {
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
-    [self.img setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+    
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:1 cache:nil isCircle:YES borderColor:[UIColor whiteColor] borderWidth:10];
+    [getter getPhoto];
+    
 }
 
 
@@ -28,7 +31,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 10;
+	return 8;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -38,47 +41,39 @@
 	{
 		case 0:
             
-			((UILabel*)[cell viewWithTag:2]).text = @"活动中心";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+			((UILabel*)[cell viewWithTag:2]).text = @"我的活动";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标1"]];
 			break;
 			
 		case 1:
-			((UILabel*)[cell viewWithTag:2]).text = @"有关活动";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
 			break;
 			
 		case 2:
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
 			
 		case 3:
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
 			break;
         case 4:
-			((UILabel*)[cell viewWithTag:2]).text = @"热门推荐";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
 			break;
         case 5:
-			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
 			break;
         case 6:
-			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
 			break;
         case 7:
-			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
-			break;
-        case 8:
 			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
-			break;
-        case 9:
-			((UILabel*)[cell viewWithTag:2]).text = @"退出";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
 			break;
 	}
     
@@ -87,7 +82,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 37;
+    return 40;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -117,11 +112,7 @@
 		case 3:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 			break;
-            
-        case 9:
-			[[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
-			return;
-			break;
+
         default:
             return;
             
@@ -129,5 +120,6 @@
 	
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
+
 
 @end

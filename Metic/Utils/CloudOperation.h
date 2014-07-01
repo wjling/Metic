@@ -32,7 +32,7 @@
 
 @optional
 //当服务器返回数据的时候执行此方法
--(void)finishwithOperationStatus:(BOOL) status type:(int)type data:(NSData*)mdata;
+-(void)finishwithOperationStatus:(BOOL) status type:(int)type data:(NSData*)mdata path:(NSString*)path;
 
 @end
 
@@ -45,6 +45,7 @@
     int COtype;
     NSData *mData;
 }
+//@property(nonatomic,strong)UIImageView* imageView;
 @property(nonatomic,strong)NSURLConnection* myConnection;
 @property(nonatomic,strong)id <CloudOperationDelegate> mDelegate;
 @property(nonatomic,strong)NSMutableData* responseData;
