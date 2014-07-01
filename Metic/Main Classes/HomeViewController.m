@@ -14,12 +14,14 @@
 @interface HomeViewController ()
 @property (nonatomic,strong)NSNumber *selete_Eventid;
 
+
 @end
 
 
 
 
 @implementation HomeViewController
+@synthesize listenerDelegate;
 
 - (void)viewDidLoad
 {
@@ -34,6 +36,11 @@
     _header.delegate = self;
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
+
+    
+    self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [self.listenerDelegate connect];
+
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [self.tableView reloadData];

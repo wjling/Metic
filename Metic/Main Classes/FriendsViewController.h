@@ -13,11 +13,10 @@
 #import "SlideNavigationController.h"
 #import "AppConstants.h"
 #import "MTUser.h"
-//#import "MTEvent.h"
 #import "AppDelegate.h"
-//#import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "FriendTableViewCell.h"
+#import "NotificationCenterCell.h"
 #import "MySqlite.h"
 
 @interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
@@ -30,9 +29,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property (strong, nonatomic) MySqlite* DB;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *addFriendBtn;
 
 
-
+- (void)initParams;
 - (void)synchronize_friends;
 - (IBAction)search_friends:(id)sender;
 - (IBAction)switchToAddFriendView:(id)sender;

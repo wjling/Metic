@@ -216,7 +216,7 @@
             self.searchedFriendsTableView.hidden = NO;
         }
     }
-    NSLog(@"reload data.");
+//    NSLog(@"reload data.");
     [self.searchedFriendsTableView reloadData];
 }
 
@@ -237,7 +237,7 @@
                 NSString* cm = [alertView textFieldAtIndex:0].text;
                 NSNumber* userId = user.userid;
                 NSNumber* friendId = [[searchFriendList objectAtIndex:friendPosition] objectForKey:@"id"];
-                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",nil];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];

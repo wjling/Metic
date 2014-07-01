@@ -20,6 +20,7 @@
 @implementation FriendsViewController
 {
     NSString* DB_path;
+    NSInteger initialSectionForFriendList;
 }
 @synthesize user;
 @synthesize friendList;
@@ -27,6 +28,7 @@
 @synthesize sectionArray;
 @synthesize searchFriendList;
 @synthesize DB;
+@synthesize addFriendBtn;
 
 - (void)viewDidLoad
 {
@@ -37,19 +39,43 @@
         self.edgesForExtendedLayout= UIRectEdgeNone;
     }
     
+    
+//    self.sectionArray = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+    
+    
+    [self initParams];
+//    [self createFriendTable];
+//    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(initTable) object:nil];
+//    [thread start];
+//    [self initTable];
+    [self synchronize_friends];
+//    NSLog(@"did reload friends");
+//    [self.friendTableView reloadData];
+}
+
+- (void) initParams
+{
     self.user = [MTUser sharedInstance];
     DB_path = [NSString stringWithFormat:@"%@/db",user.userid];
-//    self.sectionArray = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+    initialSectionForFriendList = 1;
     self.sectionArray = [[NSMutableArray alloc]init];
     self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
     self.friendSearchBar.delegate = self;
     
-    [self createFriendTable];
-    [self synchronize_friends];
-    NSLog(@"did reload friends");
+//    UIImage* img = [[UIImage imageNamed:@"添加好友icon.png"] stretchableImageWithLeftCapWidth:3 topCapHeight: 3];
+//    [self.addFriendBtn setBackButtonBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    
+}
+
+- (void)initTable
+{
+    self.friendList = [self getFriendsFromDB];
+    self.sortedFriendDic = [self sortFriendList];
     [self.friendTableView reloadData];
+//    NSLog(@"table reloaded");
+
 }
 
 - (void)synchronize_friends
@@ -59,7 +85,7 @@
     NSMutableArray* tempFriends = [self getFriendsFromDB];
     [dictionary setValue:userId forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:tempFriends.count] forKey:@"friends_number"];
-    NSLog(@"%@",dictionary);
+//    NSLog(@"%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -108,7 +134,7 @@
         NSNumber* friendGender = [friend objectForKey:@"gender"];
         NSString* friendName = [friend objectForKey:@"name"];
         
-        NSLog(@"email: %@, id: %@, gender: %@, name: %@",friendEmail,friendID,friendGender,friendName);
+//        NSLog(@"email: %@, id: %@, gender: %@, name: %@",friendEmail,friendID,friendGender,friendName);
         
         NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'", nil];
         NSArray* values = [[NSArray alloc]initWithObjects:
@@ -120,6 +146,7 @@
     }
     [self.DB closeMyDB];
 
+    NSLog(@"好友列表更新完成！");
 }
 
 - (NSMutableArray*)getFriendsFromDB
@@ -134,16 +161,16 @@
 - (NSMutableDictionary*)sortFriendList
 {
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
-    NSLog(@"friendlist count: %d",friendList.count);
+//    NSLog(@"friendlist count: %d",friendList.count);
     for (NSMutableDictionary* aFriend in self.friendList) {
         NSString* fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
-        NSLog(@"friend name: %@",fname_py);
+//        NSLog(@"friend name: %@",fname_py);
         NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
         NSMutableArray* groupOfFriends = [sorted objectForKey:[first_letter uppercaseString]];
         
         if (groupOfFriends) {
             [groupOfFriends addObject:aFriend];
-            NSLog(@"a friend: %@",aFriend);
+//            NSLog(@"a friend: %@",aFriend);
         }
         else
         {
@@ -163,6 +190,12 @@
      {
          return [(NSString*)obj1 compare:(NSString*)obj2];
      }];
+    
+    NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"好友推荐",@"name", nil];
+    NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
+    [sorted setObject:temp_arr forKey:@"🍎"];
+    
+    [sectionArray insertObject:@"🍎" atIndex:0];
     NSLog(@"sorted friends dictionary: %@",sorted);
     NSLog(@"section array: %@",self.sectionArray);
     return sorted;
@@ -195,6 +228,17 @@
     return height;
 }
 
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    if (0 == section) {
+//        FriendTableViewCell *header = [[FriendTableViewCell alloc]init];
+//        header.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+//        header.title.text = @"消息中心";
+//        return header;
+//    }
+//    return nil;
+//}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -206,25 +250,47 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
-    if (nil == cell) {
-        cell = [[FriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendcell"];
-    }
-    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:indexPath.section]];
-    NSDictionary* aFriend = [groupOfFriends objectAtIndex:indexPath.row];
-//    NSLog(@"a friend: %@",aFriend);
-    NSString* name = [aFriend objectForKey:@"name"];
-    cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
-    if (name) {
-        cell.title.text = name;
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
+    NSString* label = [aFriend objectForKey:@"name"];
+
+    if (section == 0) {
+        if (row == 0)
+        {
+            NotificationCenterCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"notificationcentercell"];
+            if (nil == cell) {
+                cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
+            }
+            cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
+//            cell.imageView
+            cell.title.text = label;
+            return cell ;
+        }
     }
     else
     {
-        cell.title.text = @"default";
+        FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
+        if (nil == cell) {
+            cell = [[FriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendcell"];
+        }
+    
+//        NSLog(@"a friend: %@",aFriend);
+    
+        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+        if (label) {
+            cell.title.text = label;
+        }
+        else
+        {
+            cell.title.text = @"default";
+        }
+        return cell;
     }
     
-//    cell.image = [[UIImage alloc]init];
-    return cell;
+    return nil;
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -294,15 +360,21 @@
         if ([cmd intValue] == NORMAL_REPLY) {
             NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             if (tempFriends.count) {
-                [self insertToFriendTable:tempFriends];
-                NSLog(@"好友列表更新完成！");
+                self.friendList = tempFriends;
+                self.sortedFriendDic = [self sortFriendList];
+//                [self insertToFriendTable:tempFriends];
+                NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:tempFriends];
+                
+                [thread start];
+                
             }
             else
             {
                 NSLog(@"好友列表已经是最新的啦～");
+                self.friendList = [self getFriendsFromDB];
+                self.sortedFriendDic = [self sortFriendList];
+
             }
-            self.friendList = [self getFriendsFromDB];
-            self.sortedFriendDic = [self sortFriendList];
             NSLog(@"synchronize friends: %@",friendList);
             
         }

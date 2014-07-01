@@ -108,9 +108,11 @@
     mySocket.delegate = nil;
     [mySocket close];
     
+//    NSString* str = @"ws://203.195.174.128:10088/";
     NSString* str = @"ws://42.96.203.86:10088/";
 //    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
+    
     NSURL* url = [[NSURL alloc]initWithString:str];
     
     NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
@@ -218,7 +220,7 @@
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     mySocket = nil;
     isConnected = NO;
-//    [self connect];
+    [self connect];
 }
 
 
