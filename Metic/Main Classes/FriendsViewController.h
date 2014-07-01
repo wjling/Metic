@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property (strong, nonatomic) MySqlite* DB;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *addFriendBtn;
 
 
 - (void)initParams;

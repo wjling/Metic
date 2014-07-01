@@ -28,6 +28,7 @@
 @synthesize sectionArray;
 @synthesize searchFriendList;
 @synthesize DB;
+@synthesize addFriendBtn;
 
 - (void)viewDidLoad
 {
@@ -62,6 +63,9 @@
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
     self.friendSearchBar.delegate = self;
+    
+//    UIImage* img = [[UIImage imageNamed:@"添加好友icon.png"] stretchableImageWithLeftCapWidth:3 topCapHeight: 3];
+//    [self.addFriendBtn setBackButtonBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     
 }
 
@@ -187,7 +191,7 @@
          return [(NSString*)obj1 compare:(NSString*)obj2];
      }];
     
-    NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"消息中心",@"name", nil];
+    NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"好友推荐",@"name", nil];
     NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
     [sorted setObject:temp_arr forKey:@"🍎"];
     
@@ -259,7 +263,7 @@
             if (nil == cell) {
                 cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
             }
-            cell.pic.image = [UIImage imageNamed:@"default_avatar.jpg"];
+            cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
 //            cell.imageView
             cell.title.text = label;
             return cell ;

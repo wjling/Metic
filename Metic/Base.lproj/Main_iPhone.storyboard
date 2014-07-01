@@ -287,7 +287,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="default_avatar.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="Qi5-Jd-fHW">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="好友推荐icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Qi5-Jd-fHW">
                                                     <rect key="frame" x="20" y="3" width="44" height="37"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -331,7 +331,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Friends" id="ObQ-44-r4f">
-                        <barButtonItem key="rightBarButtonItem" title="+" id="bgG-4k-Eqe">
+                        <barButtonItem key="rightBarButtonItem" image="添加好友icon.png" id="bgG-4k-Eqe">
+                            <inset key="imageInsets" minX="2" minY="2" maxX="2" maxY="2"/>
                             <connections>
                                 <action selector="switchToAddFriendView:" destination="cDI-rw-2Dm" id="5Zt-6p-4mu"/>
                                 <segue destination="Sxz-YS-Xvx" kind="push" id="kmJ-aw-r9I"/>
@@ -339,6 +340,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addFriendBtn" destination="bgG-4k-Eqe" id="JBk-di-q1r"/>
                         <outlet property="friendTableView" destination="9Rr-XN-lhg" id="39e-RR-rsg"/>
                         <outlet property="searchDisplayController" destination="GF7-hE-mQ9" id="9xT-LN-Vn9"/>
                     </connections>
@@ -920,6 +922,8 @@
     <resources>
         <image name="default_avatar.jpg" width="200" height="200"/>
         <image name="上传活动封面" width="320" height="150"/>
+        <image name="好友推荐icon.png" width="45" height="45"/>
+        <image name="添加好友icon.png" width="33" height="33"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

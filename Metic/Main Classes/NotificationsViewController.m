@@ -94,9 +94,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* msg = [self.msgFromDB objectAtIndex:indexPath.row];
+    int count = self.msgFromDB.count;
+    NSDictionary* msg = [self.msgFromDB objectAtIndex:(count-1-indexPath.row)];
     NSString* msg_str = [msg objectForKey:@"msg"];
-    NSLog(@"msg_str: %@",msg_str);
+//    NSLog(@"msg_str: %@",msg_str);
     NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
     NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
@@ -142,7 +143,20 @@
         }
             break;
         case NEW_EVENT_NOTIFICATION:
-            ;
+        {
+            NotificationsTableViewCell* cell = [self.notificationsTable dequeueReusableCellWithIdentifier:@"requestnotification"];
+            if (nil == cell) {
+                cell = [[NotificationsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"requestnotification"];
+            }
+            NSString* subject = [msg_dic objectForKey:@"subject"];
+            NSString* launcher = [msg_dic objectForKey:@"launcher"];
+            NSString* time = [msg_dic objectForKey:@"time"];
+            NSString* label = [NSString stringWithFormat:@"活动邀请\n主题：%@\n发起者：%@\n开始时间：%@",subject,launcher,time];
+            cell.textView.text = label;
+            
+            return cell ;
+;
+        }
             break;
             
         default:
@@ -217,6 +231,25 @@
     [self.notificationsTable reloadData];
 }
 
+- (IBAction)participate_event_okBtnClicked:(id)sender
+{
+    UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
+    selectedPath = [self.notificationsTable indexPathForCell:cell];
+    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
+    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
+    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:1],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",nil];
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+}
+
+- (IBAction)participate_event_noBtnClicked:(id)sender
+{
+    
+}
+
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
@@ -270,6 +303,11 @@
         case REQUEST_FAIL:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"发送请求错误" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+            break;
+        case ALREADY_IN_EVENT:
+        {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
         }
             break;
         default:

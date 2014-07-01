@@ -27,4 +27,6 @@
 - (IBAction)okBtnClicked:(id)sender;
 - (IBAction)noBtnClicked:(id)sender;
 - (IBAction)delBtnClicked:(id)sender;
+- (IBAction)participate_event_okBtnClicked:(id)sender;
+- (IBAction)participate_event_noBtnClicked:(id)sender;
 @end
