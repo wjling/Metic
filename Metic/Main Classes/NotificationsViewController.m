@@ -60,6 +60,7 @@
 - (void)initParams
 {
     self.msgFromDB = [[NSMutableArray alloc]init];
+    selectedPath = [[NSIndexPath alloc]init];
     mySql = [[MySqlite alloc]init];
     DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     self.notificationsTable.delegate = self;
@@ -153,6 +154,8 @@
             NSString* time = [msg_dic objectForKey:@"time"];
             NSString* label = [NSString stringWithFormat:@"活动邀请\n主题：%@\n发起者：%@\n开始时间：%@",subject,launcher,time];
             cell.textView.text = label;
+            [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside ];
+            [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
             
             return cell ;
 ;
@@ -180,7 +183,7 @@
 //    [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
 //    [alertView show];
 //    NSLog(@"cmd: %@, result: %@, id: %@, friend_id: %@",[NSNumber numberWithInt:998],[NSNumber numberWithInt:1],userid,friendid);
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:1],@"result",friendid,@"friend_id",userid,@"id",nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:1],@"result",friendid,@"friend_id",userid,@"id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
     NSLog(@"agreed json: %@",json);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -204,7 +207,7 @@
     NSLog(@"no button row: %d, seq: %@",selectedPath.row,seq);
     NSNumber* userid = [MTUser sharedInstance].userid;
     NSNumber* friendid = [msg_dic objectForKey:@"id"];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:0],@"result",userid,@"id",friendid,@"friend_id",nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:0],@"result",userid,@"id",friendid,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
     NSLog(@"reject json: %@",json);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -218,17 +221,22 @@
     
 }
 
-- (IBAction)delBtnClicked:(id)sender
+- (void)delBtnClicked:(id)sender
 {
-    UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
+    int count = self.msgFromDB.count;
+    UITableViewCell* cell = (UITableViewCell*)[[[sender superview]superview]superview] ;
     selectedPath = [self.notificationsTable indexPathForCell:cell];
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
+    
+    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
     NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    NSLog(@"del cell seq: %@, row: %d",seq,selectedPath.row);
     [mySql openMyDB:DB_path];
     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
     [mySql closeMyDB];
-    [self.msgFromDB removeObjectAtIndex:selectedPath.row];
+    [self.msgFromDB removeObjectAtIndex:(count - 1 - selectedPath.row)];
+    cell = nil;
     [self.notificationsTable reloadData];
+    
 }
 
 - (IBAction)participate_event_okBtnClicked:(id)sender
@@ -239,7 +247,7 @@
     NSString* msg_str = [dataMsg objectForKey:@"msg" ];
     NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:1],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:1],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",[NSNumber numberWithInt:PARTICIPATE_EVENT],@"item_id",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
@@ -247,7 +255,16 @@
 
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
-    
+    UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
+    selectedPath = [self.notificationsTable indexPathForCell:cell];
+    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
+    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
+    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:0],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",nil];
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
 }
 
 #pragma mark - HttpSenderDelegate
@@ -260,28 +277,33 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
-            
-            
-            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
-            NSNumber* seq = [dataMsg objectForKey:@"seq"];
-            NSLog(@"normal reply, seq: %@",seq);
-            NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-            NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-            NSString* fname = [msg_dic objectForKey:@"name"];
-            NSString* femail = [msg_dic objectForKey:@"email"];
-            NSNumber* fgender = [msg_dic objectForKey:@"gender"];
-            NSNumber* fid = [msg_dic objectForKey:@"id"];
-            [mySql openMyDB:DB_path];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-            [mySql insertToTable:@"friend"
-                     withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
-                       andValues:[[NSArray alloc] initWithObjects:
-                                  [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fid]],
-                                  [NSString stringWithFormat:@"'%@'",fname],
-                                  [NSString stringWithFormat:@"'%@'",femail],
-                                  [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
-            [mySql closeMyDB];
+            NSNumber* item_id = [response1 valueForKey:@"item_id"];
+            if ([item_id intValue] == ADD_FRIEND) {
+                [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
+                
+                
+                NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
+                NSNumber* seq = [dataMsg objectForKey:@"seq"];
+                NSLog(@"normal reply, seq: %@",seq);
+                NSString* msg_str = [dataMsg objectForKey:@"msg" ];
+                NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+                NSString* fname = [msg_dic objectForKey:@"name"];
+                NSString* femail = [msg_dic objectForKey:@"email"];
+                NSNumber* fgender = [msg_dic objectForKey:@"gender"];
+                NSNumber* fid = [msg_dic objectForKey:@"id"];
+                [mySql openMyDB:DB_path];
+                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+                [mySql insertToTable:@"friend"
+                         withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
+                           andValues:[[NSArray alloc] initWithObjects:
+                                      [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fid]],
+                                      [NSString stringWithFormat:@"'%@'",fname],
+                                      [NSString stringWithFormat:@"'%@'",femail],
+                                      [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
+                [mySql closeMyDB];
+                
+
+            }
             [self.msgFromDB removeObjectAtIndex:selectedPath.row];
             [self.notificationsTable reloadData];
         }
