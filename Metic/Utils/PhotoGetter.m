@@ -14,7 +14,7 @@
 @implementation PhotoGetter
 
 
-- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache isCircle:(BOOL)isCircle borderColor:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth
+- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache
 {
     if (self) {
         self = [super init];
@@ -23,61 +23,95 @@
         self.path = path;
         self.filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
         self.type = type;
-        switch (type) {
-            case 1://头像
-                self.phothCache = _user.avatar;
-                break;
-            case 2://照片
-                self.phothCache = cache;
-                break;
-            default:
-                break;
+        if (type == 2) {
+            [self setTypeOption2];
         }
-        self.isCircle = isCircle;
-        self.borderColor = borderColor;
-        self.borderWidth = borderWidth;
-        
+        self.phothCache = cache;
     }
     return self;
 }
 
+
+
+-(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth
+{
+    self.borderColor = borderColor;
+    self.borderWidth = borderWidth;
+}
+
+-(void)setTypeOption2
+{
+    _imageView.layer.cornerRadius = 3;
+    _imageView.layer.masksToBounds = YES;
+}
+
+-(void)setTypeOption3:(id)container
+{
+    self.container = container;
+}
+
+
 -(void)getPhoto
 {
     //缓存
-    UIImage *cacheAvatar = [_phothCache valueForKey:_path];
-    if (cacheAvatar) {
-        if (self.isCircle) {
-            cacheAvatar = [CommonUtils circleImage:cacheAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-        }else{
-            _imageView.layer.cornerRadius = 3;
-            _imageView.layer.masksToBounds = YES;
+    UIImage *imageFromCache = [_phothCache valueForKey:_path];
+    if (imageFromCache){
+        switch (self.type) {
+            case 1:
+                imageFromCache = [CommonUtils circleImage:imageFromCache withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                break;
+            case 2:
+                break;
+            case 3:
+                
+                break;
+                
+            default:
+                break;
         }
-        _imageView.image = cacheAvatar;
-        if (self.type == 2) {
-            [self.mDelegate finishwithNotification:self.tableView indexPath:self.index];
-        }
+        [self.mDelegate finishwithNotification:self.imageView image:imageFromCache type:self.type container:self.container];
     }else{
         //NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
         if ([[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {
             //本地内存
-            UIImage *memoryAvatar = [UIImage imageWithContentsOfFile:_filePath];
-            if (memoryAvatar) {
-                [_phothCache setValue:memoryAvatar forKey:_path];
-                if (self.isCircle) {
-                    memoryAvatar = [CommonUtils circleImage:memoryAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-                }else{
-                    _imageView.layer.cornerRadius = 3;
-                    _imageView.layer.masksToBounds = YES;
+            UIImage *imageFromMemory = [UIImage imageWithContentsOfFile:_filePath];
+            if (imageFromMemory) {
+                [_phothCache setValue:imageFromMemory forKey:_path];
+                switch (self.type) {
+                    case 1:
+                        imageFromMemory = [CommonUtils circleImage:imageFromMemory withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        
+                        break;
+                        
+                    default:
+                        break;
                 }
-                _imageView.image = memoryAvatar;
-                
-            }
-            
-            if (self.type == 2) {
-                [self.mDelegate finishwithNotification:self.tableView indexPath:self.index];
+                [self.mDelegate finishwithNotification:self.imageView image:imageFromMemory type:self.type container:self.container];
             }
         }else{
-            _imageView.image = [UIImage imageNamed:@"default_avatar.jpg"];
+            UIImage* tmpAvatar = [UIImage imageNamed:@"default_avatar.jpg"];
+            UIImage* tmpPhoto = [UIImage imageNamed:@"活动图片的默认图片"];
+            
+            switch (self.type) {
+                case 1:
+                    tmpAvatar = [CommonUtils circleImage:tmpAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                    [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:self.container];
+                    break;
+                case 2:
+                    [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:self.container];
+                    break;
+                case 3:
+                    [self.mDelegate finishwithNotification:self.imageView image:tmpPhoto type:self.type container:self.container];
+                    break;
+                    
+                default:
+                    break;
+            }
+            //_imageView.image = [UIImage imageNamed:@"default_avatar.jpg"];
             //网络下载
             CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
             [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
@@ -92,40 +126,23 @@
         NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
         [UIImageJPEGRepresentation([UIImage imageWithData:mdata], 1.0f) writeToFile:filePath atomically:YES];
         
-        UIImage *netAvatar = [UIImage imageWithData:mdata];
+        UIImage *imageFromAir = [UIImage imageWithData:mdata];
         //UIImage *netAvatar = [UIImage imageWithContentsOfFile:_filePath];
-        if (netAvatar) {
-            [_phothCache setValue:netAvatar forKey:_path];
-            if (self.isCircle) {
-                netAvatar = [CommonUtils circleImage:netAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-            }else{
-                _imageView.layer.cornerRadius = 3;
-                _imageView.layer.masksToBounds = YES;
+        if (imageFromAir) {
+            [_phothCache setValue:imageFromAir forKey:_path];
+            switch (self.type) {
+                case 1:
+                    imageFromAir = [CommonUtils circleImage:imageFromAir withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default:
+                    break;
             }
-            _imageView.image = netAvatar;
-            
+            [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
         }
-        if (self.type == 2) {
-            [self.mDelegate finishwithNotification:self.tableView indexPath:self.index];
-        }
-    }
-    else{
-        UIImage *defaultAvatar = [UIImage imageNamed:@"default_avatar.jpg"];
-        if (defaultAvatar) {
-            [_phothCache setValue:defaultAvatar forKey:_path];
-            if (self.isCircle) {
-                defaultAvatar = [CommonUtils circleImage:defaultAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-            }else{
-                _imageView.layer.cornerRadius = 3;
-                _imageView.layer.masksToBounds = YES;
-            }
-            _imageView.image = defaultAvatar;
-            
-        }
-        if (self.type == 2) {
-            [self.mDelegate finishwithNotification:self.tableView indexPath:self.index];
-        }
-
     }
 }
 

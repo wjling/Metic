@@ -804,11 +804,31 @@
                     <connections>
                         <outlet property="tableView1" destination="nrl-VI-A1P" id="vda-Y8-AtG"/>
                         <outlet property="tableView2" destination="Glq-Dw-Gx9" id="4WI-zE-6mE"/>
+                        <segue destination="I4u-vU-cDa" kind="push" identifier="photosShow" id="Qca-oQ-v1P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dRw-Gh-esh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2480" y="-379"/>
+            <point key="canvasLocation" x="2496" y="-379"/>
+        </scene>
+        <!--Photo Display View Controller-->
+        <scene sceneID="701-CT-BrZ">
+            <objects>
+                <viewController id="I4u-vU-cDa" customClass="PhotoDisplayViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xXf-Us-LPe"/>
+                        <viewControllerLayoutGuide type="bottom" id="Fco-Qf-bMa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZXa-GF-xvV">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="kX2-8t-RHQ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gqo-Jb-KHz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2990" y="-379"/>
         </scene>
         <!--Home View Controller - 活动中心-->
         <scene sceneID="AVu-Jk-ikC">

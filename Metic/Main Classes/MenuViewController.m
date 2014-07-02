@@ -10,7 +10,7 @@
 #import "FriendsViewController.h"
 #import "NotificationsViewController.h"
 #import "MTUser.h"
-#import "PhotoGetter.h"
+
 
 @interface MenuViewController ()
 
@@ -22,7 +22,9 @@
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
     
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:1 cache:nil isCircle:YES borderColor:[UIColor whiteColor] borderWidth:10];
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:1 cache:[MTUser sharedInstance].avatar];
+    [getter setTypeOption1:[UIColor whiteColor] borderWidth:10];
+    getter.mDelegate = self;
     [getter getPhoto];
     
 }
@@ -140,5 +142,9 @@
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 
-
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    imageView.image = image;
+}
 @end

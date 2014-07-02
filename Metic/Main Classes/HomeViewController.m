@@ -75,6 +75,9 @@
 
 
 
+
+#pragma mark - UIScrollView Methods -
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"%f",self.scrollView.contentOffset.x);
@@ -96,7 +99,7 @@
             break;
     }
 }
-#pragma mark - UIScrollView Methods -
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float position = self.scrollView.contentOffset.x;
