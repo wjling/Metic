@@ -11,7 +11,7 @@
 #import "CommonUtils.h"
 #import "AppConstants.h"
 
-@interface RegisterViewController : UIViewController <UITextFieldDelegate, HttpSenderDelegate>
+@interface RegisterViewController : UIViewController <UITextFieldDelegate, HttpSenderDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField_email;
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
@@ -19,11 +19,17 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl_gender;
 @property (weak, nonatomic) IBOutlet UIButton *button_signUp;
 @property (weak, nonatomic) IBOutlet UIButton *button_backToLogin;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIButton *nextStep;
+
 
 -(IBAction)signUpButtonClicked:(id)sender;
 -(IBAction)backToLoginButtonClicked:(id)sender;
 //-(void)genderSegmentedControlChanged:(int*)gender;
 -(IBAction)backgroundBtn:(id)sender;
+- (IBAction)text_Clear:(id)sender;
+- (IBAction)step_next:(id)sender;
+
 
 - (void)jumpToLogin;
 - (void)jumpToMain;
