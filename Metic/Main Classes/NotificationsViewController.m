@@ -170,7 +170,8 @@
 
 - (IBAction)okBtnClicked:(id)sender
 {
-    UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
+    int count = self.msgFromDB.count;
+    UITableViewCell* cell = (UITableViewCell*)[[[(UIButton*)sender superview] superview]superview];
     selectedPath = [self.notificationsTable indexPathForCell:cell];
     NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
     NSString* msg_str = [dataMsg objectForKey:@"msg" ];
@@ -198,6 +199,7 @@
 
 - (IBAction)noBtnClicked:(id)sender
 {
+    int count = self.msgFromDB.count;
     UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
     selectedPath = [self.notificationsTable indexPathForCell:cell];
     NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
@@ -241,6 +243,7 @@
 
 - (IBAction)participate_event_okBtnClicked:(id)sender
 {
+    int count = self.msgFromDB.count;
     UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
     selectedPath = [self.notificationsTable indexPathForCell:cell];
     NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
@@ -255,6 +258,7 @@
 
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
+    int count = self.msgFromDB.count;
     UITableViewCell* cell = (UITableViewCell*)[[(UIButton*)sender superview] superview];
     selectedPath = [self.notificationsTable indexPathForCell:cell];
     NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:selectedPath.row];
