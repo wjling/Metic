@@ -93,7 +93,7 @@
                 [self.mDelegate finishwithNotification:self.imageView image:imageFromMemory type:self.type container:self.container];
             }
         }else{
-            UIImage* tmpAvatar = [UIImage imageNamed:@"default_avatar.jpg"];
+            UIImage* tmpAvatar = [UIImage imageNamed:@"默认用户头像"];
             UIImage* tmpPhoto = [UIImage imageNamed:@"活动图片的默认图片"];
             
             switch (self.type) {
@@ -111,7 +111,7 @@
                 default:
                     break;
             }
-            //_imageView.image = [UIImage imageNamed:@"default_avatar.jpg"];
+            //_imageView.image = [UIImage imageNamed:@"默认用户头像"];
             //网络下载
             CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
             [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];

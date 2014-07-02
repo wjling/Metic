@@ -148,7 +148,7 @@
     NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:indexPath.section]];
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:indexPath.row];
     NSString* name = [aFriend objectForKey:@"name"];
-    cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
     cell.friendid = [aFriend objectForKey:@"id"];
     if (name) {
         cell.title.text = name;

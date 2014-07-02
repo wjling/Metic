@@ -161,7 +161,7 @@
     NSLog(@"friend name: %@",name);
 //    NSData* name = [aFriend objectForKey:@"name"];
 //    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
-//    cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+//    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
     if (name) {
         cell.friendNameLabel.text = name;
     }

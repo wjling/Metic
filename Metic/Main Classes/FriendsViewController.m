@@ -232,7 +232,7 @@
 //{
 //    if (0 == section) {
 //        FriendTableViewCell *header = [[FriendTableViewCell alloc]init];
-//        header.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+//        header.avatar.image = [UIImage imageNamed:@"默认用户头像"];
 //        header.title.text = @"消息中心";
 //        return header;
 //    }
@@ -278,7 +278,7 @@
     
 //        NSLog(@"a friend: %@",aFriend);
     
-        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+        cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
         if (label) {
             cell.title.text = label;
         }
