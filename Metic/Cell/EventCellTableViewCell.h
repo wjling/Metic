@@ -15,7 +15,9 @@
     
     IBOutlet UIImageView *themePhoto;
     IBOutlet UILabel *eventName;
+    IBOutlet UILabel *beginDate;
     IBOutlet UILabel *beginTime;
+    IBOutlet UILabel *endDate;
     IBOutlet UILabel *endTime;
     IBOutlet UILabel *eventDetail;
     IBOutlet UILabel *timeInfo;
@@ -41,6 +43,8 @@
 
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *eventName;
+@property(nonatomic,strong) UILabel *beginDate;
+@property(nonatomic,strong) UILabel *endDate;
 @property(nonatomic,strong) UILabel *beginTime;
 @property(nonatomic,strong) UILabel *endTime;
 @property(nonatomic,strong) UILabel *timeInfo;

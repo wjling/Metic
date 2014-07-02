@@ -35,7 +35,17 @@
 }
 
 
-
+- (IBAction)appreciate:(id)sender {
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.commentid forKey:@"comment_id"];
+    [dictionary setValue:[NSNumber numberWithInt:self.isZan? 0:1]  forKey:@"operation"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD];
+}
 
 
 #pragma mark - HttpSenderDelegate
@@ -51,19 +61,19 @@
         case NORMAL_REPLY:
         {
             
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+//            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除成功" WithDelegate:self WithCancelTitle:@"确定"];
             [self.controller pullMainCommentFromAir];
-            //[((UITableView*)[[self superview] superview]) reloadData];
             
         }
             break;
-        case SERVER_ERROR:
+        default:
         {
             
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
             
         }
             break;
     }
 }
+
 @end

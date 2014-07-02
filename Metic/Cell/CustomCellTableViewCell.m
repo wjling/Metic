@@ -17,7 +17,9 @@
 @synthesize videoWall;
 @synthesize imgWall;
 @synthesize beginTime;
+@synthesize beginDate;
 @synthesize endTime;
+@synthesize endDate;
 @synthesize timeInfo;
 @synthesize location;
 @synthesize launcherinfo;

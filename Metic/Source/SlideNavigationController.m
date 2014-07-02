@@ -103,7 +103,7 @@ static SlideNavigationController *singletonInstance;
 	
 	[self setEnableSwipeGesture:YES];
     
-//    [self reconnect];
+    //    [self reconnect];
 }
 
 #pragma mark - Public Methods -
@@ -124,18 +124,18 @@ static SlideNavigationController *singletonInstance;
 							  delay:0
 							options:UIViewAnimationOptionCurveEaseOut
 						 animations:^{
-			rect.origin.x = (rect.origin.x > 0) ? rect.size.width : -1*rect.size.width;
-			self.view.frame = rect;
-		} completion:^(BOOL finished) {
-			
-			[super popToRootViewControllerAnimated:NO];
-			[super pushViewController:viewController animated:NO];
-			
-			[self closeMenuWithCompletion:^{
-				if (completion)
-					completion();
-			}];
-		}];
+                             rect.origin.x = (rect.origin.x > 0) ? rect.size.width : -1*rect.size.width;
+                             self.view.frame = rect;
+                         } completion:^(BOOL finished) {
+                             
+                             [super popToRootViewControllerAnimated:NO];
+                             [super pushViewController:viewController animated:NO];
+                             
+                             [self closeMenuWithCompletion:^{
+                                 if (completion)
+                                     completion();
+                             }];
+                         }];
 	}
 	else
 	{
@@ -335,7 +335,7 @@ static SlideNavigationController *singletonInstance;
 		[self closeMenuWithCompletion:nil];
 	else
 		[self openMenu:MenuLeft withCompletion:nil];
-		
+    
 }
 
 - (void)righttMenuSelected:(id)sender
@@ -373,9 +373,13 @@ static SlideNavigationController *singletonInstance;
         float distance = self.view.frame.origin.x;
         if (rect.origin.x >= self.minXForDragging && rect.origin.x <= self.maxXForDragging)
             self.view.frame = rect;
-
-        [(UIViewController<SlideNavigationControllerDelegate> *)self.vc sendDistance:distance];
-
+        if ([self.vc respondsToSelector:@selector(slideNavigationControllerShouldDisplayLeftMenu)] &&
+			[(UIViewController<SlideNavigationControllerDelegate> *)self.vc slideNavigationControllerShouldDisplayLeftMenu])
+		{
+			[(UIViewController<SlideNavigationControllerDelegate> *)self.vc sendDistance:distance];
+		}
+        
+        
         self.draggingPoint = translation;
         
         if (rect.origin.x > 0)
@@ -388,55 +392,55 @@ static SlideNavigationController *singletonInstance;
             [self.leftMenu.view removeFromSuperview];
             [self.view.window insertSubview:self.righMenu.view atIndex:0];
         }
-
+        
 	}
 	else if (aPanRecognizer.state == UIGestureRecognizerStateEnded)
 	{
         //if ((self.beginPoint.x <= PAN_EDGE_THRESHOLD ) || (self.beginPoint.x >= (self.view.bounds.size.width - PAN_EDGE_THRESHOLD  -50))) {
-            NSInteger currentX = self.view.frame.origin.x;
-            NSInteger currentXOffset = (currentX > 0) ? currentX : currentX * -1;
-            NSInteger positiveVelocity = (velocity.x > 0) ? velocity.x : velocity.x * -1;
-            
-            // If the speed is high enough follow direction
-            if (positiveVelocity >= velocityForFollowingDirection)
+        NSInteger currentX = self.view.frame.origin.x;
+        NSInteger currentXOffset = (currentX > 0) ? currentX : currentX * -1;
+        NSInteger positiveVelocity = (velocity.x > 0) ? velocity.x : velocity.x * -1;
+        
+        // If the speed is high enough follow direction
+        if (positiveVelocity >= velocityForFollowingDirection)
+        {
+            // Moving Right
+            if (velocity.x > 0)
             {
-                // Moving Right
-                if (velocity.x > 0)
+                if (currentX > 0)
                 {
-                    if (currentX > 0)
-                    {
-                        [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withCompletion:nil];
-                    }
-                    else
-                    {
-                        [self closeMenuWithDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
-                    }
+                    [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withCompletion:nil];
                 }
-                // Moving Left
                 else
                 {
-                    if (currentX > 0)
-                    {
-                        [self closeMenuWithCompletion:nil];
-                    }
-                    else
-                    {
-                        Menu menu = (velocity.x > 0) ? MenuLeft : MenuRight;
-                        
-                        if ([self shouldDisplayMenu:menu forViewController:self.visibleViewController])
-                            [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
-                    }
+                    [self closeMenuWithDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
                 }
             }
+            // Moving Left
             else
             {
-                if (currentXOffset < self.view.frame.size.width/2)
+                if (currentX > 0)
+                {
                     [self closeMenuWithCompletion:nil];
+                }
                 else
-                    [self openMenu:(currentX > 0) ? MenuLeft : MenuRight withCompletion:nil];
+                {
+                    Menu menu = (velocity.x > 0) ? MenuLeft : MenuRight;
+                    
+                    if ([self shouldDisplayMenu:menu forViewController:self.visibleViewController])
+                        [self openMenu:(velocity.x > 0) ? MenuLeft : MenuRight withDuration:MENU_QUICK_SLIDE_ANIMATION_DURATION andCompletion:nil];
+                }
             }
         }
-   // }
+        else
+        {
+            if (currentXOffset < self.view.frame.size.width/2)
+                [self closeMenuWithCompletion:nil];
+            else
+                [self openMenu:(currentX > 0) ? MenuLeft : MenuRight withCompletion:nil];
+        }
+    }
+    // }
 }
 
 - (NSInteger)minXForDragging

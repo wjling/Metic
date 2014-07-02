@@ -46,8 +46,12 @@
     if (self.eventsSource) {
         NSDictionary *a = self.eventsSource[indexPath.row];
         cell.eventName.text = [a valueForKey:@"subject"];
-        cell.beginTime.text = [a valueForKey:@"time"];
-        cell.endTime.text = [a valueForKey:@"endTime"];
+        NSString* beginT = [a valueForKey:@"time"];
+        NSString* endT = [a valueForKey:@"endTime"];
+        cell.beginDate.text = [beginT substringToIndex:10];
+        cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
+        cell.endDate.text = [endT substringToIndex:10];
+        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
         int participator_count = [[a valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];

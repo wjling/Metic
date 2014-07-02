@@ -8,6 +8,7 @@
 
 #import "MenuViewController.h"
 #import "FriendsViewController.h"
+#import "NotificationsViewController.h"
 #import "MTUser.h"
 #import "PhotoGetter.h"
 
@@ -29,6 +30,20 @@
 
 #pragma mark - UITableView Delegate & Datasrouce -
 
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    float val = 21.0/255.0;
+    [cell setBackgroundColor:[UIColor colorWithRed:val green:val blue:val alpha:1.0f]];
+    NSLog(@"aaa");
+}
+
+-(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [cell setBackgroundColor:[UIColor clearColor]];
+    NSLog(@"ccc");
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return 8;
@@ -112,9 +127,11 @@
 		case 3:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 			break;
+            
         case 5:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
 			break;
+
         default:
             return;
             
