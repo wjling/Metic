@@ -112,7 +112,9 @@
 		case 3:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 			break;
-
+        case 5:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+			break;
         default:
             return;
             

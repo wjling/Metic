@@ -101,6 +101,9 @@
         case 9:
             resultCode = @"launch_event";
             break;
+        case 10:
+            resultCode = @"participate_event";
+            break;
         case 14:
             resultCode = @"add_comment";
             break;

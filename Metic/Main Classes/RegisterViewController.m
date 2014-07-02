@@ -37,6 +37,10 @@
     self.navigationController.navigationBar.hidden = NO;
     // Do any additional setup after loading the view.
     
+    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
+    [self.view setBackgroundColor:backgroundColor];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
     textField_confromPassword.delegate = self;
     textField_email.delegate = self;
     textField_password.delegate = self;

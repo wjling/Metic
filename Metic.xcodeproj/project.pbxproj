@@ -309,6 +309,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04B63B4C1963A1600015357B /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				0835FFC6196339590050833F /* NotificationsViewController.h */,
+				0835FFC7196339590050833F /* NotificationsViewController.m */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
 		08B3F7021957013F003B32B7 /* GTMBase64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -588,6 +597,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				04B63B4C1963A1600015357B /* Notifications */,
 				483E01EF1935C6E400418A58 /* Friends */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
@@ -611,8 +621,6 @@
 				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
-				0835FFC6196339590050833F /* NotificationsViewController.h */,
-				0835FFC7196339590050833F /* NotificationsViewController.m */,
 				51581D6219335A8700943606 /* ProfileViewController.h */,
 				51581D6319335A8700943606 /* ProfileViewController.m */,
 				086A5AB0193D6E7500880F2F /* MainView.h */,

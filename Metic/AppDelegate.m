@@ -109,9 +109,10 @@
     [mySocket close];
     
 //    NSString* str = @"ws://203.195.174.128:10088/";
-    NSString* str = @"ws://42.96.203.86:10088/";
+//    NSString* str = @"ws://42.96.203.86:10088/";
 //    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
+    NSString* str = @"ws://203.195.174.128:10088/";//腾讯
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     
@@ -184,6 +185,11 @@
     {
         [self.syncMessages addObject:response1];
         if (self.syncMessages.count == numOfSyncMessages) {
+            NSNumber* seq = [response1 objectForKey:@"seq"];
+            NSMutableDictionary* json = [CommonUtils packParamsInDictionary:@"feedback",@"cmd",[MTUser sharedInstance].userid, @"uid",seq,@"seq",nil];
+            NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+            [mySocket send:jsonData];
+            NSLog(@"feedback send data: %@",jsonData);
             NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertNotificationsToDB) object:nil];
             
             [thread start];
