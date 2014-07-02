@@ -43,19 +43,26 @@
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.user = [MTUser sharedInstance];
     
+    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
+    [self.view setBackgroundColor:backgroundColor];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    self.Img_userName.layer.cornerRadius = 10;
+//    self.Img_userName.layer.masksToBounds = YES;
+//    self.Img_password.layer.cornerRadius = 3;
+    self.Img_register.layer.cornerRadius = 3;
     self.textField_userName.tag = Tag_userName;
     self.textField_userName.returnKeyType = UIReturnKeyDone;
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"114@qq.com";
+    self.textField_userName.text = @"185597569@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"123456";
+    self.textField_password.text = @"538769";
 
 }
 
@@ -140,6 +147,12 @@
 {
     //    [sender resignFirstResponder];
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+}
+
+- (IBAction)text_Clear:(id)sender {
+    if ([sender superview] == [self.textField_userName superview]) {
+        self.textField_userName.text =@"";
+    }else self.textField_password.text = @"";
 }
 
 

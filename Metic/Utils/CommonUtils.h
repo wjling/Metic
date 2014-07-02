@@ -10,6 +10,7 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import "PinYin4Objc.h"
 #import "AFNetworking.h"
+#import "GTMBase64.h"
 
 @interface CommonUtils : NSObject
 
@@ -40,14 +41,18 @@
 //中文转成拼音（如果是英文还是转成英文）
 + (NSString*)pinyinFromNSString:(NSString*)str;
 
-//对str字符串进行sha1加密
-+(NSString*)SHA1EncryptionWithString:(NSString*)str;
-
 //从url下载图片，并保存到document／media下 path 为在media下的相对路径
 +(UIImage*)downloadfile:(NSString*)url path:(NSString*)path;
 
 //上传图片到url path为完整路径
 +(void)uploadfile:(NSString*)url path:(NSString*)path;
 
+//删除云存储上的图片 
++(void)deletefile:(NSString*)url;
 
+//hmacSha1 加密
++ (NSString *)hmac_sha1:(NSString *)key text:(NSString *)text;
+
+//将图片裁剪成圆形
++(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset  borderColor:(UIColor*)color borderWidth:(CGFloat)width ;
 @end

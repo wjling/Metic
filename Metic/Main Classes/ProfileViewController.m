@@ -33,6 +33,17 @@
 	return NO;
 }
 
+-(void)sendDistance:(float)distance
+{
+    if (distance > 0) {
+        self.shadowView.hidden = NO;
+        [self.view bringSubviewToFront:self.shadowView];
+        [self.shadowView setAlpha:distance/400.0];
+    }else{
+        self.shadowView.hidden = YES;
+        [self.view sendSubviewToBack:self.shadowView];
+    }
+}
 
 /////////////////////////testing socket/////////////
 

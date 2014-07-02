@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *addFriendBtn;
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 
 
 - (void)initParams;

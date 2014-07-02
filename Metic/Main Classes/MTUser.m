@@ -28,6 +28,7 @@ static MTUser *singletonInstance;
     self = [super init];
     if (self) {
         singletonInstance = self;
+        self.avatar = [[NSMutableDictionary alloc]init];
     }
     return self;
 }
@@ -54,26 +55,28 @@ static MTUser *singletonInstance;
 
 - (void)initUserDir
 {
-    if (YES) {
-        NSString* mediaDir= [NSString stringWithFormat:@"%@/Documents/media", NSHomeDirectory()];
-        NSLog(mediaDir,nil);
-        BOOL isDir = NO;
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        BOOL existed = [fileManager fileExistsAtPath:mediaDir isDirectory:&isDir];
-        if (!(isDir == YES && existed == YES)) {
-            [fileManager createDirectoryAtPath:mediaDir withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-    }
-    NSString* userDir= [NSString stringWithFormat:@"%@/Documents/%@", NSHomeDirectory(), self.userid];
+    NSString* mediaDir= [NSString stringWithFormat:@"%@/Documents/media", NSHomeDirectory()];
     BOOL isDir = NO;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL existed = [fileManager fileExistsAtPath:userDir isDirectory:&isDir];
+    BOOL existed = [fileManager fileExistsAtPath:mediaDir isDirectory:&isDir];
+    if (!(isDir == YES && existed == YES)) {
+        [fileManager createDirectoryAtPath:mediaDir withIntermediateDirectories:YES attributes:nil error:nil];
+        [fileManager createDirectoryAtPath:[mediaDir stringByAppendingString:@"/avatar"]  withIntermediateDirectories:YES attributes:nil error:nil];
+        [fileManager createDirectoryAtPath:[mediaDir stringByAppendingString:@"/images"]  withIntermediateDirectories:YES attributes:nil error:nil];
+        
+    }
+    
+    NSString* userDir= [NSString stringWithFormat:@"%@/Documents/%@", NSHomeDirectory(), self.userid];
+    isDir = NO;
+    existed = [fileManager fileExistsAtPath:userDir isDirectory:&isDir];
     if (!(isDir == YES && existed == YES)) {
         [fileManager createDirectoryAtPath:userDir withIntermediateDirectories:YES attributes:nil error:nil];
-//        [self initUserDB];
+      
         NSLog(@"init user DB");
         [self performSelectorOnMainThread:@selector(initUserDB) withObject:nil waitUntilDone:YES];
     }
+    
+    
 }
 
 - (void)initUserDB

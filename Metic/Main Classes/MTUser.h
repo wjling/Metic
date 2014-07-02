@@ -18,6 +18,7 @@
 @property(nonatomic,strong)NSString *sign;
 @property(nonatomic,strong)NSString *phone;
 @property(nonatomic,strong)NSNumber *location;
+@property(nonatomic,strong)NSMutableDictionary *avatar;
 
 
 

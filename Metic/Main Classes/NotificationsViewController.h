@@ -19,6 +19,7 @@
 @property (strong,nonatomic) NSMutableArray* msgFromDB;
 @property (strong, nonatomic) IBOutlet UITableView *notificationsTable;
 @property (weak,nonatomic) AppDelegate* appListener;
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 
 
 - (void)initParams;

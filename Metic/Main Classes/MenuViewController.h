@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
+#import "../Utils/CloudOperation.h"
 
-@interface MenuViewController : UIViewController <UITableViewDelegate>
+@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (strong, nonatomic) IBOutlet UIImageView *img;
 @property (strong, nonatomic) IBOutlet UILabel *userName;
 @property (strong, nonatomic) IBOutlet UILabel *email;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 
 @end

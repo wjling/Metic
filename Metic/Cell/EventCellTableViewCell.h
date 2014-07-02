@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "../Main Classes/EventDetailViewController.h"
 
 @interface EventCellTableViewCell : UITableViewCell
 
 {
     
+    IBOutlet UIImageView *themePhoto;
     IBOutlet UILabel *eventName;
     IBOutlet UILabel *beginTime;
     IBOutlet UILabel *endTime;
@@ -37,7 +39,7 @@
 
 
 
-
+@property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UILabel *beginTime;
 @property(nonatomic,strong) UILabel *endTime;
@@ -51,6 +53,7 @@
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIView *commentInputView;
+@property(nonatomic,strong) EventDetailViewController * eventController;
 
 
 @end

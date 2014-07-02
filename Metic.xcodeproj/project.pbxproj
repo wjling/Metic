@@ -7,16 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		04756A4E195DC11E002C7024 /* 添加好友icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04756A4D195DC11E002C7024 /* 添加好友icon.png */; };
-		04756A50195DC328002C7024 /* 好友推荐icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 04756A4F195DC328002C7024 /* 好友推荐icon.png */; };
-		04CE048919580C6F0022D877 /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CE048819580C6F0022D877 /* NotificationCenterCell.m */; };
-		04CE048E195839AF0022D877 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CE048D195839AF0022D877 /* NotificationsViewController.m */; };
-		04CE0491195865D10022D877 /* NotificationsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CE0490195865D10022D877 /* NotificationsTableViewCell.m */; };
 		04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
+		0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC4196330800050833F /* NotificationCenterCell.m */; };
+		0835FFC8196339590050833F /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC7196339590050833F /* NotificationsViewController.m */; };
+		0835FFCB19633A8A0050833F /* NotificationsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */; };
+		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
+		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
+		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
+		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
+		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
+		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -59,6 +63,9 @@
 		48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */; };
 		48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */; };
 		48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */; };
+		510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A2195BED3A00084014 /* PhotoGetter.m */; };
+		510BE1A6195C32FE00084014 /* MTTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A5195C32FE00084014 /* MTTableView.m */; };
+		5120883D195D18F10046766C /* MainScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5120883C195D18F10046766C /* MainScrollView.m */; };
 		514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5148120B1937064D00DBBED7 /* MJRefresh.bundle */; };
 		514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5148120E1937064D00DBBED7 /* MJRefreshBaseView.m */; };
 		514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 514812101937064E00DBBED7 /* MJRefreshConst.m */; };
@@ -105,23 +112,33 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		04756A4D195DC11E002C7024 /* 添加好友icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "添加好友icon.png"; sourceTree = "<group>"; };
-		04756A4F195DC328002C7024 /* 好友推荐icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "好友推荐icon.png"; sourceTree = "<group>"; };
-		04CE048719580C6F0022D877 /* NotificationCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCenterCell.h; sourceTree = "<group>"; };
-		04CE048819580C6F0022D877 /* NotificationCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCenterCell.m; sourceTree = "<group>"; };
-		04CE048C195839AF0022D877 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
-		04CE048D195839AF0022D877 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
-		04CE048F195865D10022D877 /* NotificationsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsTableViewCell.h; sourceTree = "<group>"; };
-		04CE0490195865D10022D877 /* NotificationsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsTableViewCell.m; sourceTree = "<group>"; };
 		04D4EA4C193DC42A000DCCBD /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = default_avatar.jpg; path = Metic/default_avatar.jpg; sourceTree = SOURCE_ROOT; };
 		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
 		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
 		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		0835FFC3196330800050833F /* NotificationCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCenterCell.h; sourceTree = "<group>"; };
+		0835FFC4196330800050833F /* NotificationCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCenterCell.m; sourceTree = "<group>"; };
+		0835FFC6196339590050833F /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		0835FFC7196339590050833F /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
+		0835FFC919633A8A0050833F /* NotificationsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsTableViewCell.h; path = "Metic/Main Classes/NotificationsTableViewCell.h"; sourceTree = SOURCE_ROOT; };
+		0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsTableViewCell.m; path = "Metic/Main Classes/NotificationsTableViewCell.m"; sourceTree = SOURCE_ROOT; };
+		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
+		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
+		08574B58196057BD00D967D4 /* PictureWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureWallViewController.h; path = "Metic/Main Classes/PictureWallViewController.h"; sourceTree = SOURCE_ROOT; };
+		08574B59196057BD00D967D4 /* PictureWallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PictureWallViewController.m; path = "Metic/Main Classes/PictureWallViewController.m"; sourceTree = SOURCE_ROOT; };
+		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
+		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
+		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		08B3F7041957013F003B32B7 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		08B3F707195711A3003B32B7 /* CloudOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CloudOperation.h; path = Metic/Utils/CloudOperation.h; sourceTree = SOURCE_ROOT; };
+		08B3F708195711A3003B32B7 /* CloudOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CloudOperation.m; path = Metic/Utils/CloudOperation.m; sourceTree = SOURCE_ROOT; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -202,6 +219,12 @@
 		48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
 		48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
 		48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
+		510BE1A1195BED3A00084014 /* PhotoGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGetter.h; sourceTree = "<group>"; };
+		510BE1A2195BED3A00084014 /* PhotoGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoGetter.m; sourceTree = "<group>"; };
+		510BE1A4195C32FE00084014 /* MTTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableView.h; sourceTree = "<group>"; };
+		510BE1A5195C32FE00084014 /* MTTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableView.m; sourceTree = "<group>"; };
+		5120883B195D18F10046766C /* MainScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScrollView.h; sourceTree = "<group>"; };
+		5120883C195D18F10046766C /* MainScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainScrollView.m; sourceTree = "<group>"; };
 		5148120B1937064D00DBBED7 /* MJRefresh.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJRefresh.bundle; sourceTree = "<group>"; };
 		5148120C1937064D00DBBED7 /* MJRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefresh.h; sourceTree = "<group>"; };
 		5148120D1937064D00DBBED7 /* MJRefreshBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJRefreshBaseView.h; sourceTree = "<group>"; };
@@ -286,25 +309,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		04756A4C195DBF19002C7024 /* resource */ = {
+		08B3F7021957013F003B32B7 /* GTMBase64 */ = {
 			isa = PBXGroup;
 			children = (
-				04756A4F195DC328002C7024 /* 好友推荐icon.png */,
-				04756A4D195DC11E002C7024 /* 添加好友icon.png */,
+				08B3F7031957013F003B32B7 /* GTMBase64.h */,
+				08B3F7041957013F003B32B7 /* GTMBase64.m */,
+				08B3F7051957013F003B32B7 /* GTMDefines.h */,
 			);
-			name = resource;
-			sourceTree = "<group>";
-		};
-		04CE048B1958395C0022D877 /* Notifications */ = {
-			isa = PBXGroup;
-			children = (
-				04CE048C195839AF0022D877 /* NotificationsViewController.h */,
-				04CE048D195839AF0022D877 /* NotificationsViewController.m */,
-				04CE048F195865D10022D877 /* NotificationsTableViewCell.h */,
-				04CE0490195865D10022D877 /* NotificationsTableViewCell.m */,
-			);
-			name = Notifications;
-			sourceTree = "<group>";
+			name = GTMBase64;
+			path = Metic/GTMBase64;
+			sourceTree = SOURCE_ROOT;
 		};
 		08DB696C19541F3A00F80F3F /* AFNetworking */ = {
 			isa = PBXGroup;
@@ -347,6 +361,13 @@
 				08DB698A19541F3A00F80F3F /* SCommentTableViewCell.h */,
 				08DB698B19541F3A00F80F3F /* SCommentTableViewCell.m */,
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
+				08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */,
+				08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */,
+				08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */,
+				510BE1A4195C32FE00084014 /* MTTableView.h */,
+				510BE1A5195C32FE00084014 /* MTTableView.m */,
+				0835FFC919633A8A0050833F /* NotificationsTableViewCell.h */,
+				0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -378,6 +399,7 @@
 		48151F14194947EB009E156E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				08B3F7021957013F003B32B7 /* GTMBase64 */,
 				48A4DDE3194FE42D0066BF8D /* PinYin4Objc */,
 				485F47CC19494A30003AAD30 /* SocketRocket */,
 				48151F15194947EB009E156E /* AppConstants.h */,
@@ -385,10 +407,14 @@
 				48151F17194947EB009E156E /* CommonUtils.m */,
 				48151F18194947EB009E156E /* HttpSender.h */,
 				48151F19194947EB009E156E /* HttpSender.m */,
+				08B3F707195711A3003B32B7 /* CloudOperation.h */,
+				08B3F708195711A3003B32B7 /* CloudOperation.m */,
 				48151F1A194947EB009E156E /* MySqlite.h */,
 				48151F1B194947EB009E156E /* MySqlite.m */,
 				48151F1C194947EB009E156E /* NSString+JSON.h */,
 				48151F1D194947EB009E156E /* NSString+JSON.m */,
+				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
+				510BE1A2195BED3A00084014 /* PhotoGetter.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -396,7 +422,8 @@
 		483E01EF1935C6E400418A58 /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				04756A4C195DBF19002C7024 /* resource */,
+				0835FFC3196330800050833F /* NotificationCenterCell.h */,
+				0835FFC4196330800050833F /* NotificationCenterCell.m */,
 				51581D5C19335A8700943606 /* FriendsViewController.h */,
 				51581D5D19335A8700943606 /* FriendsViewController.m */,
 				483E01F01935C70C00418A58 /* FriendInfoViewController.h */,
@@ -407,8 +434,6 @@
 				04D53179193E180D001EDDF4 /* AddFriendViewController.m */,
 				04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */,
 				04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */,
-				04CE048719580C6F0022D877 /* NotificationCenterCell.h */,
-				04CE048819580C6F0022D877 /* NotificationCenterCell.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -563,10 +588,11 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
-				04CE048B1958395C0022D877 /* Notifications */,
 				483E01EF1935C6E400418A58 /* Friends */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
+				51A01D141934EB270043963F /* MTEvent.h */,
+				51A01D151934EB270043963F /* MTEvent.m */,
 				51A01D0E19339F0B0043963F /* RegisterViewController.h */,
 				51A01D0F19339F0B0043963F /* RegisterViewController.m */,
 				51A01D0B19339EE50043963F /* LoginViewController.h */,
@@ -577,16 +603,22 @@
 				51581D5E19335A8700943606 /* HomeViewController.h */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
-				51A01D141934EB270043963F /* MTEvent.h */,
-				51A01D151934EB270043963F /* MTEvent.m */,
-				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
-				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
-				51581D6219335A8700943606 /* ProfileViewController.h */,
-				51581D6319335A8700943606 /* ProfileViewController.m */,
 				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
 				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
+				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
+				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
+				0842A89819588DA5003229A9 /* InviteFriendViewController.h */,
+				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
+				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
+				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
+				0835FFC6196339590050833F /* NotificationsViewController.h */,
+				0835FFC7196339590050833F /* NotificationsViewController.m */,
+				51581D6219335A8700943606 /* ProfileViewController.h */,
+				51581D6319335A8700943606 /* ProfileViewController.m */,
 				086A5AB0193D6E7500880F2F /* MainView.h */,
 				086A5AB1193D6E7500880F2F /* MainView.m */,
+				5120883B195D18F10046766C /* MainScrollView.h */,
+				5120883C195D18F10046766C /* MainScrollView.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -689,15 +721,14 @@
 			files = (
 				08DB69AF19541F3A00F80F3F /* SCommentTableViewCell.xib in Resources */,
 				51581D3A1933575300943606 /* Main_iPad.storyboard in Resources */,
-				04756A50195DC328002C7024 /* 好友推荐icon.png in Resources */,
 				48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */,
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
+				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
 				08DB69A919541F3A00F80F3F /* CustomCellTableViewCell.xib in Resources */,
-				04756A4E195DC11E002C7024 /* 添加好友icon.png in Resources */,
 				04D4EA4D193DC42A000DCCBD /* default_avatar.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
@@ -727,6 +758,7 @@
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
@@ -736,21 +768,24 @@
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
+				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
+				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				08DB69AC19541F3A00F80F3F /* MCommentTableViewCell.m in Sources */,
-				04CE048E195839AF0022D877 /* NotificationsViewController.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
-				04CE048919580C6F0022D877 /* NotificationCenterCell.m in Sources */,
+				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
+				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,
@@ -762,21 +797,25 @@
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
+				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
+				5120883D195D18F10046766C /* MainScrollView.m in Sources */,
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
 				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
-				04CE0491195865D10022D877 /* NotificationsTableViewCell.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
+				0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */,
+				08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */,
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
+				0835FFCB19633A8A0050833F /* NotificationsTableViewCell.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

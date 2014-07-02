@@ -18,19 +18,37 @@
 #import "MJRefreshHeaderView.h"
 #import "MySqlite.h"
 #import "AppDelegate.h"
+#import "../Utils/CloudOperation.h"
 
 
 
-@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
+@interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,MJRefreshBaseViewDelegate,CloudOperationDelegate>
 
 
 
 @property(nonatomic,strong)MTUser *user;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong,nonatomic) MJRefreshHeaderView *header;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 
+@property (strong,nonatomic) MJRefreshHeaderView *header;
+@property (strong, nonatomic) IBOutlet UIView *controlView;
+@property (strong, nonatomic) UILabel *indicatior;
+- (IBAction)more:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *morefuctions;
+@property (strong, nonatomic) IBOutlet UIButton *showAllEvents_button;
+@property (strong, nonatomic) IBOutlet UIButton *showMyEvents_button;
+@property (strong, nonatomic) IBOutlet UIButton *showTaEvents_button;
+- (IBAction)showAllEvents:(id)sender;
+- (IBAction)showMyEvents:(id)sender;
+- (IBAction)showTaEvents:(id)sender;
+
+
+@property (nonatomic,strong)NSNumber *selete_Eventid;
 @property(nonatomic,strong)NSMutableArray *eventIds;
-@property(nonatomic,strong)NSMutableArray *events;
+@property(nonatomic,strong)NSMutableArray *eventsSource;
+@property(atomic,strong)NSMutableArray *events;
+@property(atomic,strong)NSMutableArray *myevents;
+@property(atomic,strong)NSMutableArray *taevents;
 
 @property(nonatomic,strong)MySqlite *sql;
 

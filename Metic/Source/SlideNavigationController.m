@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
+@property (nonatomic,strong) UIViewController* vc;
 @end
 
 @implementation SlideNavigationController
@@ -93,10 +94,10 @@ static SlideNavigationController *singletonInstance;
 	singletonInstance = self;
 	self.delegate = self;
 	
-	self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-	self.view.layer.shadowRadius = 10;
-	self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
-	self.view.layer.shadowOpacity = 1;
+	//self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+	//self.view.layer.shadowRadius = 10;
+	//self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
+	//self.view.layer.shadowOpacity = 1;
 	self.view.layer.shouldRasterize = YES;
 	self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
 	
@@ -217,6 +218,7 @@ static SlideNavigationController *singletonInstance;
 	return (self.view.frame.origin.x == 0) ? NO : YES;
 }
 
+
 - (BOOL)shouldDisplayMenu:(Menu)menu forViewController:(UIViewController *)vc
 {
 	if (menu == MenuRight)
@@ -266,6 +268,13 @@ static SlideNavigationController *singletonInstance;
 						 if (completion)
 							 completion();
 					 }];
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                            [self.vc.view viewWithTag:101 ].alpha = 260.0/400.0;
+                        }completion:^(BOOL finished){
+                            
+                        }];
 }
 
 - (void)openMenu:(Menu)menu withCompletion:(void (^)())completion
@@ -289,6 +298,14 @@ static SlideNavigationController *singletonInstance;
 						 if (completion)
 							 completion();
 					 }];
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseOut animations:^(void){
+                            [self.vc.view viewWithTag:101 ].alpha = 0.0;
+                        }completion:^(BOOL finished){
+                            
+                        }];
+    
 }
 
 - (void)closeMenuWithCompletion:(void (^)())completion
@@ -302,6 +319,7 @@ static SlideNavigationController *singletonInstance;
 	  willShowViewController:(UIViewController *)viewController
 					animated:(BOOL)animated
 {
+    self.vc = viewController;
 	if ([self shouldDisplayMenu:MenuLeft forViewController:viewController])
 		viewController.navigationItem.leftBarButtonItem = [self barButtonItemForMenu:MenuLeft];
 	
@@ -338,7 +356,6 @@ static SlideNavigationController *singletonInstance;
 - (void)panDetected:(UIPanGestureRecognizer *)aPanRecognizer
 {
 	static NSInteger velocityForFollowingDirection = 1000;
-	
 	CGPoint translation = [aPanRecognizer translationInView:aPanRecognizer.view];
     CGPoint velocity = [aPanRecognizer velocityInView:aPanRecognizer.view];
 	
@@ -350,27 +367,28 @@ static SlideNavigationController *singletonInstance;
     }
 	else if (aPanRecognizer.state == UIGestureRecognizerStateChanged)
 	{
-        //if ((self.beginPoint.x <= PAN_EDGE_THRESHOLD ) || (self.beginPoint.x >= (self.view.bounds.size.width - PAN_EDGE_THRESHOLD -50))) {
-            NSInteger movement = translation.x - self.draggingPoint.x;
-            CGRect rect = self.view.frame;
-            rect.origin.x += movement;
-            
-            if (rect.origin.x >= self.minXForDragging && rect.origin.x <= self.maxXForDragging)
-                self.view.frame = rect;
-            
-            self.draggingPoint = translation;
-            
-            if (rect.origin.x > 0)
-            {
-                [self.righMenu.view removeFromSuperview];
-                [self.view.window insertSubview:self.leftMenu.view atIndex:0];
-            }
-            else
-            {
-                [self.leftMenu.view removeFromSuperview];
-                [self.view.window insertSubview:self.righMenu.view atIndex:0];
-            }
-    //    }
+        NSInteger movement = translation.x - self.draggingPoint.x;
+        CGRect rect = self.view.frame;
+        rect.origin.x += movement;
+        float distance = self.view.frame.origin.x;
+        if (rect.origin.x >= self.minXForDragging && rect.origin.x <= self.maxXForDragging)
+            self.view.frame = rect;
+
+        [(UIViewController<SlideNavigationControllerDelegate> *)self.vc sendDistance:distance];
+
+        self.draggingPoint = translation;
+        
+        if (rect.origin.x > 0)
+        {
+            [self.righMenu.view removeFromSuperview];
+            [self.view.window insertSubview:self.leftMenu.view atIndex:0];
+        }
+        else
+        {
+            [self.leftMenu.view removeFromSuperview];
+            [self.view.window insertSubview:self.righMenu.view atIndex:0];
+        }
+
 	}
 	else if (aPanRecognizer.state == UIGestureRecognizerStateEnded)
 	{
@@ -507,3 +525,5 @@ static SlideNavigationController *singletonInstance;
 
 
 @end
+
+

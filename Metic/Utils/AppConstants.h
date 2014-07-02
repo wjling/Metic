@@ -51,7 +51,16 @@ enum Operation_Code
     GET_NEARBY_FRIENDS = 33,
     KANKAN = 34,
     UPLOADPHOTO = 35,
+    GET_FILE_URL = 36,
 };
+
+enum CloudOperation_Code
+{
+    DOWNLOAD = 1,
+    UPLOAD = 2,
+    DELETE = 3,
+};
+
 
 enum Return_Code
 {

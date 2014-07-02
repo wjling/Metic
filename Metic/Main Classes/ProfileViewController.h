@@ -14,6 +14,7 @@
 @interface ProfileViewController : UIViewController <SlideNavigationControllerDelegate,SRWebSocketDelegate>
 @property(strong)SRWebSocket* mySocket;
 @property (weak, nonatomic) IBOutlet UITextView *msg;
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 
 - (IBAction)testingSocket:(id)sender;
 

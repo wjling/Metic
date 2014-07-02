@@ -140,22 +140,6 @@
     return [PinyinHelper toHanyuPinyinStringWithNSString:str withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
 }
 
-+(NSString*)SHA1EncryptionWithString:(NSString *)str
-{
-    const char *cstr = [str cStringUsingEncoding:NSUTF8StringEncoding];
-    NSData *data = [NSData dataWithBytes:cstr length:str.length];
-    
-    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
-    
-    CC_SHA1(data.bytes, data.length, digest);
-    
-    NSMutableString* output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
-    
-    for(int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++)
-        [output appendFormat:@"%02x", digest[i]];
-    
-    return output;
-}
 
 +(UIImage*)downloadfile:(NSString*)url path:(NSString*)path
 {
@@ -182,6 +166,48 @@
         NSLog(@"Error: %@ ***** %@", operation.responseString, error);
     }];
     [op start];
+}
+
++(void)deletefile:(NSString*)url
+{
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    AFHTTPRequestOperation *op = [manager DELETE:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Success: %@ ***** %@", operation.responseString, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@ ***** %@", operation.responseString, error);
+    }];
+    [op start];
+}
+
+
++ (NSString *)hmac_sha1:(NSString *)key text:(NSString *)text{
+    
+    const char *cKey  = [key cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cData = [text cStringUsingEncoding:NSUTF8StringEncoding];
+    char cHMAC[CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cData, strlen(cData), cHMAC);//hmac_sha1
+    NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:CC_SHA1_DIGEST_LENGTH];
+    NSString *hash = [GTMBase64 stringByEncodingData:HMAC];//base64 编码。
+    hash = [[hash substringWithRange:NSMakeRange(0,27)] stringByAppendingString:@"%%3D"];
+    return hash;
+
+}
+
++(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset borderColor:(UIColor*)color borderWidth:(CGFloat)width{
+    UIGraphicsBeginImageContext(image.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, width);
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
+    CGRect rect = CGRectMake(inset, inset, image.size.width - inset * 2.0f, image.size.height - inset * 2.0f);
+    CGContextAddEllipseInRect(context, rect);
+    CGContextClip(context);
+    
+    [image drawInRect:rect];
+    CGContextAddEllipseInRect(context, rect);
+    CGContextStrokePath(context);
+    UIImage *newimg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newimg;
 }
 
 @end

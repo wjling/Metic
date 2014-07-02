@@ -11,5 +11,6 @@
 @interface FriendTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
+@property (strong,nonatomic) NSNumber* friendid;
 
 @end

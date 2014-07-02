@@ -10,8 +10,10 @@
 
 @implementation CustomCellTableViewCell
 
+@synthesize avatar;
 @synthesize eventName;
-@synthesize eventDetail;
+@synthesize themePhoto;
+//@synthesize eventDetail;
 @synthesize videoWall;
 @synthesize imgWall;
 @synthesize beginTime;
@@ -40,9 +42,9 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    frame.origin.x += widthspace;
+    //frame.origin.x += widthspace;
     frame.origin.y += deepspace;
-    frame.size.width -= 2 * widthspace;
+    //frame.size.width -= 2 * widthspace;
     frame.size.height -= 2 * deepspace;
     [super setFrame:frame];
     
@@ -62,6 +64,8 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
+    self.homeController.selete_Eventid = self.eventId;
+    [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
