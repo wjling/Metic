@@ -11,6 +11,8 @@
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
 		0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC4196330800050833F /* NotificationCenterCell.m */; };
+		0835FFC8196339590050833F /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC7196339590050833F /* NotificationsViewController.m */; };
+		0835FFCB19633A8A0050833F /* NotificationsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
@@ -117,6 +119,10 @@
 		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
 		0835FFC3196330800050833F /* NotificationCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCenterCell.h; sourceTree = "<group>"; };
 		0835FFC4196330800050833F /* NotificationCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCenterCell.m; sourceTree = "<group>"; };
+		0835FFC6196339590050833F /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		0835FFC7196339590050833F /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
+		0835FFC919633A8A0050833F /* NotificationsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsTableViewCell.h; path = "Metic/Main Classes/NotificationsTableViewCell.h"; sourceTree = SOURCE_ROOT; };
+		0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsTableViewCell.m; path = "Metic/Main Classes/NotificationsTableViewCell.m"; sourceTree = SOURCE_ROOT; };
 		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		08574B58196057BD00D967D4 /* PictureWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureWallViewController.h; path = "Metic/Main Classes/PictureWallViewController.h"; sourceTree = SOURCE_ROOT; };
@@ -360,6 +366,8 @@
 				08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */,
 				510BE1A4195C32FE00084014 /* MTTableView.h */,
 				510BE1A5195C32FE00084014 /* MTTableView.m */,
+				0835FFC919633A8A0050833F /* NotificationsTableViewCell.h */,
+				0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -603,6 +611,8 @@
 				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
+				0835FFC6196339590050833F /* NotificationsViewController.h */,
+				0835FFC7196339590050833F /* NotificationsViewController.m */,
 				51581D6219335A8700943606 /* ProfileViewController.h */,
 				51581D6319335A8700943606 /* ProfileViewController.m */,
 				086A5AB0193D6E7500880F2F /* MainView.h */,
@@ -761,6 +771,7 @@
 				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
+				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
@@ -804,6 +815,7 @@
 				08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */,
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
+				0835FFCB19633A8A0050833F /* NotificationsTableViewCell.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
