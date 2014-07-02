@@ -10,8 +10,9 @@
 #import "MySqlite.h"
 #import "HttpSender.h"
 #import "CommonUtils.h"
+#import "../Utils/PhotoGetter.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,PhotoGetterDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;

@@ -7,6 +7,7 @@
 //
 
 #import "PictureWallViewController.h"
+#import "PhotoDisplayViewController.h"
 #import "../Cell/PhotoTableViewCell.h"
 #import "../Utils/HttpSender.h"
 #import "AppConstants.h"
@@ -16,6 +17,7 @@
 @property int rightHeight;
 @property int leftRows;
 @property int rightRows;
+@property int seletedPhotoIndex;
 
 @end
 
@@ -39,9 +41,11 @@
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
+    self.seletedPhotoIndex = 0;
     self.leftHeight = self.rightHeight = self.leftRows = self.rightRows = 0;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
+    self.photoPath_list = [[NSMutableArray alloc]init];
     [self getPhotolist];
     // Do any additional setup after loading the view.
 }
@@ -66,11 +70,25 @@
 
 }
 
+-(void)getPhotoPathlist
+{
+    for(NSDictionary* dict in self.photo_list)
+    {
+        NSString* path = [NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]];
+        [self.photoPath_list addObject:path];
+    }
+}
 
 #pragma mark 代理方法-UITableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.seletedPhotoIndex = indexPath.row*2;
+    if (tableView == self.tableView2) {
+        self.seletedPhotoIndex +=1;
+    }
+    [self performSegueWithIdentifier:@"photosShow" sender:self];
+    
 }
 
 
@@ -88,10 +106,7 @@
     return rows;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"kkkkk");
-}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int addition = 0;
@@ -115,7 +130,9 @@
         
         
         cell1.avatar.image = nil;
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
+        [getter setTypeOption2];
+        getter.mDelegate = self;
         [getter getPhoto];
         
         
@@ -137,10 +154,9 @@
             [cell addSubview:photo];
         }else{
             [cell setHidden:YES];
-            PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:photo path:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] type:2 cache:self.photos isCircle:NO borderColor:nil borderWidth:0];
+            PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:photo path:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] type:3 cache:self.photos];
+            [photoGetter setTypeOption3:tableView];
             photoGetter.mDelegate = self;
-            photoGetter.tableView = tableView;
-            photoGetter.index = indexPath;
             [photoGetter getPhoto];
             
         }
@@ -195,6 +211,7 @@
             NSArray* newphoto_list = [response1 valueForKey:@"photo_list"];
             self.sequence = [response1 valueForKey:@"sequence"];
             [self.photo_list addObjectsFromArray:newphoto_list];
+            [self getPhotoPathlist];
             [self.tableView1 reloadData];
             [self.tableView2 reloadData];
         }
@@ -202,8 +219,30 @@
     }
 }
 #pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
 {
-    [tableView reloadData];
+    imageView.image = image;
+    switch (type) {
+        case 3:
+            [(UITableView*)container reloadData];
+            break;
+        default:
+            break;
+    }
+}
+
+
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([sender isKindOfClass:[PictureWallViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[PhotoDisplayViewController class]]) {
+            PhotoDisplayViewController *nextViewController = segue.destinationViewController;
+            nextViewController.photoscache = self.photos;
+            nextViewController.photoPath_list = self.photoPath_list;
+            nextViewController.photoIndex = self.seletedPhotoIndex;
+        }
+    }
 }
 @end

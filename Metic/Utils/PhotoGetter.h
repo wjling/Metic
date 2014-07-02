@@ -15,7 +15,7 @@
 
 @optional
 //当服务器返回数据的时候执行此方法
--(void)finishwithNotification:(UITableView*) tableView indexPath:(NSIndexPath*)indexPath;
+-(void)finishwithNotification:(UIImageView*)imageView image:(UIImage*)image type:(int)type container:(id)container;
 
 @end
 @interface PhotoGetter : NSObject <CloudOperationDelegate>
@@ -24,6 +24,7 @@
 @property int type;
 @property(nonatomic,strong) NSIndexPath* index;
 @property(nonatomic,strong) UITableView* tableView;
+@property(nonatomic,strong) id container;
 @property(nonatomic,strong) NSString* path;
 @property(nonatomic,strong) NSString* filePath;
 @property(nonatomic,strong) NSMutableDictionary *phothCache;
@@ -32,7 +33,10 @@
 @property CGFloat borderWidth;
 @property (nonatomic,strong)MTUser *user;
 
-- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache isCircle:(BOOL)isCircle borderColor:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth;
+- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache;
+-(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth;
+-(void)setTypeOption2;
+-(void)setTypeOption3:(id)container;
 -(void)getPhoto;
 @end
 

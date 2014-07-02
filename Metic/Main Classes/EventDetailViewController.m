@@ -14,7 +14,7 @@
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
-#import "../Utils/PhotoGetter.h"
+
 
 
 @interface EventDetailViewController ()
@@ -224,7 +224,9 @@
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             tmp.image = nil;
             if (i < participator_count) {
-                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
+                [tmpgetter setTypeOption2];
+                tmpgetter.mDelegate = self;
                 [tmpgetter getPhoto];
             }
             
@@ -245,7 +247,9 @@
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
         
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
-        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] path:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] path:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
+        [tmpgetter setTypeOption2];
+        tmpgetter.mDelegate = self;
         [tmpgetter getPhoto];
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
         ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
@@ -407,6 +411,11 @@
     }
 }
 
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    imageView.image = image;
+}
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //这里我很谨慎的对sender和目标视图控制器作了判断

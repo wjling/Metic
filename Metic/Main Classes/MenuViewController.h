@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
+#import "PhotoGetter.h"
 #import "../Utils/CloudOperation.h"
 
-@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
+@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate,PhotoGetterDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (strong, nonatomic) IBOutlet UIImageView *img;

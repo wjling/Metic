@@ -16,6 +16,7 @@
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSNumber *sequence;
 @property(nonatomic,strong)NSMutableArray *photo_list;
+@property(nonatomic,strong)NSMutableArray *photoPath_list;
 @property(nonatomic,strong)NSMutableDictionary *photos;
 
 

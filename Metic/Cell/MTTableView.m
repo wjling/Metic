@@ -8,7 +8,7 @@
 
 #import "MTTableView.h"
 #import "../Cell/CustomCellTableViewCell.h"
-#import "../Utils/PhotoGetter.h"
+
 @implementation MTTableView
 
 - (id)initWithFrame:(CGRect)frame
@@ -60,7 +60,9 @@
         cell.eventId = [a valueForKey:@"event_id"];
         
         cell.avatar.image = nil;
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]] type:1 cache:nil isCircle:YES borderColor:[UIColor orangeColor] borderWidth:10];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]] type:1 cache:[MTUser sharedInstance].avatar];
+        [getter setTypeOption1:[UIColor orangeColor] borderWidth:10];
+        getter.mDelegate = self;
         [getter getPhoto];
         cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
         cell.homeController = self.homeController;
@@ -70,7 +72,9 @@
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             tmp.image = nil;
             if (i < participator_count) {
-                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:1 cache:nil isCircle:NO borderColor:nil borderWidth:0];
+                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
+                [getter setTypeOption2];
+                getter.mDelegate = self;
                 [getter getPhoto];
             }
             
@@ -80,5 +84,10 @@
 	return cell;
 }
 
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    imageView.image = image;
+}
 
 @end
