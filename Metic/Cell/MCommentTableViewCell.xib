@@ -50,12 +50,42 @@
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B3G-zL-nWL">
+                        <rect key="frame" x="270" y="50" width="45" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XRf-dQ-MZD">
+                                <rect key="frame" x="0.0" y="3" width="14" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="点赞图">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="appreciate:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zGB-PK-Iy2"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(0)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="24" translatesAutoresizingMaskIntoConstraints="NO" id="i2g-0Y-byj">
+                                <rect key="frame" x="16" y="0.0" width="24" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" red="0.97647064924240112" green="0.54901963472366333" blue="0.40784317255020142" alpha="1" colorSpace="deviceRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    </view>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
+            <connections>
+                <outlet property="good_button" destination="XRf-dQ-MZD" id="MHn-Od-zTM"/>
+                <outlet property="good_num" destination="i2g-0Y-byj" id="Rcl-Ui-jPp"/>
+            </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="删除评论的背景图" width="27" height="13"/>
+        <image name="点赞图" width="11" height="11"/>
     </resources>
 </document>

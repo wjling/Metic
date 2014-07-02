@@ -17,5 +17,9 @@
 @property(strong,nonatomic) NSNumber* commentid;
 @property(strong,nonatomic) NSString* author;
 @property(nonatomic,strong) EventDetailViewController *controller;
+@property BOOL isZan;
+@property (strong, nonatomic) IBOutlet UIButton *good_button;
+- (IBAction)appreciate:(id)sender;
+@property (strong, nonatomic) IBOutlet UILabel *good_num;
 
 @end

@@ -110,6 +110,9 @@
         case 16:
             resultCode = @"get_comments";
             break;
+        case 17:
+            resultCode = @"add_good";
+            break;
         case 23:
             resultCode = @"get_photo_list";
             break;

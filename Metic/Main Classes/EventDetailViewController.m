@@ -90,6 +90,7 @@
 - (void)pullMainCommentFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:0] forKey:@"master"];
     [dictionary setValue:self.master_sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -175,12 +176,12 @@
     }
     
     if (indexPath.section == 0) {
-        [self.inputField setPlaceholder:@"回复楼主"];
+        [self.inputField setPlaceholder:@"回复楼主:"];
         self.mainCommentId = 0;
     }
     else if (indexPath.row == 0) {
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@",cell.author]];
+        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);;
         
     }
@@ -202,8 +203,12 @@
         EventCellTableViewCell *cell = (EventCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventCellIdentifier];
         
         cell.eventName.text = [_event valueForKey:@"subject"];
-        cell.beginTime.text = [_event valueForKey:@"time"];
-        cell.endTime.text = [_event valueForKey:@"endTime"];
+        NSString* beginT = [_event valueForKey:@"time"];
+        NSString* endT = [_event valueForKey:@"endTime"];
+        cell.beginDate.text = [beginT substringToIndex:10];
+        cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
+        cell.endDate.text = [endT substringToIndex:10];
+        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
@@ -248,6 +253,11 @@
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.author = [mainCom valueForKey:@"author"];
         cell.controller = self;
+        cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
+        cell.isZan = [[mainCom valueForKey:@"isZan"] boolValue];
+        if (cell.isZan) {
+            [cell.good_button setBackgroundImage:[UIImage imageNamed:@"发起活动icon"] forState:UIControlStateNormal];
+        }else [cell.good_button setBackgroundImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
         }
