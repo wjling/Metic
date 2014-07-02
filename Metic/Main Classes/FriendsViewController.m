@@ -255,6 +255,7 @@
     NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
     NSString* label = [aFriend objectForKey:@"name"];
+    NSNumber* fid = [aFriend objectForKey:@"id"];
 
     if (section == 0) {
         if (row == 0)
@@ -278,7 +279,10 @@
     
 //        NSLog(@"a friend: %@",aFriend);
     
-        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+//        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil isCircle:NO borderColor:[UIColor blackColor] borderWidth:5];
+        [getter getPhoto];
+        
         if (label) {
             cell.title.text = label;
         }

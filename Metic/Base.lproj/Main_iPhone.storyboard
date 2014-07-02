@@ -121,13 +121,14 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5V9-hc-l5w">
-                                        <rect key="frame" x="104" y="130" width="111" height="29"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5V9-hc-l5w">
+                                        <rect key="frame" x="104" y="131" width="111" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <segments>
                                             <segment title="male"/>
                                             <segment title="female"/>
                                         </segments>
+                                        <color key="tintColor" red="0.20392158627510071" green="0.69803923368453979" blue="0.56470590829849243" alpha="1" colorSpace="deviceRGB"/>
                                     </segmentedControl>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IuI-4h-QHS">
                                         <rect key="frame" x="11" y="285" width="296" height="43"/>
@@ -404,7 +405,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="default_avatar.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="fZ5-Or-PIM">
-                                                    <rect key="frame" x="20" y="3" width="44" height="37"/>
+                                                    <rect key="frame" x="20" y="3" width="35" height="35"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
@@ -431,7 +432,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Friends" id="ObQ-44-r4f">
-                        <barButtonItem key="rightBarButtonItem" image="添加好友icon" id="bgG-4k-Eqe">
+                        <barButtonItem key="rightBarButtonItem" image="添加好友icon" style="plain" id="bgG-4k-Eqe">
                             <connections>
                                 <action selector="switchToAddFriendView:" destination="cDI-rw-2Dm" id="5Zt-6p-4mu"/>
                                 <segue destination="Sxz-YS-Xvx" kind="push" id="kmJ-aw-r9I"/>
@@ -548,31 +549,9 @@
                     <view key="view" contentMode="scaleToFill" id="5Rh-hg-SF0">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Friend Info goes here" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sib-ZF-Ztf">
-                                <rect key="frame" x="79" y="97" width="163" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IyQ-VK-LtP">
-                                <rect key="frame" x="117" y="195" width="79" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="testing">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="testingClicked:" destination="FXr-Y8-zhi" eventType="touchUpInside" id="zHW-0G-brf"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Friend Info" id="v3P-On-aQU"/>
-                    <connections>
-                        <outlet property="testingButton" destination="IyQ-VK-LtP" id="DGN-v1-LDl"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RuH-EN-WVp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1582,7 +1561,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="default_avatar.jpg" width="200" height="200"/>
+        <image name="default_avatar.jpg" width="42" height="42"/>
         <image name="上传活动封面" width="320" height="150"/>
         <image name="删除icon" width="18" height="18"/>
         <image name="删除icon效果" width="18" height="18"/>
