@@ -9,6 +9,7 @@
 #import "FriendsViewController.h"
 
 
+
 //#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 //if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 //{
@@ -21,6 +22,7 @@
 {
     NSString* DB_path;
     NSInteger initialSectionForFriendList;
+    NSNumber* selectedFriendID;
 }
 @synthesize user;
 @synthesize friendList;
@@ -228,6 +230,48 @@
     return height;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    NSInteger section = indexPath.section;
+//    NSInteger row = indexPath.row;
+//    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+//    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
+//    selectedFriendID = [aFriend objectForKey:@"id"];
+//    NSLog(@"get1 fid value: %@",selectedFriendID);
+    
+    
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
+    NSLog(@"afriend: %@",aFriend);
+    selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
+    if ([selectedFriendID isKindOfClass:[NSString class]]) {
+        NSLog(@"NSString fid value: %@",selectedFriendID);
+    }
+    else if([selectedFriendID isKindOfClass:[NSNumber class]])
+    {
+        NSLog(@"NSNumber fid value: %@",selectedFriendID);
+    }
+    
+    return indexPath;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.destinationViewController isKindOfClass:[FriendInfoViewController class]]) {
+        FriendInfoViewController* viewController = (FriendInfoViewController*)segue.destinationViewController;
+//        NSLog(@"pass fid value: %@",selectedFriendID);
+        
+        viewController.fid = selectedFriendID;
+    }
+    
+    
+}
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 //{
 //    if (0 == section) {
@@ -256,7 +300,7 @@
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
     NSString* label = [aFriend objectForKey:@"name"];
     NSNumber* fid = [aFriend objectForKey:@"id"];
-
+    
     if (section == 0) {
         if (row == 0)
         {
@@ -267,6 +311,7 @@
             cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
 //            cell.imageView
             cell.title.text = label;
+            
             return cell ;
         }
     }
