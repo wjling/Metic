@@ -17,7 +17,7 @@
 #import "FriendTableViewCell.h"
 
 
-@interface FriendInfoViewController : UIViewController <UIScrollViewDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface FriendInfoViewController : UIViewController <UIScrollViewDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,PhotoGetterDelegate>
 @property (strong, nonatomic) UIButton *del_friend_Button;
 @property (strong, nonatomic) UIView* contentView;
 @property (strong, nonatomic) UIScrollView* sView;

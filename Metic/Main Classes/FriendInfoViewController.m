@@ -204,7 +204,9 @@
     NSLog(@"event_list: %@",events);
     for (UIView* v in self.fInfoView.subviews) {
         if (v.tag == 0) {
-            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil isCircle:YES borderColor:[UIColor blackColor] borderWidth:5];
+            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil];
+            [getter setTypeOption1:[UIColor blackColor] borderWidth:5];
+            getter.mDelegate = self;
             [getter getPhoto];
         }
         else if (v.tag == 1)
@@ -387,7 +389,9 @@
     for (NSInteger i = 0; i<count; i++) {
         NSNumber* uid = [member_ids objectAtIndex:i];
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:1 cache:nil isCircle:NO borderColor:[UIColor greenColor] borderWidth:2];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:nil ];
+        [getter setTypeOption2];
+        getter.mDelegate = self;
         [getter getPhoto];
         [cell.avatars addObject:avatar];
         [cell.contentView addSubview:avatar];
@@ -526,6 +530,12 @@
     }
 }
 
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView*)imageView image:(UIImage*)image type:(int)type container:(id)container
+{
+    imageView.image = image;
+}
 
 /*
 #pragma mark - Navigation

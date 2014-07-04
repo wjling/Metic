@@ -327,7 +327,9 @@
 
         cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
 //        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil isCircle:NO borderColor:[UIColor blackColor] borderWidth:5];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:2 cache:nil ];
+        [getter setTypeOption2];
+        getter.mDelegate = self;
         [getter getPhoto];
         
         if (label) {
@@ -462,5 +464,11 @@
         self.shadowView.hidden = YES;
         [self.view sendSubviewToBack:self.shadowView];
     }
+}
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView*)imageView image:(UIImage*)image type:(int)type container:(id)container
+{
+    imageView.image = image;
 }
 @end
