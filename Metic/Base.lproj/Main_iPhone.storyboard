@@ -999,9 +999,6 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" red="0.078431375319999996" green="0.70588237050000002" blue="0.58431375029999999" alpha="1" colorSpace="deviceRGB"/>
                                         <state key="normal" backgroundImage="更多"/>
-                                        <connections>
-                                            <action selector="more:" destination="von-Oa-xrt" eventType="touchUpInside" id="qMo-ac-eGd"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
