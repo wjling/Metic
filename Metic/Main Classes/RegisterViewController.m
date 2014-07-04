@@ -20,6 +20,7 @@
 @synthesize segmentedControl_gender;
 @synthesize button_backToLogin;
 @synthesize button_signUp;
+@synthesize scrollView;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -40,6 +41,7 @@
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
     [self.view setBackgroundColor:backgroundColor];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.scrollView.delegate  = self;
     
     textField_confromPassword.delegate = self;
     textField_email.delegate = self;
@@ -138,6 +140,31 @@
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 }
 
+- (IBAction)text_Clear:(id)sender {
+    if ([sender superview] == [self.textField_userName superview])
+    {
+        self.textField_userName.text =@"";
+    }
+    else if([sender superview] == [self.textField_email superview])
+    {
+        self.textField_email.text = @"";
+    }
+    else if([sender superview] == [self.textField_password superview])
+    {
+        self.textField_password.text = @"";
+    }
+    else if([sender superview] == [self.textField_confromPassword superview])
+    {
+        self.textField_confromPassword.text = @"";
+    }
+}
+
+- (IBAction)step_next:(id)sender {
+    CGPoint offset = CGPointMake(0, 265);
+    [self.scrollView setContentOffset:offset animated:YES];
+}
+
+
 
 #pragma mark - HttpSenderDelegate
 
@@ -199,6 +226,9 @@
     [textField resignFirstResponder];
     return YES;
 }
-
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    NSLog(@"%f",scrollView.contentOffset.y);
+//}
 
 @end

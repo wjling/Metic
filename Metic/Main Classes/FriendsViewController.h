@@ -18,6 +18,8 @@
 #import "FriendTableViewCell.h"
 #import "NotificationCenterCell.h"
 #import "MySqlite.h"
+#import "PhotoGetter.h"
+#import "FriendInfoViewController.h"
 
 @interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 
