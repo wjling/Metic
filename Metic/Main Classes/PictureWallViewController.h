@@ -18,6 +18,7 @@
 @property(nonatomic,strong)NSMutableArray *photo_list;
 @property(nonatomic,strong)NSMutableArray *photoPath_list;
 @property(nonatomic,strong)NSMutableDictionary *photos;
+- (IBAction)toUploadPhoto:(id)sender;
 
 
 @end

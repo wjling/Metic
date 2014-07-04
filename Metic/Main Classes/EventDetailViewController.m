@@ -225,7 +225,7 @@
             tmp.image = nil;
             if (i < participator_count) {
                 PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
-                [tmpgetter setTypeOption2];
+                [tmpgetter setTypeOption2:memberids[i]];
                 tmpgetter.mDelegate = self;
                 [tmpgetter getPhoto];
             }
@@ -248,7 +248,7 @@
         
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] path:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        [tmpgetter setTypeOption2];
+        [tmpgetter setTypeOption2:[mainCom valueForKey:@"author_id"]];
         tmpgetter.mDelegate = self;
         [tmpgetter getPhoto];
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
@@ -260,7 +260,7 @@
         cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
         cell.isZan = [[mainCom valueForKey:@"isZan"] boolValue];
         if (cell.isZan) {
-            [cell.good_button setBackgroundImage:[UIImage imageNamed:@"发起活动icon"] forState:UIControlStateNormal];
+            [cell.good_button setBackgroundImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
         }else [cell.good_button setBackgroundImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];

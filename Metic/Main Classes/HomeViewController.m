@@ -33,8 +33,10 @@
 {
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self createMenuButton];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
+    [self.user updateAvatarList];
     self.scrollView.delegate = self;
     self.tableView.homeController= self;
     [self.tableView setDelegate:self];
@@ -74,7 +76,18 @@
 }
 
 
-
+-(void)createMenuButton
+{
+    UIImage* image = [UIImage imageNamed:@"功能选项"];
+    CGRect frame = CGRectMake(1000,0,25,44);
+    UIButton* backButton= [[UIButton alloc] initWithFrame:frame];
+    [backButton setBackgroundImage:image forState:UIControlStateNormal];
+    [backButton setTitle:@"" forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(more:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:backButton];
+    UIBarButtonItem* rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+}
 
 #pragma mark - UIScrollView Methods -
 
@@ -293,7 +306,10 @@
     [_header endRefreshing];
     self.scrollView.scrollEnabled = YES;
     [self pullEventsFromDB];
-    [self.eventsTableView reloadData];
+    [self.tableView reloadData];
+    [self.mytableView reloadData];
+    [self.tatableView reloadData];
+    //[self.eventsTableView reloadData];
 }
 
 - (void)dealloc
@@ -321,13 +337,18 @@
     }
 }
 - (IBAction)more:(id)sender {
-    [self.morefuctions setHidden:NO];
-    [self.view bringSubviewToFront:self.morefuctions];
-    //设置“更多”图层边框阴影
-    [self.morefuctions.layer setShadowOffset:CGSizeMake(1,1)];
-    [self.morefuctions.layer setShadowOpacity:1.0];
-    [self.morefuctions.layer setShadowRadius:5];
-    [self.morefuctions.layer setShadowColor:[UIColor blackColor].CGColor];
+    if (self.morefuctions.isHidden) {
+        [self.morefuctions setHidden:NO];
+        [self.view bringSubviewToFront:self.morefuctions];
+        //设置“更多”图层边框阴影
+        [self.morefuctions.layer setShadowOffset:CGSizeMake(1,1)];
+        [self.morefuctions.layer setShadowOpacity:1.0];
+        [self.morefuctions.layer setShadowRadius:5];
+        [self.morefuctions.layer setShadowColor:[UIColor blackColor].CGColor];
+    }else{
+        [self closeButtonView];
+    }
+    
 }
 
 -(void)closeButtonView
