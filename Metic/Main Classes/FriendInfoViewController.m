@@ -205,7 +205,7 @@
     for (UIView* v in self.fInfoView.subviews) {
         if (v.tag == 0) {
             PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil];
-            [getter setTypeOption1:[UIColor blackColor] borderWidth:5];
+            [getter setTypeOption1:[UIColor blackColor] borderWidth:5 avatarId:fid];
             getter.mDelegate = self;
             [getter getPhoto];
         }
@@ -390,7 +390,7 @@
         NSNumber* uid = [member_ids objectAtIndex:i];
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:nil ];
-        [getter setTypeOption2];
+        [getter setTypeOption2:uid];
         getter.mDelegate = self;
         [getter getPhoto];
         [cell.avatars addObject:avatar];

@@ -328,7 +328,7 @@
         cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
 //        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:2 cache:nil ];
-        [getter setTypeOption2];
+        [getter setTypeOption2:fid];
         getter.mDelegate = self;
         [getter getPhoto];
         
