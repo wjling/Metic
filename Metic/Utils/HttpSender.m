@@ -32,8 +32,10 @@
     self = [super init];
 //    URL_mainServer = @"http://222.200.182.183:10087/";
 //    URL_mainServer = @"http://115.29.103.9:10087/";
-//    URL_mainServer = @"http://42.96.203.86:10087/";
+//    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云
+
     URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
+    PHOTO_mainServer = @"http://203.195.174.128:20000/";
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
@@ -51,7 +53,10 @@
 //    [myDelegates removeObject:myDelegate];
 //    [delegate_method removeObjectForKey:myDelegateName];
 //}
-
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"error");
+}
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
 {
 //    NSLog(@"didReceiveData");
@@ -119,8 +124,17 @@
         case 23:
             resultCode = @"get_photo_list";
             break;
+        case 25:
+            resultCode = @"get_avatar_updatetime";
+            break;
+        case 35:
+            resultCode = @"uploadphoto";
+            break;
         case 36:
             resultCode = @"get_file_url";
+            break;
+        case 37:
+            resultCode = @"videoserver";
             break;
         default:
             resultCode = @"json";
@@ -128,6 +142,44 @@
     }
     return resultCode;
 }
+
+-(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code
+{
+    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
+    httpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPMethod:@"POST"];
+    NSString *body=@"";
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request setHTTPBody:postData];
+    
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    //NSHTTPURLResponse* urlResponse = nil;
+   // NSError *error = [[NSError alloc] init];
+    //同步提交:POST提交并等待返回值（同步），返回值是NSData类型。
+    //NSData *responseData1 = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    //将NSData类型的返回值转换成NSString类型
+    //NSString *result = [[NSString alloc] initWithData:responseData1 encoding:NSUTF8StringEncoding];
+    //NSLog(@"user login check result:%@",result);
+    
+    //NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    //[NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:handler];
+    //NSLog(@"before connection");
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    //NSLog(@"request sent");
+    
+}
+
+
+
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
 {

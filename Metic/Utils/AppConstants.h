@@ -52,6 +52,7 @@ enum Operation_Code
     KANKAN = 34,
     UPLOADPHOTO = 35,
     GET_FILE_URL = 36,
+    VIDEOSERVER = 37,
 };
 
 enum CloudOperation_Code

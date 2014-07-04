@@ -23,7 +23,7 @@
     self.email.text = [MTUser sharedInstance].email;
     
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:1 cache:[MTUser sharedInstance].avatar];
-    [getter setTypeOption1:[UIColor whiteColor] borderWidth:10];
+    [getter setTypeOption1:[UIColor whiteColor] borderWidth:10 avatarId:[MTUser sharedInstance].userid];
     getter.mDelegate = self;
     [getter getPhoto];
     
@@ -37,14 +37,12 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     float val = 21.0/255.0;
     [cell setBackgroundColor:[UIColor colorWithRed:val green:val blue:val alpha:1.0f]];
-    NSLog(@"aaa");
 }
 
 -(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [cell setBackgroundColor:[UIColor clearColor]];
-    NSLog(@"ccc");
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -99,7 +97,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return 44;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

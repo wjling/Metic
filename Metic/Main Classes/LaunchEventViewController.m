@@ -100,7 +100,7 @@ double latitude = 999.999999;
         [confirm setTitle:@"确定" forState:UIControlStateHighlighted];
         [confirm addTarget:self action:@selector(closeDatePicker) forControlEvents:UIControlEventTouchUpInside];
         self.seletedText = textField;
-        _datePickerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        _datePickerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
         [_datePickerView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.3f]];
         [self.datePickerView addSubview:_datePicker];
         [self.datePickerView addSubview:confirm];

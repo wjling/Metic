@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CloudOperation.h"
 #import "MTUser.h"
+#import "MySqlite.h"
 
 
 @protocol PhotoGetterDelegate
@@ -28,15 +29,20 @@
 @property(nonatomic,strong) NSString* path;
 @property(nonatomic,strong) NSString* filePath;
 @property(nonatomic,strong) NSMutableDictionary *phothCache;
+@property (nonatomic,strong) NSNumber *avatarId;
 @property BOOL isCircle;
 @property UIColor *borderColor;
 @property CGFloat borderWidth;
 @property (nonatomic,strong)MTUser *user;
+@property (nonatomic,strong) MySqlite* sql;
 
 - (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache;
--(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth;
--(void)setTypeOption2;
+- (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;
+-(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth avatarId:(NSNumber*)avatarId;
+-(void)setTypeOption2:(NSNumber*)avatarId;
 -(void)setTypeOption3:(id)container;
 -(void)getPhoto;
+-(void)updatePhoto;
+-(void)uploadPhoto;
 @end
 

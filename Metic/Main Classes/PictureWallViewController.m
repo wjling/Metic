@@ -8,6 +8,7 @@
 
 #import "PictureWallViewController.h"
 #import "PhotoDisplayViewController.h"
+#import "PhotoUploadViewController.h"
 #import "../Cell/PhotoTableViewCell.h"
 #import "../Utils/HttpSender.h"
 #import "AppConstants.h"
@@ -131,7 +132,7 @@
         
         cell1.avatar.image = nil;
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        [getter setTypeOption2];
+        [getter setTypeOption2:[a valueForKey:@"author_id"]];
         getter.mDelegate = self;
         [getter getPhoto];
         
@@ -241,8 +242,16 @@
             PhotoDisplayViewController *nextViewController = segue.destinationViewController;
             nextViewController.photoscache = self.photos;
             nextViewController.photoPath_list = self.photoPath_list;
+            nextViewController.photo_list = self.photo_list;
             nextViewController.photoIndex = self.seletedPhotoIndex;
         }
+        if ([segue.destinationViewController isKindOfClass:[PhotoUploadViewController class]]) {
+            PhotoUploadViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.eventId;
+        }
     }
+}
+- (IBAction)toUploadPhoto:(id)sender {
+    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
 }
 @end

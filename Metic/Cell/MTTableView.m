@@ -61,7 +61,7 @@
         
         cell.avatar.image = nil;
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]] type:1 cache:[MTUser sharedInstance].avatar];
-        [getter setTypeOption1:[UIColor orangeColor] borderWidth:10];
+        [getter setTypeOption1:[UIColor orangeColor] borderWidth:10 avatarId:[a valueForKey:@"launcher_id"]];
         getter.mDelegate = self;
         [getter getPhoto];
         cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
@@ -73,7 +73,7 @@
             tmp.image = nil;
             if (i < participator_count) {
                 PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
-                [getter setTypeOption2];
+                [getter setTypeOption2:memberids[i]];
                 getter.mDelegate = self;
                 [getter getPhoto];
             }
