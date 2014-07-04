@@ -9,9 +9,10 @@
 #import "FriendInfoViewController.h"
 #import "math.h"
 
-@interface FriendInfoViewController ()
+@interface FriendInfoViewController ()<UIAlertViewDelegate>
 {
     NSInteger kNumberOfPages;
+    NSNumber* addEventID;
 }
 
 @end
@@ -27,6 +28,7 @@
 @synthesize root;
 @synthesize fid;
 @synthesize events;
+@synthesize rowHeights;
 @synthesize friendInfoEvents_tableView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -149,14 +151,14 @@
     description_label.textColor = [UIColor whiteColor];
     [description_label setTag:4];
     
-    friendInfoEvents_tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 150, screen.size.width, 330)];
-    friendInfoEvents_tableView.delegate = self;
-    friendInfoEvents_tableView.dataSource = self;
+//    friendInfoEvents_tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 150, screen.size.width, 330)];
+//    friendInfoEvents_tableView.delegate = self;
+//    friendInfoEvents_tableView.dataSource = self;
 //    [friendInfoEvents_tableView setBackgroundColor:[UIColor blueColor]];
 //    NSLog(@"x: %f, y: %f, width: %f, height: %f",friendInfoEvents_tableView.frame.origin.x,friendInfoEvents_tableView.frame.origin.y,friendInfoEvents_tableView.frame.size.width,friendInfoEvents_tableView.frame.size.height);
     
-    self.test_tableView.delegate = self;
-    self.test_tableView.dataSource = self;
+    self.friendInfoEvents_tableView.delegate = self;
+    self.friendInfoEvents_tableView.dataSource = self;
     
     [self.fDescriptionView addSubview:title_label];
     [self.fDescriptionView addSubview:description_label];
@@ -195,6 +197,10 @@
 - (void)handleInfo:(NSDictionary*)response
 {
     events = [response objectForKey:@"event_list"];
+    rowHeights = [[NSMutableArray alloc]init];
+    for (int i = 0; i < events.count; i++) {
+        [rowHeights addObject:[NSNumber numberWithFloat:110.0]];
+    }
     NSLog(@"event_list: %@",events);
     for (UIView* v in self.fInfoView.subviews) {
         if (v.tag == 0) {
@@ -242,7 +248,7 @@
 
         }
     }
-    [self.test_tableView reloadData];
+    [self.friendInfoEvents_tableView reloadData];
     
 }
 
@@ -279,8 +285,21 @@
     NSLog(@"cmd: %@",cmd);
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
-            [self handleInfo:response1];
+        {
+            NSNumber* uid = [response1 objectForKey:@"id"];
+            if (uid) {
+                [self handleInfo:response1];
+            }
+            else
+            {
+                
+            }
             
+        }
+            break;
+        case SERVER_ERROR:
+            break;
+        case ALREADY_IN_EVENT:
             break;
             
         default:
@@ -292,16 +311,20 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.test_tableView reloadData];
-    NSLog(@"reload data");
+//    [self.friendInfoEvents_tableView reloadData];
+//    NSLog(@"reload data");
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [[rowHeights objectAtIndex:indexPath.row] floatValue];
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"events count: %d",events.count);
-    return 2;
+//    NSLog(@"events count: %d",events.count);
+    return events.count;
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -311,35 +334,196 @@
 {
     NSDictionary* event = [events objectAtIndex:indexPath.row];
     NSArray* member_ids = [event objectForKey:@"member"];
-    NSLog(@"member_ids: %@",member_ids);
+    NSLog(@"row index: %d",indexPath.row);
     FriendInfoEventsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (nil == cell) {
-        cell = [[FriendInfoEventsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"eventCell"];
-    }
-    if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
         NSLog(@"friendinfoeventstableviewcell");
+        cell = [[FriendInfoEventsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"eventCell"];
+        
     }
-//    cell.subject_label.text = [event objectForKey:@"subject"];
-//    cell.time_label.text = [NSString stringWithFormat:@"%@ ~ %@",[event objectForKey:@"time"],[event objectForKey:@"endTime"]];
-//    cell.location_label.text = [event objectForKey:@"location"];
-//    cell.launcher_label.text = [event objectForKey:@"launcher"];
-//    cell.remark_textView.text = [event objectForKey:@"remark"];
-//    cell.numOfMember_label.text = [event objectForKey:@"member_count"];
-//    int count = member_ids.count;
-//    if (cell.avatars.count != 0) {
-//        for (UIImageView* imgV in cell.avatars) {
-//            [imgV removeFromSuperview];
-//        }
-//        [cell.avatars removeAllObjects];
+    cell.subject_label.text = [event objectForKey:@"subject"];
+    cell.time_label.text = [NSString stringWithFormat:@"%@ ~ %@",[event objectForKey:@"time"],[event objectForKey:@"endTime"]];
+    cell.location_label.text = [event objectForKey:@"location"];
+    cell.launcher_label.text = [event objectForKey:@"launcher"];
+    NSString* remark = [event objectForKey:@"remark"];
+    if (![remark isEqualToString:@""]) {
+        cell.remark_textView.text = remark;
+    }
+    cell.numOfMember_label.text = [CommonUtils NSStringWithNSNumber:[event objectForKey:@"member_count"]];
+    
+    
+    if (!cell.stretch_button) {
+        cell.stretch_button = [[UIButton alloc]initWithFrame:CGRectMake(155, 90, 10, 10)];
+        [cell.stretch_button setBackgroundImage:[UIImage imageNamed:@"箭头icon"] forState:UIControlStateNormal];
+        [cell.stretch_button addTarget:self action:@selector(stretchBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.contentView addSubview:cell.stretch_button];
+    }
+    NSLog(@"button tag: %d",cell.stretch_button.tag);
+    
+    
+//    if (reloadHeight<= 100) {
+//        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
+//        cell.isExpanded = NO;
 //    }
-//    for (NSInteger i = 0; i<count; i++) {
-//        NSNumber* uid = [member_ids objectAtIndex:i];
-//        UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*30+5, 160, 30, 30)];
-//        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:1 cache:nil isCircle:NO borderColor:[UIColor greenColor] borderWidth:1.5];
-//        [getter getPhoto];
+//    else
+//    {
+//        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
+//        cell.isExpanded = YES;
 //    }
+    
+
+    
+    
+    
+    
+    
+    int count = member_ids.count;
+    if (cell.avatars.count != 0) {
+        for (UIImageView* imgV in cell.avatars) {
+            [imgV removeFromSuperview];
+        }
+        [cell.avatars removeAllObjects];
+    }
+    for (NSInteger i = 0; i<count; i++) {
+        NSNumber* uid = [member_ids objectAtIndex:i];
+        UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:1 cache:nil isCircle:NO borderColor:[UIColor greenColor] borderWidth:2];
+        [getter getPhoto];
+        [cell.avatars addObject:avatar];
+        [cell.contentView addSubview:avatar];
+        
+//        avatar.hidden = YES;
+    }
+    [cell.add_button addTarget:self action:@selector(participate_event:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
     
+}
+
+- (IBAction)stretchBtnClicked:(id)sender
+{
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[[sender superview]superview]superview];
+    NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
+    NSLog(@"clicked row: %d, if expanded: %d",indexP.row,cell.isExpanded);
+    if (!cell.isExpanded) {
+        
+
+        [rowHeights replaceObjectAtIndex:indexP.row withObject:[NSNumber numberWithFloat:215]];
+        
+//        [cell.stretch_button removeFromSuperview];
+//        cell.stretch_button.tag = 200;
+        cell.stretch_button.frame = CGRectMake(155, 200, 10, 10);
+//        cell.stretch_button.hidden = YES;
+//        [cell.contentView addSubview:cell.stretch_button];
+        
+
+        //        NSLog(@"初始————x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
+        
+        
+//             [cell.stretch_button removeFromSuperview];
+//             [cell.contentView addSubview:cell.stretch_button];
+             NSLog(@"x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
+             NSLog(@"Yes contentView height: %f",cell.contentView.bounds.size.height);
+             [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
+        
+//        isReload = YES;
+//        reloadHeight = 200;
+        
+
+        
+//        for (UIImageView* imgV in cell.avatars) {
+//            imgV.hidden = NO;
+//            [cell.contentView addSubview:imgV];
+//        }
+//        for (UIView* v in [cell subviews]) {
+//            if ( [v isKindOfClass:[UIImageView class]]) {
+//                NSLog(@"there is an ImageView");
+//                v.hidden = NO;
+//            }
+//        }
+        
+
+    }
+    else
+    {
+        [rowHeights replaceObjectAtIndex:indexP.row withObject:[NSNumber numberWithFloat:110]];
+//        for (UIImageView* imgV in cell.avatars) {
+//            imgV.hidden = YES;
+//        }
+        
+        [UIView animateWithDuration:5 animations:^
+         {
+//             cell.stretch_button.tag = 90;
+             cell.stretch_button.frame = CGRectMake(155, 90, 10, 10);
+//             isReload = YES;
+//             reloadHeight = 90;
+//             [cell.stretch_button removeFromSuperview];
+//             [cell.contentView addSubview:cell.stretch_button];
+             NSLog(@"x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
+             NSLog(@"NO contentView height: %f",cell.contentView.bounds.size.height);
+             [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
+         }];
+
+    }
+    cell.isExpanded = !cell.isExpanded;
+//    [self.friendInfoEvents_tableView beginUpdates];
+//    [self.friendInfoEvents_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexP] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [self.friendInfoEvents_tableView endUpdates];
+    [self.friendInfoEvents_tableView reloadData];
+    
+//    [self.friendInfoEvents_tableView reloadData];
+
+}
+
+- (IBAction)participate_event:(id)sender
+{
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[[sender superview]superview]superview];
+    NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
+    NSDictionary* event = [events objectAtIndex:indexP.row];
+    addEventID = [event objectForKey:@"event_id"];
+    if ([addEventID isKindOfClass:[NSString class]]) {
+        NSLog(@"addEventID is string");
+    }
+    else if([addEventID isKindOfClass:[NSNumber class]])
+    {
+        NSLog(@"addEventID is number");
+
+    }
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    confirmAlert.tag = 0;
+    [confirmAlert show];
+
+}
+
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case 0:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSString* cm = [alertView textFieldAtIndex:0].text;
+                NSNumber* userId = [MTUser sharedInstance].userid;
+                
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:996],@"cmd",userId,@"id",cm,@"confirm_msg", addEventID,@"event_id",nil];
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+                NSLog(@"add event apply: %@",json);
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 

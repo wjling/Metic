@@ -25,11 +25,13 @@
 @property (strong, nonatomic) NSMutableArray* views;
 @property (strong, nonatomic) UIImageView* fInfoView;
 @property (strong, nonatomic) UIImageView* fDescriptionView;
-@property (strong, nonatomic) UITableView *friendInfoEvents_tableView;
+@property (strong, nonatomic) IBOutlet UITableView *friendInfoEvents_tableView;
 @property (strong, nonatomic) IBOutlet UIView *root;
 @property (strong, nonatomic) NSNumber* fid;
 @property (strong, nonatomic) NSMutableArray* events;
+@property (strong, nonatomic) NSMutableArray* rowHeights;
 //- (IBAction)testingClicked:(id)sender;
-@property (strong, nonatomic) IBOutlet UITableView *test_tableView;
+
+- (IBAction)stretchBtnClicked:(id)sender;
 
 @end
