@@ -394,7 +394,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "413"
@@ -570,11 +570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "419"
-            endingLineNumber = "419"
+            startingLineNumber = "422"
+            endingLineNumber = "422"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "420"
-            endingLineNumber = "420"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -602,11 +602,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "427"
-            endingLineNumber = "427"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -618,11 +618,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -634,11 +634,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
+            startingLineNumber = "441"
+            endingLineNumber = "441"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -650,11 +650,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "439"
-            endingLineNumber = "439"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -666,11 +666,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/FriendInfoViewController.m"
-            timestampString = "426357690.338523"
+            timestampString = "426360682.882925"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "418"
-            endingLineNumber = "418"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
             landmarkName = "-stretchBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>

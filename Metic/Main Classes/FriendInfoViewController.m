@@ -410,7 +410,10 @@
 
 - (IBAction)stretchBtnClicked:(id)sender
 {
-    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[sender superview]superview];
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[sender superview];
+    while (![cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
+        cell = (FriendInfoEventsTableViewCell*)[cell superview];
+    }
     if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
         NSLog(@"is friendINFO cell");
     }
