@@ -1,14 +1,14 @@
 //
-//  NotificationsTableViewCell.m
+//  NotificationsFriendRequestTableViewCell.m
 //  Metic
 //
-//  Created by mac on 14-6-23.
+//  Created by mac on 14-7-5.
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
-#import "NotificationsTableViewCell.h"
+#import "NotificationsFriendRequestTableViewCell.h"
 
-@implementation NotificationsTableViewCell
+@implementation NotificationsFriendRequestTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

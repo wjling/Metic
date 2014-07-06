@@ -8,7 +8,7 @@
 
 #import "LoginViewController.h"
 
-@interface LoginViewController ()
+@interface LoginViewController ()<UIGestureRecognizerDelegate>
 {
     enum TAG_LOGIN
     {
@@ -55,16 +55,62 @@
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"113@qq.com";
+    self.textField_userName.text = @"112@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"12345";
+    self.textField_password.text = @"123456";
+    
+    UISwipeGestureRecognizer* gesture_swipe_right = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeRight:)];
+    gesture_swipe_right.direction = UISwipeGestureRecognizerDirectionRight;
+    gesture_swipe_right.delegate = self;
+    UISwipeGestureRecognizer* gesture_swipe_left = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeLeft:)];
+    gesture_swipe_left.direction = UISwipeGestureRecognizerDirectionLeft;
+    gesture_swipe_left.delegate = self;
+    UISwipeGestureRecognizer* gesture_swipe_up = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeUp:)];
+    gesture_swipe_up.direction = UISwipeGestureRecognizerDirectionUp;
+    gesture_swipe_up.delegate = self;
+    UISwipeGestureRecognizer* gesture_swipe_down = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeDown:)];
+    gesture_swipe_down.direction = UISwipeGestureRecognizerDirectionDown;
+    gesture_swipe_down.delegate = self;
+    [self.view addGestureRecognizer:gesture_swipe_right];
+    [self.view addGestureRecognizer:gesture_swipe_left];
+    [self.view addGestureRecognizer:gesture_swipe_up];
+    [self.view addGestureRecognizer:gesture_swipe_down];
+
 
 }
+
+- (void) handleSwipeRight:(UISwipeGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe right");
+}
+
+- (void) handleSwipeLeft:(UISwipeGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe left");
+}
+
+- (void) handleSwipeUp:(UISwipeGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe up");
+}
+
+- (void) handleSwipeDown:(UISwipeGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe down");
+}
+
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+//    NSLog(@"should receive touch");
+    return YES;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
