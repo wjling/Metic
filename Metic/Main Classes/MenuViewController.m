@@ -13,6 +13,8 @@
 
 
 @interface MenuViewController ()
+@property(nonatomic,strong) UIImageView* testImageView;
+@property(nonatomic,strong) UIImage* testImage;
 
 @end
 @implementation MenuViewController

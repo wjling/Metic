@@ -49,14 +49,14 @@
 
 
 
--(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth avatarId:(NSNumber*)avatarId
+-(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth avatarId:(NSNumber*) avatarId
 {
     self.avatarId = avatarId;
     self.borderColor = borderColor;
     self.borderWidth = borderWidth;
 }
 
--(void)setTypeOption2:(NSNumber*)avatarId
+-(void)setTypeOption2:(NSNumber*) avatarId
 {
     self.avatarId = avatarId;
     _imageView.layer.cornerRadius = 3;
@@ -77,8 +77,10 @@
         switch (self.type) {
             case 1:
                 imageFromCache = [CommonUtils circleImage:imageFromCache withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                self.container = nil;
                 break;
             case 2:
+                self.container = nil;
                 break;
             case 3:
                 
@@ -98,8 +100,10 @@
                 switch (self.type) {
                     case 1:
                         imageFromMemory = [CommonUtils circleImage:imageFromMemory withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                        self.container = nil;
                         break;
                     case 2:
+                        self.container = nil;
                         break;
                     case 3:
                         
@@ -111,28 +115,7 @@
                 [self.mDelegate finishwithNotification:self.imageView image:imageFromMemory type:self.type container:self.container];
             }
         }else{
-            UIImage* tmpAvatar = [UIImage imageNamed:@"默认用户头像"];
-            UIImage* tmpPhoto = [UIImage imageNamed:@"活动图片的默认图片"];
             
-            switch (self.type) {
-                case 1:
-                    [_phothCache setValue:tmpAvatar forKey:_path];
-                    tmpAvatar = [CommonUtils circleImage:tmpAvatar withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-                    [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:self.container];
-                    break;
-                case 2:
-                    [_phothCache setValue:tmpAvatar forKey:_path];
-                    [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:self.container];
-                    break;
-                case 3:
-                    [_phothCache setValue:tmpPhoto forKey:_path];
-                    [self.mDelegate finishwithNotification:self.imageView image:tmpPhoto type:self.type container:self.container];
-                    break;
-                    
-                default:
-                    break;
-            }
-
             //网络下载
             CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
             [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
@@ -195,17 +178,42 @@
             switch (self.type) {
                 case 1:
                     imageFromAir = [CommonUtils circleImage:imageFromAir withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
+                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
                     break;
                 case 2:
+                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
                     break;
                 case 3:
+                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
                     break;
                 default:
                     break;
             }
-            [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
         }
         
+    }else{
+        UIImage* tmpAvatar = [UIImage imageNamed:@"默认用户头像"];
+        UIImage* tmpPhoto = [UIImage imageNamed:@"活动图片的默认图片"];
+        
+        switch (self.type) {
+            case 1:
+                [_phothCache setValue:tmpAvatar forKey:_path];
+                tmpAvatar = [CommonUtils circleImage:tmpAvatar withParam:0 borderColor:_borderColor borderWidth:1];
+                [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:nil];
+                break;
+            case 2:
+                [_phothCache setValue:tmpAvatar forKey:_path];
+                [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:nil];
+                break;
+            case 3:
+                [_phothCache setValue:tmpPhoto forKey:_path];
+                [self.mDelegate finishwithNotification:self.imageView image:tmpPhoto type:self.type container:self.container];
+                break;
+                
+            default:
+                break;
+        }
+
     }
 }
 

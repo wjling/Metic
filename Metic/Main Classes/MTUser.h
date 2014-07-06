@@ -21,6 +21,7 @@
 @property(nonatomic,strong)NSString *phone;
 @property(nonatomic,strong)NSNumber *location;
 @property(nonatomic,strong)NSMutableDictionary *avatar;
+@property(nonatomic,strong)NSMutableSet *friendIds;
 @property(nonatomic,strong)MySqlite *sql;
 
 

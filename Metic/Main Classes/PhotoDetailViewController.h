@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PhotoGetter.h"
 
-@interface PhotoDetailViewController : UIViewController
+@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
+@property(nonatomic,strong) UIImage* photo;
+@property (nonatomic,strong)NSNumber* photoId;
+@property (nonatomic,strong) NSDictionary * photoInfo;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) UIViewController* photoDisplayController;
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PhotoDisplayViewController.h"
+#import "PhotoDetailViewController.h"
 #import "../Source/MRZoomScrollView.h"
 #import "../Utils/PhotoGetter.h"
 #import "../Utils/CommonUtils.h"
@@ -16,6 +17,7 @@
 @property BOOL isZan;
 @property int goodindex;
 @property int lastViewIndex;
+@property int movedown;
 @end
 
 @implementation PhotoDisplayViewController
@@ -35,6 +37,10 @@
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
     //[self.InfoView setHidden:YES];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+        self.movedown = -44;
+    }else self.movedown = -64;
+
     self.lastViewIndex = self.photoIndex;
     self.photos = [[NSMutableDictionary alloc]init];
     CGRect frame = self.view.bounds;
@@ -66,6 +72,10 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    self.commentImg.image = [UIImage imageNamed:@"评论icon"];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -106,7 +116,7 @@
 {
     if(self.navigationController.navigationBarHidden){
         [self.navigationController setNavigationBarHidden:NO];
-        [self.scrollView setFrame:CGRectMake(0, -64, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
+        [self.scrollView setFrame:CGRectMake(0, self.movedown, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
         [self.InfoView setHidden:NO];
         [self.view bringSubviewToFront:self.InfoView];
     }else{
@@ -245,6 +255,23 @@
             
         }
             break;
+    }
+}
+
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([segue.sourceViewController isKindOfClass:[PhotoDisplayViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[PhotoDetailViewController class]]) {
+            PhotoDetailViewController *nextViewController = segue.destinationViewController;
+            int index = self.scrollView.contentOffset.x/320;
+            nextViewController.photo = [self.photoscache valueForKey:self.photoPath_list[index]];
+            nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
+            nextViewController.photoInfo = self.photo_list[index];
+            nextViewController.photoDisplayController = self;
+        }
+        
     }
 }
 

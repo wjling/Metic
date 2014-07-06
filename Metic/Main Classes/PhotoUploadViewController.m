@@ -17,6 +17,8 @@
 @property (strong, nonatomic) UIImageView* img;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property (strong, nonatomic) UIButton* getPhoto;
+@property (strong, nonatomic) UIButton* upLoad;
+@property (strong, nonatomic) UITextField* preLabel;
 
 @end
 
@@ -46,6 +48,14 @@
     [self.textInput setBackgroundColor:[UIColor clearColor]];
     [self.textInput setFont:[UIFont systemFontOfSize:16]];
     [_textView addSubview:self.textInput];
+    
+    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
+    [self.preLabel setPlaceholder:@"这一刻的想法"];
+    [self.preLabel setBackgroundColor:[UIColor clearColor]];
+    [self.preLabel setEnabled:NO];
+    self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [self.preLabel setFont:[UIFont systemFontOfSize:20]];
+    [_textView addSubview:self.preLabel];
 
     self.imgView =  [[UIView alloc] initWithFrame:CGRectMake(15, 66, 290, 78)];
     self.imgView.layer.cornerRadius = 5;
@@ -115,7 +125,7 @@
         // 跳转到相机或相册页面
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
         imagePickerController.delegate = self;
-        imagePickerController.allowsEditing = YES;
+        imagePickerController.allowsEditing = NO;
         imagePickerController.sourceType = sourceType;
         
         [self presentViewController:imagePickerController animated:YES completion:^{}];
@@ -128,8 +138,7 @@
 {
 	[picker dismissViewControllerAnimated:YES completion:^{}];
     
-    UIImage *image = [info valueForKey:UIImagePickerControllerEditedImage];
-    //self.img.image = image;
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
     NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
     UIImage *compressedImage = [UIImage imageWithData:imageData];
@@ -143,6 +152,17 @@
 #pragma mark - TextView delegate
 -(void)textViewDidChange:(UITextView *)textView
 {
+    NSLog(@"test");
+    if ([textView.text isEqualToString:@""]) {
+        [self.preLabel setEnabled:YES];
+        self.preLabel.text = @"";
+        [self.preLabel setEnabled:NO];
+    }else{
+        [self.preLabel setEnabled:YES];
+        self.preLabel.text = @" ";
+        [self.preLabel setEnabled:NO];
+    }
+    
     float offset = textView.contentSize.height - textView.frame.size.height;
     
     if (offset != 0) {
@@ -176,8 +196,6 @@
         [dictionary setValue:container forKey:@"photos"];
         [dictionary setValue:self.textInput.text forKey:@"specification"];
         
-        //NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        //NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO];
         
@@ -204,15 +222,31 @@
         case NORMAL_REPLY:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传成功" WithDelegate:self WithCancelTitle:@"确定"];
+            
         }
             break;
+        default:
+        {
+            [self.upLoad setEnabled:YES];
+            [self.getPhoto setEnabled:YES];
+        }
+    }
+}
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if (buttonIndex == 0)
+    {
+        [self.navigationController popToViewController:self.photoWallController animated:YES];
     }
 }
 
 
 
-
 - (IBAction)upload:(id)sender {
+    self.upLoad = sender;
+    [self.upLoad setEnabled:NO];
+    [self.getPhoto setEnabled:NO];
     PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
     getter.mDelegate = self;
     [getter uploadPhoto];

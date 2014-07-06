@@ -209,6 +209,8 @@
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
         cell.endDate.text = [endT substringToIndex:10];
         cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        [[cell.endTime superview].layer setBorderWidth:2.0];
+        [[cell.endTime superview].layer setBorderColor:[UIColor whiteColor].CGColor];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
@@ -303,7 +305,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return 300.0f;
+        return 295.0f;
     }
     else if (indexPath.row == 0) {
         return 75.0f;

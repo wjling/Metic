@@ -17,7 +17,7 @@
 @property(nonatomic,strong)NSMutableDictionary *photos;//存放图片父uiscrollview
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据
 @property(nonatomic,strong)NSNumber* photoId;
-@property int photoIndex;
+@property long photoIndex;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;
 

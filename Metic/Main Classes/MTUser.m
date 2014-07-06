@@ -31,6 +31,7 @@ static MTUser *singletonInstance;
     if (self) {
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
+        self.friendIds = [[NSMutableSet alloc]init];
     }
     return self;
 }
@@ -66,7 +67,7 @@ static MTUser *singletonInstance;
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self.sql openMyDB:path];
     for (NSDictionary *dictionary in self.avatarInfo) {
-        
+        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
         NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
         NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];

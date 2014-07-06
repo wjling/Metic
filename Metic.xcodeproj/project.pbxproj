@@ -15,6 +15,8 @@
 		0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC4196330800050833F /* NotificationCenterCell.m */; };
 		0835FFC8196339590050833F /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC7196339590050833F /* NotificationsViewController.m */; };
 		0835FFCB19633A8A0050833F /* NotificationsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */; };
+		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
+		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
@@ -131,6 +133,9 @@
 		0835FFC7196339590050833F /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		0835FFC919633A8A0050833F /* NotificationsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsTableViewCell.h; path = "Metic/Main Classes/NotificationsTableViewCell.h"; sourceTree = SOURCE_ROOT; };
 		0835FFCA19633A8A0050833F /* NotificationsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsTableViewCell.m; path = "Metic/Main Classes/NotificationsTableViewCell.m"; sourceTree = SOURCE_ROOT; };
+		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
+		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
+		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
 		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailViewController.h; sourceTree = "<group>"; };
@@ -379,6 +384,9 @@
 				08DB698719541F3A00F80F3F /* MCommentTableViewCell.h */,
 				08DB698819541F3A00F80F3F /* MCommentTableViewCell.m */,
 				08DB698919541F3A00F80F3F /* MCommentTableViewCell.xib */,
+				0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */,
+				0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */,
+				0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */,
 				08DB698A19541F3A00F80F3F /* SCommentTableViewCell.h */,
 				08DB698B19541F3A00F80F3F /* SCommentTableViewCell.m */,
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
@@ -754,6 +762,7 @@
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
+				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
@@ -808,6 +817,7 @@
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
+				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
 				08DB69B119541F3A00F80F3F /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,

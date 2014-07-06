@@ -121,6 +121,9 @@
         case 17:
             resultCode = @"add_good";
             break;
+        case 21:
+            resultCode = @"get_pcomments";
+            break;
         case 23:
             resultCode = @"get_photo_list";
             break;

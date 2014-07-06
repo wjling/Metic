@@ -37,7 +37,7 @@
 
 
 @property(nonatomic,strong) HomeViewController* homeController;
-@property(nonatomic,strong) UIImageView *avatar;
+@property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *beginDate;

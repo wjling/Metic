@@ -18,6 +18,7 @@
 
 @property (strong, nonatomic) IBOutlet MTTableView *tableView;
 @property (strong, nonatomic) IBOutlet MTTableView *mytableView;
+@property (strong, nonatomic) IBOutlet MTTableView *frtableView;
 @property (strong, nonatomic) IBOutlet MTTableView *tatableView;
 @property(strong, nonatomic) MTTableView *eventsTableView;
 
@@ -33,6 +34,9 @@
 {
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    
+    
     [self createMenuButton];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
@@ -44,16 +48,25 @@
     self.mytableView.homeController= self;
     [self.mytableView setDelegate:self];
     [self.mytableView setDataSource:self.mytableView];
+    self.frtableView.homeController= self;
+    [self.frtableView setDelegate:self];
+    [self.frtableView setDataSource:self.frtableView];
     self.tatableView.homeController= self;
     [self.tatableView setDelegate:self];
     [self.tatableView setDataSource:self.tatableView];
     self.eventsTableView = self.tableView;
     self.events = [[NSMutableArray alloc]init];
     self.myevents = [[NSMutableArray alloc]init];
+    self.frevents = [[NSMutableArray alloc]init];
     self.taevents = [[NSMutableArray alloc]init];
     self.indicatior = [[UILabel alloc]initWithFrame:CGRectMake(24, 32, 48, 3)];
-    [self.indicatior.layer setBackgroundColor:[UIColor colorWithRed:20.0/255 green:180.0/255 blue:150.0/255 alpha:1.0].CGColor];
+    [self.indicatior setBackgroundColor:[UIColor colorWithRed:20.0/255.0 green:180.0/255.0 blue:150.0/255.0 alpha:1.0]];
+    [self.indicatior setHidden:NO];
     [self.controlView addSubview:self.indicatior];
+    [self.controlView setScrollEnabled:YES];
+    [self.controlView setShowsHorizontalScrollIndicator:NO];
+    
+    
 
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
@@ -69,21 +82,25 @@
     [self pullEventsFromDB];
     self.tableView.eventsSource = self.events;
     self.mytableView.eventsSource = self.myevents;
+    self.frtableView.eventsSource = self.frevents;
     self.tatableView.eventsSource = self.taevents;
     [self.tableView reloadData];
     [self.mytableView reloadData];
+    [self.frtableView reloadData];
     [self.tatableView reloadData];
+    
 }
+
 
 
 -(void)createMenuButton
 {
-    UIImage* image = [UIImage imageNamed:@"功能选项"];
+    UIImage* image = [UIImage imageNamed:@"dian"];
     CGRect frame = CGRectMake(1000,0,25,44);
     UIButton* backButton= [[UIButton alloc] initWithFrame:frame];
     [backButton setBackgroundImage:image forState:UIControlStateNormal];
     [backButton setTitle:@"" forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(more:) forControlEvents:UIControlEventTouchUpInside];
+    [backButton addTarget:self action:@selector(option) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:backButton];
     UIBarButtonItem* rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
@@ -105,6 +122,10 @@
             self.eventsTableView = self.mytableView;
             break;
         case 2:
+            self.header.scrollView = self.frtableView;
+            self.eventsTableView = self.frtableView;
+            break;
+        case 3:
             self.header.scrollView = self.tatableView;
             self.eventsTableView = self.tatableView;
             break;
@@ -116,7 +137,10 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     float position = self.scrollView.contentOffset.x;
-    float newposition = position/620*180+24;
+    float newposition = position/620*190+24;
+    if (newposition > 280) {
+        [self more:nil];
+    }else if(newposition < 120) [self.controlView setContentOffset:CGPointMake(0, 0) animated:YES];
     [self.indicatior setFrame:CGRectMake(newposition, 32, 48, 3)];
 }
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -207,9 +231,11 @@
 
     self.events = [[NSMutableArray alloc]init];
     self.myevents = [[NSMutableArray alloc]init];
+    self.frevents = [[NSMutableArray alloc]init];
     self.taevents = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
     self.mytableView.eventsSource = self.myevents;
+    self.frtableView.eventsSource = self.frevents;
     self.tatableView.eventsSource = self.taevents;
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
@@ -218,9 +244,12 @@
         NSString *tmpa = [temp valueForKey:@"event_info"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
-        if ([[event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        NSNumber* launcherId = [event valueForKey:@"launcher_id"];
+        if ([launcherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             [self.myevents addObject:event];
             
+        }else if([[MTUser sharedInstance].friendIds containsObject:launcherId]){
+            [self.frevents addObject:event];
         }else{
             [self.taevents addObject:event];
         }
@@ -231,7 +260,10 @@
 }
 
 
-
+-(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    //[self.tableView reloadData];
+}
 
 
 - (void) getEventids
@@ -283,6 +315,7 @@
     }
 }
 
+
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
@@ -291,7 +324,6 @@
     [self getEventids];
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(tableViewReload) userInfo:nil repeats:NO];
 }
-
 
 #pragma mark 代理方法-触摸scrollview开始时调用
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -308,6 +340,7 @@
     [self pullEventsFromDB];
     [self.tableView reloadData];
     [self.mytableView reloadData];
+    [self.frtableView reloadData];
     [self.tatableView reloadData];
     //[self.eventsTableView reloadData];
 }
@@ -330,13 +363,22 @@
         [self.scrollView setContentOffset:CGPointMake(310, 0) animated:YES];
     }
 }
-- (IBAction)showTaEvents:(id)sender
+- (IBAction)showFrEvents:(id)sender
 {
     if (self.scrollView.contentOffset.x!=620) {
         [self.scrollView setContentOffset:CGPointMake(620, 0) animated:YES];
     }
 }
-- (IBAction)more:(id)sender {
+
+- (IBAction)showTaEvents:(id)sender {
+    if (self.scrollView.contentOffset.x!=930) {
+        [self.scrollView setContentOffset:CGPointMake(930, 0) animated:YES];
+    }
+}
+
+
+-(void)option
+{
     if (self.morefuctions.isHidden) {
         [self.morefuctions setHidden:NO];
         [self.view bringSubviewToFront:self.morefuctions];
@@ -348,6 +390,10 @@
     }else{
         [self closeButtonView];
     }
+}
+
+- (IBAction)more:(id)sender {
+    [self.controlView setContentOffset:CGPointMake(122, 0) animated:YES];
     
 }
 
@@ -358,8 +404,8 @@
     
 }
 
-
 @end
+
 
 @implementation UIScrollView(UITouchEvent)
 

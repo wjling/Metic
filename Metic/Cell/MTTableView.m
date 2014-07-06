@@ -49,6 +49,8 @@
         NSString* beginT = [a valueForKey:@"time"];
         NSString* endT = [a valueForKey:@"endTime"];
         cell.beginDate.text = [beginT substringToIndex:10];
+        [[cell.beginDate superview].layer setBorderWidth:2.0];
+        [[cell.beginDate superview].layer setBorderColor:[UIColor whiteColor].CGColor];
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
         cell.endDate.text = [endT substringToIndex:10];
         cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];

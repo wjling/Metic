@@ -11,6 +11,7 @@
 
 @interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,PhotoGetterDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) UIViewController* photoWallController;
 @property (strong, nonatomic) NSNumber* eventId;
 - (IBAction)upload:(id)sender;
 

@@ -18,7 +18,7 @@
 @property int rightHeight;
 @property int leftRows;
 @property int rightRows;
-@property int seletedPhotoIndex;
+@property long seletedPhotoIndex;
 
 @end
 
@@ -47,8 +47,15 @@
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photoPath_list = [[NSMutableArray alloc]init];
-    [self getPhotolist];
+    
     // Do any additional setup after loading the view.
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    self.sequence = [[NSNumber alloc]initWithInt:0];
+    [self.photo_list removeAllObjects];
+    [self getPhotolist];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,7 +102,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int rows = 0;
+    long rows = 0;
     if (!self.photo_list.count) {
         return rows;
     }
@@ -124,10 +131,11 @@
     PhotoTableViewCell *cell1 = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     UITableViewCell *cell = [[UITableViewCell alloc]init];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
     if (self.photo_list.count) {
         NSDictionary *a = self.photo_list[indexPath.row*2+addition];
         cell1.author.text = [a valueForKey:@"author"];
-        cell1.publish_date.text = [a valueForKey:@"time"];
+        cell1.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
         
         
         cell1.avatar.image = nil;
@@ -248,6 +256,7 @@
         if ([segue.destinationViewController isKindOfClass:[PhotoUploadViewController class]]) {
             PhotoUploadViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
+            nextViewController.photoWallController = self;
         }
     }
 }
