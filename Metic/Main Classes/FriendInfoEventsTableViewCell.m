@@ -35,7 +35,7 @@
 //    self.stretch_button = [[UIButton alloc]init];
 //    self.stretch_button.tag = 90;
     isExpanded = NO;
-    NSLog(@"init cell");
+    NSLog(@"awake cell");
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

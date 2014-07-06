@@ -20,7 +20,7 @@
 @property (strong, nonatomic,readonly) IBOutlet UIView *contentView;
 @property (strong, nonatomic) NSMutableArray* avatars;
 @property (strong, nonatomic) UIButton *stretch_button;
-@property (nonatomic) BOOL isExpanded;
+@property (readwrite,nonatomic) BOOL isExpanded;
 
 
 //- (IBAction)stretch_btn_clicked:(id)sender;

@@ -99,12 +99,14 @@
     name_label.text = @"喵喵喵喵星人";
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
+    [name_label setBackgroundColor:[UIColor clearColor]];
     [name_label setTag:1];
     
     UILabel* location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 100, 25)];
     location_label.text = @"广东 广州";
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+    [location_label setBackgroundColor:[UIColor clearColor]];
     [location_label setTag:2];
     
     UIImageView* gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
@@ -121,6 +123,7 @@
     icon.image = [UIImage imageNamed:@"删除好友叉"];
     UILabel* del_btn_label = [[UILabel alloc]initWithFrame:CGRectMake(23, 0, 45, 25)];
     del_btn_label.text = @"删除好友";
+    [del_btn_label setBackgroundColor:[UIColor clearColor]];
     del_btn_label.textColor = [UIColor whiteColor];
     [del_btn_label setFont:[UIFont fontWithName:@"ArialRoundedMTBold" size:9]];
 //    del_button.titleLabel.text = @"删除好友";
@@ -142,11 +145,13 @@
     self.fDescriptionView.image = [UIImage imageNamed:@"event"];
     UILabel* title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
+    [title_label setBackgroundColor:[UIColor clearColor]];
     [title_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     title_label.textColor = [UIColor whiteColor];
     
     UILabel* description_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 50, 200, 25)];
     description_label.text = @"\"这个家伙很聪明什么都没有留下...\"";
+    [description_label setBackgroundColor:[UIColor clearColor]];
     [description_label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
     description_label.textColor = [UIColor whiteColor];
     [description_label setTag:4];
@@ -204,7 +209,7 @@
     NSLog(@"event_list: %@",events);
     for (UIView* v in self.fInfoView.subviews) {
         if (v.tag == 0) {
-            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:nil];
+            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:1 cache:[MTUser sharedInstance].avatar];
             [getter setTypeOption1:[UIColor blackColor] borderWidth:5 avatarId:fid];
             getter.mDelegate = self;
             [getter getPhoto];
@@ -389,7 +394,7 @@
     for (NSInteger i = 0; i<count; i++) {
         NSNumber* uid = [member_ids objectAtIndex:i];
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:nil ];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:[MTUser sharedInstance].avatar ];
         [getter setTypeOption2:uid];
         getter.mDelegate = self;
         [getter getPhoto];
@@ -405,9 +410,13 @@
 
 - (IBAction)stretchBtnClicked:(id)sender
 {
-    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[[sender superview]superview]superview];
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[sender superview]superview];
+    if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
+        NSLog(@"is friendINFO cell");
+    }
     NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
-    NSLog(@"clicked row: %d, if expanded: %d",indexP.row,cell.isExpanded);
+    BOOL temp = cell.isExpanded;
+    NSLog(@"clicked row: %d, if expanded: %d",indexP.row,temp);
     if (!cell.isExpanded) {
         
 

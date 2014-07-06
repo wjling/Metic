@@ -108,7 +108,10 @@
 
 + (NSNumber*)NSNumberWithNSString:(NSString *)string
 {
-    id result;
+    id result = string;
+    if ([result isKindOfClass:[NSNumber class]]) {
+        return result;
+    }
     NSNumberFormatter* format = [[NSNumberFormatter alloc]init];
     result = [format numberFromString:string];
 //    if (!result) {

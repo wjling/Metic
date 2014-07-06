@@ -140,10 +140,10 @@
         
         NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'", nil];
         NSArray* values = [[NSArray alloc]initWithObjects:
-                           [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:friendID]],
+                           [NSString stringWithFormat:@"%@",friendID],
                            [NSString stringWithFormat:@"'%@'",friendName],
                            [NSString stringWithFormat:@"'%@'",friendEmail],
-                           [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:friendGender]], nil];
+                           [NSString stringWithFormat:@"%@",friendGender], nil];
         [self.DB insertToTable:@"friend" withColumns:columns andValues:values];
     }
     [self.DB closeMyDB];
@@ -250,6 +250,7 @@
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
     NSLog(@"afriend: %@",aFriend);
     selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
+//    selectedFriendID = [aFriend objectForKey:@"id"];
     if ([selectedFriendID isKindOfClass:[NSString class]]) {
         NSLog(@"NSString fid value: %@",selectedFriendID);
     }
@@ -327,7 +328,7 @@
 
         cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
 //        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:2 cache:nil ];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:2 cache:[MTUser sharedInstance].avatar ];
         [getter setTypeOption2:fid];
         getter.mDelegate = self;
         [getter getPhoto];
