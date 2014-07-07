@@ -15,5 +15,11 @@
 @property (nonatomic,strong) NSDictionary * photoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+- (IBAction)good:(id)sender;
+- (IBAction)comment:(id)sender;
+- (IBAction)share:(id)sender;
+- (IBAction)download:(id)sender;
+- (IBAction)publishComment:(id)sender;
 
 @end

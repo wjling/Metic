@@ -10,6 +10,7 @@
 #import "PhotoDisplayViewController.h"
 #import "PhotoUploadViewController.h"
 #import "../Cell/PhotoTableViewCell.h"
+#import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
 #import "AppConstants.h"
 
@@ -18,7 +19,11 @@
 @property int rightHeight;
 @property int leftRows;
 @property int rightRows;
+@property int wait;
+@property BOOL isOpen;
 @property long seletedPhotoIndex;
+@property (nonatomic,strong) UIAlertView *Alert;
+@property (nonatomic,strong) NSTimer *timer;
 
 @end
 
@@ -44,17 +49,28 @@
     [self.tableView2 setDataSource:self];
     self.seletedPhotoIndex = 0;
     self.leftHeight = self.rightHeight = self.leftRows = self.rightRows = 0;
+    self.isOpen = NO;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
+    self.photo_list_all= [[NSMutableArray alloc]init];
     self.photoPath_list = [[NSMutableArray alloc]init];
     
-    // Do any additional setup after loading the view.
+    //初始化下拉刷新功能
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.tableView1;
+    
+    //等待圈圈
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    
     self.sequence = [[NSNumber alloc]initWithInt:0];
     [self.photo_list removeAllObjects];
+    [self.photo_list_all removeAllObjects];
+    self.leftHeight = self.rightHeight = self.leftRows = self.rightRows = self.wait= 0;
     [self getPhotolist];
 }
 
@@ -80,11 +96,51 @@
 
 -(void)getPhotoPathlist
 {
+    [self.photoPath_list removeAllObjects];
     for(NSDictionary* dict in self.photo_list)
     {
         NSString* path = [NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]];
         [self.photoPath_list addObject:path];
     }
+}
+
+
+-(void)reloadPhoto
+{
+    if (self.isOpen) {
+        self.isOpen = NO;
+        [_footer endRefreshing];
+    }
+    [self.tableView1 reloadData];
+    [self.tableView2 reloadData];
+}
+
+- (IBAction)toUploadPhoto:(id)sender {
+    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
+}
+
+-(void)showAlert
+{
+    _Alert = [[UIAlertView alloc] initWithTitle:@"" message:@"没有更多了" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    [_Alert show];
+    self.isOpen = NO;
+    [_footer endRefreshing];
+}
+-(void)performDismiss
+{
+    [_Alert dismissWithClickedButtonIndex:0 animated:NO];
+}
+
+-(void)close_RJ
+{
+    self.isOpen = NO;
+    [_footer endRefreshing];
+}
+
+-(void)BGgetPhoto:(id)sender
+{
+    PhotoGetter* getter = sender;
+    [getter getPhoto];
 }
 
 #pragma mark 代理方法-UITableView
@@ -166,6 +222,8 @@
             PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:photo path:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] type:3 cache:self.photos];
             [photoGetter setTypeOption3:tableView];
             photoGetter.mDelegate = self;
+            //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:photoGetter];
+
             [photoGetter getPhoto];
             
         }
@@ -185,9 +243,12 @@
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    //[self performSelector:@selector(reloadPhoto) withObject:nil afterDelay:1];
+    //self.wait = 0;
     if (self.tableView1.contentSize.height > self.tableView2.contentSize.height) {
         [self.tableView2 setContentSize:self.tableView1.contentSize];
     }else [self.tableView1 setContentSize:self.tableView2.contentSize];
+    self.footer.scrollView = scrollView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -204,6 +265,7 @@
     }else{
         return 0;
     }
+
 }
 #pragma mark - HttpSenderDelegate
 
@@ -217,12 +279,19 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            NSArray* newphoto_list = [response1 valueForKey:@"photo_list"];
+            NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
             self.sequence = [response1 valueForKey:@"sequence"];
-            [self.photo_list addObjectsFromArray:newphoto_list];
+            [self.photo_list_all addObjectsFromArray:newphoto_list];
+            int count = self.photo_list.count;
+            for (int i = count; i < count + 5 && i < self.photo_list_all.count; i++) {
+                [self.photo_list addObject:self.photo_list_all[i]];
+            }
+            
             [self getPhotoPathlist];
             [self.tableView1 reloadData];
             [self.tableView2 reloadData];
+            [self performSelector:@selector(reloadPhoto) withObject:nil afterDelay:0.2];
+            //self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
         }
             break;
     }
@@ -260,7 +329,40 @@
         }
     }
 }
-- (IBAction)toUploadPhoto:(id)sender {
-    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    self.isOpen = YES;
+    if ([self.sequence intValue] == -1) {
+        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+        return;
+    }
+    int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
+    int count = self.photo_list.count;
+    if (photo_rest_num >= 5) {//加载剩余的，然后再拉
+        for (int i = count; i < count + 5; i++) {
+            [self.photo_list addObject:self.photo_list_all[i]];
+        }
+        [self getPhotoPathlist];
+        [self.tableView1 reloadData];
+        [self.tableView2 reloadData];
+        [_footer endRefreshing];
+    }else{
+        [self getPhotolist];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }
+
+
+
+
 @end

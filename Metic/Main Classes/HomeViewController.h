@@ -48,6 +48,7 @@
 
 @property (nonatomic,strong)NSNumber *selete_Eventid;
 @property(nonatomic,strong)NSMutableArray *eventIds;
+@property(nonatomic,strong)NSMutableArray *eventIds_all;
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property(atomic,strong)NSMutableArray *events;
 @property(atomic,strong)NSMutableArray *myevents;

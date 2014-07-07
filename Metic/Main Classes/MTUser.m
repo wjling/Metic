@@ -12,6 +12,7 @@
 
 @interface MTUser ()
 @property(nonatomic,strong) NSArray *avatarInfo;
+
 @end
 
 @implementation MTUser
@@ -32,6 +33,7 @@ static MTUser *singletonInstance;
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
         self.friendIds = [[NSMutableSet alloc]init];
+        self.wait = 0.1;
     }
     return self;
 }

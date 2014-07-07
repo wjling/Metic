@@ -77,6 +77,7 @@
                 PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
                 [getter setTypeOption2:memberids[i]];
                 getter.mDelegate = self;
+                //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
                 [getter getPhoto];
             }
             
@@ -84,6 +85,12 @@
     }
     
 	return cell;
+}
+
+-(void)BGgetPhoto:(id)sender
+{
+    PhotoGetter* getter = sender;
+    [getter getPhoto];
 }
 
 #pragma mark - PhotoGetterDelegate

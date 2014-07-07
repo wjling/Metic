@@ -10,14 +10,16 @@
 #import "PhotoDisplayViewController.h"
 #import "../Cell/PcommentTableViewCell.h"
 #import "HomeViewController.h"
+#import "../Utils/CommonUtils.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
-@property (nonatomic,strong)UITextView* test;
-@property (nonatomic,strong)UITextView* test1;
 @property (nonatomic,strong)UIButton * delete_button;
 @property float specificationHeight;
 @property (nonatomic,strong) NSArray * pcomment_list;
+@property (strong, nonatomic) IBOutlet UIView *controlView;
+@property (strong, nonatomic) IBOutlet UIView *commentView;
+@property BOOL isKeyBoard;
 
 @end
 
@@ -36,15 +38,20 @@
 {
     [super viewDidLoad];
     self.sequence = [NSNumber numberWithInt:0];
+    self.isKeyBoard = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self initButtons];
+    [self setGoodButton];
 
     
     // Do any additional setup after loading the view.
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    
+    self.sequence = [NSNumber numberWithInt:0];
     [self pullMainCommentFromAir];
 }
 
@@ -54,6 +61,22 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) initButtons
+{
+    for (UIButton* button in self.buttons) {
+        UIImage *colorImage = [CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0] ];
+        [button setBackgroundImage:colorImage forState:UIControlStateHighlighted];
+        [button resignFirstResponder];
+    }
+    
+}
+
+-(void) setGoodButton
+{
+    if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
+        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论icon点赞"] forState:UIControlStateNormal];
+    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论icon图标1"] forState:UIControlStateNormal];
+}
 
 -(float)calculateTextHeight:(NSString*)text type:(int)type
 {
@@ -99,6 +122,55 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS];
 }
 
+
+- (IBAction)good:(id)sender {
+    //self.goodindex = self.scrollView.contentOffset.x/320;
+    BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
+    [dictionary setValue:@"good"  forKey:@"item_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD];
+}
+
+- (IBAction)comment:(id)sender {
+    [self.commentView setHidden:NO];
+    [self.view bringSubviewToFront:self.commentView];
+}
+
+- (IBAction)share:(id)sender {
+}
+
+- (IBAction)download:(id)sender {
+}
+
+- (IBAction)publishComment:(id)sender {
+    NSString *comment = [((UITextField*)[self.commentView viewWithTag:10]).text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];;
+    if ([comment isEqualToString:@""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"写点内容吧" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    [[self.commentView viewWithTag:10] resignFirstResponder];
+    ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
+    NSLog(comment,nil);
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:comment forKey:@"content"];
+    
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+}
+
+
 #pragma mark - HttpSenderDelegate
 
 -(void)finishWithReceivedData:(NSData *)rData
@@ -111,18 +183,32 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-        
-            if ([response1 valueForKey:@"pcomment_list"]) {
+            if ([response1 valueForKey:@"photo_name"]) {
                 self.pcomment_list = [response1 valueForKey:@"pcomment_list"];
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self.tableView reloadData];
-            }else
-            {
+            }else if ([response1 valueForKey:@"pcomment_id"]){
+                self.sequence = [NSNumber numberWithInt:0];
+                [self pullMainCommentFromAir];
+            }else{
+                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
+                int good = [[self.photoInfo valueForKey:@"good"]intValue];
+                if (isZan) {
+                    good --;
+                }else good ++;
+                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+                [self setGoodButton];
                 
             }
             
         }
             break;
+        default:
+        {
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            
+        }
     }
 }
 
@@ -133,7 +219,7 @@
 {
     int comment_num = 0;
     if (self.pcomment_list) {
-        comment_num = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+        comment_num = [self.pcomment_list count];
     }
     return 1 + comment_num;
 }
@@ -234,6 +320,7 @@
         [cell addSubview:backguand];
         [cell addSubview:cell1];
         [cell addSubview:comment];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         return cell;
         
     }
@@ -244,7 +331,6 @@
 {
     imageView.image = image;
 }
-
 
 #pragma mark - Table view delegate
 
@@ -271,9 +357,67 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.isKeyBoard) {
+        [[self.commentView viewWithTag:10] resignFirstResponder];
+        return;
+    }
     if (indexPath.row == 0) {
         [self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }
+}
+
+#pragma mark - keyboard observer method
+//Code from Brett Schumann
+-(void) keyboardWillShow:(NSNotification *)note{
+    self.isKeyBoard = YES;
+    // get keyboard size and loctaion
+    CGRect keyboardBounds;
+    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
+    
+    // Need to translate the bounds to account for rotation.
+    keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
+    
+    // get a rect for the textView frame
+    CGRect containerFrame = self.controlView.frame;
+    containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
+    // animations settings
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:[duration doubleValue]];
+    [UIView setAnimationCurve:[curve intValue]];
+    
+    // set views with new info
+    self.commentView.frame = containerFrame;
+    
+    
+    // commit animations
+    [UIView commitAnimations];
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyBoard = NO;
+    //self.inputField.text = @"";
+    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
+    
+    // get a rect for the textView frame
+    CGRect containerFrame = self.commentView.frame;
+    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    
+    // animations settings
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:[duration doubleValue]];
+    [UIView setAnimationCurve:[curve intValue]];
+    
+    // set views with new info
+    self.commentView.frame = containerFrame;
+    
+    // commit animations
+    [UIView commitAnimations];
 }
 
 @end

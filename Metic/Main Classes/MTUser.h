@@ -23,6 +23,7 @@
 @property(nonatomic,strong)NSMutableDictionary *avatar;
 @property(nonatomic,strong)NSMutableSet *friendIds;
 @property(nonatomic,strong)MySqlite *sql;
+@property float wait;
 
 
 

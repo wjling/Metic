@@ -73,7 +73,7 @@
 {
     //缓存
     UIImage *imageFromCache = [_phothCache valueForKey:_path];
-    if (imageFromCache){
+    if (imageFromCache && [imageFromCache isKindOfClass:[UIImage class]]){
         switch (self.type) {
             case 1:
                 imageFromCache = [CommonUtils circleImage:imageFromCache withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
@@ -115,8 +115,24 @@
                 [self.mDelegate finishwithNotification:self.imageView image:imageFromMemory type:self.type container:self.container];
             }
         }else{
-            
-            //网络下载
+            if (self.type == 1 || self.type == 2) {
+                id fake = [self.phothCache valueForKey:_path];
+                if (fake == nil) {
+                    [_phothCache setValue:[NSNumber numberWithInt:24] forKey:_path];
+                }else if([fake isKindOfClass:[NSNumber class]])
+                {
+                    float time = [MTUser sharedInstance].wait;
+                    [MTUser sharedInstance].wait += 0.1;
+                    if ([MTUser sharedInstance].wait > 1.0) {
+                        [MTUser sharedInstance].wait = 0.1;
+                    }
+                    NSLog(@"%f",[MTUser sharedInstance].wait);
+                    [NSTimer scheduledTimerWithTimeInterval:time+0.1 target:self selector:@selector(getPhoto) userInfo:nil repeats:NO];
+                    return;
+                }
+
+            }
+                        //网络下载
             CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
             [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
         }
@@ -166,7 +182,9 @@
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
         }
+        return;
     }
+
     if (mdata) {
         NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
         [UIImageJPEGRepresentation([UIImage imageWithData:mdata], 1.0f) writeToFile:filePath atomically:YES];

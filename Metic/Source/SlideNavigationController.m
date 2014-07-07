@@ -530,7 +530,6 @@ static SlideNavigationController *singletonInstance;
     NSLog(@"Websocket Connected");
 }
 
-
 @end
 
 

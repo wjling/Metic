@@ -121,6 +121,9 @@
         case 17:
             resultCode = @"add_good";
             break;
+        case 20:
+            resultCode = @"add_pcomment";
+            break;
         case 21:
             resultCode = @"get_pcomments";
             break;
@@ -165,19 +168,9 @@
     [request setHTTPBody:postData];
     
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    //NSHTTPURLResponse* urlResponse = nil;
-   // NSError *error = [[NSError alloc] init];
-    //同步提交:POST提交并等待返回值（同步），返回值是NSData类型。
-    //NSData *responseData1 = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    //将NSData类型的返回值转换成NSString类型
-    //NSString *result = [[NSString alloc] initWithData:responseData1 encoding:NSUTF8StringEncoding];
-    //NSLog(@"user login check result:%@",result);
-    
-    //NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    //[NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:handler];
-    //NSLog(@"before connection");
+
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    //NSLog(@"request sent");
+
     
 }
 

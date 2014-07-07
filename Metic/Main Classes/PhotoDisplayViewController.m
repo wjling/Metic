@@ -75,6 +75,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     self.commentImg.image = [UIImage imageNamed:@"评论icon"];
+    [self refreshGood];
+    
 }
 - (void)didReceiveMemoryWarning
 {
@@ -83,7 +85,15 @@
 }
 //
 
-
+-(void)refreshGood
+{
+    int index = self.scrollView.contentOffset.x/320;
+    NSDictionary* dict = self.photo_list[index];
+    self.zan_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"good"]];
+    BOOL iszan = [[self.photo_list[index] valueForKey:@"isZan"]boolValue];
+    UIImage* zanImage = !iszan? [UIImage imageNamed:@"点赞icon"]:[UIImage imageNamed:@"实心点赞图"];
+    self.goodImg.image = zanImage;
+}
 -(void)loadPictureDescription
 {
     int index = self.scrollView.contentOffset.x/320;
@@ -268,11 +278,24 @@
             int index = self.scrollView.contentOffset.x/320;
             nextViewController.photo = [self.photoscache valueForKey:self.photoPath_list[index]];
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
-            nextViewController.photoInfo = self.photo_list[index];
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:self.photo_list[index]];
+            self.photo_list[index] = dict;
+            nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
         }
         
     }
 }
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    UIView* touchedView = [touch view];
+    if([touchedView isKindOfClass:[UIButton class]]) {
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
 
 @end

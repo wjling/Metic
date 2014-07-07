@@ -107,5 +107,4 @@
     [self setContentSize:CGSizeMake(self.contentSize.width, self.imageView.frame.origin.y*2 +self.imageView.frame.size.height)];
 }
 
-
 @end

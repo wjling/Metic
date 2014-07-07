@@ -84,10 +84,10 @@
     self.mytableView.eventsSource = self.myevents;
     self.frtableView.eventsSource = self.frevents;
     self.tatableView.eventsSource = self.taevents;
-    [self.tableView reloadData];
-    [self.mytableView reloadData];
-    [self.frtableView reloadData];
-    [self.tatableView reloadData];
+//    [self.tableView reloadData];
+//    [self.mytableView reloadData];
+//    [self.frtableView reloadData];
+//    [self.tatableView reloadData];
     
 }
 
@@ -132,6 +132,7 @@
         default:
             break;
     }
+    [self.eventsTableView reloadData];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -292,6 +293,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (![self.morefuctions isHidden]) {
+        [self closeButtonView];
+        return;
+    }
+    
     
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
@@ -328,9 +334,6 @@
 #pragma mark 代理方法-触摸scrollview开始时调用
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (![self.morefuctions isHidden]) {
-        [self closeButtonView];
-    }
 }
 
 - (void) tableViewReload
@@ -338,11 +341,7 @@
     [_header endRefreshing];
     self.scrollView.scrollEnabled = YES;
     [self pullEventsFromDB];
-    [self.tableView reloadData];
-    [self.mytableView reloadData];
-    [self.frtableView reloadData];
-    [self.tatableView reloadData];
-    //[self.eventsTableView reloadData];
+    [self.eventsTableView reloadData];
 }
 
 - (void)dealloc
