@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *conform_msg_label;
 @property (strong, nonatomic) IBOutlet UIButton *okBtn;
 @property (strong, nonatomic) IBOutlet UIButton *noBtn;
+@property (strong, nonatomic) IBOutlet UILabel *remark_label;
 
 @end

@@ -17,6 +17,13 @@
     CGFloat lastX;
 }
 
+enum Response_Type
+{
+    RESPONSE_EVENT = 0,
+    RESPONSE_FRIEND,
+    RESPONSE_SYSTEM
+};
+
 @end
 
 @implementation NotificationsViewController
@@ -89,33 +96,43 @@
     
     CGRect frame = self.tabbar_scrollview.frame;
     int x = 0;
-    int width = frame.size.width/3;
+    CGFloat width = frame.size.width/3;
     int height = frame.size.height;
     UIButton* eventR_button = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, height)];
     UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height)];
     UIButton* systemMsg_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width*2, 0, width, height)];
     self.tabs = [[NSMutableArray alloc]initWithObjects:eventR_button,friendR_button,systemMsg_button, nil];
     
-//    UIColor* color = [UIColor darkGrayColor];
-    [eventR_button setBackgroundColor:[UIColor grayColor]];
-    [friendR_button setBackgroundColor:[UIColor clearColor]];
-    [systemMsg_button setBackgroundColor:[UIColor clearColor]];
+    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+    UIColor* tColor_normal = [UIColor colorWithRed:0.553 green:0.553 blue:0.553 alpha:1];
+    UIColor* tColor_selected = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1];
+    
+    [eventR_button setBackgroundColor:bColor_selected];
+    [friendR_button setBackgroundColor:bColor_normal];
+    [systemMsg_button setBackgroundColor:bColor_normal];
     
     [eventR_button setTitle:@"邀请" forState:UIControlStateNormal];
     [friendR_button setTitle:@"好友" forState:UIControlStateNormal];
     [systemMsg_button setTitle:@"系统" forState:UIControlStateNormal];
-    [eventR_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [friendR_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [systemMsg_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [eventR_button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [friendR_button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [systemMsg_button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     
-    [eventR_button backgroundRectForBounds:CGRectMake(0, eventR_button.frame.size.height - 5, eventR_button.frame.size.width, 5)];
+    [eventR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
+    [friendR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
+    [systemMsg_button setTitleColor:tColor_normal forState:UIControlStateNormal];
+    
+    [eventR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
+    [friendR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
+    [systemMsg_button setTitleColor:tColor_selected forState:UIControlStateSelected];
+    
+//    [eventR_button backgroundRectForBounds:CGRectMake(0, eventR_button.frame.size.height - 5, eventR_button.frame.size.width, 5)];
     [eventR_button setSelected:YES];
     
-//    [eventR_button.layer setBorderWidth:2];
-//    [eventR_button.layer setBorderColor:[UIColor greenColor].CGColor];
+    [eventR_button.layer setBorderWidth:0.5];
+    [eventR_button.layer setBorderColor:bColor_selected.CGColor];
+    [friendR_button.layer setBorderWidth:0.5];
+    [friendR_button.layer setBorderColor:bColor_selected.CGColor];
+    [systemMsg_button.layer setBorderWidth:0.5];
+    [systemMsg_button.layer setBorderColor:bColor_selected.CGColor];
     
     [eventR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [friendR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -137,12 +154,14 @@
 - (IBAction)tabBtnClicked:(id)sender
 
 {
-    int index = [self.tabs indexOfObject:sender];
+    NSInteger index = [self.tabs indexOfObject:sender];
     NSLog(@"selected button: %d",index);
-    [(UIButton*)sender setBackgroundColor:[UIColor lightGrayColor]];
+    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+    [(UIButton*)sender setBackgroundColor:bColor_selected];
     [((UIButton*)sender) setSelected: YES];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
-    [lastBtn setBackgroundColor:[UIColor clearColor]];
+    [lastBtn setBackgroundColor:bColor_normal];
     lastBtn.selected = NO;
     tab_index = index;
     CGRect frame = self.content_scrollView.frame;
@@ -187,11 +206,13 @@
     [mySql closeMyDB];
     NSLog(@"msg from db: %@",msgFromDB);
 //    [self.notificationsTable reloadData];
-    int count = self.msgFromDB.count;
-    for (int i = count - 1; i >= 0; i--) {
+    NSInteger count = self.msgFromDB.count;
+    for (NSInteger i = count - 1; i >= 0; i--) {
         NSDictionary* msg = [msgFromDB objectAtIndex:i];
         NSString* msg_str = [msg objectForKey:@"msg"];
-        NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+        NSString* seq = [msg objectForKey:@"seq"];
+        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
         switch (cmd) {
             case ADD_FRIEND_NOTIFICATION:
@@ -246,12 +267,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int count = self.msgFromDB.count;
-    NSDictionary* msg = [self.msgFromDB objectAtIndex:(count-1-indexPath.row)];
-    NSString* msg_str = [msg objectForKey:@"msg"];
-//    NSLog(@"msg_str: %@",msg_str);
-    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-    NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+//    int count = self.msgFromDB.count;
+//    NSDictionary* msg = [self.msgFromDB objectAtIndex:(count-1-indexPath.row)];
+//    NSString* msg_str = [msg objectForKey:@"msg"];
+////    NSLog(@"msg_str: %@",msg_str);
+//    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+//    NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
 //    NSLog(@"notification table cmd: %d",cmd);
 //    switch (cmd) {
@@ -343,7 +364,20 @@
                 getter.mDelegate = self;
                 [getter setTypeOption2:uid];
                 [getter getPhoto];
-//                NSString* time = [msg_dic objectForKey:@"time"];
+                
+                if (cell.tag == 0) {
+                    cell.okBtn.hidden = NO;
+                    cell.noBtn.hidden = NO;
+                    cell.remark_label.hidden = YES;
+                }
+                else
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                }
+                [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
 
             }
                 break;
@@ -374,6 +408,20 @@
                 getter.mDelegate = self;
                 [getter setTypeOption2:uid];
                 [getter getPhoto];
+                
+                if (cell.tag == 0) {
+                    cell.okBtn.hidden = NO;
+                    cell.noBtn.hidden = NO;
+                    cell.remark_label.hidden = YES;
+                }
+                else
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                }
+                [cell.okBtn addTarget:self action:@selector(friend_request_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.noBtn addTarget:self action:@selector(friend_request_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
                 
             }
                 break;
@@ -420,23 +468,35 @@
     return temp_cell;
 }
 
-- (IBAction)okBtnClicked:(id)sender
+- (IBAction)friend_request_okBtnClicked:(id)sender
 {
-    int count = self.msgFromDB.count;
-    UITableViewCell* cell = (UITableViewCell*)[[[(UIButton*)sender superview] superview]superview];
-//    selectedPath = [self.notificationsTable indexPathForCell:cell];
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-    NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    cell.tag = 1;
+    ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已同意";
+    selectedPath = [self.friendRequest_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:selectedPath.row];
+    
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"ok button row: %d, seq: %@",selectedPath.row,seq);
+    
     NSNumber* userid = [MTUser sharedInstance].userid;
     NSNumber* friendid = [msg_dic objectForKey:@"id"];
-//    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"好友申请" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
-//    [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
-//    [alertView show];
-//    NSLog(@"cmd: %@, result: %@, id: %@, friend_id: %@",[NSNumber numberWithInt:998],[NSNumber numberWithInt:1],userid,friendid);
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:1],@"result",friendid,@"friend_id",userid,@"id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+                                 nil];
+    
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:998],@"cmd",
+                                 [NSNumber numberWithInt:1],@"result",
+                                 friendid,@"friend_id",
+                                 userid,@"id",
+                                 item_id_dic,@"item_id",
+                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+                                 nil];
     NSLog(@"agreed json: %@",json);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -449,19 +509,34 @@
     
 }
 
-- (IBAction)noBtnClicked:(id)sender
+- (IBAction)friend_request_noBtnClicked:(id)sender
 {
-    int count = self.msgFromDB.count;
-    UITableViewCell* cell = (UITableViewCell*)[[[sender superview]superview]superview];
-//    selectedPath = [self.notificationsTable indexPathForCell:cell];
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-    NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    cell.tag = 1;
+    ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
+    selectedPath = [self.friendRequest_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:selectedPath.row];
+    
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"no button row: %d, seq: %@",selectedPath.row,seq);
     NSNumber* userid = [MTUser sharedInstance].userid;
     NSNumber* friendid = [msg_dic objectForKey:@"id"];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:998],@"cmd",[NSNumber numberWithInt:0],@"result",userid,@"id",friendid,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+                                 nil];
+
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:998],@"cmd",
+                                 [NSNumber numberWithInt:0],@"result",
+                                 friendid,@"friend_id",
+                                 userid,@"id",
+                                 item_id_dic,@"item_id",
+                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+                                 nil];
     NSLog(@"reject json: %@",json);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -475,36 +550,51 @@
     
 }
 
-- (IBAction)delBtnClicked:(id)sender
+- (IBAction)delSystemMsg:(id)sender
 {
-    int count = self.msgFromDB.count;
-    UITableViewCell* cell = (UITableViewCell*)[[[sender superview]superview]superview] ;
-//    selectedPath = [self.notificationsTable indexPathForCell:cell];
-    
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-    NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[NotificationsSystemMessageTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    selectedPath = [self.systemMessage_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [self.systemMsg objectAtIndex:selectedPath.row];
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"del cell seq: %@, row: %d",seq,selectedPath.row);
     [mySql openMyDB:DB_path];
     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
     [mySql closeMyDB];
-    [self.msgFromDB removeObjectAtIndex:(count - 1 - selectedPath.row)];
+    [self.systemMsg removeObjectAtIndex:selectedPath.row];
     cell = nil;
-//    [self.notificationsTable reloadData];
+    [self.systemMessage_tableView reloadData];
     
 }
 
 - (IBAction)participate_event_okBtnClicked:(id)sender
 {
-    int count = self.msgFromDB.count;
-    UITableViewCell* cell = (UITableViewCell*)[[[sender superview]superview]superview];
-//    selectedPath = [self.notificationsTable indexPathForCell:cell];
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-    NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    cell.tag = 1;
+    ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已同意";
+    selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:selectedPath.row];
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
-    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+    
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:1],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",[NSNumber numberWithInt:PARTICIPATE_EVENT],@"item_id",nil];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:1],@"result",
+                                 [MTUser sharedInstance].userid,@"id",
+                                 eventid,@"event_id",
+                                 item_id_dic,@"item_id",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
     NSLog(@"participate event okBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -513,16 +603,30 @@
 
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
-    int count = self.msgFromDB.count;
-    UITableViewCell* cell = (UITableViewCell*)[[[sender superview]superview]superview];
-//    selectedPath = [self.notificationsTable indexPathForCell:cell];
-    NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-    NSNumber* seq = [dataMsg objectForKey:@"seq"];
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    cell.tag = 1;
+    ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
+    selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:selectedPath.row];
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
-    NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+    
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:997],@"cmd",[NSNumber numberWithInt:0],@"result",[MTUser sharedInstance].userid,@"id",eventid,@"event_id",[NSNumber numberWithInt:PARTICIPATE_EVENT],@"item_id",nil];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:0],@"result",
+                                 [MTUser sharedInstance].userid,@"id",
+                                 eventid,@"event_id",
+                                 item_id_dic,@"item_id",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
     NSLog(@"participate event noBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -539,60 +643,82 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            NSNumber* item_id = [response1 valueForKey:@"item_id"];
-            NSNumber* result = [response1 valueForKey:@"result"];
-            int count = self.msgFromDB.count;
-            if ([item_id intValue] == ADD_FRIEND && [result intValue] == 1) {
-                [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
-                
-                
-                NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-                NSNumber* seq = [dataMsg objectForKey:@"seq"];
-                NSLog(@"normal reply, seq: %@",seq);
-                NSString* msg_str = [dataMsg objectForKey:@"msg" ];
-                NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-                NSString* fname = [msg_dic objectForKey:@"name"];
-                NSString* femail = [msg_dic objectForKey:@"email"];
-                NSNumber* fgender = [msg_dic objectForKey:@"gender"];
-                NSNumber* fid = [msg_dic objectForKey:@"id"];
-                [mySql openMyDB:DB_path];
-                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-                [mySql insertToTable:@"friend"
-                         withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
-                           andValues:[[NSArray alloc] initWithObjects:
-                                      [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fid]],
-                                      [NSString stringWithFormat:@"'%@'",fname],
-                                      [NSString stringWithFormat:@"'%@'",femail],
-                                      [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
-                [mySql closeMyDB];
-                
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
+            NSLog(@"item_id_dic: %@", item_id_dic);
+            NSNumber* item_index = [item_id_dic objectForKey:@"item_index"];
+            NSNumber* response_type = [item_id_dic objectForKey:@"response_type"];
+            
+            
+//            NSLog(@"http receive, response_type: %@, item_index: %@",response_type, item_index);
+            if ([response_type intValue] == RESPONSE_FRIEND) {
+                NSNumber* result = [response1 valueForKey:@"result"];
+                if ([result intValue] == 1) {
+                    [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
+                    [self.friendRequest_tableView reloadData];
+                    
+                    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
+                    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+                    NSLog(@"response friend, seq: %@",seq);
+                    
+                    NSString* fname = [msg_dic objectForKey:@"name"];
+                    NSString* femail = [msg_dic objectForKey:@"email"];
+                    NSNumber* fgender = [msg_dic objectForKey:@"gender"];
+                    NSNumber* fid = [msg_dic objectForKey:@"id"];
+                    [mySql openMyDB:DB_path];
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+                    [mySql insertToTable:@"friend"
+                             withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
+                               andValues:[[NSArray alloc] initWithObjects:
+                                          [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fid]],
+                                          [NSString stringWithFormat:@"'%@'",fname],
+                                          [NSString stringWithFormat:@"'%@'",femail],
+                                          [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
+                    [mySql closeMyDB];
+
+                }
+                else
+                {
+                    [self.friendRequest_tableView reloadData];
+                    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
+                    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+                    NSLog(@"response friend, seq: %@",seq);
+                    
+//                    NSString* fname = [msg_dic objectForKey:@"name"];
+//                    NSString* femail = [msg_dic objectForKey:@"email"];
+//                    NSNumber* fgender = [msg_dic objectForKey:@"gender"];
+//                    NSNumber* fid = [msg_dic objectForKey:@"id"];
+                    [mySql openMyDB:DB_path];
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+                    [mySql closeMyDB];
+                }
 
             }
-            else if ([item_id intValue] == PARTICIPATE_EVENT)
+            else if ([response_type intValue] == RESPONSE_EVENT)
             {
-                NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
+                [self.eventRequest_tableView reloadData];
+                NSDictionary* dataMsg = [self.eventRequestMsg objectAtIndex:[item_index intValue]];
                 NSNumber* seq = [dataMsg objectForKey:@"seq"];
-                NSLog(@"normal reply, seq: %@",seq);
+                NSLog(@"response event, seq: %@",seq);
                 [mySql openMyDB:DB_path];
                 [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
                 [mySql closeMyDB];
             }
-            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
-//            [self.notificationsTable reloadData];
+//            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
+            
         }
             break;
         case ALREADY_FRIENDS:
         {
             
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
-            int count = self.msgFromDB.count;
-            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-            NSNumber* seq = [dataMsg objectForKey:@"seq"];
-            NSLog(@"already friends, seq: %@",seq);
-            [mySql openMyDB:DB_path];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-            [mySql closeMyDB];
-            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
+//            int count = self.msgFromDB.count;
+//            NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
+//            NSNumber* seq = [msg_dic objectForKey:@"seq"];
+//            NSLog(@"already friends, seq: %@",seq);
+//            [mySql openMyDB:DB_path];
+//            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+//            [mySql closeMyDB];
+//            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
 //            [self.notificationsTable reloadData];
 
         }
@@ -606,14 +732,14 @@
         case ALREADY_IN_EVENT:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
-            int count = self.msgFromDB.count;
-            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(count - 1 -selectedPath.row)];
-            NSNumber* seq = [dataMsg objectForKey:@"seq"];
-            NSLog(@"already in event, seq: %@",seq);
-            [mySql openMyDB:DB_path];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-            [mySql closeMyDB];
-            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
+//            int count = self.msgFromDB.count;
+//            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
+//            NSNumber* seq = [dataMsg objectForKey:@"seq"];
+//            NSLog(@"already in event, seq: %@",seq);
+//            [mySql openMyDB:DB_path];
+//            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+//            [mySql closeMyDB];
+//            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
 //            [self.notificationsTable reloadData];
 
         }
@@ -635,11 +761,13 @@
         CGFloat page_width = scrollView.frame.size.width;
         NSInteger last_tab_index = tab_index;
         tab_index = floor((scrollView.contentOffset.x - page_width/2) / page_width) +1;
+        UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+        UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
         UIButton* lastBtn = (UIButton*)[tabs objectAtIndex:last_tab_index];
         UIButton* currentBtn = (UIButton*)[tabs objectAtIndex:tab_index];
-        [lastBtn setBackgroundColor:[UIColor clearColor]];
+        [lastBtn setBackgroundColor:bColor_normal];
         lastBtn.selected = NO;
-        [currentBtn setBackgroundColor:[UIColor lightGrayColor]];
+        [currentBtn setBackgroundColor:bColor_selected];
         currentBtn.selected = YES;
         
     }

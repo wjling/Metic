@@ -39,9 +39,9 @@
 - (void)initParams;
 - (void)getMsgFromDataBase;
 
-- (IBAction)okBtnClicked:(id)sender;
-- (IBAction)noBtnClicked:(id)sender;
-- (IBAction)delBtnClicked:(id)sender;
+- (IBAction)friend_request_okBtnClicked:(id)sender;
+- (IBAction)friend_request_noBtnClicked:(id)sender;
+- (IBAction)delSystemMsg:(id)sender;
 - (IBAction)participate_event_okBtnClicked:(id)sender;
 - (IBAction)participate_event_noBtnClicked:(id)sender;
 @end

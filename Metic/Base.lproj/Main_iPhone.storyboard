@@ -515,6 +515,13 @@
                                                                 <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
                                                         </button>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uED-Dc-ME2">
+                                                            <rect key="frame" x="272" y="16" width="43" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="邀请你加入" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQy-r5-mCs">
                                                             <rect key="frame" x="54" y="28" width="55" height="15"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -560,6 +567,7 @@
                                                     <outlet property="name_label" destination="6Rh-QL-aUB" id="fRq-39-sZO"/>
                                                     <outlet property="noBtn" destination="wRW-vq-Ut2" id="oyx-i3-zXg"/>
                                                     <outlet property="okBtn" destination="ZzI-ZX-ocd" id="z2N-6M-fNT"/>
+                                                    <outlet property="remark_label" destination="uED-Dc-ME2" id="dIn-aN-eqE"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -598,6 +606,13 @@
                                                                 <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
                                                         </button>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IE4-as-yr6">
+                                                            <rect key="frame" x="272" y="16" width="43" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="请求加你为好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hpz-50-f9W">
                                                             <rect key="frame" x="54" y="28" width="163" height="15"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -619,6 +634,7 @@
                                                     <outlet property="name_label" destination="YKV-q9-jNG" id="Tcc-yB-CWx"/>
                                                     <outlet property="noBtn" destination="mMh-6m-2Cs" id="hjM-Tl-5Ci"/>
                                                     <outlet property="okBtn" destination="dDs-8M-37I" id="cVZ-Gg-tSl"/>
+                                                    <outlet property="remark_label" destination="IE4-as-yr6" id="n4R-F5-iIa"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -656,6 +672,7 @@
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="sys_msg_label" destination="srN-2p-hKf" id="R1W-20-iCy"/>
+                                                    <outlet property="title_label" destination="hHR-Hl-vSD" id="ZT2-FZ-qJh"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>

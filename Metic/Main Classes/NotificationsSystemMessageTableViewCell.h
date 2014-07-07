@@ -10,5 +10,6 @@
 
 @interface NotificationsSystemMessageTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *sys_msg_label;
+@property (strong, nonatomic) IBOutlet UILabel *title_label;
 
 @end
