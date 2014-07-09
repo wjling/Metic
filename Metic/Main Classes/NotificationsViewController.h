@@ -36,6 +36,7 @@
 @property (strong, nonatomic) IBOutlet UIView *rootView;
 
 
+
 - (void)initParams;
 - (void)getMsgFromDataBase;
 
@@ -44,4 +45,6 @@
 - (IBAction)delSystemMsg:(id)sender;
 - (IBAction)participate_event_okBtnClicked:(id)sender;
 - (IBAction)participate_event_noBtnClicked:(id)sender;
+- (void)tabBtnClicked:(id)sender;
+
 @end

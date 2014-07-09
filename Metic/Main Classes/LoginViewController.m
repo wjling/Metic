@@ -55,7 +55,7 @@
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"112@qq.com";
+    self.textField_userName.text = @"115@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;

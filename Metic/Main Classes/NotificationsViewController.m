@@ -63,6 +63,7 @@ enum Response_Type
 {
 //    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
+    self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
     
     
 }
@@ -95,6 +96,7 @@ enum Response_Type
     self.systemMessage_tableView.dataSource = self;
     
     CGRect frame = self.tabbar_scrollview.frame;
+    
     int x = 0;
     CGFloat width = frame.size.width/3;
     int height = frame.size.height;
@@ -112,6 +114,11 @@ enum Response_Type
     [friendR_button setBackgroundColor:bColor_normal];
     [systemMsg_button setBackgroundColor:bColor_normal];
     
+//    [eventR_button setBackgroundColor:[UIColor clearColor]];
+//    [friendR_button setBackgroundColor:[UIColor clearColor]];
+//    [systemMsg_button setBackgroundColor:[UIColor clearColor]];
+    
+    
     [eventR_button setTitle:@"邀请" forState:UIControlStateNormal];
     [friendR_button setTitle:@"好友" forState:UIControlStateNormal];
     [systemMsg_button setTitle:@"系统" forState:UIControlStateNormal];
@@ -119,6 +126,10 @@ enum Response_Type
     [eventR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
     [friendR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
     [systemMsg_button setTitleColor:tColor_normal forState:UIControlStateNormal];
+    
+//    [eventR_button setAlpha:0.1];
+//    [friendR_button setAlpha:0.1];
+//    [systemMsg_button setAlpha:0.1];
     
     [eventR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
     [friendR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
@@ -151,26 +162,47 @@ enum Response_Type
     
 }
 
-- (IBAction)tabBtnClicked:(id)sender
+- (void)tabBtnClicked:(id)sender
 
 {
     NSInteger index = [self.tabs indexOfObject:sender];
     NSLog(@"selected button: %d",index);
+//    if (index == 0) {
+//        [self.eventRequest_tableView reloadData];
+//    }
+//    else if (index == 1)
+//    {
+//        [self.friendRequest_tableView reloadData];
+//    }
+//    else if (index == 2)
+//    {
+//        [self.systemMessage_tableView reloadData];
+//    }
     UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
     UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+    
     [(UIButton*)sender setBackgroundColor:bColor_selected];
     [((UIButton*)sender) setSelected: YES];
+    
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
+    
     [lastBtn setBackgroundColor:bColor_normal];
     lastBtn.selected = NO;
     tab_index = index;
-    CGRect frame = self.content_scrollView.frame;
-    frame.origin.x = frame.size.width*index;
     
-    [self.content_scrollView scrollRectToVisible:frame animated:YES];
-//    [self.content_scrollView setContentOffset:CGPointMake(frame.size.width*index, 0) animated:YES];
-//    NSLog(@"x: %f,y: %f, width: %f, height: %f",frame.origin.x, frame.origin.y,frame.size.width,frame.size.height);
+//    NSLog(@"clicked, x: %f,y: %f, width: %f, height: %f",self.bgOfTabs.frame.origin.x, self.bgOfTabs.frame.origin.y,self.bgOfTabs.frame.size.width,self.bgOfTabs.frame.size.height);
+//
+//    [self.content_scrollView scrollRectToVisible:frame animated:YES];
     
+    CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
+    [self.content_scrollView setContentOffset:point animated:YES];
+   
+    
+}
+
+- (void) refresh
+{
+    [self.view setNeedsDisplay];
 }
 
 
@@ -221,6 +253,7 @@ enum Response_Type
             }
                 break;
             case ADD_FRIEND_RESULT:
+            case EVENT_INVITE_RESPONSE:
             {
                 [self.systemMsg addObject:msg_dic];
             }
@@ -267,82 +300,8 @@ enum Response_Type
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    int count = self.msgFromDB.count;
-//    NSDictionary* msg = [self.msgFromDB objectAtIndex:(count-1-indexPath.row)];
-//    NSString* msg_str = [msg objectForKey:@"msg"];
-////    NSLog(@"msg_str: %@",msg_str);
-//    NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-//    NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
-//    NSLog(@"notification table cmd: %d",cmd);
-//    switch (cmd) {
-//        case ADD_FRIEND_NOTIFICATION:
-//        {
-//            NotificationsTableViewCell* cell = [self.notificationsTable dequeueReusableCellWithIdentifier:@"requestnotification"];
-//            if (nil == cell) {
-//                cell = [[NotificationsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"requestnotification"];
-//            }
-//            NSString* name = [msg_dic objectForKey:@"name"];
-//            NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
-//            NSString* label = [[NSString alloc]initWithFormat:@"%@ 想要加你为好友\n验证信息：%@",name,confirm_msg ];
-//            cell.textView.text =  label;
-//            cell.okBtn.hidden = NO;
-//            [cell.okBtn setTitle:@"同意" forState:UIControlStateNormal];
-//            [cell.noBtn setTitle:@"拒绝" forState:UIControlStateNormal];
-//            [cell.okBtn addTarget:self action:@selector(okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            [cell.noBtn addTarget:self action:@selector(noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-////            NSLog(@"return add friend notification cell");
-//            return cell ;
-//            
-//        }
-//            break;
-//        case ADD_FRIEND_RESULT:
-//        {
-//            NotificationsTableViewCell* cell = [self.notificationsTable dequeueReusableCellWithIdentifier:@"requestnotification"];
-//            if (nil == cell) {
-//                cell = [[NotificationsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"requestnotification"];
-//            }
-//            NSString* name = [msg_dic objectForKey:@"name"];
-//            NSNumber* result = [msg_dic objectForKey:@"result"];
-//            NSString* label;
-//            if (result) {
-//                label = [NSString stringWithFormat:@"%@ 同意添加你为好友",name];
-//            }
-//            else
-//                label = [NSString stringWithFormat:@"%@ 拒绝添加你为好友",name];
-//            cell.textView.text = label;
-//            cell.okBtn.hidden = YES;
-//            [cell.noBtn setTitle:@"删除" forState:UIControlStateNormal];
-//            [cell.noBtn addTarget:self action:@selector(delBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            return cell ;
-//            
-//        }
-//            break;
-//        case NEW_EVENT_NOTIFICATION:
-//        {
-//            NotificationsTableViewCell* cell = [self.notificationsTable dequeueReusableCellWithIdentifier:@"requestnotification"];
-//            if (nil == cell) {
-//                cell = [[NotificationsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"requestnotification"];
-//            }
-//            NSString* subject = [msg_dic objectForKey:@"subject"];
-//            NSString* launcher = [msg_dic objectForKey:@"launcher"];
-//            NSString* time = [msg_dic objectForKey:@"time"];
-//            NSString* label = [NSString stringWithFormat:@"活动邀请\n主题：%@\n发起者：%@\n开始时间：%@",subject,launcher,time];
-//            cell.textView.text = label;
-//            cell.okBtn.hidden = NO;
-//            [cell.okBtn setTitle:@"同意" forState:UIControlStateNormal];
-//            [cell.noBtn setTitle:@"拒绝" forState:UIControlStateNormal];
-//            [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside ];
-//            [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-//            
-//            return cell ;
-//;
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
     if (tableView == self.eventRequest_tableView) {
         NotificationsEventRequestTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
         if (nil == cell) {
@@ -455,6 +414,25 @@ enum Response_Type
                     text = [NSString stringWithFormat:@" %@ 拒绝添加你为好友",name];
 
                 }
+                cell.title_label.text = @"好友消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+            case EVENT_INVITE_RESPONSE: //996
+            {
+                NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
+                NSString* name = [msg_dic objectForKey:@"name"];
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text = @"";
+                if (result) {
+                    text = [NSString stringWithFormat:@"%@ 同意加入你的活动 %@ ",name,subject];
+                }
+                else
+                {
+                    text = [NSString stringWithFormat:@"%@ 拒绝加入你的活动 %@ ",name,subject];
+                    
+                }
+                cell.title_label.text = @"活动消息";
                 cell.sys_msg_label.text = text;
             }
                 break;
@@ -465,6 +443,7 @@ enum Response_Type
         
         return cell;
     }
+    temp_cell.textLabel.text = @"没有新的消息啦";
     return temp_cell;
 }
 
@@ -765,6 +744,7 @@ enum Response_Type
         UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
         UIButton* lastBtn = (UIButton*)[tabs objectAtIndex:last_tab_index];
         UIButton* currentBtn = (UIButton*)[tabs objectAtIndex:tab_index];
+        
         [lastBtn setBackgroundColor:bColor_normal];
         lastBtn.selected = NO;
         [currentBtn setBackgroundColor:bColor_selected];
