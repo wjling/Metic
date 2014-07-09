@@ -148,10 +148,10 @@
 - (IBAction)share:(id)sender {
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"kaljefldkjfawelkjflkasdjf"
+                                      shareText:@"weshare"
                                      shareImage:self.photo
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
-                                       delegate:nil];
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                       delegate:self];
 }
 
 - (IBAction)download:(id)sender {
@@ -439,6 +439,17 @@
     
     // commit animations
     [UIView commitAnimations];
+}
+
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
+    }
 }
 
 @end
