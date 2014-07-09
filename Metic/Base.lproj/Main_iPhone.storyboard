@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -933,17 +933,17 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZLa-Nx-Oif">
-                                <rect key="frame" x="227" y="0.0" width="83" height="53"/>
+                                <rect key="frame" x="207" y="0.0" width="103" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发起活动icon" translatesAutoresizingMaskIntoConstraints="NO" id="qVw-XI-IhG">
-                                        <rect key="frame" x="6" y="3" width="20" height="20"/>
+                                        <rect key="frame" x="6" y="5" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A4g-6W-HgG">
-                                        <rect key="frame" x="24" y="0.0" width="59" height="26"/>
+                                        <rect key="frame" x="29" y="0.0" width="72" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="发起活动">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -956,20 +956,20 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxN-3x-uQ6">
-                                        <rect key="frame" x="4" y="26" width="75" height="1"/>
+                                        <rect key="frame" x="0.0" y="35" width="103" height="1"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.88235300780000003" green="0.88235300780000003" blue="0.88235300780000003" alpha="1" colorSpace="deviceRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="添加好友icon" translatesAutoresizingMaskIntoConstraints="NO" id="ajT-Y3-l5C">
-                                        <rect key="frame" x="6" y="30" width="20" height="20"/>
+                                        <rect key="frame" x="6" y="41" width="25" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bvy-RL-Uil">
-                                        <rect key="frame" x="24" y="27" width="59" height="26"/>
+                                        <rect key="frame" x="29" y="36" width="72" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="添加好友">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1003,10 +1003,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2wR-2f-Zzx">
-                                        <rect key="frame" x="90" y="0.0" width="87" height="32"/>
+                                        <rect key="frame" x="90" y="0.0" width="70" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <state key="normal" title="我发起的活动">
+                                        <state key="normal" title="我发起的">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <state key="highlighted" title="我发起的活动">
@@ -1017,10 +1017,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MV1-7L-zP2">
-                                        <rect key="frame" x="180" y="0.0" width="98" height="32"/>
+                                        <rect key="frame" x="155" y="0.0" width="98" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <state key="normal" title="好友发起的活动">
+                                        <state key="normal" title="好友发起的">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <state key="highlighted" title="好友发起的活动">
@@ -1031,13 +1031,13 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIj-Mg-dLL">
-                                        <rect key="frame" x="290" y="0.0" width="98" height="32"/>
+                                        <rect key="frame" x="250" y="0.0" width="98" height="32"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="BKl-u1-9jm"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <state key="normal" title="陌生人发起的活动">
+                                        <state key="normal" title="陌生人发起的">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <state key="highlighted" title="好友发起的活动">
@@ -1051,8 +1051,8 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="w8x-wV-9LC" firstAttribute="leading" secondItem="TWS-vU-U1a" secondAttribute="leading" constant="20" id="2R3-x7-dba"/>
-                                    <constraint firstAttribute="trailing" secondItem="bIj-Mg-dLL" secondAttribute="trailing" constant="-68" id="NCt-VW-ezV"/>
-                                    <constraint firstItem="bIj-Mg-dLL" firstAttribute="leading" secondItem="w8x-wV-9LC" secondAttribute="trailing" constant="214" id="d0T-lT-yZK"/>
+                                    <constraint firstAttribute="trailing" secondItem="bIj-Mg-dLL" secondAttribute="trailing" constant="100" id="NCt-VW-ezV"/>
+                                    <constraint firstItem="bIj-Mg-dLL" firstAttribute="leading" secondItem="w8x-wV-9LC" secondAttribute="trailing" constant="174" id="d0T-lT-yZK"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eTZ-nL-XRi">
@@ -1312,10 +1312,18 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button" image="上传活动封面">
+                                        <state key="normal" image="上传活动封面">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r6D-ac-rMX">
+                                        <rect key="frame" x="0.0" y="150" width="320" height="5"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.94117647058823528" green="0.44705882352941173" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y0j-yq-Ctk">
                                         <rect key="frame" x="20" y="172" width="280" height="46"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1351,7 +1359,7 @@
                                         <rect key="frame" x="20" y="232" width="280" height="46"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动主题" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="73M-ZQ-JY1">
+                                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动时间" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="73M-ZQ-JY1">
                                                 <rect key="frame" x="87" y="8" width="342" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <constraints>
@@ -1382,7 +1390,7 @@
                                         <rect key="frame" x="20" y="294" width="280" height="46"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动主题" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P6o-zO-iZa">
+                                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动时间" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="P6o-zO-iZa">
                                                 <rect key="frame" x="87" y="8" width="342" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <constraints>
@@ -1413,15 +1421,27 @@
                                         <rect key="frame" x="20" y="353" width="280" height="46"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动主题" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SUS-Ls-zJF">
-                                                <rect key="frame" x="87" y="8" width="342" height="30"/>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入活动地点" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SUS-Ls-zJF">
+                                                <rect key="frame" x="87" y="8" width="155" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="342" id="koM-g2-AQW"/>
+                                                    <constraint firstAttribute="width" constant="155" id="koM-g2-AQW"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IRa-by-VY1">
+                                                <rect key="frame" x="240" y="3" width="40" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <state key="normal" image="地图定位icon">
+                                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="getLoc:" destination="IYS-qz-32K" eventType="touchUpInside" id="zGl-v6-Y6f"/>
+                                                </connections>
+                                            </button>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="活动地点" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPd-RN-SJ2">
                                                 <rect key="frame" x="6" y="12" width="68" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1441,7 +1461,7 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TZI-wu-iUq">
-                                        <rect key="frame" x="20" y="454" width="280" height="128"/>
+                                        <rect key="frame" x="20" y="415" width="280" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -1450,13 +1470,16 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UqX-vI-bRD">
-                                        <rect key="frame" x="33" y="739" width="254" height="33"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UqX-vI-bRD">
+                                        <rect key="frame" x="33" y="690" width="254" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.44425752740000002" green="0.77209739960000001" blue="0.91565921530000005" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="33" id="Azh-Wy-5fA"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="33" id="nJ2-FK-zQO"/>
+                                            <constraint firstAttribute="width" constant="254" id="xum-BH-ct6"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="发起活动">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1466,20 +1489,19 @@
                                         </connections>
                                     </button>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J81-wT-qKU">
-                                        <rect key="frame" x="20" y="594" width="51" height="31"/>
+                                        <rect key="frame" x="20" y="560" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </switch>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="允许陌生人参加" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Duz-wR-XjT">
-                                        <rect key="frame" x="86" y="606" width="162" height="21"/>
+                                        <rect key="frame" x="80" y="566" width="181" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJn-2N-SYJ">
-                                        <rect key="frame" x="20" y="638" width="49" height="55"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LJn-2N-SYJ">
+                                        <rect key="frame" x="20" y="614" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="36"/>
-                                        <state key="normal" title="＋">
+                                        <state key="normal" image="加号icon">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -1487,70 +1509,50 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="邀请好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Zy-EG-btB">
-                                        <rect key="frame" x="86" y="662" width="125" height="21"/>
+                                        <rect key="frame" x="80" y="625" width="125" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="125" id="KYm-F5-V0b"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IRa-by-VY1">
-                                        <rect key="frame" x="33" y="407" width="36" height="36"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.33725491169999999" green="0.79215693470000004" blue="0.66274511810000003" alpha="1" colorSpace="deviceRGB"/>
-                                        <state key="normal" title=" 定位">
-                                            <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="点击定位到地图" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FeJ-AM-IfK">
-                                        <rect key="frame" x="89" y="414" width="119" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstItem="y0j-yq-Ctk" firstAttribute="trailing" secondItem="Vzw-Bo-Uen" secondAttribute="trailing" id="17A-fP-iDq"/>
-                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="top" secondItem="J81-wT-qKU" secondAttribute="bottom" constant="13" id="23M-n8-b3t"/>
-                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="leading" secondItem="J81-wT-qKU" secondAttribute="leading" id="2Nz-P9-jnK"/>
-                                    <constraint firstItem="IRa-by-VY1" firstAttribute="leading" secondItem="UqX-vI-bRD" secondAttribute="leading" id="5Fq-63-bSP"/>
-                                    <constraint firstItem="IRa-by-VY1" firstAttribute="top" secondItem="uV0-eG-foO" secondAttribute="bottom" constant="8" symbolic="YES" id="7ue-1y-mVp"/>
-                                    <constraint firstItem="TZI-wu-iUq" firstAttribute="top" secondItem="FeJ-AM-IfK" secondAttribute="bottom" constant="19" id="8wE-go-SgF"/>
+                                    <constraint firstItem="J81-wT-qKU" firstAttribute="top" secondItem="TZI-wu-iUq" secondAttribute="bottom" constant="17" id="6b2-be-Wf5"/>
+                                    <constraint firstItem="UqX-vI-bRD" firstAttribute="top" secondItem="LJn-2N-SYJ" secondAttribute="bottom" constant="36" id="7TP-kz-JHg"/>
+                                    <constraint firstItem="1Zy-EG-btB" firstAttribute="top" secondItem="Duz-wR-XjT" secondAttribute="bottom" constant="38" id="80B-Cs-stP"/>
                                     <constraint firstItem="JKs-Bt-Aav" firstAttribute="top" secondItem="Vzw-Bo-Uen" secondAttribute="bottom" constant="16" id="9fl-uO-w0p"/>
                                     <constraint firstItem="uV0-eG-foO" firstAttribute="leading" secondItem="JKs-Bt-Aav" secondAttribute="leading" id="ARO-7R-IDU"/>
+                                    <constraint firstItem="Duz-wR-XjT" firstAttribute="leading" secondItem="J81-wT-qKU" secondAttribute="trailing" constant="11" id="BxJ-g5-3HB"/>
                                     <constraint firstItem="yY7-SY-N81" firstAttribute="leading" secondItem="eYA-7C-1UR" secondAttribute="leading" id="CU9-fB-bmF"/>
                                     <constraint firstItem="Vzw-Bo-Uen" firstAttribute="leading" secondItem="JKs-Bt-Aav" secondAttribute="leading" id="Cqk-0W-QbK"/>
-                                    <constraint firstItem="Duz-wR-XjT" firstAttribute="top" secondItem="TZI-wu-iUq" secondAttribute="bottom" constant="24" id="DdY-mo-AGO"/>
+                                    <constraint firstItem="1Zy-EG-btB" firstAttribute="leading" secondItem="LJn-2N-SYJ" secondAttribute="trailing" constant="20" id="FOW-4t-3fV"/>
                                     <constraint firstItem="uV0-eG-foO" firstAttribute="top" secondItem="JKs-Bt-Aav" secondAttribute="bottom" constant="13" id="FsO-2S-tKJ"/>
-                                    <constraint firstItem="FeJ-AM-IfK" firstAttribute="leading" secondItem="IRa-by-VY1" secondAttribute="trailing" constant="20" id="Gln-No-dtG"/>
                                     <constraint firstItem="Vzw-Bo-Uen" firstAttribute="top" secondItem="y0j-yq-Ctk" secondAttribute="bottom" constant="14" id="HOa-cc-lUg"/>
                                     <constraint firstItem="UqX-vI-bRD" firstAttribute="centerX" secondItem="TZI-wu-iUq" secondAttribute="centerX" id="If4-3g-G5g"/>
-                                    <constraint firstAttribute="bottom" secondItem="UqX-vI-bRD" secondAttribute="bottom" constant="124" id="Kdc-tc-wuA"/>
+                                    <constraint firstAttribute="bottom" secondItem="UqX-vI-bRD" secondAttribute="bottom" constant="50" id="Kdc-tc-wuA"/>
+                                    <constraint firstItem="J81-wT-qKU" firstAttribute="leading" secondItem="TZI-wu-iUq" secondAttribute="leading" id="PiX-g4-RM6"/>
                                     <constraint firstAttribute="trailing" secondItem="y0j-yq-Ctk" secondAttribute="trailing" constant="20" symbolic="YES" id="QN6-Kr-aLS"/>
-                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="baseline" secondItem="1Zy-EG-btB" secondAttribute="baseline" id="Spe-T2-5NZ"/>
+                                    <constraint firstItem="1Zy-EG-btB" firstAttribute="leading" secondItem="Duz-wR-XjT" secondAttribute="leading" id="QeZ-wl-Yzn"/>
+                                    <constraint firstAttribute="trailing" secondItem="Duz-wR-XjT" secondAttribute="trailing" constant="59" id="RGi-kG-cGf"/>
+                                    <constraint firstItem="J81-wT-qKU" firstAttribute="top" secondItem="eYA-7C-1UR" secondAttribute="top" constant="560" id="SMx-Uc-AbF"/>
                                     <constraint firstItem="JKs-Bt-Aav" firstAttribute="trailing" secondItem="Vzw-Bo-Uen" secondAttribute="trailing" id="ULx-CT-5hP"/>
-                                    <constraint firstItem="1Zy-EG-btB" firstAttribute="centerX" secondItem="FeJ-AM-IfK" secondAttribute="centerX" id="W63-59-BB3"/>
-                                    <constraint firstItem="FeJ-AM-IfK" firstAttribute="top" secondItem="uV0-eG-foO" secondAttribute="bottom" constant="15" id="Xox-aL-o5l"/>
-                                    <constraint firstItem="1Zy-EG-btB" firstAttribute="leading" secondItem="Duz-wR-XjT" secondAttribute="leading" id="Y5l-pw-Isj"/>
                                     <constraint firstItem="y0j-yq-Ctk" firstAttribute="centerX" secondItem="yY7-SY-N81" secondAttribute="centerX" id="Z8f-qx-O39"/>
-                                    <constraint firstItem="J81-wT-qKU" firstAttribute="top" secondItem="TZI-wu-iUq" secondAttribute="bottom" constant="12" id="aCw-RV-eB6"/>
                                     <constraint firstItem="uV0-eG-foO" firstAttribute="trailing" secondItem="TZI-wu-iUq" secondAttribute="trailing" id="aek-wJ-wf9"/>
-                                    <constraint firstItem="IRa-by-VY1" firstAttribute="leading" secondItem="eYA-7C-1UR" secondAttribute="leading" constant="33" id="bCD-sE-H7A"/>
-                                    <constraint firstItem="IRa-by-VY1" firstAttribute="trailing" secondItem="J81-wT-qKU" secondAttribute="trailing" id="fvI-sC-FX4"/>
+                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="leading" secondItem="eYA-7C-1UR" secondAttribute="leading" constant="20" id="dST-4H-k8x"/>
+                                    <constraint firstItem="Duz-wR-XjT" firstAttribute="top" secondItem="TZI-wu-iUq" secondAttribute="bottom" constant="23" id="die-GX-I7W"/>
                                     <constraint firstItem="y0j-yq-Ctk" firstAttribute="leading" secondItem="Vzw-Bo-Uen" secondAttribute="leading" id="gne-ji-5nD"/>
-                                    <constraint firstItem="TZI-wu-iUq" firstAttribute="leading" secondItem="J81-wT-qKU" secondAttribute="leading" id="hPd-LQ-pM4"/>
                                     <constraint firstItem="uV0-eG-foO" firstAttribute="trailing" secondItem="JKs-Bt-Aav" secondAttribute="trailing" id="iMp-0w-HZK"/>
-                                    <constraint firstItem="TZI-wu-iUq" firstAttribute="top" secondItem="IRa-by-VY1" secondAttribute="bottom" constant="11" id="oB1-He-FHz"/>
+                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="top" secondItem="J81-wT-qKU" secondAttribute="bottom" constant="23" id="kHQ-t0-mHs"/>
                                     <constraint firstItem="y0j-yq-Ctk" firstAttribute="top" secondItem="yY7-SY-N81" secondAttribute="bottom" constant="22" id="oL7-Sy-gzf"/>
-                                    <constraint firstItem="UqX-vI-bRD" firstAttribute="top" secondItem="LJn-2N-SYJ" secondAttribute="bottom" constant="46" id="otP-Ey-SBD"/>
                                     <constraint firstItem="y0j-yq-Ctk" firstAttribute="leading" secondItem="eYA-7C-1UR" secondAttribute="leading" constant="20" symbolic="YES" id="p0S-da-nqV"/>
                                     <constraint firstItem="uV0-eG-foO" firstAttribute="leading" secondItem="TZI-wu-iUq" secondAttribute="leading" id="pfT-pL-TvQ"/>
-                                    <constraint firstItem="Duz-wR-XjT" firstAttribute="leading" secondItem="J81-wT-qKU" secondAttribute="trailing" constant="17" id="uH7-yz-DNY"/>
-                                    <constraint firstAttribute="trailing" secondItem="Duz-wR-XjT" secondAttribute="trailing" constant="72" id="xLs-Oq-b0z"/>
+                                    <constraint firstItem="UqX-vI-bRD" firstAttribute="top" secondItem="1Zy-EG-btB" secondAttribute="bottom" constant="44" id="qUU-5d-qzP"/>
                                     <constraint firstItem="yY7-SY-N81" firstAttribute="centerX" secondItem="eYA-7C-1UR" secondAttribute="centerX" id="yBh-hj-rVw"/>
                                     <constraint firstItem="yY7-SY-N81" firstAttribute="top" secondItem="eYA-7C-1UR" secondAttribute="top" id="yYf-b9-E2c"/>
-                                    <constraint firstItem="LJn-2N-SYJ" firstAttribute="trailing" secondItem="J81-wT-qKU" secondAttribute="trailing" id="zQO-z2-vZs"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -1574,11 +1576,16 @@
                         <outlet property="location_text" destination="SUS-Ls-zJF" id="yFB-gR-9UW"/>
                         <outlet property="scrollView" destination="eYA-7C-1UR" id="bIw-DD-Hcv"/>
                         <outlet property="subject_text" destination="139-Dc-JeZ" id="YsT-oC-A6t"/>
+                        <outletCollection property="roundCornerView" destination="y0j-yq-Ctk" id="o4X-B5-M3o"/>
+                        <outletCollection property="roundCornerView" destination="Vzw-Bo-Uen" id="use-XZ-24G"/>
+                        <outletCollection property="roundCornerView" destination="JKs-Bt-Aav" id="Gmp-io-iwc"/>
+                        <outletCollection property="roundCornerView" destination="uV0-eG-foO" id="fbr-PU-p7O"/>
+                        <outletCollection property="roundCornerView" destination="TZI-wu-iUq" id="clM-f2-ca1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GW0-zg-hFK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1483" y="-1161"/>
+            <point key="canvasLocation" x="1519" y="-1456"/>
         </scene>
         <!--Photo Upload View Controller - 上传图片-->
         <scene sceneID="Dag-NC-9cB">
@@ -1790,6 +1797,7 @@
                         <outlet property="avatar" destination="333-FN-zW4" id="Iex-jZ-h3e"/>
                         <outlet property="commentImg" destination="w8o-Gt-f78" id="mpT-9Z-7zl"/>
                         <outlet property="comment_num" destination="7Yj-Cn-F9u" id="eH8-WV-X5e"/>
+                        <outlet property="goodButton" destination="Lb3-sY-yrc" id="h4D-yN-tPT"/>
                         <outlet property="goodImg" destination="USo-NE-p8H" id="sOw-zU-2LZ"/>
                         <outlet property="pictureAuthor" destination="c84-4Q-aVr" id="Cam-P8-f4f"/>
                         <outlet property="pictureDescription" destination="ZGG-Te-c2F" id="qXV-gP-XIP"/>
@@ -1952,6 +1960,8 @@
                     <connections>
                         <outlet property="commentView" destination="cXw-gB-Z6b" id="QT8-Ce-A4n"/>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
+                        <outlet property="download_button" destination="CLr-x0-Y7a" id="vrd-CL-xYV"/>
+                        <outlet property="good_button" destination="pZT-L4-2hm" id="Pcs-y9-BHb"/>
                         <outlet property="tableView" destination="wJW-xi-MsO" id="d3J-vv-iVx"/>
                         <outletCollection property="buttons" destination="pZT-L4-2hm" id="b9j-Fx-rOr"/>
                         <outletCollection property="buttons" destination="Ygo-LO-AWi" id="rDT-X7-NpD"/>
@@ -2100,6 +2110,7 @@
         <image name="删除icon" width="18" height="18"/>
         <image name="删除icon效果" width="18" height="18"/>
         <image name="加入活动加号icon" width="29" height="29"/>
+        <image name="加号icon" width="12" height="12"/>
         <image name="发起人icon" width="7" height="7"/>
         <image name="发起活动icon" width="13" height="13"/>
         <image name="图片评论icon图标1" width="20" height="20"/>
@@ -2110,6 +2121,7 @@
         <image name="图片评论icon图标3白色" width="20" height="20"/>
         <image name="图片评论icon图标4" width="20" height="20"/>
         <image name="图片评论icon图标4白色" width="20" height="20"/>
+        <image name="地图定位icon" width="17" height="17"/>
         <image name="好友推荐icon" width="45" height="45"/>
         <image name="更多" width="36" height="35"/>
         <image name="活动地点icon" width="7" height="7"/>
@@ -2132,6 +2144,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="a7Z-Ie-XBp"/>
     </inferredMetricsTieBreakers>
 </document>

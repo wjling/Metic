@@ -25,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet UITextView *detail_text;
 @property (strong, nonatomic) IBOutlet UISwitch *canin;
 @property (strong, nonatomic) IBOutlet UIButton *launch_button;
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray *roundCornerView;
 
 
 

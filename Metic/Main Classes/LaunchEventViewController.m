@@ -21,6 +21,7 @@
 @property (nonatomic,strong) CLLocationManager *locManager;
 @property (nonatomic,strong) CLGeocoder *geocoder;
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
+@property (nonatomic,strong) NSDictionary* positions;
 
 
 
@@ -43,6 +44,7 @@ double latitude = 999.999999;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self turnRoundCorner];
     self.scrollView.delegate = self;
     self.begin_time_text.delegate = self;
     self.end_time_text.delegate = self;
@@ -55,9 +57,8 @@ double latitude = 999.999999;
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
-    _locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    _locManager.desiredAccuracy = kCLLocationAccuracyBest;
     _locManager.distanceFilter = 1000.0f;
-    _geocoder = [[CLGeocoder alloc] init];
     // Do any additional setup after loading the view.
 }
 
@@ -67,6 +68,13 @@ double latitude = 999.999999;
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)turnRoundCorner
+{
+    for (UIView*view in self.roundCornerView) {
+        view.layer.cornerRadius = 5;
+    }
+}
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     //[self.scrollView scrollRectToVisible:CGRectMake(0, textView.frame.origin.y - 55, 320, 480) animated:YES];
@@ -189,25 +197,19 @@ double latitude = 999.999999;
     if(currLocation){
         latitude = currLocation.coordinate.latitude;
         longitude = currLocation.coordinate.longitude;
-        [_geocoder reverseGeocodeLocation:currLocation completionHandler:
-         ^(NSArray* placemarks, NSError* error){
-             NSString *location = @"";
-             for (NSString* place in placemarks) {
-                 location =[location stringByAppendingString:place];
-             }
-             self.location_text.text = location;
-             NSLog(@"%@",location);
-         }];
+        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
+            CLPlacemark* mark = placemarks[0];
+            NSDictionary* locationInfo = mark.addressDictionary;
+            NSString *address = [locationInfo valueForKey:@"Name"];
+            if (address) {
+                self.location_text.text = address;
+            }
+        }];
+        
+
     }
     
-    //    [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-    //        if (placemarks.count > 0) {
-    //            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-    //            NSString *country = placemark.ISOcountryCode;
-    //            NSString *city = placemark.locality;
-    //            NSLog(@"---%@......%@...cout:%d",country,city,[placemarks count]);
-    //        }
-    //    }];
+
     [_locManager stopUpdatingLocation];
     
 }

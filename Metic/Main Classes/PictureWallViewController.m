@@ -24,6 +24,7 @@
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
 @property (nonatomic,strong) NSTimer *timer;
+@property (nonatomic,strong) NSMutableSet *img;
 
 @end
 
@@ -54,6 +55,7 @@
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     self.photoPath_list = [[NSMutableArray alloc]init];
+    self.img = [[NSMutableSet alloc]init];
     
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
@@ -70,7 +72,9 @@
     self.sequence = [[NSNumber alloc]initWithInt:0];
     [self.photo_list removeAllObjects];
     [self.photo_list_all removeAllObjects];
-    self.leftHeight = self.rightHeight = self.leftRows = self.rightRows = self.wait= 0;
+    [self.img removeAllObjects];
+    self.leftHeight = self.rightHeight = self.wait= 0;
+    self.leftRows = self.rightRows = 1;
     [self getPhotolist];
 }
 
@@ -79,7 +83,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [cell removeFromSuperview];
+}
 -(void)getPhotolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -91,7 +98,7 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST];
     
-
+    
 }
 
 -(void)getPhotoPathlist
@@ -158,16 +165,16 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    long rows = 0;
+    long max = 0;
     if (!self.photo_list.count) {
-        return rows;
+        return 0;
     }
-    rows = self.photo_list.count/2;
-
+    max = self.photo_list.count/2;
+    
     if (tableView == self.tableView1) {
-        rows += self.photo_list.count%2;
+        max += self.photo_list.count%2;
     }
-    return rows;
+    return max;
 }
 
 
@@ -217,17 +224,18 @@
             [cell1 setFrame:CGRectMake(0, imgHeight, 145, 33)];
             [cell addSubview:cell1];
             [cell addSubview:photo];
+            [photo setTag:11];
         }else{
             [cell setHidden:YES];
             PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:photo path:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] type:3 cache:self.photos];
             [photoGetter setTypeOption3:tableView];
             photoGetter.mDelegate = self;
             //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:photoGetter];
-
+            
             [photoGetter getPhoto];
             
         }
-     
+        
         
     }
 	return cell;
@@ -265,7 +273,7 @@
     }else{
         return 0;
     }
-
+    
 }
 #pragma mark - HttpSenderDelegate
 

@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "UMSocialWechatHandler.h"
 
 @implementation AppDelegate
 {
@@ -43,6 +44,7 @@
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     [[MTUser alloc]init];
+    [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     return YES;
 

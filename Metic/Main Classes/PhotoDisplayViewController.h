@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *comment_num;
 @property (strong, nonatomic) IBOutlet UIImageView *commentImg;
 @property (strong, nonatomic) IBOutlet UIImageView *goodImg;
+@property (strong, nonatomic) IBOutlet UIButton *goodButton;
 
 
 

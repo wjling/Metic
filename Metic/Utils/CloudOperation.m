@@ -67,9 +67,15 @@
 -(void)downloadfile:(NSString*)url path:(NSString*)path
 {
     NSURL *myurl = [NSURL URLWithString:url];
-    NSData *imgData = [NSData dataWithContentsOfURL:myurl];
-    [self.mDelegate finishwithOperationStatus:YES type:1 data:imgData path:mpath];
+    [self performSelectorInBackground:@selector(download:) withObject:myurl];
     
+    
+}
+
+-(void)download:(NSURL *)url
+{
+    NSData *imgData = [NSData dataWithContentsOfURL:url];
+    [self.mDelegate finishwithOperationStatus:YES type:1 data:imgData path:mpath];
 }
 
 -(void)uploadfile:(NSString*)url path:(NSString*)path;

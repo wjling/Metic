@@ -14,6 +14,7 @@
 #import "MTUser.h"
 #import "SRWebSocket.h"
 #import "MySqlite.h"
+#import "UMSocial.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *window;
