@@ -18,8 +18,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self reconnect];
+//    [self reconnect];
+    UISwipeGestureRecognizer* gesture_swipe_right = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeRight:)];
+    gesture_swipe_right.direction = UISwipeGestureRecognizerDirectionRight;
+    UISwipeGestureRecognizer* gesture_swipe_left = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(handleSwipeLeft:)];
+    gesture_swipe_left.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:gesture_swipe_right];
+    [self.view addGestureRecognizer:gesture_swipe_left];
 }
+
+- (void) handleSwipeRight:(UIGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe right");
+}
+
+- (void) handleSwipeLeft:(UIGestureRecognizer*)gesture
+{
+    NSLog(@"handle swipe left");
+}
+
 
 #pragma mark - SlideNavigationController Methods -
 
@@ -44,6 +61,8 @@
         [self.view sendSubviewToBack:self.shadowView];
     }
 }
+
+
 
 /////////////////////////testing socket/////////////
 
