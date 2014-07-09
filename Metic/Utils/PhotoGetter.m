@@ -121,18 +121,13 @@
                     [_phothCache setValue:[NSNumber numberWithInt:24] forKey:_path];
                 }else if([fake isKindOfClass:[NSNumber class]])
                 {
-                    float time = [MTUser sharedInstance].wait;
-                    [MTUser sharedInstance].wait += 0.1;
-                    if ([MTUser sharedInstance].wait > 1.0) {
-                        [MTUser sharedInstance].wait = 0.1;
-                    }
-                    NSLog(@"%f",[MTUser sharedInstance].wait);
-                    [NSTimer scheduledTimerWithTimeInterval:time+0.1 target:self selector:@selector(getPhoto) userInfo:nil repeats:NO];
+                    [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(getPhoto) userInfo:nil repeats:NO];
                     return;
                 }
 
             }
-                        //网络下载
+            //网络下载
+            
             CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
             [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
         }
@@ -187,7 +182,8 @@
 
     if (mdata) {
         NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
-        [UIImageJPEGRepresentation([UIImage imageWithData:mdata], 1.0f) writeToFile:filePath atomically:YES];
+        mdata = UIImageJPEGRepresentation([UIImage imageWithData:mdata], 1.0f);
+        [mdata writeToFile:filePath atomically:YES];
         
         UIImage *imageFromAir = [UIImage imageWithData:mdata];
         //UIImage *netAvatar = [UIImage imageWithContentsOfFile:_filePath];
@@ -216,16 +212,12 @@
         switch (self.type) {
             case 1:
                 [_phothCache setValue:tmpAvatar forKey:_path];
-                tmpAvatar = [CommonUtils circleImage:tmpAvatar withParam:0 borderColor:_borderColor borderWidth:1];
-                [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:nil];
                 break;
             case 2:
                 [_phothCache setValue:tmpAvatar forKey:_path];
-                [self.mDelegate finishwithNotification:self.imageView image:tmpAvatar type:self.type container:nil];
                 break;
             case 3:
                 [_phothCache setValue:tmpPhoto forKey:_path];
-                [self.mDelegate finishwithNotification:self.imageView image:tmpPhoto type:self.type container:self.container];
                 break;
                 
             default:

@@ -84,10 +84,6 @@
     self.mytableView.eventsSource = self.myevents;
     self.frtableView.eventsSource = self.frevents;
     self.tatableView.eventsSource = self.taevents;
-//    [self.tableView reloadData];
-//    [self.mytableView reloadData];
-//    [self.frtableView reloadData];
-//    [self.tatableView reloadData];
     
 }
 
@@ -137,11 +133,12 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    //NSLog(@"%f",self.controlView.contentOffset.x);
     float position = self.scrollView.contentOffset.x;
-    float newposition = position/620*190+24;
-    if (newposition > 280) {
+    float newposition = position/740*190+24;
+    if (newposition > 250) {
         [self more:nil];
-    }else if(newposition < 120) [self.controlView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }else if(newposition < 100) [self.controlView setContentOffset:CGPointMake(0, 0) animated:YES];
     [self.indicatior setFrame:CGRectMake(newposition, 32, 48, 3)];
 }
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -392,7 +389,7 @@
 }
 
 - (IBAction)more:(id)sender {
-    [self.controlView setContentOffset:CGPointMake(122, 0) animated:YES];
+    [self.controlView setContentOffset:CGPointMake(65, 0) animated:YES];
     
 }
 

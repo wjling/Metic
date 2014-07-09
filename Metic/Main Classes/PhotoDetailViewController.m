@@ -15,6 +15,8 @@
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
+@property (strong, nonatomic) IBOutlet UIButton *good_button;
+@property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
 @property (nonatomic,strong) NSArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
@@ -124,7 +126,7 @@
 
 
 - (IBAction)good:(id)sender {
-    //self.goodindex = self.scrollView.contentOffset.x/320;
+    [self.good_button setEnabled:NO];
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -144,9 +146,18 @@
 }
 
 - (IBAction)share:(id)sender {
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:@"53bb542e56240ba6e80a4bfb"
+                                      shareText:@"kaljefldkjfawelkjflkasdjf"
+                                     shareImage:self.photo
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                       delegate:nil];
 }
 
 - (IBAction)download:(id)sender {
+    [self.download_button setEnabled:NO];
+    UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
 }
 
 - (IBAction)publishComment:(id)sender {
@@ -168,6 +179,15 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+}
+
+- (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
+    [self.download_button setEnabled:YES];
+    if (error){
+        // Do anything needed to handle the error or display it to the user
+    }else{
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
+    }
 }
 
 
@@ -199,6 +219,7 @@
                 [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
                 [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
                 [self setGoodButton];
+                [self.good_button setEnabled:YES];
                 
             }
             

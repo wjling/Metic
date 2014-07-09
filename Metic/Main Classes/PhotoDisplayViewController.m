@@ -208,6 +208,7 @@
 
 
 - (IBAction)appreciate:(id)sender {
+    [(UIButton*)sender setEnabled:NO];
     self.goodindex = self.scrollView.contentOffset.x/320;
     BOOL iszan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -255,6 +256,7 @@
             [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
             [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
             self.photo_list[self.goodindex] = dict;
+            [self.goodButton setEnabled:YES];
 
         }
             break;
