@@ -13,19 +13,20 @@
 #import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
 #import "AppConstants.h"
+#import "UIImageView+WebCache.h"
+
+
 
 @interface PictureWallViewController ()
-@property int leftHeight;
-@property int rightHeight;
-@property int leftRows;
-@property int rightRows;
-@property int wait;
 @property BOOL isOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
+@property BOOL shouldStopTimer;
 @property (nonatomic,strong) NSTimer *timer;
-@property (nonatomic,strong) NSMutableSet *img;
-
+@property (nonatomic,strong) NSMutableDictionary *cellHeight;
+@property (nonatomic,strong)SDWebImageManager *manager;
+@property int currentPhotoNum;
+@property (nonatomic,strong) NSString* urlFormat;
 @end
 
 @implementation PictureWallViewController
@@ -49,18 +50,20 @@
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
     self.seletedPhotoIndex = 0;
-    self.leftHeight = self.rightHeight = self.leftRows = self.rightRows = 0;
     self.isOpen = NO;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     self.photoPath_list = [[NSMutableArray alloc]init];
-    self.img = [[NSMutableSet alloc]init];
+    self.cellHeight = [[NSMutableDictionary alloc]init];
+    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";
+    _manager = [SDWebImageManager sharedManager];
     
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = self.tableView1;
+    [_footer beginRefreshing];
     
     //等待圈圈
     
@@ -68,14 +71,19 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    
-    self.sequence = [[NSNumber alloc]initWithInt:0];
-    [self.photo_list removeAllObjects];
-    [self.photo_list_all removeAllObjects];
-    [self.img removeAllObjects];
-    self.leftHeight = self.rightHeight = self.wait= 0;
-    self.leftRows = self.rightRows = 1;
+    _shouldStopTimer = YES;
+    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:YES];
     [self getPhotolist];
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    if (_shouldStopTimer){
+        _shouldStopTimer = NO;
+        [_timer invalidate];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,8 +114,8 @@
     [self.photoPath_list removeAllObjects];
     for(NSDictionary* dict in self.photo_list)
     {
-        NSString* path = [NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]];
-        [self.photoPath_list addObject:path];
+        NSString *url = [NSString stringWithFormat:_urlFormat,[dict valueForKey:@"photo_name"] ,[dict valueForKey:@"url"]];
+        [self.photoPath_list addObject:url];
     }
 }
 
@@ -138,16 +146,25 @@
     [_Alert dismissWithClickedButtonIndex:0 animated:NO];
 }
 
--(void)close_RJ
+#pragma mark 代理方法-UIScrollView
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    self.isOpen = NO;
-    [_footer endRefreshing];
+    if (scrollView == _tableView1) {
+        [_tableView2 setContentOffset:_tableView1.contentOffset];
+    }else [_tableView1 setContentOffset:_tableView2.contentOffset];
 }
 
--(void)BGgetPhoto:(id)sender
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    PhotoGetter* getter = sender;
-    [getter getPhoto];
+    if (_shouldStopTimer){
+        _shouldStopTimer = NO;
+        [_timer invalidate];
+    
+    }
+    _footer.scrollView = scrollView;
+    if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
+        [_tableView2 setContentSize:_tableView1.contentSize];
+    }else [_tableView1 setContentSize:_tableView2.contentSize];
 }
 
 #pragma mark 代理方法-UITableView
@@ -192,72 +209,42 @@
         nibsRegistered = YES;
     }
     PhotoTableViewCell *cell1 = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     UITableViewCell *cell = [[UITableViewCell alloc]init];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
-    if (self.photo_list.count) {
-        NSDictionary *a = self.photo_list[indexPath.row*2+addition];
-        cell1.author.text = [a valueForKey:@"author"];
-        cell1.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
-        
-        
-        cell1.avatar.image = nil;
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        [getter setTypeOption2:[a valueForKey:@"author_id"]];
-        getter.mDelegate = self;
-        [getter getPhoto];
-        
-        
-        
-        
-        UIImageView *photo = [[UIImageView alloc]init];
-        //photo.image = nil;
-        NSString* path = [NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]];
-        UIImage* img = [self.photos valueForKey:path];
-        if (img) {
-            [cell1 setHidden:NO];
-            photo.image = img;
-            float imgHeight = 145.0*img.size.height/img.size.width;
-            [cell setFrame:CGRectMake(0, 0, 145, imgHeight+33)];
-            [cell setBackgroundColor:[UIColor clearColor]];
-            [photo setFrame:CGRectMake(0, 0, 145, imgHeight)];
-            [cell1 setFrame:CGRectMake(0, imgHeight, 145, 33)];
-            [cell addSubview:cell1];
-            [cell addSubview:photo];
-            [photo setTag:11];
-        }else{
+    NSDictionary *a = self.photo_list[indexPath.row*2+addition];
+    cell1.author.text = [a valueForKey:@"author"];
+    cell1.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
+    
+    
+    cell1.avatar.image = nil;
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
+    [getter setTypeOption2:[a valueForKey:@"author_id"]];
+    getter.mDelegate = self;
+    [getter getPhoto];
+    
+    
+    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    UIImageView* photo = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 145, 0)];
+    [cell addSubview:photo];
+    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+    NSNumber* Cellheight = [_cellHeight valueForKey:url];
+    if (Cellheight) {
+        float height = [Cellheight floatValue];
+        if (height == 0) {
             [cell setHidden:YES];
-            PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:photo path:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] type:3 cache:self.photos];
-            [photoGetter setTypeOption3:tableView];
-            photoGetter.mDelegate = self;
-            //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:photoGetter];
-            
-            [photoGetter getPhoto];
-            
+        }else{
+            [cell setHidden:NO];
+            [photo setFrame:CGRectMake(0, 0, 145, height)];
+            [cell1.infoView setFrame:CGRectMake(0, height, 145, 33)];
+            [cell setFrame:CGRectMake(0, 0, 145, height+43)];
+            [cell addSubview:cell1.infoView];
         }
-        
-        
-    }
-	return cell;
-}
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (self.tableView1 == scrollView) {
-        self.tableView2.contentOffset = self.tableView1.contentOffset;
-    }else{
-        self.tableView1.contentOffset = self.tableView2.contentOffset;
-    }
+
+    }else [cell setHidden:YES];
+    [cell setBackgroundColor:[UIColor clearColor]];
+    return cell;
 }
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    //[self performSelector:@selector(reloadPhoto) withObject:nil afterDelay:1];
-    //self.wait = 0;
-    if (self.tableView1.contentSize.height > self.tableView2.contentSize.height) {
-        [self.tableView2 setContentSize:self.tableView1.contentSize];
-    }else [self.tableView1 setContentSize:self.tableView2.contentSize];
-    self.footer.scrollView = scrollView;
-}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int addition = 0;
@@ -265,14 +252,18 @@
         addition = 1;
     }
     NSDictionary *a = self.photo_list[indexPath.row*2+addition];
-    NSString* path = [NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]];
-    UIImage* img = [self.photos valueForKey:path];
-    if (img) {
-        float imgHeight = 145.0*img.size.height/img.size.width;
-        return imgHeight + 43;
+    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    UIImage * img = [[_manager imageCache] imageFromDiskCacheForKey:url];
+    float height = 0;
+    if(img){
+        height = img.size.height *145.0/img.size.width;
+        [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
+        return height+43;
     }else{
+        [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
         return 0;
     }
+
     
 }
 #pragma mark - HttpSenderDelegate
@@ -294,12 +285,9 @@
             for (int i = count; i < count + 5 && i < self.photo_list_all.count; i++) {
                 [self.photo_list addObject:self.photo_list_all[i]];
             }
-            
             [self getPhotoPathlist];
-            [self.tableView1 reloadData];
-            [self.tableView2 reloadData];
-            [self performSelector:@selector(reloadPhoto) withObject:nil afterDelay:0.2];
-            //self.timer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
+            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
+            
         }
             break;
     }
@@ -325,7 +313,6 @@
     if ([sender isKindOfClass:[PictureWallViewController class]]) {
         if ([segue.destinationViewController isKindOfClass:[PhotoDisplayViewController class]]) {
             PhotoDisplayViewController *nextViewController = segue.destinationViewController;
-            nextViewController.photoscache = self.photos;
             nextViewController.photoPath_list = self.photoPath_list;
             nextViewController.photo_list = self.photo_list;
             nextViewController.photoIndex = self.seletedPhotoIndex;
@@ -354,20 +341,11 @@
             [self.photo_list addObject:self.photo_list_all[i]];
         }
         [self getPhotoPathlist];
-        [self.tableView1 reloadData];
-        [self.tableView2 reloadData];
-        [_footer endRefreshing];
+        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
     }else{
         [self getPhotolist];
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
 }
 
 

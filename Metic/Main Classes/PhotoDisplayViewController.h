@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "../Utils/HttpSender.h"
 #import "../Utils/PhotoGetter.h"
+#import "UIImageView+WebCache.h"
 
 @interface PhotoDisplayViewController : UIViewController<PhotoGetterDelegate,UIScrollViewDelegate,HttpSenderDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
-@property(nonatomic,strong)NSMutableDictionary *photoscache;//存放图片uiimage
+//@property(nonatomic,strong)NSMutableDictionary *photoscache;//存放图片uiimage
 @property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
 @property(nonatomic,strong)NSMutableDictionary *photos;//存放图片父uiscrollview
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据

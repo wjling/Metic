@@ -148,7 +148,7 @@
 - (IBAction)share:(id)sender {
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"weshare"
+                                      shareText:@"WeShare"
                                      shareImage:self.photo
                                 shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
                                        delegate:self];
