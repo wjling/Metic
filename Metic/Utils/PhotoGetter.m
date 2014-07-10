@@ -8,6 +8,7 @@
 
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
+#import "UIImage+UIImageExtras.h"
 
 @interface PhotoGetter ()
 @property(nonatomic,strong) UIImage* uploadImage;
@@ -146,8 +147,14 @@
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+    if (imageData.length > 1000000) {
+        CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
+        compressedImage = [compressedImage imageByScalingToSize:imagesize];
+        imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+    }
+    float para = 0.75;
     while (imageData.length > 100000) {
-        imageData = UIImageJPEGRepresentation(compressedImage, 0.7);
+        imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
         compressedImage = [UIImage imageWithData:imageData];
     }
 
