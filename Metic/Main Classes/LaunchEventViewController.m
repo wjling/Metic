@@ -22,6 +22,7 @@
 @property (nonatomic,strong) CLGeocoder *geocoder;
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
 @property (nonatomic,strong) NSDictionary* positions;
+@property (nonatomic,strong) NSDictionary* locationInfo;
 
 
 
@@ -57,7 +58,7 @@ double latitude = 999.999999;
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
-    _locManager.desiredAccuracy = kCLLocationAccuracyBest;
+    _locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     _locManager.distanceFilter = 1000.0f;
     // Do any additional setup after loading the view.
 }
@@ -199,11 +200,13 @@ double latitude = 999.999999;
         longitude = currLocation.coordinate.longitude;
         [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
             CLPlacemark* mark = placemarks[0];
-            NSDictionary* locationInfo = mark.addressDictionary;
-            NSString *address = [locationInfo valueForKey:@"Name"];
+            _locationInfo = mark.addressDictionary;
+            NSString *address = [_locationInfo valueForKey:@"Name"];
             if (address) {
                 self.location_text.text = address;
             }
+            //NSString *info = [NSString stringWithFormat:@"%@",placemarks];
+            //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:info WithDelegate:self WithCancelTitle:@"确定"];
         }];
         
 
@@ -218,7 +221,6 @@ double latitude = 999.999999;
 {
     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
     [_locManager stopUpdatingLocation];
-    
 }
 
 - (void) recoverButton

@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "UMSocialWechatHandler.h"
+#import "UMSocialSinaHandler.h"
+
 
 @implementation AppDelegate
 {
@@ -45,6 +47,8 @@
     numOfSyncMessages = -1;
     [[MTUser alloc]init];
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
+    [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
+    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     return YES;
 
@@ -231,6 +235,17 @@
     [self connect];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [UMSocialSnsService handleOpenURL:url];
+}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return  [UMSocialSnsService handleOpenURL:url];
+}
 
 
 @end
