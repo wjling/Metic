@@ -782,8 +782,8 @@
 				51581D351933575300943606 /* Main_iPhone.storyboard */,
 				51581D381933575300943606 /* Main_iPad.storyboard */,
 				51581D3B1933575300943606 /* ViewController.h */,
-				51581D3C1933575300943606 /* ViewController.m */,
 				51581D3E1933575300943606 /* Images.xcassets */,
+				51581D3C1933575300943606 /* ViewController.m */,
 				51581D2A1933575300943606 /* Supporting Files */,
 			);
 			path = Metic;

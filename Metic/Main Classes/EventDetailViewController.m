@@ -205,12 +205,10 @@
         cell.eventName.text = [_event valueForKey:@"subject"];
         NSString* beginT = [_event valueForKey:@"time"];
         NSString* endT = [_event valueForKey:@"endTime"];
-        cell.beginDate.text = [beginT substringToIndex:10];
+        cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-        cell.endDate.text = [endT substringToIndex:10];
+        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
         cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
-        [[cell.endTime superview].layer setBorderWidth:2.0];
-        [[cell.endTime superview].layer setBorderColor:[UIColor whiteColor].CGColor];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
