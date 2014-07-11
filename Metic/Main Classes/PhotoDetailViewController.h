@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoGetter.h"
+#import "UMSocialSnsPlatformManager.h"
 
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
 @property(nonatomic,strong) UIImage* photo;

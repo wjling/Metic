@@ -46,6 +46,19 @@
     [[MTUser alloc]init];
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    
+//    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    // Override point for customization after application launch.
+    NSError *setCategoryErr = nil;
+    NSError *activationErr  = nil;
+    [[AVAudioSession sharedInstance]
+     setCategory: AVAudioSessionCategoryPlayback
+     error: &setCategoryErr];
+    [[AVAudioSession sharedInstance]
+     setActive: YES
+     error: &activationErr];
+//    self.window.backgroundColor = [UIColor whiteColor];
+//    [self.window makeKeyAndVisible];
     return YES;
 
 }
@@ -60,11 +73,39 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+//     [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
+//         /*todo send keep live */
+//         NSLog(@"alive in background");
+//         [NSThread sleepForTimeInterval:10];
+//     }];
+     NSLog(@"enter Background====================");
+    UIApplication*   app = [UIApplication sharedApplication];
+    __block    UIBackgroundTaskIdentifier bgTask;
+    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    });
+   
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[UIApplication sharedApplication] clearKeepAliveTimeout];
+    NSLog(@"enter foreground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -145,7 +186,10 @@
     }
     else
     {
+        [self disconnect];
         NSLog(@"Disconnected");
+        [self connect];
+        NSLog(@"Reconnecting...");
     }
     
 }

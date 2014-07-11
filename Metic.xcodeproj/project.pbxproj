@@ -12,6 +12,7 @@
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
+		04D2F80C196FE7FD00B83E38 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D2F80B196FE7FD00B83E38 /* AVFoundation.framework */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
@@ -143,6 +144,7 @@
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
+		04D2F80B196FE7FD00B83E38 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
 		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04D2F80C196FE7FD00B83E38 /* AVFoundation.framework in Frameworks */,
 				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
 				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
 				51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */,
@@ -657,6 +660,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04D2F80B196FE7FD00B83E38 /* AVFoundation.framework */,
 				48151F1119493FD8009E156E /* CFNetwork.framework */,
 				48151F0D19493FA1009E156E /* Security.framework */,
 				4892337D1947F9BA00068BBC /* libicucore.dylib */,
@@ -1190,6 +1194,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
