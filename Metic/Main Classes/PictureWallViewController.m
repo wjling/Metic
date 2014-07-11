@@ -329,15 +329,16 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     self.isOpen = YES;
-    if ([self.sequence intValue] == -1) {
+    int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
+    if ([self.sequence intValue] == -1 && photo_rest_num == 0) {
         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
         [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
         return;
     }
-    int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
+    
     int count = self.photo_list.count;
-    if (photo_rest_num >= 5) {//加载剩余的，然后再拉
-        for (int i = count; i < count + 5; i++) {
+    if (photo_rest_num >= 5 || [_sequence intValue] == -1) {//加载剩余的，然后再拉
+        for (int i = count; i < count + 5 && i < _photo_list_all.count; i++) {
             [self.photo_list addObject:self.photo_list_all[i]];
         }
         [self getPhotoPathlist];

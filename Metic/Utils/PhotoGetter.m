@@ -147,7 +147,7 @@
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    if (imageData.length > 1000000) {
+    if (imageData.length > 800000) {
         CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
         compressedImage = [compressedImage imageByScalingToSize:imagesize];
         imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
