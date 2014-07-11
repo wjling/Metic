@@ -209,7 +209,7 @@
     {
         NSString* obj1_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]] uppercaseString];
         NSString* obj2_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]] uppercaseString];
-        int result = [obj1_py compare:obj2_py];
+        NSInteger result = [obj1_py compare:obj2_py];
         return result;
     };
     [friends sortUsingComparator:cmptor];

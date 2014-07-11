@@ -1299,6 +1299,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1325,6 +1326,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Wechat",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
