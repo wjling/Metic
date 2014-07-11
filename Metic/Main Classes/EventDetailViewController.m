@@ -286,12 +286,12 @@
         ((UILabel*)[cell viewWithTag:1]).text = [NSString stringWithFormat:@"%@ : %@", [subCom valueForKey:@"author"], [subCom valueForKey:@"content"]];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.controller = self;
-        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
-            [((UIButton*)[cell viewWithTag:2]) setHidden:YES];
-        }
-        else{
-            [((UIButton*)[cell viewWithTag:2]) setHidden:NO];
-        }
+//        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
+//            [((UIButton*)[cell viewWithTag:2]) setHidden:YES];
+//        }
+//        else{
+//            [((UIButton*)[cell viewWithTag:2]) setHidden:NO];
+//        }
         return cell;
     }
     
