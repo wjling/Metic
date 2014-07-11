@@ -90,6 +90,7 @@
 		510D45A4196E8A960081672A /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4592196E8A960081672A /* UIImageView+HighlightedWebCache.m */; };
 		510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4594196E8A960081672A /* UIImageView+WebCache.m */; };
 		510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4596196E8A960081672A /* UIView+WebCacheOperation.m */; };
+		510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */; };
 		5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5144D980196B880300C953FB /* UMSocialLocalizable.strings */; };
 		5144D99B196B880300C953FB /* libUMSocial_Sdk_4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5144D98E196B880300C953FB /* libUMSocial_Sdk_4.0.a */; };
 		5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5144D990196B880300C953FB /* UMSCommentDetailController.xib */; };
@@ -311,6 +312,8 @@
 		510D4594196E8A960081672A /* UIImageView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+WebCache.m"; sourceTree = "<group>"; };
 		510D4595196E8A960081672A /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		510D4596196E8A960081672A /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
+		510D45A7196EA5700081672A /* UIImage+UIImageExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIImageExtras.h"; sourceTree = "<group>"; };
+		510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIImageExtras.m"; sourceTree = "<group>"; };
 		5144D981196B880300C953FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UMSocialLocalizable.strings; sourceTree = "<group>"; };
 		5144D983196B880300C953FB /* UMSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocial.h; sourceTree = "<group>"; };
 		5144D984196B880300C953FB /* UMSocialAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialAccountManager.h; sourceTree = "<group>"; };
@@ -554,6 +557,8 @@
 				48151F1D194947EB009E156E /* NSString+JSON.m */,
 				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
 				510BE1A2195BED3A00084014 /* PhotoGetter.m */,
+				510D45A7196EA5700081672A /* UIImage+UIImageExtras.h */,
+				510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1099,6 +1104,7 @@
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
+				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
 				510D459F196E8A960081672A /* SDWebImagePrefetcher.m in Sources */,
 				080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */,
 				510D459B196E8A960081672A /* SDWebImageDecoder.m in Sources */,

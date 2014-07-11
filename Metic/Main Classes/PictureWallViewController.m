@@ -27,6 +27,7 @@
 @property (nonatomic,strong)SDWebImageManager *manager;
 @property int currentPhotoNum;
 @property (nonatomic,strong) NSString* urlFormat;
+
 @end
 
 @implementation PictureWallViewController
@@ -209,7 +210,13 @@
         nibsRegistered = YES;
     }
     PhotoTableViewCell *cell1 = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    UITableViewCell *cell = [[UITableViewCell alloc]init];
+    if (!cell1) {
+        cell1 = [[PhotoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+    }
+    [cell1.imgView setFrame:CGRectZero];
+    [cell1.infoView setFrame:CGRectZero];
+    //UITableViewCell *cell = [[UITableViewCell alloc]init];
     NSDictionary *a = self.photo_list[indexPath.row*2+addition];
     cell1.author.text = [a valueForKey:@"author"];
     cell1.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
@@ -223,25 +230,24 @@
     
     
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    UIImageView* photo = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 145, 0)];
-    [cell addSubview:photo];
+    UIImageView* photo = cell1.imgView;// [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 145, 0)];
+    [cell1.infoView removeFromSuperview];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];
     if (Cellheight) {
         float height = [Cellheight floatValue];
         if (height == 0) {
-            [cell setHidden:YES];
+            [cell1 setHidden:YES];
         }else{
-            [cell setHidden:NO];
+            [cell1 setHidden:NO];
             [photo setFrame:CGRectMake(0, 0, 145, height)];
             [cell1.infoView setFrame:CGRectMake(0, height, 145, 33)];
-            [cell setFrame:CGRectMake(0, 0, 145, height+43)];
-            [cell addSubview:cell1.infoView];
+            [cell1 setFrame:CGRectMake(0, 0, 145, height+43)];
+            [cell1 addSubview:cell1.infoView];
         }
 
-    }else [cell setHidden:YES];
-    [cell setBackgroundColor:[UIColor clearColor]];
-    return cell;
+    }else [cell1 setHidden:YES];
+    return cell1;
 }
 
 
@@ -349,6 +355,10 @@
 
 }
 
+-(void)dealloc
+{
+    [_footer free];
+}
 
 
 
