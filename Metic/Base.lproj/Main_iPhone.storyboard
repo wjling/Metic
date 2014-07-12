@@ -1629,6 +1629,10 @@
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="rk4-b2-1gW">
+                                                <rect key="frame" x="250" y="13" width="20" height="20"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         <constraints>
@@ -1752,6 +1756,8 @@
                         <outlet property="detail_text" destination="TZI-wu-iUq" id="oTH-Kk-qvK"/>
                         <outlet property="end_time_text" destination="P6o-zO-iZa" id="khy-cY-HgX"/>
                         <outlet property="event_text" destination="139-Dc-JeZ" id="M9h-d0-zaF"/>
+                        <outlet property="getLocButton" destination="IRa-by-VY1" id="yJP-NK-iiZ"/>
+                        <outlet property="getLocIndicator" destination="rk4-b2-1gW" id="Buo-jL-GyJ"/>
                         <outlet property="launch_button" destination="UqX-vI-bRD" id="0Xi-QL-B6u"/>
                         <outlet property="location_text" destination="SUS-Ls-zJF" id="yFB-gR-9UW"/>
                         <outlet property="scrollView" destination="eYA-7C-1UR" id="bIw-DD-Hcv"/>

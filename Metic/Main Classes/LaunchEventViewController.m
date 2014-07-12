@@ -23,6 +23,8 @@
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
 @property (nonatomic,strong) NSDictionary* positions;
 @property (nonatomic,strong) NSDictionary* locationInfo;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
+@property (strong, nonatomic) IBOutlet UIButton *getLocButton;
 
 
 
@@ -188,6 +190,9 @@ double latitude = 999.999999;
 }
 
 - (IBAction)getLoc:(id)sender {
+    [self.getLocButton setHidden:YES];
+    [self.getLocIndicator startAnimating];
+    self.location_text.text = @"定位中";
     [_locManager startUpdatingLocation];
     
 }
@@ -205,6 +210,8 @@ double latitude = 999.999999;
             if (address) {
                 self.location_text.text = address;
             }
+            [self.getLocIndicator stopAnimating];
+            [self.getLocButton setHidden:NO];
             //NSString *info = [NSString stringWithFormat:@"%@",placemarks];
             //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:info WithDelegate:self WithCancelTitle:@"确定"];
         }];
@@ -219,6 +226,9 @@ double latitude = 999.999999;
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
+    [self.getLocIndicator stopAnimating];
+    [self.getLocButton setHidden:NO];
+    self.location_text.text = @"";
     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
     [_locManager stopUpdatingLocation];
 }
