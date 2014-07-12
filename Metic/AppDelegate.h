@@ -17,12 +17,21 @@
 #import "UMSocial.h"
 #import <AVFoundation/AVFoundation.h>
 
+@protocol NotificationDelegate
+
+-(void) notificationDidReceive;
+
+@end
+
+
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) SRWebSocket* mySocket;
 @property (strong, nonatomic)NSTimer* heartBeatTimer;
 @property (strong, nonatomic)MySqlite* sql;
 @property (strong, nonatomic)NSMutableArray* syncMessages;
+@property (strong, nonatomic) id<NotificationDelegate> delegate;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 
 - (void)connect;

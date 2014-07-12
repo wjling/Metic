@@ -18,6 +18,7 @@
 @property int goodindex;
 @property int lastViewIndex;
 @property int movedown;
+@property (nonatomic,strong)SDWebImageManager *manager;
 @end
 
 @implementation PhotoDisplayViewController
@@ -46,16 +47,14 @@
     CGRect frame = self.view.bounds;
     frame.origin.y = -64;
     self.scrollView = [[UIScrollView alloc]initWithFrame:frame];
-    
     [self.scrollView setPagingEnabled:YES];
     self.scrollView.delegate = self;
-    if (self.photoscache) {
-        [self.scrollView setContentSize:CGSizeMake(320*self.photoPath_list.count, self.view.bounds.size.height)];
-        [self.scrollView setContentOffset:CGPointMake(320*self.photoIndex, 0)];
-    }
+    [self.scrollView setContentSize:CGSizeMake(320*self.photoPath_list.count, self.view.bounds.size.height)];
+    [self.scrollView setContentOffset:CGPointMake(320*self.photoIndex, 0)];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
+    _manager = [SDWebImageManager sharedManager];
     [self.InfoView setHidden:NO];
     [self.view bringSubviewToFront:self.InfoView];
     //单击手势
@@ -164,21 +163,15 @@
     }
     MRZoomScrollView* zoomScrollView = [[MRZoomScrollView alloc]init];
     [zoomScrollView setFrame:CGRectMake(320*photoIndex+2,0,316, self.scrollView.frame.size.height)];
-    UIImage *img = [self.photoscache valueForKey:self.photoPath_list[photoIndex]];
+
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
-    
-    if (img) {
-        zoomScrollView.imageView.image = img;
+    NSString *url = _photoPath_list[photoIndex];
+    [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+    if (zoomScrollView.imageView.image) {
         [zoomScrollView fitImageView];
-        [self.scrollView addSubview:zoomScrollView];
-    }else{
-        [self.scrollView addSubview:zoomScrollView];
-        PhotoGetter *photoGetter = [[PhotoGetter alloc]initWithData:zoomScrollView.imageView path:self.photoPath_list[photoIndex] type:3 cache:self.photoscache];
-        [photoGetter setTypeOption3:zoomScrollView];
-        photoGetter.mDelegate = self;
-        [photoGetter getPhoto];
-        
     }
+    
+    [self.scrollView addSubview:zoomScrollView];
     
     
 }
@@ -278,10 +271,11 @@
         if ([segue.destinationViewController isKindOfClass:[PhotoDetailViewController class]]) {
             PhotoDetailViewController *nextViewController = segue.destinationViewController;
             int index = self.scrollView.contentOffset.x/320;
-            nextViewController.photo = [self.photoscache valueForKey:self.photoPath_list[index]];
+            
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:self.photo_list[index]];
             self.photo_list[index] = dict;
+            nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:_photoPath_list[index]];
             nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
         }

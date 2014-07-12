@@ -10,6 +10,7 @@
 #import "PhotoGetter.h"
 #import "MTUser.h"
 #import "MJRefreshFooterView.h"
+#import "UIImageView+WebCache.h"
 
 @interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate,MJRefreshBaseViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView1;

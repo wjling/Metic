@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import "UMSocialWechatHandler.h"
+#import "UMSocialSinaHandler.h"
+
 
 @implementation AppDelegate
 {
@@ -19,6 +21,7 @@
 @synthesize heartBeatTimer;
 @synthesize syncMessages;
 @synthesize sql;
+@synthesize delegate;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -45,6 +48,8 @@
     numOfSyncMessages = -1;
     [[MTUser alloc]init];
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
+    [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
+    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     
 //    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
@@ -126,7 +131,7 @@
 //        NSLog(@"undone notification");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
+//    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
     
     for (NSDictionary* message in self.syncMessages) {
@@ -275,6 +280,17 @@
     [self connect];
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return  [UMSocialSnsService handleOpenURL:url];
+}
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation
+{
+    return  [UMSocialSnsService handleOpenURL:url];
+}
 
 
 @end
