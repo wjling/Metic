@@ -36,11 +36,8 @@
 @property (nonatomic,strong)MTUser *user;
 @property (nonatomic,strong) MySqlite* sql;
 
-- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache;
+-(instancetype)initWithData:(UIImageView*)animageView authorId:(NSNumber*)authorId;
 - (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;
--(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth avatarId:(NSNumber*) avatarId;
--(void)setTypeOption2:(NSNumber*) avatarId;
--(void)setTypeOption3:(id)container;
 -(void)getPhoto;
 -(void)updatePhoto;
 -(void)uploadPhoto;

@@ -12,7 +12,7 @@
 #import "MJRefreshFooterView.h"
 #import "UIImageView+WebCache.h"
 
-@interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate,MJRefreshBaseViewDelegate>
+@interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView1;
 @property (strong, nonatomic) IBOutlet UITableView *tableView2;
 @property(nonatomic,strong)NSNumber *eventId;

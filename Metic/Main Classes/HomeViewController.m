@@ -40,7 +40,7 @@
     [self createMenuButton];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
-    [self.user updateAvatarList];
+    //[self.user updateAvatarList];
     self.scrollView.delegate = self;
     self.tableView.homeController= self;
     [self.tableView setDelegate:self];
@@ -86,7 +86,10 @@
     self.tatableView.eventsSource = self.taevents;
     
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self.view bringSubviewToFront: self.shadowView];
+}
 
 
 -(void)createMenuButton
@@ -152,6 +155,7 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
+    NSLog(@"  dsfa");
 	return YES;
 }
 
@@ -161,13 +165,14 @@
 }
 -(void)sendDistance:(float)distance
 {
+    NSLog(@"af");
     if (distance > 0) {
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
     }else{
-        self.shadowView.hidden = YES;
-        [self.view sendSubviewToBack:self.shadowView];
+        //self.shadowView.hidden = YES;
+        //[self.view sendSubviewToBack:self.shadowView];
     }
 }
 

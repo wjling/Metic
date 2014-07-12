@@ -56,12 +56,9 @@
         int participator_count = [[a valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-        //cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@ %@",[a valueForKey:@"remark"],@"\n \n \n \n \n \n \n \n \n \n" ];
         cell.eventId = [a valueForKey:@"event_id"];
-        cell.avatar.image = [CommonUtils circleImage:[UIImage imageNamed:@"默认用户头像"] withParam:0 borderColor:[UIColor orangeColor] borderWidth:10];
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]] type:1 cache:[MTUser sharedInstance].avatar];
-        [getter setTypeOption1:[UIColor orangeColor] borderWidth:10 avatarId:[a valueForKey:@"launcher_id"]];
-        getter.mDelegate = self;
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
+        //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
         [getter getPhoto];
         cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
         cell.homeController = self.homeController;
@@ -70,10 +67,7 @@
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             if (i < participator_count) {
-                tmp.image = [UIImage imageNamed:@"默认用户头像"];
-                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
-                [getter setTypeOption2:memberids[i]];
-                getter.mDelegate = self;
+                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                 //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
                 [getter getPhoto];
             }else tmp.image = nil;
@@ -90,10 +84,5 @@
     [getter getPhoto];
 }
 
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-}
 
 @end

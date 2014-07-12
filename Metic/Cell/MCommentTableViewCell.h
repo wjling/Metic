@@ -21,5 +21,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 - (IBAction)appreciate:(id)sender;
 @property (strong, nonatomic) IBOutlet UILabel *good_num;
+@property (strong, nonatomic) IBOutlet UIImageView *subCommentBG;
+@property (strong, nonatomic) IBOutlet UIView *zanView;
+
 
 @end

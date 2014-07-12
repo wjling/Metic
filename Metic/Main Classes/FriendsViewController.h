@@ -21,7 +21,7 @@
 #import "PhotoGetter.h"
 #import "FriendInfoViewController.h"
 
-@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,PhotoGetterDelegate>
+@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 
 @property(nonatomic,strong)MTUser *user;
 @property(nonatomic,strong)NSMutableArray* friendList;

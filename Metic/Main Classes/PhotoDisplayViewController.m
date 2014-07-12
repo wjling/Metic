@@ -108,9 +108,7 @@
     self.pictureAuthor.text = [dict valueForKey:@"author"];
     self.publishTime.text = [[dict valueForKey:@"time"] substringToIndex:10];
     self.photoId = [dict valueForKey:@"photo_id"];
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[dict valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-    getter.mDelegate = self;
-    [getter setTypeOption2:[dict valueForKey:@"author_id"]];
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[dict valueForKey:@"author_id"]];
     [getter getPhoto];
     
     
@@ -176,15 +174,6 @@
     
 }
 
-
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-    if (type == 3) {
-        [(MRZoomScrollView*)container fitImageView];
-    }
-}
 
 
 #pragma mark - UiScrollViewDelegate

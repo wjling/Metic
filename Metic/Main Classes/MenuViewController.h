@@ -11,7 +11,7 @@
 #import "PhotoGetter.h"
 #import "../Utils/CloudOperation.h"
 
-@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate,PhotoGetterDelegate>
+@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (strong, nonatomic) IBOutlet UIImageView *img;

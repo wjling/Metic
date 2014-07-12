@@ -21,6 +21,7 @@
 @property(nonatomic,strong)NSString *phone;
 @property(nonatomic,strong)NSNumber *location;
 @property(nonatomic,strong)NSMutableDictionary *avatar;
+@property(nonatomic,strong)NSMutableDictionary *avatarURL;
 @property(nonatomic,strong)NSMutableSet *friendIds;
 @property(nonatomic,strong)MySqlite *sql;
 @property float wait;
@@ -30,8 +31,8 @@
 @property(nonatomic)bool logined;
 + (MTUser *)sharedInstance;
 - (void)getInfo:(NSNumber *) uid myid:(NSNumber *)myid delegateId:(id) aDelegate;
-- (void)updateAvatar;
-- (void)updateAvatarList;
+//- (void)updateAvatar;
+//- (void)updateAvatarList;
 - (void)initWithData:(NSDictionary *)mdictionary;
 - (void)setUserid:(NSNumber *)userid;
 

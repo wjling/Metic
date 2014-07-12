@@ -9,6 +9,7 @@
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImage+UIImageExtras.h"
+#import "UIImageView+WebCache.h"
 
 @interface PhotoGetter ()
 @property(nonatomic,strong) UIImage* uploadImage;
@@ -21,16 +22,14 @@
 @implementation PhotoGetter
 
 
-- (instancetype)initWithData:(UIImageView*)animageView path:(NSString*)path type:(int)type cache:(NSMutableDictionary*)cache
+- (instancetype)initWithData:(UIImageView*)animageView authorId:(NSNumber*)authorId //type:(int)type cache:(NSMutableDictionary*)cache
 {
     if (self) {
         self = [super init];
         self.user = [MTUser sharedInstance];
         self.imageView = animageView;
-        self.path = path;
-        self.filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
-        self.type = type;
-        self.phothCache = cache;
+        self.avatarId = authorId;
+        self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",authorId];
         self.isUpload = NO;
     }
     return self;
@@ -49,97 +48,23 @@
 
 
 
-
--(void)setTypeOption1:(UIColor*)borderColor borderWidth:(CGFloat) borderWidth avatarId:(NSNumber*) avatarId
-{
-    self.avatarId = avatarId;
-    self.borderColor = borderColor;
-    self.borderWidth = borderWidth;
-}
-
--(void)setTypeOption2:(NSNumber*) avatarId
-{
-    self.avatarId = avatarId;
-    _imageView.layer.cornerRadius = 3;
-    _imageView.layer.masksToBounds = YES;
-}
-
--(void)setTypeOption3:(id)container
-{
-    self.container = container;
-}
-
-
 -(void)getPhoto
 {
-    //缓存
-    UIImage *imageFromCache = [_phothCache valueForKey:_path];
-    if (imageFromCache && [imageFromCache isKindOfClass:[UIImage class]]){
-        switch (self.type) {
-            case 1:
-                imageFromCache = [CommonUtils circleImage:imageFromCache withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-                self.container = nil;
-                break;
-            case 2:
-                self.container = nil;
-                break;
-            case 3:
-                
-                break;
-                
-            default:
-                break;
-        }
-        [self.mDelegate finishwithNotification:self.imageView image:imageFromCache type:self.type container:self.container];
+    
+
+    NSString*url = [self getLocalUrl];
+    if (url) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
     }else{
-        //NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {
-            //本地内存
-            UIImage *imageFromMemory = [UIImage imageWithContentsOfFile:_filePath];
-            if (imageFromMemory) {
-                [_phothCache setValue:imageFromMemory forKey:_path];
-                switch (self.type) {
-                    case 1:
-                        imageFromMemory = [CommonUtils circleImage:imageFromMemory withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-                        self.container = nil;
-                        break;
-                    case 2:
-                        self.container = nil;
-                        break;
-                    case 3:
-                        
-                        break;
-                        
-                    default:
-                        break;
-                }
-                [self.mDelegate finishwithNotification:self.imageView image:imageFromMemory type:self.type container:self.container];
-            }
-        }else{
-            if (self.type == 1 || self.type == 2) {
-                id fake = [self.phothCache valueForKey:_path];
-                if (fake == nil) {
-                    [_phothCache setValue:[NSNumber numberWithInt:24] forKey:_path];
-                }else if([fake isKindOfClass:[NSNumber class]])
-                {
-                    [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(getPhoto) userInfo:nil repeats:NO];
-                    return;
-                }
-
-            }
-            //网络下载
-            
-            CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-            [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
-        }
-        
+        CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+        [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil container:self.imageView authorId:self.avatarId];
     }
-}
 
+}
 -(void)updatePhoto
 {
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-    [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil];
+    [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil container:self.imageView authorId:nil];
 }
 
 -(void)uploadPhoto
@@ -172,68 +97,38 @@
 
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     NSString* uploadfilePath = filePath;
-    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath];
+    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
     
 }
 
--(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
+//-(NSString*)getLocalUrl
+//{
+//    MySqlite* sql = [[MySqlite alloc]init];
+//    NSString* url;
+//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+//    [sql openMyDB:path];
+//
+//    NSArray *seletes = [[NSArray alloc]initWithObjects:@"url", nil];
+//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:self.avatarId,@"id", nil];
+//    NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
+//    if (!results.count) {
+//        url = nil;
+//    }else{
+//        NSDictionary* result = results[0];
+//        url = [result valueForKey:@"url"];
+//    }
+//    
+//    [self.sql closeMyDB];
+//    return url;
+//
+//}
+
+-(NSString*)getLocalUrl
 {
-    if (self.isUpload) {
-        if (status){
-            [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
-        }else{
-            [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
-        }
-        return;
-    }
-
-    if (mdata) {
-        NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
-        mdata = UIImageJPEGRepresentation([UIImage imageWithData:mdata], 1.0f);
-        [mdata writeToFile:filePath atomically:YES];
-        
-        UIImage *imageFromAir = [UIImage imageWithData:mdata];
-        //UIImage *netAvatar = [UIImage imageWithContentsOfFile:_filePath];
-        if (imageFromAir) {
-            [_phothCache setValue:imageFromAir forKey:_path];
-            switch (self.type) {
-                case 1:
-                    imageFromAir = [CommonUtils circleImage:imageFromAir withParam:0 borderColor:_borderColor borderWidth:_borderWidth];
-                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
-                    break;
-                case 2:
-                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
-                    break;
-                case 3:
-                    [self.mDelegate finishwithNotification:self.imageView image:imageFromAir type:self.type container:self.container];
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-    }else{
-        UIImage* tmpAvatar = [UIImage imageNamed:@"默认用户头像"];
-        UIImage* tmpPhoto = [UIImage imageNamed:@"活动图片的默认图片"];
-        
-        switch (self.type) {
-            case 1:
-                [_phothCache setValue:tmpAvatar forKey:_path];
-                break;
-            case 2:
-                [_phothCache setValue:tmpAvatar forKey:_path];
-                break;
-            case 3:
-                [_phothCache setValue:tmpPhoto forKey:_path];
-                break;
-                
-            default:
-                break;
-        }
-
-    }
+    NSString* url;
+    url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    return url;
 }
-
 
 @end
 

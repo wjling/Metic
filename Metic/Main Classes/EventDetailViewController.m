@@ -81,6 +81,43 @@
     
 }
 
+-(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
+{
+    float height = 0;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+    //设置自动行数与字符换行，为0标示无限制
+    [label setNumberOfLines:0];
+    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
+    UIFont *font = [UIFont systemFontOfSize:fsize];
+    label.font = font;
+    
+    CGSize size = CGSizeMake(width,CGFLOAT_MAX);//LableWight标签宽度，固定的
+    //计算实际frame大小，并将label的frame变成实际大小
+    
+    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
+    height = labelsize.height;
+    return height < 8.0? 8.0:height+1;
+}
+
+
+-(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
+{
+    float width = 0;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+    //设置自动行数与字符换行，为0标示无限制
+    [label setNumberOfLines:0];
+    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
+    UIFont *font = [UIFont systemFontOfSize:fsize];
+    label.font = font;
+    
+    CGSize size = CGSizeMake(CGFLOAT_MAX,height);//LableWight标签宽度，固定的
+    //计算实际frame大小，并将label的frame变成实际大小
+    
+    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
+    width = labelsize.width;
+    return width;
+
+}
 
 #pragma mark - 数据库操作
 - (void)updateEventToDB
@@ -134,7 +171,6 @@
 
 - (IBAction)publishComment:(id)sender {
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
-    NSLog(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -213,7 +249,16 @@
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"] ];
-        cell.eventDetail.text = [[NSString alloc]initWithFormat:@"%@\n \n \n \n \n \n \n \n",[_event valueForKey:@"remark"]];
+        NSString* text = [_event valueForKey:@"remark"];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
+        if (commentHeight < 25) commentHeight = 25;
+        cell.eventDetail.text = text;
+        CGRect frame = cell.eventDetail.frame;
+        frame.size.height = commentHeight;
+        [cell.eventDetail setFrame:frame];
+        frame = cell.frame;
+        frame.size.height = 239 + commentHeight;
+        
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
         
@@ -224,17 +269,12 @@
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             tmp.image = nil;
             if (i < participator_count) {
-                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp path:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]] type:2 cache:[MTUser sharedInstance].avatar];
-                [tmpgetter setTypeOption2:memberids[i]];
-                tmpgetter.mDelegate = self;
+                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                 [tmpgetter getPhoto];
             }
             
         }
 
-        //self.comment_button = cell.comment;
-        //[self.comment_button addTarget:self action:@selector(addComment) forControlEvents:UIControlEventTouchUpInside];
-        
         return cell;
     }
     else if (indexPath.row == 0) {
@@ -247,13 +287,27 @@
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
         
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
-        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] path:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        [tmpgetter setTypeOption2:[mainCom valueForKey:@"author_id"]];
-        tmpgetter.mDelegate = self;
-        [tmpgetter getPhoto];
+        
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
         ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
-        ((UILabel*)[cell viewWithTag:4]).text = [NSString stringWithFormat:@"%@\n \n \n \n",[mainCom valueForKey:@"content"]];
+        if([[mainCom valueForKey:@"comment_num"]intValue]==0) [cell.subCommentBG setHidden:YES];
+        
+        
+        UILabel *textView = (UILabel*)[cell viewWithTag:4];
+        NSString* text = [mainCom valueForKey:@"content"];
+        textView.text = text;
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:10.0f];
+        if (commentHeight < 15) commentHeight = 15;
+        CGRect frame = textView.frame;
+        frame.size.height = commentHeight;
+        [textView setFrame:frame];
+        
+        
+        frame = cell.frame;
+        frame.size.height = 60 + commentHeight;
+        [cell setFrame:frame];
+
+        
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.author = [mainCom valueForKey:@"author"];
         cell.controller = self;
@@ -270,7 +324,8 @@
         }
 
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
-        
+        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
+        [tmpgetter getPhoto];
         return cell;
     }
     else
@@ -283,9 +338,33 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
-        ((UILabel*)[cell viewWithTag:1]).text = [NSString stringWithFormat:@"%@ : %@", [subCom valueForKey:@"author"], [subCom valueForKey:@"content"]];
+        cell.author.text = [subCom valueForKey:@"author"];
+        float width = [self calculateTextWidth:cell.author.text height:21.0f fontSize:10.0f]+1;
+        [cell.author setFrame:CGRectMake(10, 0, width, 21)];
+        float colorValue = 230.0/255.0;
+        [cell.author setBackgroundColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:1.0]];
+        NSString* text = [NSString stringWithFormat:@"%@:%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        float commentHeight = [self calculateTextHeight:text width:250.0 fontSize:10.0f];
+        CGRect frame = cell.frame;
+        frame.size.height = commentHeight+10;
+        [cell setFrame:frame];
+
+
+        
+        
+        frame = [cell viewWithTag:100].frame;
+        frame.size.height =  commentHeight+10;
+        [[cell viewWithTag:100] setFrame:frame];
+        
+        
+        
+        [cell.comment setFrame:CGRectMake(10, 0, 250, commentHeight+10)];
+        cell.comment.text = text;
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.controller = self;
+        [cell bringSubviewToFront:cell.author];
+        [cell.author.layer setBorderColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:1].CGColor];
+        [cell.author.layer setBorderWidth:1];
 //        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
 //            [((UIButton*)[cell viewWithTag:2]) setHidden:YES];
 //        }
@@ -303,14 +382,25 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return 295.0f;
+        NSString* text = [_event valueForKey:@"remark"];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
+        if (commentHeight < 25) commentHeight = 25;
+        return 239.0f + commentHeight;
     }
     else if (indexPath.row == 0) {
-        return 75.0f;
+        NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
+        NSString* text = [mainCom valueForKey:@"content"];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:10.0f];
+        if (commentHeight < 15.0f) commentHeight = 15.0f;
+        return 60.0f + commentHeight;
         
     }else
     {
-        return 21.0f;
+        NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
+        NSString* text = [NSString stringWithFormat:@"%@:%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        
+        float commentHeight = [self calculateTextHeight:text width:250.0 fontSize:10.0f];
+        return commentHeight+10;
     }
 }
 
@@ -411,11 +501,6 @@
     }
 }
 
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-}
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //这里我很谨慎的对sender和目标视图控制器作了判断
