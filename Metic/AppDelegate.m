@@ -21,7 +21,7 @@
 @synthesize heartBeatTimer;
 @synthesize syncMessages;
 @synthesize sql;
-@synthesize delegate;
+@synthesize notificationDelegate;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -51,7 +51,8 @@
     [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
     [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    
+   
+    //running in background
 //    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     NSError *setCategoryErr = nil;
@@ -145,9 +146,21 @@
         [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
     }
     [self.sql closeMyDB];
+    
+    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
+        [self.notificationDelegate notificationDidReceive:self.syncMessages];
+    }
+    
     numOfSyncMessages = -1;
     [self.syncMessages removeAllObjects];
 }
+
+//#pragma mark - NotificationDelegate
+//
+//- (void) notificationDidReceive:(NSArray*) messages
+//{
+//    
+//}
 
 
 #pragma mark - WebSocket
@@ -228,19 +241,35 @@
     
     //处理推送消息
     if ([cmd isEqualToString:@"sync"]) {
+        
+        /*
+         这种情况的推送的json格式：
+         “timestamp": string
+         "cmd": "sync"
+         "num": int
+         */
+        
         if (numOfSyncMessages == -1) {
             numOfSyncMessages = [(NSNumber*)[response1 objectForKey:@"num"] intValue];
         };
     }
     else if([cmd isEqualToString:@"message"])
     {
+        /*
+         这种情况的推送的json格式：
+         “timestamp": string
+         "cmd": "message"
+         "seq": int
+         "msg": json(string)
+         */
+        
         [self.syncMessages addObject:response1];
         if (self.syncMessages.count == numOfSyncMessages) {
             NSNumber* seq = [response1 objectForKey:@"seq"];
             NSMutableDictionary* json = [CommonUtils packParamsInDictionary:@"feedback",@"cmd",[MTUser sharedInstance].userid, @"uid",seq,@"seq",nil];
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
-            NSLog(@"feedback send data: %@",jsonData);
+            NSLog(@"feedback send json: %@",json);
             NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertNotificationsToDB) object:nil];
             
             [thread start];
@@ -251,6 +280,12 @@
     }
     else if ([cmd isEqualToString:@"init"])
     {
+        /*
+         这种情况的推送的json格式：
+         "cmd": "init"
+         "seq": int
+         */
+        
         [self scheduleHeartBeat];
     }
 }

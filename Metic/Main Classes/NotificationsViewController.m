@@ -48,6 +48,7 @@ enum Response_Type
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    self.appListener.notificationDelegate = self;
     [self initParams];
     [self getMsgFromDataBase];
 //    NSLog(@"hahahah");
@@ -167,17 +168,17 @@ enum Response_Type
 {
     NSInteger index = [self.tabs indexOfObject:sender];
     NSLog(@"selected button: %d",index);
-//    if (index == 0) {
-//        [self.eventRequest_tableView reloadData];
-//    }
-//    else if (index == 1)
-//    {
-//        [self.friendRequest_tableView reloadData];
-//    }
-//    else if (index == 2)
-//    {
-//        [self.systemMessage_tableView reloadData];
-//    }
+    if (index == 0) {
+        [self.eventRequest_tableView reloadData];
+    }
+    else if (index == 1)
+    {
+        [self.friendRequest_tableView reloadData];
+    }
+    else if (index == 2)
+    {
+        [self.systemMessage_tableView reloadData];
+    }
     UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
     UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
     
@@ -203,6 +204,15 @@ enum Response_Type
 - (void) refresh
 {
     [self.view setNeedsDisplay];
+}
+//==========================================================================================
+
+#pragma mark - Touches
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch* touch = [touches anyObject];
+    lastX = [touch locationInView:self.view].x;
 }
 
 
@@ -230,6 +240,7 @@ enum Response_Type
     self.content_scrollView.scrollEnabled = YES;
 }
 
+//==========================================================================================
 
 - (void) getMsgFromDataBase
 {
@@ -269,6 +280,52 @@ enum Response_Type
         }
     }
     
+}
+
+#pragma mark - NotificationDelegate
+
+-(void) notificationDidReceive:(NSArray *)messages
+{
+    for (NSDictionary* msg in messages) {
+        NSString* msg_str = [msg objectForKey:@"msg"];
+        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+        NSString* seq = [msg objectForKey:@"seq"];
+        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
+        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+        switch (cmd) {
+            case ADD_FRIEND_NOTIFICATION:
+            {
+                [self.friendRequestMsg insertObject:msg_dic atIndex:0];
+            }
+                break;
+            case ADD_FRIEND_RESULT:
+            case EVENT_INVITE_RESPONSE:
+            {
+                [self.systemMsg insertObject:msg_dic atIndex:0];
+            }
+                break;
+            case NEW_EVENT_NOTIFICATION:
+            {
+                [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+            }
+                break;
+                
+            default:
+                break;
+        }
+        if (tab_index == 0) {
+            [self.eventRequest_tableView reloadData];
+        }
+        else if (tab_index == 1)
+        {
+            [self.friendRequest_tableView reloadData];
+        }
+        else if (tab_index == 2)
+        {
+            [self.systemMessage_tableView reloadData];
+        }
+
+    }
 }
 
 
@@ -749,6 +806,19 @@ enum Response_Type
         lastBtn.selected = NO;
         [currentBtn setBackgroundColor:bColor_selected];
         currentBtn.selected = YES;
+        
+        if (tab_index == 0) {
+            [self.eventRequest_tableView reloadData];
+        }
+        else if (tab_index == 1)
+        {
+            [self.friendRequest_tableView reloadData];
+        }
+        else if (tab_index == 2)
+        {
+            [self.systemMessage_tableView reloadData];
+        }
+
         
     }
 }

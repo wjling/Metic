@@ -19,7 +19,7 @@
 #import "PhotoGetter.h"
 
 
-@interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,PhotoGetterDelegate>
+@interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,PhotoGetterDelegate,NotificationDelegate>
 @property (strong,nonatomic) NSMutableArray* msgFromDB;
 @property (strong,nonatomic) NSMutableArray* friendRequestMsg;
 @property (strong,nonatomic) NSMutableArray* eventRequestMsg;
