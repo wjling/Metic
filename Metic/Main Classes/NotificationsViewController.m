@@ -319,9 +319,7 @@ enum Response_Type
                 
                 cell.name_label.text = launcher;
                 [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
-                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:nil];
-                getter.mDelegate = self;
-                [getter setTypeOption2:uid];
+                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getPhoto];
                 
                 if (cell.tag == 0) {
@@ -363,9 +361,7 @@ enum Response_Type
                 NSNumber* uid = [msg_dic objectForKey:@"id"];
                 cell.name_label.text = name;
                 cell.conform_msg_label.text = confirm_msg;
-                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView path:[NSString stringWithFormat:@"/avatar/%@.jpg",uid] type:2 cache:nil];
-                getter.mDelegate = self;
-                [getter setTypeOption2:uid];
+                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getPhoto];
                 
                 if (cell.tag == 0) {
@@ -751,12 +747,6 @@ enum Response_Type
         currentBtn.selected = YES;
         
     }
-}
-
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView*)imageView image:(UIImage*)image type:(int)type container:(id)container
-{
-    imageView.image = image;
 }
 
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "../Utils/PhotoGetter.h"
 
-@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,PhotoGetterDelegate,HttpSenderDelegate>
+@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIViewController* photoWallController;
 @property (strong, nonatomic) NSNumber* eventId;

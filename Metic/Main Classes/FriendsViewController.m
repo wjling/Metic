@@ -322,15 +322,8 @@
         if (nil == cell) {
             cell = [[FriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendcell"];
         }
-    
-//        NSLog(@"a friend: %@",aFriend);
-    
 
-        cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
-//        cell.avatar.image = [UIImage imageNamed:@"default_avatar.jpg"];
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",fid] type:2 cache:[MTUser sharedInstance].avatar ];
-        [getter setTypeOption2:fid];
-        getter.mDelegate = self;
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getPhoto];
         
         if (label) {
@@ -467,9 +460,5 @@
     }
 }
 
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView*)imageView image:(UIImage*)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-}
+
 @end

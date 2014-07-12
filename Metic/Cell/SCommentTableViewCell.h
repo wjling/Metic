@@ -15,5 +15,7 @@
 @interface SCommentTableViewCell : UITableViewCell
 - (IBAction)delete_Comment:(id)sender;
 @property(strong,nonatomic) NSNumber* commentid;
+@property (strong, nonatomic) IBOutlet UILabel *author;
+@property (strong, nonatomic) IBOutlet UILabel *comment;
 @property(nonatomic,strong) EventDetailViewController *controller;
 @end

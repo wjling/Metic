@@ -209,45 +209,42 @@
         [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
         nibsRegistered = YES;
     }
-    PhotoTableViewCell *cell1 = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (!cell1) {
-        cell1 = [[PhotoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    PhotoTableViewCell *cell = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell) {
+        cell = [[PhotoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
     }
-    [cell1.imgView setFrame:CGRectZero];
-    [cell1.infoView setFrame:CGRectZero];
-    //UITableViewCell *cell = [[UITableViewCell alloc]init];
+    [cell.imgView setFrame:CGRectZero];
+    [cell.infoView setFrame:CGRectZero];
     NSDictionary *a = self.photo_list[indexPath.row*2+addition];
-    cell1.author.text = [a valueForKey:@"author"];
-    cell1.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
+    cell.author.text = [a valueForKey:@"author"];
+    cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
     
     
-    cell1.avatar.image = nil;
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-    [getter setTypeOption2:[a valueForKey:@"author_id"]];
-    getter.mDelegate = self;
+    cell.avatar.image = nil;
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
     [getter getPhoto];
     
     
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    UIImageView* photo = cell1.imgView;// [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 145, 0)];
-    [cell1.infoView removeFromSuperview];
+    UIImageView* photo = cell.imgView;
+    [cell.infoView removeFromSuperview];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];
     if (Cellheight) {
         float height = [Cellheight floatValue];
         if (height == 0) {
-            [cell1 setHidden:YES];
+            [cell setHidden:YES];
         }else{
-            [cell1 setHidden:NO];
+            [cell setHidden:NO];
             [photo setFrame:CGRectMake(0, 0, 145, height)];
-            [cell1.infoView setFrame:CGRectMake(0, height, 145, 33)];
-            [cell1 setFrame:CGRectMake(0, 0, 145, height+43)];
-            [cell1 addSubview:cell1.infoView];
+            [cell.infoView setFrame:CGRectMake(0, height, 145, 33)];
+            [cell setFrame:CGRectMake(0, 0, 145, height+43)];
+            [cell addSubview:cell.infoView];
         }
 
-    }else [cell1 setHidden:YES];
-    return cell1;
+    }else [cell setHidden:YES];
+    return cell;
 }
 
 
@@ -298,18 +295,7 @@
             break;
     }
 }
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-    switch (type) {
-        case 3:
-            [(UITableView*)container reloadData];
-            break;
-        default:
-            break;
-    }
-}
+
 
 
 #pragma mark 用segue跳转时传递参数eventid

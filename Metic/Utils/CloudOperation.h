@@ -42,6 +42,7 @@
     NSString *httpURL;
     NSString *mpath;
     NSString *uploadFilePath;
+    UIImageView *img;
     int COtype;
     NSData *mData;
 }
@@ -52,7 +53,7 @@
 
 
 -(id)initWithDelegate:(id)delegate;
--(void)CloudToDo:(int)type path:(NSString*)path uploadPath:(NSString*)uploadpath;
+-(void)CloudToDo:(int)type path:(NSString*)path uploadPath:(NSString*)uploadpath container:(UIImageView*)container authorId:(NSNumber *)authorId;
 
 //从url下载图片，并保存到document／media下 path 为在media下的相对路径
 -(void)downloadfile:(NSString*)url path:(NSString*)path;

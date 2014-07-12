@@ -32,6 +32,7 @@ static MTUser *singletonInstance;
     if (self) {
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
+        self.avatarURL = [[NSMutableDictionary alloc]init];
         self.friendIds = [[NSMutableSet alloc]init];
         self.wait = 0.1;
     }
@@ -52,46 +53,46 @@ static MTUser *singletonInstance;
 
 }
 
--(void)updateAvatarList
-{
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:self.userid  forKey:@"id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_AVATAR_UPDATETIME];
-    
-}
+//-(void)updateAvatarList
+//{
+//    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//    [dictionary setValue:self.userid  forKey:@"id"];
+//    
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//    [httpSender sendMessage:jsonData withOperationCode:GET_AVATAR_UPDATETIME];
+//    
+//}
 
--(void)updateAvatar
-{
-    self.sql = [[MySqlite alloc]init];
-    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-    [self.sql openMyDB:path];
-    for (NSDictionary *dictionary in self.avatarInfo) {
-        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
-        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
-        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
-        NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
-        if (!results.count) {
-            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-            [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
-        }else{
-            NSDictionary* result = results[0];
-            NSString *local_update = [result valueForKey:@"updatetime"];
-            NSString *net_update = [dictionary valueForKey:@"updatetime"];
-            if (![local_update isEqualToString:net_update]) {
-                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-                [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
-                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:nil path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:2 cache:[MTUser sharedInstance].avatar];
-                [getter updatePhoto];
-            }
-        }
-    }
-    [self.sql closeMyDB];
-}
+//-(void)updateAvatar
+//{
+//    self.sql = [[MySqlite alloc]init];
+//    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+//    [self.sql openMyDB:path];
+//    for (NSDictionary *dictionary in self.avatarInfo) {
+//        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
+//        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
+//        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
+//        NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
+//        if (!results.count) {
+//            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+//            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+//            [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
+//        }else{
+//            NSDictionary* result = results[0];
+//            NSString *local_update = [result valueForKey:@"updatetime"];
+//            NSString *net_update = [dictionary valueForKey:@"updatetime"];
+//            if (![local_update isEqualToString:net_update]) {
+//                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+//                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+//                [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
+//                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:nil path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:2 cache:[MTUser sharedInstance].avatar];
+//                [getter updatePhoto];
+//            }
+//        }
+//    }
+//    [self.sql closeMyDB];
+//}
 
 - (void)setUserid:(NSNumber *)userid
 {
@@ -134,9 +135,9 @@ static MTUser *singletonInstance;
     [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
     [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",nil];
     [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",nil];
-    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
+    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",@"url",nil];
     [sql closeMyDB];
-    self.logined = YES;
+    //self.logined = YES;
 }
 
 - (void)initWithData:(NSDictionary *)mdictionary
@@ -164,7 +165,7 @@ static MTUser *singletonInstance;
         case NORMAL_REPLY:
         {
             self.avatarInfo = [response1 valueForKey:@"list"];
-            [self updateAvatar];
+            //[self updateAvatar];
             
         }
             break;

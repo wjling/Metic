@@ -24,9 +24,7 @@
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
     
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:1 cache:[MTUser sharedInstance].avatar];
-    [getter setTypeOption1:[UIColor whiteColor] borderWidth:10 avatarId:[MTUser sharedInstance].userid];
-    getter.mDelegate = self;
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
     
 }
@@ -142,9 +140,4 @@
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-}
 @end

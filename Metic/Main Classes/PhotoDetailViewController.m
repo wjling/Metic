@@ -80,21 +80,9 @@
     }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论icon图标1"] forState:UIControlStateNormal];
 }
 
--(float)calculateTextHeight:(NSString*)text type:(int)type
+-(float)calculateTextHeight:(NSString*)text width:(float)width
 {
-//    UITextView* cal;
-    float width,height = 0;
-    switch (type) {
-        case 1:
-            width = 270;
-            break;
-        case 2:
-            width = 255;
-            break;
-            
-        default:
-            break;
-    }
+    float height = 0;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
     //设置自动行数与字符换行，为0标示无限制
     [label setNumberOfLines:0];
@@ -290,9 +278,7 @@
         }
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 20, 20)];
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[self.photoInfo valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        getter.mDelegate = self;
-        [getter setTypeOption2:[self.photoInfo valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
         [getter getPhoto];
         [cell addSubview:avatar];
         
@@ -318,13 +304,11 @@
         cell1.date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         //cell1.comment.text = [Pcomment valueForKey:@"content"];
 
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar path:[NSString stringWithFormat:@"/avatar/%@.jpg",[Pcomment valueForKey:@"author_id"]] type:2 cache:[MTUser sharedInstance].avatar];
-        getter.mDelegate = self;
-        [getter setTypeOption2:[self.photoInfo valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
         [getter getPhoto];
         
         
-        int height = [self calculateTextHeight:commentText type:2];
+        int height = [self calculateTextHeight:commentText width:255.0];
         UILabel* comment = [[UILabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
         [comment setFont:[UIFont systemFontOfSize:12]];
         [comment setNumberOfLines:0];
@@ -347,11 +331,6 @@
     }
     
 }
-#pragma mark - PhotoGetterDelegate
--(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
-{
-    imageView.image = image;
-}
 
 #pragma mark - Table view delegate
 
@@ -360,7 +339,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] type:1];
+        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:270.0 ];
         NSLog(@"%f",self.specificationHeight);
         height = self.photo.size.height *320.0/self.photo.size.width;
         height += 3;
@@ -370,7 +349,7 @@
     }else{
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
         NSString* commentText = [Pcomment valueForKey:@"content"];
-        height = [self calculateTextHeight:commentText type:2];
+        height = [self calculateTextHeight:commentText width:255];
         height += 32;
     }
     return height;

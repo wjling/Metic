@@ -8,6 +8,13 @@
 
 #import "CloudOperation.h"
 #import "HttpSender.h"
+#import "UIImageView+WebCache.h"
+#import "MySqlite.h"
+#import "../Main Classes/MTUser.h"
+@interface CloudOperation()
+@property BOOL shouldExit;
+@property (nonatomic,strong) NSNumber* authorId;
+@end
 
 @implementation CloudOperation
 
@@ -23,6 +30,7 @@
     COtype = 0;
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
+    _shouldExit = NO;
     return self;
 }
 
@@ -47,11 +55,16 @@
 }
 
 
--(void)CloudToDo:(int)type path:(NSString*)path uploadPath:(NSString*)uploadpath
+-(void)CloudToDo:(int)type path:(NSString*)path uploadPath:(NSString*)uploadpath container:(UIImageView*)container authorId:(NSNumber *)authorId
 {
     COtype = type;
     mpath = path;
+    img = container;
     if(type == 2) uploadFilePath = uploadpath;
+    _authorId = authorId;
+    
+    
+    
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[self parseOperationCode:type] forKey:@"method"];
     [dictionary setValue:path forKey:@"object"];
@@ -60,23 +73,32 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
+    @autoreleasepool{
+    while (!_shouldExit) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }}
 }
+
+
+
+
+
 
 
 
 -(void)downloadfile:(NSString*)url path:(NSString*)path
 {
-    NSURL *myurl = [NSURL URLWithString:url];
-    [self performSelectorInBackground:@selector(download:) withObject:myurl];
-    
-    
+//    MySqlite* sql = [[MySqlite alloc]init];
+//    NSString * DBpath = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+//    [sql openMyDB:DBpath];
+//    NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'",@"'url'", nil];
+//    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",self.authorId],[NSString stringWithFormat:@"'%@'",@"unknown"],[NSString stringWithFormat:@"'%@'",url], nil];
+//    [sql insertToTable:@"avatar" withColumns:columns andValues:values];
+//    [sql closeMyDB];
+    [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
+    [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
 }
 
--(void)download:(NSURL *)url
-{
-    NSData *imgData = [NSData dataWithContentsOfURL:url];
-    [self.mDelegate finishwithOperationStatus:YES type:1 data:imgData path:mpath];
-}
 
 -(void)uploadfile:(NSString*)url path:(NSString*)path;
 {
@@ -112,6 +134,7 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    _shouldExit = YES;
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
