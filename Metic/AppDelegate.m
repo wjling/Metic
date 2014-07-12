@@ -21,6 +21,7 @@
 @synthesize heartBeatTimer;
 @synthesize syncMessages;
 @synthesize sql;
+@synthesize delegate;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -89,7 +90,7 @@
 //        NSLog(@"undone notification");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
+//    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
     
     for (NSDictionary* message in self.syncMessages) {
@@ -150,6 +151,7 @@
     else
     {
         NSLog(@"Disconnected");
+        
     }
     
 }
