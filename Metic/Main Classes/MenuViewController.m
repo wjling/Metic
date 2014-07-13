@@ -23,6 +23,10 @@
 {
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
+    self.img.layer.masksToBounds = YES;
+    [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.img.layer setBorderWidth:3.0f];
+    [self.img.layer setCornerRadius:33];
     
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
