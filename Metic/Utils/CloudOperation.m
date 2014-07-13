@@ -73,10 +73,10 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
-    @autoreleasepool{
-    while (!_shouldExit) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }}
+//    @autoreleasepool{
+//    while (!_shouldExit) {
+//        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//    }}
 }
 
 
@@ -97,7 +97,16 @@
 //    [sql closeMyDB];
     [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
     [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+    //[self performSelectorOnMainThread:@selector(draw:) withObject:url waitUntilDone:NO];
 }
+
+-(void)draw:(NSString*)url
+{
+    [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+}
+
+
+
 
 
 -(void)uploadfile:(NSString*)url path:(NSString*)path;

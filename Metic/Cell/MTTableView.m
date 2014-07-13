@@ -57,6 +57,7 @@
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
         cell.eventId = [a valueForKey:@"event_id"];
+        cell.avatar.image = nil;
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
         //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
         [getter getPhoto];
@@ -66,11 +67,12 @@
         NSArray *memberids = [a valueForKey:@"member"];
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
+            tmp.image = nil;
             if (i < participator_count) {
                 PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                 //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
                 [getter getPhoto];
-            }else tmp.image = nil;
+            }
             
         }
     }

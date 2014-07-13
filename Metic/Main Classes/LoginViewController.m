@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "../Source/security/SFHFKeychainUtils.h"
 
 @interface LoginViewController ()
 {
@@ -55,14 +56,15 @@
     self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"111@qq.com";
+    self.textField_userName.text = @"";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"123456";
+    self.textField_password.text = @"";
+    [self checkPreUP];
 
 }
 
@@ -82,6 +84,22 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+-(void)checkPreUP
+{
+    [self.button_login setEnabled:NO];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
+    NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
+    NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
+    if (userName && password) {
+        self.logInEmail = userName;
+        self.logInPassword = password;
+        [self login];
+    }
+}
+
+
+
 
 -(BOOL)isTextFieldEmpty
 {
@@ -119,7 +137,11 @@
     NSLog(@"%@",[self.textField_userName text]);
     self.logInEmail = [self.textField_userName text];
     self.logInPassword = [self.textField_password text];
-    
+    [self login];
+
+}
+
+-(void)login{
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:self.logInEmail forKey:@"email"];
     [dictionary setValue:@"" forKey:@"passwd"];
@@ -130,12 +152,6 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:LOGIN];
-
-    MySqlite* sqlite = [[MySqlite alloc]init];
-    [sqlite isExistTable:@"notification"];
-//    [sqlite queryTable:@"notification" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:nil];
-    [sqlite closeMyDB];
-
 }
 
 - (IBAction)registerBtnClicked:(id)sender
@@ -190,6 +206,8 @@
             break;
         case LOGIN_SUC:
         {
+            [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
+            [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
             NSNumber *userid = [response1 valueForKey:@"id"];
             [user setUserid:userid];
