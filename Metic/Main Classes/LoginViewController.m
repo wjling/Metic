@@ -131,10 +131,7 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:LOGIN];
 
-    MySqlite* sqlite = [[MySqlite alloc]init];
-    [sqlite isExistTable:@"notification"];
-//    [sqlite queryTable:@"notification" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:nil];
-    [sqlite closeMyDB];
+    
 
 }
 

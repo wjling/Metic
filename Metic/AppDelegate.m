@@ -63,8 +63,8 @@
     [[AVAudioSession sharedInstance]
      setActive: YES
      error: &activationErr];
-//    self.window.backgroundColor = [UIColor whiteColor];
-//    [self.window makeKeyAndVisible];
+    
+    application.applicationIconBadgeNumber = 0;
     return YES;
 
 }
@@ -112,11 +112,19 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
     NSLog(@"enter foreground");
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    application.applicationIconBadgeNumber = 0;
+    NSLog(@"did become active");
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    //点击提示框的打开
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -124,15 +132,16 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)insertNotificationsToDB
+
+//===================================MY METHODS============================================
+
+- (void)handleReceivedNotifications
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
     while (![self.sql isExistTable:@"notification"]) {
-//        NSLog(@"undone notification");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-//    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
     
     for (NSDictionary* message in self.syncMessages) {
@@ -149,6 +158,26 @@
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
+    }
+    
+    //发送通知
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        NSDate *now=[NSDate new];
+        notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
+        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        notification.applicationIconBadgeNumber=numOfSyncMessages; //应用的红色数字
+        notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
+        //去掉下面2行就不会弹出提示框
+        notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
+        notification.alertAction = @"打开";  //提示框按钮
+        //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        
+        // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        //notification.userInfo = infoDict; //添加额外的信息
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
     
     numOfSyncMessages = -1;
@@ -270,7 +299,7 @@
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
             NSLog(@"feedback send json: %@",json);
-            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertNotificationsToDB) object:nil];
+            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
             
             [thread start];
             

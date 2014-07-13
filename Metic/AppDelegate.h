@@ -41,6 +41,6 @@
 - (void)sendHeartBeatMessage;
 - (void)disconnect;
 
-- (void)insertNotificationsToDB;
+- (void)handleReceivedNotifications;
 
 @end
