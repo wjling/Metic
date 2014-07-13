@@ -15,10 +15,12 @@
 #import "SRWebSocket.h"
 #import "MySqlite.h"
 #import "UMSocial.h"
+#import <AVFoundation/AVFoundation.h>
 
 @protocol NotificationDelegate
 
--(void) notificationDidReceive;
+@optional
+-(void) notificationDidReceive:(NSArray*) messages;
 
 @end
 
@@ -30,7 +32,7 @@
 @property (strong, nonatomic)NSTimer* heartBeatTimer;
 @property (strong, nonatomic)MySqlite* sql;
 @property (strong, nonatomic)NSMutableArray* syncMessages;
-@property (strong, nonatomic) id<NotificationDelegate> delegate;
+@property (strong, nonatomic) id<NotificationDelegate> notificationDelegate;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 
 - (void)connect;
@@ -39,6 +41,6 @@
 - (void)sendHeartBeatMessage;
 - (void)disconnect;
 
-- (void)insertNotificationsToDB;
+- (void)handleReceivedNotifications;
 
 @end

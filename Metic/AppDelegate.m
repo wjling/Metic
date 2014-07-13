@@ -21,7 +21,7 @@
 @synthesize heartBeatTimer;
 @synthesize syncMessages;
 @synthesize sql;
-@synthesize delegate;
+@synthesize notificationDelegate;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -51,6 +51,20 @@
     [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
     [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+   
+    //running in background
+//    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    // Override point for customization after application launch.
+    NSError *setCategoryErr = nil;
+    NSError *activationErr  = nil;
+    [[AVAudioSession sharedInstance]
+     setCategory: AVAudioSessionCategoryPlayback
+     error: &setCategoryErr];
+    [[AVAudioSession sharedInstance]
+     setActive: YES
+     error: &activationErr];
+    
+    application.applicationIconBadgeNumber = 0;
     return YES;
 
 }
@@ -65,16 +79,52 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+//     [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
+//         /*todo send keep live */
+//         NSLog(@"alive in background");
+//         [NSThread sleepForTimeInterval:10];
+//     }];
+     NSLog(@"enter Background====================");
+    UIApplication*   app = [UIApplication sharedApplication];
+    __block    UIBackgroundTaskIdentifier bgTask;
+    bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (bgTask != UIBackgroundTaskInvalid)
+            {
+                bgTask = UIBackgroundTaskInvalid;
+            }
+        });
+    });
+   
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[UIApplication sharedApplication] clearKeepAliveTimeout];
+    NSLog(@"enter foreground");
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    application.applicationIconBadgeNumber = 0;
+    NSLog(@"did become active");
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    //点击提示框的打开
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -82,15 +132,16 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)insertNotificationsToDB
+
+//===================================MY METHODS============================================
+
+- (void)handleReceivedNotifications
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
     while (![self.sql isExistTable:@"notification"]) {
-//        NSLog(@"undone notification");
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-//    NSLog(@"user id has set++++++++++++++++++++++++++++++++");
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
     
     for (NSDictionary* message in self.syncMessages) {
@@ -104,9 +155,41 @@
         [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
     }
     [self.sql closeMyDB];
+    
+    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
+        [self.notificationDelegate notificationDidReceive:self.syncMessages];
+    }
+    
+    //发送通知
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        NSDate *now=[NSDate new];
+        notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
+        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        notification.applicationIconBadgeNumber=numOfSyncMessages; //应用的红色数字
+        notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
+        //去掉下面2行就不会弹出提示框
+        notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
+        notification.alertAction = @"打开";  //提示框按钮
+        //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        
+        // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        //notification.userInfo = infoDict; //添加额外的信息
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    
     numOfSyncMessages = -1;
     [self.syncMessages removeAllObjects];
 }
+
+//#pragma mark - NotificationDelegate
+//
+//- (void) notificationDidReceive:(NSArray*) messages
+//{
+//    
+//}
 
 
 #pragma mark - WebSocket
@@ -150,8 +233,10 @@
     }
     else
     {
+        [self disconnect];
         NSLog(@"Disconnected");
-        
+        [self connect];
+        NSLog(@"Reconnecting...");
     }
     
 }
@@ -185,20 +270,36 @@
     
     //处理推送消息
     if ([cmd isEqualToString:@"sync"]) {
+        
+        /*
+         这种情况的推送的json格式：
+         “timestamp": string
+         "cmd": "sync"
+         "num": int
+         */
+        
         if (numOfSyncMessages == -1) {
             numOfSyncMessages = [(NSNumber*)[response1 objectForKey:@"num"] intValue];
         };
     }
     else if([cmd isEqualToString:@"message"])
     {
+        /*
+         这种情况的推送的json格式：
+         “timestamp": string
+         "cmd": "message"
+         "seq": int
+         "msg": json(string)
+         */
+        
         [self.syncMessages addObject:response1];
         if (self.syncMessages.count == numOfSyncMessages) {
             NSNumber* seq = [response1 objectForKey:@"seq"];
             NSMutableDictionary* json = [CommonUtils packParamsInDictionary:@"feedback",@"cmd",[MTUser sharedInstance].userid, @"uid",seq,@"seq",nil];
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
-            NSLog(@"feedback send data: %@",jsonData);
-            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertNotificationsToDB) object:nil];
+            NSLog(@"feedback send json: %@",json);
+            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
             
             [thread start];
             
@@ -208,6 +309,12 @@
     }
     else if ([cmd isEqualToString:@"init"])
     {
+        /*
+         这种情况的推送的json格式：
+         "cmd": "init"
+         "seq": int
+         */
+        
         [self scheduleHeartBeat];
     }
 }
