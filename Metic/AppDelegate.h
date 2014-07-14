@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
 #import "CommonUtils.h"
-//#import "NSString+JSON.h"
 #import "MenuViewController.h"
 #import "MTUser.h"
 #import "SRWebSocket.h"
 #import "MySqlite.h"
 #import "UMSocial.h"
+#import "BMapKit.h"
 
 @protocol NotificationDelegate
 
@@ -24,7 +24,7 @@
 
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate,BMKGeneralDelegate>
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) SRWebSocket* mySocket;
 @property (strong, nonatomic)NSTimer* heartBeatTimer;

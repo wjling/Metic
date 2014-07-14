@@ -71,13 +71,13 @@
 {
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
-    NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    if (imageData.length > 800000) {
+    NSData* imageData;// = UIImageJPEGRepresentation(compressedImage, 1.0);;
+    if (compressedImage.size.width> 640) {
         CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
         compressedImage = [compressedImage imageByScalingToSize:imagesize];
         imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
     }
-    float para = 0.75;
+    float para = 1.0;
     while (imageData.length > 100000) {
         imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
         compressedImage = [UIImage imageWithData:imageData];
@@ -130,5 +130,16 @@
     return url;
 }
 
+-(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
+{
+    if (self.isUpload) {
+        if (status){
+            [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
+        }else{
+            [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
+        }
+        return;
+    }
+}
 @end
 

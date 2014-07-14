@@ -25,6 +25,7 @@
 @property (nonatomic,strong) NSDictionary* locationInfo;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *getLocButton;
+@property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
 
 
 
@@ -62,6 +63,7 @@ double latitude = 999.999999;
     _locManager.delegate = self;
     _locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     _locManager.distanceFilter = 1000.0f;
+    _geocodesearch.delegate = self;
     // Do any additional setup after loading the view.
 }
 
@@ -197,24 +199,56 @@ double latitude = 999.999999;
     
 }
 
+-(void) seletePosition
+{
+    [self performSegueWithIdentifier:@"map" sender:self];
+    
+}
+
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation * currLocation = [locations lastObject];
     if(currLocation){
-        latitude = currLocation.coordinate.latitude;
-        longitude = currLocation.coordinate.longitude;
-        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
-            CLPlacemark* mark = placemarks[0];
-            _locationInfo = mark.addressDictionary;
-            NSString *address = [_locationInfo valueForKey:@"Name"];
-            if (address) {
-                self.location_text.text = address;
-            }
+        //百度坐标反坐标检索
+        NSLog(@"%f  %f",currLocation.coordinate.latitude,currLocation.coordinate.longitude);
+
+        BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+        reverseGeocodeSearchOption.reverseGeoPoint = currLocation.coordinate;
+        BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
+        if(flag)
+        {
+            NSLog(@"反geo检索发送成功");
+        }
+        else
+        {
             [self.getLocIndicator stopAnimating];
+            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
             [self.getLocButton setHidden:NO];
-            //NSString *info = [NSString stringWithFormat:@"%@",placemarks];
-            //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:info WithDelegate:self WithCancelTitle:@"确定"];
-        }];
+            NSLog(@"反geo检索发送失败");
+        }
+        
+        
+        
+        
+        
+        //苹果自带坐标反坐标检索
+//        latitude = currLocation.coordinate.latitude;
+//        longitude = currLocation.coordinate.longitude;
+//        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
+//            CLPlacemark* mark = placemarks[0];
+//            _locationInfo = mark.addressDictionary;
+//            NSString *address = [_locationInfo valueForKey:@"Name"];
+//            if (address) {
+//                self.location_text.text = address;
+//            }
+//            [self.getLocIndicator stopAnimating];
+//            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+//            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+//            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+//            [self.getLocButton setHidden:NO];
+//        }];
         
 
     }
@@ -224,11 +258,33 @@ double latitude = 999.999999;
     
 }
 
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
+{
+	if (error == 0) {
+		BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
+		item.coordinate = result.location;
+		item.title = result.address;
+		
+        
+        NSString* titleStr;
+        NSString* showmeg;
+        titleStr = @"反向地理编码";
+        showmeg = [NSString stringWithFormat:@"%@",item.title];
+        self.location_text.text = item.title;
+        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:titleStr message:showmeg delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",nil];
+        [myAlertView show];
+	}
+}
+
+
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     [self.getLocIndicator stopAnimating];
     [self.getLocButton setHidden:NO];
     self.location_text.text = @"";
+    [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+    [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+    [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
     [_locManager stopUpdatingLocation];
 }

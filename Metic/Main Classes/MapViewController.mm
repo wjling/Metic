@@ -7,13 +7,15 @@
 //
 
 #import "MapViewController.h"
+#import "../Source/SlideNavigationController.h"
+
 
 @interface MapViewController ()
 
 @end
 
-@implementation MapViewController
 
+@implementation MapViewController
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -22,28 +24,51 @@
     }
     return self;
 }
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    //适配ios7
+    if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
+    {
+        //        self.edgesForExtendedLayout=UIRectEdgeNone;
+        self.navigationController.navigationBar.translucent = NO;
+    }
+    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:NO];
+ 
+	
+
 }
 
-- (void)didReceiveMemoryWarning
-{
+-(void)viewWillAppear:(BOOL)animated {
+    [mapView viewWillAppear];
+    mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+//    [_mapView showMapScaleBar];
+    CLLocationCoordinate2D pt = (CLLocationCoordinate2D){40.0,116.0};
+    mapView.centerCoordinate = pt;
+    mapView.mapType = BMKMapTypeSatellite;
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [mapView viewWillDisappear];
+    mapView.delegate = nil; // 不用时，置nil
+    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:YES];
+}
+
+
+- (void)dealloc {
+    if (mapView) {
+        mapView.delegate = nil;
+        mapView = nil;
+    }
+}
+- (void)didReceiveMemoryWarning {
+    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    // Release any cached data, images, etc. that aren't in use.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+
 
 @end
+

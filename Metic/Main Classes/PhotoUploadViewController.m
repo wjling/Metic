@@ -10,6 +10,7 @@
 #import "../Utils/CommonUtils.h"
 
 
+
 @interface PhotoUploadViewController ()
 @property (strong, nonatomic) UITextView* textInput;
 @property (strong, nonatomic) UIView* textView;
@@ -140,7 +141,7 @@
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.1);
+    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
     UIImage *compressedImage = [UIImage imageWithData:imageData];
     [self.getPhoto setBackgroundImage:compressedImage forState:UIControlStateNormal];
     

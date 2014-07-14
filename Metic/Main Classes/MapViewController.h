@@ -6,8 +6,14 @@
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface MapViewController : ViewController
+#import "BMapKit.h"
+#import "BMKMapView.h"
 
+@interface MapViewController : UIViewController <BMKMapViewDelegate>{
+
+    IBOutlet BMKMapView *mapView;
+
+}
 @end

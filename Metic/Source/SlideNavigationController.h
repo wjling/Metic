@@ -54,7 +54,7 @@ typedef  enum{
 
 + (SlideNavigationController *)sharedInstance;
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
-
+- (void)setEnableSwipeGesture:(BOOL)markEnableSwipeGesture;
 //- (void)reconnect;
 
 @end
