@@ -11,12 +11,17 @@
 
 
 @interface MTUser ()
+{
+    NSString* DB_path;
+}
 @property(nonatomic,strong) NSArray *avatarInfo;
-
 @end
 
 @implementation MTUser
-
+@synthesize userid;
+@synthesize friendList;
+@synthesize sortedFriendDic;
+@synthesize sectionArray;
 
 static MTUser *singletonInstance;
 
@@ -34,6 +39,10 @@ static MTUser *singletonInstance;
         self.avatar = [[NSMutableDictionary alloc]init];
         self.avatarURL = [[NSMutableDictionary alloc]init];
         self.friendIds = [[NSMutableSet alloc]init];
+        self.friendList = [[NSMutableArray alloc]initWithCapacity:0];
+        self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
+        self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
+//        self.sql = [[MySqlite alloc]init];
         self.wait = 0.1;
     }
     return self;
@@ -94,11 +103,17 @@ static MTUser *singletonInstance;
 //    [self.sql closeMyDB];
 //}
 
-- (void)setUserid:(NSNumber *)userid
+- (void)setUid:(NSNumber*) user_id
 {
-    _userid = userid;
-    NSLog(@"set user id");
+    userid = user_id;
+    NSLog(@"set user id: %@", self.userid);
+    DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self initUserDir];
+    
+//    [self.friendList removeAllObjects];
+//    [self.sortedFriendDic removeAllObjects];
+    [self.sectionArray removeAllObjects];
+    [self synchronizeFriends];
 }
 
 - (void)initUserDir
@@ -152,6 +167,116 @@ static MTUser *singletonInstance;
     
 }
 
+//======================================SYNCHRONIZE FRIENDS=================================
+
+- (void) synchronizeFriends
+{
+    self.friendList = [self getFriendsFromDB];
+    NSLog(@"get friends from DB, friendList: %@",self.friendList);
+    NSDictionary* json = [CommonUtils packParamsInDictionary:
+                          self.userid,@"id",
+                          [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
+}
+
+- (NSMutableArray*)getFriendsFromDB
+{
+    NSMutableArray* friends;
+    MySqlite* db = [[MySqlite alloc]init];
+    [db openMyDB:DB_path];
+    friends = [db queryTable:@"friend" withSelect:[[NSArray alloc]initWithObjects:@"*", nil] andWhere:nil];
+    [db closeMyDB];
+    return friends;
+}
+
+- (NSMutableDictionary*)sortFriendList
+{
+    NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
+    //    NSLog(@"friendlist count: %d",friendList.count);
+    for (NSMutableDictionary* aFriend in self.friendList) {
+        NSString* fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
+        //        NSLog(@"friend name: %@",fname_py);
+        NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
+        NSMutableArray* groupOfFriends = [sorted objectForKey:[first_letter uppercaseString]];
+        
+        if (groupOfFriends) {
+            [groupOfFriends addObject:aFriend];
+            //            NSLog(@"a friend: %@",aFriend);
+        }
+        else
+        {
+            groupOfFriends = [[NSMutableArray alloc]init];
+            [groupOfFriends addObject:aFriend];
+            [sorted setObject:groupOfFriends forKey:[first_letter uppercaseString]];
+            [self.sectionArray addObject:[first_letter uppercaseString]];
+        }
+    }
+    
+    for (NSString* key in sorted) {
+        NSMutableArray* arr = [sorted objectForKey:key];
+        [self rankFriendsInArray:arr];
+        //        NSLog(@"sorted array: %@",arr);
+    }
+    [self.sectionArray sortUsingComparator:^(id obj1, id obj2)
+     {
+         return [(NSString*)obj1 compare:(NSString*)obj2];
+     }];
+    
+    NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"好友推荐",@"name", nil];
+    NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
+    [sorted setObject:temp_arr forKey:@"🍎"];
+    
+    [sectionArray insertObject:@"🍎" atIndex:0];
+    NSLog(@"sorted friends dictionary: %@",sorted);
+    NSLog(@"section array: %@",self.sectionArray);
+    return sorted;
+}
+
+- (void)rankFriendsInArray:(NSMutableArray*)friends
+{
+    NSComparator cmptor = ^(id obj1, id obj2)
+    {
+        NSString* obj1_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]] uppercaseString];
+        NSString* obj2_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]] uppercaseString];
+        NSInteger result = [obj1_py compare:obj2_py];
+        return result;
+    };
+    [friends sortUsingComparator:cmptor];
+}
+
+- (void) insertToFriendTable:(NSArray *)friends
+{
+    //    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:DB_path];
+    for (NSDictionary* friend in friends) {
+        NSString* friendEmail = [friend objectForKey:@"email"];
+        NSNumber* friendID = [friend objectForKey:@"id"];
+        NSNumber* friendGender = [friend objectForKey:@"gender"];
+        NSString* friendName = [friend objectForKey:@"name"];
+        
+        //        NSLog(@"email: %@, id: %@, gender: %@, name: %@",friendEmail,friendID,friendGender,friendName);
+        
+        NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'", nil];
+        NSArray* values = [[NSArray alloc]initWithObjects:
+                           [NSString stringWithFormat:@"%@",friendID],
+                           [NSString stringWithFormat:@"'%@'",friendName],
+                           [NSString stringWithFormat:@"'%@'",friendEmail],
+                           [NSString stringWithFormat:@"%@",friendGender], nil];
+        [sql insertToTable:@"friend" withColumns:columns andValues:values];
+    }
+    [sql closeMyDB];
+    
+    NSLog(@"好友列表更新完成！");
+}
+
+
+//============================================================================
+
+
+
 #pragma mark - HttpSenderDelegate
 
 -(void)finishWithReceivedData:(NSData *)rData
@@ -165,7 +290,28 @@ static MTUser *singletonInstance;
         case NORMAL_REPLY:
         {
             self.avatarInfo = [response1 valueForKey:@"list"];
-            //[self updateAvatar];
+            //[self updateAvatar];NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
+            NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
+            if (tempFriends) {
+                if (tempFriends.count) {
+                    self.friendList = tempFriends;
+                    self.sortedFriendDic = [self sortFriendList];
+                    //                [self insertToFriendTable:tempFriends];
+                    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:tempFriends];
+                    
+                    [thread start];
+                    
+                }
+                else
+                {
+                    NSLog(@"好友列表已经是最新的啦～");
+//                    self.friendList = [self getFriendsFromDB];
+                    self.sortedFriendDic = [self sortFriendList];
+                    
+                }
+                NSLog(@"synchronize friends: %@",friendList);
+                
+            }
             
         }
             break;

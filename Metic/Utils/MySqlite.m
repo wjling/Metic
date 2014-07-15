@@ -18,12 +18,25 @@
     
     NSLog(@"array path: %@",path);
     NSLog(@"DB_path: %@",DB_path);
+    NSLog(@"sqlite3 lib version: %s", sqlite3_libversion());
+//    int err=sqlite3_config(SQLITE_CONFIG_SERIALIZED);
+//    if (err == SQLITE_OK) {
+//        NSLog(@"Can now use sqlite on multiple threads, using the same connection");
+//    } else {
+//        NSLog(@"setting sqlite thread safe mode to serialized failed!!! return code: %d", err);
+//    }
+    while (isLocked) {
+        NSLog(@"loop: isLocked");
+    }
+    
     if (sqlite3_open([DB_path UTF8String], &myDB) != SQLITE_OK) {
         sqlite3_close(self.myDB);
         NSLog(@"database open failed");
         return NO;
     }
     NSLog(@"database open succeeded");
+    NSLog(@"database is locked++");
+    isLocked = true;
     return YES;
 }
 
@@ -35,6 +48,8 @@
         return NO;
     }
     NSLog(@"close myDB succeeded");
+    NSLog(@"database is unLocked--");
+    isLocked = false;
     return YES;
 }
 

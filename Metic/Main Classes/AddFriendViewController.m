@@ -68,25 +68,32 @@
 - (void)search_friend
 {
     NSString* text = self.friendSearchBar.text;
-    if ([CommonUtils isEmailValid:text]) {
-        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-        dictionary = [CommonUtils packParamsInDictionary:text,@"email",self.user.userid,@"myId",nil];
-        NSLog(@"%@",dictionary);
-        
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
-    }
-    else
-    {
-        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-        dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
-        NSLog(@"%@",dictionary);
-        
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
-    }
+//    if ([CommonUtils isEmailValid:text]) {
+//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//        dictionary = [CommonUtils packParamsInDictionary:text,@"email",self.user.userid,@"myId",nil];
+//        NSLog(@"%@",dictionary);
+//        
+//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
+//    }
+//    else
+//    {
+//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//        dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
+//        NSLog(@"%@",dictionary);
+//        
+//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
+//    }
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
+    NSLog(@"%@",dictionary);
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
 }
 
 

@@ -167,7 +167,7 @@
         notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
         notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
         notification.timeZone=[NSTimeZone defaultTimeZone];
-        notification.applicationIconBadgeNumber=numOfSyncMessages; //应用的红色数字
+        notification.applicationIconBadgeNumber += numOfSyncMessages; //应用的红色数字
         notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
         //去掉下面2行就不会弹出提示框
         notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框

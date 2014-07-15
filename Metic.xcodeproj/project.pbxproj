@@ -10,6 +10,7 @@
 		0400DFF8196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */; };
 		0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */; };
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
+		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
@@ -159,6 +160,8 @@
 		0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsFriendRequestTableViewCell.m; sourceTree = "<group>"; };
 		0400DFF6196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsSystemMessageTableViewCell.h; sourceTree = "<group>"; };
 		0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
+		04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedBackViewController.h; path = FeedBack/FeedBackViewController.h; sourceTree = "<group>"; };
+		04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedBackViewController.m; path = FeedBack/FeedBackViewController.m; sourceTree = "<group>"; };
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
@@ -438,6 +441,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04B3F5E919756BA600C0A6EB /* FeedBack */ = {
+			isa = PBXGroup;
+			children = (
+				04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */,
+				04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */,
+			);
+			name = FeedBack;
+			sourceTree = "<group>";
+		};
 		04B63B4C1963A1600015357B /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
@@ -833,6 +845,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				04B3F5E919756BA600C0A6EB /* FeedBack */,
 				04B63B4C1963A1600015357B /* Notifications */,
 				483E01EF1935C6E400418A58 /* Friends */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
@@ -1121,6 +1134,7 @@
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
 				510D459E196E8A960081672A /* SDWebImageManager.m in Sources */,
+				04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */,
 				510D459D196E8A960081672A /* SDWebImageDownloaderOperation.m in Sources */,
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,

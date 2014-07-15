@@ -36,13 +36,14 @@
 
 
 - (void)initParams;
-- (void)synchronize_friends;
+- (void)initTableData;
+//- (void)synchronize_friends;
 - (IBAction)search_friends:(id)sender;
 - (IBAction)switchToAddFriendView:(id)sender;
 
-- (void) createFriendTable;
-- (void) insertToFriendTable:(NSArray*)friends;
-- (NSMutableArray*)getFriendsFromDB;
-- (NSMutableDictionary*)sortFriendList;
-- (void)rankFriendsInArray:(NSMutableArray*)friends;
+//- (void) createFriendTable;
+//- (void) insertToFriendTable:(NSArray*)friends;
+//- (NSMutableArray*)getFriendsFromDB;
+//- (NSMutableDictionary*)sortFriendList;
+//- (void)rankFriendsInArray:(NSMutableArray*)friends;
 @end
