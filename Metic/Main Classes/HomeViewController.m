@@ -86,10 +86,13 @@
     self.tatableView.eventsSource = self.taevents;
     
 }
--(void)viewDidAppear:(BOOL)animated
+
+-(void)viewWillAppear:(BOOL)animated
 {
     [self.view bringSubviewToFront: self.shadowView];
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
 }
+
 
 
 -(void)createMenuButton
