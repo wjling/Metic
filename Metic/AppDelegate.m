@@ -48,11 +48,8 @@
     numOfSyncMessages = -1;
     [[MTUser alloc]init];
     
-    BMKMapManager* _mapManager = [[BMKMapManager alloc]init];
-    BOOL ret = [_mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:self];
-	if (!ret) {
-		NSLog(@"manager start failed!");
-	}
+    _mapManager = [[BMKMapManager alloc]init];
+    
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
     [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
     [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
@@ -60,26 +57,7 @@
     return YES;
 
 }
-- (void)onGetNetworkState:(int)iError
-{
-    if (0 == iError) {
-        NSLog(@"联网成功");
-    }
-    else{
-        NSLog(@"onGetNetworkState %d",iError);
-    }
-    
-}
 
-- (void)onGetPermissionState:(int)iError
-{
-    if (0 == iError) {
-        NSLog(@"授权成功");
-    }
-    else {
-        NSLog(@"onGetPermissionState %d",iError);
-    }
-}
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

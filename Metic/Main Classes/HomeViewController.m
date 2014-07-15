@@ -155,7 +155,6 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
-    NSLog(@"  dsfa");
 	return YES;
 }
 
@@ -165,7 +164,6 @@
 }
 -(void)sendDistance:(float)distance
 {
-    NSLog(@"af");
     if (distance > 0) {
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];

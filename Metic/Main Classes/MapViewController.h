@@ -11,9 +11,13 @@
 #import "BMapKit.h"
 #import "BMKMapView.h"
 
-@interface MapViewController : UIViewController <BMKMapViewDelegate>{
+@interface MapViewController : UIViewController <BMKMapViewDelegate,BMKGeoCodeSearchDelegate>{
 
     IBOutlet BMKMapView *mapView;
-
 }
+//@property BMKMapView *mapView;
+@property CLLocationCoordinate2D position;
+@property (nonatomic,strong) UIViewController* controller;
+- (IBAction)comfirmPosition:(id)sender;
+@property (nonatomic,strong) NSString* positionInfo;
 @end

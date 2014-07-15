@@ -1341,10 +1341,11 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sad-WS-38C">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sad-WS-38C">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="544"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5U-Ih-F1e">
                                 <rect key="frame" x="0.0" y="372" width="320" height="163"/>
@@ -1410,15 +1411,33 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yS6-Tv-ZCJ" customClass="BMKMapView">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yS6-Tv-ZCJ" customClass="BMKMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="49f-rS-tTF" firstAttribute="top" secondItem="yS6-Tv-ZCJ" secondAttribute="bottom" id="a08-73-Seh"/>
+                            <constraint firstItem="yS6-Tv-ZCJ" firstAttribute="top" secondItem="y9I-VR-EDt" secondAttribute="bottom" id="na0-VO-Ar8"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="4aq-hJ-Rkd"/>
+                    <navigationItem key="navigationItem" id="4aq-hJ-Rkd">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ioh-2x-Ocr">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FJW-sU-oaD">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="确定">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="comfirmPosition:" destination="3Ms-XL-qgl" eventType="touchUpInside" id="4wU-DM-RZU"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="yS6-Tv-ZCJ" id="ti8-qZ-EPF"/>
                     </connections>
@@ -2361,8 +2380,8 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="hB7-KS-rrK"/>
     </inferredMetricsTieBreakers>
 </document>

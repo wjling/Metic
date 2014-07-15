@@ -8,6 +8,7 @@
 
 #import "LaunchEventViewController.h"
 #import "InviteFriendViewController.h"
+#import "MapViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
 
@@ -25,16 +26,17 @@
 @property (nonatomic,strong) NSDictionary* locationInfo;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *getLocButton;
+//@property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
-
+@property (strong, nonatomic) BMKMapManager *mapManager;
 
 
 @end
 
 @implementation LaunchEventViewController
-
-double longitude = 999.999999;
-double latitude = 999.999999;
+@synthesize mapManager;
+//double longitude = 999.999999;
+//double latitude = 999.999999;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,15 +60,48 @@ double latitude = 999.999999;
     self.user = [MTUser sharedInstance];
     [self.canin setOn:NO];
     self.FriendsIds = [[NSMutableSet alloc]init];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    mapManager = appDelegate.mapManager;
+    
+    BOOL ret = [mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];
+	if (!ret) {
+		NSLog(@"manager start failed!");
+	}
+    
+    
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
     _locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     _locManager.distanceFilter = 1000.0f;
-    _geocodesearch.delegate = self;
+    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
+    
+    self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
+    self.positionInfo = @"";
+    
     // Do any additional setup after loading the view.
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    _geocodesearch.delegate = self;
+    self.location_text.text = self.positionInfo;
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    _geocodesearch.delegate = nil;
+}
+
+-(void)dealloc
+{
+    _geocodesearch.delegate = nil;
+    [mapManager stop];
+    mapManager = nil;
+    NSLog(@"delete");
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -84,18 +119,19 @@ double latitude = 999.999999;
 {
     //[self.scrollView scrollRectToVisible:CGRectMake(0, textView.frame.origin.y - 55, 320, 480) animated:YES];
     self.scrollView.contentOffset = CGPointMake(0, textView.frame.origin.y - 55);
+    
     return YES;
 }
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    
-    if (self.scrollView.contentSize.height != 790) {
-        NSLog(@"%f",self.scrollView.contentSize.height);
-        [self.scrollView setContentSize:CGSizeMake(320, 790)];
-        NSLog(@"%f",self.scrollView.contentSize.height);
-    }
-}
+//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    
+//    if (self.scrollView.contentSize.height != 790) {
+//        NSLog(@"%f",self.scrollView.contentSize.height);
+//        [self.scrollView setContentSize:CGSizeMake(320, 790)];
+//        NSLog(@"%f",self.scrollView.contentSize.height);
+//    }
+//}
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -179,8 +215,8 @@ double latitude = 999.999999;
     [dictionary setValue:self.detail_text.text forKey:@"remark"];
     [dictionary setValue:self.location_text.text forKey:@"location"];
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
-    [dictionary setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
-    [dictionary setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+    [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
+    [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
     [dictionary setValue:[NSNumber numberWithInt:visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
     [dictionary setValue:friends forKey:@"friends"];
@@ -195,6 +231,8 @@ double latitude = 999.999999;
     [self.getLocButton setHidden:YES];
     [self.getLocIndicator startAnimating];
     self.location_text.text = @"定位中";
+    self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
+    self.positionInfo = @"(^_^)";
     [_locManager startUpdatingLocation];
     
 }
@@ -228,10 +266,7 @@ double latitude = 999.999999;
             [self.getLocButton setHidden:NO];
             NSLog(@"反geo检索发送失败");
         }
-        
-        
-        
-        
+       
         
         //苹果自带坐标反坐标检索
 //        latitude = currLocation.coordinate.latitude;
@@ -258,21 +293,20 @@ double latitude = 999.999999;
     
 }
 
+
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
 	if (error == 0) {
-		BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
-		item.coordinate = result.location;
-		item.title = result.address;
-		
+
+        self.location_text.text = result.address;
+        self.pt = result.location;
+        self.positionInfo = result.address;
         
-        NSString* titleStr;
-        NSString* showmeg;
-        titleStr = @"反向地理编码";
-        showmeg = [NSString stringWithFormat:@"%@",item.title];
-        self.location_text.text = item.title;
-        UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:titleStr message:showmeg delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",nil];
-        [myAlertView show];
+        [self.getLocIndicator stopAnimating];
+        [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+        [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+        [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+        [self.getLocButton setHidden:NO];
 	}
 }
 
@@ -315,6 +349,12 @@ double latitude = 999.999999;
     if ([segue.destinationViewController isKindOfClass:[InviteFriendViewController class]]) {
         InviteFriendViewController *nextViewController = segue.destinationViewController;
         nextViewController.FriendsIds = self.FriendsIds;
+    }
+    if ([segue.destinationViewController isKindOfClass:[MapViewController class]]) {
+        MapViewController *nextViewController = segue.destinationViewController;
+        nextViewController.position = self.pt;
+        nextViewController.positionInfo = self.positionInfo;
+        nextViewController.controller = self;
     }
 }
 

@@ -14,6 +14,7 @@
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
+#import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
 
 
 
@@ -291,6 +292,7 @@
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
         ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
         if([[mainCom valueForKey:@"comment_num"]intValue]==0) [cell.subCommentBG setHidden:YES];
+        else [cell.subCommentBG setHidden:NO];
         
         
         UILabel *textView = (UILabel*)[cell viewWithTag:4];
@@ -338,33 +340,33 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
-        cell.author.text = [subCom valueForKey:@"author"];
-        float width = [self calculateTextWidth:cell.author.text height:21.0f fontSize:10.0f]+1;
-        [cell.author setFrame:CGRectMake(10, 0, width, 21)];
-        float colorValue = 230.0/255.0;
-        [cell.author setBackgroundColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:1.0]];
-        NSString* text = [NSString stringWithFormat:@"%@:%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
-        float commentHeight = [self calculateTextHeight:text width:250.0 fontSize:10.0f];
+        
+        NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
+        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor redColor] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
+        [cell.comment setNumberOfLines:0];
+        [cell.comment setLineBreakMode:NSLineBreakByTruncatingTail];
+        [((TTTAttributedLabel*)cell.comment) setText:hintString1];
+
+        
+        
+        float commentHeight = [self calculateTextHeight:text width:270 fontSize:10.0f];
         CGRect frame = cell.frame;
-        frame.size.height = commentHeight+10;
+        frame.size.height = commentHeight+25;
         [cell setFrame:frame];
-
-
-        
-        
         frame = [cell viewWithTag:100].frame;
-        frame.size.height =  commentHeight+10;
+        frame.size.height =  commentHeight+24;
         [[cell viewWithTag:100] setFrame:frame];
-        
-        
-        
-        [cell.comment setFrame:CGRectMake(10, 0, 250, commentHeight+10)];
-        cell.comment.text = text;
+        [cell.comment setFrame:CGRectMake(10, 5, 270, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.controller = self;
-        [cell bringSubviewToFront:cell.author];
-        [cell.author.layer setBorderColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:1].CGColor];
-        [cell.author.layer setBorderWidth:1];
+        
+        //[cell.layer setBorderColor:[UIColor redColor].CGColor];
+        //[cell.layer setBorderWidth:2];
+        [cell.comment.layer setBorderColor:[UIColor yellowColor].CGColor];
+        [cell.comment.layer setBorderWidth:2];
+        
+        
 //        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
 //            [((UIButton*)[cell viewWithTag:2]) setHidden:YES];
 //        }
@@ -397,10 +399,10 @@
     }else
     {
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
-        NSString* text = [NSString stringWithFormat:@"%@:%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:250.0 fontSize:10.0f];
-        return commentHeight+10;
+        float commentHeight = [self calculateTextHeight:text width:270.0 fontSize:10.0f];
+        return commentHeight+25;
     }
 }
 

@@ -11,11 +11,11 @@
 #import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
 #import "../Main Classes/EventDetailViewController.h"
+#import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
 
 @interface SCommentTableViewCell : UITableViewCell
 - (IBAction)delete_Comment:(id)sender;
 @property(strong,nonatomic) NSNumber* commentid;
-@property (strong, nonatomic) IBOutlet UILabel *author;
-@property (strong, nonatomic) IBOutlet UILabel *comment;
+@property (strong, nonatomic) IBOutlet TTTAttributedLabel *comment;
 @property(nonatomic,strong) EventDetailViewController *controller;
 @end

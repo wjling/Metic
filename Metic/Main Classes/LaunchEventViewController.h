@@ -26,6 +26,8 @@
 @property (strong, nonatomic) IBOutlet UISwitch *canin;
 @property (strong, nonatomic) IBOutlet UIButton *launch_button;
 @property (strong, nonatomic) IBOutletCollection(UIView) NSArray *roundCornerView;
+@property (nonatomic) CLLocationCoordinate2D pt;
+@property (nonatomic,strong) NSString *positionInfo;
 
 
 

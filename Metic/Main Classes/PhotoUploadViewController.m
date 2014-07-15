@@ -246,6 +246,9 @@
 
 
 - (IBAction)upload:(id)sender {
+    if (!self.uploadImage) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
+    }
     self.upLoad = sender;
     [self.upLoad setEnabled:NO];
     [self.getPhoto setEnabled:NO];
