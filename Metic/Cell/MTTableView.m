@@ -61,25 +61,26 @@
         [cell.avatar.layer setBorderColor:[UIColor yellowColor].CGColor];
         [cell.avatar.layer setBorderWidth:2.0f];
         [cell.avatar.layer setCornerRadius:15];
-        cell.avatar.image = nil;
+
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-        //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
-        [getter getPhoto];
-        cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
+        [self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
+        //[getter getPhoto];
+
+        //cell.themePhoto.image = nil;
+        PhotoGetter *bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
+        [self performSelectorInBackground:@selector(BGgetBanner:) withObject:bannerGetter];
+        //[bannerGetter getBanner];
         cell.homeController = self.homeController;
         
         NSArray *memberids = [a valueForKey:@"member"];
-        for (int i =3; i>=0; i--) {
-            UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
-            tmp.image = nil;
-        }
+
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             if (i < participator_count) {
                 PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                //[self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
-                [getter getPhoto];
-            }
+                [self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
+                //[getter getPhoto];
+            }else tmp.image = nil;
             
         }
     }
@@ -87,11 +88,15 @@
 	return cell;
 }
 
+-(void)BGgetBanner:(id)sender
+{
+    PhotoGetter* getter = sender;
+    [getter getBanner];
+}
 -(void)BGgetPhoto:(id)sender
 {
     PhotoGetter* getter = sender;
     [getter getPhoto];
 }
-
 
 @end

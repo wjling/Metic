@@ -64,7 +64,8 @@
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = @"";
-//    [self checkPreUP];
+    //[self checkPreUP];
+
 
 }
 

@@ -50,9 +50,7 @@
 
 -(void)getPhoto
 {
-    
-
-    NSString*url = [self getLocalUrl];
+    NSString*url = [self getLocalAvatarUrl];
     if (url) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
     }else{
@@ -61,6 +59,24 @@
     }
 
 }
+
+
+-(void)getBanner
+{
+    
+    self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
+    NSString*url = [self getLocalBannerUrl];
+    if (url) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+    }else{
+        CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+        [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:@"" container:self.imageView authorId:self.avatarId];
+    }
+    
+}
+
+
+
 -(void)updatePhoto
 {
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
@@ -72,21 +88,26 @@
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    if (imageData.length > 800000) {
+    if (compressedImage.size.width> 640) {
         CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
         compressedImage = [compressedImage imageByScalingToSize:imagesize];
         imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
     }
-    float para = 0.75;
+    float para = 1.0;
+    int restOp = 5;
     while (imageData.length > 100000) {
         imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
         compressedImage = [UIImage imageWithData:imageData];
+        if (!restOp--) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
     }
 
     
     
     NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
-    [formatter setDateFormat:[NSString stringWithFormat:@"%@YYYYMMddhhmmssSSSSS",[MTUser sharedInstance].userid]];
+    [formatter setDateFormat:[NSString stringWithFormat:@"%@YYYYMMddHHmmssSSSSS",[MTUser sharedInstance].userid]];
     NSString *date =  [formatter stringFromDate:[NSDate date]];
     NSString *timeLocal = [[NSString alloc] initWithFormat:@"%@", date];
     
@@ -123,12 +144,31 @@
 //
 //}
 
--(NSString*)getLocalUrl
+-(NSString*)getLocalAvatarUrl
 {
     NSString* url;
     url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
     return url;
 }
 
+-(NSString*)getLocalBannerUrl
+{
+    NSString* url;
+    url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    return url;
+}
+
+
+-(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
+{
+    if (self.isUpload) {
+        if (status){
+            [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
+        }else{
+            [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
+        }
+        return;
+    }
+}
 @end
 

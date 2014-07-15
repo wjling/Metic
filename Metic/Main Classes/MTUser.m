@@ -33,6 +33,7 @@ static MTUser *singletonInstance;
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
         self.avatarURL = [[NSMutableDictionary alloc]init];
+        self.bannerURL = [[NSMutableDictionary alloc]init];
         self.friendIds = [[NSMutableSet alloc]init];
         self.wait = 0.1;
     }

@@ -86,10 +86,13 @@
     self.tatableView.eventsSource = self.taevents;
     
 }
--(void)viewDidAppear:(BOOL)animated
+
+-(void)viewWillAppear:(BOOL)animated
 {
     [self.view bringSubviewToFront: self.shadowView];
+    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
 }
+
 
 
 -(void)createMenuButton
@@ -155,7 +158,6 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
-    NSLog(@"  dsfa");
 	return YES;
 }
 
@@ -165,7 +167,6 @@
 }
 -(void)sendDistance:(float)distance
 {
-    NSLog(@"af");
     if (distance > 0) {
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];
@@ -217,8 +218,10 @@
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
     for (NSDictionary *event in self.events) {
+        NSString *eventData = [NSString jsonStringWithDictionary:event];
+        eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",[NSString jsonStringWithDictionary:event]], nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",eventData], nil];
         
         [self.sql insertToTable:@"event" withColumns:columns andValues:values];
     }
@@ -245,6 +248,7 @@
     NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
     for (NSDictionary *temp in result) {
         NSString *tmpa = [temp valueForKey:@"event_info"];
+        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* launcherId = [event valueForKey:@"launcher_id"];

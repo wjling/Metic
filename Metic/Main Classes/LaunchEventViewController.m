@@ -8,6 +8,7 @@
 
 #import "LaunchEventViewController.h"
 #import "InviteFriendViewController.h"
+#import "MapViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
 
@@ -25,15 +26,17 @@
 @property (nonatomic,strong) NSDictionary* locationInfo;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *getLocButton;
-
+//@property (strong, nonatomic) BMKMapManager* mapManager;
+@property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
+@property (strong, nonatomic) BMKMapManager *mapManager;
 
 
 @end
 
 @implementation LaunchEventViewController
-
-double longitude = 999.999999;
-double latitude = 999.999999;
+@synthesize mapManager;
+//double longitude = 999.999999;
+//double latitude = 999.999999;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,14 +60,46 @@ double latitude = 999.999999;
     self.user = [MTUser sharedInstance];
     [self.canin setOn:NO];
     self.FriendsIds = [[NSMutableSet alloc]init];
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    mapManager = appDelegate.mapManager;
+    
+    BOOL ret = [mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];
+	if (!ret) {
+		NSLog(@"manager start failed!");
+	}
+    
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
     _locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     _locManager.distanceFilter = 1000.0f;
+    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
+    
+    self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
+    self.positionInfo = @"";
+    
     // Do any additional setup after loading the view.
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    _geocodesearch.delegate = self;
+    self.location_text.text = self.positionInfo;
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    _geocodesearch.delegate = nil;
+}
+
+-(void)dealloc
+{
+    _geocodesearch.delegate = nil;
+    [mapManager stop];
+    NSLog(@"delete");
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -82,18 +117,19 @@ double latitude = 999.999999;
 {
     //[self.scrollView scrollRectToVisible:CGRectMake(0, textView.frame.origin.y - 55, 320, 480) animated:YES];
     self.scrollView.contentOffset = CGPointMake(0, textView.frame.origin.y - 55);
+    
     return YES;
 }
 
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    
-    if (self.scrollView.contentSize.height != 790) {
-        NSLog(@"%f",self.scrollView.contentSize.height);
-        [self.scrollView setContentSize:CGSizeMake(320, 790)];
-        NSLog(@"%f",self.scrollView.contentSize.height);
-    }
-}
+//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    
+//    if (self.scrollView.contentSize.height != 790) {
+//        NSLog(@"%f",self.scrollView.contentSize.height);
+//        [self.scrollView setContentSize:CGSizeMake(320, 790)];
+//        NSLog(@"%f",self.scrollView.contentSize.height);
+//    }
+//}
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -177,8 +213,8 @@ double latitude = 999.999999;
     [dictionary setValue:self.detail_text.text forKey:@"remark"];
     [dictionary setValue:self.location_text.text forKey:@"location"];
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
-    [dictionary setValue:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
-    [dictionary setValue:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+    [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
+    [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
     [dictionary setValue:[NSNumber numberWithInt:visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
     [dictionary setValue:friends forKey:@"friends"];
@@ -193,7 +229,15 @@ double latitude = 999.999999;
     [self.getLocButton setHidden:YES];
     [self.getLocIndicator startAnimating];
     self.location_text.text = @"定位中";
+    self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
+    self.positionInfo = @"(^_^)";
     [_locManager startUpdatingLocation];
+    
+}
+
+-(void) seletePosition
+{
+    [self performSegueWithIdentifier:@"map" sender:self];
     
 }
 
@@ -201,20 +245,43 @@ double latitude = 999.999999;
 {
     CLLocation * currLocation = [locations lastObject];
     if(currLocation){
-        latitude = currLocation.coordinate.latitude;
-        longitude = currLocation.coordinate.longitude;
-        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
-            CLPlacemark* mark = placemarks[0];
-            _locationInfo = mark.addressDictionary;
-            NSString *address = [_locationInfo valueForKey:@"Name"];
-            if (address) {
-                self.location_text.text = address;
-            }
+        //百度坐标反坐标检索
+        NSLog(@"%f  %f",currLocation.coordinate.latitude,currLocation.coordinate.longitude);
+
+        BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+        reverseGeocodeSearchOption.reverseGeoPoint = currLocation.coordinate;
+        BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
+        if(flag)
+        {
+            NSLog(@"反geo检索发送成功");
+        }
+        else
+        {
             [self.getLocIndicator stopAnimating];
+            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
             [self.getLocButton setHidden:NO];
-            //NSString *info = [NSString stringWithFormat:@"%@",placemarks];
-            //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:info WithDelegate:self WithCancelTitle:@"确定"];
-        }];
+            NSLog(@"反geo检索发送失败");
+        }
+       
+        
+        //苹果自带坐标反坐标检索
+//        latitude = currLocation.coordinate.latitude;
+//        longitude = currLocation.coordinate.longitude;
+//        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
+//            CLPlacemark* mark = placemarks[0];
+//            _locationInfo = mark.addressDictionary;
+//            NSString *address = [_locationInfo valueForKey:@"Name"];
+//            if (address) {
+//                self.location_text.text = address;
+//            }
+//            [self.getLocIndicator stopAnimating];
+//            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+//            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+//            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+//            [self.getLocButton setHidden:NO];
+//        }];
         
 
     }
@@ -224,11 +291,32 @@ double latitude = 999.999999;
     
 }
 
+
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
+{
+	if (error == 0) {
+
+        self.location_text.text = result.address;
+        self.pt = result.location;
+        self.positionInfo = result.address;
+        
+        [self.getLocIndicator stopAnimating];
+        [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+        [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+        [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+        [self.getLocButton setHidden:NO];
+	}
+}
+
+
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     [self.getLocIndicator stopAnimating];
     [self.getLocButton setHidden:NO];
     self.location_text.text = @"";
+    [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+    [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+    [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
     [_locManager stopUpdatingLocation];
 }
@@ -259,6 +347,12 @@ double latitude = 999.999999;
     if ([segue.destinationViewController isKindOfClass:[InviteFriendViewController class]]) {
         InviteFriendViewController *nextViewController = segue.destinationViewController;
         nextViewController.FriendsIds = self.FriendsIds;
+    }
+    if ([segue.destinationViewController isKindOfClass:[MapViewController class]]) {
+        MapViewController *nextViewController = segue.destinationViewController;
+        nextViewController.position = self.pt;
+        nextViewController.positionInfo = self.positionInfo;
+        nextViewController.controller = self;
     }
 }
 

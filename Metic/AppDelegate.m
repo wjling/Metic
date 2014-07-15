@@ -47,6 +47,9 @@
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     [[MTUser alloc]init];
+    
+    _mapManager = [[BMKMapManager alloc]init];
+    
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
     [UMSocialWechatHandler setWXAppId:@"wx529f1cffffefcc3a" url:@"http://www.baidu.com"];
     [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.sogou.com"];
@@ -68,7 +71,7 @@
     return YES;
 
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

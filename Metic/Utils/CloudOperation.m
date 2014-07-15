@@ -60,7 +60,7 @@
     COtype = type;
     mpath = path;
     img = container;
-    if(type == 2) uploadFilePath = uploadpath;
+    uploadFilePath = uploadpath;
     _authorId = authorId;
     
     
@@ -73,10 +73,10 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
-//    @autoreleasepool{
-//    while (!_shouldExit) {
-//        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-//    }}
+    @autoreleasepool{
+    while (!_shouldExit) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }}
 }
 
 
@@ -95,8 +95,14 @@
 //    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",self.authorId],[NSString stringWithFormat:@"'%@'",@"unknown"],[NSString stringWithFormat:@"'%@'",url], nil];
 //    [sql insertToTable:@"avatar" withColumns:columns andValues:values];
 //    [sql closeMyDB];
-    [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
-    [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+    if (uploadFilePath) {
+        [[MTUser sharedInstance].bannerURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
+        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+    }else{
+        [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
+        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+    }
+    
     //[self performSelectorOnMainThread:@selector(draw:) withObject:url waitUntilDone:NO];
 }
 
