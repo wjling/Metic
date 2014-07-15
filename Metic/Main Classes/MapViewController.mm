@@ -76,8 +76,6 @@
     if (mapView) {
         mapView.delegate = nil;
         _geoCodeSearch.delegate = nil;
-        _panPoint = nil;
-        mapView = nil;
     }
 }
 - (void)didReceiveMemoryWarning {

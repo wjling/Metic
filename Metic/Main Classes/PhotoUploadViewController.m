@@ -11,6 +11,7 @@
 
 
 
+
 @interface PhotoUploadViewController ()
 @property (strong, nonatomic) UITextView* textInput;
 @property (strong, nonatomic) UIView* textView;
@@ -97,6 +98,45 @@
     [sheet showInView:self.view];
 }
 
+- (IBAction)openEditor:(id)sender
+{
+    PECropViewController *controller = [[PECropViewController alloc] init];
+    controller.delegate = self;
+    controller.image = self.uploadImage;
+    
+    UIImage *image = self.uploadImage;
+    CGFloat width = image.size.width;
+    CGFloat height = image.size.height;
+    CGFloat length = MIN(width, height);
+    controller.imageCropRect = CGRectMake((width - length) / 2,
+                                          (height - length) / 2,
+                                          length,
+                                          length);
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+    
+    [self presentViewController:navigationController animated:YES completion:NULL];
+}
+
+#pragma mark - PECropViewControllerDelegate methods
+
+- (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+    [self.getPhoto setBackgroundImage:croppedImage forState:UIControlStateNormal];
+    self.uploadImage = croppedImage;
+}
+
+- (void)cropViewControllerDidCancel:(PECropViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
 
 #pragma mark - action sheet delegte
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -137,15 +177,15 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-	[picker dismissViewControllerAnimated:YES completion:^{}];
+	//[picker dismissViewControllerAnimated:YES completion:^{}];
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
-    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-    UIImage *compressedImage = [UIImage imageWithData:imageData];
-    [self.getPhoto setBackgroundImage:compressedImage forState:UIControlStateNormal];
-    
-    
+    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self openEditor:nil];
+    }];
+
 }
 
 

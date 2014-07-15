@@ -69,7 +69,6 @@
 		NSLog(@"manager start failed!");
 	}
     
-    
     _geocoder = [[CLGeocoder alloc]init];
     _locManager = [[CLLocationManager alloc]init];
     _locManager.delegate = self;
@@ -99,7 +98,6 @@
 {
     _geocodesearch.delegate = nil;
     [mapManager stop];
-    mapManager = nil;
     NSLog(@"delete");
 }
 - (void)didReceiveMemoryWarning

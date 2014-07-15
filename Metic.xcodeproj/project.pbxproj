@@ -28,6 +28,12 @@
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
+		089337A5197579CE00AD940B /* PECropRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379B197579CE00AD940B /* PECropRectView.m */; };
+		089337A6197579CE00AD940B /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379D197579CE00AD940B /* PECropView.m */; };
+		089337A7197579CE00AD940B /* PECropViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379F197579CE00AD940B /* PECropViewController.m */; };
+		089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */; };
+		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
+		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
@@ -201,6 +207,17 @@
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		0893379A197579CE00AD940B /* PECropRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropRectView.h; sourceTree = "<group>"; };
+		0893379B197579CE00AD940B /* PECropRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PECropRectView.m; sourceTree = "<group>"; };
+		0893379C197579CE00AD940B /* PECropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropView.h; sourceTree = "<group>"; };
+		0893379D197579CE00AD940B /* PECropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PECropView.m; sourceTree = "<group>"; };
+		0893379E197579CE00AD940B /* PECropViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropViewController.h; sourceTree = "<group>"; };
+		0893379F197579CE00AD940B /* PECropViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PECropViewController.m; sourceTree = "<group>"; };
+		089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PEPhotoCropEditor.bundle; sourceTree = "<group>"; };
+		089337A1197579CE00AD940B /* PEResizeControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEResizeControl.h; sourceTree = "<group>"; };
+		089337A2197579CE00AD940B /* PEResizeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEResizeControl.m; sourceTree = "<group>"; };
+		089337A3197579CE00AD940B /* UIImage+PECrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PECrop.h"; sourceTree = "<group>"; };
+		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		08B3F7041957013F003B32B7 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -468,7 +485,7 @@
 		51E86E0E197501C100CBAE86 /* BMKTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKTypes.h; sourceTree = "<group>"; };
 		51E86E0F197501C100CBAE86 /* BMKUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUserLocation.h; sourceTree = "<group>"; };
 		51E86E10197501C100CBAE86 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
-		51E86E11197501D400CBAE86 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
+		51E86E11197501D400CBAE86 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = ../mapapi.bundle; sourceTree = "<group>"; };
 		51E86E13197501F000CBAE86 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		51EDF3A3197512B4005BEA39 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		51EDF3A919752D8A005BEA39 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
@@ -536,6 +553,24 @@
 				08920730197224C30076D2BC /* SFHFKeychainUtils.m */,
 			);
 			path = security;
+			sourceTree = "<group>";
+		};
+		08933799197579CE00AD940B /* PEPCELib */ = {
+			isa = PBXGroup;
+			children = (
+				0893379A197579CE00AD940B /* PECropRectView.h */,
+				0893379B197579CE00AD940B /* PECropRectView.m */,
+				0893379C197579CE00AD940B /* PECropView.h */,
+				0893379D197579CE00AD940B /* PECropView.m */,
+				0893379E197579CE00AD940B /* PECropViewController.h */,
+				0893379F197579CE00AD940B /* PECropViewController.m */,
+				089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */,
+				089337A1197579CE00AD940B /* PEResizeControl.h */,
+				089337A2197579CE00AD940B /* PEResizeControl.m */,
+				089337A3197579CE00AD940B /* UIImage+PECrop.h */,
+				089337A4197579CE00AD940B /* UIImage+PECrop.m */,
+			);
+			path = PEPCELib;
 			sourceTree = "<group>";
 		};
 		08B3F7021957013F003B32B7 /* GTMBase64 */ = {
@@ -958,8 +993,8 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				08933799197579CE00AD940B /* PEPCELib */,
 				51EDF3A819752D8A005BEA39 /* TTTAttributedLabel */,
-				51E86E11197501D400CBAE86 /* mapapi.bundle */,
 				51E86DDE197501C100CBAE86 /* BMKinc */,
 				0892072E197224C30076D2BC /* security */,
 				510D4575196E8A960081672A /* SDWebImage */,
@@ -1016,6 +1051,7 @@
 		51E86DDE197501C100CBAE86 /* BMKinc */ = {
 			isa = PBXGroup;
 			children = (
+				51E86E11197501D400CBAE86 /* mapapi.bundle */,
 				51E86DDF197501C100CBAE86 /* BMapKit.h */,
 				51E86DE0197501C100CBAE86 /* BMKActionPaopaoView.h */,
 				51E86DE1197501C100CBAE86 /* BMKAnnotation.h */,
@@ -1162,6 +1198,7 @@
 				5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */,
 				5144D9A4196B880300C953FB /* UMSocialSDKResourcesNew.bundle in Resources */,
 				5144D99F196B880300C953FB /* UMShareEditViewController.xib in Resources */,
+				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
 				48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */,
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
@@ -1202,6 +1239,8 @@
 			files = (
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
 				08DB69A319541F3A00F80F3F /* AFSecurityPolicy.m in Sources */,
+				089337A6197579CE00AD940B /* PECropView.m in Sources */,
+				089337A9197579CE00AD940B /* PEResizeControl.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
@@ -1240,6 +1279,7 @@
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
+				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
@@ -1256,6 +1296,7 @@
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
 				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
+				089337A7197579CE00AD940B /* PECropViewController.m in Sources */,
 				510D459F196E8A960081672A /* SDWebImagePrefetcher.m in Sources */,
 				080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */,
 				510D459B196E8A960081672A /* SDWebImageDecoder.m in Sources */,
@@ -1263,6 +1304,7 @@
 				515F9FF419736D58009D96BA /* MapViewController.mm in Sources */,
 				48A4DDF2194FE42D0066BF8D /* ChineseToPinyinResource.m in Sources */,
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,
+				089337A5197579CE00AD940B /* PECropRectView.m in Sources */,
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
