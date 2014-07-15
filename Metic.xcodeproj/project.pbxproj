@@ -34,6 +34,7 @@
 		089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */; };
 		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
 		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
+		089337B219759D2400AD940B /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 089337B119759D2400AD940B /* libbaidumapapi.a */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
@@ -152,7 +153,6 @@
 		51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */; };
 		51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */; };
 		51E86E12197501D400CBAE86 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 51E86E11197501D400CBAE86 /* mapapi.bundle */; };
-		51E86E14197501F000CBAE86 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E86E13197501F000CBAE86 /* libbaidumapapi.a */; };
 		51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51EDF3A3197512B4005BEA39 /* CoreText.framework */; };
 		51EDF3AB19752D8A005BEA39 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 51EDF3AA19752D8A005BEA39 /* TTTAttributedLabel.m */; };
 /* End PBXBuildFile section */
@@ -218,6 +218,7 @@
 		089337A2197579CE00AD940B /* PEResizeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEResizeControl.m; sourceTree = "<group>"; };
 		089337A3197579CE00AD940B /* UIImage+PECrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PECrop.h"; sourceTree = "<group>"; };
 		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
+		089337B119759D2400AD940B /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		08B3F7041957013F003B32B7 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -486,7 +487,6 @@
 		51E86E0F197501C100CBAE86 /* BMKUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUserLocation.h; sourceTree = "<group>"; };
 		51E86E10197501C100CBAE86 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
 		51E86E11197501D400CBAE86 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = ../mapapi.bundle; sourceTree = "<group>"; };
-		51E86E13197501F000CBAE86 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		51EDF3A3197512B4005BEA39 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		51EDF3A919752D8A005BEA39 /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		51EDF3AA19752D8A005BEA39 /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
@@ -498,8 +498,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
+				089337B219759D2400AD940B /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
-				51E86E14197501F000CBAE86 /* libbaidumapapi.a in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
 				51E86D971973CA8000CBAE86 /* CoreLocation.framework in Frameworks */,
@@ -877,8 +877,8 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				089337B119759D2400AD940B /* libbaidumapapi.a */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
-				51E86E13197501F000CBAE86 /* libbaidumapapi.a */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
 				51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */,
 				51E86D981973CAA300CBAE86 /* QuartzCore.framework */,
@@ -1496,6 +1496,8 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/BMK-iphoneos",
+					"$(PROJECT_DIR)/BMK-iphonesimulator",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1524,6 +1526,8 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/BMK-iphoneos",
+					"$(PROJECT_DIR)/BMK-iphonesimulator",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
