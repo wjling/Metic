@@ -363,8 +363,8 @@
         
         //[cell.layer setBorderColor:[UIColor redColor].CGColor];
         //[cell.layer setBorderWidth:2];
-        [cell.comment.layer setBorderColor:[UIColor yellowColor].CGColor];
-        [cell.comment.layer setBorderWidth:2];
+//        [cell.comment.layer setBorderColor:[UIColor yellowColor].CGColor];
+//        [cell.comment.layer setBorderWidth:2];
         
         
 //        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {

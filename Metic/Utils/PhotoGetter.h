@@ -39,6 +39,7 @@
 -(instancetype)initWithData:(UIImageView*)animageView authorId:(NSNumber*)authorId;
 - (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;
 -(void)getPhoto;
+-(void)getBanner;
 -(void)updatePhoto;
 -(void)uploadPhoto;
 @end

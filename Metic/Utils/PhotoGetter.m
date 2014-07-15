@@ -50,9 +50,7 @@
 
 -(void)getPhoto
 {
-    
-
-    NSString*url = [self getLocalUrl];
+    NSString*url = [self getLocalAvatarUrl];
     if (url) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
     }else{
@@ -61,6 +59,24 @@
     }
 
 }
+
+
+-(void)getBanner
+{
+    
+    self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
+    NSString*url = [self getLocalBannerUrl];
+    if (url) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+    }else{
+        CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+        [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:@"" container:self.imageView authorId:self.avatarId];
+    }
+    
+}
+
+
+
 -(void)updatePhoto
 {
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
@@ -128,12 +144,20 @@
 //
 //}
 
--(NSString*)getLocalUrl
+-(NSString*)getLocalAvatarUrl
 {
     NSString* url;
     url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
     return url;
 }
+
+-(NSString*)getLocalBannerUrl
+{
+    NSString* url;
+    url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    return url;
+}
+
 
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
