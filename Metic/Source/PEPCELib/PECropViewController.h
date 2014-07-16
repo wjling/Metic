@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL toolbarHidden;
 
 - (void)resetCropRect;
+- (void)setBannerSize;
 - (void)resetCropRectAnimated:(BOOL)animated;
 
 @end

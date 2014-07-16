@@ -232,4 +232,10 @@ static inline NSString *PELocalizedString(NSString *key, NSString *comment)
     }
 }
 
+-(void)setBannerSize
+{
+    [self actionSheet:self.actionSheet clickedButtonAtIndex:8];
+}
+
+
 @end
