@@ -776,18 +776,21 @@
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96862751245498657" green="0.41176474094390869" blue="0.25098040699958801" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="135" id="Vy6-69-Wl8"/>
+                                </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="30" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ku9-N0-IKm">
-                                <rect key="frame" x="10" y="135" width="300" height="281"/>
+                                <rect key="frame" x="0.0" y="135" width="320" height="281"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserInfoTableViewCell" id="f80-ae-tFT" customClass="UserInfoTableViewCell">
-                                        <rect key="frame" x="0.0" y="22" width="300" height="30"/>
+                                        <rect key="frame" x="0.0" y="22" width="320" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f80-ae-tFT" id="kfV-7S-cZs">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="29"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="昵称" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDD-gL-lB6">
@@ -815,7 +818,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.94117653369903564" green="0.94117653369903564" blue="0.94117653369903564" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
-                            <constraint firstItem="ku9-N0-IKm" firstAttribute="top" secondItem="caP-i2-TqL" secondAttribute="bottom" id="ts9-SA-uEE"/>
+                            <constraint firstItem="Qh2-07-FOQ" firstAttribute="top" secondItem="ku9-N0-IKm" secondAttribute="bottom" id="FAo-YD-eYL"/>
+                            <constraint firstItem="ku9-N0-IKm" firstAttribute="top" secondItem="caP-i2-TqL" secondAttribute="bottom" id="WiP-Vh-DI8"/>
+                            <constraint firstItem="caP-i2-TqL" firstAttribute="top" secondItem="7Eo-S4-Zwh" secondAttribute="bottom" id="b8w-oe-n6d"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ">

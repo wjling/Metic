@@ -60,7 +60,7 @@
     
     self.info_tableView.delegate = self;
     self.info_tableView.dataSource = self;
-    self.info_tableView.scrollEnabled = NO;
+    self.info_tableView.scrollEnabled = YES;
     
 }
 
@@ -159,7 +159,15 @@
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
                 }
                 cell.title_label.text = @"所在地";
-                cell.content_label.text = [MTUser sharedInstance].location;
+                NSString* location = [MTUser sharedInstance].location;
+                if ( ![location isEqual:[NSNull null]]) {
+                    cell.content_label.text = location;
+                }
+                else
+                {
+                    cell.content_label.text = @"无";
+                }
+                
                 return cell;
             }
             
@@ -179,8 +187,15 @@
             else if (indexPath.row == 1)
             {
                 UITableViewCell* cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"description"];
+                NSString* sign = [MTUser sharedInstance].sign;
+                if ( ![sign isEqual:[NSNull null]]) {
+                    cell.textLabel.text = sign;
+                }
+                else
+                {
+                    cell.textLabel.text = @"无";
+                }
                 
-                cell.textLabel.text = [MTUser sharedInstance].sign;
                 cell.userInteractionEnabled = NO;
                 return cell;
             }
