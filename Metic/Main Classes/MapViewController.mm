@@ -14,6 +14,7 @@
 @interface MapViewController ()
 @property (nonatomic,strong) BMKPointAnnotation *panPoint;
 @property (nonatomic,strong) BMKGeoCodeSearch *geoCodeSearch;
+@property (nonatomic,strong) BMKLocationService* locService;
 @end
 
 
@@ -38,9 +39,8 @@
         //        self.edgesForExtendedLayout=UIRectEdgeNone;
         self.navigationController.navigationBar.translucent = NO;
     }
-    
-    //mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, 320, 400)];
-    //[self.view addSubview:mapView];
+    _locService = [[BMKLocationService alloc]init];
+
     
  
 	
@@ -53,7 +53,7 @@
     mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     mapView.centerCoordinate = _position;
     mapView.mapType = BMKMapTypeStandard;
-    
+    _locService.delegate = self;
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
     
@@ -66,6 +66,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated {
     [mapView viewWillDisappear];
+    [_locService stopUserLocationService];
     mapView.delegate = nil; // 不用时，置nil
     _geoCodeSearch.delegate = nil;
     [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:YES];
@@ -116,6 +117,38 @@
     ((LaunchEventViewController*)_controller).pt = _position;
     ((LaunchEventViewController*)_controller).positionInfo = _positionInfo;
     [self.navigationController popToViewController:_controller animated:YES];
+}
+
+- (IBAction)getLocation:(id)sender {
+    [_locService startUserLocationService];
+    mapView.showsUserLocation = NO;
+    mapView.userTrackingMode = BMKUserTrackingModeNone;
+    mapView.showsUserLocation = YES;
+}
+/**
+ *用户位置更新后，会调用此函数
+ *@param userLocation 新的用户位置
+ */
+- (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
+{
+    //    NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
+    [mapView updateLocationData:userLocation];
+    
+    [mapView removeAnnotation:_panPoint];
+    _panPoint.coordinate = userLocation.location.coordinate;
+    [mapView addAnnotation:_panPoint];
+    
+    BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+    reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
+    BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
+    if(flag)
+    {
+        NSLog(@"反geo检索发送成功");
+    }
+    else
+    {
+        NSLog(@"反geo检索发送失败");
+    }
 }
 @end
 

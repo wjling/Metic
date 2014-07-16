@@ -304,7 +304,7 @@
         cell1.date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         //cell1.comment.text = [Pcomment valueForKey:@"content"];
 
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar authorId:[Pcomment valueForKey:@"author_id"]];
         [getter getPhoto];
         
         

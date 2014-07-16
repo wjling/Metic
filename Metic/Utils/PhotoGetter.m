@@ -50,10 +50,18 @@
 
 -(void)getPhoto
 {
+//    UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:_path];
+//    if (!image) {
+//        image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_path];
+//    }
+//    if (image) {
+//        self.imageView.image = image;
+//    }
     NSString*url = [self getLocalAvatarUrl];
     if (url) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-    }else{
+    }
+    else{
         CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
         [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil container:self.imageView authorId:self.avatarId];
     }
@@ -63,12 +71,20 @@
 
 -(void)getBanner
 {
-    
+//    self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
+//    UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:_path];
+//    if (!image) {
+//        image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_path];
+//    }
+//    if (image) {
+//        self.imageView.image = image;
+//    }
     self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
     NSString*url = [self getLocalBannerUrl];
     if (url) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
-    }else{
+    }
+    else{
         CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
         [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:@"" container:self.imageView authorId:self.avatarId];
     }

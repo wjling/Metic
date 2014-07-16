@@ -19,8 +19,6 @@
 @property (nonatomic,strong) UIView *datePickerView;
 @property (nonatomic,strong) UITextField *seletedText;
 @property (nonatomic,strong) MTUser *user;
-@property (nonatomic,strong) CLLocationManager *locManager;
-@property (nonatomic,strong) CLGeocoder *geocoder;
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
 @property (nonatomic,strong) NSDictionary* positions;
 @property (nonatomic,strong) NSDictionary* locationInfo;
@@ -28,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *getLocButton;
 //@property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
+@property (nonatomic, strong) BMKLocationService* locService;
 @property (strong, nonatomic) BMKMapManager *mapManager;
 
 
@@ -68,18 +67,18 @@
 	if (!ret) {
 		NSLog(@"manager start failed!");
 	}
-    
-    _geocoder = [[CLGeocoder alloc]init];
-    _locManager = [[CLLocationManager alloc]init];
-    _locManager.delegate = self;
-    _locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-    _locManager.distanceFilter = 1000.0f;
+
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
-    
+    _locService = [[BMKLocationService alloc]init];
     self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
     self.positionInfo = @"";
     
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    _locService.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -92,6 +91,8 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     _geocodesearch.delegate = nil;
+    _locService.delegate = nil;
+    [_locService stopUserLocationService];
 }
 
 -(void)dealloc
@@ -121,15 +122,6 @@
     return YES;
 }
 
-//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    
-//    if (self.scrollView.contentSize.height != 790) {
-//        NSLog(@"%f",self.scrollView.contentSize.height);
-//        [self.scrollView setContentSize:CGSizeMake(320, 790)];
-//        NSLog(@"%f",self.scrollView.contentSize.height);
-//    }
-//}
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -231,7 +223,8 @@
     self.location_text.text = @"定位中";
     self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
     self.positionInfo = @"(^_^)";
-    [_locManager startUpdatingLocation];
+    //[_locManager startUpdatingLocation];
+    [_locService startUserLocationService];
     
 }
 
@@ -241,55 +234,6 @@
     
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    CLLocation * currLocation = [locations lastObject];
-    if(currLocation){
-        //百度坐标反坐标检索
-        NSLog(@"%f  %f",currLocation.coordinate.latitude,currLocation.coordinate.longitude);
-
-        BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
-        reverseGeocodeSearchOption.reverseGeoPoint = currLocation.coordinate;
-        BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
-        if(flag)
-        {
-            NSLog(@"反geo检索发送成功");
-        }
-        else
-        {
-            [self.getLocIndicator stopAnimating];
-            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
-            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
-            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
-            [self.getLocButton setHidden:NO];
-            NSLog(@"反geo检索发送失败");
-        }
-       
-        
-        //苹果自带坐标反坐标检索
-//        latitude = currLocation.coordinate.latitude;
-//        longitude = currLocation.coordinate.longitude;
-//        [_geocoder reverseGeocodeLocation:currLocation completionHandler:^(NSArray* placemarks,NSError*error){
-//            CLPlacemark* mark = placemarks[0];
-//            _locationInfo = mark.addressDictionary;
-//            NSString *address = [_locationInfo valueForKey:@"Name"];
-//            if (address) {
-//                self.location_text.text = address;
-//            }
-//            [self.getLocIndicator stopAnimating];
-//            [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
-//            [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
-//            [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
-//            [self.getLocButton setHidden:NO];
-//        }];
-        
-
-    }
-    
-
-    [_locManager stopUpdatingLocation];
-    
-}
 
 
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
@@ -309,17 +253,6 @@
 }
 
 
--(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    [self.getLocIndicator stopAnimating];
-    [self.getLocButton setHidden:NO];
-    self.location_text.text = @"";
-    [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
-    [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
-    [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
-    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
-    [_locManager stopUpdatingLocation];
-}
 
 - (void) recoverButton
 {
@@ -354,6 +287,47 @@
         nextViewController.positionInfo = self.positionInfo;
         nextViewController.controller = self;
     }
+}
+
+/**
+ *用户位置更新后，会调用此函数
+ *@param userLocation 新的用户位置
+ */
+- (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
+{
+
+    BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+    reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
+    BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
+    if(flag)
+    {
+        NSLog(@"反geo检索发送成功");
+    }
+    else
+    {
+        [self.getLocIndicator stopAnimating];
+        [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+        [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+        [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+        [self.getLocButton setHidden:NO];
+        NSLog(@"反geo检索发送失败");
+    }
+    [_locService stopUserLocationService];
+}
+/**
+ *定位失败后，会调用此函数
+ *@param mapView 地图View
+ *@param error 错误号，参考CLError.h中定义的错误号
+ */
+- (void)mapView:(BMKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+{
+    [self.getLocIndicator stopAnimating];
+    [self.getLocButton setHidden:NO];
+    self.location_text.text = @"";
+    [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
+    [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
+    [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
+    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
 }
 
 

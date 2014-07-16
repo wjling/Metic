@@ -8,8 +8,14 @@
 
 #import "MTTableView.h"
 #import "../Cell/CustomCellTableViewCell.h"
+#import "../Source/SDWebImage/UIImageView+WebCache.h"
+
+
+
+
 
 @implementation MTTableView
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -62,14 +68,29 @@
         [cell.avatar.layer setBorderWidth:2.0f];
         [cell.avatar.layer setCornerRadius:15];
 
+        
+        if (![[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]]]) {
+            cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
+        }
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-        [self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
+        NSInvocationOperation *operation0 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(BGgetPhoto:) object:getter];
+        [self.queue addOperation:operation0];
         //[getter getPhoto];
-
-        //cell.themePhoto.image = nil;
+        
+        
+        
+        
+        if (![[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:[NSString stringWithFormat:@"/banner/%@.jpg",[a valueForKey:@"event_id"]]]) {
+            cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
+        }
         PhotoGetter *bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-        [self performSelectorInBackground:@selector(BGgetBanner:) withObject:bannerGetter];
+        NSInvocationOperation *operation1 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(BGgetBanner:) object:bannerGetter];
+        [self.queue addOperation:operation1];
         //[bannerGetter getBanner];
+        
+        
+        
+        
         cell.homeController = self.homeController;
         
         NSArray *memberids = [a valueForKey:@"member"];
@@ -77,8 +98,12 @@
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             if (i < participator_count) {
+                if (![[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]]]) {
+                    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
+                }
                 PhotoGetter *getter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                [self performSelectorInBackground:@selector(BGgetPhoto:) withObject:getter];
+                NSInvocationOperation *operation2 = [[NSInvocationOperation alloc]initWithTarget:self selector:@selector(BGgetPhoto:) object:getter];
+                [self.queue addOperation:operation2];
                 //[getter getPhoto];
             }else tmp.image = nil;
             

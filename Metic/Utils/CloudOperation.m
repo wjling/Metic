@@ -14,6 +14,7 @@
 @interface CloudOperation()
 @property BOOL shouldExit;
 @property (nonatomic,strong) NSNumber* authorId;
+
 @end
 
 @implementation CloudOperation
@@ -73,10 +74,11 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
-    @autoreleasepool{
-    while (!_shouldExit) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }}
+    //@autoreleasepool{
+    //while (!_shouldExit) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    //}}
+
 }
 
 
@@ -97,10 +99,21 @@
 //    [sql closeMyDB];
     if (uploadFilePath) {
         [[MTUser sharedInstance].bannerURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
-        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                [[SDImageCache sharedImageCache] storeImage:image forKey:path];
+            }
+        }];
+        
+        
+        
     }else{
         [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
-        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                [[SDImageCache sharedImageCache] storeImage:image forKey:path];
+            }
+        }];
     }
     
     //[self performSelectorOnMainThread:@selector(draw:) withObject:url waitUntilDone:NO];

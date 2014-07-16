@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "HttpSender.h"
-#import <CoreLocation/CoreLocation.h>
-#import <CoreLocation/CLLocationManagerDelegate.h>
 #import "BMapKit.h"
 
 
-@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,CLLocationManagerDelegate,BMKGeoCodeSearchDelegate>
+@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *event_text;
 @property (strong, nonatomic) IBOutlet UITextField *begin_time_text;

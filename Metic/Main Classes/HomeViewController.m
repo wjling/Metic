@@ -16,6 +16,7 @@
 
 @interface HomeViewController ()
 
+@property (nonatomic,strong) NSOperationQueue *queue;
 @property (strong, nonatomic) IBOutlet MTTableView *tableView;
 @property (strong, nonatomic) IBOutlet MTTableView *mytableView;
 @property (strong, nonatomic) IBOutlet MTTableView *frtableView;
@@ -42,16 +43,22 @@
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
     self.scrollView.delegate = self;
+    self.queue = [[NSOperationQueue alloc]init];
+    [self.queue setMaxConcurrentOperationCount:5];
     self.tableView.homeController= self;
+    self.tableView.queue = self.queue;
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self.tableView];
     self.mytableView.homeController= self;
+    self.mytableView.queue = self.queue;
     [self.mytableView setDelegate:self];
     [self.mytableView setDataSource:self.mytableView];
     self.frtableView.homeController= self;
+    self.frtableView.queue = self.queue;
     [self.frtableView setDelegate:self];
     [self.frtableView setDataSource:self.frtableView];
     self.tatableView.homeController= self;
+    self.tatableView.queue = self.queue;
     [self.tatableView setDelegate:self];
     [self.tatableView setDataSource:self.tatableView];
     self.eventsTableView = self.tableView;

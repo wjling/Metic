@@ -64,7 +64,7 @@
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = self.tableView1;
-    [_footer beginRefreshing];
+    //[_footer beginRefreshing];
     
     //等待圈圈
     
@@ -229,7 +229,12 @@
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
-    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            NSLog(@"ok");
+        }
+    }];
+    //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];
     if (Cellheight) {
         float height = [Cellheight floatValue];
