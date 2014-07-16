@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
+static BOOL isLocked = false;
+
 @interface MySqlite : NSObject
 @property(nonatomic,readwrite) sqlite3* myDB;
 

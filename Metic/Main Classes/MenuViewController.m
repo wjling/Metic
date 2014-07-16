@@ -19,6 +19,7 @@
 @end
 @implementation MenuViewController
 @synthesize cellIdentifier;
+@synthesize tapRecognizer;
 -(void)viewDidLoad
 {
     self.userName.text = [MTUser sharedInstance].name;
@@ -31,6 +32,19 @@
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
     
+    
+    
+}
+
+- (IBAction)selector_tap:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+	
+	UIViewController *vc ;
+    vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+    
+    [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+
 }
 
 
@@ -50,7 +64,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 8;
+	return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -64,36 +78,41 @@
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标1"]];
 			break;
 			
-		case 1:
-			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
-			break;
+//		case 1:
+//			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
+//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
+//			break;
 			
-		case 2:
+		case 1:
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
 			
-		case 3:
-			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
-			break;
-        case 4:
-			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
-			break;
-        case 5:
+//		case 3:
+//			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
+//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
+//			break;
+//        case 4:
+//			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
+//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
+//			break;
+        case 2:
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
 			break;
-        case 6:
-			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
+//        case 6:
+//			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
+//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
+//			break;
+//        case 7:
+//			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
+//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
+//			break;
+        case 3:
+			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
 			break;
-        case 7:
-			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
-			break;
+            
 	}
     
 	return cell;
@@ -119,21 +138,24 @@
 			vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
 			break;
 			
+//		case 1:
+//			
+//            return;
+//			break;
+			
 		case 1:
-			
-            return;
-			break;
-			
-		case 2:
 			vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
 			break;
 			
-		case 3:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
-			break;
+//		case 2:
+//            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
+//			break;
             
-        case 5:
+        case 2:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+			break;
+        case 3:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
 			break;
 
         default:
@@ -143,5 +165,6 @@
 	
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
+
 
 @end

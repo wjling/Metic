@@ -211,7 +211,7 @@
             [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
             NSNumber *userid = [response1 valueForKey:@"id"];
-            [user setUserid:userid];
+            [user setUid:userid];
             //[user getInfo:userid myid:userid delegateId:self];
             
             [self jumpToMainView];
