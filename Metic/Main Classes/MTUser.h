@@ -20,7 +20,7 @@
 @property(nonatomic,strong)NSString *email;
 @property(nonatomic,strong)NSString *sign;
 @property(nonatomic,strong)NSString *phone;
-@property(nonatomic,strong)NSNumber *location;
+@property(nonatomic,strong)NSString *location;
 @property(nonatomic,strong)NSMutableDictionary *avatar;
 @property(nonatomic,strong)NSMutableDictionary *avatarURL;
 @property(nonatomic,strong)NSMutableSet *friendIds;

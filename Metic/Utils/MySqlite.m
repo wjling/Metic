@@ -139,7 +139,7 @@
 
     char* error;
     if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
-        sqlite3_close(self.myDB);
+//        sqlite3_close(self.myDB);
         NSLog(@"insert table failed. error: %s", error);
         return NO;
     }

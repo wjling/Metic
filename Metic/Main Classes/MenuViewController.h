@@ -19,5 +19,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *email;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 
+- (IBAction)selector_tap:(id)sender;
 @end

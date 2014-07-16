@@ -19,6 +19,7 @@
 @end
 @implementation MenuViewController
 @synthesize cellIdentifier;
+@synthesize tapRecognizer;
 -(void)viewDidLoad
 {
     self.userName.text = [MTUser sharedInstance].name;
@@ -31,6 +32,19 @@
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
     
+    
+    
+}
+
+- (IBAction)selector_tap:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+	
+	UIViewController *vc ;
+    vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+    
+    [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+
 }
 
 
@@ -151,5 +165,6 @@
 	
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
+
 
 @end

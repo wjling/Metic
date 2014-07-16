@@ -156,6 +156,8 @@ enum Response_Type
     
     self.content_scrollView.pagingEnabled = YES;
     self.content_scrollView.scrollEnabled = YES;
+    self.content_scrollView.showsHorizontalScrollIndicator = NO;
+    self.content_scrollView.showsVerticalScrollIndicator = NO;
     self.content_scrollView.delegate = self;
     
     tab_index = 0;
