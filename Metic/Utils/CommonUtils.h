@@ -53,6 +53,12 @@
 //hmacSha1 加密
 + (NSString *)hmac_sha1:(NSString *)key text:(NSString *)text;
 
+//urlencode
++ (NSString *)URLEncodedString:(NSString*) originUrl;
+
+//计算头像url
++ (NSString*)getUrl:(NSString*) path;
+
 //将图片裁剪成圆形
 +(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset  borderColor:(UIColor*)color borderWidth:(CGFloat)width ;
 

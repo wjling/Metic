@@ -14,6 +14,7 @@
 
 
 
+
 @interface LaunchEventViewController ()
 @property (nonatomic,strong) UIDatePicker *datePicker;
 @property (nonatomic,strong) UIView *datePickerView;
@@ -28,6 +29,7 @@
 @property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
 @property (nonatomic, strong) BMKLocationService* locService;
 @property (strong, nonatomic) BMKMapManager *mapManager;
+@property (strong, nonatomic) UIImage* uploadImage;
 
 
 @end
@@ -116,7 +118,6 @@
 }
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    //[self.scrollView scrollRectToVisible:CGRectMake(0, textView.frame.origin.y - 55, 320, 480) animated:YES];
     self.scrollView.contentOffset = CGPointMake(0, textView.frame.origin.y - 55);
     
     return YES;
@@ -228,6 +229,23 @@
     
 }
 
+- (IBAction)getBanner:(id)sender {
+    UIActionSheet *sheet;
+    
+    // 判断是否支持相机
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照", @"从相册选择", nil];
+    }
+    else {
+        sheet = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
+    }
+    
+    sheet.tag = 255;
+    
+    [sheet showInView:self.view];
+}
+
 -(void) seletePosition
 {
     [self performSegueWithIdentifier:@"map" sender:self];
@@ -259,6 +277,96 @@
     [self.launch_button setEnabled:YES];
 }
 
+- (IBAction)openEditor:(id)sender
+{
+    PECropViewController *controller = [[PECropViewController alloc] init];
+    controller.delegate = self;
+    controller.image = self.uploadImage;
+    
+    UIImage *image = self.uploadImage;
+    CGFloat width = image.size.width;
+    CGFloat height = image.size.height;
+    CGFloat wi = MIN(width, height*2.5);
+    controller.imageCropRect = CGRectMake((width - wi) / 2,
+                                          (height - wi*0.4) / 2,
+                                          wi,
+                                          wi*0.4);
+    [controller setKeepingCropAspectRatio:YES];
+    [controller setToolbarHidden:YES];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+    
+    [self presentViewController:navigationController animated:YES completion:^{
+    }];
+    
+}
+
+#pragma mark - PECropViewControllerDelegate methods
+
+- (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+    [self.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
+    self.uploadImage = croppedImage;
+}
+
+- (void)cropViewControllerDidCancel:(PECropViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+
+#pragma mark - action sheet delegte
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 255) {
+        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        // 判断是否支持相机
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            switch (buttonIndex) {
+                case 0:
+                    return;
+                case 1: //相机
+                    sourceType = UIImagePickerControllerSourceTypeCamera;
+                    break;
+                case 2: //相册
+                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    break;
+            }
+        }
+        else {
+            if (buttonIndex == 0) {
+                return;
+            } else {
+                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            }
+        }
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.allowsEditing = NO;
+        imagePickerController.sourceType = sourceType;
+        
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }
+}
+
+#pragma mark - image picker delegte
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    self.uploadImage = image;
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self openEditor:nil];
+    }];
+    
+}
+#pragma mark - httpsender delegte
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
@@ -267,12 +375,31 @@
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     NSNumber *tmpid = [response1 valueForKey:@"event_id"];
     if ([cmd intValue] != SERVER_ERROR && [tmpid intValue] != -1) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+        if (self.uploadImage) {
+            PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+            getter.mDelegate = self;
+            [getter uploadBanner:[response1 valueForKey:@"event_id"]];
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+        
+        
+        
     }else{
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:self WithCancelTitle:@"确定"];
     }
     
 }
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    if (type == 100){
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+    }else if (type == 106){
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功，图片上传失败" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+}
+
 #pragma mark 用segue跳转时传递参数eventid
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

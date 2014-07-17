@@ -127,6 +127,7 @@ static MTUser *singletonInstance;
         [fileManager createDirectoryAtPath:mediaDir withIntermediateDirectories:YES attributes:nil error:nil];
         [fileManager createDirectoryAtPath:[mediaDir stringByAppendingString:@"/avatar"]  withIntermediateDirectories:YES attributes:nil error:nil];
         [fileManager createDirectoryAtPath:[mediaDir stringByAppendingString:@"/images"]  withIntermediateDirectories:YES attributes:nil error:nil];
+        [fileManager createDirectoryAtPath:[mediaDir stringByAppendingString:@"/banner"]  withIntermediateDirectories:YES attributes:nil error:nil];
         
     }
     

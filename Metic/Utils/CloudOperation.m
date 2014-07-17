@@ -74,10 +74,8 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
-    //@autoreleasepool{
-    //while (!_shouldExit) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    //}}
+    //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+
 
 }
 
@@ -88,7 +86,7 @@
 
 
 
--(void)downloadfile:(NSString*)url path:(NSString*)path
+-(void)downloadfile:(NSString*)url
 {
 //    MySqlite* sql = [[MySqlite alloc]init];
 //    NSString * DBpath = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -97,21 +95,35 @@
 //    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",self.authorId],[NSString stringWithFormat:@"'%@'",@"unknown"],[NSString stringWithFormat:@"'%@'",url], nil];
 //    [sql insertToTable:@"avatar" withColumns:columns andValues:values];
 //    [sql closeMyDB];
+
     if (uploadFilePath) {
         [[MTUser sharedInstance].bannerURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//                if (image) {
+//                    [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
+//                }
+//            }];
+//        });
         [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
-                [[SDImageCache sharedImageCache] storeImage:image forKey:path];
+                [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
             }
         }];
-        
-        
-        
     }else{
         [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            //回调或者说是通知主线程刷新，
+//            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//                if (image) {
+//                    [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
+//                }
+//            }];
+//        });
         [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
-                [[SDImageCache sharedImageCache] storeImage:image forKey:path];
+                [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
             }
         }];
     }
@@ -119,10 +131,6 @@
     //[self performSelectorOnMainThread:@selector(draw:) withObject:url waitUntilDone:NO];
 }
 
--(void)draw:(NSString*)url
-{
-    [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-}
 
 
 
@@ -162,6 +170,7 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    
     _shouldExit = YES;
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
@@ -174,7 +183,8 @@
             httpURL = (NSString*)[response1 valueForKey:@"url"];
             switch (COtype) {
                 case 1:
-                    [self downloadfile:httpURL path:mpath];
+                    //[self performSelectorOnMainThread:@selector(downloadfile:) withObject:httpURL waitUntilDone:YES];
+                    [self downloadfile:httpURL];
                     break;
                 case 2:
                     [self uploadfile:httpURL path:uploadFilePath];

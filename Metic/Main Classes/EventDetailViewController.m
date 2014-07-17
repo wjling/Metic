@@ -263,16 +263,18 @@
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
         
-        cell.themePhoto.image = [UIImage imageNamed:@"event.png"];
+        NSString *bannerUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/banner/%@.jpg",self.eventId]];
+        [cell.themePhoto sd_setImageWithURL:[NSURL URLWithString:bannerUrl] placeholderImage:[UIImage imageNamed:@"event.png"]];
         
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
-            tmp.image = nil;
+            tmp.layer.masksToBounds = YES;
+            [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
-                PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                [tmpgetter getPhoto];
-            }
+                NSString *miniAvatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]]];
+                [tmp sd_setImageWithURL:[NSURL URLWithString:miniAvatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+            }else tmp.image = nil;
             
         }
 
@@ -326,8 +328,10 @@
         }
 
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
-        PhotoGetter *tmpgetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
-        [tmpgetter getPhoto];
+        ((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
+        [((UIImageView*)[cell viewWithTag:1]).layer setCornerRadius:5];
+        NSString *avatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]]];
+        [(UIImageView*)[cell viewWithTag:1] sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
         return cell;
     }
     else
@@ -360,19 +364,7 @@
         [cell.comment setFrame:CGRectMake(10, 5, 270, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.controller = self;
-        
-        //[cell.layer setBorderColor:[UIColor redColor].CGColor];
-        //[cell.layer setBorderWidth:2];
-//        [cell.comment.layer setBorderColor:[UIColor yellowColor].CGColor];
-//        [cell.comment.layer setBorderWidth:2];
-        
-        
-//        if (![[subCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
-//            [((UIButton*)[cell viewWithTag:2]) setHidden:YES];
-//        }
-//        else{
-//            [((UIButton*)[cell viewWithTag:2]) setHidden:NO];
-//        }
+
         return cell;
     }
     

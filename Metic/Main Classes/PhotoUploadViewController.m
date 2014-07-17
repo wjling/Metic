@@ -103,12 +103,6 @@
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
     controller.image = self.uploadImage;
-    
-    
-    //[controller setCropAspectRatio:2.0f / 5.0f];
-    //[controller setKeepingCropAspectRatio:YES];
-    //[controller setToolbarHidden:YES];
-    
 
     UIImage *image = self.uploadImage;
     CGFloat width = image.size.width;
@@ -126,9 +120,6 @@
     }
 
     [self presentViewController:navigationController animated:YES completion:^{
-        [controller setBannerSize];
-        //[controller setKeepingCropAspectRatio:YES];
-        //[controller setToolbarHidden:YES];
     }];
     
 }

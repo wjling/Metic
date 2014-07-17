@@ -138,6 +138,45 @@
     
 }
 
+-(void)uploadBanner:(NSNumber*)eventId
+{
+    self.isUpload = YES;
+    UIImage* compressedImage = self.uploadImage;
+    NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+    if (compressedImage.size.width> 640) {
+        CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
+        compressedImage = [compressedImage imageByScalingToSize:imagesize];
+        imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+    }
+    float para = 0.8;
+    int restOp = 5;
+    while (imageData.length > 50000) {
+        imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
+        compressedImage = [UIImage imageWithData:imageData];
+        if (!restOp--) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
+    }
+    
+    
+    
+    self.path = [NSString stringWithFormat:@"/banner/%@.jpg",eventId];
+    self.imgName =[NSString stringWithFormat:@"%@.jpg",eventId];
+    NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
+    [imageData writeToFile:filePath atomically:YES];
+    
+    CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    NSString* uploadfilePath = filePath;
+    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+    
+}
+
+
+
+
+
+
 //-(NSString*)getLocalUrl
 //{
 //    MySqlite* sql = [[MySqlite alloc]init];

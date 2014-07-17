@@ -220,19 +220,15 @@
     cell.author.text = [a valueForKey:@"author"];
     cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
     
-    
-    cell.avatar.image = nil;
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
-    [getter getPhoto];
-    
+    cell.avatar.layer.masksToBounds = YES;
+    [cell.avatar.layer setCornerRadius:5];
+    NSString *avatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]]];
+    [cell.avatar sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
     
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
-            NSLog(@"ok");
-        }
     }];
     //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];

@@ -191,10 +191,23 @@
     CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cData, strlen(cData), cHMAC);//hmac_sha1
     NSData *HMAC = [[NSData alloc] initWithBytes:cHMAC length:CC_SHA1_DIGEST_LENGTH];
     NSString *hash = [GTMBase64 stringByEncodingData:HMAC];//base64 编码。
-    hash = [[hash substringWithRange:NSMakeRange(0,27)] stringByAppendingString:@"%%3D"];
+    
+    
+    //hash = [[hash substringWithRange:NSMakeRange(0,27)] stringByAppendingString:@"%%3D"];
     return hash;
 
 }
+
++ (NSString*)getUrl:(NSString*) path
+{
+    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];
+    NSString* key = @"VWWE6aPlh4uUAhhrXytxvIXUCR27OShi";
+    NSString* sign = [self hmac_sha1:key text:content];
+    NSString* signencoded = [self URLEncodedString:sign];
+    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];
+    return url;
+}
+
 
 +(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset borderColor:(UIColor*)color borderWidth:(CGFloat)width{
     UIGraphicsBeginImageContext(image.size);
@@ -226,4 +239,11 @@
     return theImage;
 }
 
++ (NSString *)URLEncodedString:(NSString*) originUrl
+{
+    NSString *encodedValue = (NSString*)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(nil,
+                                                                                (CFStringRef)originUrl, nil,
+                                                                                (CFStringRef)@"!*'();:@&=+$,?%#[]", kCFStringEncodingUTF8));
+    return encodedValue;
+}
 @end
