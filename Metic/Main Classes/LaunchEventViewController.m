@@ -31,7 +31,7 @@
 @property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property (strong, nonatomic) UIView* waitingView;
-
+@property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 
 
 @end
@@ -76,7 +76,8 @@
     _locService = [[BMKLocationService alloc]init];
     self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
     self.positionInfo = @"";
-    
+    self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
+    self.flatDatePicker.delegate = self;
     // Do any additional setup after loading the view.
 }
 
@@ -96,12 +97,14 @@
 {
     _geocodesearch.delegate = nil;
     _locService.delegate = nil;
+    _flatDatePicker.delegate = nil;
     [_locService stopUserLocationService];
 }
 
 -(void)dealloc
 {
     _geocodesearch.delegate = nil;
+    
     [mapManager stop];
     NSLog(@"delete");
 }
@@ -156,24 +159,23 @@
 {
     
     if (textField.tag == 1) {
-        self.scrollView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 30);
-        _datePicker = [[UIDatePicker alloc]initWithFrame:CGRectMake(0,100, 320, 216)];
-        [_datePicker setBackgroundColor:[UIColor whiteColor]];
-        
-        
-        UIButton *confirm = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        confirm.frame = CGRectMake(0, 316, 320, 30);
-        [confirm setBackgroundColor:[UIColor grayColor]];
-        [confirm setTitle:@"确定" forState:UIControlStateNormal];
-        [confirm setTitle:@"确定" forState:UIControlStateHighlighted];
-        [confirm addTarget:self action:@selector(closeDatePicker) forControlEvents:UIControlEventTouchUpInside];
+        [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 180) animated:YES];
+        [self.scrollView setUserInteractionEnabled:NO];
+        self.flatDatePicker.title = @"请选择活动日期";
+        NSDate *date;
+        if (![textField.text isEqualToString:@""]) {
+            NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+            [dateFormatter setLocale:[NSLocale currentLocale]];
+            NSLog(@"#%@#",textField.text);
+            date= [dateFormatter dateFromString:textField.text];
+        }else date = [NSDate date];
         self.seletedText = textField;
-        _datePickerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
-        [_datePickerView setBackgroundColor:[UIColor colorWithWhite:0.0f alpha:0.3f]];
-        [self.datePickerView addSubview:_datePicker];
-        [self.datePickerView addSubview:confirm];
-        [self.view addSubview:self.datePickerView];
-        textField.enabled = NO;
+        [self.flatDatePicker setMaximumDate:[NSDate dateWithTimeIntervalSinceNow:157680000]];
+        self.flatDatePicker.datePickerMode = FlatDatePickerModeDate;
+        [self.flatDatePicker setDate:date animated:NO];
+        [self.flatDatePicker show];
         return NO;
         
     }else{
@@ -332,6 +334,50 @@
     }];
     
 }
+
+#pragma mark - FlatDatePicker Delegate
+
+- (void)flatDatePicker:(FlatDatePicker*)datePicker dateDidChange:(NSDate*)date {
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    if (datePicker.datePickerMode == FlatDatePickerModeDate) {
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSString *value = [dateFormatter stringFromDate:date];
+        self.seletedText.text = value;
+    } else{
+        if ([self.seletedText.text isEqualToString:@""]) {
+            return;
+        }
+        [dateFormatter setDateFormat:@" HH:mm:ss"];
+        NSString *value = [dateFormatter stringFromDate:date];
+        value = [[self.seletedText.text substringToIndex:10] stringByAppendingString:value];
+        self.seletedText.text = value;
+    }
+}
+
+- (void)flatDatePicker:(FlatDatePicker*)datePicker didCancel:(UIButton*)sender {
+    self.seletedText.text = @"";
+    [self.scrollView setUserInteractionEnabled:YES];
+}
+
+- (void)flatDatePicker:(FlatDatePicker*)datePicker didValid:(UIButton*)sender date:(NSDate*)date {
+    if (datePicker.datePickerMode == FlatDatePickerModeDate) {
+        [datePicker setDatePickerMode:FlatDatePickerModeTime];
+        [datePicker dismiss];
+        [datePicker setTitle:@"请输入活动时间"];
+        [datePicker show];
+        return;
+    } else if (datePicker.datePickerMode == FlatDatePickerModeTime) {
+        //[datePicker setDatePickerMode:FlatDatePickerModeDate];
+        [self.scrollView setUserInteractionEnabled:YES];
+        return;
+    }
+    
+}
+
+
 
 #pragma mark - PECropViewControllerDelegate methods
 

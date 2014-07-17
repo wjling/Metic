@@ -28,6 +28,11 @@
 		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
 		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
+		0858503119781A0700337689 /* FlatDatePicker-Icon-Check.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */; };
+		0858503219781A0700337689 /* FlatDatePicker-Icon-Check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */; };
+		0858503319781A0700337689 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */; };
+		0858503419781A0700337689 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */; };
+		0858503519781A0700337689 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858503019781A0700337689 /* FlatDatePicker.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
@@ -210,6 +215,12 @@
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check.png"; sourceTree = "<group>"; };
+		0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check@2x.png"; sourceTree = "<group>"; };
+		0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close.png"; sourceTree = "<group>"; };
+		0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
+		0858502F19781A0700337689 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
+		0858503019781A0700337689 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
@@ -575,6 +586,19 @@
 				04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */,
 			);
 			name = UserInfo;
+			sourceTree = "<group>";
+		};
+		0858502A19781A0700337689 /* FlatDatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */,
+				0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */,
+				0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */,
+				0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */,
+				0858502F19781A0700337689 /* FlatDatePicker.h */,
+				0858503019781A0700337689 /* FlatDatePicker.m */,
+			);
+			path = FlatDatePicker;
 			sourceTree = "<group>";
 		};
 		0892072E197224C30076D2BC /* security */ = {
@@ -1086,6 +1110,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0858502A19781A0700337689 /* FlatDatePicker */,
 				5138B02019766BF300817821 /* BMKinc */,
 				08933799197579CE00AD940B /* PEPCELib */,
 				51EDF3A819752D8A005BEA39 /* TTTAttributedLabel */,
@@ -1231,6 +1256,7 @@
 				5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */,
 				51581D3A1933575300943606 /* Main_iPad.storyboard in Resources */,
 				5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */,
+				0858503419781A0700337689 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
 				5144D9A4196B880300C953FB /* UMSocialSDKResourcesNew.bundle in Resources */,
 				5144D99F196B880300C953FB /* UMShareEditViewController.xib in Resources */,
 				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
@@ -1239,12 +1265,14 @@
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
+				0858503119781A0700337689 /* FlatDatePicker-Icon-Check.png in Resources */,
 				5138B05619766C2000817821 /* mapapi.bundle in Resources */,
 				5144D9A1196B880300C953FB /* UMSLoginViewController.xib in Resources */,
 				5144D9A3196B880300C953FB /* UMSShareListController.xib in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
 				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
+				0858503219781A0700337689 /* FlatDatePicker-Icon-Check@2x.png in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
 				08DB69A919541F3A00F80F3F /* CustomCellTableViewCell.xib in Resources */,
@@ -1253,6 +1281,7 @@
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 				5144D99E196B880300C953FB /* UMSCommentInputControlleriPad.xib in Resources */,
+				0858503319781A0700337689 /* FlatDatePicker-Icon-Close.png in Resources */,
 				5144D9A0196B880300C953FB /* UMShareEditViewControlleriPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1318,6 +1347,7 @@
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				0858503519781A0700337689 /* FlatDatePicker.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
