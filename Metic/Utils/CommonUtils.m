@@ -205,6 +205,7 @@
     NSString* sign = [self hmac_sha1:key text:content];
     NSString* signencoded = [self URLEncodedString:sign];
     NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];
+    NSLog(@"算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算算");
     return url;
 }
 

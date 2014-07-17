@@ -67,12 +67,13 @@
         [cell.avatar.layer setBorderColor:[UIColor yellowColor].CGColor];
         [cell.avatar.layer setBorderWidth:2.0f];
         [cell.avatar.layer setCornerRadius:15];
-        NSString *avatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"launcher_id"]]];
-        [cell.avatar sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-        NSString *bannerUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/banner/%@.jpg",[a valueForKey:@"event_id"]]];
-        [cell.themePhoto sd_setImageWithURL:[NSURL URLWithString:bannerUrl] placeholderImage:[UIImage imageNamed:@"event.png"]];
         
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
+        [avatarGetter getPhoto];
         
+        PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
+        [bannerGetter getBanner];
+
         cell.homeController = self.homeController;
         
         NSArray *memberids = [a valueForKey:@"member"];
@@ -82,8 +83,8 @@
             tmp.layer.masksToBounds = YES;
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
-                NSString *miniAvatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]]];
-                [tmp sd_setImageWithURL:[NSURL URLWithString:miniAvatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+                PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+                [miniGetter getPhoto];
             }else tmp.image = nil;
             
         }

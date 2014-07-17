@@ -50,45 +50,16 @@
 
 -(void)getPhoto
 {
-//    UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:_path];
-//    if (!image) {
-//        image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_path];
-//    }
-//    if (image) {
-//        self.imageView.image = image;
-//    }
-    NSString*url = [self getLocalAvatarUrl];
-    if (url) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-    }
-    else{
-        CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-        [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil container:self.imageView authorId:self.avatarId];
-    }
-
+    
+    NSString *url = [self getLocalAvatarUrl];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
 }
 
 
 -(void)getBanner
 {
-//    self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
-//    UIImage *image = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:_path];
-//    if (!image) {
-//        image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_path];
-//    }
-//    if (image) {
-//        self.imageView.image = image;
-//    }
-    self.path = [self.path stringByReplacingOccurrencesOfString:@"avatar" withString:@"banner"];
-    NSString*url = [self getLocalBannerUrl];
-    if (url) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
-    }
-    else{
-        CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-        [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:@"" container:self.imageView authorId:self.avatarId];
-    }
-    
+    NSString *url = [self getLocalBannerUrl];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
 }
 
 
@@ -174,42 +145,23 @@
 
 
 
-
-
-
-//-(NSString*)getLocalUrl
-//{
-//    MySqlite* sql = [[MySqlite alloc]init];
-//    NSString* url;
-//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [sql openMyDB:path];
-//
-//    NSArray *seletes = [[NSArray alloc]initWithObjects:@"url", nil];
-//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:self.avatarId,@"id", nil];
-//    NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
-//    if (!results.count) {
-//        url = nil;
-//    }else{
-//        NSDictionary* result = results[0];
-//        url = [result valueForKey:@"url"];
-//    }
-//    
-//    [self.sql closeMyDB];
-//    return url;
-//
-//}
-
 -(NSString*)getLocalAvatarUrl
 {
-    NSString* url;
-    url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    NSString* url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    if (!url) {
+        url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId]];
+        [[MTUser sharedInstance].avatarURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    }
     return url;
 }
 
 -(NSString*)getLocalBannerUrl
 {
-    NSString* url;
-    url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    NSString* url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    if (!url) {
+        url = [CommonUtils getUrl:[NSString stringWithFormat:@"/banner/%@.jpg",self.avatarId]];
+        [[MTUser sharedInstance].bannerURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+    }
     return url;
 }
 

@@ -222,9 +222,11 @@
     
     cell.avatar.layer.masksToBounds = YES;
     [cell.avatar.layer setCornerRadius:5];
-    NSString *avatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[a valueForKey:@"author_id"]]];
-    [cell.avatar sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
     
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
+    [avatarGetter getPhoto];
+    
+        
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];

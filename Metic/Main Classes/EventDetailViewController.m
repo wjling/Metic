@@ -263,17 +263,17 @@
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
         
-        NSString *bannerUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/banner/%@.jpg",self.eventId]];
-        [cell.themePhoto sd_setImageWithURL:[NSURL URLWithString:bannerUrl] placeholderImage:[UIImage imageNamed:@"event.png"]];
-        
+        PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
+        [bannerGetter getBanner];
+
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             tmp.layer.masksToBounds = YES;
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
-                NSString *miniAvatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",memberids[i]]];
-                [tmp sd_setImageWithURL:[NSURL URLWithString:miniAvatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+                PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+                [miniGetter getPhoto];
             }else tmp.image = nil;
             
         }
@@ -330,8 +330,11 @@
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         ((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
         [((UIImageView*)[cell viewWithTag:1]).layer setCornerRadius:5];
-        NSString *avatarUrl = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[mainCom valueForKey:@"author_id"]]];
-        [(UIImageView*)[cell viewWithTag:1] sd_setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+        
+        
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
+        [avatarGetter getPhoto];
+        
         return cell;
     }
     else
