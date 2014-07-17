@@ -26,6 +26,7 @@
 @property long mainCommentId;
 @property BOOL isOpen;
 @property BOOL isKeyBoard;
+@property BOOL RJopen;
 
 
 
@@ -59,6 +60,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     self.commentIds = [[NSMutableArray alloc]init];
     self.mainCommentId = 0;
+    self.RJopen = NO;
     self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
@@ -73,6 +75,9 @@
     [self pullEventFromDB];
     [self pullMainCommentFromAir];
     
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
     
 }
 
@@ -185,6 +190,22 @@
     [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT];
 }
 
+-(void)closeRJ
+{
+    if (_RJopen) {
+        _RJopen = NO;
+        [_header endRefreshing];
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    _RJopen = YES;
+    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    [self pullMainCommentFromAir];
+}
 
 
 #pragma mark - Table view data source
@@ -258,7 +279,7 @@
         frame.size.height = commentHeight;
         [cell.eventDetail setFrame:frame];
         frame = cell.frame;
-        frame.size.height = 239 + commentHeight;
+        frame.size.height = 248 + commentHeight;
         
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
@@ -382,7 +403,7 @@
         NSString* text = [_event valueForKey:@"remark"];
         float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
         if (commentHeight < 25) commentHeight = 25;
-        return 239.0f + commentHeight;
+        return 248.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
@@ -482,7 +503,10 @@
         {
             if ([response1 valueForKey:@"comment_list"]) {
                 self.comment_list = [response1 valueForKey:@"comment_list"];
-                [self.tableView reloadData];
+                if (_RJopen) {
+                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+                }else [_tableView reloadData];
+                
             }else
             {
                 [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];

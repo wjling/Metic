@@ -13,10 +13,10 @@
 #import "../Cell/MTTableView.h"
 #import "../Utils/PhotoGetter.h"
 #import "PictureWallViewController.h"
-
+#import "LaunchEventViewController.h"
 @interface HomeViewController ()
 
-@property (nonatomic,strong) NSOperationQueue *queue;
+
 @property (strong, nonatomic) IBOutlet MTTableView *tableView;
 @property (strong, nonatomic) IBOutlet MTTableView *mytableView;
 @property (strong, nonatomic) IBOutlet MTTableView *frtableView;
@@ -43,22 +43,16 @@
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
     self.scrollView.delegate = self;
-    self.queue = [[NSOperationQueue alloc]init];
-    [self.queue setMaxConcurrentOperationCount:5];
     self.tableView.homeController= self;
-    self.tableView.queue = self.queue;
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self.tableView];
     self.mytableView.homeController= self;
-    self.mytableView.queue = self.queue;
     [self.mytableView setDelegate:self];
     [self.mytableView setDataSource:self.mytableView];
     self.frtableView.homeController= self;
-    self.frtableView.queue = self.queue;
     [self.frtableView setDelegate:self];
     [self.frtableView setDataSource:self.frtableView];
     self.tatableView.homeController= self;
-    self.tatableView.queue = self.queue;
     [self.tatableView setDelegate:self];
     [self.tatableView setDataSource:self.tatableView];
     self.eventsTableView = self.tableView;
@@ -321,17 +315,24 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //这里我很谨慎的对sender和目标视图控制器作了判断
-    if ([sender isKindOfClass:[HomeViewController class]]) {
-        if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
-            EventDetailViewController *nextViewController = segue.destinationViewController;
-            nextViewController.eventId = self.selete_Eventid;
-        }
-        if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
-                PictureWallViewController *nextViewController = segue.destinationViewController;
-                nextViewController.eventId = self.selete_Eventid;
-
-        }
+    if (![self.morefuctions isHidden]) {
+        [self closeButtonView];
     }
+    if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
+        EventDetailViewController *nextViewController = segue.destinationViewController;
+        nextViewController.eventId = self.selete_Eventid;
+    }
+    if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
+            PictureWallViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.selete_Eventid;
+
+    }
+    if ([segue.destinationViewController isKindOfClass:[LaunchEventViewController class]]) {
+        LaunchEventViewController *nextViewController = segue.destinationViewController;
+        nextViewController.controller = self;
+        
+    }
+    
 }
 
 

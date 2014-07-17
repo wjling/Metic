@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIView) NSArray *roundCornerView;
 @property (nonatomic) CLLocationCoordinate2D pt;
 @property (nonatomic,strong) NSString *positionInfo;
+@property (strong, nonatomic) UIViewController* controller;
 
 
 

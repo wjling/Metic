@@ -17,6 +17,7 @@
         Tag_password
     };
 }
+@property (strong, nonatomic) UIView* waitingView;
 @end
 
 @implementation LoginViewController
@@ -75,16 +76,33 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(void)showWaitingView
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if (!_waitingView) {
+        CGRect frame = self.view.bounds;
+        _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setBackgroundColor:[UIColor blackColor]];
+        [_waitingView setAlpha:0.5f];
+        frame.origin.x = (frame.size.width - 100)/2.0;
+        frame.origin.y = (frame.size.height - 100)/2.0;
+        frame.size = CGSizeMake(100, 100);
+        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+        [indicator setTag:101];
+        [_waitingView addSubview:indicator];
+    }
+    
+    [self.view addSubview:_waitingView];
+    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
 }
-*/
+
+-(void)removeWaitingView
+{
+    if (_waitingView) {
+        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
+        [_waitingView removeFromSuperview];
+    }
+}
 
 -(void)checkPreUP
 {
@@ -143,6 +161,7 @@
 }
 
 -(void)login{
+    [self showWaitingView];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:self.logInEmail forKey:@"email"];
     [dictionary setValue:@"" forKey:@"passwd"];
@@ -210,6 +229,7 @@
             [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
             [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
+            [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];
             [user setUid:userid];
             //[user getInfo:userid myid:userid delegateId:self];
@@ -220,6 +240,7 @@
             break;
         case PASSWD_NOT_CORRECT:
         {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"密码错误，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
             NSLog(@"password not correct");
             
@@ -227,17 +248,20 @@
             break;
         case USER_NOT_FOUND:
         {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户名不存在" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
             NSLog(@"user not found");
         }
             break;
         case NORMAL_REPLY:
         {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
             break;
             
         default:{
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
             break;
@@ -246,7 +270,14 @@
     
 }
 
-
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if (buttonIndex == 0)
+    {
+        [self removeWaitingView];
+    }
+}
 
 #pragma mark - UItextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField;        // return NO to disallow editing.

@@ -1339,6 +1339,9 @@
                                         <state key="highlighted" title="添加好友">
                                             <color key="titleColor" red="0.89019614459999996" green="0.89019614459999996" blue="0.89019614459999996" alpha="1" colorSpace="deviceRGB"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="Sxz-YS-Xvx" kind="push" id="EEO-gR-a4J"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -2601,8 +2604,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="ib8-0I-OZA"/>
         <segue reference="a7Z-Ie-XBp"/>
     </inferredMetricsTieBreakers>
 </document>

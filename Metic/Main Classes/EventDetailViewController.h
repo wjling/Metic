@@ -10,13 +10,14 @@
 #import "MySqlite.h"
 #import "HttpSender.h"
 #import "CommonUtils.h"
-//#import "../Utils/PhotoGetter.h"
+#import "MJRefreshHeaderView.h"
+#import "../Utils/PhotoGetter.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;
-
+@property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong, nonatomic)  UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;

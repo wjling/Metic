@@ -21,6 +21,7 @@
 @property (strong, nonatomic) UIButton* getPhoto;
 @property (strong, nonatomic) UIButton* upLoad;
 @property (strong, nonatomic) UITextField* preLabel;
+@property (strong, nonatomic) UIView* waitingView;
 
 @end
 
@@ -122,6 +123,46 @@
     [self presentViewController:navigationController animated:YES completion:^{
     }];
     
+}
+
+- (IBAction)upload:(id)sender {
+    if (!self.uploadImage) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    [self showWaitingView];
+    self.upLoad = sender;
+    [self.upLoad setEnabled:NO];
+    [self.getPhoto setEnabled:NO];
+    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+    getter.mDelegate = self;
+    [getter uploadPhoto];
+}
+
+-(void)showWaitingView
+{
+    if (!_waitingView) {
+        CGRect frame = self.view.bounds;
+        _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setBackgroundColor:[UIColor blackColor]];
+        [_waitingView setAlpha:0.5f];
+        frame.origin.x = (frame.size.width - 100)/2.0;
+        frame.origin.y = (frame.size.height - 100)/2.0;
+        frame.size = CGSizeMake(100, 100);
+        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+        [indicator setTag:101];
+        [_waitingView addSubview:indicator];
+    }
+    [_textInput endEditing:YES];
+    [self.view addSubview:_waitingView];
+    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
+}
+
+-(void)removeWaitingView
+{
+    if (_waitingView) {
+        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
+        [_waitingView removeFromSuperview];
+    }
 }
 
 #pragma mark - PECropViewControllerDelegate methods
@@ -245,6 +286,7 @@
         
         
     }else if (type == 106){
+        [self removeWaitingView];
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
     }
 }
@@ -264,12 +306,14 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
+            [self removeWaitingView];
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传成功" WithDelegate:self WithCancelTitle:@"确定"];
             
         }
             break;
         default:
         {
+            [self removeWaitingView];
             [self.upLoad setEnabled:YES];
             [self.getPhoto setEnabled:YES];
         }
@@ -287,15 +331,5 @@
 
 
 
-- (IBAction)upload:(id)sender {
-    if (!self.uploadImage) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
-    }
-    self.upLoad = sender;
-    [self.upLoad setEnabled:NO];
-    [self.getPhoto setEnabled:NO];
-    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
-    getter.mDelegate = self;
-    [getter uploadPhoto];
-}
+
 @end

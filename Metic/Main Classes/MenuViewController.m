@@ -20,7 +20,9 @@
 @implementation MenuViewController
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
--(void)viewDidLoad
+
+
+-(void)viewWillAppear:(BOOL)animated
 {
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
@@ -31,10 +33,8 @@
     
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
-    
-    
-    
 }
+
 
 - (IBAction)selector_tap:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"

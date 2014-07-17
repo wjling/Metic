@@ -30,6 +30,8 @@
 @property (nonatomic, strong) BMKLocationService* locService;
 @property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) UIImage* uploadImage;
+@property (strong, nonatomic) UIView* waitingView;
+
 
 
 @end
@@ -123,6 +125,32 @@
     return YES;
 }
 
+-(void)showWaitingView
+{
+    if (!_waitingView) {
+        CGRect frame = self.view.bounds;
+        _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setBackgroundColor:[UIColor blackColor]];
+        [_waitingView setAlpha:0.5f];
+        frame.origin.x = (frame.size.width - 100)/2.0;
+        frame.origin.y = (frame.size.height - 100)/2.0;
+        frame.size = CGSizeMake(100, 100);
+        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+        [indicator setTag:101];
+        [_waitingView addSubview:indicator];
+    }
+    
+    [self.view addSubview:_waitingView];
+    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
+}
+
+-(void)removeWaitingView
+{
+    if (_waitingView) {
+        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
+        [_waitingView removeFromSuperview];
+    }
+}
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -197,6 +225,7 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
+    [self showWaitingView];
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
     [dictionary setValue:_user.userid forKey:@"id"];
@@ -382,11 +411,8 @@
         }else{
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
         }
-        
-        
-        
     }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:self WithCancelTitle:@"确定"];
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:nil WithCancelTitle:@"确定"];
     }
     
 }
@@ -413,6 +439,16 @@
         nextViewController.position = self.pt;
         nextViewController.positionInfo = self.positionInfo;
         nextViewController.controller = self;
+    }
+}
+
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if (buttonIndex == 0)
+    {
+        [self removeWaitingView];
+        [self.navigationController popToViewController:self.controller animated:YES];
     }
 }
 
