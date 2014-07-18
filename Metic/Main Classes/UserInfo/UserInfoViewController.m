@@ -8,7 +8,12 @@
 
 #import "UserInfoViewController.h"
 
+
 @interface UserInfoViewController ()
+{
+    SingleSelectionAlertView* alert;
+    NSInteger newGender;
+}
 
 @end
 
@@ -20,6 +25,8 @@
 @synthesize gender_imageView;
 @synthesize email_label;
 @synthesize info_tableView;
+
+@synthesize name_vc;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -96,6 +103,41 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    switch (indexPath.section) {
+        case 0:
+        {
+            if (indexPath.row == 0) {
+//                [self performSegueWithIdentifier:@"NameSettingViewController" sender:self];
+                
+                name_vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"NameSettingViewController"];
+                
+                [self.navigationController pushViewController:name_vc animated:YES];
+            }
+            else if(indexPath.row == 1)
+            {
+                NSArray* arr = [[NSArray alloc]initWithObjects:@"女",@"男", nil];
+//                SingleSelectionAlertView* alert = [[SingleSelectionAlertView alloc]initWithFrame:CGRectMake(100, 100, 120, 300) withOptionTitles:arr];
+                alert =  [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改性别" withOptions:arr];
+                alert.kDelegate = self;
+                alert.tag = 0;
+                [alert show];
+            }
+            else if (indexPath.row == 2)
+            {
+                LocationSettingViewController* location_vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocationSettingViewController"];
+                [self.navigationController pushViewController:location_vc animated:YES];
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -221,5 +263,56 @@
     }
     return nil;
 }
+
+#pragma mark - SingleSelectionAlertViewDelegate
+- (void)SingleSelectionAlertView:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView isKindOfClass:[CustomIOS7AlertView class]]) {
+        if (((CustomIOS7AlertView*)alertView).tag == 0) {
+            if (buttonIndex == 1) {
+                newGender = [alert getSelectedIndex];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:
+                                      [NSNumber numberWithInteger:newGender],@"gender",
+                                      [MTUser sharedInstance].userid,@"id",
+                                      nil];
+                NSLog(@"gender modify json: %@",json);
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
+                NSLog(@"click alert Button");
+            }
+        }
+
+    }
+    else if ([alertView isKindOfClass:[UIButton class]])
+    {
+        
+    }
+}
+
+#pragma mark - HttpSenderDelegate
+-(void)finishWithReceivedData:(NSData*) rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    NSLog(@"Received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+    NSLog(@"cmd: %@",cmd);
+    switch ([cmd integerValue]) {
+        case NORMAL_REPLY:
+        {
+            [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
+            NSLog(@"性别修改成功");
+        }
+            break;
+            
+        default:
+            NSLog(@"性别修改失败");
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因性别修改失败" WithDelegate:self WithCancelTitle:@"OK"];
+            break;
+    }
+    [self.info_tableView reloadData];
+}
+
 
 @end

@@ -121,6 +121,9 @@
         case 17:
             resultCode = @"add_good";
             break;
+        case 18:
+            resultCode = @"change_settings";
+            break;
         case 20:
             resultCode = @"add_pcomment";
             break;
@@ -186,9 +189,6 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
     
-    //NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    //[NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:handler];
-    //NSLog(@"before connection");
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     //NSLog(@"request sent");
     

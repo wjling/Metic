@@ -12,6 +12,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="LIP-Wz-4kd">
                         <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -442,7 +443,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ppn-p0-Wt2">
                                 <rect key="frame" x="279" y="9" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="添加好友icon"/>
+                                <state key="normal" backgroundImage="添加好友icon白"/>
                                 <connections>
                                     <action selector="switchToAddFriendView:" destination="cDI-rw-2Dm" eventType="touchUpInside" id="rTX-cE-4iR"/>
                                     <segue destination="Sxz-YS-Xvx" kind="push" id="ib8-0I-OZA"/>
@@ -786,11 +787,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserInfoTableViewCell" id="f80-ae-tFT" customClass="UserInfoTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UserInfoTableViewCell" id="f80-ae-tFT" customClass="UserInfoTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f80-ae-tFT" id="kfV-7S-cZs">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="29"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="29"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="昵称" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDD-gL-lB6">
@@ -834,11 +835,108 @@
                         <outlet property="gender_imageView" destination="jos-rq-E6c" id="0Ab-fa-oNC"/>
                         <outlet property="info_tableView" destination="ku9-N0-IKm" id="8jD-Lr-7cM"/>
                         <outlet property="name_label" destination="FOa-uQ-13H" id="1ib-ru-Ba3"/>
+                        <segue destination="9CX-Yq-UH3" kind="push" id="SMH-Gn-ARt"/>
+                        <segue destination="KuQ-yT-otW" kind="push" id="XmB-Pe-2N1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bju-HU-z8G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1466" y="2752"/>
+        </scene>
+        <!--Location Setting View Controller - 请选择所在地-->
+        <scene sceneID="qDt-gQ-oAa">
+            <objects>
+                <viewController storyboardIdentifier="LocationSettingViewController" id="KuQ-yT-otW" customClass="LocationSettingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ipY-cL-qQv"/>
+                        <viewControllerLayoutGuide type="bottom" id="EUj-qz-imG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hyj-OT-oO2">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAU-SN-v1J">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="QDU-mh-Xmz">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="mf3-OW-jTa">
+                                        <rect key="frame" x="320" y="0.0" width="320" height="416"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="mf3-OW-jTa" firstAttribute="leading" secondItem="QDU-mh-Xmz" secondAttribute="trailing" id="23l-ew-JV7"/>
+                                    <constraint firstItem="QDU-mh-Xmz" firstAttribute="leading" secondItem="pAU-SN-v1J" secondAttribute="leading" id="PxQ-gI-NFW"/>
+                                    <constraint firstAttribute="trailing" secondItem="mf3-OW-jTa" secondAttribute="trailing" constant="-320" id="gHd-wR-bdl"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="pAU-SN-v1J" firstAttribute="top" secondItem="ipY-cL-qQv" secondAttribute="bottom" id="8L7-Yh-iEh"/>
+                            <constraint firstItem="EUj-qz-imG" firstAttribute="top" secondItem="pAU-SN-v1J" secondAttribute="bottom" id="DAm-WM-tTG"/>
+                            <constraint firstItem="pAU-SN-v1J" firstAttribute="leading" secondItem="hyj-OT-oO2" secondAttribute="leading" id="EkJ-i8-I4a"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="请选择所在地" id="LkC-xL-S4L">
+                        <barButtonItem key="leftBarButtonItem" image="白色箭头" id="buO-H4-zCD"/>
+                        <barButtonItem key="rightBarButtonItem" image="勾选前icon" id="2ID-zk-An8"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="city_tableView" destination="mf3-OW-jTa" id="y3n-Yd-VBE"/>
+                        <outlet property="content_scrollView" destination="pAU-SN-v1J" id="4Fs-1w-q1u"/>
+                        <outlet property="left_barButton" destination="buO-H4-zCD" id="nMc-De-8Wr"/>
+                        <outlet property="navigationItem" destination="LkC-xL-S4L" id="ykG-YW-vp0"/>
+                        <outlet property="province_tableView" destination="QDU-mh-Xmz" id="ogF-H7-s5Y"/>
+                        <outlet property="right_barButton" destination="2ID-zk-An8" id="fWz-Ze-TXL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Yww-eD-6qU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1929" y="2880"/>
+        </scene>
+        <!--Name Setting View Controller - 修改昵称-->
+        <scene sceneID="Edk-U2-dC2">
+            <objects>
+                <viewController storyboardIdentifier="NameSettingViewController" id="9CX-Yq-UH3" customClass="NameSettingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1ez-4M-Hlr"/>
+                        <viewControllerLayoutGuide type="bottom" id="pUX-YF-165"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ueL-IV-5RV">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="请输入新的昵称" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SNQ-dV-rt9">
+                                <rect key="frame" x="38" y="38" width="245" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="修改昵称" id="Urb-eR-66l">
+                        <barButtonItem key="rightBarButtonItem" image="勾选前icon" style="plain" id="sdJ-j0-uDp">
+                            <connections>
+                                <action selector="confirmClicked:" destination="9CX-Yq-UH3" id="s5w-AS-o0t"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="confirm_barButton" destination="sdJ-j0-uDp" id="QHc-Ud-uTZ"/>
+                        <outlet property="name_textField" destination="SNQ-dV-rt9" id="pig-r6-pmj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y6J-WP-KrB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1929" y="2294"/>
         </scene>
         <!--Feed Back View Controller - 意见反馈-->
         <scene sceneID="Fg4-hi-lC8">
@@ -2558,6 +2656,7 @@
         <image name="删除icon效果" width="18" height="18"/>
         <image name="加入活动加号icon" width="29" height="29"/>
         <image name="加号icon" width="12" height="12"/>
+        <image name="勾选前icon" width="34" height="34"/>
         <image name="发起人icon" width="7" height="7"/>
         <image name="发起活动icon" width="13" height="13"/>
         <image name="图片评论icon图标1" width="20" height="20"/>
@@ -2577,11 +2676,13 @@
         <image name="活动地点icon" width="7" height="7"/>
         <image name="活动宝" width="201" height="151"/>
         <image name="活动时间icon" width="6" height="6"/>
-        <image name="添加好友icon" width="16" height="16"/>
+        <image name="添加好友icon" width="13" height="13"/>
+        <image name="添加好友icon白" width="16" height="16"/>
         <image name="登录按钮" width="290" height="29"/>
         <image name="登录按钮按下效果" width="290" height="29"/>
         <image name="登录界面按钮" width="580" height="76"/>
         <image name="登录界面按钮按下效果" width="580" height="76"/>
+        <image name="白色箭头" width="17" height="17"/>
         <image name="系统消息图标" width="45" height="45"/>
         <image name="输入框" width="320" height="35"/>
         <image name="输入框-1" width="295" height="43"/>

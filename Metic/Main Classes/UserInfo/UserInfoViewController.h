@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "UserInfoTableViewCell.h"
 #import "PhotoGetter.h"
+#import "SingleSelectionAlertView.h"
+#import "NameSettingViewController.h"
+#import "LocationSettingViewController.h"
+#import "HttpSender.h"
 
-@interface UserInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface UserInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UIView *banner_UIview;
 @property (strong, nonatomic) IBOutlet UIImageView *banner_imageView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatar_imageView;
@@ -18,5 +22,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *gender_imageView;
 @property (strong, nonatomic) IBOutlet UILabel *email_label;
 @property (strong, nonatomic) IBOutlet UITableView *info_tableView;
+@property (strong, nonatomic) NameSettingViewController* name_vc;
 
 @end
