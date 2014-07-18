@@ -47,7 +47,7 @@
     
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
     [self.view setBackgroundColor:backgroundColor];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
 //    self.Img_userName.layer.cornerRadius = 10;
 //    self.Img_userName.layer.masksToBounds = YES;
 //    self.Img_password.layer.cornerRadius = 3;
@@ -68,6 +68,11 @@
 //    [self checkPreUP];
 
 
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)didReceiveMemoryWarning

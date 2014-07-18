@@ -89,6 +89,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     _geocodesearch.delegate = self;
+    _flatDatePicker.delegate = self;
     self.location_text.text = self.positionInfo;
 }
 
@@ -158,8 +159,8 @@
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     
-    if (textField.tag == 1) {
-        [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 180) animated:YES];
+    if (textField.tag == 11) {
+        [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         [self.scrollView setUserInteractionEnabled:NO];
         self.flatDatePicker.title = @"请选择活动日期";
         NSDate *date;
@@ -216,15 +217,15 @@
     
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([self.event_text.text isEqualToString: @""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
     if ([self.begin_time_text.text isEqualToString: @""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动开始时间不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动开始时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
     if ([self.end_time_text.text isEqualToString: @""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:self WithCancelTitle:@"确定"];
+        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
     [self showWaitingView];

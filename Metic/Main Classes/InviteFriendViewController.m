@@ -120,18 +120,20 @@
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FriendTableViewCell *cell = (FriendTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    [(UIImageView*)[cell viewWithTag:3] setHidden:!((UIImageView*)[cell viewWithTag:3]).isHidden];
     if ([self.FriendsIds containsObject:cell.friendid]) {
+        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
         [self.FriendsIds removeObject:cell.friendid];
         NSLog(@"remove: %d",[cell.friendid intValue]);
     }else{
-        
+        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
         [self.FriendsIds addObject:cell.friendid];
         NSLog(@"add: %d",[cell.friendid intValue]);
     }
     
     
 }
+
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -149,7 +151,7 @@
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:indexPath.row];
     NSString* name = [aFriend objectForKey:@"name"];
     cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
-    cell.friendid = [aFriend objectForKey:@"id"];
+    cell.friendid = [CommonUtils NSNumberWithNSString:[aFriend valueForKey:@"id"]];
     if (name) {
         cell.title.text = name;
     }
@@ -157,12 +159,13 @@
     {
         cell.title.text = @"default";
     }
-    
+
     if ([self.FriendsIds containsObject:cell.friendid]) {
-        [(UIImageView*)[cell viewWithTag:3] setHidden:NO];
+        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
+        NSLog(@"remove: %d",[cell.friendid intValue]);
     }else{
-        
-        [(UIImageView*)[cell viewWithTag:3] setHidden:YES];
+        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
+        NSLog(@"add: %d",[cell.friendid intValue]);
     }
     return cell;
 }

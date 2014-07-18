@@ -15,6 +15,7 @@
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
 #import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
+#import "showParticipatorsViewController.h"
 
 
 
@@ -529,6 +530,10 @@
         if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
             PictureWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
+        }
+        if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
+            showParticipatorsViewController *nextViewController = segue.destinationViewController;
+            nextViewController.fids = [self.event valueForKey:@"member"];
         }
     }
 }

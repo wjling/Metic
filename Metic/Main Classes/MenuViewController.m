@@ -15,11 +15,16 @@
 @interface MenuViewController ()
 @property(nonatomic,strong) UIImageView* testImageView;
 @property(nonatomic,strong) UIImage* testImage;
+@property(nonatomic,strong) UIImageView* gender;
 
 @end
 @implementation MenuViewController
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
+
+-(void)viewDidLoad
+{
+}
 
 
 -(void)viewWillAppear:(BOOL)animated
@@ -30,9 +35,36 @@
     [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.img.layer setBorderWidth:3.0f];
     [self.img.layer setCornerRadius:33];
-    
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
+    if (!_gender && [MTUser sharedInstance].gender) {
+        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
+        if ([[MTUser sharedInstance].gender intValue] == 1) {
+            [self.gender setImage:[UIImage imageNamed:@"男icon"]];
+        }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
+        [self.view addSubview:_gender];
+
+    }
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
+}
+
+-(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
+{
+    float width = 0;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+    //设置自动行数与字符换行，为0标示无限制
+    [label setNumberOfLines:0];
+    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
+    UIFont *font = [UIFont systemFontOfSize:fsize];
+    label.font = font;
+    
+    CGSize size = CGSizeMake(CGFLOAT_MAX,height);//LableWight标签宽度，固定的
+    //计算实际frame大小，并将label的frame变成实际大小
+    
+    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
+    width = labelsize.width;
+    return width;
+    
 }
 
 

@@ -76,6 +76,10 @@
 - (IBAction)addComment:(id)sender {
 }
 
+- (IBAction)showParticipators:(id)sender {
+    [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+}
+
 
 
 - (void)dealloc {
