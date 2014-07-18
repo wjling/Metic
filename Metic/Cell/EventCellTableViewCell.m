@@ -25,6 +25,7 @@
 @synthesize member_count;
 @synthesize comment;
 @synthesize commentInputView;
+@synthesize addPaticipator;
 
 
 #define widthspace 10

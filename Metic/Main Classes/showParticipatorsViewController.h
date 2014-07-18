@@ -11,4 +11,6 @@
 @interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray* fids;
+@property (strong, nonatomic) NSNumber* eventId;
+@property BOOL visibility;
 @end

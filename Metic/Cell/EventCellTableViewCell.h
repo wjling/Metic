@@ -28,6 +28,7 @@
     IBOutlet UILabel *launcherinfo;
     IBOutlet UILabel *member_count;
     IBOutlet UIView *commentInputView;
+    IBOutlet UIButton *addPaticipator;
     
     
 }
@@ -59,6 +60,6 @@
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIView *commentInputView;
 @property(nonatomic,strong) EventDetailViewController * eventController;
-
+@property(nonatomic,strong) UIButton *addPaticipator;
 
 @end

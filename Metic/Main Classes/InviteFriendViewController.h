@@ -29,7 +29,11 @@
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) NSMutableSet *FriendsIds;
+@property (strong, nonatomic) UIViewController* controller;
+@property (strong, nonatomic) NSNumber* eventId;
 
+- (IBAction)seleteAll:(id)sender;
+- (IBAction)confirm:(id)sender;
 - (NSMutableArray*)getFriendsFromDB;
 - (NSMutableDictionary*)sortFriendList;
 - (void)rankFriendsInArray:(NSMutableArray*)friends;

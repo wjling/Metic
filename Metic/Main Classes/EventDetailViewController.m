@@ -24,6 +24,7 @@
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) NSNumber *master_sequence;
 @property(nonatomic,strong) NSMutableArray *commentIds;
+@property BOOL visibility;
 @property long mainCommentId;
 @property BOOL isOpen;
 @property BOOL isKeyBoard;
@@ -271,7 +272,11 @@
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"] ];
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"]];
+        _visibility = [[_event valueForKey:@"visibility"] boolValue] || ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+        if (_visibility) {
+            [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
+        }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         NSString* text = [_event valueForKey:@"remark"];
         float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
         if (commentHeight < 25) commentHeight = 25;
@@ -534,6 +539,8 @@
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;
             nextViewController.fids = [self.event valueForKey:@"member"];
+            nextViewController.eventId = _eventId;
+            nextViewController.visibility = _visibility;
         }
     }
 }

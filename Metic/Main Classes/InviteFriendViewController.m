@@ -7,7 +7,13 @@
 //
 
 #import "InviteFriendViewController.h"
+#import "LaunchEventViewController.h"
+#import "showParticipatorsViewController.h"
 
+@interface InviteFriendViewController ()
+@property (nonatomic,strong) NSMutableSet *tmp_fids;
+
+@end
 @implementation InviteFriendViewController
 {
     NSString* DB_path;
@@ -34,9 +40,48 @@
     self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
+    _tmp_fids = [[NSMutableSet alloc]initWithSet:_FriendsIds];
     self.friendList = [self getFriendsFromDB];
     self.sortedFriendDic = [self sortFriendList];
     [self.friendTableView reloadData];
+}
+
+- (IBAction)seleteAll:(id)sender {
+}
+
+- (IBAction)confirm:(id)sender {
+    if ([self.controller isKindOfClass:[LaunchEventViewController class]]) {
+        [_FriendsIds removeAllObjects];
+        for (NSNumber* f in _tmp_fids) {
+            [_FriendsIds addObject:f];
+        }
+        [self.navigationController popToViewController:self.controller animated:YES];
+    }
+    if ([self.controller isKindOfClass:[showParticipatorsViewController class]]) {
+        for (NSNumber* f in _FriendsIds) {
+            if([_tmp_fids containsObject:f]){
+                [_tmp_fids removeObject:f];
+            }
+        }
+
+        NSString *friends = @"[";
+        BOOL flag = YES;
+        for (NSNumber* friendid in _tmp_fids) {
+            friends = [friends stringByAppendingString: flag? @"%@":@",%@"];
+            if (flag) flag = NO;
+            friends = [NSString stringWithFormat:friends,friendid];
+        }
+        friends = [friends stringByAppendingString:@"]"];
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        [dictionary setValue:_eventId forKey:@"event_id"];
+        [dictionary setValue:friends forKey:@"friends"];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:INVITE_FRIENDS];
+    }
+    
 }
 
 - (NSMutableArray*)getFriendsFromDB
@@ -101,6 +146,32 @@
 {
     
 }
+#pragma mark - HttpSenderDelegate
+
+-(void)finishWithReceivedData:(NSData *)rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+    switch ([cmd intValue]) {
+        case NORMAL_REPLY:
+        {
+            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"邀请信息已经发送，等待对方处理" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+            break;
+    }
+}
+
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if (buttonIndex == 0)
+    {
+        [self.navigationController popToViewController:self.controller animated:YES];
+    }
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -120,13 +191,13 @@
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FriendTableViewCell *cell = (FriendTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if ([self.FriendsIds containsObject:cell.friendid]) {
+    if ([self.tmp_fids containsObject:cell.friendid]) {
         [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
-        [self.FriendsIds removeObject:cell.friendid];
+        [self.tmp_fids removeObject:cell.friendid];
         NSLog(@"remove: %d",[cell.friendid intValue]);
     }else{
         [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
-        [self.FriendsIds addObject:cell.friendid];
+        [self.tmp_fids addObject:cell.friendid];
         NSLog(@"add: %d",[cell.friendid intValue]);
     }
     
@@ -150,7 +221,8 @@
     NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:indexPath.section]];
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:indexPath.row];
     NSString* name = [aFriend objectForKey:@"name"];
-    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
+    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[CommonUtils NSNumberWithNSString:[aFriend valueForKey:@"id"]]];
+    [getter getPhoto];
     cell.friendid = [CommonUtils NSNumberWithNSString:[aFriend valueForKey:@"id"]];
     if (name) {
         cell.title.text = name;
@@ -160,7 +232,7 @@
         cell.title.text = @"default";
     }
 
-    if ([self.FriendsIds containsObject:cell.friendid]) {
+    if ([self.tmp_fids containsObject:cell.friendid]) {
         [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
         NSLog(@"remove: %d",[cell.friendid intValue]);
     }else{

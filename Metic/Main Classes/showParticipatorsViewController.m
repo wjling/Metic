@@ -42,7 +42,7 @@
 #pragma mark - CollectionViewDelegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _fids.count + 1;
+    return _visibility? _fids.count + 1:_fids.count;
 }
 
 
@@ -59,7 +59,7 @@
 
     }else{
         UIImageView* add = (UIImageView*)[cell viewWithTag:1];
-        [add setImage:[UIImage imageNamed:@"加图片的加号"]];
+        [add setImage:[UIImage imageNamed:@"添加参与者icon"]];
     }
     return cell;
 }
@@ -78,6 +78,8 @@
     if ([segue.destinationViewController isKindOfClass:[InviteFriendViewController class]]) {
         InviteFriendViewController *nextViewController = segue.destinationViewController;
         nextViewController.FriendsIds = self.inviteFids;
+        nextViewController.controller = self;
+        nextViewController.eventId = _eventId;
     }
 
 }

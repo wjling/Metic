@@ -480,6 +480,7 @@
     if ([segue.destinationViewController isKindOfClass:[InviteFriendViewController class]]) {
         InviteFriendViewController *nextViewController = segue.destinationViewController;
         nextViewController.FriendsIds = self.FriendsIds;
+        nextViewController.controller = self;
     }
     if ([segue.destinationViewController isKindOfClass:[MapViewController class]]) {
         MapViewController *nextViewController = segue.destinationViewController;
