@@ -133,6 +133,9 @@
         case 23:
             resultCode = @"get_photo_list";
             break;
+        case 24:
+            resultCode = @"get_event_participants";
+            break;
         case 25:
             resultCode = @"get_avatar_updatetime";
             break;

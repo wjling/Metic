@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) NSMutableSet *FriendsIds;
+@property (strong, nonatomic) NSMutableSet *ExistedIds;
 @property (strong, nonatomic) UIViewController* controller;
 @property (strong, nonatomic) NSNumber* eventId;
 

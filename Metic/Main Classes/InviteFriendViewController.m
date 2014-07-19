@@ -191,17 +191,17 @@
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     FriendTableViewCell *cell = (FriendTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if ([self.tmp_fids containsObject:cell.friendid]) {
-        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
-        [self.tmp_fids removeObject:cell.friendid];
-        NSLog(@"remove: %d",[cell.friendid intValue]);
-    }else{
-        [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
-        [self.tmp_fids addObject:cell.friendid];
-        NSLog(@"add: %d",[cell.friendid intValue]);
+    if (![_ExistedIds containsObject:cell.friendid]) {
+        if ([self.tmp_fids containsObject:cell.friendid]) {
+            [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
+            [self.tmp_fids removeObject:cell.friendid];
+            NSLog(@"remove: %d",[cell.friendid intValue]);
+        }else{
+            [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
+            [self.tmp_fids addObject:cell.friendid];
+            NSLog(@"add: %d",[cell.friendid intValue]);
+        }
     }
-    
-    
 }
 
 
@@ -234,10 +234,8 @@
 
     if ([self.tmp_fids containsObject:cell.friendid]) {
         [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
-        NSLog(@"remove: %d",[cell.friendid intValue]);
     }else{
         [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
-        NSLog(@"add: %d",[cell.friendid intValue]);
     }
     return cell;
 }

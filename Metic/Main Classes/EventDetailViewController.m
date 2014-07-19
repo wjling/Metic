@@ -538,7 +538,6 @@
         }
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;
-            nextViewController.fids = [self.event valueForKey:@"member"];
             nextViewController.eventId = _eventId;
             nextViewController.visibility = _visibility;
         }

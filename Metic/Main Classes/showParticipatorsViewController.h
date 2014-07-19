@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "../Utils/HttpSender.h"
 
-@interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray* fids;
 @property (strong, nonatomic) NSNumber* eventId;
