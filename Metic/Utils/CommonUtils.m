@@ -198,6 +198,16 @@
 
 }
 
++ (NSString *)base64StringFromText:(NSString *)text
+{
+    NSData *Data=[text dataUsingEncoding:NSUTF8StringEncoding];
+    //进行编码
+    Data =[GTMBase64 encodeData:Data];
+    NSString *codestr=[[NSString alloc] initWithData:Data encoding:NSUTF8StringEncoding];
+    return codestr;
+}
+
+
 + (NSString*)getUrl:(NSString*) path
 {
     NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];
@@ -245,5 +255,14 @@
                                                                                 (CFStringRef)originUrl, nil,
                                                                                 (CFStringRef)@"!*'();:@&=+$,?%#[]", kCFStringEncodingUTF8));
     return encodedValue;
+}
+
++ (NSString *)stringByReversed:(NSString*) text
+{
+    NSMutableString *s = [NSMutableString string];
+    for (NSUInteger i=text.length; i>0; i--) {
+        [s appendString:[text substringWithRange:NSMakeRange(i-1, 1)]];
+    }
+    return s;
 }
 @end

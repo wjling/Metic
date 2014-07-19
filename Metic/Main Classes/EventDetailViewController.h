@@ -24,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
+- (IBAction)show2Dcode:(id)sender;
 
 
 

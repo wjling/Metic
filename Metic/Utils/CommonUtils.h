@@ -64,4 +64,10 @@
 
 //UIColor 转UIImage
 + (UIImage*) createImageWithColor: (UIColor*) color;
+
+//base64加密
++ (NSString *)base64StringFromText:(NSString *)text;
+
+//翻转字符串
++ (NSString *)stringByReversed:(NSString*) text;
 @end
