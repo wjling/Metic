@@ -10,7 +10,7 @@
 
 @interface LocationSettingViewController ()
 {
-    NSArray* province_array;
+    NSMutableArray* province_array;
     NSArray* selected_city_array;
     
     NSInteger selected_province_index;
@@ -20,7 +20,7 @@
 @end
 
 @implementation LocationSettingViewController
-@synthesize LocationDic;
+@synthesize location_arr;
 @synthesize navigationItem;
 @synthesize left_barButton;
 @synthesize right_barButton;
@@ -37,13 +37,26 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    selected_province_index = -1;
+    selected_city_index = -1;
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"Provinces" ofType:@"plist"];
-    LocationDic = [[NSMutableDictionary alloc]initWithContentsOfFile:plistPath];
-    province_array = [LocationDic allKeys];
+    location_arr = [[NSArray alloc]initWithContentsOfFile:plistPath];
+    NSInteger count = location_arr.count;
+    province_array = [[NSMutableArray alloc]init];
+    for (NSInteger i = 0; i<count; i++) {
+        NSDictionary* province = [location_arr objectAtIndex:i];
+        [province_array addObject:[province objectForKey:@"ProvinceName"]];
+    }
+    NSLog(@"province array: %@",province_array);
     
     [self.content_scrollView setScrollEnabled:NO];
     self.content_scrollView.showsHorizontalScrollIndicator = NO;
     self.content_scrollView.showsVerticalScrollIndicator = NO;
+    
+    self.province_tableView.delegate = self;
+    self.province_tableView.dataSource = self;
+    self.city_tableView.delegate = self;
+    self.city_tableView.dataSource = self;
     
     navigationItem.title = @"请选择省份";
     [left_barButton setTarget:self];
@@ -138,7 +151,8 @@
         if (nil == cell) {
             cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"citycell"];
         }
-        cell.textLabel.text = [selected_city_array objectAtIndex:indexPath.row];
+        NSDictionary* city = [selected_city_array objectAtIndex:indexPath.row];
+        cell.textLabel.text = [city objectForKey:@"CityName"];
         return cell;
     }
     return cell;
@@ -149,7 +163,8 @@
 {
     if (tableView == self.province_tableView) {
         selected_province_index = indexPath.row;
-        selected_city_array = [LocationDic objectForKey:[province_array objectAtIndex:selected_province_index]];
+        selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
+        NSLog(@"selected_city_arr: %@",selected_city_array);
         [self.province_tableView reloadData];
     }
     else if(tableView == self.city_tableView)

@@ -15,7 +15,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *content_scrollView;
 @property (strong, nonatomic) IBOutlet UITableView *province_tableView;
 @property (strong, nonatomic) IBOutlet UITableView *city_tableView;
-@property (strong, nonatomic) NSMutableDictionary* LocationDic;
+@property (strong, nonatomic) NSArray* location_arr;
 @property (strong, nonatomic) IBOutlet UINavigationItem *navigationItem;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *right_barButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *left_barButton;
