@@ -68,7 +68,7 @@
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = @"538769";
-//    [self checkPreUP];
+    [self checkPreUP];
 
 
 }
@@ -121,7 +121,10 @@
     if (userName && password) {
         self.logInEmail = userName;
         self.logInPassword = password;
-        [self login];
+        //[self login];
+        self.textField_userName.text = userName;
+        self.textField_password.text = password;
+        [self.button_login setEnabled:YES];
     }else [self.button_login setEnabled:YES];
 }
 

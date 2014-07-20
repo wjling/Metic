@@ -1216,6 +1216,104 @@
             </objects>
             <point key="canvasLocation" x="1929" y="395"/>
         </scene>
+        <!--Event2 Dcode View Controller - 活动二维码-->
+        <scene sceneID="yjz-Jf-0SP">
+            <objects>
+                <viewController id="AQh-VD-se3" customClass="Event2DcodeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7TX-8K-1m8"/>
+                        <viewControllerLayoutGuide type="bottom" id="XMF-xf-rHt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YzA-fW-Mvq">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Jg-6Em">
+                                <rect key="frame" x="10" y="15" width="300" height="391"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFF-qU-MsW">
+                                        <rect key="frame" x="15" y="15" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bmh-ab-rdi">
+                                        <rect key="frame" x="15" y="70" width="270" height="270"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="二维码" translatesAutoresizingMaskIntoConstraints="NO" id="aVk-fW-gu7">
+                                                <rect key="frame" x="20" y="20" width="230" height="230"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="这是个活动" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okl-Vj-pvv">
+                                        <rect key="frame" x="80" y="15" width="200" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="发起人：xxx" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OtX-gP-dPY">
+                                        <rect key="frame" x="80" y="35" width="200" height="10"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                        <color key="textColor" red="0.58431375026702881" green="0.58431375026702881" blue="0.58431375026702881" alpha="1" colorSpace="deviceRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mu1-ho-pK0">
+                                        <rect key="frame" x="0.0" y="355" width="150" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.90588241815567017" green="0.90588241815567017" blue="0.90588241815567017" alpha="1" colorSpace="deviceRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="分享二维码">
+                                            <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="0.5" colorSpace="deviceRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="shareQRcode:" destination="AQh-VD-se3" eventType="touchUpInside" id="1wr-Cs-FGF"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PKO-T5-8Ca">
+                                        <rect key="frame" x="151" y="355" width="149" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.90588241820000004" green="0.90588241820000004" blue="0.90588241820000004" alpha="1" colorSpace="deviceRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="保存到手机">
+                                            <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="0.5" colorSpace="deviceRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="saveQRcode:" destination="AQh-VD-se3" eventType="touchUpInside" id="IC2-yb-WLi"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="tintColor" red="0.0" green="0.70588237047195435" blue="0.56470590829849243" alpha="1" colorSpace="deviceRGB"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="活动二维码" id="iRI-FJ-zn6"/>
+                    <connections>
+                        <outlet property="TwodCode" destination="aVk-fW-gu7" id="ezR-iR-YNG"/>
+                        <outlet property="activity" destination="okl-Vj-pvv" id="9Tg-Ib-ASG"/>
+                        <outlet property="avatar" destination="vFF-qU-MsW" id="x1A-1C-eoU"/>
+                        <outlet property="launcher" destination="OtX-gP-dPY" id="N0h-Pf-Xnr"/>
+                        <outlet property="mainView" destination="lap-Jg-6Em" id="4PZ-bA-Po8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tqn-UI-iRz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2541" y="390"/>
+        </scene>
         <!--Login View Controller - Login-->
         <scene sceneID="c37-aP-6j7">
             <objects>
@@ -1331,6 +1429,7 @@
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
                         <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="uJg-s7-QUo"/>
+                        <segue destination="vUF-zA-h47" kind="push" id="tWn-Bj-Cas"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1565,7 +1664,7 @@
                         <outlet property="tatableView" destination="Mk0-Yo-XWM" id="TOH-IR-KkF"/>
                         <segue destination="cGW-AM-0QH" kind="push" identifier="eventDetailIdentifier" id="fLJ-gw-aSw"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="HomeToPictureWall" id="a7Z-Ie-XBp"/>
-                        <segue destination="FRw-iK-B1T" kind="push" id="cJP-Cj-WvT"/>
+                        <segue destination="FRw-iK-B1T" kind="push" identifier="toUserInfoViewController" id="cJP-Cj-WvT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Tr-aS-eLs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1628,7 +1727,20 @@
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="35" id="uxe-yV-kTm"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2"/>
+                    <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="H2j-n1-6M4">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Agz-Hd-Hpf">
+                                <rect key="frame" x="274" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="二维码">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="show2Dcode:" destination="cGW-AM-0QH" eventType="touchUpInside" id="KHG-y1-735"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
@@ -1976,6 +2088,9 @@
                                         <state key="normal" title="发起活动">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="launch:" destination="IYS-qz-32K" eventType="touchUpInside" id="baV-97-13L"/>

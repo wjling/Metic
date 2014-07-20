@@ -101,6 +101,10 @@
                                 <rect key="frame" x="6" y="4" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="动参与者圆头像的边框图" translatesAutoresizingMaskIntoConstraints="NO" id="a3q-YY-iKi">
+                                <rect key="frame" x="5" y="2" width="34" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
                     </view>
@@ -174,7 +178,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="活动持续时间：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTg-qa-hTH">
-                                <rect key="frame" x="25" y="6" width="275" height="15"/>
+                                <rect key="frame" x="25" y="6" width="260" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="highlightedColor"/>
@@ -243,6 +247,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="动参与者圆头像的边框图" width="32" height="32"/>
         <image name="发起人icon" width="7" height="7"/>
         <image name="图片墙图标" width="13" height="13"/>
         <image name="活动地点icon" width="7" height="7"/>

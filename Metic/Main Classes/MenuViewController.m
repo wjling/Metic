@@ -96,7 +96,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 4;
+	return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,11 +136,11 @@
 //			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
 //            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
 //			break;
-//        case 7:
-//			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
-//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
-//			break;
         case 3:
+			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
+			break;
+        case 4:
 			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
 			break;
@@ -187,6 +187,9 @@
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
 			break;
         case 3:
+            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
+			break;
+        case 4:
             vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
 			break;
 
