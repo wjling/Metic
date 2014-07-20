@@ -1225,15 +1225,15 @@
                         <viewControllerLayoutGuide type="bottom" id="XMF-xf-rHt"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YzA-fW-Mvq">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Jg-6Em">
-                                <rect key="frame" x="10" y="15" width="300" height="455"/>
+                                <rect key="frame" x="10" y="15" width="300" height="391"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFF-qU-MsW">
-                                        <rect key="frame" x="15" y="15" width="40" height="104"/>
+                                        <rect key="frame" x="15" y="15" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     </imageView>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bmh-ab-rdi">
@@ -1429,6 +1429,7 @@
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
                         <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="uJg-s7-QUo"/>
+                        <segue destination="ad7-0h-3Sf" kind="push" id="4DP-nd-Tbh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1747,6 +1748,7 @@
                         <outlet property="inputField" destination="oLS-E0-JBf" id="WdI-tt-BYf"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
+                        <segue destination="AQh-VD-se3" kind="push" identifier="2Dcode" id="ITr-e1-NM4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RKA-5E-VEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2722,6 +2724,39 @@
             </objects>
             <point key="canvasLocation" x="-470" y="54"/>
         </scene>
+        <!--Scaning View Controller - 扫一扫-->
+        <scene sceneID="cjB-2r-40c">
+            <objects>
+                <viewController storyboardIdentifier="ScaningViewController" id="ad7-0h-3Sf" customClass="ScaningViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nX1-Bu-Hh9"/>
+                        <viewControllerLayoutGuide type="bottom" id="FPP-4h-88Z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="rnW-nK-DGV">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sNE-PI-Yba">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="FPP-4h-88Z" firstAttribute="top" secondItem="sNE-PI-Yba" secondAttribute="bottom" id="DSw-WN-IKV"/>
+                            <constraint firstItem="sNE-PI-Yba" firstAttribute="top" secondItem="nX1-Bu-Hh9" secondAttribute="bottom" constant="-20" id="olf-zG-kTh"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="扫一扫" id="diE-sV-HHH"/>
+                    <connections>
+                        <outlet property="shadowView" destination="sNE-PI-Yba" id="92U-U3-ZBo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CfC-nA-eNy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466" y="3364"/>
+        </scene>
     </scenes>
     <resources>
         <image name="event" width="300" height="113"/>
@@ -2771,6 +2806,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="hB7-KS-rrK"/>
     </inferredMetricsTieBreakers>
 </document>
