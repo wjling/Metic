@@ -446,7 +446,7 @@
         
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
-        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor redColor] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
+        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
         [cell.comment setNumberOfLines:0];
         [cell.comment setLineBreakMode:NSLineBreakByTruncatingTail];
         [((TTTAttributedLabel*)cell.comment) setText:hintString1];
