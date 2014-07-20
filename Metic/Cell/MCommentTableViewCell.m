@@ -23,7 +23,8 @@
 }
 
 - (IBAction)delete_Comment:(id)sender {
-
+    _controller.master_sequence = [NSNumber numberWithInt:0];
+    _controller.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.commentid forKey:@"comment_id"];
@@ -36,8 +37,11 @@
 
 
 - (IBAction)appreciate:(id)sender {
+    _controller.master_sequence = [NSNumber numberWithInt:0];
+    _controller.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:self.commentid forKey:@"comment_id"];
     [dictionary setValue:[NSNumber numberWithInt:self.isZan? 0:1]  forKey:@"operation"];
     

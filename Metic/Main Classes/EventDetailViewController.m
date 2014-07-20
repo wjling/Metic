@@ -23,7 +23,6 @@
 @interface EventDetailViewController ()
 @property(nonatomic,strong) NSDictionary *event;
 @property(nonatomic,strong) NSMutableArray *comment_list;
-@property(nonatomic,strong) NSNumber *master_sequence;
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property BOOL visibility;
@@ -67,6 +66,7 @@
     self.mainCommentId = 0;
     self.Headeropen = NO;
     self.Footeropen = NO;
+    self.isPublish = NO;
     self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
@@ -223,6 +223,8 @@
 }
 
 - (IBAction)publishComment:(id)sender {
+    self.master_sequence = [NSNumber numberWithInt:0];
+    self.isPublish = YES;
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -308,9 +310,10 @@
         self.mainCommentId = 0;
     }
     else if (indexPath.row == 0) {
+        
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);;
+        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
         
     }
 }
@@ -384,7 +387,6 @@
             nibsRegistered = YES;
         }
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
-        NSLog(@"%d %d",indexPath.section,indexPath.row);
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
@@ -409,6 +411,7 @@
 
         
         cell.commentid = [mainCom valueForKey:@"comment_id"];
+        cell.eventId = _eventId;
         cell.author = [mainCom valueForKey:@"author"];
         cell.controller = self;
         cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
@@ -422,7 +425,7 @@
         else{
             [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
         }
-
+        
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         ((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
         [((UIImageView*)[cell viewWithTag:1]).layer setCornerRadius:5];
@@ -580,6 +583,10 @@
                 NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
                 self.master_sequence = [response1 valueForKey:@"sequence"];
                 if (_Headeropen) [_comment_list removeAllObjects];
+                if (_isPublish){
+                    _isPublish = NO;
+                    [_comment_list removeAllObjects];
+                }
                 [self.comment_list addObjectsFromArray:tmp];
                 if (_Footeropen && [_master_sequence intValue] == -1) {
                     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];

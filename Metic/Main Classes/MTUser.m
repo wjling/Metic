@@ -176,6 +176,10 @@ static MTUser *singletonInstance;
 - (void) synchronizeFriends
 {
     self.friendList = [self getFriendsFromDB];
+    for (NSDictionary* friend in friendList) {
+        NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
+        [friendsIdSet addObject:fid];
+    }
     NSLog(@"get friends from DB, friendList: %@",self.friendList);
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           self.userid,@"id",

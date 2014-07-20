@@ -30,14 +30,12 @@
     IBOutlet UIView *commentInputView;
     IBOutlet UIButton *addPaticipator;
     
-    
 }
 
 - (IBAction)jumpToPictureWall:(id)sender;
 - (IBAction)jumpToVideoWall:(id)sender;
 - (IBAction)addComment:(id)sender;
 - (IBAction)showParticipators:(id)sender;
-
 
 
 
