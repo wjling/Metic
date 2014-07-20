@@ -1480,6 +1480,7 @@
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
                         <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="uJg-s7-QUo"/>
+                        <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1661,7 +1662,7 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="289" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gbd-mu-gcx" customClass="MTTableView">
                                         <rect key="frame" x="620" y="0.0" width="300" height="293"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <color key="backgroundColor" red="0.92549026010000002" green="0.92549026010000002" blue="0.92549026010000002" alpha="1" colorSpace="deviceRGB"/>
+                                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="300" id="XFy-F5-1eU"/>
                                         </constraints>
@@ -1669,7 +1670,7 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="289" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Mk0-Yo-XWM" customClass="MTTableView">
                                         <rect key="frame" x="930" y="0.0" width="300" height="293"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <color key="backgroundColor" red="0.92549026010000002" green="0.92549026010000002" blue="0.92549026010000002" alpha="1" colorSpace="deviceRGB"/>
+                                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="300" id="EgK-XX-T5I"/>
                                         </constraints>
@@ -2879,6 +2880,39 @@
             </objects>
             <point key="canvasLocation" x="-470" y="54"/>
         </scene>
+        <!--Scaning View Controller - 扫一扫-->
+        <scene sceneID="kYJ-TK-diU">
+            <objects>
+                <viewController storyboardIdentifier="ScaningViewController" id="VkY-lH-zTs" customClass="ScaningViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="i08-dF-yKI"/>
+                        <viewControllerLayoutGuide type="bottom" id="GKX-CO-XK0"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Re2-5z-Vte">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u8a-Yr-5Ae">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="u8a-Yr-5Ae" secondAttribute="bottom" id="kM4-nB-V9s"/>
+                            <constraint firstItem="u8a-Yr-5Ae" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="uQ6-nx-2eJ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k"/>
+                    <connections>
+                        <outlet property="shadowView" destination="u8a-Yr-5Ae" id="k1E-aR-XVi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vnO-ph-17Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466" y="3452"/>
+        </scene>
     </scenes>
     <resources>
         <image name="event" width="300" height="113"/>
@@ -2886,8 +2920,6 @@
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
         <image name="二维码" width="22" height="22"/>
-        <image name="删除icon" width="18" height="18"/>
-        <image name="删除icon效果" width="18" height="18"/>
         <image name="加入活动加号icon" width="29" height="29"/>
         <image name="加号icon" width="12" height="12"/>
         <image name="勾选前icon" width="34" height="34"/>
@@ -2911,11 +2943,12 @@
         <image name="活动地点icon" width="7" height="7"/>
         <image name="活动宝" width="201" height="151"/>
         <image name="活动时间icon" width="6" height="6"/>
-        <image name="添加好友icon" width="16" height="16"/>
+        <image name="添加好友icon" width="13" height="13"/>
         <image name="登录按钮" width="290" height="29"/>
         <image name="登录按钮按下效果" width="290" height="29"/>
         <image name="登录界面按钮" width="580" height="76"/>
         <image name="登录界面按钮按下效果" width="580" height="76"/>
+        <image name="白色箭头" width="17" height="17"/>
         <image name="系统消息图标" width="45" height="45"/>
         <image name="输入框" width="320" height="35"/>
         <image name="输入框-1" width="295" height="43"/>
@@ -2929,8 +2962,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="a7Z-Ie-XBp"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="hB7-KS-rrK"/>
         <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>
