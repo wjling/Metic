@@ -25,7 +25,7 @@
 		04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */; };
 		04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */; };
 		04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D61295197BD40000159190 /* FlatDatePicker.m */; };
-		04D612A6197C060D00159190 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D612A5197C060C00159190 /* libbaidumapapi.a */; };
+		04D612B5197C1BCD00159190 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D612B4197C1BCD00159190 /* libbaidumapapi.a */; };
 		04E657C0197978080091524F /* LocationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657BF197978080091524F /* LocationSettingViewController.m */; };
 		04E657C219797A380091524F /* Provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E657C119797A380091524F /* Provinces.plist */; };
 		04E657C7197A4EA20091524F /* InputHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657C6197A4EA20091524F /* InputHandleView.m */; };
@@ -231,7 +231,7 @@
 		04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
 		04D61294197BD40000159190 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
 		04D61295197BD40000159190 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
-		04D612A5197C060C00159190 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04D612B4197C1BCD00159190 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04E657BE197978080091524F /* LocationSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSettingViewController.h; path = UserInfo/LocationSettingViewController.h; sourceTree = "<group>"; };
 		04E657BF197978080091524F /* LocationSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSettingViewController.m; path = UserInfo/LocationSettingViewController.m; sourceTree = "<group>"; };
 		04E657C119797A380091524F /* Provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provinces.plist; sourceTree = "<group>"; };
@@ -565,7 +565,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04D612A6197C060D00159190 /* libbaidumapapi.a in Frameworks */,
+				04D612B5197C1BCD00159190 /* libbaidumapapi.a in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				04CB1B831977CEA500BC083C /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
@@ -1067,7 +1067,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				04D612A5197C060C00159190 /* libbaidumapapi.a */,
+				04D612B4197C1BCD00159190 /* libbaidumapapi.a */,
 				08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
@@ -1623,6 +1623,7 @@
 				OTHER_LDFLAGS = "-all_load";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Debug;
 		};
@@ -1657,6 +1658,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7s armv7";
 			};
 			name = Release;
 		};
