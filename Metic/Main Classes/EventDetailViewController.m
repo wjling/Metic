@@ -25,12 +25,13 @@
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) NSNumber *master_sequence;
 @property(nonatomic,strong) NSMutableArray *commentIds;
+@property(nonatomic,strong) UIAlertView *Alert;
 @property BOOL visibility;
 @property long mainCommentId;
 @property BOOL isOpen;
 @property BOOL isKeyBoard;
-@property BOOL RJopen;
-
+@property BOOL Headeropen;
+@property BOOL Footeropen;
 
 
 
@@ -62,8 +63,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     self.commentIds = [[NSMutableArray alloc]init];
+    self.comment_list = [[NSMutableArray alloc]init];
     self.mainCommentId = 0;
-    self.RJopen = NO;
+    self.Headeropen = NO;
+    self.Footeropen = NO;
     self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
@@ -81,6 +84,11 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
+    
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.tableView;
+    
     
 }
 
@@ -235,18 +243,37 @@
 
 -(void)closeRJ
 {
-    if (_RJopen) {
-        _RJopen = NO;
+    if (_Headeropen) {
+        _Headeropen = NO;
         [_header endRefreshing];
-        [self.tableView reloadData];
     }
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
+    [self.tableView reloadData];
+}
+
+-(void)showAlert
+{
+    _Alert = [[UIAlertView alloc] initWithTitle:@"" message:@"没有更多了" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    [_Alert show];
+    self.Footeropen = NO;
+    [_footer endRefreshing];
+}
+-(void)performDismiss
+{
+    [_Alert dismissWithClickedButtonIndex:0 animated:NO];
 }
 
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    _RJopen = YES;
     [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    if (refreshView == _header) {
+        _Headeropen = YES;
+        self.master_sequence = [NSNumber numberWithInt:0];
+    }else _Footeropen = YES;
     [self pullMainCommentFromAir];
 }
 
@@ -357,7 +384,7 @@
             nibsRegistered = YES;
         }
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
-        
+        NSLog(@"%d %d",indexPath.section,indexPath.row);
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         
         ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
@@ -550,8 +577,14 @@
         case NORMAL_REPLY:
         {
             if ([response1 valueForKey:@"comment_list"]) {
-                self.comment_list = [response1 valueForKey:@"comment_list"];
-                if (_RJopen) {
+                NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
+                self.master_sequence = [response1 valueForKey:@"sequence"];
+                if (_Headeropen) [_comment_list removeAllObjects];
+                [self.comment_list addObjectsFromArray:tmp];
+                if (_Footeropen && [_master_sequence intValue] == -1) {
+                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                    [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+                }else if (_Footeropen || _Headeropen) {
                     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
                 }else [_tableView reloadData];
                 

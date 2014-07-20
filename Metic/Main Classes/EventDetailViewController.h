@@ -11,6 +11,7 @@
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "MJRefreshHeaderView.h"
+#import "MJRefreshFooterView.h"
 #import "../Utils/PhotoGetter.h"
 
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
@@ -18,6 +19,7 @@
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
+@property (strong,nonatomic) MJRefreshFooterView *footer;
 @property (strong, nonatomic)  UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
