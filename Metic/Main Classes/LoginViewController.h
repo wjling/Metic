@@ -12,8 +12,9 @@
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "AppConstants.h"
+#import "InputHandleView.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate,HttpSenderDelegate>
+@interface LoginViewController : UIViewController <InputHandleViewDelegate,HttpSenderDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
@@ -25,14 +26,15 @@
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
 @property(nonatomic,strong)MTUser *user;
-@property (strong, nonatomic) IBOutlet UIControl *rootView;
+@property (strong, nonatomic) IBOutlet InputHandleView *rootView;
+
 
 
 - (BOOL)isTextFieldEmpty;
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerBtnClicked:(id)sender;
-- (IBAction)backgroundBtn:(id)sender;
-- (IBAction)text_Clear:(id)sender;
+//- (IBAction)backgroundBtn:(id)sender;
+//- (IBAction)text_Clear:(id)sender;
 - (void)jumpToMainView;
 - (void)jumpToRegisterView;
 

@@ -22,6 +22,7 @@
 @synthesize friendList;
 @synthesize sortedFriendDic;
 @synthesize sectionArray;
+@synthesize friendsIdSet;
 
 static MTUser *singletonInstance;
 
@@ -43,7 +44,8 @@ static MTUser *singletonInstance;
         self.friendList = [[NSMutableArray alloc]initWithCapacity:0];
         self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
-//        self.sql = [[MySqlite alloc]init];
+        self.friendsIdSet = [[NSMutableSet alloc]init];
+       
         self.wait = 0.1;
     }
     return self;
@@ -194,6 +196,7 @@ static MTUser *singletonInstance;
 
 - (NSMutableDictionary*)sortFriendList
 {
+    [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
     //    NSLog(@"friendlist count: %d",friendList.count);
     for (NSMutableDictionary* aFriend in self.friendList) {
@@ -227,9 +230,9 @@ static MTUser *singletonInstance;
     
     NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"好友推荐",@"name", nil];
     NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
-    [sorted setObject:temp_arr forKey:@"🍎"];
+    [sorted setObject:temp_arr forKey:@"#"];
     
-    [sectionArray insertObject:@"🍎" atIndex:0];
+    [sectionArray insertObject:@"#" atIndex:0];
     NSLog(@"sorted friends dictionary: %@",sorted);
     NSLog(@"section array: %@",self.sectionArray);
     return sorted;
@@ -273,6 +276,17 @@ static MTUser *singletonInstance;
     NSLog(@"好友列表更新完成！");
 }
 
+-(void)friendListDidChanged
+{
+    self.sortedFriendDic = [self sortFriendList];
+    for (NSDictionary* friend in friendList) {
+        NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
+        [friendsIdSet addObject:fid];
+    }
+    NSLog(@"friend id set: %@",friendsIdSet);
+}
+
+
 
 //============================================================================
 
@@ -296,8 +310,7 @@ static MTUser *singletonInstance;
             if (tempFriends) {
                 if (tempFriends.count) {
                     self.friendList = tempFriends;
-                    self.sortedFriendDic = [self sortFriendList];
-                    //                [self insertToFriendTable:tempFriends];
+                    
                     NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:tempFriends];
                     
                     [thread start];
@@ -307,13 +320,15 @@ static MTUser *singletonInstance;
                 {
                     NSLog(@"好友列表已经是最新的啦～");
 //                    self.friendList = [self getFriendsFromDB];
-                    self.sortedFriendDic = [self sortFriendList];
+//                    self.sortedFriendDic = [self sortFriendList];
                     
                 }
                 NSLog(@"synchronize friends: %@",friendList);
                 
             }
+            [self friendListDidChanged];
             
+                    
         }
             break;
         default:

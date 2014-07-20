@@ -44,6 +44,12 @@
     [self initParams];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"UserInfoViewController viewWillAppear");
+    [self refresh];
+}
+
 - (void)initParams
 {
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
@@ -69,6 +75,22 @@
     self.info_tableView.dataSource = self;
     self.info_tableView.scrollEnabled = YES;
     
+}
+
+-(void)refresh
+{
+    self.name_label.text = [MTUser sharedInstance].name;
+    self.email_label.text = [MTUser sharedInstance].email;
+    
+    NSNumber* gender = [MTUser sharedInstance].gender;
+    if (gender == 0) {
+        self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+    }
+    else
+    {
+        self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+    }
+    [self.info_tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -131,6 +153,14 @@
             {
                 LocationSettingViewController* location_vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"LocationSettingViewController"];
                 [self.navigationController pushViewController:location_vc animated:YES];
+            }
+        }
+            break;
+        case 1:
+        {
+            if (indexPath.row == 0) {
+                SignSetttingViewController* sign_vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"SignSetttingViewController"];
+                [self.navigationController pushViewController:sign_vc animated:YES];
             }
         }
             break;

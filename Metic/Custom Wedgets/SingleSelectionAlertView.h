@@ -17,7 +17,8 @@
 @end
 
 //----------------WARNING---------------------
-//请把该类定义成类变量，不要定义成局部变量。否则，在执行show方法的时候可能会把该变量提前释放以至于其中的点击事件造成崩溃。切记切记～～！！
+//请把该类定义成类变量，不要定义成局部变量（比如可以用@property和@synthesize定义该变量）。
+//否则，在执行show方法的时候可能会把该变量提前释放以至于其中的点击事件造成崩溃。切记切记～～！！
 
 @interface SingleSelectionAlertView : UIView<CustomIOS7AlertViewDelegate>
 {

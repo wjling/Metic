@@ -30,6 +30,7 @@
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property (strong,nonatomic) NSMutableArray* sectionArray;
+@property (strong,nonatomic) NSMutableSet* friendsIdSet;
 
 
 
@@ -45,6 +46,7 @@
 //- (void)updateAvatarList;
 - (void)initWithData:(NSDictionary *)mdictionary;
 - (void)setUid:(NSNumber *)user_id;
+-(void)friendListDidChanged;
 
 @end
 

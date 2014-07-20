@@ -10,8 +10,9 @@
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "AppConstants.h"
+#import "InputHandleView.h"
 
-@interface RegisterViewController : UIViewController <UITextFieldDelegate, HttpSenderDelegate,UIScrollViewDelegate>
+@interface RegisterViewController : UIViewController <InputHandleViewDelegate, HttpSenderDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField_email;
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
@@ -21,13 +22,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_backToLogin;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIButton *nextStep;
+@property (strong, nonatomic) IBOutlet InputHandleView *rootView;
 
 
 -(IBAction)signUpButtonClicked:(id)sender;
 -(IBAction)backToLoginButtonClicked:(id)sender;
 //-(void)genderSegmentedControlChanged:(int*)gender;
--(IBAction)backgroundBtn:(id)sender;
-- (IBAction)text_Clear:(id)sender;
+//-(IBAction)backgroundBtn:(id)sender;
+//- (IBAction)text_Clear:(id)sender;
 - (IBAction)step_next:(id)sender;
 
 

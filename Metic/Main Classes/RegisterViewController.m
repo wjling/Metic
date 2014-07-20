@@ -21,6 +21,7 @@
 @synthesize button_backToLogin;
 @synthesize button_signUp;
 @synthesize scrollView;
+@synthesize rootView;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -43,10 +44,11 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     self.scrollView.delegate  = self;
     
-    textField_confromPassword.delegate = self;
-    textField_email.delegate = self;
-    textField_password.delegate = self;
-    textField_userName.delegate = self;
+    rootView.myDelegate = self;
+    textField_confromPassword.delegate = rootView;
+    textField_email.delegate = rootView;
+    textField_password.delegate = rootView;
+    textField_userName.delegate = rootView;
     
     textField_confromPassword.placeholder = @"请再次输入密码";
     textField_email.placeholder = @"请输入您的邮箱";
@@ -57,6 +59,11 @@
     
     textField_password.secureTextEntry = YES;
     textField_confromPassword.secureTextEntry = YES;
+    
+    textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField_email.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField_confromPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
 
 }
 
@@ -134,30 +141,24 @@
     [self jumpToLogin];
 }
 
--(IBAction)backgroundBtn:(id)sender
-{
-    //    [sender resignFirstResponder];
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-}
-
-- (IBAction)text_Clear:(id)sender {
-    if ([sender superview] == [self.textField_userName superview])
-    {
-        self.textField_userName.text =@"";
-    }
-    else if([sender superview] == [self.textField_email superview])
-    {
-        self.textField_email.text = @"";
-    }
-    else if([sender superview] == [self.textField_password superview])
-    {
-        self.textField_password.text = @"";
-    }
-    else if([sender superview] == [self.textField_confromPassword superview])
-    {
-        self.textField_confromPassword.text = @"";
-    }
-}
+//- (IBAction)text_Clear:(id)sender {
+//    if ([sender superview] == [self.textField_userName superview])
+//    {
+//        self.textField_userName.text =@"";
+//    }
+//    else if([sender superview] == [self.textField_email superview])
+//    {
+//        self.textField_email.text = @"";
+//    }
+//    else if([sender superview] == [self.textField_password superview])
+//    {
+//        self.textField_password.text = @"";
+//    }
+//    else if([sender superview] == [self.textField_confromPassword superview])
+//    {
+//        self.textField_confromPassword.text = @"";
+//    }
+//}
 
 - (IBAction)step_next:(id)sender {
     CGPoint offset = CGPointMake(0, 265);
@@ -188,47 +189,18 @@
 }
 
 
-#pragma mark - UItextFieldDelegate
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField;        // return NO to disallow editing.
-{
-    return YES;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
-{
-    
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField;          // return YES to allow editing to stop and to resign first responder status. NO to disallow the editing session to end
-{
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
-{
-    [textField resignFirstResponder];
-    
-}
-
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;   // return NO to not change text
-{
-    return YES;
-}
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField;               // called when clear button pressed. return NO to ignore (no notifications)
-{
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField;              // called when 'return' key pressed. return NO to ignore.
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+//#pragma mark - UItextFieldDelegate
+//
+//- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
 //{
-//    NSLog(@"%f",scrollView.contentOffset.y);
+//    
+//}
+//
+//
+//- (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
+//{
+//    [textField resignFirstResponder];
+//    
 //}
 
 @end

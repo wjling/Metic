@@ -15,6 +15,8 @@
     
     NSInteger selected_province_index;
     NSInteger selected_city_index;
+    
+    NSString* newLocation;
 }
 
 @end
@@ -85,6 +87,9 @@
 
 -(void)rightBarButtonInProvinceClicked:(id)sender
 {
+    selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
+    NSLog(@"selected_city_array: %@",selected_city_array);
+    [self.city_tableView reloadData];
     CGPoint p = CGPointMake(320, 0);
     [self.content_scrollView setContentOffset:p animated:YES];
     navigationItem.title = @"请选择城市";
@@ -95,11 +100,11 @@
 -(void)rightBarButtonInCityClicked:(id)sender
 {
     NSString* province = [province_array objectAtIndex:selected_province_index];
-    NSString* city = [selected_city_array objectAtIndex:selected_city_index];
-    NSString* location = [NSString stringWithFormat:@"%@ %@",province,city];
+    NSString* city = [[selected_city_array objectAtIndex:selected_city_index] objectForKey:@"CityName"];
+    newLocation = [NSString stringWithFormat:@"%@ %@",province,city];
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           [MTUser sharedInstance].userid,@"id",
-                          location,@"location",nil  ];
+                          newLocation,@"location",nil  ];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
@@ -163,8 +168,6 @@
 {
     if (tableView == self.province_tableView) {
         selected_province_index = indexPath.row;
-        selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
-        NSLog(@"selected_city_arr: %@",selected_city_array);
         [self.province_tableView reloadData];
     }
     else if(tableView == self.city_tableView)
@@ -204,15 +207,17 @@
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
-            
+            [MTUser sharedInstance].location = newLocation;
+            [self.navigationController popViewControllerAnimated:YES];
         }
             break;
             
         default:
-            NSLog(@"性别修改失败");
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因性别修改失败" WithDelegate:self WithCancelTitle:@"OK"];
+            NSLog(@"所在地修改失败");
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因所在地修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
             break;
     }
+    
 }
 
 

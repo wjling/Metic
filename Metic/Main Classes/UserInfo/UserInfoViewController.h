@@ -12,6 +12,7 @@
 #import "SingleSelectionAlertView.h"
 #import "NameSettingViewController.h"
 #import "LocationSettingViewController.h"
+#import "SignSetttingViewController.h"
 #import "HttpSender.h"
 
 @interface UserInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate>
@@ -23,5 +24,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *email_label;
 @property (strong, nonatomic) IBOutlet UITableView *info_tableView;
 @property (strong, nonatomic) NameSettingViewController* name_vc;
+
+-(void)refresh;
 
 @end

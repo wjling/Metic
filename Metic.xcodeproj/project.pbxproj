@@ -19,8 +19,10 @@
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
+		04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D6128D197B90D500159190 /* SignSetttingViewController.m */; };
 		04E657C0197978080091524F /* LocationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657BF197978080091524F /* LocationSettingViewController.m */; };
 		04E657C219797A380091524F /* Provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E657C119797A380091524F /* Provinces.plist */; };
+		04E657C7197A4EA20091524F /* InputHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657C6197A4EA20091524F /* InputHandleView.m */; };
 		04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */; };
 		04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
@@ -198,9 +200,13 @@
 		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
 		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		04D6128C197B90D500159190 /* SignSetttingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignSetttingViewController.h; path = UserInfo/SignSetttingViewController.h; sourceTree = "<group>"; };
+		04D6128D197B90D500159190 /* SignSetttingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignSetttingViewController.m; path = UserInfo/SignSetttingViewController.m; sourceTree = "<group>"; };
 		04E657BE197978080091524F /* LocationSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSettingViewController.h; path = UserInfo/LocationSettingViewController.h; sourceTree = "<group>"; };
 		04E657BF197978080091524F /* LocationSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSettingViewController.m; path = UserInfo/LocationSettingViewController.m; sourceTree = "<group>"; };
 		04E657C119797A380091524F /* Provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provinces.plist; sourceTree = "<group>"; };
+		04E657C5197A4EA20091524F /* InputHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputHandleView.h; path = "Custom Wedgets/InputHandleView.h"; sourceTree = "<group>"; };
+		04E657C6197A4EA20091524F /* InputHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InputHandleView.m; path = "Custom Wedgets/InputHandleView.m"; sourceTree = "<group>"; };
 		04EF4A5E19765DDB00649DC0 /* UserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoViewController.h; path = UserInfo/UserInfoViewController.h; sourceTree = "<group>"; };
 		04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoViewController.m; path = UserInfo/UserInfoViewController.m; sourceTree = "<group>"; };
 		04EF4A6119765F1400649DC0 /* UserInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoTableViewCell.h; path = UserInfo/UserInfoTableViewCell.h; sourceTree = "<group>"; };
@@ -587,6 +593,8 @@
 				04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */,
 				04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */,
 				04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */,
+				04E657C5197A4EA20091524F /* InputHandleView.h */,
+				04E657C6197A4EA20091524F /* InputHandleView.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -602,6 +610,8 @@
 				04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */,
 				04E657BE197978080091524F /* LocationSettingViewController.h */,
 				04E657BF197978080091524F /* LocationSettingViewController.m */,
+				04D6128C197B90D500159190 /* SignSetttingViewController.h */,
+				04D6128D197B90D500159190 /* SignSetttingViewController.m */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -1308,6 +1318,7 @@
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
 				08DB69A319541F3A00F80F3F /* AFSecurityPolicy.m in Sources */,
 				089337A6197579CE00AD940B /* PECropView.m in Sources */,
+				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
 				089337A9197579CE00AD940B /* PEResizeControl.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
@@ -1337,6 +1348,7 @@
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
+				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
 				0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,

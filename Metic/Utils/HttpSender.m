@@ -36,6 +36,8 @@
 
     URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
     PHOTO_mainServer = @"http://203.195.174.128:20000/";
+    feedBack_mainServer = @"http://203.195.174.128:10089/";
+    
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
@@ -192,6 +194,24 @@
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     //NSLog(@"request sent");
     
+}
+
+-(void)sendFeedBackMessage:(NSDictionary *)json
+{
+    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,@"user_feedback"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    
+    NSString *body=@"";
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[json valueForKey:@"id"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"content",[json valueForKey:@"content"]]];
+    NSData* jsonData = [body dataUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:jsonData];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[jsonData length]];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
 @end

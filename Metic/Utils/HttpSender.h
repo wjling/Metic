@@ -22,6 +22,7 @@
 {
     NSString *URL_mainServer;
     NSString *PHOTO_mainServer;
+    NSString* feedBack_mainServer;
     NSString *httpURL;
 }
 @property(nonatomic,strong)NSURLConnection* myConnection;
@@ -42,6 +43,9 @@
 
 //向服务器传送数据（jsonData）,操作码为operationCode，操作码可从AppConstants.h里面查找
 -(void)sendMessage:(NSData*)jsonData withOperationCode:(int)operationCode;
+
 -(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code;
+
+-(void)sendFeedBackMessage:(NSDictionary*)json;
 
 @end
