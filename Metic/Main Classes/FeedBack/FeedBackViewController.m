@@ -35,7 +35,7 @@
     self.content_textView.delegate = self.rootView;
     UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
     self.content_textView.layer.borderColor = color.CGColor;
-    self.content_textView.layer.borderWidth = 1;
+    self.content_textView.layer.borderWidth = 2;
     self.contact2_textField.text = [MTUser sharedInstance].email;
     
     self.contact1_textField.delegate = rootView;
@@ -71,6 +71,10 @@
 - (IBAction)confrim_button:(id)sender {
     
     NSString* content = self.content_textView.text;
+    if ([content isEqualToString:@""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请输入你的宝贵意见" WithDelegate:self WithCancelTitle:@"OK"];
+        return;
+    }
     NSString* contact_qq = self.contact1_textField.text;
     NSString* contact_mail = self.contact2_textField.text;
     
