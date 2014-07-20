@@ -25,7 +25,6 @@
 		04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */; };
 		04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */; };
 		04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D61295197BD40000159190 /* FlatDatePicker.m */; };
-		04D6129D197BD52F00159190 /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D6129C197BD52F00159190 /* showParticipatorsViewController.m */; };
 		04E657C0197978080091524F /* LocationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657BF197978080091524F /* LocationSettingViewController.m */; };
 		04E657C219797A380091524F /* Provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E657C119797A380091524F /* Provinces.plist */; };
 		04E657C7197A4EA20091524F /* InputHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657C6197A4EA20091524F /* InputHandleView.m */; };
@@ -52,6 +51,7 @@
 		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
 		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
 		08AB9010197AB100006E54CE /* ScaningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB900F197AB100006E54CE /* ScaningViewController.m */; };
+		08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
@@ -230,8 +230,6 @@
 		04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
 		04D61294197BD40000159190 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
 		04D61295197BD40000159190 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
-		04D6129B197BD52F00159190 /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
-		04D6129C197BD52F00159190 /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		04E657BE197978080091524F /* LocationSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSettingViewController.h; path = UserInfo/LocationSettingViewController.h; sourceTree = "<group>"; };
 		04E657BF197978080091524F /* LocationSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSettingViewController.m; path = UserInfo/LocationSettingViewController.m; sourceTree = "<group>"; };
 		04E657C119797A380091524F /* Provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provinces.plist; sourceTree = "<group>"; };
@@ -280,6 +278,8 @@
 		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
 		08AB900E197AB100006E54CE /* ScaningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaningViewController.h; sourceTree = "<group>"; };
 		08AB900F197AB100006E54CE /* ScaningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaningViewController.m; sourceTree = "<group>"; };
+		08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
+		08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		08B3F7041957013F003B32B7 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -1065,7 +1065,6 @@
 			isa = PBXGroup;
 			children = (
 				08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */,
-				08862C3C197976C200A2C454 /* libbaidumapapi.a */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
 				51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */,
@@ -1158,10 +1157,10 @@
 				51581D5F19335A8700943606 /* HomeViewController.m */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
+				08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */,
+				08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */,
 				08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */,
 				08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */,
-				51A94E821978F1D600E1F81D /* showParticipatorsViewController.h */,
-				51A94E831978F1D600E1F81D /* showParticipatorsViewController.m */,
 				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
 				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
 				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
@@ -1444,6 +1443,7 @@
 				0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,
+				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
@@ -1457,7 +1457,6 @@
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
-				0858503519781A0700337689 /* FlatDatePicker.m in Sources */,
 				08AB9010197AB100006E54CE /* ScaningViewController.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
@@ -1485,7 +1484,6 @@
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
-				04D6129D197BD52F00159190 /* showParticipatorsViewController.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */,
