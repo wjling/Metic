@@ -256,7 +256,7 @@
         if ([launcherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             [self.myevents addObject:event];
             
-        }else if([[MTUser sharedInstance].friendIds containsObject:launcherId]){
+        }else if([[MTUser sharedInstance].friendsIdSet containsObject:launcherId]){
             [self.frevents addObject:event];
         }else{
             [self.taevents addObject:event];
