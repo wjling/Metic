@@ -55,6 +55,12 @@
     self.tatableView.homeController= self;
     [self.tatableView setDelegate:self];
     [self.tatableView setDataSource:self.tatableView];
+    
+    self.tableView.eventsSource = self.events;
+    self.mytableView.eventsSource = self.myevents;
+    self.frtableView.eventsSource = self.frevents;
+    self.tatableView.eventsSource = self.taevents;
+    
     self.eventsTableView = self.tableView;
     self.events = [[NSMutableArray alloc]init];
     self.myevents = [[NSMutableArray alloc]init];
@@ -81,10 +87,7 @@
 
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
-    self.tableView.eventsSource = self.events;
-    self.mytableView.eventsSource = self.myevents;
-    self.frtableView.eventsSource = self.frevents;
-    self.tatableView.eventsSource = self.taevents;
+    
     
 }
 

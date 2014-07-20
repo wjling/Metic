@@ -24,6 +24,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
+@property (nonatomic,strong) NSNumber *master_sequence;
+@property BOOL isPublish;
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)show2Dcode:(id)sender;
