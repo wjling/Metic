@@ -29,6 +29,7 @@
 @synthesize logInEmail;
 @synthesize logInPassword;
 @synthesize user;
+@synthesize rootView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -44,7 +45,7 @@
     [super viewDidLoad];
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.user = [MTUser sharedInstance];
-    
+    self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
     [self.view setBackgroundColor:backgroundColor];
     
@@ -54,14 +55,16 @@
     self.Img_register.layer.cornerRadius = 3;
     self.textField_userName.tag = Tag_userName;
     self.textField_userName.returnKeyType = UIReturnKeyDone;
-    self.textField_userName.delegate = self;
+    self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.textField_userName.delegate = self.rootView;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
     self.textField_userName.text = @"185597569@qq.com";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
-    self.textField_password.delegate = self;
+    self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.textField_password.delegate = self.rootView;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = @"538769";
@@ -184,19 +187,6 @@
     [self jumpToRegisterView];
 }
 
--(IBAction)backgroundBtn:(id)sender
-{
-    //    [sender resignFirstResponder];
-    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-}
-
-- (IBAction)text_Clear:(id)sender {
-    if ([sender superview] == [self.textField_userName superview]) {
-        self.textField_userName.text =@"";
-    }else self.textField_password.text = @"";
-}
-
-
 
 #pragma mark - HttpSenderDelegate
 
@@ -284,21 +274,7 @@
     }
 }
 
-#pragma mark - UItextFieldDelegate
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField;        // return NO to disallow editing.
-{
-    return YES;
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
-{
-    
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField;          // return YES to allow editing to stop and to resign first responder status. NO to disallow the editing session to end
-{
-    return YES;
-}
+#pragma mark - InputHandleViewDelegate
 
 - (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
 {
@@ -337,19 +313,8 @@
 }
 
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;   // return NO to not change text
-{
-    return YES;
-}
-
 - (BOOL)textFieldShouldClear:(UITextField *)textField;               // called when clear button pressed. return NO to ignore (no notifications)
 {
-    return YES;
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField;              // called when 'return' key pressed. return NO to ignore.
-{
-    [textField resignFirstResponder];
     return YES;
 }
 

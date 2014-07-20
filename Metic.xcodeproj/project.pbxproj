@@ -13,8 +13,22 @@
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
+		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
+		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
+		04CB1B831977CEA500BC083C /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04CB1B821977CEA500BC083C /* libbaidumapapi.a */; };
+		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
 		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
 		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
+		04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D6128D197B90D500159190 /* SignSetttingViewController.m */; };
+		04D61296197BD40000159190 /* FlatDatePicker-Icon-Check.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61290197BD40000159190 /* FlatDatePicker-Icon-Check.png */; };
+		04D61297197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61291197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png */; };
+		04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */; };
+		04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */; };
+		04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D61295197BD40000159190 /* FlatDatePicker.m */; };
+		04D6129D197BD52F00159190 /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D6129C197BD52F00159190 /* showParticipatorsViewController.m */; };
+		04E657C0197978080091524F /* LocationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657BF197978080091524F /* LocationSettingViewController.m */; };
+		04E657C219797A380091524F /* Provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E657C119797A380091524F /* Provinces.plist */; };
+		04E657C7197A4EA20091524F /* InputHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657C6197A4EA20091524F /* InputHandleView.m */; };
 		04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */; };
 		04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
@@ -28,14 +42,8 @@
 		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
 		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
-		0858503119781A0700337689 /* FlatDatePicker-Icon-Check.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */; };
-		0858503219781A0700337689 /* FlatDatePicker-Icon-Check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */; };
-		0858503319781A0700337689 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */; };
-		0858503419781A0700337689 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */; };
-		0858503519781A0700337689 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 0858503019781A0700337689 /* FlatDatePicker.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
-		08862C3D197976C200A2C454 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08862C3C197976C200A2C454 /* libbaidumapapi.a */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		089337A5197579CE00AD940B /* PECropRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379B197579CE00AD940B /* PECropRectView.m */; };
 		089337A6197579CE00AD940B /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379D197579CE00AD940B /* PECropView.m */; };
@@ -154,7 +162,6 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
-		51A94E841978F1D600E1F81D /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A94E831978F1D600E1F81D /* showParticipatorsViewController.m */; };
 		51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857BF196B951300812F7D /* libSocialSina.a */; };
 		51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C2196B951300812F7D /* libSocialWechat.a */; };
 		51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C3196B951300812F7D /* libWeChatSDK.a */; };
@@ -188,10 +195,32 @@
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
+		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
+		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
+		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
+		04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleSelectionAlertView.m; path = "Custom Wedgets/SingleSelectionAlertView.m"; sourceTree = "<group>"; };
+		04CB1B821977CEA500BC083C /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04CB1BB4197824CF00BC083C /* CustomIOS7AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOS7AlertView.h; sourceTree = "<group>"; };
+		04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOS7AlertView.m; sourceTree = "<group>"; };
 		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
 		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
 		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
 		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		04D6128C197B90D500159190 /* SignSetttingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignSetttingViewController.h; path = UserInfo/SignSetttingViewController.h; sourceTree = "<group>"; };
+		04D6128D197B90D500159190 /* SignSetttingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignSetttingViewController.m; path = UserInfo/SignSetttingViewController.m; sourceTree = "<group>"; };
+		04D61290197BD40000159190 /* FlatDatePicker-Icon-Check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check.png"; sourceTree = "<group>"; };
+		04D61291197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check@2x.png"; sourceTree = "<group>"; };
+		04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close.png"; sourceTree = "<group>"; };
+		04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
+		04D61294197BD40000159190 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
+		04D61295197BD40000159190 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
+		04D6129B197BD52F00159190 /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
+		04D6129C197BD52F00159190 /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
+		04E657BE197978080091524F /* LocationSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSettingViewController.h; path = UserInfo/LocationSettingViewController.h; sourceTree = "<group>"; };
+		04E657BF197978080091524F /* LocationSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSettingViewController.m; path = UserInfo/LocationSettingViewController.m; sourceTree = "<group>"; };
+		04E657C119797A380091524F /* Provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provinces.plist; sourceTree = "<group>"; };
+		04E657C5197A4EA20091524F /* InputHandleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputHandleView.h; path = "Custom Wedgets/InputHandleView.h"; sourceTree = "<group>"; };
+		04E657C6197A4EA20091524F /* InputHandleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InputHandleView.m; path = "Custom Wedgets/InputHandleView.m"; sourceTree = "<group>"; };
 		04EF4A5E19765DDB00649DC0 /* UserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoViewController.h; path = UserInfo/UserInfoViewController.h; sourceTree = "<group>"; };
 		04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoViewController.m; path = UserInfo/UserInfoViewController.m; sourceTree = "<group>"; };
 		04EF4A6119765F1400649DC0 /* UserInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserInfoTableViewCell.h; path = UserInfo/UserInfoTableViewCell.h; sourceTree = "<group>"; };
@@ -216,17 +245,10 @@
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
-		0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check.png"; sourceTree = "<group>"; };
-		0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check@2x.png"; sourceTree = "<group>"; };
-		0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close.png"; sourceTree = "<group>"; };
-		0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
-		0858502F19781A0700337689 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
-		0858503019781A0700337689 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
-		08862C3C197976C200A2C454 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		0893379A197579CE00AD940B /* PECropRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropRectView.h; sourceTree = "<group>"; };
@@ -499,8 +521,6 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
-		51A94E821978F1D600E1F81D /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
-		51A94E831978F1D600E1F81D /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		51E857BF196B951300812F7D /* libSocialSina.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialSina.a; sourceTree = "<group>"; };
 		51E857C0196B951300812F7D /* UMSocialSinaHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialSinaHandler.h; sourceTree = "<group>"; };
 		51E857C2196B951300812F7D /* libSocialWechat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialWechat.a; sourceTree = "<group>"; };
@@ -523,7 +543,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
-				08862C3D197976C200A2C454 /* libbaidumapapi.a in Frameworks */,
+				04CB1B831977CEA500BC083C /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -580,6 +600,32 @@
 			name = Notifications;
 			sourceTree = "<group>";
 		};
+		04CB1B7C1977760200BC083C /* Custom Wedgets */ = {
+			isa = PBXGroup;
+			children = (
+				04CB1BB4197824CF00BC083C /* CustomIOS7AlertView.h */,
+				04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */,
+				04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */,
+				04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */,
+				04E657C5197A4EA20091524F /* InputHandleView.h */,
+				04E657C6197A4EA20091524F /* InputHandleView.m */,
+			);
+			name = "Custom Wedgets";
+			sourceTree = "<group>";
+		};
+		04D6128F197BD40000159190 /* FlatDatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				04D61290197BD40000159190 /* FlatDatePicker-Icon-Check.png */,
+				04D61291197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png */,
+				04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */,
+				04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */,
+				04D61294197BD40000159190 /* FlatDatePicker.h */,
+				04D61295197BD40000159190 /* FlatDatePicker.m */,
+			);
+			path = FlatDatePicker;
+			sourceTree = "<group>";
+		};
 		04EF4A5D1976382200649DC0 /* UserInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -587,21 +633,14 @@
 				04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */,
 				04EF4A6119765F1400649DC0 /* UserInfoTableViewCell.h */,
 				04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */,
+				04CB1B791976EFD300BC083C /* NameSettingViewController.h */,
+				04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */,
+				04E657BE197978080091524F /* LocationSettingViewController.h */,
+				04E657BF197978080091524F /* LocationSettingViewController.m */,
+				04D6128C197B90D500159190 /* SignSetttingViewController.h */,
+				04D6128D197B90D500159190 /* SignSetttingViewController.m */,
 			);
 			name = UserInfo;
-			sourceTree = "<group>";
-		};
-		0858502A19781A0700337689 /* FlatDatePicker */ = {
-			isa = PBXGroup;
-			children = (
-				0858502B19781A0700337689 /* FlatDatePicker-Icon-Check.png */,
-				0858502C19781A0700337689 /* FlatDatePicker-Icon-Check@2x.png */,
-				0858502D19781A0700337689 /* FlatDatePicker-Icon-Close.png */,
-				0858502E19781A0700337689 /* FlatDatePicker-Icon-Close@2x.png */,
-				0858502F19781A0700337689 /* FlatDatePicker.h */,
-				0858503019781A0700337689 /* FlatDatePicker.m */,
-			);
-			path = FlatDatePicker;
 			sourceTree = "<group>";
 		};
 		0892072E197224C30076D2BC /* security */ = {
@@ -995,7 +1034,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				08862C3C197976C200A2C454 /* libbaidumapapi.a */,
+				04CB1B821977CEA500BC083C /* libbaidumapapi.a */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
 				51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */,
@@ -1017,6 +1056,7 @@
 		51581D291933575300943606 /* Metic */ = {
 			isa = PBXGroup;
 			children = (
+				04CB1B7C1977760200BC083C /* Custom Wedgets */,
 				08DB696C19541F3A00F80F3F /* AFNetworking */,
 				08DB698019541F3A00F80F3F /* Cell */,
 				08DB698D19541F3A00F80F3F /* UIKit+AFNetworking */,
@@ -1039,6 +1079,7 @@
 		51581D2A1933575300943606 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				04E657C119797A380091524F /* Provinces.plist */,
 				51581D2B1933575300943606 /* Metic-Info.plist */,
 				51581D2C1933575300943606 /* InfoPlist.strings */,
 				51581D2F1933575300943606 /* main.m */,
@@ -1086,8 +1127,8 @@
 				51581D5E19335A8700943606 /* HomeViewController.h */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
-				51A94E821978F1D600E1F81D /* showParticipatorsViewController.h */,
-				51A94E831978F1D600E1F81D /* showParticipatorsViewController.m */,
+				04D6129B197BD52F00159190 /* showParticipatorsViewController.h */,
+				04D6129C197BD52F00159190 /* showParticipatorsViewController.m */,
 				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
 				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
 				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
@@ -1115,7 +1156,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				0858502A19781A0700337689 /* FlatDatePicker */,
+				04D6128F197BD40000159190 /* FlatDatePicker */,
 				5138B02019766BF300817821 /* BMKinc */,
 				08933799197579CE00AD940B /* PEPCELib */,
 				51EDF3A819752D8A005BEA39 /* TTTAttributedLabel */,
@@ -1190,7 +1231,6 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
-				51A94E811978C8AC00E1F81D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1260,34 +1300,35 @@
 			files = (
 				08DB69AF19541F3A00F80F3F /* SCommentTableViewCell.xib in Resources */,
 				5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */,
+				04D61296197BD40000159190 /* FlatDatePicker-Icon-Check.png in Resources */,
 				51581D3A1933575300943606 /* Main_iPad.storyboard in Resources */,
 				5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */,
-				0858503419781A0700337689 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
 				5144D9A4196B880300C953FB /* UMSocialSDKResourcesNew.bundle in Resources */,
 				5144D99F196B880300C953FB /* UMShareEditViewController.xib in Resources */,
 				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
 				48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */,
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
+				04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */,
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
-				0858503119781A0700337689 /* FlatDatePicker-Icon-Check.png in Resources */,
 				5138B05619766C2000817821 /* mapapi.bundle in Resources */,
 				5144D9A1196B880300C953FB /* UMSLoginViewController.xib in Resources */,
 				5144D9A3196B880300C953FB /* UMSShareListController.xib in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
+				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
+				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
 				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
-				0858503219781A0700337689 /* FlatDatePicker-Icon-Check@2x.png in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
+				04D61297197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png in Resources */,
 				08DB69A919541F3A00F80F3F /* CustomCellTableViewCell.xib in Resources */,
 				04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 				5144D99E196B880300C953FB /* UMSCommentInputControlleriPad.xib in Resources */,
-				0858503319781A0700337689 /* FlatDatePicker-Icon-Close.png in Resources */,
 				5144D9A0196B880300C953FB /* UMShareEditViewControlleriPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1302,30 +1343,16 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		51A94E811978C8AC00E1F81D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */,
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
 				08DB69A319541F3A00F80F3F /* AFSecurityPolicy.m in Sources */,
 				089337A6197579CE00AD940B /* PECropView.m in Sources */,
+				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
 				089337A9197579CE00AD940B /* PEResizeControl.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
@@ -1355,8 +1382,10 @@
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
+				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
 				0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
+				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
@@ -1365,11 +1394,11 @@
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
+				04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */,
 				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
-				0858503519781A0700337689 /* FlatDatePicker.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
@@ -1382,7 +1411,6 @@
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
-				51A94E841978F1D600E1F81D /* showParticipatorsViewController.m in Sources */,
 				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
 				089337A7197579CE00AD940B /* PECropViewController.m in Sources */,
 				510D459F196E8A960081672A /* SDWebImagePrefetcher.m in Sources */,
@@ -1397,6 +1425,7 @@
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
+				04D6129D197BD52F00159190 /* showParticipatorsViewController.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */,
@@ -1414,9 +1443,11 @@
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
+				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */,
 				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
+				04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */,
 				510D45A4196E8A960081672A /* UIImageView+HighlightedWebCache.m in Sources */,
 				0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */,
 				510D4598196E8A960081672A /* NSData+ImageContentType.m in Sources */,

@@ -14,7 +14,7 @@
 
 @interface CommonUtils : NSObject
 
-//传入参数格式: value,key,value,key...
+//打包一个dictionary.传入参数格式: value,key,value,key...
 +(NSMutableDictionary*)packParamsInDictionary:(id) params,...;
 
 //验证邮箱格式是不是正确

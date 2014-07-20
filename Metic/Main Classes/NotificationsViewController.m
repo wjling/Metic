@@ -708,6 +708,15 @@ enum Response_Type
                                           [NSString stringWithFormat:@"'%@'",femail],
                                           [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
                     [mySql closeMyDB];
+                    
+                    NSDictionary* friendJson = [CommonUtils packParamsInDictionary:
+                                                fname,@"name",
+                                                femail,@"email",
+                                                fgender,@"gender",
+                                                fid,@"id",
+                                                nil];
+                    [[MTUser sharedInstance].friendList addObject:friendJson];
+                    [[MTUser sharedInstance] friendListDidChanged];
 
                 }
                 else
