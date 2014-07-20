@@ -208,6 +208,7 @@
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
+            NSLog(@"所在地修改成功");
             [MTUser sharedInstance].location = newLocation;
             [self.navigationController popViewControllerAnimated:YES];
         }
