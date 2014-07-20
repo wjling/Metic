@@ -17,8 +17,9 @@
 @property (strong, nonatomic) IBOutlet UITableView *city_tableView;
 @property (strong, nonatomic) NSArray* location_arr;
 @property (strong, nonatomic) IBOutlet UINavigationItem *navigationItem;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *right_barButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *left_barButton;
+@property (strong, nonatomic) IBOutlet UIButton *right_barButton;
+@property (strong, nonatomic) IBOutlet UIButton *left_barButton;
+
 
 -(void)rightBarButtonInProvinceClicked:(id)sender;
 -(void)rightBarButtonInCityClicked:(id)sender;

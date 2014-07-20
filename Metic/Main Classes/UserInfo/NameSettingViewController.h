@@ -15,7 +15,8 @@
 
 @interface NameSettingViewController : UIViewController<HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *name_textField;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *confirm_barButton;
+@property (strong, nonatomic) IBOutlet UIButton *confirm_barButton;
+
 
 
 - (IBAction)confirmClicked:(id)sender;

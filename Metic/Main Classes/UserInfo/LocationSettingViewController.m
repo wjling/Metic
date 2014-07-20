@@ -61,10 +61,8 @@
     self.city_tableView.dataSource = self;
     
     navigationItem.title = @"请选择省份";
-    [left_barButton setTarget:self];
-    [right_barButton setTarget:self];
-    [left_barButton setAction:@selector(leftBarButtonInProvinceClicked:)];
-    [right_barButton setAction:@selector(rightBarButtonInProvinceClicked:)];
+    [left_barButton addTarget:self action:@selector(leftBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [right_barButton addTarget:self action:@selector(rightBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
@@ -93,8 +91,10 @@
     CGPoint p = CGPointMake(320, 0);
     [self.content_scrollView setContentOffset:p animated:YES];
     navigationItem.title = @"请选择城市";
-    [left_barButton setAction:@selector(leftBarButtonInCityClicked:)];
-    [right_barButton setAction:@selector(rightBarButtonInCityClicked:)];
+    [left_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [right_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [left_barButton addTarget:self action:@selector(leftBarButtonInCityClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [right_barButton addTarget:self action:@selector(rightBarButtonInCityClicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)rightBarButtonInCityClicked:(id)sender
@@ -120,9 +120,10 @@
     CGPoint p = CGPointMake(0, 0);
     [self.content_scrollView setContentOffset:p animated:YES];
     navigationItem.title = @"请选择省份";
-    [left_barButton setAction:@selector(leftBarButtonInProvinceClicked:)];
-    [right_barButton setAction:@selector(rightBarButtonInProvinceClicked:)];
-
+    [left_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [right_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [left_barButton addTarget:self action:@selector(leftBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [right_barButton addTarget:self action:@selector(rightBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
