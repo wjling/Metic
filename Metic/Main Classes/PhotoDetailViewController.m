@@ -420,6 +420,7 @@
     [UIView commitAnimations];
 }
 
+#pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
     //根据`responseCode`得到发送结果,如果分享成功

@@ -7,10 +7,11 @@
 //
 
 #import "Event2DcodeViewController.h"
+#import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
 #import "../Utils/PhotoGetter.h"
 
 @interface Event2DcodeViewController ()
-
+@property(nonatomic,strong) UIImage* event2Dcode;
 @end
 
 @implementation Event2DcodeViewController
@@ -64,13 +65,20 @@
     NSString* QRCODE_STRING = [NSString stringWithFormat:@"%@%@%@",url,type,ID_STRING];
     _TwodCode.image = [QREncoder encode:QRCODE_STRING];
     [_TwodCode layer].magnificationFilter = kCAFilterNearest;
+    _event2Dcode = [CommonUtils convertViewToImage:_mainView];
 }
 - (IBAction)shareQRcode:(id)sender {
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:@"53bb542e56240ba6e80a4bfb"
+                                      shareText:@"WeShare"
+                                     shareImage:_event2Dcode
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                       delegate:self];
 }
 
 - (IBAction)saveQRcode:(id)sender {
-    UIImage* event2Dcode = [CommonUtils convertViewToImage:_mainView];
-    UIImageWriteToSavedPhotosAlbum(event2Dcode,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    
+    UIImageWriteToSavedPhotosAlbum(_event2Dcode,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
 }
 
 - (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
@@ -78,6 +86,18 @@
         // Do anything needed to handle the error or display it to the user
     }else{
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+}
+
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
     }
 }
 @end
