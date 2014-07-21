@@ -42,7 +42,7 @@
     }
     
     
-//    self.sectionArray = [NSArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+    self.sectionArray = [NSMutableArray arrayWithObjects:@"#",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
     
     
     [self initParams];
@@ -77,7 +77,7 @@
     }
     NSLog(@"table data init done");
     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-    self.sectionArray = [[MTUser sharedInstance] sectionArray];
+//    self.sectionArray = [[MTUser sharedInstance] sectionArray];
 //    NSLog(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
     [self.friendTableView reloadData];
     

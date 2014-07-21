@@ -215,7 +215,7 @@ static MTUser *singletonInstance;
             groupOfFriends = [[NSMutableArray alloc]init];
             [groupOfFriends addObject:aFriend];
             [sorted setObject:groupOfFriends forKey:[first_letter uppercaseString]];
-            [self.sectionArray addObject:[first_letter uppercaseString]];
+//            [self.sectionArray addObject:[first_letter uppercaseString]];
         }
     }
     
@@ -233,9 +233,9 @@ static MTUser *singletonInstance;
     NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
     [sorted setObject:temp_arr forKey:@"#"];
     
-    [sectionArray insertObject:@"#" atIndex:0];
+//    [sectionArray insertObject:@"#" atIndex:0];
     NSLog(@"sorted friends dictionary: %@",sorted);
-    NSLog(@"section array: %@",self.sectionArray);
+//    NSLog(@"section array: %@",self.sectionArray);
     return sorted;
 }
 
