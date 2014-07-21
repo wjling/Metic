@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -1287,7 +1287,7 @@
                                         <rect key="frame" x="15" y="70" width="270" height="270"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="二维码" translatesAutoresizingMaskIntoConstraints="NO" id="aVk-fW-gu7">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="默认用户头像" translatesAutoresizingMaskIntoConstraints="NO" id="aVk-fW-gu7">
                                                 <rect key="frame" x="20" y="20" width="230" height="230"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2948,7 +2948,7 @@
         <image name="系统消息图标" width="45" height="45"/>
         <image name="输入框" width="320" height="35"/>
         <image name="输入框-1" width="295" height="43"/>
-        <image name="默认用户头像" width="42" height="42"/>
+        <image name="默认用户头像" width="60" height="60"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -2956,10 +2956,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="a7Z-Ie-XBp"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="U4U-xx-4qf"/>
     </inferredMetricsTieBreakers>
 </document>

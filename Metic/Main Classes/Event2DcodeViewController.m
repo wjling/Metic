@@ -62,8 +62,8 @@
     NSString* ID_STRING = [CommonUtils stringByReversed:[text substringToIndex:text.length-3]];
     ID_STRING = [ID_STRING stringByAppendingString:[text substringWithRange:NSMakeRange(text.length-3, 3)]];
     NSString* QRCODE_STRING = [NSString stringWithFormat:@"%@%@%@",url,type,ID_STRING];
-    NSLog(QRCODE_STRING,nil);
-//    _TwodCode.image = [QREncoder encode:QRCODE_STRING];
+    _TwodCode.image = [QREncoder encode:QRCODE_STRING];
+    [_TwodCode layer].magnificationFilter = kCAFilterNearest;
 }
 - (IBAction)shareQRcode:(id)sender {
 }

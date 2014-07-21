@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "../Source/QREncoder/Classes/QREncoder/QREncoder.h"
+#import <QREncoder/QREncoder.h>
 
 @interface Event2DcodeViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
