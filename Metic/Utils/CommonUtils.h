@@ -70,4 +70,7 @@
 
 //翻转字符串
 + (NSString *)stringByReversed:(NSString*) text;
+
+//将uiview转换成uiimage
++(UIImage*)convertViewToImage:(UIView*)view;
 @end

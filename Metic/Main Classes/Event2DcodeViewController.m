@@ -69,6 +69,16 @@
 }
 
 - (IBAction)saveQRcode:(id)sender {
+    UIImage* event2Dcode = [CommonUtils convertViewToImage:_mainView];
+    UIImageWriteToSavedPhotosAlbum(event2Dcode,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+}
+
+- (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
+    if (error){
+        // Do anything needed to handle the error or display it to the user
+    }else{
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
+    }
 }
 @end
 
