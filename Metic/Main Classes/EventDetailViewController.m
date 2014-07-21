@@ -25,6 +25,8 @@
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
+@property(nonatomic,strong) NSNumber* repliedId;
+@property(nonatomic,strong) NSString* herName;
 @property BOOL visibility;
 @property long mainCommentId;
 @property BOOL isOpen;
@@ -227,11 +229,14 @@
     self.isPublish = YES;
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
+        [dictionary setValue:_repliedId forKey:@"replied"];
+        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+    }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     [dictionary setValue:[NSNumber numberWithLong:self.mainCommentId] forKey:@"master"];
-    
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
@@ -307,6 +312,7 @@
     
     if (indexPath.section == 0) {
         [self.inputField setPlaceholder:@"回复楼主:"];
+        self.repliedId = nil;
         self.mainCommentId = 0;
     }
     else if (indexPath.row == 0) {
@@ -314,7 +320,13 @@
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
-        
+        self.repliedId = nil;
+    }else{
+        SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
+        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.repliedId = cell.authorid;
+        self.herName = cell.author;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -465,6 +477,8 @@
         [[cell viewWithTag:100] setFrame:frame];
         [cell.comment setFrame:CGRectMake(10, 5, 270, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
+        cell.authorid = [subCom valueForKey:@"author_id"];
+        cell.author = [subCom valueForKey:@"author"];
         cell.controller = self;
 
         return cell;
