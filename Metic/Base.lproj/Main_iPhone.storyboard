@@ -392,7 +392,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ppn-p0-Wt2">
                                 <rect key="frame" x="279" y="9" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="添加好友icon"/>
+                                <state key="normal" backgroundImage="添加好友icon白"/>
                                 <connections>
                                     <action selector="switchToAddFriendView:" destination="cDI-rw-2Dm" eventType="touchUpInside" id="rTX-cE-4iR"/>
                                     <segue destination="Sxz-YS-Xvx" kind="push" id="ib8-0I-OZA"/>
@@ -773,9 +773,7 @@
                             <constraint firstItem="caP-i2-TqL" firstAttribute="top" secondItem="7Eo-S4-Zwh" secondAttribute="bottom" id="b8w-oe-n6d"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ">
-                        <barButtonItem key="backBarButtonItem" title="返回" id="4kq-H0-Ysu"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ"/>
                     <connections>
                         <outlet property="avatar_imageView" destination="TeT-cC-fCq" id="m8r-OU-Jev"/>
                         <outlet property="banner_UIview" destination="caP-i2-TqL" id="6Y8-Hl-a9G"/>
@@ -1475,8 +1473,8 @@
                         <segue destination="hMX-YH-n10" kind="push" id="Lay-DH-g1S"/>
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
                         <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
-                        <segue destination="dAM-f8-mD3" kind="push" id="uJg-s7-QUo"/>
                         <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
+                        <segue destination="dAM-f8-mD3" kind="push" id="bpL-Ol-9VE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1714,7 +1712,7 @@
                         <outlet property="tatableView" destination="Mk0-Yo-XWM" id="TOH-IR-KkF"/>
                         <segue destination="cGW-AM-0QH" kind="push" identifier="eventDetailIdentifier" id="fLJ-gw-aSw"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="HomeToPictureWall" id="a7Z-Ie-XBp"/>
-                        <segue destination="FRw-iK-B1T" kind="push" identifier="toUserInfoViewController" id="cJP-Cj-WvT"/>
+                        <segue destination="FRw-iK-B1T" kind="push" id="Tsj-Re-7es"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Tr-aS-eLs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2940,6 +2938,7 @@
         <image name="活动宝" width="201" height="151"/>
         <image name="活动时间icon" width="6" height="6"/>
         <image name="添加好友icon" width="13" height="13"/>
+        <image name="添加好友icon白" width="16" height="16"/>
         <image name="登录按钮" width="290" height="29"/>
         <image name="登录按钮按下效果" width="290" height="29"/>
         <image name="登录界面按钮" width="580" height="76"/>
@@ -2956,10 +2955,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="ib8-0I-OZA"/>
         <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="U4U-xx-4qf"/>
     </inferredMetricsTieBreakers>
 </document>

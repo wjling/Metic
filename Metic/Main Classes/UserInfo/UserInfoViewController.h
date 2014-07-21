@@ -14,8 +14,10 @@
 #import "LocationSettingViewController.h"
 #import "SignSetttingViewController.h"
 #import "HttpSender.h"
+#import "HomeViewController.h"
+#import "SlideNavigationController.h"
 
-@interface UserInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate>
+@interface UserInfoViewController : UIViewController<SlideNavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UIView *banner_UIview;
 @property (strong, nonatomic) IBOutlet UIImageView *banner_imageView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatar_imageView;

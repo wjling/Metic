@@ -28,9 +28,11 @@
 @synthesize friendList;
 @synthesize sortedFriendDic;
 @synthesize sectionArray;
+@synthesize sectionTitlesArray;
 @synthesize searchFriendList;
 @synthesize DB;
 @synthesize addFriendBtn;
+@synthesize friendTableView;
 
 - (void)viewDidLoad
 {
@@ -42,13 +44,18 @@
     }
     
     
-    self.sectionArray = [NSMutableArray arrayWithObjects:@"#",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z", nil];
+    self.sectionTitlesArray = [NSMutableArray arrayWithObjects:@"★",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z",@"#", nil];
     
     
     [self initParams];
-    [self initTableData];
+//    [self initTableData];
 //    NSLog(@"did reload friends");
 //    [self.friendTableView reloadData];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self initTableData];
 }
 
 - (void) initParams
@@ -77,7 +84,7 @@
     }
     NSLog(@"table data init done");
     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-//    self.sectionArray = [[MTUser sharedInstance] sectionArray];
+    self.sectionArray = [[MTUser sharedInstance] sectionArray];
 //    NSLog(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
     [self.friendTableView reloadData];
     
@@ -186,17 +193,31 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
-    return groupOfFriends.count;
+    if (groupOfFriends) {
+        return groupOfFriends.count;
+    }
+    else
+        return 0;
+//    return groupOfFriends.count;
 }
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return sectionArray.count;
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+    if (groupOfFriends) {
     NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
     NSString* label = [aFriend objectForKey:@"name"];
     NSNumber* fid = [aFriend objectForKey:@"id"];
+    
+        
     
     if (section == 0) {
         if (row == 0)
@@ -231,15 +252,13 @@
         }
         return cell;
     }
+        
+    }
     
     return nil;
     
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return sortedFriendDic.count;
-}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -248,12 +267,13 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return sectionArray;
+    return sectionTitlesArray;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    return index;
+    NSInteger sectionIndex = [sectionArray indexOfObject:[sectionTitlesArray objectAtIndex:index]];
+    return sectionIndex;
 }
 
 #pragma mark - UISearchBarDelegate
@@ -334,6 +354,7 @@
 //    [self.friendTableView reloadData];
 }
 
+#pragma mark - SlideNavigationControllerDelegate
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
 	return YES;

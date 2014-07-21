@@ -13,6 +13,7 @@
 {
     NSInteger kNumberOfPages;
     NSNumber* addEventID;
+    NSString* DB_path;
 }
 
 @end
@@ -45,6 +46,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     kNumberOfPages = 2;
+    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self initViews];
     [self getUserInfo];
      NSLog(@"friend info fid: %@",fid);
@@ -206,6 +208,23 @@
     for (int i = 0; i < events.count; i++) {
         [rowHeights addObject:[NSNumber numberWithFloat:110.0]];
     }
+    NSString* name = [response objectForKey:@"name"];
+    NSString* location = [response objectForKey:@"location"];
+    NSNumber* gender = [response objectForKey:@"gender"];
+    NSString* email = [response objectForKey:@"email"];
+    NSDictionary* wheres = [CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",fid],@"id",nil];
+    NSDictionary* sets = [CommonUtils packParamsInDictionary:
+                          [NSString stringWithFormat:@"'%@'",name],@"name",
+                          [NSString stringWithFormat:@"'%@'",email],@"email",
+                          [NSString stringWithFormat:@"%@",fid],@"id",
+                          [NSString stringWithFormat:@"%@",gender],@"gender",
+                          nil];
+    MySqlite* mySql = [[MySqlite alloc]init];
+    [mySql openMyDB:DB_path];
+    [mySql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
+    [mySql closeMyDB];
+    [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+    [[MTUser sharedInstance] friendListDidChanged];
     NSLog(@"event_list: %@",events);
     for (UIView* v in self.fInfoView.subviews) {
         if (v.tag == 0) {
@@ -214,13 +233,12 @@
         }
         else if (v.tag == 1)
         {
-            NSString* name = [response objectForKey:@"name"];
+            
             ((UILabel*)v).text = name;
         }
         else if (v.tag == 2)
         {
-            NSString* location = [response objectForKey:@"location"];
-            
+        
             if (![location isEqual:[NSNull null]]) {
                 ((UILabel*)v).text = location;
                 
@@ -233,7 +251,7 @@
         }
         else if( v.tag == 3)
         {
-            NSNumber* gender = [response objectForKey:@"gender"];
+            
             if (0 == [gender intValue]) {
                 ((UIImageView*)v).image = [UIImage imageNamed:@"女icon"];
             }

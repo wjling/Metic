@@ -93,6 +93,7 @@
     [self.info_tableView reloadData];
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -343,6 +344,19 @@
     }
     [self.info_tableView reloadData];
 }
+
+
+#pragma mark - SlideNavigationControllerDelegate
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+	return YES;
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayRightMenu
+{
+	return NO;
+}
+
 
 
 @end

@@ -197,13 +197,21 @@ static MTUser *singletonInstance;
 
 - (NSMutableDictionary*)sortFriendList
 {
+    BOOL hasSpecialChar = NO;
     [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
     //    NSLog(@"friendlist count: %d",friendList.count);
     for (NSMutableDictionary* aFriend in self.friendList) {
         NSString* fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
         //        NSLog(@"friend name: %@",fname_py);
+        NSString *regex = @"[a-zA-Z]";
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
+        BOOL isSpecialChar = ! [predicate evaluateWithObject:first_letter];
+        if (isSpecialChar) {
+            first_letter = @"#";
+            hasSpecialChar = YES;
+        }
         NSMutableArray* groupOfFriends = [sorted objectForKey:[first_letter uppercaseString]];
         
         if (groupOfFriends) {
@@ -215,7 +223,10 @@ static MTUser *singletonInstance;
             groupOfFriends = [[NSMutableArray alloc]init];
             [groupOfFriends addObject:aFriend];
             [sorted setObject:groupOfFriends forKey:[first_letter uppercaseString]];
-//            [self.sectionArray addObject:[first_letter uppercaseString]];
+            if (!isSpecialChar) {
+                [self.sectionArray addObject:[first_letter uppercaseString]];
+            }
+            
         }
     }
     
@@ -231,11 +242,14 @@ static MTUser *singletonInstance;
     
     NSDictionary* temp_dic = [[NSDictionary alloc]initWithObjectsAndKeys:@"好友推荐",@"name", nil];
     NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
-    [sorted setObject:temp_arr forKey:@"#"];
+    [sorted setObject:temp_arr forKey:@"★"];
     
-//    [sectionArray insertObject:@"#" atIndex:0];
+    [sectionArray insertObject:@"★" atIndex:0];
+    if (hasSpecialChar) {
+        [sectionArray addObject:@"#"];
+    }
     NSLog(@"sorted friends dictionary: %@",sorted);
-//    NSLog(@"section array: %@",self.sectionArray);
+    NSLog(@"section array: %@",self.sectionArray);
     return sorted;
 }
 
