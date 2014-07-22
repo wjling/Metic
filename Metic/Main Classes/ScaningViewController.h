@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZBarSDK.h"
 #import "SlideNavigationController.h"
 
-@interface ScaningViewController : UIViewController<SlideNavigationControllerDelegate>
+@interface ScaningViewController : UIViewController<SlideNavigationControllerDelegate,ZBarReaderDelegate>
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
-
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+- (IBAction)scan:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *label;
 @end
