@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *email_label;
 @property (strong, nonatomic) IBOutlet UITableView *info_tableView;
 @property (strong, nonatomic) NameSettingViewController* name_vc;
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 
 -(void)refresh;
 
