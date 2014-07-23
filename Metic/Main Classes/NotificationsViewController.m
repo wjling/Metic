@@ -33,6 +33,10 @@ enum Response_Type
 @synthesize systemMsg;
 @synthesize appListener;
 @synthesize tabs;
+@synthesize rightBarButton;
+@synthesize functions_uiview;
+@synthesize function1_button;
+@synthesize function2_button;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -96,6 +100,11 @@ enum Response_Type
     self.systemMessage_tableView.delegate = self;
     self.systemMessage_tableView.dataSource = self;
     
+    [functions_uiview setHidden:YES];
+    
+    [function1_button addTarget:self action:@selector(function1Clicked:) forControlEvents:UIControlEventTouchUpInside];
+    [function2_button addTarget:self action:@selector(function2Clicked:) forControlEvents:UIControlEventTouchUpInside];
+    
     CGRect frame = self.tabbar_scrollview.frame;
     
     int x = 0;
@@ -105,6 +114,9 @@ enum Response_Type
     UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height)];
     UIButton* systemMsg_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width*2, 0, width, height)];
     self.tabs = [[NSMutableArray alloc]initWithObjects:eventR_button,friendR_button,systemMsg_button, nil];
+    eventR_button.showsTouchWhenHighlighted = NO;
+    friendR_button.showsTouchWhenHighlighted = NO;
+    systemMsg_button.showsTouchWhenHighlighted = NO;
     
     UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
     UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
@@ -201,6 +213,28 @@ enum Response_Type
     [self.content_scrollView setContentOffset:point animated:YES];
    
     
+}
+
+- (IBAction)rightBarBtnClicked:(id)sender {
+    //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
+    [UIView beginAnimations:@"View shows" context:nil];
+    //动画持续时间
+    [UIView setAnimationDuration:0.5];
+    //设置动画的回调函数，设置后可以使用回调方法
+    [UIView setAnimationDelegate:self];
+    //设置动画曲线，控制动画速度
+    [UIView  setAnimationCurve: UIViewAnimationCurveEaseInOut];
+    //设置动画方式，并指出动画发生的位置
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
+    [functions_uiview setHidden:NO];
+    //提交UIView动画
+    [UIView commitAnimations];
+}
+
+- (IBAction)function1Clicked:(id)sender {
+}
+
+- (IBAction)function2Clicked:(id)sender {
 }
 
 - (void) refresh

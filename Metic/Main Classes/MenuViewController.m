@@ -75,7 +75,9 @@
 	UIViewController *vc ;
     vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
     
+//    [self.navigationController pushViewController:vc animated:YES];
     [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+//    [self presentModalViewController:vc animated:YES];
 
 }
 
