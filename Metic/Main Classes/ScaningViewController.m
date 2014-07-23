@@ -49,8 +49,7 @@
     ZBarImageScanner * scanner = _reader.scanner;
     [scanner setSymbology:ZBAR_I25 config:ZBAR_CFG_ENABLE to:0];
     [_reader.readerView setTorchMode:0];
-    [_reader setShowsZBarControls: YES];
-    
+    [_reader setShowsZBarControls:NO];
     
     [self.navigationController pushViewController:_reader animated:YES];
     
