@@ -315,12 +315,6 @@
     
 }
 
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField;               // called when clear button pressed. return NO to ignore (no notifications)
-{
-    return YES;
-}
-
 - (void) recoverloginbutton
 {
     [button_login setEnabled:YES];

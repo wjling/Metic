@@ -19,7 +19,7 @@
 #import "PhotoGetter.h"
 
 
-@interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate>
+@interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,NotificationDelegate>
 @property (strong,nonatomic) NSMutableArray* msgFromDB;
 @property (strong,nonatomic) NSMutableArray* friendRequestMsg;
 @property (strong,nonatomic) NSMutableArray* eventRequestMsg;
@@ -34,6 +34,10 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *tabbar_scrollview;
 @property (strong, nonatomic) IBOutlet UIScrollView *content_scrollView;
 @property (strong, nonatomic) IBOutlet UIView *rootView;
+@property (strong, nonatomic) IBOutlet UIButton *rightBarButton;
+@property (strong, nonatomic) IBOutlet UIView *functions_uiview;
+@property (strong, nonatomic) IBOutlet UIButton *function1_button;
+@property (strong, nonatomic) IBOutlet UIButton *function2_button;
 
 
 
@@ -46,5 +50,8 @@
 - (IBAction)participate_event_okBtnClicked:(id)sender;
 - (IBAction)participate_event_noBtnClicked:(id)sender;
 - (void)tabBtnClicked:(id)sender;
+- (IBAction)rightBarBtnClicked:(id)sender;
+- (IBAction)function1Clicked:(id)sender;
+- (IBAction)function2Clicked:(id)sender;
 
 @end

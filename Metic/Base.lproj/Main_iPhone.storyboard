@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="22" y="49"/>
         </scene>
-        <!--Register View Controller - Register-->
+        <!--Register View Controller - 注册-->
         <scene sceneID="CW3-Zz-73w">
             <objects>
                 <viewController id="Zgx-3f-tRL" customClass="RegisterViewController" sceneMemberID="viewController">
@@ -209,7 +209,7 @@
                             <constraint firstItem="C8K-GH-Txv" firstAttribute="top" secondItem="vcL-dC-qBm" secondAttribute="bottom" constant="25" id="d7h-6C-br3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Register" id="VFq-4v-LPp"/>
+                    <navigationItem key="navigationItem" title="注册" id="VFq-4v-LPp"/>
                     <size key="freeformSize" width="320" height="640"/>
                     <connections>
                         <outlet property="button_backToLogin" destination="vcL-dC-qBm" id="uN8-hH-QtN"/>
@@ -296,7 +296,7 @@
             </objects>
             <point key="canvasLocation" x="1483" y="390"/>
         </scene>
-        <!--Friends View Controller - Friends-->
+        <!--Friends View Controller - 好友中心-->
         <scene sceneID="jJY-Vt-jgb">
             <objects>
                 <viewController storyboardIdentifier="FriendsViewController" id="cDI-rw-2Dm" customClass="FriendsViewController" sceneMemberID="viewController">
@@ -387,7 +387,7 @@
                             <constraint firstItem="9kw-Z0-asa" firstAttribute="top" secondItem="Hc6-Qr-xXh" secondAttribute="bottom" id="hJL-nr-hHB"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Friends" id="ObQ-44-r4f">
+                    <navigationItem key="navigationItem" title="好友中心" id="ObQ-44-r4f">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Tif-OU-Zzl">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ppn-p0-Wt2">
                                 <rect key="frame" x="279" y="9" width="25" height="25"/>
@@ -419,7 +419,7 @@
             </objects>
             <point key="canvasLocation" x="1466" y="976"/>
         </scene>
-        <!--Notifications View Controller - Notifications-->
+        <!--Notifications View Controller - 消息中心-->
         <scene sceneID="IO1-2z-f5N">
             <objects>
                 <viewController storyboardIdentifier="NotificationsViewController" id="hMX-YH-n10" customClass="NotificationsViewController" sceneMemberID="viewController">
@@ -656,6 +656,49 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cDo-Qy-sEn">
+                                <rect key="frame" x="215" y="0.0" width="100" height="80"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xLs-Wt-4Wv">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTJ-lu-Q67">
+                                                <rect key="frame" x="0.0" y="5" width="100" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <state key="normal" title="历史记录">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="function1Clicked:" destination="hMX-YH-n10" eventType="touchUpInside" id="e0T-Az-7WP"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rKe-LF-39V">
+                                        <rect key="frame" x="0.0" y="40" width="100" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCr-2n-REN">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <state key="normal" title="清空当前列表">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="function2Clicked:" destination="hMX-YH-n10" eventType="touchUpInside" id="wMd-gI-EYd"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -667,11 +710,29 @@
                             <constraint firstItem="Lyi-aI-pIE" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" id="rFr-OA-P6J"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Notifications" id="siV-z3-2cW"/>
+                    <navigationItem key="navigationItem" title="消息中心" id="siV-z3-2cW">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Djn-1T-Bbv">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Eow-OI-lju">
+                                <rect key="frame" x="274" y="2" width="30" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" backgroundImage="功能选项">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="rightBarBtnClicked:" destination="hMX-YH-n10" eventType="touchUpInside" id="JVI-10-a2b"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="content_scrollView" destination="Adz-kL-fW6" id="JJr-uX-fc7"/>
                         <outlet property="eventRequest_tableView" destination="bju-hI-gfv" id="P38-nm-zJU"/>
                         <outlet property="friendRequest_tableView" destination="bkl-GJ-uzZ" id="LWU-jP-X6V"/>
+                        <outlet property="function1_button" destination="sTJ-lu-Q67" id="N8k-PJ-s6h"/>
+                        <outlet property="function2_button" destination="MCr-2n-REN" id="fNb-V3-7Ty"/>
+                        <outlet property="functions_uiview" destination="cDo-Qy-sEn" id="vTj-3M-zTO"/>
+                        <outlet property="rightBarButton" destination="Eow-OI-lju" id="vAV-mY-pcK"/>
                         <outlet property="rootView" destination="HbB-c8-nWA" id="75m-sj-t8X"/>
                         <outlet property="shadowView" destination="JCv-GU-pwd" id="6Pa-8k-tI8"/>
                         <outlet property="systemMessage_tableView" destination="HlR-s1-oMN" id="kcH-U7-1OB"/>
@@ -1056,7 +1117,7 @@
             </objects>
             <point key="canvasLocation" x="1466" y="2164"/>
         </scene>
-        <!--Friend Info View Controller - Friend Info-->
+        <!--Friend Info View Controller - 好友信息-->
         <scene sceneID="CSm-aA-FZ8">
             <objects>
                 <viewController id="FXr-Y8-zhi" customClass="FriendInfoViewController" sceneMemberID="viewController">
@@ -1174,7 +1235,7 @@
                             <constraint firstItem="iCh-82-s7t" firstAttribute="top" secondItem="bCG-BS-MNC" secondAttribute="bottom" constant="150" id="xRJ-wG-81R"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Friend Info" id="v3P-On-aQU"/>
+                    <navigationItem key="navigationItem" title="好友信息" id="v3P-On-aQU"/>
                     <connections>
                         <outlet property="friendInfoEvents_tableView" destination="iCh-82-s7t" id="uKX-eb-Cda"/>
                         <outlet property="root" destination="5Rh-hg-SF0" id="nU3-VF-DAB"/>
@@ -1184,7 +1245,7 @@
             </objects>
             <point key="canvasLocation" x="1929" y="1058"/>
         </scene>
-        <!--Add Friend View Controller - Add Friends-->
+        <!--Add Friend View Controller - 添加好友-->
         <scene sceneID="6Zy-R9-3wh">
             <objects>
                 <viewController id="Sxz-YS-Xvx" customClass="AddFriendViewController" sceneMemberID="viewController">
@@ -1232,7 +1293,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Add Friends" id="DPg-4m-rod"/>
+                    <navigationItem key="navigationItem" title="添加好友" id="DPg-4m-rod"/>
                     <connections>
                         <outlet property="friendSearchBar" destination="egC-rh-eUW" id="lD3-pr-i0D"/>
                         <outlet property="searchedFriendsTableView" destination="1l6-KE-ZGK" id="nuI-y2-ESC"/>
@@ -1359,7 +1420,7 @@
             </objects>
             <point key="canvasLocation" x="2541" y="390"/>
         </scene>
-        <!--Login View Controller - Login-->
+        <!--Login View Controller - 登陆-->
         <scene sceneID="c37-aP-6j7">
             <objects>
                 <viewController id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
@@ -1458,7 +1519,7 @@
                             <constraint firstItem="od8-4V-RI7" firstAttribute="top" secondItem="y6K-RO-Ldz" secondAttribute="bottom" constant="25" id="cqz-pt-q1C"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Login" id="QFT-Ua-zat"/>
+                    <navigationItem key="navigationItem" title="登陆" id="QFT-Ua-zat"/>
                     <connections>
                         <outlet property="Img_password" destination="iig-DP-8Ji" id="6aJ-dF-J4E"/>
                         <outlet property="Img_register" destination="y6K-RO-Ldz" id="2WO-Bc-p1b"/>
@@ -2297,11 +2358,11 @@
                         <viewControllerLayoutGuide type="bottom" id="4Gl-Fe-oyc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3ZT-9j-Wbx" customClass="MainView">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqB-KE-UOQ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </scrollView>
@@ -2914,6 +2975,7 @@
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
         <image name="二维码" width="22" height="22"/>
+        <image name="功能选项" width="25" height="44"/>
         <image name="加入活动加号icon" width="29" height="29"/>
         <image name="加号icon" width="12" height="12"/>
         <image name="勾选前icon" width="34" height="34"/>
@@ -2955,9 +3017,9 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
-        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="cOi-1F-viY"/>
         <segue reference="ib8-0I-OZA"/>
+        <segue reference="Bnm-KN-OgT"/>
         <segue reference="a7Z-Ie-XBp"/>
         <segue reference="U4U-xx-4qf"/>
     </inferredMetricsTieBreakers>
