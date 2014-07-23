@@ -2876,10 +2876,10 @@
             </objects>
             <point key="canvasLocation" x="-470" y="54"/>
         </scene>
-        <!--Scaning View Controller - 扫一扫-->
+        <!--Scan View Controller - 扫一扫-->
         <scene sceneID="kYJ-TK-diU">
             <objects>
-                <viewController storyboardIdentifier="ScaningViewController" id="VkY-lH-zTs" customClass="ScaningViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ScaningViewController" id="VkY-lH-zTs" customClass="ScanViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="i08-dF-yKI"/>
                         <viewControllerLayoutGuide type="bottom" id="GKX-CO-XK0"/>
@@ -2888,32 +2888,23 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8SR-Jm-OBb">
+                                <rect key="frame" x="0.0" y="320" width="320" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.98823535439999999" green="0.4274510145" blue="0.26274511220000002" alpha="1" colorSpace="deviceRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RI0-Cs-sfd" customClass="ZBarReaderView">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u8a-Yr-5Ae">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4fS-wJ-vN0">
-                                <rect key="frame" x="23" y="350" width="274" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HOX-zR-C3x">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="305"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fkN-Pv-e14">
-                                <rect key="frame" x="260" y="380" width="53" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="scan:" destination="VkY-lH-zTs" eventType="touchUpInside" id="a3A-4e-nHM"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -2923,9 +2914,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k"/>
                     <connections>
-                        <outlet property="imageView" destination="HOX-zR-C3x" id="pZ6-lz-a9w"/>
-                        <outlet property="label" destination="4fS-wJ-vN0" id="nka-4G-dxJ"/>
-                        <outlet property="shadowView" destination="u8a-Yr-5Ae" id="k1E-aR-XVi"/>
+                        <outlet property="label" destination="8SR-Jm-OBb" id="niy-ZY-O5O"/>
+                        <outlet property="readerView" destination="RI0-Cs-sfd" id="YZ9-FB-0Gl"/>
+                        <outlet property="shadowView" destination="u8a-Yr-5Ae" id="MmD-Yd-85D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vnO-ph-17Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
