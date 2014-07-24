@@ -8,16 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "ZBarSDK.h"
+#import "AppConstants.h"
+#import "HttpSender.h"
 
-@interface ScanViewController : UIViewController<ZBarReaderViewDelegate>
+@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate>
 {
-    IBOutlet UILabel  * label ;
     IBOutlet ZBarReaderView *readerView;
-    ZBarCameraSimulator *cameraSim;
 }
 
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
-@property(nonatomic,retain) UILabel * label ;
+@property (strong, nonatomic) IBOutlet UIView *showView;
+@property (strong, nonatomic) IBOutlet UIView *resultView;
 @property (nonatomic, retain) ZBarReaderView *readerView;
+@property (strong, nonatomic) IBOutlet UIButton *inButton;
+- (IBAction)back:(id)sender;
+- (IBAction)wantIn:(id)sender;
 
 @end
