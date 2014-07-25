@@ -207,6 +207,14 @@
     return codestr;
 }
 
++ (NSString *)TextFrombase64String:(NSString *)text
+{
+    NSData *Data=[text dataUsingEncoding:NSUTF8StringEncoding];
+    //进行编码
+    Data =[GTMBase64 decodeData:Data];
+    NSString *codestr=[[NSString alloc] initWithData:Data encoding:NSUTF8StringEncoding];
+    return codestr;
+}
 
 + (NSString*)getUrl:(NSString*) path
 {

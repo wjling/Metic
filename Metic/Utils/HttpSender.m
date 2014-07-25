@@ -114,6 +114,9 @@
         case 11:
             resultCode = @"invite_friends";
             break;
+        case 12:
+            resultCode = @"search_event";
+            break;
         case 14:
             resultCode = @"add_comment";
             break;

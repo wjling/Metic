@@ -68,6 +68,9 @@
 //base64加密
 + (NSString *)base64StringFromText:(NSString *)text;
 
+//base64解密
++ (NSString *)TextFrombase64String:(NSString *)text;
+
 //翻转字符串
 + (NSString *)stringByReversed:(NSString*) text;
 
