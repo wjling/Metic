@@ -11,7 +11,7 @@
 #import "AppConstants.h"
 #import "HttpSender.h"
 
-@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate>
+@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
 {
     IBOutlet ZBarReaderView *readerView;
 }

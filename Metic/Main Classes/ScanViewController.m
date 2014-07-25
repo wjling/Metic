@@ -71,7 +71,10 @@
 }
 
 - (IBAction)wantIn:(id)sender {
-    
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [confirmAlert show];
+
 }
 
 
@@ -81,6 +84,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventid forKey:@"event_id"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT];
@@ -92,7 +96,7 @@
     CustomCellTableViewCell *cell = [nib objectAtIndex:0];
     [cell setFrame:CGRectMake(0, 46, 300, 250)];
     NSDictionary *a = _events;
-    if ([a valueForKey:@"isIn"]){
+    if ([[a valueForKey:@"isIn"] intValue] == 1){
         [_inButton setHighlighted:YES];
         [_inButton setEnabled:NO];
     }
@@ -192,6 +196,11 @@
     return timeInfo;
 }
 
+-(void)dismissAlertView:(UIAlertView*) alertView
+{
+    [alertView dismissWithClickedButtonIndex:0 animated:YES];
+    
+}
 #pragma mark - HttpSender Delegate -
 -(void)finishWithReceivedData:(NSData *)rData
 {
@@ -204,8 +213,16 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            self.events = response1;
-            [self showResult];
+            if ([response1 valueForKey:@"isIn"]) {
+                self.events = response1;
+                [self showResult];
+            }else{
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"请等待发起人验证" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                [alert show];
+                [self performSelector:@selector(dismissAlertView:) withObject:alert afterDelay:1.0];
+                [self performSelector:@selector(back:) withObject:alert afterDelay:1.5];
+            }
+            
         }
         break;
     }
@@ -259,6 +276,37 @@
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];
+    }
+}
+
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case 0:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSString* cm = [alertView textFieldAtIndex:0].text;
+
+                NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
+                NSLog(@"%@",dictionary);
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+
+            }
+        }
+            break;
+            
+        default:
+            break;
     }
 }
 

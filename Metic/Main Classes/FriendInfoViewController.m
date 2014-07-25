@@ -524,7 +524,7 @@
                 NSString* cm = [alertView textFieldAtIndex:0].text;
                 NSNumber* userId = [MTUser sharedInstance].userid;
                 
-                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:996],@"cmd",userId,@"id",cm,@"confirm_msg", addEventID,@"event_id",nil];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",userId,@"id",cm,@"confirm_msg", addEventID,@"event_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
