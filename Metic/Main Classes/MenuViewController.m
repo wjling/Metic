@@ -16,6 +16,12 @@
 @property(nonatomic,strong) UIImageView* testImageView;
 @property(nonatomic,strong) UIImage* testImage;
 @property(nonatomic,strong) UIImageView* gender;
+@property(nonatomic,strong) UIViewController* homeViewController;
+@property(nonatomic,strong) UIViewController* friendsViewController;
+@property(nonatomic,strong) UIViewController* notificationsViewController;
+@property(nonatomic,strong) UIViewController* scaningViewController;
+@property(nonatomic,strong) UIViewController* feedBackViewController;
+
 
 @end
 @implementation MenuViewController
@@ -24,6 +30,7 @@
 
 -(void)viewDidLoad
 {
+    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
 
@@ -169,7 +176,10 @@
 	switch (indexPath.row)
 	{
 		case 0:
-			vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+            if (!_homeViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+                _homeViewController = vc;
+            }else vc = _homeViewController;
 			break;
 			
 //		case 1:
@@ -178,7 +188,10 @@
 //			break;
 			
 		case 1:
-			vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
+            if (!_friendsViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
+                _friendsViewController = vc;
+            }else vc = _friendsViewController;
 			break;
 			
 //		case 2:
@@ -186,13 +199,22 @@
 //			break;
             
         case 2:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+            if (!_notificationsViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+                _notificationsViewController = vc;
+            }else vc = _notificationsViewController;
 			break;
         case 3:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
+            if (!_scaningViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
+                _scaningViewController = vc;
+            }else vc = _scaningViewController;
 			break;
         case 4:
-            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
+            if (!_feedBackViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
+                _feedBackViewController = vc;
+            }else vc = _feedBackViewController;
 			break;
 
         default:

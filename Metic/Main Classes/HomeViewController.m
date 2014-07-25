@@ -21,8 +21,10 @@
 @property (strong, nonatomic) IBOutlet MTTableView *mytableView;
 @property (strong, nonatomic) IBOutlet MTTableView *frtableView;
 @property (strong, nonatomic) IBOutlet MTTableView *tatableView;
-@property(strong, nonatomic) MTTableView *eventsTableView;
-
+@property (strong, nonatomic) MTTableView *eventsTableView;
+@property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
+@property (nonatomic,strong) NSNumber* updateInfoNum;
+@property (nonatomic,strong) NSMutableSet* updateEventIds;
 @end
 
 
@@ -34,14 +36,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _updateEventIds = [[NSMutableSet alloc]init];
+    _updateInfoNum = [NSNumber numberWithInt:0];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
+    ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
     
     
     [self createMenuButton];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
+    
     self.scrollView.delegate = self;
     self.tableView.homeController= self;
     [self.tableView setDelegate:self];
@@ -95,9 +100,13 @@
 {
     [self.view bringSubviewToFront: self.shadowView];
     [self.scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
 }
 
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
+}
 
 -(void)createMenuButton
 {
@@ -112,6 +121,32 @@
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
 }
 
+
+-(void)adjustInfoView
+{
+    //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
+    if (_updateEventIds.count > 0) {
+        [_updateInfoView setHidden:NO];
+        if (_updateEventIds.count < 10) {
+            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",_updateEventIds.count];
+        }else _updateInfoNumLabel.text = @"+N";
+        CGRect frame = _scrollView.frame;
+        if (frame.origin.y == 35) {
+            frame.origin.y = 75;
+            frame.size.height -= 40;
+            [_scrollView setFrame:frame];
+        }
+    }else{
+        _updateInfoNumLabel.text = @"";
+        [_updateInfoView setHidden:YES];
+        CGRect frame = _scrollView.frame;
+        if (frame.origin.y == 75) {
+            frame.origin.y = 35;
+            frame.size.height += 40;
+            [_scrollView setFrame:frame];
+        }
+    }
+}
 #pragma mark - UIScrollView Methods -
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -348,6 +383,27 @@
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(tableViewReload) userInfo:nil repeats:NO];
 }
 
+#pragma mark notificationDidReceive
+-(void)notificationDidReceive:(NSArray *)messages
+{
+    for (NSDictionary* message in messages) {
+        NSLog(@"receive a message %@",message);
+        NSString *eventInfo = [message valueForKey:@"msg"];
+        NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
+        int cmd = [[event valueForKey:@"cmd"] intValue];
+        if (cmd == 993 || cmd == 992 || cmd == 991) {
+            [_updateEventIds addObject:[event valueForKey:@"event_id"]];
+            NSLog(@"%d",_updateEventIds.count);
+            [self adjustInfoView];
+        }
+        
+    }
+}
+
+
+
+
 #pragma mark 代理方法-触摸scrollview开始时调用
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -397,7 +453,7 @@
 {
     if (self.morefuctions.isHidden) {
         [self.morefuctions setHidden:NO];
-        [self.view bringSubviewToFront:self.morefuctions];
+        //[self.view bringSubviewToFront:self.morefuctions];
         //设置“更多”图层边框阴影
         [self.morefuctions.layer setShadowOffset:CGSizeMake(1,1)];
         [self.morefuctions.layer setShadowOpacity:1.0];
@@ -416,7 +472,7 @@
 -(void)closeButtonView
 {
     [self.morefuctions setHidden:YES];
-    [self.view sendSubviewToBack:self.morefuctions];
+    //[self.view sendSubviewToBack:self.morefuctions];
     
 }
 

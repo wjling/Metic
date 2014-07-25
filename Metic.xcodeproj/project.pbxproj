@@ -10,7 +10,6 @@
 		0400DFF8196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */; };
 		0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */; };
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
-		04133E14197FA624006F378E /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04133E13197FA624006F378E /* libbaidumapapi.a */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
@@ -41,6 +40,7 @@
 		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
 		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
+		085E7A0519824173001E99E4 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 085E7A0419824173001E99E4 /* libbaidumapapi.a */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
@@ -216,7 +216,6 @@
 		0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsFriendRequestTableViewCell.m; sourceTree = "<group>"; };
 		0400DFF6196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsSystemMessageTableViewCell.h; sourceTree = "<group>"; };
 		0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
-		04133E13197FA624006F378E /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedBackViewController.h; path = FeedBack/FeedBackViewController.h; sourceTree = "<group>"; };
 		04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedBackViewController.m; path = FeedBack/FeedBackViewController.m; sourceTree = "<group>"; };
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
@@ -269,6 +268,7 @@
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		085E7A0419824173001E99E4 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
@@ -603,13 +603,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
 				51F06C29197E0193000E8428 /* libiconv.dylib in Frameworks */,
 				51F06C27197E017F000E8428 /* CoreVideo.framework in Frameworks */,
 				51F06C25197E0173000E8428 /* CoreMedia.framework in Frameworks */,
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
-				5172E2DF197D049C0050F446 /* libbaidumapapi.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
@@ -624,6 +622,7 @@
 				4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */,
 				51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */,
 				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
+				085E7A0519824173001E99E4 /* libbaidumapapi.a in Frameworks */,
 				51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */,
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
@@ -1102,6 +1101,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				085E7A0419824173001E99E4 /* libbaidumapapi.a */,
 				51F06C28197E0193000E8428 /* libiconv.dylib */,
 				51F06C26197E017F000E8428 /* CoreVideo.framework */,
 				51F06C24197E0173000E8428 /* CoreMedia.framework */,

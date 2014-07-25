@@ -46,6 +46,7 @@
 @property (strong, nonatomic)NSMutableArray* syncMessages;
 @property (strong, nonatomic) id<NotificationDelegate> notificationDelegate;
 @property (strong, nonatomic) BMKMapManager* mapManager;
+@property (strong, nonatomic) UIViewController* homeViewController;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 
 - (void)connect;

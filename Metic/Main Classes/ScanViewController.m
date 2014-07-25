@@ -219,8 +219,8 @@
             }else{
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"请等待发起人验证" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [alert show];
-                [self performSelector:@selector(dismissAlertView:) withObject:alert afterDelay:1.0];
-                [self performSelector:@selector(back:) withObject:alert afterDelay:1.5];
+                [self performSelector:@selector(dismissAlertView:) withObject:alert afterDelay:1.5];
+                [self performSelector:@selector(back:) withObject:alert afterDelay:2.0];
             }
             
         }
