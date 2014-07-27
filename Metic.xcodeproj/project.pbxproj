@@ -41,6 +41,7 @@
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
 		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
 		085E7A0519824173001E99E4 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 085E7A0419824173001E99E4 /* libbaidumapapi.a */; };
+		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
@@ -269,6 +270,8 @@
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		085E7A0419824173001E99E4 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		085E7A0B19828AAA001E99E4 /* DynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicViewController.h; sourceTree = "<group>"; };
+		085E7A0C19828AAA001E99E4 /* DynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicViewController.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
@@ -1226,6 +1229,8 @@
 				515F9FF319736D58009D96BA /* MapViewController.mm */,
 				51F06C86197FA2F3000E8428 /* ScanViewController.h */,
 				51F06C87197FA2F3000E8428 /* ScanViewController.m */,
+				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
+				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -1549,6 +1554,7 @@
 				089337A6197579CE00AD940B /* PECropView.m in Sources */,
 				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
 				089337A9197579CE00AD940B /* PEResizeControl.m in Sources */,
+				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,

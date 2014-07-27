@@ -1426,7 +1426,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tqn-UI-iRz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2541" y="390"/>
+            <point key="canvasLocation" x="2453" y="390"/>
         </scene>
         <!--Login View Controller - 登陆-->
         <scene sceneID="c37-aP-6j7">
@@ -1661,6 +1661,9 @@
                                         <state key="normal" title="新动态      " backgroundImage="新消息黑色背景">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="toDynamic:" destination="von-Oa-xrt" eventType="touchUpInside" id="E3c-jx-L4V"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="新消息数圆圈" translatesAutoresizingMaskIntoConstraints="NO" id="WAB-Zf-CBw">
                                         <rect key="frame" x="173" y="7" width="26" height="26"/>
@@ -1810,11 +1813,137 @@
                         <segue destination="cGW-AM-0QH" kind="push" identifier="eventDetailIdentifier" id="fLJ-gw-aSw"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="HomeToPictureWall" id="a7Z-Ie-XBp"/>
                         <segue destination="FRw-iK-B1T" kind="push" id="Tsj-Re-7es"/>
+                        <segue destination="a8T-4m-XZD" kind="push" identifier="toDynamics" id="f3E-D8-oKh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Tr-aS-eLs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1466" y="-379"/>
+        </scene>
+        <!--Dynamic View Controller - 动态列表-->
+        <scene sceneID="koA-8j-QB5">
+            <objects>
+                <viewController id="a8T-4m-XZD" customClass="DynamicViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="UsQ-GB-wAw"/>
+                        <viewControllerLayoutGuide type="bottom" id="vqa-kY-CEn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="n1p-FU-yxJ">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pL-ib-WJT">
+                                <rect key="frame" x="0.0" y="0.0" width="159" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="活动更新">
+                                    <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="dynamics_pressdown:" destination="a8T-4m-XZD" eventType="touchUpInside" id="Dgc-zb-1i1"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bVQ-oV-pLZ">
+                                <rect key="frame" x="160" y="0.0" width="160" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <state key="normal" title="@我的">
+                                    <color key="titleColor" red="0.57254904510000004" green="0.57254904510000004" blue="0.57254904510000004" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected">
+                                    <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" red="0.0" green="0.70588237050000002" blue="0.5647059083" alpha="1" colorSpace="deviceRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="atMe_pressdown:" destination="a8T-4m-XZD" eventType="touchUpInside" id="sS6-1s-rUJ"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8g-40-Ff2">
+                                <rect key="frame" x="159" y="10" width="1" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.80000000000000004" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AiL-Pi-wnM">
+                                <rect key="frame" x="0.0" y="33" width="320" height="2"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.80000000000000004" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FJ9-kR-AqD">
+                                <rect key="frame" x="0.0" y="35" width="320" height="381"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ZGm-dy-cGR">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="381"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                        <prototypes>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="updateCell" rowHeight="50" id="7ke-6o-dd3">
+                                                <rect key="frame" x="0.0" y="22" width="320" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7ke-6o-dd3" id="pc3-Gu-b9O">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4Am-kh-Nqm">
+                                        <rect key="frame" x="320" y="0.0" width="320" height="381"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
+                                        <prototypes>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="atMeCell" rowHeight="50" id="ZkD-hN-jEP">
+                                                <rect key="frame" x="0.0" y="22" width="320" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZkD-hN-jEP" id="BFU-Bh-6Mo">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="ZGm-dy-cGR" firstAttribute="leading" secondItem="FJ9-kR-AqD" secondAttribute="leading" id="42j-ug-FQn"/>
+                                    <constraint firstItem="4Am-kh-Nqm" firstAttribute="leading" secondItem="ZGm-dy-cGR" secondAttribute="trailing" id="4rf-iT-31K"/>
+                                    <constraint firstAttribute="trailing" secondItem="4Am-kh-Nqm" secondAttribute="trailing" id="xdg-PE-z2J"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.93333339691162109" green="0.93333339691162109" blue="0.93333339691162109" alpha="1" colorSpace="deviceRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZGm-dy-cGR" firstAttribute="top" secondItem="UsQ-GB-wAw" secondAttribute="bottom" constant="35" id="7bR-zU-0pY"/>
+                            <constraint firstItem="vqa-kY-CEn" firstAttribute="top" secondItem="FJ9-kR-AqD" secondAttribute="bottom" id="GJO-WD-6GB"/>
+                            <constraint firstItem="vqa-kY-CEn" firstAttribute="top" secondItem="4Am-kh-Nqm" secondAttribute="bottom" id="a7C-VZ-EU7"/>
+                            <constraint firstItem="4Am-kh-Nqm" firstAttribute="top" secondItem="UsQ-GB-wAw" secondAttribute="bottom" constant="35" id="alL-iI-O6h"/>
+                            <constraint firstItem="FJ9-kR-AqD" firstAttribute="top" secondItem="UsQ-GB-wAw" secondAttribute="bottom" constant="35" id="fsx-DW-4Rt"/>
+                            <constraint firstItem="vqa-kY-CEn" firstAttribute="top" secondItem="ZGm-dy-cGR" secondAttribute="bottom" id="gaZ-O1-viU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="动态列表" id="ybQ-Dz-gs7"/>
+                    <connections>
+                        <outlet property="atMe_button" destination="bVQ-oV-pLZ" id="Pdj-kv-TC6"/>
+                        <outlet property="atMe_tableView" destination="4Am-kh-Nqm" id="ouO-fX-2mM"/>
+                        <outlet property="dynamic_tableView" destination="ZGm-dy-cGR" id="CLv-Q5-PFw"/>
+                        <outlet property="dynamics_button" destination="5pL-ib-WJT" id="z2z-mQ-sRS"/>
+                        <outlet property="scrollView" destination="FJ9-kR-AqD" id="SoG-Dz-oYj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LRt-Be-sAV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2036" y="-678"/>
         </scene>
         <!--Event Detail View Controller - 活动详情-->
         <scene sceneID="N7k-Vs-EaJ">
@@ -1899,7 +2028,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RKA-5E-VEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2019" y="-379"/>
+            <point key="canvasLocation" x="2453" y="-379"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="ou0-cq-X5U">
@@ -1964,7 +2093,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oQU-tM-b4Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1929" y="-1741"/>
+            <point key="canvasLocation" x="2453" y="-1741"/>
         </scene>
         <!--Invite Friend View Controller - 邀请好友-->
         <scene sceneID="lhe-x7-x8d">
@@ -2071,7 +2200,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ffj-7J-89s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1929" y="-1161"/>
+            <point key="canvasLocation" x="2453" y="-1161"/>
         </scene>
         <!--Launch Event View Controller - 发起活动-->
         <scene sceneID="dbm-cM-Bbu">
@@ -2432,7 +2561,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GFv-An-32f" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2461" y="-1161"/>
+            <point key="canvasLocation" x="2985" y="-1161"/>
         </scene>
         <!--Show Participators View Controller - 活动参与者-->
         <scene sceneID="jkd-eS-YMD">
@@ -2493,7 +2622,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ccs-Oc-d9a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2956" y="-1144"/>
+            <point key="canvasLocation" x="3480" y="-1144"/>
         </scene>
         <!--Picture Wall View Controller - 图片墙-->
         <scene sceneID="jET-B2-Ifw">
@@ -2549,7 +2678,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DYb-Gb-6Ib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2517" y="-391"/>
+            <point key="canvasLocation" x="3041" y="-391"/>
         </scene>
         <!--Photo Display View Controller-->
         <scene sceneID="W3X-7y-wZo">
@@ -2666,7 +2795,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yae-7W-sYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2987" y="-391"/>
+            <point key="canvasLocation" x="3511" y="-391"/>
         </scene>
         <!--Photo Detail View Controller-->
         <scene sceneID="v7Q-Vv-RB3">
@@ -2830,7 +2959,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gJp-mE-q59" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3474" y="-396"/>
+            <point key="canvasLocation" x="3998" y="-396"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="EOk-MM-Lrr">
@@ -3133,6 +3262,6 @@
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="a7Z-Ie-XBp"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="U4U-xx-4qf"/>
+        <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>

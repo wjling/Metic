@@ -14,6 +14,8 @@
 #import "../Utils/PhotoGetter.h"
 #import "PictureWallViewController.h"
 #import "LaunchEventViewController.h"
+#import "DynamicViewController.h"
+
 @interface HomeViewController ()
 
 
@@ -23,8 +25,8 @@
 @property (strong, nonatomic) IBOutlet MTTableView *tatableView;
 @property (strong, nonatomic) MTTableView *eventsTableView;
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
-@property (nonatomic,strong) NSNumber* updateInfoNum;
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
+@property (nonatomic,strong) NSMutableArray* updateEvents;
 @end
 
 
@@ -37,7 +39,7 @@
 {
     [super viewDidLoad];
     _updateEventIds = [[NSMutableSet alloc]init];
-    _updateInfoNum = [NSNumber numberWithInt:0];
+    _updateEvents = [[NSMutableArray alloc]init];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
     
@@ -370,6 +372,12 @@
         nextViewController.controller = self;
         
     }
+    if ([segue.destinationViewController isKindOfClass:[DynamicViewController class]]) {
+        DynamicViewController *nextViewController = segue.destinationViewController;
+        nextViewController.updateEvents = [[NSMutableArray alloc]initWithArray: _updateEvents];
+        [self.updateEventIds removeAllObjects];
+        [self.updateEvents removeAllObjects];
+    }
     
 }
 
@@ -393,7 +401,10 @@
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
         if (cmd == 993 || cmd == 992 || cmd == 991) {
-            [_updateEventIds addObject:[event valueForKey:@"event_id"]];
+            if (![_updateEventIds containsObject:[event valueForKey:@"event_id"]]) {
+                [_updateEventIds addObject:[event valueForKey:@"event_id"]];
+                [_updateEvents addObject:event];
+            }
             NSLog(@"%d",_updateEventIds.count);
             [self adjustInfoView];
         }
@@ -446,6 +457,10 @@
     if (self.scrollView.contentOffset.x!=930) {
         [self.scrollView setContentOffset:CGPointMake(930, 0) animated:YES];
     }
+}
+
+- (IBAction)toDynamic:(id)sender {
+    [self performSegueWithIdentifier:@"toDynamics" sender:self];
 }
 
 

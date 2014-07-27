@@ -45,6 +45,7 @@
 - (IBAction)showMyEvents:(id)sender;
 - (IBAction)showFrEvents:(id)sender;
 - (IBAction)showTaEvents:(id)sender;
+- (IBAction)toDynamic:(id)sender;
 
 
 @property (nonatomic,strong)NSNumber *selete_Eventid;
