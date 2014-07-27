@@ -303,7 +303,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = QREncoder_Prefix.pch;
-				INSTALL_PATH = /usr/local/lib;
+				INSTALL_PATH = "";
 				PRODUCT_NAME = QREncoder;
 				SKIP_INSTALL = YES;
 			};
@@ -318,7 +318,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = QREncoder_Prefix.pch;
-				INSTALL_PATH = /usr/local/lib;
+				INSTALL_PATH = "";
 				PRODUCT_NAME = QREncoder;
 				SKIP_INSTALL = YES;
 			};
@@ -335,6 +335,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.2;
+				SKIP_INSTALL = NO;
 			};
 			name = Debug;
 		};
@@ -348,6 +349,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.2;
+				SKIP_INSTALL = NO;
 			};
 			name = Release;
 		};

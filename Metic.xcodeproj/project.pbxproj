@@ -13,6 +13,8 @@
 		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22C491985238700B33B7C /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B22C481985238700B33B7C /* libbaidumapapi.a */; };
+		04B22C7B198531E200B33B7C /* libQREncoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B22C7519852CBD00B33B7C /* libQREncoder.a */; };
+		04B22C7E1985333700B33B7C /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C7D1985333700B33B7C /* ScanViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
@@ -53,7 +55,6 @@
 		089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */; };
 		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
 		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
-		08AB9010197AB100006E54CE /* ScaningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB900F197AB100006E54CE /* ScaningViewController.m */; };
 		08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
@@ -179,19 +180,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		08FE3FA2197A93F6009EA7C7 /* PBXContainerItemProxy */ = {
+		04B22C7419852CBD00B33B7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */;
+			containerPortal = 04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = QREncoder;
 		};
-		08FE3FA4197A93F6009EA7C7 /* PBXContainerItemProxy */ = {
+		04B22C7619852CBD00B33B7C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */;
+			containerPortal = 04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EB7DA3AE10A4F5D90071984A;
 			remoteInfo = QREncoderTest;
+		};
+		04B22C79198531C500B33B7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = QREncoder;
 		};
 		51581D491933575300943606 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -214,6 +222,9 @@
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22C481985238700B33B7C /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QREncoder.xcodeproj; path = src/QREncoder.xcodeproj; sourceTree = "<group>"; };
+		04B22C7C1985333700B33B7C /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
+		04B22C7D1985333700B33B7C /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
 		04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedBackViewController.h; path = FeedBack/FeedBackViewController.h; sourceTree = "<group>"; };
 		04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedBackViewController.m; path = FeedBack/FeedBackViewController.m; sourceTree = "<group>"; };
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
@@ -284,8 +295,6 @@
 		089337A2197579CE00AD940B /* PEResizeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEResizeControl.m; sourceTree = "<group>"; };
 		089337A3197579CE00AD940B /* UIImage+PECrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PECrop.h"; sourceTree = "<group>"; };
 		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
-		08AB900E197AB100006E54CE /* ScaningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaningViewController.h; sourceTree = "<group>"; };
-		08AB900F197AB100006E54CE /* ScaningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScaningViewController.m; sourceTree = "<group>"; };
 		08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
 		08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -343,7 +352,6 @@
 		08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event2DcodeViewController.h; sourceTree = "<group>"; };
 		08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event2DcodeViewController.m; sourceTree = "<group>"; };
-		08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QREncoder.xcodeproj; path = Metic/Source/QREncoder/QREncoder.xcodeproj; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		48151F1119493FD8009E156E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		48151F15194947EB009E156E /* AppConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
@@ -571,6 +579,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B22C7B198531E200B33B7C /* libQREncoder.a in Frameworks */,
 				04B22C491985238700B33B7C /* libbaidumapapi.a in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				04CB1B831977CEA500BC083C /* libbaidumapapi.a in Frameworks */,
@@ -613,6 +622,15 @@
 				04B22C441984F43400B33B7C /* SystemSettingsViewController.m */,
 			);
 			name = SystemSettings;
+			sourceTree = "<group>";
+		};
+		04B22C7019852CBD00B33B7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				04B22C7519852CBD00B33B7C /* libQREncoder.a */,
+				04B22C7719852CBD00B33B7C /* QREncoderTest.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		04B3F5E919756BA600C0A6EB /* FeedBack */ = {
@@ -797,15 +815,6 @@
 				08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
-			sourceTree = "<group>";
-		};
-		08FE3F9E197A93F6009EA7C7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				08FE3FA3197A93F6009EA7C7 /* libQREncoder.a */,
-				08FE3FA5197A93F6009EA7C7 /* QREncoderTest.octest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		48151F14194947EB009E156E /* Utils */ = {
@@ -1084,8 +1093,8 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */,
 				04B22C481985238700B33B7C /* libbaidumapapi.a */,
-				08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
 				51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */,
@@ -1203,8 +1212,8 @@
 				086A5AB1193D6E7500880F2F /* MainView.m */,
 				515F9FF219736D58009D96BA /* MapViewController.h */,
 				515F9FF319736D58009D96BA /* MapViewController.mm */,
-				08AB900E197AB100006E54CE /* ScaningViewController.h */,
-				08AB900F197AB100006E54CE /* ScaningViewController.m */,
+				04B22C7C1985333700B33B7C /* ScanViewController.h */,
+				04B22C7D1985333700B33B7C /* ScanViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -1291,6 +1300,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				04B22C7A198531C500B33B7C /* PBXTargetDependency */,
 			);
 			name = Metic;
 			productName = Metic;
@@ -1343,8 +1353,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 08FE3F9E197A93F6009EA7C7 /* Products */;
-					ProjectRef = 08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */;
+					ProductGroup = 04B22C7019852CBD00B33B7C /* Products */;
+					ProjectRef = 04B22C6F19852CBD00B33B7C /* QREncoder.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1356,18 +1366,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		08FE3FA3197A93F6009EA7C7 /* libQREncoder.a */ = {
+		04B22C7519852CBD00B33B7C /* libQREncoder.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libQREncoder.a;
-			remoteRef = 08FE3FA2197A93F6009EA7C7 /* PBXContainerItemProxy */;
+			remoteRef = 04B22C7419852CBD00B33B7C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		08FE3FA5197A93F6009EA7C7 /* QREncoderTest.octest */ = {
+		04B22C7719852CBD00B33B7C /* QREncoderTest.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = QREncoderTest.octest;
-			remoteRef = 08FE3FA4197A93F6009EA7C7 /* PBXContainerItemProxy */;
+			remoteRef = 04B22C7619852CBD00B33B7C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1476,11 +1486,11 @@
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */,
+				04B22C7E1985333700B33B7C /* ScanViewController.m in Sources */,
 				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
-				08AB9010197AB100006E54CE /* ScaningViewController.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
@@ -1554,6 +1564,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		04B22C7A198531C500B33B7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QREncoder;
+			targetProxy = 04B22C79198531C500B33B7C /* PBXContainerItemProxy */;
+		};
 		51581D4A1933575300943606 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 51581D1F1933575300943606 /* Metic */;
@@ -1696,6 +1711,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/src/**",
+					"$(PROJECT_DIR)/Metic/Source/ZBarSDK/Headers/ZBarSDK",
 				);
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -1730,6 +1747,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(PROJECT_DIR)/src/**",
+					"$(PROJECT_DIR)/Metic/Source/ZBarSDK/Headers/ZBarSDK",
 				);
 				INFOPLIST_FILE = "Metic/Metic-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
