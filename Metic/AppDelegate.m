@@ -145,7 +145,7 @@
     while (![self.sql isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
-    NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg", nil];
+    NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
     for (NSDictionary* message in self.syncMessages) {
         NSString* timeStamp = [message objectForKey:@"timestamp"];
@@ -154,7 +154,9 @@
         NSArray* values = [[NSArray alloc]initWithObjects:
                            [NSString stringWithFormat:@"%@",seq],
                            [NSString stringWithFormat:@"'%@'",timeStamp],
-                           [NSString stringWithFormat:@"'%@'",msg], nil];
+                           [NSString stringWithFormat:@"'%@'",msg],
+                           [NSString stringWithFormat:@"%d",-1],
+                           nil];
         [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
     }
     [self.sql closeMyDB];
@@ -296,9 +298,40 @@
          */
         
         [self.syncMessages addObject:response1];
+        NSString* msg_str = [response1 objectForKey:@"msg"];
+        NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+        NSNumber* msg_cmd = [msg_dic objectForKey:@"cmd"];
+        if ([msg_cmd integerValue] == ADD_FRIEND_RESULT) {
+            NSNumber* result = [msg_dic objectForKey:@"result"];
+            NSLog(@"friend request result: %@",result);
+            if ([result integerValue] == 1) {
+                NSString* name = [msg_dic objectForKey:@"name"];
+                NSString* email = [msg_dic objectForKey:@"email"];
+                NSNumber* fid = [msg_dic objectForKey:@"id"];
+                NSNumber* gender = [msg_dic objectForKey:@"gender"];
+                NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+                [sql openMyDB:path];
+                [sql insertToTable:@"friend"
+                        withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
+                          andValues:[[NSArray alloc] initWithObjects:
+                                     [NSString stringWithFormat:@"%@",fid],
+                                     [NSString stringWithFormat:@"'%@'",name],
+                                     [NSString stringWithFormat:@"'%@'",email],
+                                     [NSString stringWithFormat:@"%@",gender], nil]];
+                [sql closeMyDB];
+            }
+            else if ([result integerValue] == 0)
+            {
+                NSLog(@"friend request is refused");
+            }
+            
+        }
         if (self.syncMessages.count == numOfSyncMessages) {
             NSNumber* seq = [response1 objectForKey:@"seq"];
-            NSMutableDictionary* json = [CommonUtils packParamsInDictionary:@"feedback",@"cmd",[MTUser sharedInstance].userid, @"uid",seq,@"seq",nil];
+            NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                         @"feedback",@"cmd",[MTUser sharedInstance].userid, @"uid",
+                                         seq,@"seq",
+                                         nil];
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
             NSLog(@"feedback send json: %@",json);

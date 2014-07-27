@@ -10,6 +10,9 @@
 		0400DFF8196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */; };
 		0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */; };
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
+		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
+		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
+		04B22C491985238700B33B7C /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B22C481985238700B33B7C /* libbaidumapapi.a */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
@@ -25,7 +28,6 @@
 		04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61292197BD40000159190 /* FlatDatePicker-Icon-Close.png */; };
 		04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */; };
 		04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D61295197BD40000159190 /* FlatDatePicker.m */; };
-		04D612A6197C060D00159190 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D612A5197C060C00159190 /* libbaidumapapi.a */; };
 		04E657C0197978080091524F /* LocationSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657BF197978080091524F /* LocationSettingViewController.m */; };
 		04E657C219797A380091524F /* Provinces.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E657C119797A380091524F /* Provinces.plist */; };
 		04E657C7197A4EA20091524F /* InputHandleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E657C6197A4EA20091524F /* InputHandleView.m */; };
@@ -207,6 +209,11 @@
 		0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsFriendRequestTableViewCell.m; sourceTree = "<group>"; };
 		0400DFF6196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsSystemMessageTableViewCell.h; sourceTree = "<group>"; };
 		0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
+		04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoricalNotificationViewController.h; sourceTree = "<group>"; };
+		04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoricalNotificationViewController.m; sourceTree = "<group>"; };
+		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
+		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
+		04B22C481985238700B33B7C /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedBackViewController.h; path = FeedBack/FeedBackViewController.h; sourceTree = "<group>"; };
 		04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedBackViewController.m; path = FeedBack/FeedBackViewController.m; sourceTree = "<group>"; };
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
@@ -231,7 +238,6 @@
 		04D61293197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Close@2x.png"; sourceTree = "<group>"; };
 		04D61294197BD40000159190 /* FlatDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlatDatePicker.h; sourceTree = "<group>"; };
 		04D61295197BD40000159190 /* FlatDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlatDatePicker.m; sourceTree = "<group>"; };
-		04D612A5197C060C00159190 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04E657BE197978080091524F /* LocationSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationSettingViewController.h; path = UserInfo/LocationSettingViewController.h; sourceTree = "<group>"; };
 		04E657BF197978080091524F /* LocationSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationSettingViewController.m; path = UserInfo/LocationSettingViewController.m; sourceTree = "<group>"; };
 		04E657C119797A380091524F /* Provinces.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Provinces.plist; sourceTree = "<group>"; };
@@ -565,7 +571,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04D612A6197C060D00159190 /* libbaidumapapi.a in Frameworks */,
+				04B22C491985238700B33B7C /* libbaidumapapi.a in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				04CB1B831977CEA500BC083C /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
@@ -600,6 +606,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		04B22C3F1984F3F100B33B7C /* SystemSettings */ = {
+			isa = PBXGroup;
+			children = (
+				04B22C431984F43400B33B7C /* SystemSettingsViewController.h */,
+				04B22C441984F43400B33B7C /* SystemSettingsViewController.m */,
+			);
+			name = SystemSettings;
+			sourceTree = "<group>";
+		};
 		04B3F5E919756BA600C0A6EB /* FeedBack */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,6 +635,8 @@
 				0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */,
 				0835FFC6196339590050833F /* NotificationsViewController.h */,
 				0835FFC7196339590050833F /* NotificationsViewController.m */,
+				04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */,
+				04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -1067,7 +1084,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				04D612A5197C060C00159190 /* libbaidumapapi.a */,
+				04B22C481985238700B33B7C /* libbaidumapapi.a */,
 				08FE3F9D197A93F6009EA7C7 /* QREncoder.xcodeproj */,
 				51EDF3A3197512B4005BEA39 /* CoreText.framework */,
 				51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */,
@@ -1143,6 +1160,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				04B22C3F1984F3F100B33B7C /* SystemSettings */,
 				04EF4A5D1976382200649DC0 /* UserInfo */,
 				04B3F5E919756BA600C0A6EB /* FeedBack */,
 				04B63B4C1963A1600015357B /* Notifications */,
@@ -1450,6 +1468,7 @@
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
+				04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				08DB69AC19541F3A00F80F3F /* MCommentTableViewCell.m in Sources */,
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
@@ -1469,6 +1488,7 @@
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				510D4597196E8A960081672A /* MKAnnotationView+WebCache.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
+				04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */,
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
