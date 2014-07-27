@@ -17,6 +17,7 @@
 #import "NotificationsFriendRequestTableViewCell.h"
 #import "NotificationsSystemMessageTableViewCell.h"
 #import "PhotoGetter.h"
+#import "HistoricalNotificationViewController.h"
 
 
 @interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,NotificationDelegate>
@@ -24,6 +25,7 @@
 @property (strong,nonatomic) NSMutableArray* friendRequestMsg;
 @property (strong,nonatomic) NSMutableArray* eventRequestMsg;
 @property (strong,nonatomic) NSMutableArray* systemMsg;
+@property (strong,nonatomic) NSMutableArray* historicalMsg;
 @property (strong,nonatomic) NSMutableArray* tabs;
 @property (strong, nonatomic) IBOutlet UITableView *friendRequest_tableView;
 @property (strong, nonatomic) IBOutlet UITableView *eventRequest_tableView;
