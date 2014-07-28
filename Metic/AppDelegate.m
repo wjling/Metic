@@ -319,6 +319,10 @@
                                      [NSString stringWithFormat:@"'%@'",email],
                                      [NSString stringWithFormat:@"%@",gender], nil]];
                 [sql closeMyDB];
+//                [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+                NSDictionary* newFriend = [CommonUtils packParamsInDictionary:fid,@"id",name,@"name",gender,@"gender",email,@"email",nil];
+                [[MTUser sharedInstance].friendList addObject:newFriend];
+                [[MTUser sharedInstance] friendListDidChanged];
             }
             else if ([result integerValue] == 0)
             {
