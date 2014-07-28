@@ -3523,7 +3523,7 @@
         <!--System Settings View Controller - 系统设置-->
         <scene sceneID="sSI-FL-evp">
             <objects>
-                <viewController id="sN6-CT-cFg" customClass="SystemSettingsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SystemSettingsViewController" id="sN6-CT-cFg" customClass="SystemSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3aE-W8-woV"/>
                         <viewControllerLayoutGuide type="bottom" id="dkF-kr-onV"/>
@@ -3531,19 +3531,8 @@
                     <view key="view" contentMode="scaleToFill" id="lKi-kZ-AUV">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Osz-gQ-eVs">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            </tableView>
-                        </subviews>
                     </view>
                     <navigationItem key="navigationItem" title="系统设置" id="HiN-LQ-Kft"/>
-                    <connections>
-                        <outlet property="settings_tableview" destination="Osz-gQ-eVs" id="3Al-yf-hbr"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ntg-Cr-XsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

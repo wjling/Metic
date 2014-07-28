@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
-@property (strong, nonatomic) IBOutlet UITableView *settings_tableview;
+@property (strong, nonatomic) UITableView *settings_tableview;
 
 @end

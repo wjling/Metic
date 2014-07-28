@@ -21,6 +21,7 @@
 @property(nonatomic,strong) UIViewController* notificationsViewController;
 @property(nonatomic,strong) UIViewController* scaningViewController;
 @property(nonatomic,strong) UIViewController* feedBackViewController;
+@property(nonatomic,strong) UIViewController* systemSettingsViewController;
 
 
 @end
@@ -105,7 +106,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 5;
+	return 6;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -129,10 +130,6 @@
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
 			
-//		case 3:
-//			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
-//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
-//			break;
 //        case 4:
 //			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
 //            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
@@ -153,6 +150,11 @@
 			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
 			break;
+        case 5:
+			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
+			break;
+
             
 	}
     
@@ -216,6 +218,14 @@
                 _feedBackViewController = vc;
             }else vc = _feedBackViewController;
 			break;
+        case 5:
+        {
+            if (!_systemSettingsViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"SystemSettingsViewController"];
+                _systemSettingsViewController = vc;
+            }else vc = _systemSettingsViewController;
+        }
+            break;
 
         default:
             return;
