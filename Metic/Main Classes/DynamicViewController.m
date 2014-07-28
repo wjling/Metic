@@ -7,10 +7,13 @@
 //
 
 #import "DynamicViewController.h"
+#import "EventDetailViewController.h"
 #import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
+#import "../Utils/PhotoGetter.h"
 
 @interface DynamicViewController ()
 @property(nonatomic,strong) UIView *bar;
+@property(nonatomic,strong) NSNumber* selete_Eventid;
 
 @end
 
@@ -34,6 +37,15 @@
     _dynamic_tableView.dataSource = self;
     _atMe_tableView.delegate = self;
     _atMe_tableView.dataSource = self;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [_dynamic_tableView reloadData];
+    [_atMe_tableView reloadData];
+    if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
+        [_scrollView setContentOffset:CGPointMake(320, 0) animated:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -77,19 +89,25 @@
         return cell;
 
     }else{
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
-        if (_updateEvents) {
-            NSDictionary *updateInfo = _updateEvents[indexPath.row];
-            NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",[updateInfo valueForKey:@"subject"]];
-            NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
-            [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[updateInfo valueForKey:@"subject"]).length)];
-            [hintString1 addAttribute:(NSString *)kCTFontSizeAttribute value:[UIFont systemFontOfSize:25] range:NSMakeRange(0,((NSString*)[updateInfo valueForKey:@"subject"]).length)];
-            TTTAttributedLabel *update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, 200, 30)];
-            update_label.font = [UIFont systemFontOfSize:25.0];
-            [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
-            [update_label setText:hintString1];
-            [cell addSubview:update_label];
+        UITableViewCell* cell;
+        NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
+        int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
+        if (cmd == 988) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
+            UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
+            PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
+            [avatarGetter getPhoto];
             
+            ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
+            ((UILabel*)[cell viewWithTag:3]).text = [atMeInfo valueForKey:@"content"];
+            ((UILabel*)[cell viewWithTag:4]).text = [atMeInfo valueForKey:@"time"];
+
+        }else if(cmd == 989){
+            cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
+            UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
+            PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
+            [avatarGetter getPhoto];
+            ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
         }
         return cell;
     }
@@ -105,20 +123,57 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (tableView == _dynamic_tableView) {
+        NSDictionary *updateInfo = _updateEvents[indexPath.row];
+        _selete_Eventid = [updateInfo valueForKey:@"event_id"];
+        [_updateEvents removeObjectAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+    }else{
+        NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
+        _selete_Eventid = [atMeInfo valueForKey:@"event_id"];
+        [_atMeEvents removeObjectAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+    }
+    
+    
+    
+    
+    
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == _dynamic_tableView) {
-        if (_updateEvents) {
+        if (_updateEvents && _updateEvents.count >0) {
+            [_dynamic_empty_label setHidden:YES];
             return _updateEvents.count;
-        }else return 0;
+        }else{
+            [_dynamic_empty_label setHidden:NO];
+            return 0;
+        }
     }
     else {
-        if (_updateEvents) {
-            return _updateEvents.count;
-        }else return 0;
+        if (_atMeEvents && _atMeEvents.count > 0) {
+            [_atMe_empty_label setHidden:YES];
+            return _atMeEvents.count;
+        }else{
+            [_atMe_empty_label setHidden:NO];
+            return 0;
+        }
     }
+}
+
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+
+    if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
+        EventDetailViewController *nextViewController = segue.destinationViewController;
+        nextViewController.eventId = self.selete_Eventid;
+    }
+
+    
 }
 
 #pragma mark scrollView Delegate

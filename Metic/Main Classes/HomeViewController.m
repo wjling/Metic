@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
 @property (nonatomic,strong) NSMutableArray* updateEvents;
+@property (nonatomic,strong) NSMutableArray* atMeEvents;
 @end
 
 
@@ -40,6 +41,7 @@
     [super viewDidLoad];
     _updateEventIds = [[NSMutableSet alloc]init];
     _updateEvents = [[NSMutableArray alloc]init];
+    _atMeEvents = [[NSMutableArray alloc]init];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
     
@@ -127,10 +129,11 @@
 -(void)adjustInfoView
 {
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
-    if (_updateEventIds.count > 0) {
+    int num = _updateEvents.count + _atMeEvents.count;
+    if (num > 0) {
         [_updateInfoView setHidden:NO];
-        if (_updateEventIds.count < 10) {
-            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",_updateEventIds.count];
+        if (num < 10) {
+            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",num];
         }else _updateInfoNumLabel.text = @"+N";
         CGRect frame = _scrollView.frame;
         if (frame.origin.y == 35) {
@@ -375,6 +378,8 @@
     if ([segue.destinationViewController isKindOfClass:[DynamicViewController class]]) {
         DynamicViewController *nextViewController = segue.destinationViewController;
         nextViewController.updateEvents = [[NSMutableArray alloc]initWithArray: _updateEvents];
+        nextViewController.atMeEvents = [[NSMutableArray alloc] initWithArray:_atMeEvents];
+        [self.atMeEvents removeAllObjects];
         [self.updateEventIds removeAllObjects];
         [self.updateEvents removeAllObjects];
     }
@@ -406,6 +411,10 @@
                 [_updateEvents addObject:event];
             }
             NSLog(@"%d",_updateEventIds.count);
+            [self adjustInfoView];
+        }
+        if (cmd == 988 || cmd == 989) {
+            [_atMeEvents addObject:event];
             [self adjustInfoView];
         }
         

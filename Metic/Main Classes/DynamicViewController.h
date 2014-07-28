@@ -14,8 +14,11 @@
 - (IBAction)dynamics_pressdown:(id)sender;
 - (IBAction)atMe_pressdown:(id)sender;
 @property (strong, nonatomic) IBOutlet UITableView *dynamic_tableView;
+@property (strong, nonatomic) IBOutlet UILabel *dynamic_empty_label;
 @property (strong, nonatomic) IBOutlet UITableView *atMe_tableView;
+@property (strong, nonatomic) IBOutlet UILabel *atMe_empty_label;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,strong) NSMutableArray* updateEvents;
+@property (nonatomic,strong) NSMutableArray* atMeEvents;
 
 @end

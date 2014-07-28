@@ -308,6 +308,8 @@
     if (self.isKeyBoard) {
         [self.inputField resignFirstResponder];
         return;
+    }else {
+        [self.inputField becomeFirstResponder];
     }
     
     if (indexPath.section == 0) {
