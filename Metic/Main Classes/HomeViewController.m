@@ -14,6 +14,8 @@
 #import "../Utils/PhotoGetter.h"
 #import "PictureWallViewController.h"
 #import "LaunchEventViewController.h"
+#import "DynamicViewController.h"
+
 @interface HomeViewController ()
 
 
@@ -23,8 +25,9 @@
 @property (strong, nonatomic) IBOutlet MTTableView *tatableView;
 @property (strong, nonatomic) MTTableView *eventsTableView;
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
-@property (nonatomic,strong) NSNumber* updateInfoNum;
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
+@property (nonatomic,strong) NSMutableArray* updateEvents;
+@property (nonatomic,strong) NSMutableArray* atMeEvents;
 @end
 
 
@@ -37,7 +40,8 @@
 {
     [super viewDidLoad];
     _updateEventIds = [[NSMutableSet alloc]init];
-    _updateInfoNum = [NSNumber numberWithInt:0];
+    _updateEvents = [[NSMutableArray alloc]init];
+    _atMeEvents = [[NSMutableArray alloc]init];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
     
@@ -125,10 +129,11 @@
 -(void)adjustInfoView
 {
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
-    if (_updateEventIds.count > 0) {
+    int num = _updateEvents.count + _atMeEvents.count;
+    if (num > 0) {
         [_updateInfoView setHidden:NO];
-        if (_updateEventIds.count < 10) {
-            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",_updateEventIds.count];
+        if (num < 10) {
+            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",num];
         }else _updateInfoNumLabel.text = @"+N";
         CGRect frame = _scrollView.frame;
         if (frame.origin.y == 35) {
@@ -370,6 +375,14 @@
         nextViewController.controller = self;
         
     }
+    if ([segue.destinationViewController isKindOfClass:[DynamicViewController class]]) {
+        DynamicViewController *nextViewController = segue.destinationViewController;
+        nextViewController.updateEvents = [[NSMutableArray alloc]initWithArray: _updateEvents];
+        nextViewController.atMeEvents = [[NSMutableArray alloc] initWithArray:_atMeEvents];
+        [self.atMeEvents removeAllObjects];
+        [self.updateEventIds removeAllObjects];
+        [self.updateEvents removeAllObjects];
+    }
     
 }
 
@@ -393,8 +406,15 @@
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
         if (cmd == 993 || cmd == 992 || cmd == 991) {
-            [_updateEventIds addObject:[event valueForKey:@"event_id"]];
+            if (![_updateEventIds containsObject:[event valueForKey:@"event_id"]]) {
+                [_updateEventIds addObject:[event valueForKey:@"event_id"]];
+                [_updateEvents addObject:event];
+            }
             NSLog(@"%d",_updateEventIds.count);
+            [self adjustInfoView];
+        }
+        if (cmd == 988 || cmd == 989) {
+            [_atMeEvents addObject:event];
             [self adjustInfoView];
         }
         
@@ -446,6 +466,10 @@
     if (self.scrollView.contentOffset.x!=930) {
         [self.scrollView setContentOffset:CGPointMake(930, 0) animated:YES];
     }
+}
+
+- (IBAction)toDynamic:(id)sender {
+    [self performSegueWithIdentifier:@"toDynamics" sender:self];
 }
 
 
