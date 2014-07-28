@@ -1788,6 +1788,7 @@
                         <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="bpL-Ol-9VE"/>
                         <segue destination="sN6-CT-cFg" kind="push" id="YWf-Zs-2Jn"/>
+                        <segue destination="6xS-iU-uTV" kind="push" identifier="toInvitationView" id="ykp-fl-l56"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3548,6 +3549,36 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ntg-Cr-XsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1466" y="4017"/>
+        </scene>
+        <!--Event Invitation View Controller - 活动邀请-->
+        <scene sceneID="O4T-eZ-rQ1">
+            <objects>
+                <viewController id="6xS-iU-uTV" customClass="EventInvitationViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vu2-yB-RFH"/>
+                        <viewControllerLayoutGuide type="bottom" id="gL6-uA-l7g"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Qif-nw-EP8">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4Lw-9T-gxJ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="gL6-uA-l7g" firstAttribute="top" secondItem="4Lw-9T-gxJ" secondAttribute="bottom" id="GCE-bd-gBM"/>
+                            <constraint firstItem="4Lw-9T-gxJ" firstAttribute="top" secondItem="vu2-yB-RFH" secondAttribute="bottom" id="RYH-oD-Z9A"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="活动邀请" id="Iyr-dC-wK2"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a0a-4H-96t" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466" y="4674"/>
         </scene>
     </scenes>
     <resources>
