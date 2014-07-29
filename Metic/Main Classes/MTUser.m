@@ -49,6 +49,9 @@ static MTUser *singletonInstance;
         self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
         self.friendsIdSet = [[NSMutableSet alloc]init];
+        self.updateEventIds = [[NSMutableSet alloc]init];
+        self.updateEvents = [[NSMutableArray alloc]init];
+        self.atMeEvents = [[NSMutableArray alloc]init];
        
         self.wait = 0.1;
     }
