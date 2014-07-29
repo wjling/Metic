@@ -2345,6 +2345,202 @@
             </objects>
             <point key="canvasLocation" x="2453" y="-379"/>
         </scene>
+        <!--Banner Selector View Controller - 封面选择-->
+        <scene sceneID="uMZ-ij-H19">
+            <objects>
+                <viewController id="Si5-o4-IJN" customClass="BannerSelectorViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tgW-1e-WDW"/>
+                        <viewControllerLayoutGuide type="bottom" id="7Bx-uh-sig"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VMM-1v-gas">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
+                                        <rect key="frame" x="10" y="15" width="300" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="自定义封面">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="getMyBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="6qa-95-a5i"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="默认封面" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHS-W6-huD">
+                                        <rect key="frame" x="10" y="60" width="100" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nL6-Ha-a2l">
+                                        <rect key="frame" x="10" y="82" width="300" height="1"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VeA-PM-2vT">
+                                        <rect key="frame" x="10" y="88" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="ijk-Eb-yty"/>
+                                            <constraint firstAttribute="height" constant="115" id="pxu-Oo-NP4"/>
+                                        </constraints>
+                                        <state key="normal" image="2聚餐">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="fYQ-xD-AuW"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hlA-Jo-zTD">
+                                        <rect key="frame" x="10" y="213" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="3兜风">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="wXv-LT-ocE"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-az-reg">
+                                        <rect key="frame" x="10" y="338" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="4喝酒">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="sO4-j2-WaR"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-5p-JFd">
+                                        <rect key="frame" x="10" y="463" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="5健身">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="ddd-Kk-bky"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czb-gJ-8X2">
+                                        <rect key="frame" x="10" y="588" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="6听课">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="w9Z-4c-Ufq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="7" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAs-sP-gJ0">
+                                        <rect key="frame" x="10" y="713" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="115" id="d8h-0V-9Me"/>
+                                            <constraint firstAttribute="width" constant="300" id="npf-Xo-qPZ"/>
+                                        </constraints>
+                                        <state key="normal" image="7夜店">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="aJ7-Nu-qZq"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="nLV-JZ-daA">
+                                        <rect key="frame" x="282" y="93" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="J61-Of-Lqd">
+                                        <rect key="frame" x="282" y="218" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="G5U-wh-VRA">
+                                        <rect key="frame" x="282" y="343" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="1gz-QY-Esw">
+                                        <rect key="frame" x="282" y="468" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="2Zn-zp-MbM">
+                                        <rect key="frame" x="282" y="593" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="tAc-fn-tsd">
+                                        <rect key="frame" x="282" y="718" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstItem="VeA-PM-2vT" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="top" constant="88" id="BW3-5H-Z6b"/>
+                                    <constraint firstAttribute="bottom" secondItem="nAs-sP-gJ0" secondAttribute="bottom" constant="10" id="DTO-qx-CBx"/>
+                                    <constraint firstItem="nAs-sP-gJ0" firstAttribute="top" secondItem="VeA-PM-2vT" secondAttribute="bottom" constant="510" id="M6K-m3-grN"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7Bx-uh-sig" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="bottom" id="FJa-Ot-wfg"/>
+                            <constraint firstItem="TYE-6F-F8Y" firstAttribute="top" secondItem="tgW-1e-WDW" secondAttribute="bottom" id="Mio-Zt-Dt4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="封面选择" id="ggF-sM-F4G">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="wZW-3r-qlN">
+                            <view key="customView" alpha="0.0" contentMode="scaleToFill" id="lth-3k-7hu">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHf-DA-LIG">
+                                        <rect key="frame" x="21" y="3" width="50" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="确定" backgroundImage="头部小按钮">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" backgroundImage="头部小按钮按下效果">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="confirmBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="fkF-zQ-dGQ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outletCollection property="defaultBanners" destination="VeA-PM-2vT" id="Mz7-tC-ejj"/>
+                        <outletCollection property="defaultBanners" destination="hlA-Jo-zTD" id="S1g-As-8oj"/>
+                        <outletCollection property="defaultBanners" destination="Fn6-az-reg" id="59F-eO-JmG"/>
+                        <outletCollection property="defaultBanners" destination="QTc-5p-JFd" id="5w6-Cc-ett"/>
+                        <outletCollection property="defaultBanners" destination="czb-gJ-8X2" id="S8o-Sh-JaV"/>
+                        <outletCollection property="defaultBanners" destination="nAs-sP-gJ0" id="yaJ-67-wAv"/>
+                        <outletCollection property="selectorIndictors" destination="nLV-JZ-daA" id="PK5-QG-MX1"/>
+                        <outletCollection property="selectorIndictors" destination="J61-Of-Lqd" id="1zc-uH-Wf1"/>
+                        <outletCollection property="selectorIndictors" destination="G5U-wh-VRA" id="lhb-1p-Zbg"/>
+                        <outletCollection property="selectorIndictors" destination="1gz-QY-Esw" id="gbG-S6-89E"/>
+                        <outletCollection property="selectorIndictors" destination="2Zn-zp-MbM" id="zZZ-89-GLv"/>
+                        <outletCollection property="selectorIndictors" destination="tAc-fn-tsd" id="HfO-nV-Pak"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7tN-v5-auA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2453" y="-2378"/>
+        </scene>
         <!--Map View Controller-->
         <scene sceneID="ou0-cq-X5U">
             <objects>
@@ -2823,6 +3019,7 @@
                         <outletCollection property="roundCornerView" destination="uV0-eG-foO" id="fbr-PU-p7O"/>
                         <outletCollection property="roundCornerView" destination="TZI-wu-iUq" id="clM-f2-ca1"/>
                         <segue destination="3Ms-XL-qgl" kind="push" identifier="map" id="3Aq-PS-n76"/>
+                        <segue destination="Si5-o4-IJN" kind="push" identifier="toBannerSelector" id="jhB-aT-xWL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GW0-zg-hFK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3582,6 +3779,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="2聚餐" width="320" height="122"/>
+        <image name="3兜风" width="320" height="122"/>
+        <image name="4喝酒" width="320" height="122"/>
+        <image name="5健身" width="320" height="122"/>
+        <image name="6听课" width="320" height="122"/>
+        <image name="7夜店" width="320" height="122"/>
         <image name="dian" width="32" height="44"/>
         <image name="event" width="300" height="113"/>
         <image name="上传按钮" width="26" height="26"/>
@@ -3594,6 +3797,8 @@
         <image name="勾选后icon" width="34" height="34"/>
         <image name="发起人icon" width="7" height="7"/>
         <image name="发起活动icon" width="13" height="13"/>
+        <image name="发送至图片墙对号" width="34" height="34"/>
+        <image name="发送至图片墙对号按下效果" width="34" height="34"/>
         <image name="图片评论icon图标1" width="20" height="20"/>
         <image name="图片评论icon图标1白色" width="20" height="20"/>
         <image name="图片评论icon图标2" width="20" height="20"/>
@@ -3603,6 +3808,8 @@
         <image name="图片评论icon图标4" width="20" height="20"/>
         <image name="图片评论icon图标4白色" width="20" height="20"/>
         <image name="地图定位icon" width="17" height="17"/>
+        <image name="头部小按钮" width="83" height="43"/>
+        <image name="头部小按钮按下效果" width="83" height="43"/>
         <image name="女icon" width="29" height="29"/>
         <image name="好友推荐icon" width="45" height="45"/>
         <image name="小按钮橙色" width="83" height="33"/>
@@ -3633,11 +3840,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
-        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="fLJ-gw-aSw"/>
+        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="U4U-xx-4qf"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "HttpSender.h"
 #import "BMapKit.h"
-#import "PECropViewController.h"
 #import "../Utils/PhotoGetter.h"
 #import "FlatDatePicker.h"
 
-@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PECropViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
+@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *event_text;
 @property (strong, nonatomic) IBOutlet UITextField *begin_time_text;
@@ -31,7 +30,8 @@
 @property (nonatomic) CLLocationCoordinate2D pt;
 @property (nonatomic,strong) NSString *positionInfo;
 @property (strong, nonatomic) UIViewController* controller;
-
+@property (strong, nonatomic) UIImage* uploadImage;
+@property int code;
 
 
 @end

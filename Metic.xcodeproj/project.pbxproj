@@ -170,6 +170,7 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
+		51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E55C731987389000D62C36 /* BannerSelectorViewController.m */; };
 		51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857BF196B951300812F7D /* libSocialSina.a */; };
 		51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C2196B951300812F7D /* libSocialWechat.a */; };
 		51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C3196B951300812F7D /* libWeChatSDK.a */; };
@@ -568,6 +569,8 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
+		51E55C721987389000D62C36 /* BannerSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerSelectorViewController.h; sourceTree = "<group>"; };
+		51E55C731987389000D62C36 /* BannerSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerSelectorViewController.m; sourceTree = "<group>"; };
 		51E857BF196B951300812F7D /* libSocialSina.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialSina.a; sourceTree = "<group>"; };
 		51E857C0196B951300812F7D /* UMSocialSinaHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialSinaHandler.h; sourceTree = "<group>"; };
 		51E857C2196B951300812F7D /* libSocialWechat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialWechat.a; sourceTree = "<group>"; };
@@ -1262,6 +1265,8 @@
 				51F06C87197FA2F3000E8428 /* ScanViewController.m */,
 				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
 				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
+				51E55C721987389000D62C36 /* BannerSelectorViewController.h */,
+				51E55C731987389000D62C36 /* BannerSelectorViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -1594,6 +1599,7 @@
 				0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				51EDF3AB19752D8A005BEA39 /* TTTAttributedLabel.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
