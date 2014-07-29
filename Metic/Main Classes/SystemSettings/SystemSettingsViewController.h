@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SlideNavigationController.h"
+#import "CommonUtils.h"
 
-@interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UITableView *settings_tableview;
 
 @end

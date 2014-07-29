@@ -38,6 +38,8 @@
     numOfSections = 4;
     [self.view addSubview:settings_tableview];
     
+    [self initParams];
+    
 //    UIView* view = [[UIView alloc]initWithFrame:CGRectMake(40, 0, 300, 44)];
 //    [view setBackgroundColor:[UIColor yellowColor]];
 //    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -84,7 +86,8 @@
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:!sender.on forKey:@"systemSettingsSwitch1"];
+        [userDf setBool:sender.on forKey:@"systemSettingsSwitch1"];
+        NSLog(@"switch1: %d",sender.on);
     }
     [userDf synchronize];
 }
@@ -93,9 +96,78 @@
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:!sender.on forKey:@"systemSettingsSwitch2"];
+        [userDf setBool:sender.on forKey:@"systemSettingsSwitch2"];
+        NSLog(@"switch2: %d",sender.on);
     }
     [userDf synchronize];
+}
+
+-(void)clearBuffers
+{
+    
+}
+
+-(void)updateCheck
+{
+    
+}
+
+-(void)aboutApp
+{
+    
+}
+
+-(void)quit
+{
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请选择退出方式" delegate:self cancelButtonTitle:@"退出程序" otherButtonTitles:@"切换账号", nil];
+    [alertView show];
+}
+
+- (void)animationFinished:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
+    
+    if ([animationID compare:@"exitApplication"] == 0) {
+        
+        exit(0);
+        
+    }
+    
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSLog(@"退出程序");
+        [UIView beginAnimations:@"exitApplication" context:nil];
+        
+        [UIView setAnimationDuration:0.5];
+        
+        [UIView setAnimationDelegate:self];
+        
+        // [UIView setAnimationTransition:UIViewAnimationCurveEaseOut forView:self.view.window cache:NO];
+        
+        [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view.window cache:NO];
+        
+        [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+        
+        //self.view.window.bounds = CGRectMake(0, 0, 0, 0);
+        
+        self.view.window.bounds = CGRectMake(0, 0, 0, 0);
+        
+        [UIView commitAnimations];
+//        exit(0);
+        
+    }
+    else if (buttonIndex == 1)
+    {
+        NSLog(@"切换账号");
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView
+{
+    
 }
 
 #pragma mark - UITableViewDataSource
@@ -149,6 +221,7 @@
         cell.textLabel.text = @"通知栏提醒";
         UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
         [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
+        nSwitch1.on = statusOfSwitch1;
         nSwitch1.tag = 1;
         [cell addSubview:nSwitch1];
     }
@@ -162,6 +235,7 @@
             cell.textLabel.text = @"版本更新提醒";
             UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
             [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
+            nSwitch2.on = statusOfSwitch2;
             nSwitch2.tag = 2;
             [cell addSubview:nSwitch2];
         }
@@ -223,7 +297,7 @@
     NSInteger row = indexPath.row;
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     if (section == 0) {
-        UISwitch* mSwitch = (UISwitch*)[cell.contentView viewWithTag:1];
+        UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:1];
         if ([mSwitch isKindOfClass:[UISwitch class]]) {
             [mSwitch setOn:!mSwitch.on animated:YES];
             [self switch1Clicked:mSwitch];
@@ -232,13 +306,24 @@
     else if (section == 2)
     {
         if (row == 0) {
-            UISwitch* mSwitch = (UISwitch*)[cell.contentView viewWithTag:2];
+            UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:2];
             if ([mSwitch isKindOfClass:[UISwitch class]]) {
                 [mSwitch setOn:!mSwitch.on animated:YES];
                 [self switch2Clicked:mSwitch];
             }
-
         }
+        else if (row == 1)
+        {
+            
+        }
+        else if (row == 2)
+        {
+            
+        }
+    }
+    else if (section == 3)
+    {
+        [self quit];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -260,5 +345,29 @@
 //    }
 //    return nil;
 //}
+
+#pragma mark - SlideNavigationControllerDelegate
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+	return YES;
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayRightMenu
+{
+	return NO;
+}
+
+-(void)sendDistance:(float)distance
+{
+//    if (distance > 0) {
+//        self.shadowView.hidden = NO;
+//        [self.view bringSubviewToFront:self.shadowView];
+//        [self.shadowView setAlpha:distance/400.0];
+//    }else{
+//        self.shadowView.hidden = YES;
+//        [self.view sendSubviewToBack:self.shadowView];
+//    }
+}
+
 
 @end
