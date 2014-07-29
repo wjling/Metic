@@ -8,6 +8,7 @@
 
 #import "LaunchEventViewController.h"
 #import "InviteFriendViewController.h"
+#import "BannerSelectorViewController.h"
 #import "MapViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
@@ -29,7 +30,6 @@
 @property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
 @property (nonatomic, strong) BMKLocationService* locService;
 @property (strong, nonatomic) BMKMapManager *mapManager;
-@property (strong, nonatomic) UIImage* uploadImage;
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 
@@ -62,6 +62,7 @@
     self.detail_text.delegate = self;
     self.user = [MTUser sharedInstance];
     [self.canin setOn:NO];
+    _code = 1;
     self.FriendsIds = [[NSMutableSet alloc]init];
     
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -242,6 +243,7 @@
     [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
     [dictionary setValue:[NSNumber numberWithInt:visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
+    [dictionary setValue:[NSNumber numberWithInt:_code] forKeyPath:@"code"];
     [dictionary setValue:friends forKey:@"friends"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
@@ -262,20 +264,7 @@
 }
 
 - (IBAction)getBanner:(id)sender {
-    UIActionSheet *sheet;
-    
-    // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照", @"从相册选择", nil];
-    }
-    else {
-        sheet = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
-    }
-    
-    sheet.tag = 255;
-    
-    [sheet showInView:self.view];
+    [self performSegueWithIdentifier:@"toBannerSelector" sender:self];
 }
 
 -(void) seletePosition
@@ -309,33 +298,6 @@
     [self.launch_button setEnabled:YES];
 }
 
-- (IBAction)openEditor:(id)sender
-{
-    PECropViewController *controller = [[PECropViewController alloc] init];
-    controller.delegate = self;
-    controller.image = self.uploadImage;
-    
-    UIImage *image = self.uploadImage;
-    CGFloat width = image.size.width;
-    CGFloat height = image.size.height;
-    CGFloat wi = MIN(width, height*2.5);
-    controller.imageCropRect = CGRectMake((width - wi) / 2,
-                                          (height - wi*0.4) / 2,
-                                          wi,
-                                          wi*0.4);
-    [controller setKeepingCropAspectRatio:YES];
-    [controller setToolbarHidden:YES];
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
-    }
-    
-    [self presentViewController:navigationController animated:YES completion:^{
-    }];
-    
-    
-}
 
 #pragma mark - FlatDatePicker Delegate
 
@@ -380,69 +342,6 @@
 }
 
 
-
-#pragma mark - PECropViewControllerDelegate methods
-
-- (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
-{
-    [controller dismissViewControllerAnimated:YES completion:NULL];
-    [self.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
-    self.uploadImage = croppedImage;
-}
-
-- (void)cropViewControllerDidCancel:(PECropViewController *)controller
-{
-    [controller dismissViewControllerAnimated:YES completion:NULL];
-}
-
-
-
-#pragma mark - action sheet delegte
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == 255) {
-        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        // 判断是否支持相机
-        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            switch (buttonIndex) {
-                case 0:
-                    return;
-                case 1: //相机
-                    sourceType = UIImagePickerControllerSourceTypeCamera;
-                    break;
-                case 2: //相册
-                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    break;
-            }
-        }
-        else {
-            if (buttonIndex == 0) {
-                return;
-            } else {
-                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            }
-        }
-        // 跳转到相机或相册页面
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.delegate = self;
-        imagePickerController.allowsEditing = NO;
-        imagePickerController.sourceType = sourceType;
-        
-        [self presentViewController:imagePickerController animated:YES completion:^{}];
-    }
-}
-
-#pragma mark - image picker delegte
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    self.uploadImage = image;
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [self openEditor:nil];
-    }];
-    
-}
 #pragma mark - httpsender delegte
 -(void)finishWithReceivedData:(NSData *)rData
 {
@@ -487,6 +386,10 @@
         MapViewController *nextViewController = segue.destinationViewController;
         nextViewController.position = self.pt;
         nextViewController.positionInfo = self.positionInfo;
+        nextViewController.controller = self;
+    }
+    if ([segue.destinationViewController isKindOfClass:[BannerSelectorViewController class]]) {
+        BannerSelectorViewController *nextViewController = segue.destinationViewController;
         nextViewController.controller = self;
     }
 }

@@ -161,12 +161,16 @@
 		51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D7019335CDD00943606 /* SlideNavigationController.m */; };
 		51581D76193361A500943606 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D75193361A500943606 /* MenuViewController.m */; };
 		515F9FF419736D58009D96BA /* MapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 515F9FF319736D58009D96BA /* MapViewController.mm */; };
+		516DD989198645680088FE69 /* EventInvitationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 516DD987198645680088FE69 /* EventInvitationCell.m */; };
+		516DD98A198645680088FE69 /* EventInvitationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 516DD988198645680088FE69 /* EventInvitationCell.xib */; };
+		516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */; };
 		5172E2E1197D05240050F446 /* libQREncoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5172E2E0197D05240050F446 /* libQREncoder.a */; };
 		519100F019651388005DF607 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 519100EF19651388005DF607 /* MRZoomScrollView.m */; };
 		51A01D0D19339EE50043963F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0C19339EE50043963F /* LoginViewController.m */; };
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
+		51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E55C731987389000D62C36 /* BannerSelectorViewController.m */; };
 		51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857BF196B951300812F7D /* libSocialSina.a */; };
 		51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C2196B951300812F7D /* libSocialWechat.a */; };
 		51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C3196B951300812F7D /* libWeChatSDK.a */; };
@@ -548,6 +552,11 @@
 		51581D75193361A500943606 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		515F9FF219736D58009D96BA /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		515F9FF319736D58009D96BA /* MapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MapViewController.mm; sourceTree = "<group>"; };
+		516DD986198645680088FE69 /* EventInvitationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInvitationCell.h; sourceTree = "<group>"; };
+		516DD987198645680088FE69 /* EventInvitationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInvitationCell.m; sourceTree = "<group>"; };
+		516DD988198645680088FE69 /* EventInvitationCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventInvitationCell.xib; sourceTree = "<group>"; };
+		516DD98D19864B5F0088FE69 /* EventInvitationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInvitationViewController.h; sourceTree = "<group>"; };
+		516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInvitationViewController.m; sourceTree = "<group>"; };
 		5172E2D5197D03DB0050F446 /* QREncoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QREncoder.xcodeproj; path = src/QREncoder.xcodeproj; sourceTree = "<group>"; };
 		5172E2E0197D05240050F446 /* libQREncoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQREncoder.a; sourceTree = "<group>"; };
 		519100EE19651388005DF607 /* MRZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRZoomScrollView.h; sourceTree = "<group>"; };
@@ -560,6 +569,8 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
+		51E55C721987389000D62C36 /* BannerSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerSelectorViewController.h; sourceTree = "<group>"; };
+		51E55C731987389000D62C36 /* BannerSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerSelectorViewController.m; sourceTree = "<group>"; };
 		51E857BF196B951300812F7D /* libSocialSina.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialSina.a; sourceTree = "<group>"; };
 		51E857C0196B951300812F7D /* UMSocialSinaHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialSinaHandler.h; sourceTree = "<group>"; };
 		51E857C2196B951300812F7D /* libSocialWechat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialWechat.a; sourceTree = "<group>"; };
@@ -803,6 +814,9 @@
 				08DB698419541F3A00F80F3F /* EventCellTableViewCell.h */,
 				08DB698519541F3A00F80F3F /* EventCellTableViewCell.m */,
 				08DB698619541F3A00F80F3F /* EventCellTableViewCell.xib */,
+				516DD986198645680088FE69 /* EventInvitationCell.h */,
+				516DD987198645680088FE69 /* EventInvitationCell.m */,
+				516DD988198645680088FE69 /* EventInvitationCell.xib */,
 				08DB698719541F3A00F80F3F /* MCommentTableViewCell.h */,
 				08DB698819541F3A00F80F3F /* MCommentTableViewCell.m */,
 				08DB698919541F3A00F80F3F /* MCommentTableViewCell.xib */,
@@ -1221,6 +1235,8 @@
 				51581D5F19335A8700943606 /* HomeViewController.m */,
 				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
+				516DD98D19864B5F0088FE69 /* EventInvitationViewController.h */,
+				516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */,
 				08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */,
 				08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */,
 				08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */,
@@ -1249,6 +1265,8 @@
 				51F06C87197FA2F3000E8428 /* ScanViewController.m */,
 				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
 				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
+				51E55C721987389000D62C36 /* BannerSelectorViewController.h */,
+				51E55C731987389000D62C36 /* BannerSelectorViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -1508,6 +1526,7 @@
 				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */,
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
+				516DD98A198645680088FE69 /* EventInvitationCell.xib in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
 				5138B05619766C2000817821 /* mapapi.bundle in Resources */,
@@ -1563,8 +1582,10 @@
 				0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				51EDF3AB19752D8A005BEA39 /* TTTAttributedLabel.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
+				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
+				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
@@ -1630,6 +1651,7 @@
 				089337A5197579CE00AD940B /* PECropRectView.m in Sources */,
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
+				516DD989198645680088FE69 /* EventInvitationCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,

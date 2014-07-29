@@ -134,6 +134,7 @@
 }
 
 - (IBAction)share:(id)sender {
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:@"53bb542e56240ba6e80a4bfb"
                                       shareText:@"WeShare"
