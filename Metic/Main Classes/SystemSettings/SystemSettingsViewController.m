@@ -15,6 +15,7 @@
 @implementation SystemSettingsViewController
 {
     NSInteger numOfSections;
+    BOOL statusOfSwitch1,statusOfSwitch2;
 }
 @synthesize settings_tableview;
 
@@ -71,6 +72,32 @@
 }
 */
 
+-(void)initParams
+{
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    statusOfSwitch1 = [userDf boolForKey:@"systemSettingsSwitch1"];
+    statusOfSwitch2 = [userDf boolForKey:@"systemSettingsSwitch2"];
+    
+}
+
+-(void)switch1Clicked:(UISwitch*)sender
+{
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if ([sender isKindOfClass:[UISwitch class]]) {
+        [userDf setBool:!sender.on forKey:@"systemSettingsSwitch1"];
+    }
+    [userDf synchronize];
+}
+
+-(void)switch2Clicked:(UISwitch*)sender
+{
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if ([sender isKindOfClass:[UISwitch class]]) {
+        [userDf setBool:!sender.on forKey:@"systemSettingsSwitch2"];
+    }
+    [userDf synchronize];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -120,8 +147,10 @@
     NSInteger row = indexPath.row;
     if (section == 0) {
         cell.textLabel.text = @"通知栏提醒";
-        UISwitch* nSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(222, 8, 30, 30)];
-        [cell addSubview:nSwitch];
+        UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
+        [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
+        nSwitch1.tag = 1;
+        [cell addSubview:nSwitch1];
     }
     else if(section == 1)
     {
@@ -131,8 +160,10 @@
     {
         if (row == 0) {
             cell.textLabel.text = @"版本更新提醒";
-            UISwitch* nSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(222, 8, 30, 30)];
-            [cell addSubview:nSwitch];
+            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
+            [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
+            nSwitch2.tag = 2;
+            [cell addSubview:nSwitch2];
         }
         else if (row == 1)
         {
@@ -184,6 +215,32 @@
 //        return 50;
 //    }
     return 0;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (section == 0) {
+        UISwitch* mSwitch = (UISwitch*)[cell.contentView viewWithTag:1];
+        if ([mSwitch isKindOfClass:[UISwitch class]]) {
+            [mSwitch setOn:!mSwitch.on animated:YES];
+            [self switch1Clicked:mSwitch];
+        }
+    }
+    else if (section == 2)
+    {
+        if (row == 0) {
+            UISwitch* mSwitch = (UISwitch*)[cell.contentView viewWithTag:2];
+            if ([mSwitch isKindOfClass:[UISwitch class]]) {
+                [mSwitch setOn:!mSwitch.on animated:YES];
+                [self switch2Clicked:mSwitch];
+            }
+
+        }
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
