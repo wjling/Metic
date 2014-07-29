@@ -52,10 +52,7 @@ enum Response_Type
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    self.appListener.notificationDelegate = self;
-    [self initParams];
-    [self getMsgFromDataBase];
+    
 //    NSLog(@"hahahah");
 }
 
@@ -63,6 +60,14 @@ enum Response_Type
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    self.appListener.notificationDelegate = self;
+    [self initParams];
+    [self getMsgFromDataBase];
 }
 
 - (void) viewDidAppear:(BOOL)animated

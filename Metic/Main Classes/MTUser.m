@@ -24,6 +24,10 @@
 @synthesize sectionArray;
 @synthesize friendsIdSet;
 
+@synthesize updateEventIds;
+@synthesize updateEvents;
+@synthesize atMeEvents;
+
 static MTUser *singletonInstance;
 
 + (MTUser *)sharedInstance

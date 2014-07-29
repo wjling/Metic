@@ -300,8 +300,9 @@
         [self.syncMessages addObject:response1];
         NSString* msg_str = [response1 objectForKey:@"msg"];
         NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
-        NSNumber* msg_cmd = [msg_dic objectForKey:@"cmd"];
-        if ([msg_cmd integerValue] == ADD_FRIEND_RESULT) {
+        NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
+        if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
+        {
             NSNumber* result = [msg_dic objectForKey:@"result"];
             NSLog(@"friend request result: %@",result);
             if ([result integerValue] == 1) {
@@ -330,6 +331,18 @@
             }
             
         }
+        else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
+            if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
+                [[MTUser sharedInstance].updateEventIds addObject:[msg_dic valueForKey:@"event_id"]];
+                [[MTUser sharedInstance].updateEvents addObject:msg_dic];
+            }
+            NSLog(@"%d",[MTUser sharedInstance].updateEventIds.count);
+//            [self adjustInfoView];
+        }else if (msg_cmd == 988 || msg_cmd == 989) {
+            [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+//            [self adjustInfoView];
+        }
+
         if (self.syncMessages.count == numOfSyncMessages) {
             NSNumber* seq = [response1 objectForKey:@"seq"];
             NSMutableDictionary* json = [CommonUtils packParamsInDictionary:

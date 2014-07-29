@@ -27,10 +27,16 @@
 @property(nonatomic,strong)NSMutableSet *friendIds;
 //@property(nonatomic,strong)MySqlite *sql;
 @property float wait;
+
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong,nonatomic) NSMutableSet* friendsIdSet;
+
+//For HomeViewController
+@property (nonatomic,strong) NSMutableSet* updateEventIds;
+@property (nonatomic,strong) NSMutableArray* updateEvents;
+@property (nonatomic,strong) NSMutableArray* atMeEvents;
 
 
 
