@@ -39,9 +39,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _updateEventIds = [[NSMutableSet alloc]init];
-    _updateEvents = [[NSMutableArray alloc]init];
-    _atMeEvents = [[NSMutableArray alloc]init];
+    _updateEventIds = [MTUser sharedInstance].updateEventIds;
+    _updateEvents = [MTUser sharedInstance].updateEvents;
+    _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
     
@@ -405,16 +405,7 @@
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
-        if (cmd == 993 || cmd == 992 || cmd == 991) {
-            if (![_updateEventIds containsObject:[event valueForKey:@"event_id"]]) {
-                [_updateEventIds addObject:[event valueForKey:@"event_id"]];
-                [_updateEvents addObject:event];
-            }
-            NSLog(@"%d",_updateEventIds.count);
-            [self adjustInfoView];
-        }
-        if (cmd == 988 || cmd == 989) {
-            [_atMeEvents addObject:event];
+        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
             [self adjustInfoView];
         }
         

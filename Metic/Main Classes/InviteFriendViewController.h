@@ -26,6 +26,7 @@
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
 @property (strong,nonatomic) NSMutableArray* sectionArray;
+@property (strong, nonatomic) NSMutableArray* sectionTitlesArray;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) NSMutableSet *FriendsIds;
