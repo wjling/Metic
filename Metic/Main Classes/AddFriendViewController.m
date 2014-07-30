@@ -25,7 +25,7 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
+    
     if (self) {
         // Custom initialization
     }
@@ -35,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {
         self.edgesForExtendedLayout= UIRectEdgeNone;
@@ -45,7 +46,8 @@
     self.friendSearchBar.delegate = self;
     self.searchedFriendsTableView.delegate = self;
     self.searchedFriendsTableView.dataSource = self;
-    self.searchedFriendsTableView.hidden = YES;
+    self.searchedFriendsTableView.scrollEnabled = NO;
+//    self.searchedFriendsTableView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -54,7 +56,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -62,8 +64,17 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"addfriend_searchfriend"]) {
+        NSLog(@"passing searchName : %@",self.friendSearchBar.text);
+        if ([segue.destinationViewController isKindOfClass: [SearchFriendViewController class]]) {
+            SearchFriendViewController* vc = segue.destinationViewController;
+            vc.searchName = self.friendSearchBar.text;
+            
+        }
+
+    }
 }
-*/
+
 
 - (void)search_friend
 {
@@ -121,9 +132,10 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                     // called when keyboard search button pressed
 {
-    [self search_friend];
-    [searchBar resignFirstResponder];
+//    [self search_friend];
+//    [searchBar resignFirstResponder];
 //    [self.searchedFriendsTableView reloadData];
+    [self performSegueWithIdentifier:@"addfriend_searchfriend" sender:self];
 }
 
 #pragma mark - UITableViewDelegate
@@ -138,11 +150,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    confirmAlert.tag = 0;
-    friendPosition = indexPath.row;
-    [confirmAlert show];
+//    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+//    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+//    confirmAlert.tag = 0;
+//    friendPosition = indexPath.row;
+//    [confirmAlert show];
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    if (section == 0) {
+        if (row == 0) {
+            
+        }
+        else if (row == 1)
+        {
+            
+        }
+    }
 }
 
 
@@ -151,36 +174,49 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"searchFriendList.count: %lu",(unsigned long)self.searchFriendList.count);
-    return self.searchFriendList.count;
+//    NSLog(@"searchFriendList.count: %lu",(unsigned long)self.searchFriendList.count);
+//    return self.searchFriendList.count;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SearchedFriendTableViewCell* cell = [self.searchedFriendsTableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
-    if (nil == cell) {
-//        NSLog(@"create cell");
-        cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
-    }
-    NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
-    //    NSLog(@"a friend: %@",aFriend);
-    NSString* name = [aFriend objectForKey:@"name"];
-    NSLog(@"friend name: %@",name);
-//    NSData* name = [aFriend objectForKey:@"name"];
-//    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
-//    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
-    if (name) {
-        cell.friendNameLabel.text = name;
-    }
-    else
-    {
-        cell.friendNameLabel.text = @"default";
-    }
-    
-    //    cell.image = [[UIImage alloc]init];
-//    if (cell) {
-//        NSLog(@"cell isn't nil");
+//    SearchedFriendTableViewCell* cell = [self.searchedFriendsTableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
+//    if (nil == cell) {
+////        NSLog(@"create cell");
+//        cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
 //    }
+//    NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
+//    //    NSLog(@"a friend: %@",aFriend);
+//    NSString* name = [aFriend objectForKey:@"name"];
+//    NSLog(@"friend name: %@",name);
+////    NSData* name = [aFriend objectForKey:@"name"];
+////    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
+////    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
+//    if (name) {
+//        cell.friendNameLabel.text = name;
+//    }
+//    else
+//    {
+//        cell.friendNameLabel.text = @"default";
+//    }
+//    
+//    //    cell.image = [[UIImage alloc]init];
+////    if (cell) {
+////        NSLog(@"cell isn't nil");
+////    }
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    if (indexPath.row == 0) {
+        cell.textLabel.text = @"添加手机联系人";
+    }
+    else if (indexPath.row == 1)
+    {
+        cell.textLabel.text = @"扫一扫";
+    }
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 

@@ -89,6 +89,7 @@
 //         [NSThread sleepForTimeInterval:10];
 //     }];
      NSLog(@"enter Background====================");
+    application.applicationIconBadgeNumber = 0;
     UIApplication*   app = [UIApplication sharedApplication];
     __block    UIBackgroundTaskIdentifier bgTask;
     bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
@@ -165,6 +166,8 @@
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
     
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    BOOL flag = [userDf boolForKey:@"systemSettings1"];
     //发送通知
     UILocalNotification *notification=[[UILocalNotification alloc] init];
     if (notification!=nil) {
@@ -174,9 +177,11 @@
         notification.timeZone=[NSTimeZone defaultTimeZone];
         notification.applicationIconBadgeNumber += numOfSyncMessages; //应用的红色数字
         notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
-        //去掉下面2行就不会弹出提示框
-        notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
-        notification.alertAction = @"打开";  //提示框按钮
+        if (flag) {
+            //去掉下面2行就不会弹出提示框
+            notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
+            notification.alertAction = @"打开";  //提示框按钮
+        }        
         //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
         
         // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
@@ -184,7 +189,7 @@
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
-    
+
     numOfSyncMessages = -1;
     [self.syncMessages removeAllObjects];
 }

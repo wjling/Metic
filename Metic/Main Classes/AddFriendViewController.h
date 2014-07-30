@@ -18,8 +18,9 @@
 //#import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "SearchedFriendTableViewCell.h"
+#import "SearchFriendViewController.h"
 
-@interface AddFriendViewController : UIViewController<SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
+@interface AddFriendViewController : UIViewController<HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong)MTUser *user;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;

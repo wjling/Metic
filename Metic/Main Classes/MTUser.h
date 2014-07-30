@@ -28,6 +28,7 @@
 //@property(nonatomic,strong)MySqlite *sql;
 @property float wait;
 
+//For FriendsViewController
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property (strong,nonatomic) NSMutableArray* sectionArray;

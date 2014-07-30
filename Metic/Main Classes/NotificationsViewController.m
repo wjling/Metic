@@ -15,6 +15,7 @@
     NSIndexPath* selectedPath;
     NSInteger tab_index;
     CGFloat lastX;
+    BOOL clickTab;
 }
 
 enum Response_Type
@@ -52,7 +53,10 @@ enum Response_Type
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    self.appListener.notificationDelegate = self;
+    [self initParams];
+    [self getMsgFromDataBase];
 //    NSLog(@"hahahah");
 }
 
@@ -64,10 +68,7 @@ enum Response_Type
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.appListener.notificationDelegate = self;
-    [self initParams];
-    [self getMsgFromDataBase];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -193,37 +194,23 @@ enum Response_Type
     self.content_scrollView.delegate = self;
     
     tab_index = 0;
-    
+    clickTab = NO;
 }
 
 - (void)tabBtnClicked:(id)sender
 
 {
+    clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
     NSLog(@"selected button: %d",index);
     lastBtn.selected = NO;
     [((UIButton*)sender) setSelected: YES];
     
-    if (index == 0) {
-        [self.eventRequest_tableView reloadData];
-    }
-    else if (index == 1)
-    {
-        [self.friendRequest_tableView reloadData];
-    }
-    else if (index == 2)
-    {
-        [self.systemMessage_tableView reloadData];
-    }
-//    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
-//    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
-    
-//    [(UIButton*)sender setBackgroundColor:bColor_selected];
-   
-    
-    
-//    [lastBtn setBackgroundColor:bColor_normal];
+    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+    [(UIButton*)sender setBackgroundColor:bColor_selected];
+    [lastBtn setBackgroundColor:bColor_normal];
     
     tab_index = index;
     
@@ -233,7 +220,19 @@ enum Response_Type
     
     CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
     [self.content_scrollView setContentOffset:point animated:YES];
-   
+    
+//    if (index == 0) {
+//        [self.eventRequest_tableView reloadData];
+//    }
+//    else if (index == 1)
+//    {
+//        [self.friendRequest_tableView reloadData];
+//    }
+//    else if (index == 2)
+//    {
+//        [self.systemMessage_tableView reloadData];
+//    }
+
     
 }
 
@@ -241,9 +240,8 @@ enum Response_Type
     if (!functions_uiview.hidden) {
         [functions_uiview setHidden:YES];
         //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-        
         [UIView beginAnimations:@"View shows" context:nil];
-                //动画持续时间
+        //动画持续时间
         [UIView setAnimationDuration:0.5];
         //设置动画的回调函数，设置后可以使用回调方法
         [UIView setAnimationDelegate:self];
@@ -1000,9 +998,15 @@ enum Response_Type
     }
     else if(scrollView == self.content_scrollView)
     {
+        if (clickTab) {
+            return;
+        }
         CGFloat page_width = scrollView.frame.size.width;
         NSInteger last_tab_index = tab_index;
         tab_index = floor((scrollView.contentOffset.x - page_width/2) / page_width) +1;
+        if (clickTab) {
+            return;
+        }
         UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
         UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
         UIButton* lastBtn = (UIButton*)[tabs objectAtIndex:last_tab_index];
@@ -1013,20 +1017,42 @@ enum Response_Type
         [currentBtn setBackgroundColor:bColor_selected];
         currentBtn.selected = YES;
         
+//        if (tab_index == 0) {
+//            [self.eventRequest_tableView reloadData];
+//        }
+//        else if (tab_index == 1)
+//        {
+//            [self.friendRequest_tableView reloadData];
+//        }
+//        else if (tab_index == 2)
+//        {
+//            [self.systemMessage_tableView reloadData];
+//        }
+
+        
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    if (scrollView == self.content_scrollView) {
         if (tab_index == 0) {
             [self.eventRequest_tableView reloadData];
+            NSLog(@"reload event_table");
         }
         else if (tab_index == 1)
         {
             [self.friendRequest_tableView reloadData];
+            NSLog(@"reload friend_table");
         }
         else if (tab_index == 2)
         {
             [self.systemMessage_tableView reloadData];
+            NSLog(@"reload system_table");
         }
 
-        
     }
+    clickTab = NO;
 }
 
 
