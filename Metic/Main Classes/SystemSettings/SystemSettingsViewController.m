@@ -77,8 +77,8 @@
 -(void)initParams
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    statusOfSwitch1 = [userDf boolForKey:@"systemSettingsSwitch1"];
-    statusOfSwitch2 = [userDf boolForKey:@"systemSettingsSwitch2"];
+    statusOfSwitch1 = [userDf boolForKey:@"systemSettings1"];
+    statusOfSwitch2 = [userDf boolForKey:@"systemSettings2"];
     
 }
 
@@ -86,7 +86,7 @@
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:sender.on forKey:@"systemSettingsSwitch1"];
+        [userDf setBool:sender.on forKey:@"systemSettings1"];
         NSLog(@"switch1: %d",sender.on);
     }
     [userDf synchronize];
@@ -96,7 +96,7 @@
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:sender.on forKey:@"systemSettingsSwitch2"];
+        [userDf setBool:sender.on forKey:@"systemSettings2"];
         NSLog(@"switch2: %d",sender.on);
     }
     [userDf synchronize];
@@ -139,21 +139,14 @@
     if (buttonIndex == 0) {
         NSLog(@"退出程序");
         [UIView beginAnimations:@"exitApplication" context:nil];
-        
         [UIView setAnimationDuration:0.5];
-        
         [UIView setAnimationDelegate:self];
-        
-        // [UIView setAnimationTransition:UIViewAnimationCurveEaseOut forView:self.view.window cache:NO];
-        
+//        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
         [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view.window cache:NO];
-        
         [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
-        
-        //self.view.window.bounds = CGRectMake(0, 0, 0, 0);
-        
         self.view.window.bounds = CGRectMake(0, 0, 0, 0);
-        
+        [(SlideNavigationController*)self.navigationController leftMenu].view.hidden = YES;
+        [(AppDelegate*)[UIApplication sharedApplication].delegate window].bounds = CGRectMake(0, 0, 0, 0);
         [UIView commitAnimations];
 //        exit(0);
         
@@ -293,6 +286,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -325,7 +319,7 @@
     {
         [self quit];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 //- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
