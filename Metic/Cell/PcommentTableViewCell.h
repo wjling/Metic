@@ -13,5 +13,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet UILabel *comment;
 @property (strong, nonatomic) IBOutlet UILabel *date;
+@property (strong, nonatomic) NSString *authorName;
+@property (strong, nonatomic) NSNumber *authorId;
 
 @end

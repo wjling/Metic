@@ -21,6 +21,8 @@
 @property (nonatomic,strong) NSArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
+@property(nonatomic,strong) NSNumber* repliedId;
+@property(nonatomic,strong) NSString* herName;
 @property BOOL isKeyBoard;
 
 @end
@@ -132,6 +134,7 @@
 - (IBAction)comment:(id)sender {
     //[self.commentView setHidden:NO];
     //[self.view bringSubviewToFront:self.commentView];
+    [((UITextField*)[self.commentView viewWithTag:10]) setPlaceholder:@"说点什么吧"];
     [((UITextField*)[self.commentView viewWithTag:10]) becomeFirstResponder];
 }
 
@@ -157,10 +160,15 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"写点内容吧" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
+    
     [[self.commentView viewWithTag:10] resignFirstResponder];
     ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
     NSLog(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
+        [dictionary setValue:_repliedId forKey:@"replied"];
+        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+    }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -322,10 +330,13 @@
             nibsRegistered = YES;
         }
         PcommentTableViewCell* cell1 = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        [cell1 setTag:5];
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
         NSString* commentText = [Pcomment valueForKey:@"content"];
         
         cell1.author.text = [Pcomment valueForKey:@"author"];
+        cell1.authorName = [Pcomment valueForKey:@"author"];
+        cell1.authorId = [Pcomment valueForKey:@"author_id"];
         cell1.date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         //cell1.comment.text = [Pcomment valueForKey:@"content"];
 
@@ -344,8 +355,6 @@
         
         UIView *backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
-        
-        
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         [cell addSubview:backguand];
         [cell addSubview:cell1];
@@ -382,13 +391,23 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.isKeyBoard) {
         [[self.commentView viewWithTag:10] resignFirstResponder];
         return;
     }
+    NSLog(@"kkkk");
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
+    }else{
+        NSLog(@"aaa");
+        PcommentTableViewCell *cell = (PcommentTableViewCell*)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:5];
+        self.herName = cell.authorName;
+        if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
+            [((UITextField*)[self.commentView viewWithTag:10]) setPlaceholder:[NSString stringWithFormat:@"回复%@:",_herName]];
+        }else [((UITextField*)[self.commentView viewWithTag:10]) setPlaceholder:@"说点什么吧"];
+        [((UITextField*)[self.commentView viewWithTag:10]) becomeFirstResponder];
+        self.repliedId = cell.authorId;
     }
 }
 
