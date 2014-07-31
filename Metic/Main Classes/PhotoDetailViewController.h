@@ -13,6 +13,7 @@
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
 @property(nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong)NSNumber* photoId;
+@property(nonatomic,strong)NSNumber* eventId;
 @property (nonatomic,strong) NSDictionary * photoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;

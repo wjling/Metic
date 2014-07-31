@@ -121,6 +121,7 @@
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
     [dictionary setValue:@"good"  forKey:@"item_id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
@@ -162,6 +163,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     
     
@@ -195,7 +197,6 @@
 //        //[self.view sendSubviewToBack:self.commentView];
 //    }
 //}
-
 
 
 #pragma mark - HttpSenderDelegate

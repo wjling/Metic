@@ -265,6 +265,7 @@
             NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:self.photo_list[index]];
             self.photo_list[index] = dict;
             nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:_photoPath_list[index]];
+            nextViewController.eventId = _eventId;
             nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
         }
