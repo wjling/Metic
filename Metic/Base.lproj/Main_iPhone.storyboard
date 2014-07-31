@@ -3455,7 +3455,7 @@
                                 <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXw-gB-Z6b">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXw-gB-Z6b">
                                 <rect key="frame" x="0.0" y="381" width="320" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>

@@ -129,8 +129,9 @@
 }
 
 - (IBAction)comment:(id)sender {
-    [self.commentView setHidden:NO];
-    [self.view bringSubviewToFront:self.commentView];
+    //[self.commentView setHidden:NO];
+    //[self.view bringSubviewToFront:self.commentView];
+    [((UITextField*)[self.commentView viewWithTag:10]) becomeFirstResponder];
 }
 
 - (IBAction)share:(id)sender {
@@ -179,13 +180,21 @@
     }
 }
 
-
-#pragma mark - UIScrollViewDelegate
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+-(void)backToDisplay
 {
-    [self.commentView setHidden:YES];
-    [self.view sendSubviewToBack:self.commentView];
+    if (_isKeyBoard) {
+        [[self.commentView viewWithTag:10] resignFirstResponder];
+    }else [self.navigationController popToViewController:self.photoDisplayController animated:YES];
 }
+
+//#pragma mark - UIScrollViewDelegate
+//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    if (!_isKeyBoard) {
+//        [self.commentView setHidden:YES];
+//        //[self.view sendSubviewToBack:self.commentView];
+//    }
+//}
 
 
 
@@ -255,6 +264,11 @@
         imageView.image = self.photo;
         [cell addSubview:imageView];
         [cell addSubview:label];
+        
+        UIButton* back = [UIButton buttonWithType:UIButtonTypeCustom];
+        [back setFrame:imageView.frame];
+        [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:back];
         
         UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(40, height+13, 150, 12)];
         [author setFont:[UIFont systemFontOfSize:14]];
@@ -373,7 +387,7 @@
         return;
     }
     if (indexPath.row == 0) {
-        [self.navigationController popToViewController:self.photoDisplayController animated:YES];
+        //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }
 }
 
