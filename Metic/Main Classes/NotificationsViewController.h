@@ -21,11 +21,11 @@
 
 
 @interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,NotificationDelegate>
-@property (strong,nonatomic) NSMutableArray* msgFromDB;
+//@property (strong,nonatomic) NSMutableArray* msgFromDB;
 @property (strong,nonatomic) NSMutableArray* friendRequestMsg;
 @property (strong,nonatomic) NSMutableArray* eventRequestMsg;
 @property (strong,nonatomic) NSMutableArray* systemMsg;
-@property (strong,nonatomic) NSMutableArray* historicalMsg;
+//@property (strong,nonatomic) NSMutableArray* historicalMsg;
 @property (strong,nonatomic) NSMutableArray* tabs;
 @property (strong, nonatomic) IBOutlet UITableView *friendRequest_tableView;
 @property (strong, nonatomic) IBOutlet UITableView *eventRequest_tableView;
@@ -44,7 +44,7 @@
 
 
 - (void)initParams;
-- (void)getMsgFromDataBase;
+//- (void)getMsgFromDataBase;
 
 - (IBAction)friend_request_okBtnClicked:(id)sender;
 - (IBAction)friend_request_noBtnClicked:(id)sender;

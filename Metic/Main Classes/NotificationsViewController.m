@@ -7,6 +7,11 @@
 //
 
 #import "NotificationsViewController.h"
+#define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
+#define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
+#define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
+#define MTUser_systemMsg [MTUser sharedInstance].systemMsg
+#define MTUser_historicalMsg [MTUser sharedInstance].historicalMsg
 
 @interface NotificationsViewController ()
 {
@@ -28,11 +33,11 @@ enum Response_Type
 @end
 
 @implementation NotificationsViewController
-@synthesize msgFromDB;
+//@synthesize msgFromDB;
 @synthesize friendRequestMsg;
 @synthesize eventRequestMsg;
 @synthesize systemMsg;
-@synthesize historicalMsg;
+//@synthesize historicalMsg;
 @synthesize appListener;
 @synthesize tabs;
 @synthesize rightBarButton;
@@ -56,8 +61,13 @@ enum Response_Type
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.appListener.notificationDelegate = self;
     [self initParams];
-    [self getMsgFromDataBase];
+//    [self getMsgFromDataBase];
 //    NSLog(@"hahahah");
+//    self.msgFromDB = [MTUser sharedInstance].msgFromDB;
+//    self.eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
+//    self.friendRequestMsg = [MTUser sharedInstance].friendRequestMsg;
+//    self.systemMsg = [MTUser sharedInstance].systemMsg;
+//    self.historicalMsg = [MTUser sharedInstance].historicalMsg;
 }
 
 - (void)didReceiveMemoryWarning
@@ -68,11 +78,36 @@ enum Response_Type
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.appListener.notificationDelegate = self;
+    self.eventRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].eventRequestMsg];
+    self.friendRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].friendRequestMsg];
+    self.systemMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].systemMsg];
+    if (tab_index == 0) {
+        [self.eventRequest_tableView reloadData];
+    }
+    else if (tab_index == 1)
+    {
+        [self.friendRequest_tableView reloadData];
+    }
+    else if (tab_index == 2)
+    {
+        [self.systemMessage_tableView reloadData];
+    }
+//    id temp = [eventRequestMsg objectAtIndex:0];
+//    if ([temp isKindOfClass:[NSMutableDictionary class]]) {
+//        NSLog(@"temp is mutable_dic");
+//    }
+//    else if ([temp isKindOfClass:[NSDictionary class]])
+//    {
+//        NSLog(@"temp is dic");
+//    }
+    
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
 //    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
@@ -87,23 +122,23 @@ enum Response_Type
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.destinationViewController isKindOfClass:[HistoricalNotificationViewController class]]) {
-        HistoricalNotificationViewController* viewController = (HistoricalNotificationViewController*)segue.destinationViewController;
-        //        NSLog(@"pass fid value: %@",selectedFriendID);
-        
-        viewController.historicalMsgs = self.historicalMsg;
-    }
+//    if ([segue.destinationViewController isKindOfClass:[HistoricalNotificationViewController class]]) {
+//        HistoricalNotificationViewController* viewController = (HistoricalNotificationViewController*)segue.destinationViewController;
+//        //        NSLog(@"pass fid value: %@",selectedFriendID);
+//        
+//        viewController.historicalMsgs = self.historicalMsg;
+//    }
 
 }
 
 
 - (void)initParams
 {
-    self.msgFromDB = [[NSMutableArray alloc]init];
-    self.friendRequestMsg = [[NSMutableArray alloc]init];
-    self.eventRequestMsg = [[NSMutableArray alloc]init];
-    self.systemMsg = [[NSMutableArray alloc]init];
-    self.historicalMsg = [[NSMutableArray alloc]init];
+//    self.msgFromDB = [[NSMutableArray alloc]init];
+//    self.friendRequestMsg = [[NSMutableArray alloc]init];
+//    self.eventRequestMsg = [[NSMutableArray alloc]init];
+//    self.systemMsg = [[NSMutableArray alloc]init];
+//    self.historicalMsg = [[NSMutableArray alloc]init];
     selectedPath = [[NSIndexPath alloc]init];
     mySql = [[MySqlite alloc]init];
     DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -123,6 +158,7 @@ enum Response_Type
     [function1_button addTarget:self action:@selector(function1Clicked:) forControlEvents:UIControlEventTouchUpInside];
     [function2_button addTarget:self action:@selector(function2Clicked:) forControlEvents:UIControlEventTouchUpInside];
     
+    self.tabbar_scrollview.scrollEnabled = NO;
     CGRect frame = self.tabbar_scrollview.frame;
     
     int x = 0;
@@ -172,12 +208,13 @@ enum Response_Type
 //    [eventR_button backgroundRectForBounds:CGRectMake(0, eventR_button.frame.size.height - 5, eventR_button.frame.size.width, 5)];
     [eventR_button setSelected:YES];
     
+    UIColor* borderColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
     [eventR_button.layer setBorderWidth:0.5];
-    [eventR_button.layer setBorderColor:bColor_selected.CGColor];
+    [eventR_button.layer setBorderColor:borderColor.CGColor];
     [friendR_button.layer setBorderWidth:0.5];
-    [friendR_button.layer setBorderColor:bColor_selected.CGColor];
+    [friendR_button.layer setBorderColor:borderColor.CGColor];
     [systemMsg_button.layer setBorderWidth:0.5];
-    [systemMsg_button.layer setBorderColor:bColor_selected.CGColor];
+    [systemMsg_button.layer setBorderColor:borderColor.CGColor];
     
     [eventR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [friendR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -275,46 +312,60 @@ enum Response_Type
     [UIView setAnimationDuration:0.5];
     [UIView setAnimationDelegate:self];
     [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:NO];
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
     [UIView commitAnimations];
+    [self performSegueWithIdentifier:@"notificationvc_historicalvc" sender:self];
 }
 
 - (IBAction)function2Clicked:(id)sender {
-    [mySql openMyDB:DB_path];
-    if (tab_index == 0) {
-        for (NSDictionary* msg in self.eventRequestMsg) {
-            NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:seq,@"seq",nil]];
-        }
-        [self.eventRequestMsg removeAllObjects];
-        [self.eventRequest_tableView reloadData];
-    }
-    else if (tab_index == 1)
-    {
-        for (NSDictionary* msg in self.friendRequestMsg) {
-            NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:seq,@"seq",nil]];
-        }
-        [self.friendRequestMsg removeAllObjects];
-        [self.friendRequest_tableView reloadData];
-    }
-    else if (tab_index == 2)
-    {
-        for (NSDictionary* msg in self.systemMsg) {
-            NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:seq,@"seq",nil]];
-        }
-        [self.systemMsg removeAllObjects];
-        [self.systemMessage_tableView reloadData];
-    }
-    [mySql closeMyDB];
     [UIView beginAnimations:@"View shows" context:nil];
     [functions_uiview setHidden:YES];
     [UIView setAnimationDuration:0.5];
     [UIView setAnimationDelegate:self];
     [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:NO];
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
     [UIView commitAnimations];
+
+    //[self performSelectorOnMainThread:@selector(clearCurrentPage) withObject:nil waitUntilDone:NO];
+    [self clearCurrentPage];
+}
+
+-(void)clearCurrentPage
+{
+    [mySql openMyDB:DB_path];
+    if (tab_index == 0) {
+        for (NSDictionary* msg in MTUser_eventRequestMsg) {
+            NSNumber* seq = [msg objectForKey:@"seq"];
+            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
+                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+        }
+        [eventRequestMsg removeAllObjects];
+        [MTUser_eventRequestMsg removeAllObjects];
+        [self.eventRequest_tableView reloadData];
+    }
+    else if (tab_index == 1)
+    {
+        for (NSDictionary* msg in MTUser_friendRequestMsg) {
+            NSNumber* seq = [msg objectForKey:@"seq"];
+            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
+                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+        }
+        [friendRequestMsg removeAllObjects];
+        [MTUser_friendRequestMsg removeAllObjects];
+        [self.friendRequest_tableView reloadData];
+    }
+    else if (tab_index == 2)
+    {
+        for (NSDictionary* msg in MTUser_systemMsg) {
+            NSNumber* seq = [msg objectForKey:@"seq"];
+            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
+                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+        }
+        [systemMsg removeAllObjects];
+        [MTUser_systemMsg removeAllObjects];
+        [self.systemMessage_tableView reloadData];
+    }
+    [mySql closeMyDB];
 
 }
 
@@ -362,62 +413,62 @@ enum Response_Type
 
 //==========================================================================================
 
-- (void) getMsgFromDataBase
-{
-    [mySql openMyDB:DB_path];
-    self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
-    [mySql closeMyDB];
-    NSLog(@"msg from db: %@",msgFromDB);
-//    [self.notificationsTable reloadData];
-    NSInteger count = self.msgFromDB.count;
-    for (NSInteger i = count - 1; i >= 0; i--) {
-        NSDictionary* msg = [msgFromDB objectAtIndex:i];
-        NSString* msg_str = [msg objectForKey:@"msg"];
-        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
-        NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
-//        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
-//            NSLog(@"seq is string");
+//- (void) getMsgFromDataBase
+//{
+//    [mySql openMyDB:DB_path];
+//    msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
+//    [mySql closeMyDB];
+//    NSLog(@"msg from db: %@",MTUser_msgFromDB);
+////    [self.notificationsTable reloadData];
+//    NSInteger count = MTUser_msgFromDB.count;
+//    for (NSInteger i = count - 1; i >= 0; i--) {
+//        NSDictionary* msg = [MTUser_msgFromDB objectAtIndex:i];
+//        NSString* msg_str = [msg objectForKey:@"msg"];
+//        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+//        NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
+////        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
+////            NSLog(@"seq is string");
+////        }
+////        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+////        {
+////            NSLog(@"seq is number");
+////        }
+//        NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
+//        
+//        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
+//        [msg_dic setValue:ishandled forKey:@"ishanled"];
+//        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+//        if ([ishandled integerValue] == -1) {
+//            switch (cmd) {
+//                case ADD_FRIEND_NOTIFICATION:
+//                {
+//                    [friendRequestMsg addObject:msg_dic];
+//                }
+//                    break;
+//                case ADD_FRIEND_RESULT:
+//                case EVENT_INVITE_RESPONSE:
+//                {
+//                    [systemMsg addObject:msg_dic];
+//                }
+//                    break;
+//                case NEW_EVENT_NOTIFICATION:
+//                {
+//                    [[MTUser sharedInstance].eventRequestMsg addObject:msg_dic];
+//                }
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//
 //        }
-//        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+//        else
 //        {
-//            NSLog(@"seq is number");
+////            [historicalMsg addObject:msg_dic];
 //        }
-        NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
-        
-        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
-        [msg_dic setValue:ishandled forKey:@"ishanled"];
-        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
-        if ([ishandled integerValue] == -1) {
-            switch (cmd) {
-                case ADD_FRIEND_NOTIFICATION:
-                {
-                    [self.friendRequestMsg addObject:msg_dic];
-                }
-                    break;
-                case ADD_FRIEND_RESULT:
-                case EVENT_INVITE_RESPONSE:
-                {
-                    [self.systemMsg addObject:msg_dic];
-                }
-                    break;
-                case NEW_EVENT_NOTIFICATION:
-                {
-                    [self.eventRequestMsg addObject:msg_dic];
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
-
-        }
-        else
-        {
-            [self.historicalMsg addObject:msg_dic];
-        }
-    }
-    
-}
+//    }
+//    
+//}
 
 #pragma mark - NotificationDelegate
 
@@ -428,7 +479,7 @@ enum Response_Type
         NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
         NSNumber* seq = [msg objectForKey:@"seq"];
         [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
-        [msg_dic setValue:[NSNumber numberWithInteger:0] forKey:@"ishandled"];
+        [msg_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"ishandled"];
 //        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
 //            NSLog(@"received seq is string");
 //        }
@@ -441,18 +492,18 @@ enum Response_Type
         switch (cmd) {
             case ADD_FRIEND_NOTIFICATION:
             {
-                [self.friendRequestMsg insertObject:msg_dic atIndex:0];
+                [friendRequestMsg insertObject:msg_dic atIndex:0];
             }
                 break;
             case ADD_FRIEND_RESULT:
             {
-                [self.systemMsg insertObject:msg_dic atIndex:0];
-                [[MTUser sharedInstance] synchronizeFriends];
+                [systemMsg insertObject:msg_dic atIndex:0];
+//                [[MTUser sharedInstance] synchronizeFriends];
             }
                 break;
             case EVENT_INVITE_RESPONSE:
             {
-                [self.systemMsg insertObject:msg_dic atIndex:0];
+                [systemMsg insertObject:msg_dic atIndex:0];
             }
                 break;
             case NEW_EVENT_NOTIFICATION:
@@ -464,19 +515,20 @@ enum Response_Type
             default:
                 break;
         }
-        if (tab_index == 0) {
-            [self.eventRequest_tableView reloadData];
-        }
-        else if (tab_index == 1)
-        {
-            [self.friendRequest_tableView reloadData];
-        }
-        else if (tab_index == 2)
-        {
-            [self.systemMessage_tableView reloadData];
-        }
-
+        
     }
+    if (tab_index == 0) {
+        [self.eventRequest_tableView reloadData];
+    }
+    else if (tab_index == 1)
+    {
+        [self.friendRequest_tableView reloadData];
+    }
+    else if (tab_index == 2)
+    {
+        [self.systemMessage_tableView reloadData];
+    }
+
 }
 
 
@@ -490,15 +542,15 @@ enum Response_Type
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == self.friendRequest_tableView) {
-        return self.friendRequestMsg.count;
+        return friendRequestMsg.count;
     }
     else if (tableView == self.eventRequest_tableView)
     {
-        return self.eventRequestMsg.count;
+        return eventRequestMsg.count;
     }
     else if (tableView == self.systemMessage_tableView)
     {
-        return self.systemMsg.count;
+        return systemMsg.count;
     }
     
     return 0;
@@ -515,9 +567,10 @@ enum Response_Type
         if (nil == cell) {
             cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
         }
-        NSMutableDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:indexPath.row];
+        NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
         NSLog(@"event %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
             case NEW_EVENT_NOTIFICATION: //cmd 997
             {
@@ -530,26 +583,36 @@ enum Response_Type
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getPhoto];
                 
-                if (cell.tag == 0) {
+                if (ishandled == -1) {
                     cell.okBtn.hidden = NO;
                     cell.noBtn.hidden = NO;
                     cell.remark_label.hidden = YES;
                 }
-                else
+                else if(ishandled == 0)
                 {
                     cell.okBtn.hidden = YES;
                     cell.noBtn.hidden = YES;
                     cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已拒绝";
+                }
+                else if (ishandled == 1)
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已同意";
                 }
                 [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-
             }
                 break;
                 
             default:
                 break;
         }
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if(tableView == self.friendRequest_tableView)
@@ -558,9 +621,10 @@ enum Response_Type
         if (nil == cell) {
             cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
         }
-        NSMutableDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:indexPath.row];
+        NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:indexPath.row];
         NSLog(@"friend %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
             case ADD_FRIEND_NOTIFICATION: //cmd 999
             {
@@ -572,16 +636,24 @@ enum Response_Type
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getPhoto];
                 
-                if (cell.tag == 0) {
+                if (ishandled == -1) {
                     cell.okBtn.hidden = NO;
                     cell.noBtn.hidden = NO;
                     cell.remark_label.hidden = YES;
                 }
-                else
+                else if(ishandled == 0)
                 {
                     cell.okBtn.hidden = YES;
                     cell.noBtn.hidden = YES;
                     cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已拒绝";
+                }
+                else if (ishandled == 1)
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已同意";
                 }
                 [cell.okBtn addTarget:self action:@selector(friend_request_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.noBtn addTarget:self action:@selector(friend_request_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -592,7 +664,9 @@ enum Response_Type
             default:
                 break;
         }
-        
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if (tableView == self.systemMessage_tableView)
@@ -601,7 +675,7 @@ enum Response_Type
         if (nil == cell) {
             cell = [[NotificationsSystemMessageTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsSystemMessageTableViewCell"];
         }
-        NSMutableDictionary* msg_dic = [self.systemMsg objectAtIndex:indexPath.row];
+        NSMutableDictionary* msg_dic = [systemMsg objectAtIndex:indexPath.row];
         NSLog(@"system %d message: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
         switch (cmd) {
@@ -644,7 +718,9 @@ enum Response_Type
             default:
                 break;
         }
-        
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     temp_cell.textLabel.text = @"没有新的消息啦";
@@ -657,10 +733,10 @@ enum Response_Type
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
     }
-    cell.tag = 1;
+//    cell.tag = 1;
     ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已同意";
     selectedPath = [self.friendRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
     
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"ok button row: %d, seq: %@",selectedPath.row,seq);
@@ -699,10 +775,10 @@ enum Response_Type
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
     }
-    cell.tag = 1;
+//    cell.tag = 1;
     ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
     selectedPath = [self.friendRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
     
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"no button row: %d, seq: %@",selectedPath.row,seq);
@@ -742,13 +818,13 @@ enum Response_Type
         cell = [cell superview];
     }
     selectedPath = [self.systemMessage_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [self.systemMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [systemMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"del cell seq: %@, row: %d",seq,selectedPath.row);
     [mySql openMyDB:DB_path];
     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
     [mySql closeMyDB];
-    [self.systemMsg removeObjectAtIndex:selectedPath.row];
+    [systemMsg removeObjectAtIndex:selectedPath.row];
     cell = nil;
     [self.systemMessage_tableView reloadData];
     
@@ -760,10 +836,10 @@ enum Response_Type
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
     }
-    cell.tag = 1;
+//    cell.tag = 1;
     ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已同意";
     selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
     
@@ -793,10 +869,10 @@ enum Response_Type
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
     }
-    cell.tag = 1;
+//    cell.tag = 1;
     ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
     selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
     
@@ -844,7 +920,7 @@ enum Response_Type
                     [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
                     [self.friendRequest_tableView reloadData];
                     
-                    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
+                    NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
                     NSNumber* seq = [msg_dic objectForKey:@"seq"];
                     NSLog(@"response friend, seq: %@",seq);
                     
@@ -878,12 +954,16 @@ enum Response_Type
                                                 nil];
                     [[MTUser sharedInstance].friendList addObject:friendJson];
                     [[MTUser sharedInstance] friendListDidChanged];
-
+                    
+                    [MTUser_friendRequestMsg removeObject:msg_dic];
+                    [msg_dic setValue:result forKey:@"ishandled"];
+                    
+                    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
                 }
                 else
                 {
                     [self.friendRequest_tableView reloadData];
-                    NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
+                    NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
                     NSNumber* seq = [msg_dic objectForKey:@"seq"];
                     NSLog(@"response friend, seq: %@",seq);
                     [mySql openMyDB:DB_path];
@@ -896,6 +976,10 @@ enum Response_Type
                                                    nil]];
                     [mySql closeMyDB];
 
+                    [MTUser_friendRequestMsg removeObject:msg_dic];
+                    [msg_dic setValue:result forKey:@"ishandled"];
+                    
+                    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
                     
 //                    NSString* fname = [msg_dic objectForKey:@"name"];
 //                    NSString* femail = [msg_dic objectForKey:@"email"];
@@ -910,10 +994,9 @@ enum Response_Type
             else if ([response_type intValue] == RESPONSE_EVENT)
             {
                 [self.eventRequest_tableView reloadData];
-                NSDictionary* dataMsg = [self.eventRequestMsg objectAtIndex:[item_index intValue]];
-//                [self.historicalMsg insertObject:dataMsg atIndex:0];
-//                [self.eventRequestMsg removeObjectAtIndex:[item_index integerValue]];
-                NSNumber* seq = [dataMsg objectForKey:@"seq"];
+                NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:[item_index intValue]];
+                
+                NSNumber* seq = [msg_dic objectForKey:@"seq"];
                 NSLog(@"response event, seq: %@",seq);
                 [mySql openMyDB:DB_path];
                 [mySql updateDataWitTableName:@"notification"
@@ -924,6 +1007,14 @@ enum Response_Type
                                                [NSString stringWithFormat:@"%@",result],@"ishandled",
                                                nil]];
                 [mySql closeMyDB];
+                
+                
+                [MTUser_eventRequestMsg removeObject:msg_dic];
+                [msg_dic setValue:result forKey:@"ishandled"];
+
+                [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
+//                NSLog(@"MTUser eventRequestMsg: %@",[MTUser sharedInstance].eventRequestMsg);
+//                NSLog(@"msg_dic: %@",new_msg_dic);
                 
 //                [mySql openMyDB:DB_path];
 //                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];

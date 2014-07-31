@@ -162,9 +162,6 @@
     }
     [self.sql closeMyDB];
     
-    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
-        [self.notificationDelegate notificationDidReceive:self.syncMessages];
-    }
     
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     BOOL flag = [userDf boolForKey:@"systemSettings1"];
@@ -188,6 +185,10 @@
         //notification.userInfo = infoDict; //添加额外的信息
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    
+    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
+        [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
 
     numOfSyncMessages = -1;
@@ -304,10 +305,13 @@
         
         [self.syncMessages addObject:response1];
         NSString* msg_str = [response1 objectForKey:@"msg"];
-        NSDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+        NSMutableDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+        [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
         NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+            [[MTUser sharedInstance] synchronizeFriends];
             NSNumber* result = [msg_dic objectForKey:@"result"];
             NSLog(@"friend request result: %@",result);
             if ([result integerValue] == 1) {
@@ -342,12 +346,24 @@
                 [[MTUser sharedInstance].updateEvents addObject:msg_dic];
             }
             NSLog(@"%d",[MTUser sharedInstance].updateEventIds.count);
-//            [self adjustInfoView];
-        }else if (msg_cmd == 988 || msg_cmd == 989) {
+        }
+        else if (msg_cmd == 988 || msg_cmd == 989) {
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
-//            [self adjustInfoView];
+        }
+        else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
+        {
+            [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
+        }
+        else if (msg_cmd == EVENT_INVITE_RESPONSE)
+        {
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+        }
+        else if (msg_cmd == NEW_EVENT_NOTIFICATION)
+        {
+            [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
         }
 
+        
         if (self.syncMessages.count == numOfSyncMessages) {
             NSNumber* seq = [response1 objectForKey:@"seq"];
             NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
