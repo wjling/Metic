@@ -18,6 +18,7 @@
     };
 }
 @property (strong, nonatomic) UIView* waitingView;
+@property (strong, nonatomic) NSTimer* timer;
 @end
 
 @implementation LoginViewController
@@ -59,7 +60,7 @@
     self.textField_userName.delegate = self.rootView;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"185597569@qq.com";
+    self.textField_userName.text = @"";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
@@ -67,7 +68,7 @@
     self.textField_password.delegate = self.rootView;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"538769";
+    self.textField_password.text = @"";
     [self checkPreUP];
 
 
@@ -112,6 +113,11 @@
     }
 }
 
+-(void)loginFail
+{
+    [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+}
+
 -(void)checkPreUP
 {
     [self.button_login setEnabled:NO];
@@ -119,17 +125,21 @@
     NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
     NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
     if (userName && password) {
-        self.logInEmail = userName;
-        self.logInPassword = password;
-        //[self login];
         self.textField_userName.text = userName;
         self.textField_password.text = password;
-        [self.button_login setEnabled:YES];
+        self.logInEmail = userName;
+        self.logInPassword = password;
+        _timer = [NSTimer scheduledTimerWithTimeInterval:3.5f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+        [self login];
     }else [self.button_login setEnabled:YES];
 }
 
 
 
+- (void) recoverloginbutton
+{
+    [button_login setEnabled:YES];
+}
 
 -(BOOL)isTextFieldEmpty
 {
@@ -167,6 +177,9 @@
     NSLog(@"%@",[self.textField_userName text]);
     self.logInEmail = [self.textField_userName text];
     self.logInPassword = [self.textField_password text];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:3.5f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+    [self.textField_password endEditing:YES];
+    [self.textField_userName endEditing:YES];
     [self login];
 
 }
@@ -224,6 +237,7 @@
             break;
         case LOGIN_SUC:
         {
+            [_timer invalidate];
             [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
             [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
@@ -238,6 +252,7 @@
             break;
         case PASSWD_NOT_CORRECT:
         {
+            [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"密码错误，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
             NSLog(@"password not correct");
@@ -246,6 +261,7 @@
             break;
         case USER_NOT_FOUND:
         {
+            [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户名不存在" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
             NSLog(@"user not found");
@@ -253,12 +269,14 @@
             break;
         case NORMAL_REPLY:
         {
+            [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
             break;
             
         default:{
+            [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
@@ -315,8 +333,4 @@
     
 }
 
-- (void) recoverloginbutton
-{
-    [button_login setEnabled:YES];
-}
 @end

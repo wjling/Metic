@@ -32,7 +32,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
-@property (nonatomic,strong) UIViewController* vc;
+
 @end
 
 @implementation SlideNavigationController

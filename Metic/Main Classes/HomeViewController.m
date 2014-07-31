@@ -112,6 +112,8 @@
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
 }
 
+
+
 -(void)createMenuButton
 {
     UIImage* image = [UIImage imageNamed:@"dian"];
