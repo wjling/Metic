@@ -39,6 +39,14 @@
 @property (nonatomic,strong) NSMutableArray* updateEvents;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 
+//For NotificationViewController
+@property (strong,nonatomic) NSMutableArray* msgFromDB;
+@property (strong,nonatomic) NSMutableArray* friendRequestMsg;
+@property (strong,nonatomic) NSMutableArray* eventRequestMsg; //活动邀请message
+@property (strong,nonatomic) NSMutableArray* systemMsg;
+@property (strong,nonatomic) NSMutableArray* historicalMsg;
+@property BOOL hasInitNotification;
+
 
 
 @property(nonatomic)bool logined;

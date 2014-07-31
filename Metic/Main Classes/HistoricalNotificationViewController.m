@@ -37,11 +37,26 @@
     self.functions_view.hidden = YES;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.historicalMsgs = [MTUser sharedInstance].historicalMsg;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+//    CGRect frame = [self.historicalNF_tableview.tableHeaderView frame];
+//    frame.size.height = 0;
+//    [self.historicalNF_tableview.tableHeaderView setFrame:frame];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation
@@ -58,7 +73,6 @@
     if (!self.functions_view.hidden) {
         [self.functions_view setHidden:YES];
         //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-        
         [UIView beginAnimations:@"View shows" context:nil];
         //动画持续时间
         [UIView setAnimationDuration:0.5];
@@ -89,19 +103,35 @@
 }
 
 - (IBAction)function1Clicked:(id)sender {
+    [UIView beginAnimations:@"View shows" context:nil];
+    [self.functions_view setHidden:YES];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.self.functions_view  cache:YES];
+    [UIView commitAnimations];
+    
     MySqlite* mySql = [[MySqlite alloc]init];
     [mySql openMyDB:DB_path];
     for (NSDictionary* msg in self.historicalMsgs) {
         NSNumber* seq = [msg objectForKey:@"seq"];
-        [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:seq,@"seq",nil]];
+        [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
+                                                                [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
     }
     [mySql closeMyDB];
-    [self.historicalMsgs removeAllObjects];
+    [[MTUser sharedInstance].historicalMsg removeAllObjects];
     [self.historicalNF_tableview reloadData];
 
 }
 
 - (IBAction)function2Clicked:(id)sender {
+    [UIView beginAnimations:@"View shows" context:nil];
+    [self.functions_view setHidden:YES];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.self.functions_view  cache:YES];
+    [UIView commitAnimations];
 }
 
 #pragma mark - UITableViewDataSource
@@ -182,4 +212,10 @@
     return nil;
 }
 
+
+#pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
+}
 @end

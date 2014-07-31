@@ -28,6 +28,13 @@
 @synthesize updateEvents;
 @synthesize atMeEvents;
 
+@synthesize msgFromDB;
+@synthesize eventRequestMsg;
+@synthesize friendRequestMsg;
+@synthesize systemMsg;
+@synthesize historicalMsg;
+@synthesize hasInitNotification;
+
 static MTUser *singletonInstance;
 
 + (MTUser *)sharedInstance
@@ -52,6 +59,11 @@ static MTUser *singletonInstance;
         self.updateEventIds = [[NSMutableSet alloc]init];
         self.updateEvents = [[NSMutableArray alloc]init];
         self.atMeEvents = [[NSMutableArray alloc]init];
+        self.eventRequestMsg = [[NSMutableArray alloc]init];
+        self.friendRequestMsg = [[NSMutableArray alloc]init];
+        self.systemMsg = [[NSMutableArray alloc]init];
+        self.historicalMsg = [[NSMutableArray alloc]init];
+        self.hasInitNotification = NO;
        
         self.wait = 0.1;
     }
@@ -124,6 +136,7 @@ static MTUser *singletonInstance;
 //    [self.sortedFriendDic removeAllObjects];
     [self.sectionArray removeAllObjects];
     [self synchronizeFriends];
+    [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
 }
 
 - (void)initUserDir
@@ -317,7 +330,75 @@ static MTUser *singletonInstance;
 
 //============================================================================
 
+//================================Init Notification Messages=====================
 
+- (void) getMsgFromDataBase
+{
+    MySqlite* mySql = [[MySqlite alloc]init];
+    [mySql openMyDB:DB_path];
+    self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
+    [mySql closeMyDB];
+    NSLog(@"msg from db: %@",msgFromDB);
+    //    [self.notificationsTable reloadData];
+    NSInteger count = self.msgFromDB.count;
+    for (NSInteger i = count - 1; i >= 0; i--) {
+        NSDictionary* msg = [msgFromDB objectAtIndex:i];
+        NSString* msg_str = [msg objectForKey:@"msg"];
+        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+        NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
+        //        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
+        //            NSLog(@"seq is string");
+        //        }
+        //        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+        //        {
+        //            NSLog(@"seq is number");
+        //        }
+        NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
+        
+        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
+        [msg_dic setValue:ishandled forKey:@"ishandled"];
+        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+        if ([ishandled integerValue] == -1) {
+            switch (cmd) {
+                case ADD_FRIEND_NOTIFICATION:
+                {
+                    [self.friendRequestMsg addObject:msg_dic];
+                }
+                    break;
+                case ADD_FRIEND_RESULT:
+                case EVENT_INVITE_RESPONSE:
+                {
+                    [self.systemMsg addObject:msg_dic];
+                }
+                    break;
+                case NEW_EVENT_NOTIFICATION:
+                {
+                    [self.eventRequestMsg addObject:msg_dic];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+        }
+        else
+        {
+            [self.historicalMsg addObject:msg_dic];
+        }
+    }
+//    self.hasInitNotification = YES;
+    [self performSelectorOnMainThread:@selector(getMsgFromDataBaseDone) withObject:nil waitUntilDone:YES];
+    
+}
+
+-(void)getMsgFromDataBaseDone
+{
+    self.hasInitNotification = YES;
+}
+
+
+//===============================================================================
 
 #pragma mark - HttpSenderDelegate
 
@@ -339,22 +420,18 @@ static MTUser *singletonInstance;
                     self.friendList = tempFriends;
                     
                     NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:tempFriends];
-                    
                     [thread start];
-                    
                 }
                 else
                 {
                     NSLog(@"好友列表已经是最新的啦～");
 //                    self.friendList = [self getFriendsFromDB];
 //                    self.sortedFriendDic = [self sortFriendList];
-                    
                 }
                 NSLog(@"synchronize friends: %@",friendList);
                 
             }
             [self friendListDidChanged];
-            
                     
         }
             break;
