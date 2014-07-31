@@ -167,6 +167,12 @@
 		516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */; };
 		5172E2E1197D05240050F446 /* libQREncoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5172E2E0197D05240050F446 /* libQREncoder.a */; };
 		519100F019651388005DF607 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 519100EF19651388005DF607 /* MRZoomScrollView.m */; };
+		519C65941989F61B00710B26 /* 2聚餐.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C658E1989F61B00710B26 /* 2聚餐.jpg */; };
+		519C65951989F61B00710B26 /* 3兜风.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C658F1989F61B00710B26 /* 3兜风.jpg */; };
+		519C65961989F61B00710B26 /* 4喝酒.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65901989F61B00710B26 /* 4喝酒.jpg */; };
+		519C65971989F61B00710B26 /* 5健身.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65911989F61B00710B26 /* 5健身.jpg */; };
+		519C65981989F61B00710B26 /* 6听课.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65921989F61B00710B26 /* 6听课.jpg */; };
+		519C65991989F61B00710B26 /* 7夜店.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65931989F61B00710B26 /* 7夜店.jpg */; };
 		51A01D0D19339EE50043963F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0C19339EE50043963F /* LoginViewController.m */; };
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
@@ -564,6 +570,12 @@
 		5172E2E0197D05240050F446 /* libQREncoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQREncoder.a; sourceTree = "<group>"; };
 		519100EE19651388005DF607 /* MRZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRZoomScrollView.h; sourceTree = "<group>"; };
 		519100EF19651388005DF607 /* MRZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRZoomScrollView.m; sourceTree = "<group>"; };
+		519C658E1989F61B00710B26 /* 2聚餐.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2聚餐.jpg"; sourceTree = "<group>"; };
+		519C658F1989F61B00710B26 /* 3兜风.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "3兜风.jpg"; sourceTree = "<group>"; };
+		519C65901989F61B00710B26 /* 4喝酒.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "4喝酒.jpg"; sourceTree = "<group>"; };
+		519C65911989F61B00710B26 /* 5健身.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "5健身.jpg"; sourceTree = "<group>"; };
+		519C65921989F61B00710B26 /* 6听课.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "6听课.jpg"; sourceTree = "<group>"; };
+		519C65931989F61B00710B26 /* 7夜店.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "7夜店.jpg"; sourceTree = "<group>"; };
 		51A01D0B19339EE50043963F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		51A01D0C19339EE50043963F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		51A01D0E19339F0B0043963F /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
@@ -1176,6 +1188,7 @@
 				51581D5B19335A8700943606 /* Main Classes */,
 				51581D6B19335CDD00943606 /* Source */,
 				5148120A1937064D00DBBED7 /* MJRefresh */,
+				519C658C1989F61B00710B26 /* Resource */,
 				51581D321933575300943606 /* AppDelegate.h */,
 				51581D331933575300943606 /* AppDelegate.m */,
 				51581D351933575300943606 /* Main_iPhone.storyboard */,
@@ -1315,6 +1328,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		519C658C1989F61B00710B26 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				519C658D1989F61B00710B26 /* banner */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		519C658D1989F61B00710B26 /* banner */ = {
+			isa = PBXGroup;
+			children = (
+				519C658E1989F61B00710B26 /* 2聚餐.jpg */,
+				519C658F1989F61B00710B26 /* 3兜风.jpg */,
+				519C65901989F61B00710B26 /* 4喝酒.jpg */,
+				519C65911989F61B00710B26 /* 5健身.jpg */,
+				519C65921989F61B00710B26 /* 6听课.jpg */,
+				519C65931989F61B00710B26 /* 7夜店.jpg */,
+			);
+			path = banner;
+			sourceTree = "<group>";
+		};
 		51E857BD196B951300812F7D /* UMSocial_Sdk_Extra_Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1428,6 +1462,7 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
+				519C65891989EAF900710B26 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1518,6 +1553,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				519C65991989F61B00710B26 /* 7夜店.jpg in Resources */,
 				51F06C1D197E0109000E8428 /* zbar-help.html in Resources */,
 				08DB69AF19541F3A00F80F3F /* SCommentTableViewCell.xib in Resources */,
 				5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */,
@@ -1535,7 +1571,9 @@
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51581D371933575300943606 /* Main_iPhone.storyboard in Resources */,
 				5138B05619766C2000817821 /* mapapi.bundle in Resources */,
+				519C65961989F61B00710B26 /* 4喝酒.jpg in Resources */,
 				5144D9A1196B880300C953FB /* UMSLoginViewController.xib in Resources */,
+				519C65941989F61B00710B26 /* 2聚餐.jpg in Resources */,
 				5144D9A3196B880300C953FB /* UMSShareListController.xib in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
@@ -1544,12 +1582,15 @@
 				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
 				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
+				519C65951989F61B00710B26 /* 3兜风.jpg in Resources */,
 				51F06C1C197E0109000E8428 /* zbar-back.png in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
+				519C65971989F61B00710B26 /* 5健身.jpg in Resources */,
 				04D61297197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png in Resources */,
 				08DB69A919541F3A00F80F3F /* CustomCellTableViewCell.xib in Resources */,
 				04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */,
+				519C65981989F61B00710B26 /* 6听课.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
@@ -1567,6 +1608,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		519C65891989EAF900710B26 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {

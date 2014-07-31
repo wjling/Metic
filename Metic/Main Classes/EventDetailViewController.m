@@ -377,12 +377,12 @@
         cell.eventController = self;
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
-        [bannerGetter getBanner];
+        [bannerGetter getBanner:[_event valueForKey:@"code"]];
 
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
-            tmp.layer.masksToBounds = YES;
+            //tmp.layer.masksToBounds = YES;
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
@@ -441,7 +441,7 @@
         }
         
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
-        ((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
+        //((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
         [((UIImageView*)[cell viewWithTag:1]).layer setCornerRadius:5];
         
         

@@ -56,10 +56,55 @@
 }
 
 
--(void)getBanner
+-(void)getBanner:(NSNumber*)code
 {
-    NSString *url = [self getLocalBannerUrl];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+    switch ([code intValue]) {
+        case 0:
+        {
+            NSString *url = [self getLocalBannerUrl];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+        }
+            break;
+        case 1:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"event.png"]];
+        }
+            break;
+        case 2:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"2聚餐.jpg"]];
+        }
+            break;
+        case 3:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"3兜风.jpg"]];
+        }
+            break;
+        case 4:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"4喝酒.jpg"]];
+        }
+            break;
+        case 5:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"5健身.jpg"]];
+        }
+            break;
+        case 6:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"6听课.jpg"]];
+        }
+            break;
+        case 7:
+        {
+            [self.imageView setImage:[UIImage imageNamed:@"7夜店.jpg"]];
+        }
+            break;
+        default:
+            [self.imageView setImage:[UIImage imageNamed:@"event.png"]];
+            break;
+        }
+  
 }
 
 

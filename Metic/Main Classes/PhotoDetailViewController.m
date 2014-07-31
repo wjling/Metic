@@ -180,6 +180,15 @@
 }
 
 
+#pragma mark - UIScrollViewDelegate
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.commentView setHidden:YES];
+    [self.view sendSubviewToBack:self.commentView];
+}
+
+
+
 #pragma mark - HttpSenderDelegate
 
 -(void)finishWithReceivedData:(NSData *)rData

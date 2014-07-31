@@ -64,14 +64,14 @@
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
         cell.eventId = [a valueForKey:@"event_id"];
-        cell.avatar.layer.masksToBounds = YES;
+        //cell.avatar.layer.masksToBounds = YES;
         [cell.avatar.layer setCornerRadius:15];
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
         [avatarGetter getPhoto];
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-        [bannerGetter getBanner];
+        [bannerGetter getBanner:[a valueForKey:@"code"]];
 
         cell.homeController = self.homeController;
         
@@ -79,7 +79,7 @@
 
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
-            tmp.layer.masksToBounds = YES;
+            //tmp.layer.masksToBounds = YES;
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];

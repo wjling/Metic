@@ -54,6 +54,9 @@
         _isScaning = NO;
         [readerView stop];
     }
+    [_resultView setHidden:YES];
+    [_showView setHidden:YES];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -120,7 +123,7 @@
     [avatarGetter getPhoto];
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-    [bannerGetter getBanner];
+    [bannerGetter getBanner:[a valueForKey:@"code"]];
     
     //cell.homeController = self.homeController;
     
