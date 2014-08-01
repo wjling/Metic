@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -3940,7 +3940,7 @@
         <!--Event Invitation View Controller - 活动邀请-->
         <scene sceneID="O4T-eZ-rQ1">
             <objects>
-                <viewController id="6xS-iU-uTV" customClass="EventInvitationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventInvitationViewController" id="6xS-iU-uTV" customClass="EventInvitationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vu2-yB-RFH"/>
                         <viewControllerLayoutGuide type="bottom" id="gL6-uA-l7g"/>
@@ -3949,19 +3949,30 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4Lw-9T-gxJ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4Lw-9T-gxJ">
+                                <rect key="frame" x="10" y="0.0" width="300" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IpV-b0-tQv">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
                             <constraint firstItem="gL6-uA-l7g" firstAttribute="top" secondItem="4Lw-9T-gxJ" secondAttribute="bottom" id="GCE-bd-gBM"/>
+                            <constraint firstItem="IpV-b0-tQv" firstAttribute="top" secondItem="vu2-yB-RFH" secondAttribute="bottom" id="P6O-Bm-Bf5"/>
                             <constraint firstItem="4Lw-9T-gxJ" firstAttribute="top" secondItem="vu2-yB-RFH" secondAttribute="bottom" id="RYH-oD-Z9A"/>
+                            <constraint firstItem="gL6-uA-l7g" firstAttribute="top" secondItem="IpV-b0-tQv" secondAttribute="bottom" id="cMD-cd-P81"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动邀请" id="Iyr-dC-wK2"/>
+                    <connections>
+                        <outlet property="shadowView" destination="IpV-b0-tQv" id="9MR-O8-NjN"/>
+                        <outlet property="tableView" destination="4Lw-9T-gxJ" id="wBG-vv-NGS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a0a-4H-96t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4030,12 +4041,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="hOW-ww-bKW"/>
+        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="EEO-gR-a4J"/>
         <segue reference="fLJ-gw-aSw"/>
         <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="hOW-ww-bKW"/>
         <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>

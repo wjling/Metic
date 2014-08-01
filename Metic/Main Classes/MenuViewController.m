@@ -9,6 +9,7 @@
 #import "MenuViewController.h"
 #import "FriendsViewController.h"
 #import "NotificationsViewController.h"
+#import "EventInvitationViewController.h"
 #import "MTUser.h"
 
 
@@ -17,6 +18,7 @@
 @property(nonatomic,strong) UIImage* testImage;
 @property(nonatomic,strong) UIImageView* gender;
 @property(nonatomic,strong) UIViewController* homeViewController;
+@property(nonatomic,strong) UIViewController* eventInvitationViewController;
 @property(nonatomic,strong) UIViewController* friendsViewController;
 @property(nonatomic,strong) UIViewController* notificationsViewController;
 @property(nonatomic,strong) UIViewController* scaningViewController;
@@ -106,7 +108,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 6;
+	return 7;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -120,12 +122,12 @@
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标1"]];
 			break;
 			
-//		case 1:
-//			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
-//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
-//			break;
-			
 		case 1:
+			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
+			break;
+			
+		case 2:
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
@@ -134,7 +136,7 @@
 //			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
 //            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
 //			break;
-        case 2:
+        case 3:
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
 			break;
@@ -142,15 +144,15 @@
 //			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
 //            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
 //			break;
-        case 3:
+        case 4:
 			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
 			break;
-        case 4:
+        case 5:
 			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
 			break;
-        case 5:
+        case 6:
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
 			break;
@@ -184,12 +186,14 @@
             }else vc = _homeViewController;
 			break;
 			
-//		case 1:
-//			
-//            return;
-//			break;
-			
 		case 1:
+            if (!_eventInvitationViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
+                _eventInvitationViewController = vc;
+            }else vc = _eventInvitationViewController;
+			break;
+			
+		case 2:
             if (!_friendsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
                 _friendsViewController = vc;
@@ -200,25 +204,25 @@
 //            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 //			break;
             
-        case 2:
+        case 3:
             if (!_notificationsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
                 _notificationsViewController = vc;
             }else vc = _notificationsViewController;
 			break;
-        case 3:
+        case 4:
             if (!_scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
                 _scaningViewController = vc;
             }else vc = _scaningViewController;
 			break;
-        case 4:
+        case 5:
             if (!_feedBackViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
                 _feedBackViewController = vc;
             }else vc = _feedBackViewController;
 			break;
-        case 5:
+        case 6:
         {
             if (!_systemSettingsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"SystemSettingsViewController"];
