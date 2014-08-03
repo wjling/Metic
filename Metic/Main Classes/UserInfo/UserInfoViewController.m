@@ -63,6 +63,9 @@
     self.email_label.text = [MTUser sharedInstance].email;
     
     NSNumber* gender = [MTUser sharedInstance].gender;
+    UIFont* font = [UIFont systemFontOfSize:15];
+    CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
+    self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     if (gender == 0) {
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
@@ -70,7 +73,7 @@
     {
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
-    
+    [self.banner_UIview addSubview:self.gender_imageView];
     self.info_tableView.delegate = self;
     self.info_tableView.dataSource = self;
     self.info_tableView.scrollEnabled = YES;
@@ -82,7 +85,16 @@
     self.name_label.text = [MTUser sharedInstance].name;
     self.email_label.text = [MTUser sharedInstance].email;
     
+    UIFont* font = [UIFont systemFontOfSize:15];
+    CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
     NSNumber* gender = [MTUser sharedInstance].gender;
+    if (self.gender_imageView) {
+        self.gender_imageView.frame = CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18);
+    }
+    else
+    {
+        self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
+    }
     if (gender == 0) {
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
@@ -121,7 +133,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 15;
+    return 8;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
@@ -169,6 +181,7 @@
         default:
             break;
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -195,6 +208,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
+    UIColor* textColor1 = [CommonUtils colorWithValue:0xbfbfbf];
+    UIColor* textColor2 = [CommonUtils colorWithValue:0x444444];
     switch (indexPath.section) {
         case 0:
         {
@@ -205,6 +221,10 @@
                 }
                 cell.title_label.text = @"昵称";
                 cell.content_label.text = [MTUser sharedInstance].name;
+                cell.title_label.textColor = textColor1;
+                cell.content_label.textColor = textColor2;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
             else if(indexPath.row == 1)
@@ -222,7 +242,10 @@
                 {
                     cell.content_label.text = @"男";
                 }
-                
+                cell.title_label.textColor = textColor1;
+                cell.content_label.textColor = textColor2;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
             else if (indexPath.row == 2)
@@ -240,7 +263,10 @@
                 {
                     cell.content_label.text = @"无";
                 }
-                
+                cell.title_label.textColor = textColor1;
+                cell.content_label.textColor = textColor2;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
             
@@ -255,6 +281,10 @@
                 }
                 cell.title_label.text = @"个人描述";
                 cell.content_label.text = @"";
+                cell.title_label.textColor = textColor1;
+//                cell.content_label.textColor = textColor2;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
             else if (indexPath.row == 1)
@@ -268,8 +298,10 @@
                 {
                     cell.textLabel.text = @"无";
                 }
-                
+                cell.textLabel.textColor = textColor2;
                 cell.userInteractionEnabled = NO;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
 
@@ -284,6 +316,9 @@
                 }
                 cell.title_label.text = @"安全中心";
                 cell.content_label.text = @"";
+                cell.title_label.textColor = textColor2;
+                cell.layer.borderColor = borderColor.CGColor;
+                cell.layer.borderWidth = 0.3;
                 return cell;
             }
         }
@@ -333,6 +368,13 @@
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
+            if (newGender == 0) {
+                self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+            }
+            else
+            {
+                self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+            }
             NSLog(@"性别修改成功");
         }
             break;

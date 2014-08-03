@@ -226,7 +226,7 @@
 
 - (void)scheduleHeartBeat
 {
-    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(sendHeartBeatMessage) userInfo:nil repeats:YES];
+    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(sendHeartBeatMessage) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop]addTimer:heartBeatTimer forMode:NSRunLoopCommonModes];
 }
 

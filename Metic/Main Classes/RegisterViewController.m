@@ -17,12 +17,12 @@
 @synthesize textField_confromPassword;
 @synthesize textField_password;
 @synthesize textField_userName;
-@synthesize segmentedControl_gender;
 @synthesize button_backToLogin;
 @synthesize button_signUp;
 @synthesize scrollView;
 @synthesize rootView;
-
+@synthesize male_button;
+@synthesize female_button;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,6 +43,31 @@
     [self.view setBackgroundColor:backgroundColor];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     self.scrollView.delegate  = self;
+    
+    male_button = [UIButton buttonWithType:UIButtonTypeCustom];
+    male_button.frame = CGRectMake(0, 7, 55, 20);
+    [male_button setImage:[UIImage imageNamed:@"注册性别按钮"] forState:UIControlStateNormal];
+    [male_button setImage:[UIImage imageNamed:@"注册性别按钮按下效果"] forState:UIControlStateSelected];
+    [male_button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 35)];
+    [male_button setTitle:@"男" forState:UIControlStateNormal];
+    male_button.titleLabel.font = [UIFont systemFontOfSize:17];
+    [male_button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    
+    female_button = [UIButton buttonWithType:UIButtonTypeCustom];
+    female_button.frame = CGRectMake(80, 7, 55, 20);
+    [female_button setImage:[UIImage imageNamed:@"注册性别按钮"] forState:UIControlStateNormal];
+    [female_button setImage:[UIImage imageNamed:@"注册性别按钮按下效果"] forState:UIControlStateSelected];
+    [female_button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 35)];
+    [female_button setTitle:@"女" forState:UIControlStateNormal];
+    female_button.titleLabel.font = [UIFont systemFontOfSize:17];
+    [female_button setTitleEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
+    
+    male_button.selected = YES;
+    female_button.selected = NO;
+    [male_button addTarget:self action:@selector(genderBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [female_button addTarget:self action:@selector(genderBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.genderRoot_view addSubview:male_button];
+    [self.genderRoot_view addSubview:female_button];
     
     rootView.myDelegate = self;
     textField_confromPassword.delegate = rootView;
@@ -102,10 +127,16 @@
     NSString* password = [textField_password text];
     NSString* conformPassword = [textField_confromPassword text];
     NSString* userName = [textField_userName text];
-    NSNumber* gender = [NSNumber numberWithInteger:[segmentedControl_gender selectedSegmentIndex]];
+    NSNumber* gender;
     NSString* salt = [CommonUtils randomStringWithLength:6];
     
-    
+    if (male_button.selected) {
+        gender = [NSNumber numberWithInt:1];
+    }
+    else
+    {
+        gender = [NSNumber numberWithInt:0];
+    }
     //    NSLog(@"random String: %@",salt);
     if (password.length<6) {
         [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong password length" WithDelegate:self WithCancelTitle:@"OK"];
@@ -160,9 +191,27 @@
 //    }
 //}
 
-- (IBAction)step_next:(id)sender {
-    CGPoint offset = CGPointMake(0, 265);
+- (IBAction)step_back:(UIButton *)sender {
+    CGPoint offset = CGPointMake(0, 0);
     [self.scrollView setContentOffset:offset animated:YES];
+}
+
+- (IBAction)step_next:(id)sender {
+    CGPoint offset = CGPointMake(0, 201);
+    [self.scrollView setContentOffset:offset animated:YES];
+}
+
+- (IBAction)genderBtnClicked:(UIButton *)sender {
+    if (sender == male_button) {
+        male_button.selected = YES;
+        female_button.selected = NO;
+    }
+    else
+    {
+        female_button.selected = YES;
+        male_button.selected = NO;
+
+    }
 }
 
 

@@ -76,4 +76,7 @@
 
 //将uiview转换成uiimage
 +(UIImage*)convertViewToImage:(UIView*)view;
+
+//将颜色值转换成UIColor
++(UIColor*)colorWithValue:(NSInteger)rgbValue;
 @end
