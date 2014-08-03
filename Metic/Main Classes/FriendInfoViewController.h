@@ -23,8 +23,17 @@
 @property (strong, nonatomic) UIScrollView* sView;
 @property (strong, nonatomic) UIPageControl* pControl;
 @property (strong, nonatomic) NSMutableArray* views;
+
 @property (strong, nonatomic) UIImageView* fInfoView;
+@property (strong, nonatomic) UIImageView* photo;
+@property (strong, nonatomic) UILabel* name_label;
+@property (strong, nonatomic) UILabel* location_label;
+@property (strong, nonatomic) UIImageView* gender_imageView;
+
 @property (strong, nonatomic) UIImageView* fDescriptionView;
+@property (strong, nonatomic) UILabel* title_label;
+@property (strong, nonatomic) UILabel* description_label;
+
 @property (strong, nonatomic) IBOutlet UITableView *friendInfoEvents_tableView;
 @property (strong, nonatomic) IBOutlet UIView *root;
 @property (strong, nonatomic) NSNumber* fid;

@@ -22,7 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *banner_imageView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatar_imageView;
 @property (strong, nonatomic) IBOutlet UILabel *name_label;
-@property (strong, nonatomic) IBOutlet UIImageView *gender_imageView;
+@property (strong, nonatomic) UIImageView *gender_imageView;
 @property (strong, nonatomic) IBOutlet UILabel *email_label;
 @property (strong, nonatomic) IBOutlet UITableView *info_tableView;
 @property (strong, nonatomic) NameSettingViewController* name_vc;

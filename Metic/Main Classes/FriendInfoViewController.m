@@ -24,8 +24,17 @@
 @synthesize contentView;
 @synthesize pControl;
 @synthesize views;
+
 @synthesize fInfoView;
+@synthesize photo;
+@synthesize name_label;
+@synthesize location_label;
+@synthesize gender_imageView;
+
 @synthesize fDescriptionView;
+@synthesize title_label;
+@synthesize description_label;
+
 @synthesize root;
 @synthesize fid;
 @synthesize events;
@@ -61,7 +70,7 @@
 - (void)initViews
 {
     CGRect screen = [UIScreen mainScreen].bounds;
-    contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 150)];
+    contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 135)];
     [contentView setBackgroundColor:[UIColor orangeColor]];
     
     sView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height-3)];
@@ -88,7 +97,7 @@
 //    [self.fInfoView setBackgroundColor:[UIColor lightGrayColor]];
     self.fInfoView.image = [UIImage imageNamed:@"event"];
     
-    UIImageView* photo = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"default_avatar.jpg"]];
+    photo = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"default_avatar.jpg"]];
     photo.frame = CGRectMake(20, 40, 50, 50);
     photo.layer.cornerRadius = 25;
     photo.layer.masksToBounds = YES;
@@ -97,21 +106,22 @@
     photo.layer.borderWidth = 2;
     
     
-    UILabel* name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 100, 30)];
+    name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 150, 25)];
     name_label.text = @"喵喵喵喵星人";
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
     [name_label setBackgroundColor:[UIColor clearColor]];
     [name_label setTag:1];
     
-    UILabel* location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 100, 25)];
+    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 100, 20)];
     location_label.text = @"广东 广州";
     location_label.textColor = [UIColor whiteColor];
-    [location_label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
+    [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
     [location_label setBackgroundColor:[UIColor clearColor]];
     [location_label setTag:2];
     
-    UIImageView* gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
+    
+    gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
     gender_imageView.image = [UIImage imageNamed:@"女icon"];
     [gender_imageView setTag:3];
     
@@ -145,13 +155,13 @@
     self.fDescriptionView = [[UIImageView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
     self.fDescriptionView.image = [UIImage imageNamed:@"event"];
-    UILabel* title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
+    title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
     [title_label setBackgroundColor:[UIColor clearColor]];
     [title_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     title_label.textColor = [UIColor whiteColor];
     
-    UILabel* description_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 50, 200, 25)];
+    description_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 50, 200, 25)];
     description_label.text = @"\"这个家伙很聪明什么都没有留下...\"";
     [description_label setBackgroundColor:[UIColor clearColor]];
     [description_label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
@@ -226,51 +236,89 @@
     [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
     [[MTUser sharedInstance] friendListDidChanged];
     NSLog(@"event_list: %@",events);
-    for (UIView* v in self.fInfoView.subviews) {
-        if (v.tag == 0) {
-            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v authorId:fid];
-            [getter getPhoto];
-        }
-        else if (v.tag == 1)
-        {
-            
-            ((UILabel*)v).text = name;
-        }
-        else if (v.tag == 2)
-        {
-        
-            if (![location isEqual:[NSNull null]]) {
-                ((UILabel*)v).text = location;
-                
-            }
-            else
-            {
-                ((UILabel*)v).text = @"暂无地址信息";
-            }
-            
-        }
-        else if( v.tag == 3)
-        {
-            
-            if (0 == [gender intValue]) {
-                ((UIImageView*)v).image = [UIImage imageNamed:@"女icon"];
-            }
-            else
-            {
-                ((UIImageView*)v).image = [UIImage imageNamed:@"男icon"];
-            }
-        }
+//    for (UIView* v in self.fInfoView.subviews) {
+//        if (v.tag == 0) {
+//            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v authorId:fid];
+//            [getter getPhoto];
+//        }
+//        else if (v.tag == 1)
+//        {
+//            
+//            ((UILabel*)v).text = name;
+//        }
+//        else if (v.tag == 2)
+//        {
+//        
+//            if (![location isEqual:[NSNull null]]) {
+//                ((UILabel*)v).text = location;
+//                
+//            }
+//            else
+//            {
+//                ((UILabel*)v).text = @"暂无地址信息";
+//            }
+//            
+//        }
+//        else if( v.tag == 3)
+//        {
+//            
+//            if (0 == [gender intValue]) {
+//                ((UIImageView*)v).image = [UIImage imageNamed:@"女icon"];
+//            }
+//            else
+//            {
+//                ((UIImageView*)v).image = [UIImage imageNamed:@"男icon"];
+//            }
+//        }
+//    }
+//   
+//    for (UIView* v in self.fDescriptionView.subviews) {
+//        if (v.tag == 4) {
+//            NSString* sign = [response objectForKey:@"sign"];
+//            if (![sign isEqual:[NSNull null]]) {
+//                ((UILabel*)v).text = sign;
+//            }
+//
+//        }
+//    }
+    
+    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
+    [getter getPhoto];
+    name_label.text = name;
+    
+    UIFont* font = [UIFont systemFontOfSize:15];
+    CGSize sizeOfName = [name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, 30) lineBreakMode:NSLineBreakByCharWrapping];
+    CGRect frame = CGRectMake(name_label.frame.origin.x + sizeOfName.width + 5, name_label.frame.origin.y + 1, 17, 17);
+    if (gender_imageView) {
+        gender_imageView.frame = frame;
     }
-   
-    for (UIView* v in self.fDescriptionView.subviews) {
-        if (v.tag == 4) {
-            NSString* sign = [response objectForKey:@"sign"];
-            if (![sign isEqual:[NSNull null]]) {
-                ((UILabel*)v).text = sign;
-            }
+    else
+    {
+        gender_imageView = [[UIImageView alloc]initWithFrame:frame];
+    }
 
-        }
+    if (0 == [gender intValue]) {
+        gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
+    else
+    {
+        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+    }
+    
+    if (![location isEqual:[NSNull null]]) {
+        location_label.text = location;
+        
+    }
+    else
+    {
+        location_label.text = @"暂无地址信息";
+    }
+
+    NSString* sign = [response objectForKey:@"sign"];
+    if (![sign isEqual:[NSNull null]]) {
+        (description_label).text = sign;
+    }
+    
     [self.friendInfoEvents_tableView reloadData];
     
 }
@@ -340,13 +388,28 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [[rowHeights objectAtIndex:indexPath.row] floatValue];
+    return [[rowHeights objectAtIndex:indexPath.section] floatValue];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 1;
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    NSLog(@"events count: %d",events.count);
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return events.count;
 }
 
@@ -355,9 +418,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* event = [events objectAtIndex:indexPath.row];
+    NSDictionary* event = [events objectAtIndex:indexPath.section];
     NSArray* member_ids = [event objectForKey:@"member"];
-    NSLog(@"row index: %d",indexPath.row);
+    NSLog(@"section index: %d",indexPath.section);
     FriendInfoEventsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (nil == cell) {
         NSLog(@"friendinfoeventstableviewcell");
@@ -381,7 +444,7 @@
         [cell.stretch_button addTarget:self action:@selector(stretchBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:cell.stretch_button];
     }
-    NSLog(@"button tag: %d",cell.stretch_button.tag);
+//    NSLog(@"button tag: %d",cell.stretch_button.tag);
     
     
 //    if (reloadHeight<= 100) {
@@ -418,6 +481,10 @@
 //        avatar.hidden = YES;
     }
     [cell.add_button addTarget:self action:@selector(participate_event:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
+    cell.layer.borderColor = borderColor.CGColor;
+    cell.layer.borderWidth = 0.3;
     return cell;
     
 }
@@ -433,11 +500,11 @@
     }
     NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
     BOOL temp = cell.isExpanded;
-    NSLog(@"clicked row: %d, if expanded: %d",indexP.row,temp);
+    NSLog(@"clicked row: %d, if expanded: %d",indexP.section,temp);
     if (!cell.isExpanded) {
         
 
-        [rowHeights replaceObjectAtIndex:indexP.row withObject:[NSNumber numberWithFloat:215]];
+        [rowHeights replaceObjectAtIndex:indexP.section withObject:[NSNumber numberWithFloat:215]];
         
 //        [cell.stretch_button removeFromSuperview];
 //        cell.stretch_button.tag = 200;
@@ -475,7 +542,7 @@
     }
     else
     {
-        [rowHeights replaceObjectAtIndex:indexP.row withObject:[NSNumber numberWithFloat:110]];
+        [rowHeights replaceObjectAtIndex:indexP.section withObject:[NSNumber numberWithFloat:110]];
 //        for (UIImageView* imgV in cell.avatars) {
 //            imgV.hidden = YES;
 //        }
