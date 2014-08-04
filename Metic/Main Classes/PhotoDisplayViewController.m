@@ -195,6 +195,7 @@
     BOOL iszan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
     

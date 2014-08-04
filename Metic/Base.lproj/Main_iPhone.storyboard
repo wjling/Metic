@@ -2011,6 +2011,7 @@
                         <segue destination="dAM-f8-mD3" kind="push" id="bpL-Ol-9VE"/>
                         <segue destination="sN6-CT-cFg" kind="push" id="YWf-Zs-2Jn"/>
                         <segue destination="6xS-iU-uTV" kind="push" identifier="toInvitationView" id="ykp-fl-l56"/>
+                        <segue destination="v1C-b9-9Np" kind="push" identifier="toNearbyEvent" id="Puz-xH-LjM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5qd-dC-fe5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3261,11 +3262,11 @@
                         <viewControllerLayoutGuide type="bottom" id="4Gl-Fe-oyc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3ZT-9j-Wbx" customClass="MainView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqB-KE-UOQ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </scrollView>
@@ -4001,7 +4002,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a0a-4H-96t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1466" y="4674"/>
+            <point key="canvasLocation" x="1483" y="4714"/>
+        </scene>
+        <!--Nearby Event View Controller - 周边活动-->
+        <scene sceneID="FSR-jj-W8C">
+            <objects>
+                <viewController id="v1C-b9-9Np" customClass="NearbyEventViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MJM-1G-5Pn"/>
+                        <viewControllerLayoutGuide type="bottom" id="Hud-jW-JyZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yza-mp-k9g">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="周边活动" id="b2O-GP-low"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G4B-Mq-UIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1491" y="5457"/>
         </scene>
     </scenes>
     <resources>
@@ -4065,18 +4085,12 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="hOW-ww-bKW"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="DsC-hh-HTw"/>
-        <segue reference="cOi-1F-viY"/>
-        <segue reference="Bnm-KN-OgT"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="eBE-9B-Hp2"/>
         <segue reference="ib8-0I-OZA"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -43,7 +43,7 @@
 @property (strong,nonatomic) SRWebSocket* mySocket;
 @property (strong, nonatomic)NSTimer* heartBeatTimer;
 @property (strong, nonatomic)MySqlite* sql;
-@property (strong, nonatomic)NSMutableArray* syncMessages;
+@property (strong, atomic)NSMutableArray* syncMessages;
 @property (strong, nonatomic) id<NotificationDelegate> notificationDelegate;
 @property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) UIViewController* homeViewController;

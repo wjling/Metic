@@ -156,6 +156,19 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS];
 }
 
+-(void)getmoreComments:(NSNumber*) master sub_Sequence:(NSNumber*)sub_Sequence
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:master forKey:@"master"];
+    [dictionary setValue:sub_Sequence forKey:@"sequence"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS];
+}
+
 
 - (void)pullEventFromDB
 {
@@ -299,6 +312,12 @@
         return 1;
     }
     NSMutableArray *comments = self.comment_list[section - 1];
+    NSDictionary *mainCom = comments[0];
+    int comment_num = [[mainCom valueForKey:@"comment_num"] intValue];
+    if (comment_num > comments.count - 1) {
+        return comments.count+1;
+    }
+    
     return comments.count;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -308,22 +327,28 @@
     if (self.isKeyBoard) {
         [self.inputField resignFirstResponder];
         return;
-    }else {
-        [self.inputField becomeFirstResponder];
     }
     
     if (indexPath.section == 0) {
+        [self.inputField becomeFirstResponder];
         [self.inputField setPlaceholder:@"回复楼主:"];
         self.repliedId = nil;
         self.mainCommentId = 0;
     }
     else if (indexPath.row == 0) {
-        
+        [self.inputField becomeFirstResponder];
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
         self.repliedId = nil;
     }else{
+        NSMutableArray *comments = self.comment_list[indexPath.section -1];
+        if (indexPath.row > comments.count - 1) {
+            NSDictionary* lastSubComment = [comments lastObject];
+            [self getmoreComments:[lastSubComment valueForKey:@"master"] sub_Sequence:[lastSubComment valueForKey:@"comment_id"]];
+            return;
+        }
+        [self.inputField becomeFirstResponder];
         SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
@@ -452,6 +477,22 @@
     }
     else
     {
+        NSMutableArray *comments = self.comment_list[indexPath.section -1];
+        if (indexPath.row > comments.count - 1) {
+            UITableViewCell *cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+            [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:242/255.0]];
+            UIView *content = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 30)];
+            [content setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
+            [cell addSubview:content];
+            UILabel* more = [[UILabel alloc]initWithFrame:CGRectMake(100, 0, 100, 30)];
+            [more setText:@"查看更多评论"];
+            [more setTextAlignment:NSTextAlignmentCenter];
+            [more setFont:[UIFont systemFontOfSize:12]];
+            [content addSubview:more];
+            return cell;
+            
+        }
+
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
             UINib *nib = [UINib nibWithNibName:NSStringFromClass([SCommentTableViewCell class]) bundle:nil];
@@ -508,6 +549,13 @@
         
     }else
     {
+        NSMutableArray *comments = self.comment_list[indexPath.section -1];
+        if (indexPath.row > comments.count - 1) {
+            return 30;
+        }
+
+        
+        
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
@@ -596,20 +644,36 @@
         case NORMAL_REPLY:
         {
             if ([response1 valueForKey:@"comment_list"]) {
+                int type = [[response1 valueForKey:@"type"]intValue];
                 NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
-                self.master_sequence = [response1 valueForKey:@"sequence"];
-                if (_Headeropen) [_comment_list removeAllObjects];
-                if (_isPublish){
-                    _isPublish = NO;
-                    [_comment_list removeAllObjects];
+                if (type == 0) {
+                    
+                    self.master_sequence = [response1 valueForKey:@"sequence"];
+                    if (_Headeropen) [_comment_list removeAllObjects];
+                    if (_isPublish){
+                        _isPublish = NO;
+                        [_comment_list removeAllObjects];
+                    }
+                    [self.comment_list addObjectsFromArray:tmp];
+                    if (_Footeropen && [_master_sequence intValue] == -1) {
+                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                        [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+                    }else if (_Footeropen || _Headeropen) {
+                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+                    }else [_tableView reloadData];
+                }else{
+                    for (int i = 0; i < _comment_list.count; i++) {
+                        NSMutableArray* comments = [[NSMutableArray alloc]initWithArray: _comment_list[i]];
+                        NSMutableDictionary* comment = [[NSMutableDictionary alloc]initWithDictionary: comments[0]];
+                        if ([[comment valueForKey:@"comment_id"] intValue] == type) {
+                            [comments addObjectsFromArray:tmp];
+                            _comment_list[i] = comments;
+                            [_tableView reloadData];
+                            return;
+                        }
+                    }
+
                 }
-                [self.comment_list addObjectsFromArray:tmp];
-                if (_Footeropen && [_master_sequence intValue] == -1) {
-                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-                    [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-                }else if (_Footeropen || _Headeropen) {
-                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
-                }else [_tableView reloadData];
                 
             }else
             {
