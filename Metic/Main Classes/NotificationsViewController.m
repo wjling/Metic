@@ -570,7 +570,7 @@ enum Response_Type
         NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
         NSLog(@"event %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
-        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
+//        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
             case NEW_EVENT_NOTIFICATION: //cmd 997
             {
@@ -583,27 +583,32 @@ enum Response_Type
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getPhoto];
                 
-                if (ishandled == -1) {
-                    cell.okBtn.hidden = NO;
-                    cell.noBtn.hidden = NO;
-                    cell.remark_label.hidden = YES;
-                }
-                else if(ishandled == 0)
-                {
-                    cell.okBtn.hidden = YES;
-                    cell.noBtn.hidden = YES;
-                    cell.remark_label.hidden = NO;
-                    cell.remark_label.text = @"已拒绝";
-                }
-                else if (ishandled == 1)
-                {
-                    cell.okBtn.hidden = YES;
-                    cell.noBtn.hidden = YES;
-                    cell.remark_label.hidden = NO;
-                    cell.remark_label.text = @"已同意";
-                }
-                [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-                [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                cell.okBtn.hidden = YES;
+                cell.noBtn.hidden = YES;
+                cell.remark_label.hidden = YES;
+                [cell.event_name_button addTarget:self action:@selector(eventBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+//                if (ishandled == -1) {
+//                    cell.okBtn.hidden = NO;
+//                    cell.noBtn.hidden = NO;
+//                    cell.remark_label.hidden = YES;
+//                }
+//                else if(ishandled == 0)
+//                {
+//                    cell.okBtn.hidden = YES;
+//                    cell.noBtn.hidden = YES;
+//                    cell.remark_label.hidden = NO;
+//                    cell.remark_label.text = @"已拒绝";
+//                }
+//                else if (ishandled == 1)
+//                {
+//                    cell.okBtn.hidden = YES;
+//                    cell.noBtn.hidden = YES;
+//                    cell.remark_label.hidden = NO;
+//                    cell.remark_label.text = @"已同意";
+//                }
+//                [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+//                [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
             }
                 break;
                 
@@ -894,6 +899,13 @@ enum Response_Type
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+}
+
+-(void)eventBtnClicked:(UIButton*)sender
+{
+    MenuViewController* mvc = (MenuViewController*)[SlideNavigationController sharedInstance].leftMenu;
+    
+    [self.navigationController pushViewController:mvc.eventInvitationViewController animated:YES];
 }
 
 #pragma mark - HttpSenderDelegate

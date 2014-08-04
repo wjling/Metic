@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
+#import "EventInvitationTableViewCell.h"
+#import "HttpSender.h"
 
-@interface EventInvitationViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate>
+@interface EventInvitationViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 

@@ -18,6 +18,13 @@
 @property (strong, nonatomic) IBOutlet UILabel *userName;
 @property (strong, nonatomic) IBOutlet UILabel *email;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property(nonatomic,strong) UIViewController* homeViewController;
+@property(nonatomic,strong) UIViewController* eventInvitationViewController;
+@property(nonatomic,strong) UIViewController* friendsViewController;
+@property(nonatomic,strong) UIViewController* notificationsViewController;
+@property(nonatomic,strong) UIViewController* scaningViewController;
+@property(nonatomic,strong) UIViewController* feedBackViewController;
+@property(nonatomic,strong) UIViewController* systemSettingsViewController;
 
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 

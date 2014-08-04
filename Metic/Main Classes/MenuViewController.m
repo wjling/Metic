@@ -17,17 +17,12 @@
 @property(nonatomic,strong) UIImageView* testImageView;
 @property(nonatomic,strong) UIImage* testImage;
 @property(nonatomic,strong) UIImageView* gender;
-@property(nonatomic,strong) UIViewController* homeViewController;
-@property(nonatomic,strong) UIViewController* eventInvitationViewController;
-@property(nonatomic,strong) UIViewController* friendsViewController;
-@property(nonatomic,strong) UIViewController* notificationsViewController;
-@property(nonatomic,strong) UIViewController* scaningViewController;
-@property(nonatomic,strong) UIViewController* feedBackViewController;
-@property(nonatomic,strong) UIViewController* systemSettingsViewController;
+
 
 
 @end
 @implementation MenuViewController
+@synthesize eventInvitationViewController;
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
 
@@ -187,10 +182,10 @@
 			break;
 			
 		case 1:
-            if (!_eventInvitationViewController) {
+            if (!eventInvitationViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
-                _eventInvitationViewController = vc;
-            }else vc = _eventInvitationViewController;
+                eventInvitationViewController = vc;
+            }else vc = eventInvitationViewController;
 			break;
 			
 		case 2:
