@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *publish_date;
 @property (strong, nonatomic) IBOutlet UIView *infoView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end

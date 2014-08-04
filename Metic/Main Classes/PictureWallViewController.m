@@ -59,7 +59,9 @@
     self.cellHeight = [[NSMutableDictionary alloc]init];
     _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";
     _manager = [SDWebImageManager sharedManager];
+    [self initIndicator];
     
+
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
@@ -72,8 +74,10 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    _shouldStopTimer = YES;
+    _shouldStopTimer = NO;
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:YES];
+    [_timer invalidate];
+    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
     [self getPhotolist];
 }
 
@@ -145,6 +149,43 @@
 -(void)performDismiss
 {
     [_Alert dismissWithClickedButtonIndex:0 animated:NO];
+}
+
+
+-(void)initIndicator
+{
+    _indicatorView = [[UIView alloc]initWithFrame:CGRectMake(60, -50, 200, 50)];
+    [self.view addSubview:_indicatorView];
+    [_indicatorView.layer setCornerRadius:10];
+    [_indicatorView setBackgroundColor:[UIColor whiteColor]];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(40, 10, 100, 30)];
+    label.text = @"正在加载图片";
+    [label setFont:[UIFont systemFontOfSize:16]];
+    [_indicatorView addSubview:label];
+    UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 15, 20, 20)];
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [indicator startAnimating];
+    [_indicatorView addSubview:indicator];
+}
+
+
+-(void)indicatorAppear
+{
+    [UIView beginAnimations:@"indicatorAppear" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationDelegate:self];
+    //[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:_indicatorView cache:YES];
+    _indicatorView.frame = CGRectMake(60, 10, 200, 50);
+    [UIView commitAnimations];
+}
+
+-(void)indicatorDisappear
+{
+    [UIView beginAnimations:@"indicatorDisappear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    _indicatorView.frame = CGRectMake(60, -50, 200, 50);
+    [UIView commitAnimations];
 }
 
 #pragma mark 代理方法-UIScrollView
@@ -230,16 +271,28 @@
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
+    //[cell.layer setBorderColor:[UIColor redColor].CGColor];
+    //[cell.layer setBorderWidth:2];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (self && cacheType == SDImageCacheTypeNone) {
+            [tableView reloadData];
+            NSLog(@"reloadData");
+        }
     }];
     //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];
     if (Cellheight) {
         float height = [Cellheight floatValue];
         if (height == 0) {
-            [cell setHidden:YES];
+            //[cell setHidden:YES];
+            [cell.activityIndicator startAnimating];
+            [cell.activityIndicator setHidden:NO];
+            [cell.imageView setHidden:YES];
         }else{
             [cell setHidden:NO];
+            [cell.imageView setHidden:NO];
+            [cell.activityIndicator stopAnimating];
+            [cell.activityIndicator setHidden:YES];
             [photo setFrame:CGRectMake(0, 0, 145, height)];
             [cell.infoView setFrame:CGRectMake(0, height, 145, 33)];
             [cell setFrame:CGRectMake(0, 0, 145, height+43)];
@@ -259,7 +312,8 @@
     }
     NSDictionary *a = self.photo_list[indexPath.row*2+addition];
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    UIImage * img = [[_manager imageCache] imageFromDiskCacheForKey:url];
+    UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
+    if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
     float height = 0;
     if(img){
         height = img.size.height *145.0/img.size.width;
@@ -267,7 +321,7 @@
         return height+43;
     }else{
         [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
-        return 0;
+        return 178;
     }
 
     
@@ -293,7 +347,8 @@
             }
             [self getPhotoPathlist];
             [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-            
+            [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
+
         }
             break;
     }
