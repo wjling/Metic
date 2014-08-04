@@ -67,6 +67,8 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     mapManager = appDelegate.mapManager;
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
     
     BOOL ret = [mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];
 	if (!ret) {
@@ -92,6 +94,7 @@
     _geocodesearch.delegate = self;
     _flatDatePicker.delegate = self;
     self.location_text.text = self.positionInfo;
+    [_collectionView reloadData];
 }
 
 
@@ -273,8 +276,41 @@
     
 }
 
+#pragma mark - CollectionViewDelegate
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _FriendsIds.count;
+}
 
 
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participatorCell" forIndexPath:indexPath];
+    if(indexPath.row != _FriendsIds.count){
+        //NSDictionary* participant = _participants[indexPath.row];
+        UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
+        UILabel* name = (UILabel*)[cell viewWithTag:2];
+        avatar.layer.masksToBounds = YES;
+        [avatar.layer setCornerRadius:5];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[_FriendsIds objectat ];
+        [getter getPhoto];
+        name.text = @"xxxx";
+        
+    }else{
+        UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+        [add setImage:[UIImage imageNamed:@"添加参与者icon"]];
+    }
+    return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == _FriendsIds.count) {
+        [self performSegueWithIdentifier:@"" sender:self];
+    }
+}
+
+#pragma mark - BMk Method
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
 	if (error == 0) {

@@ -12,7 +12,7 @@
 #import "../Utils/PhotoGetter.h"
 #import "FlatDatePicker.h"
 
-@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
+@interface LaunchEventViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *event_text;
 @property (strong, nonatomic) IBOutlet UITextField *begin_time_text;
@@ -33,5 +33,6 @@
 @property (strong, nonatomic) UIImage* uploadImage;
 @property int code;
 
+@property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 
 @end
