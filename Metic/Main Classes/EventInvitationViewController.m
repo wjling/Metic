@@ -12,6 +12,11 @@
 #import "MTUser.h"
 
 @interface EventInvitationViewController ()
+{
+    NSIndexPath* selectedPath;
+    MySqlite* mySql;
+    NSString* DB_path;
+}
 @property (nonatomic,strong) NSMutableArray* eventRequestMsg;
 @end
 
@@ -32,6 +37,9 @@
     _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    selectedPath = [[NSIndexPath alloc]init];
+    mySql = [[MySqlite alloc]init];
+    DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -142,11 +150,141 @@
         }else tmp.image = nil;
         
     }
-    
-    
+    [cell.ok_button addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.no_button addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
+
+- (IBAction)participate_event_okBtnClicked:(id)sender
+{
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [_eventRequestMsg objectAtIndex:selectedPath.row];
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+    
+    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 [NSNumber numberWithInteger:1],@"response_result",
+                                 nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:1],@"result",
+                                 [MTUser sharedInstance].userid,@"id",
+                                 eventid,@"event_id",
+                                 item_id_dic,@"item_id",
+//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
+    NSLog(@"participate event okBtn, http json : %@",json );
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+}
+
+- (IBAction)participate_event_noBtnClicked:(id)sender
+{
+    UIView* cell = [sender superview];
+    while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
+        cell = [cell superview];
+    }
+    selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
+    NSDictionary* msg_dic = [_eventRequestMsg objectAtIndex:selectedPath.row];
+    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+    
+    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 [NSNumber numberWithInteger:0],@"response_result",
+                                 nil];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:0],@"result",
+                                 [MTUser sharedInstance].userid,@"id",
+                                 eventid,@"event_id",
+                                 item_id_dic,@"item_id",
+//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 nil];
+    NSLog(@"participate event noBtn, http json : %@",json );
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+}
+
+
+#pragma mark - HttpSenderDelegate
+-(void)finishWithReceivedData:(NSData*) rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    NSLog(@"Received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+    switch ([cmd intValue]) {
+        case NORMAL_REPLY:
+        {
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
+            NSLog(@"item_id_dic: %@", item_id_dic);
+            NSNumber* item_index = [item_id_dic objectForKey:@"item_index"];
+//            NSNumber* response_type = [item_id_dic objectForKey:@"response_type"];
+            NSNumber* result = [item_id_dic valueForKey:@"response_result"];
+            NSMutableDictionary* msg_dic = [_eventRequestMsg objectAtIndex:[item_index intValue]];
+            
+            NSNumber* seq = [msg_dic objectForKey:@"seq"];
+            NSLog(@"response event, seq: %@",seq);
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",seq],@"seq",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",result],@"ishandled",
+                                           nil]];
+            [mySql closeMyDB];
+            
+            [_eventRequestMsg removeObject:msg_dic];
+            [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+            [msg_dic setValue:result forKey:@"ishandled"];
+            
+            [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
+            [self.tableView reloadData];
+        }
+            break;
+            case REQUEST_FAIL:
+        {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"发送请求错误" WithDelegate:self WithCancelTitle:@"确定"];
+            
+        }
+            break;
+        case ALREADY_IN_EVENT:
+        {
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            //            int count = self.msgFromDB.count;
+            //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
+            //            NSNumber* seq = [dataMsg objectForKey:@"seq"];
+            //            NSLog(@"already in event, seq: %@",seq);
+            //            [mySql openMyDB:DB_path];
+            //            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
+            //            [mySql closeMyDB];
+            //            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
+            //            [self.notificationsTable reloadData];
+            
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
+
+
+
 
 #pragma mark UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

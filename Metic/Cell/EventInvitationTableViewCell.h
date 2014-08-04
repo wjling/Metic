@@ -40,4 +40,6 @@
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UILabel *inviteInfo;
+@property (strong, nonatomic) IBOutlet UIButton *ok_button;
+@property (strong, nonatomic) IBOutlet UIButton *no_button;
 @end
