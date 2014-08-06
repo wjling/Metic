@@ -12,7 +12,7 @@
 #import "../Utils/PhotoGetter.h"
 #import "FlatDatePicker.h"
 
-@interface LaunchEventViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
+@interface LaunchEventViewController : UIViewController<UICollectionViewDataSource,UIScrollViewDelegate,UICollectionViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *event_text;
 @property (strong, nonatomic) IBOutlet UITextField *begin_time_text;
@@ -23,7 +23,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *subject_text;
 @property (strong, nonatomic) IBOutlet UITextField *location_text;
 @property (strong, nonatomic) IBOutlet UITextView *detail_text;
-@property (strong, nonatomic) IBOutlet UISwitch *canin;
 @property (strong, nonatomic) IBOutlet UIButton *banner_button;
 @property (strong, nonatomic) IBOutlet UIButton *launch_button;
 @property (strong, nonatomic) IBOutletCollection(UIView) NSArray *roundCornerView;
@@ -32,6 +31,7 @@
 @property (strong, nonatomic) UIViewController* controller;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property int code;
+
 
 
 @end

@@ -2221,7 +2221,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "51"
             endingLineNumber = "51"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            landmarkName = "-getEventParticipants"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2237,7 +2237,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "45"
             endingLineNumber = "45"
-            landmarkName = "-collectionView:numberOfItemsInSection:"
+            landmarkName = "-didReceiveMemoryWarning"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2253,7 +2253,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
             endingLineNumber = "53"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            landmarkName = "-getEventParticipants"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2269,7 +2269,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
             endingLineNumber = "43"
-            landmarkName = "-collectionView:numberOfItemsInSection:"
+            landmarkName = "-didReceiveMemoryWarning"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2349,8 +2349,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
             endingLineNumber = "60"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
-            landmarkType = "5">
+            landmarkName = "@implementation showParticipatorsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2365,7 +2365,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "49"
             endingLineNumber = "49"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
+            landmarkName = "-getEventParticipants"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

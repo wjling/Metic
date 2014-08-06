@@ -22,6 +22,7 @@
 @property (nonatomic,strong) UITextField *seletedText;
 @property (nonatomic,strong) MTUser *user;
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
+@property (nonatomic,strong) NSMutableArray *FriendsIds_array;
 @property (nonatomic,strong) NSDictionary* positions;
 @property (nonatomic,strong) NSDictionary* locationInfo;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
@@ -32,6 +33,12 @@
 @property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
+@property int visibility;
+
+@property (nonatomic,strong) UIView* InviteFriendsView;
+@property (nonatomic,strong) UIView* isAllowStrangerView;
+@property (nonatomic,strong) UIButton *isAllowStrangerButton;
+@property (strong,nonatomic) UICollectionView *collectionView;
 
 
 @end
@@ -61,7 +68,8 @@
     self.location_text.delegate = self;
     self.detail_text.delegate = self;
     self.user = [MTUser sharedInstance];
-    [self.canin setOn:NO];
+    [self initInviteFriendsView];
+    _visibility = 0;
     _code = 1;
     self.FriendsIds = [[NSMutableSet alloc]init];
     
@@ -92,6 +100,9 @@
     _geocodesearch.delegate = self;
     _flatDatePicker.delegate = self;
     self.location_text.text = self.positionInfo;
+    [self copyFriendsId];
+    [self adjustCollectionView];
+    [_collectionView reloadData];
 }
 
 
@@ -116,6 +127,85 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)initInviteFriendsView
+{
+    _InviteFriendsView = [[UIView alloc]initWithFrame:CGRectMake(20, 560, 280, 70)];
+    [_InviteFriendsView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0]];
+    _InviteFriendsView.layer.cornerRadius = 5;
+    [_scrollView addSubview:_InviteFriendsView];
+    
+    _isAllowStrangerView = [[UIView alloc]initWithFrame:CGRectMake(20, 640, 280, 40)];
+    [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
+    [_scrollView addSubview:_isAllowStrangerView];
+    
+    _isAllowStrangerButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 5, 30, 30)];
+    [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+    [_isAllowStrangerButton addTarget:self action:@selector(changeAllowStangerStage) forControlEvents:UIControlEventTouchUpInside];
+    [_isAllowStrangerView addSubview:_isAllowStrangerButton];
+    
+    UILabel *isAllowStrangerLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 5, 200, 30)];
+    isAllowStrangerLabel.text = @"允许陌生人参与";
+    [isAllowStrangerLabel setFont:[UIFont systemFontOfSize:16]];
+    [isAllowStrangerLabel setTextAlignment:NSTextAlignmentLeft];
+    [_isAllowStrangerView addSubview:isAllowStrangerLabel];
+    
+    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
+    flowLayout.itemSize=CGSizeMake(50,70);
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumInteritemSpacing = 0;
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(5, 0, 270, 70) collectionViewLayout:flowLayout];
+    _collectionView.dataSource = self;
+    _collectionView.delegate = self;
+    [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"participantCell"];
+    [_collectionView setBackgroundColor:[UIColor clearColor]];
+    [_InviteFriendsView addSubview:_collectionView];
+    
+    
+}
+
+-(void)changeAllowStangerStage
+{
+    if (_visibility == 0) {
+        _visibility = 1;
+        [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+
+    }else{
+        _visibility = 0;
+        [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+    }
+}
+
+-(void)copyFriendsId
+{
+    _FriendsIds_array = [[NSMutableArray alloc]init];
+    for (NSNumber* fid in _FriendsIds) {
+        [_FriendsIds_array addObject:fid];
+    }
+}
+
+-(void)adjustCollectionView
+{
+    CGRect frame = _collectionView.frame;
+    float count = _FriendsIds_array.count+1;
+    frame.size.height = ceilf(count/5)*70;
+    _collectionView.frame = frame;
+    
+    frame = _InviteFriendsView.frame;
+    frame.size.height = ceilf(count/5)*70;
+    _InviteFriendsView.frame = frame;
+    
+    frame = _isAllowStrangerView.frame;
+    frame.origin.y = 570 + ceilf(count/5)*70;
+    _isAllowStrangerView.frame = frame;
+    
+    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60 > _scrollView.contentSize.height) {
+        CGSize size = _scrollView.contentSize;
+        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60;
+        _scrollView.contentSize = size;
+        
+    }
+}
 
 -(void)turnRoundCorner
 {
@@ -204,7 +294,6 @@
 - (IBAction)launch:(id)sender {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
-    int visibility = self.canin.isOn;
     int status = 0;
     NSString *friends = @"[";
     BOOL flag = YES;
@@ -241,7 +330,7 @@
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
-    [dictionary setValue:[NSNumber numberWithInt:visibility] forKey:@"visibility"];
+    [dictionary setValue:[NSNumber numberWithInt:_visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
     [dictionary setValue:[NSNumber numberWithInt:_code] forKeyPath:@"code"];
     [dictionary setValue:friends forKey:@"friends"];
@@ -273,8 +362,84 @@
     
 }
 
+#pragma mark - CollectionViewDelegate
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60 > _scrollView.contentSize.height) {
+        CGSize size = _scrollView.contentSize;
+        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60;
+        _scrollView.contentSize = size;
+        
+    }
+}
+
+#pragma mark - CollectionViewDelegate
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _FriendsIds_array.count + 1;
+}
 
 
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participantCell" forIndexPath:indexPath];
+    [cell setHidden:NO];
+    if(indexPath.row != _FriendsIds_array.count){
+        //NSDictionary* participant = _participants[indexPath.row];
+        UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
+        if (!avatar) {
+            avatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 40, 40)];
+            [avatar setTag:1];
+            [cell addSubview:avatar];
+        }
+        [avatar setHighlightedImage:nil];
+        UILabel* name = (UILabel*)[cell viewWithTag:2];
+        if (!name) {
+            name = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, 50, 20)];
+            [name setTag:2];
+            [name setFont:[UIFont systemFontOfSize:10]];
+            [name setTextAlignment:NSTextAlignmentCenter];
+            [cell addSubview:name];
+        }
+        avatar.layer.masksToBounds = YES;
+        [avatar.layer setCornerRadius:5];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:_FriendsIds_array[indexPath.row] ];
+        [getter getPhoto];
+        //name.text = [MTUser sharedInstance].
+        name.text = @"xxxx";
+        
+    }else{
+        UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+        if (!add) {
+            add = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 40, 40)];
+            [add setTag:1];
+            [cell addSubview:add];
+        }
+        UILabel* name = (UILabel*)[cell viewWithTag:2];
+        if (!name) {
+            name = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, 50, 20)];
+            [name setTag:2];
+            [name setFont:[UIFont systemFontOfSize:10]];
+            [name setTextAlignment:NSTextAlignmentCenter];
+            [cell addSubview:name];
+        }
+        [add setHidden:NO];
+        [add setImage:[UIImage imageNamed:@"grid_add_light"]];
+        [add setHighlightedImage:[UIImage imageNamed:@"grid_add_pressed_light"]];
+        name.text = @"";
+    }
+    return cell;
+}
+
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == _FriendsIds.count) {
+        [self performSegueWithIdentifier:@"LaunchToInvite" sender:self];
+    }
+}
+
+#pragma mark - BMk Method
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
 	if (error == 0) {
