@@ -42,6 +42,7 @@
 -(void)getBanner:(NSNumber*)code;
 -(void)updatePhoto;
 -(void)uploadPhoto;
+-(void)uploadAvatar;
 -(void)uploadBanner:(NSNumber*)eventId;
 @end
 

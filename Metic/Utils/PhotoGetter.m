@@ -154,6 +154,80 @@
     
 }
 
+-(void)uploadAvatar
+{
+    self.isUpload = YES;
+    UIImage* compressedImage1 = self.uploadImage;
+    UIImage* compressedImage2 = self.uploadImage;
+    
+    NSData* imageData1 = UIImageJPEGRepresentation(compressedImage1, 1.0);
+//    NSData* imageData2 = [[NSData alloc]initWithData:imageData1];
+    NSData* imageData2 = UIImageJPEGRepresentation(compressedImage2, 1.0);
+    
+    if (compressedImage1.size.width> 640) {
+        CGSize imagesize=CGSizeMake(640.0, compressedImage1.size.height * 640.0/compressedImage1.size.width);
+        compressedImage1 = [compressedImage1 imageByScalingToSize:imagesize];
+        imageData1 = UIImageJPEGRepresentation(compressedImage1, 1.0);
+    }
+    
+    if (compressedImage2.size.width> 300) {
+        CGSize imagesize=CGSizeMake(300.0, compressedImage2.size.height * 300.0/compressedImage2.size.width);
+        compressedImage2 = [compressedImage2 imageByScalingToSize:imagesize];
+        imageData2 = UIImageJPEGRepresentation(compressedImage2, 1.0);
+    }
+    
+    float para = 1.0;
+    int restOp = 5;
+    
+//    NSData* imageData_compressed1 = [[NSData alloc]initWithData:imageData1];
+//    NSData* imageData_compressed2 = [[NSData alloc]initWithData:imageData2];
+    
+    while (imageData1.length > 300000) {
+        imageData1 = UIImageJPEGRepresentation(compressedImage1, para*0.5);
+        compressedImage1 = [UIImage imageWithData:imageData1];
+        if (!restOp--) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
+    }
+    
+    while (imageData2.length > 30000) {
+        imageData2 = UIImageJPEGRepresentation(compressedImage2, para*0.5);
+        compressedImage2 = [UIImage imageWithData:imageData2];
+        if (!restOp--) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
+    }
+    
+    
+    
+//    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+//    [formatter setDateFormat:[NSString stringWithFormat:@"%@YYYYMMddHHmmssSSSSS",[MTUser sharedInstance].userid]];
+//    NSString *date =  [formatter stringFromDate:[NSDate date]];
+    NSString *avatarName1 = [[NSString alloc] initWithFormat:@"%@_2", [MTUser sharedInstance].userid];
+    NSString* avatarName2 = [NSString stringWithFormat:@"%@",[MTUser sharedInstance].userid];
+    NSString* uploadfilePath;
+    CloudOperation *cloudOP1 = [[CloudOperation alloc]initWithDelegate:self];
+    CloudOperation* cloudOP2 = [[CloudOperation alloc]initWithDelegate:self];
+    
+    self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",avatarName1];
+    self.imgName =[NSString stringWithFormat:@"%@.jpg",avatarName1];
+    uploadfilePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
+    [imageData1 writeToFile:uploadfilePath atomically:YES];
+    
+    [cloudOP1 CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+    
+    self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",avatarName2];
+    self.imgName =[NSString stringWithFormat:@"%@.jpg",avatarName2];
+    uploadfilePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
+    [imageData2 writeToFile:uploadfilePath atomically:YES];
+    
+    [cloudOP2 CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+
+}
+
+
 -(void)uploadBanner:(NSNumber*)eventId
 {
     self.isUpload = YES;

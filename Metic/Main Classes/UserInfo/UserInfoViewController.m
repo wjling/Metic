@@ -13,6 +13,7 @@
 {
     SingleSelectionAlertView* alert;
     NSInteger newGender;
+    UIImage* newAvatar;
 }
 
 @end
@@ -59,6 +60,10 @@
     self.avatar_imageView.layer.borderColor = ([UIColor lightGrayColor].CGColor);
     self.avatar_imageView.layer.borderWidth = 2;
     
+    UITapGestureRecognizer* avatarGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(avatarClicked:)];
+    self.avatar_imageView.userInteractionEnabled = YES;
+    [self.avatar_imageView addGestureRecognizer:avatarGesture];
+    
     self.name_label.text = [MTUser sharedInstance].name;
     self.email_label.text = [MTUser sharedInstance].email;
     
@@ -79,6 +84,52 @@
     self.info_tableView.scrollEnabled = YES;
     
 }
+
+-(void)avatarClicked:(id)sender
+{
+    NSLog(@"avatar clicked");
+    UIActionSheet *sheet;
+    
+    // 判断是否支持相机
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照", @"从相册选择", nil];
+    }
+    else {
+        sheet = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
+    }
+    
+    sheet.tag = 255;
+    
+    [sheet showInView:self.view];
+}
+
+- (IBAction)openEditor:(id)sender
+{
+    PECropViewController *controller = [[PECropViewController alloc] init];
+    controller.delegate = self;
+    controller.image = newAvatar;
+    
+    UIImage *image = newAvatar;
+    CGFloat width = image.size.width;
+    CGFloat height = image.size.height;
+    CGFloat length = MIN(width, height);
+    controller.imageCropRect = CGRectMake((width - length) / 2,
+                                          (height - length) / 2,
+                                          length,
+                                          length);
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+    }
+    
+    [self presentViewController:navigationController animated:YES completion:^{
+    }];
+    
+}
+
 
 -(void)refresh
 {
@@ -356,6 +407,72 @@
     }
 }
 
+
+#pragma mark - action sheet delegte
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 255) {
+        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        // 判断是否支持相机
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            switch (buttonIndex) {
+                case 0:
+                    return;
+                case 1: //相机
+                    sourceType = UIImagePickerControllerSourceTypeCamera;
+                    break;
+                case 2: //相册
+                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    break;
+            }
+        }
+        else {
+            if (buttonIndex == 0) {
+                return;
+            } else {
+                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            }
+        }
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.allowsEditing = NO;
+        imagePickerController.sourceType = sourceType;
+        
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }
+}
+
+#pragma mark - image picker delegte
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+	//[picker dismissViewControllerAnimated:YES completion:^{}];
+    
+    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    newAvatar = image;
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [self openEditor:nil];
+    }];
+    
+}
+
+#pragma mark - PECropViewControllerDelegate methods
+
+- (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+    newAvatar = croppedImage;
+    PhotoGetter* getter = [[PhotoGetter alloc]initUploadMethod:croppedImage type:1];
+    [getter uploadAvatar];
+}
+
+- (void)cropViewControllerDidCancel:(PECropViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
@@ -410,6 +527,8 @@
         //[self.view sendSubviewToBack:self.shadowView];
     }
 }
+
+
 
 
 @end

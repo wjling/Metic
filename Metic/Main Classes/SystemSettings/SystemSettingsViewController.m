@@ -146,7 +146,7 @@
         [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
         self.view.window.bounds = CGRectMake(0, 0, 0, 0);
         [(SlideNavigationController*)self.navigationController leftMenu].view.hidden = YES;
-        [(AppDelegate*)[UIApplication sharedApplication].delegate window].bounds = CGRectMake(0, 0, 0, 0);
+//        [(AppDelegate*)[UIApplication sharedApplication].delegate window].bounds = CGRectMake(0, 0, 0, 0);
         [UIView commitAnimations];
 //        exit(0);
         

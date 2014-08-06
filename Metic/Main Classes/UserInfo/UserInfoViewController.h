@@ -16,8 +16,9 @@
 #import "HttpSender.h"
 #import "HomeViewController.h"
 #import "SlideNavigationController.h"
+#import "PECropViewController.h"
 
-@interface UserInfoViewController : UIViewController<SlideNavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate>
+@interface UserInfoViewController : UIViewController<SlideNavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,SingleSelectionAlertViewDelegate,HttpSenderDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PECropViewControllerDelegate>
 @property (strong, nonatomic) IBOutlet UIView *banner_UIview;
 @property (strong, nonatomic) IBOutlet UIImageView *banner_imageView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatar_imageView;
