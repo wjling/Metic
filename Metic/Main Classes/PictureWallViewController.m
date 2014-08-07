@@ -274,9 +274,9 @@
     //[cell.layer setBorderColor:[UIColor redColor].CGColor];
     //[cell.layer setBorderWidth:2];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (self && cacheType == SDImageCacheTypeNone) {
+        if (self && image && cacheType == SDImageCacheTypeNone) {
             [tableView reloadData];
-            NSLog(@"reloadData");
+            NSLog(@"reloadData %@",imageURL);
         }
     }];
     //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];

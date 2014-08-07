@@ -52,6 +52,7 @@ typedef  enum{
 @property (nonatomic, strong) UIBarButtonItem *leftbarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
 @property (nonatomic,strong) UIViewController* vc;
+- (void)closeMenuWithCompletion:(void (^)())completion;
 + (SlideNavigationController *)sharedInstance;
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
 - (void)setEnableSwipeGesture:(BOOL)markEnableSwipeGesture;

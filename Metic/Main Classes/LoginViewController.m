@@ -124,6 +124,11 @@
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
     NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
     NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
+    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSLog(@"直接跳转  fail");
+        //处理登录状态下，直接跳转 需要读取默认信息。 暂未保存默认信息。
+    }
     if (userName && password) {
         self.textField_userName.text = userName;
         self.textField_password.text = password;
@@ -240,6 +245,7 @@
             [_timer invalidate];
             [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
             [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
+            [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
             [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];

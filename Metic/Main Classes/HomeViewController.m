@@ -20,14 +20,15 @@
 
 
 @property (strong, nonatomic) IBOutlet MTTableView *tableView;
-@property (strong, nonatomic) IBOutlet MTTableView *mytableView;
-@property (strong, nonatomic) IBOutlet MTTableView *frtableView;
-@property (strong, nonatomic) IBOutlet MTTableView *tatableView;
-@property (strong, nonatomic) MTTableView *eventsTableView;
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
 @property (nonatomic,strong) NSMutableArray* updateEvents;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
+@property (nonatomic,strong) UIAlertView *Alert;
+@property int type;
+@property BOOL clearIds;
+@property BOOL Headeropen;
+@property BOOL Footeropen;
 @end
 
 
@@ -39,50 +40,39 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _type = 0;
+    _clearIds = NO;
+    _Headeropen = NO;
+    _Footeropen = NO;
     _updateEventIds = [MTUser sharedInstance].updateEventIds;
     _updateEvents = [MTUser sharedInstance].updateEvents;
     _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
-    
-    
+
     [self createMenuButton];
+    
+    [_morefuctions.layer setCornerRadius:6];
+    [_ArrangementView.layer setCornerRadius:6];
+    _ArrangementView.
+    clipsToBounds = YES;
+    for (UIButton* button in _arrangementButtons) {
+        
+        [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
+    }
+    [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
     
-    self.scrollView.delegate = self;
     self.tableView.homeController= self;
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self.tableView];
-    self.mytableView.homeController= self;
-    [self.mytableView setDelegate:self];
-    [self.mytableView setDataSource:self.mytableView];
-    self.frtableView.homeController= self;
-    [self.frtableView setDelegate:self];
-    [self.frtableView setDataSource:self.frtableView];
-    self.tatableView.homeController= self;
-    [self.tatableView setDelegate:self];
-    [self.tatableView setDataSource:self.tatableView];
-    
-    self.tableView.eventsSource = self.events;
-    self.mytableView.eventsSource = self.myevents;
-    self.frtableView.eventsSource = self.frevents;
-    self.tatableView.eventsSource = self.taevents;
-    
-    self.eventsTableView = self.tableView;
     self.events = [[NSMutableArray alloc]init];
-    self.myevents = [[NSMutableArray alloc]init];
-    self.frevents = [[NSMutableArray alloc]init];
-    self.taevents = [[NSMutableArray alloc]init];
-    self.indicatior = [[UILabel alloc]initWithFrame:CGRectMake(24, 32, 48, 3)];
-    [self.indicatior setBackgroundColor:[UIColor colorWithRed:20.0/255.0 green:180.0/255.0 blue:150.0/255.0 alpha:1.0]];
-    [self.indicatior setHidden:NO];
-    [self.controlView addSubview:self.indicatior];
-    [self.controlView setScrollEnabled:YES];
-    [self.controlView setShowsHorizontalScrollIndicator:NO];
+    self.tableView.eventsSource = self.events;
     
-    
+    self.sql = [[MySqlite alloc]init];
+    [self pullEventsFromDB];
 
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
@@ -90,6 +80,11 @@
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
 
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
+    
     
     self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [self.listenerDelegate connect];
@@ -102,8 +97,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.view bringSubviewToFront: self.shadowView];
-    [self.scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+    [self.shadowView setAlpha:0];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
 }
 
@@ -131,72 +125,27 @@
 -(void)adjustInfoView
 {
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
-    int num = _updateEvents.count + _atMeEvents.count;
+    long num = _updateEvents.count + _atMeEvents.count;
     if (num > 0) {
         [_updateInfoView setHidden:NO];
         if (num < 10) {
-            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%d",num];
+            _updateInfoNumLabel.text = [NSString stringWithFormat:@"+%ld",num];
         }else _updateInfoNumLabel.text = @"+N";
-        CGRect frame = _scrollView.frame;
-        if (frame.origin.y == 35) {
-            frame.origin.y = 75;
+        CGRect frame = _tableView.frame;
+        if (frame.origin.y == 0) {
+            frame.origin.y = 40;
             frame.size.height -= 40;
-            [_scrollView setFrame:frame];
+            [_tableView setFrame:frame];
         }
     }else{
         _updateInfoNumLabel.text = @"";
         [_updateInfoView setHidden:YES];
-        CGRect frame = _scrollView.frame;
-        if (frame.origin.y == 75) {
-            frame.origin.y = 35;
+        CGRect frame = _tableView.frame;
+        if (frame.origin.y == 40) {
+            frame.origin.y = 0;
             frame.size.height += 40;
-            [_scrollView setFrame:frame];
+            [_tableView setFrame:frame];
         }
-    }
-}
-#pragma mark - UIScrollView Methods -
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSLog(@"%f",self.scrollView.contentOffset.x);
-    int position = self.scrollView.contentOffset.x/310;
-    switch (position) {
-        case 0:
-            self.header.scrollView = self.tableView;
-            self.eventsTableView = self.tableView;
-            break;
-        case 1:
-            self.header.scrollView = self.mytableView;
-            self.eventsTableView = self.mytableView;
-            break;
-        case 2:
-            self.header.scrollView = self.frtableView;
-            self.eventsTableView = self.frtableView;
-            break;
-        case 3:
-            self.header.scrollView = self.tatableView;
-            self.eventsTableView = self.tatableView;
-            break;
-        default:
-            break;
-    }
-    [self.eventsTableView reloadData];
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    //NSLog(@"%f",self.controlView.contentOffset.x);
-    float position = self.scrollView.contentOffset.x;
-    float newposition = position/740*190+24;
-    if (newposition > 250) {
-        [self more:nil];
-    }else if(newposition < 100) [self.controlView setContentOffset:CGPointMake(0, 0) animated:YES];
-    [self.indicatior setFrame:CGRectMake(newposition, 32, 48, 3)];
-}
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (![self.morefuctions isHidden]) {
-        [self closeButtonView];
     }
 }
 
@@ -215,7 +164,7 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
-        [self.view bringSubviewToFront:self.shadowView];
+        //[self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
     }else{
         //self.shadowView.hidden = YES;
@@ -242,13 +191,19 @@
             }
             
             else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
-                self.events = [response1 valueForKey:@"event_list"];
-                [self updateEventToDB];
+                if (_clearIds) [_events removeAllObjects];
+                [self.events addObjectsFromArray:[response1 valueForKey:@"event_list"]];
+                [_tableView reloadData];
+                [self closeRJ];
+                [self updateEventToDB:[response1 valueForKey:@"event_list"]];
+                
                 
             }
             else{//获取event id 号
-                self.eventIds = [response1 valueForKey:@"sequence"];
-                [self getEvents:self.eventIds];
+                self.eventIds_all = [response1 valueForKey:@"sequence"];
+                //[self.eventIds removeAllObjects];
+                //[_eventIds addObjectsFromArray:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
+                [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
             }
         }
             break;
@@ -259,11 +214,11 @@
 
 
 #pragma mark - 数据库操作
-- (void)updateEventToDB
+- (void)updateEventToDB:(NSArray*)events
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
-    for (NSDictionary *event in self.events) {
+    for (NSDictionary *event in events) {
         NSString *eventData = [NSString jsonStringWithDictionary:event];
         eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
@@ -282,13 +237,7 @@
     [self.sql openMyDB:path];
 
     self.events = [[NSMutableArray alloc]init];
-    self.myevents = [[NSMutableArray alloc]init];
-    self.frevents = [[NSMutableArray alloc]init];
-    self.taevents = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
-    self.mytableView.eventsSource = self.myevents;
-    self.frtableView.eventsSource = self.frevents;
-    self.tatableView.eventsSource = self.taevents;
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
     NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
@@ -297,15 +246,6 @@
         tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber* launcherId = [event valueForKey:@"launcher_id"];
-        if ([launcherId intValue] == [[MTUser sharedInstance].userid intValue]) {
-            [self.myevents addObject:event];
-            
-        }else if([[MTUser sharedInstance].friendsIdSet containsObject:launcherId]){
-            [self.frevents addObject:event];
-        }else{
-            [self.taevents addObject:event];
-        }
         [self.events addObject:event];
     }
     
@@ -323,7 +263,7 @@
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:_user.userid forKey:@"id"];
-    
+    [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_MY_EVENTS];
@@ -339,6 +279,17 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
 }
 
+-(void)showAlert
+{
+    _Alert = [[UIAlertView alloc] initWithTitle:@"" message:@"没有更多了" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    [_Alert show];
+    self.Footeropen = NO;
+    [_footer endRefreshing];
+}
+-(void)performDismiss
+{
+    [_Alert dismissWithClickedButtonIndex:0 animated:NO];
+}
 
 #pragma mark 代理方法-UITableView
 
@@ -392,10 +343,33 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    self.scrollView.scrollEnabled = NO;
-    NSLog(@"begin");
-    [self getEventids];
-    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(tableViewReload) userInfo:nil repeats:NO];
+    if (refreshView == _header) {
+        NSLog(@"header Begin");
+        _Headeropen = YES;
+        _clearIds = YES;
+        [self getEventids];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    }else if(refreshView == _footer){
+        NSLog(@"footer Begin");
+        _Footeropen = YES;
+        _clearIds = NO;
+        
+        if (_eventIds_all.count <= _events.count) {
+            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+            [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+            return;
+        }
+        
+        NSInteger beginEventId = [_events count];
+        NSInteger endEventId = beginEventId + 10;
+        if (endEventId > _eventIds_all.count) {
+            endEventId = _eventIds_all.count;
+        }
+        
+        [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(beginEventId, endEventId - beginEventId)]];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    }
+    
 }
 
 #pragma mark notificationDidReceive
@@ -425,9 +399,21 @@
 - (void) tableViewReload
 {
     [_header endRefreshing];
-    self.scrollView.scrollEnabled = YES;
-    [self pullEventsFromDB];
-    [self.eventsTableView reloadData];
+    //[self pullEventsFromDB];
+    [self.tableView reloadData];
+}
+
+-(void)closeRJ
+{
+    if (_Headeropen) {
+        _Headeropen = NO;
+        [_header endRefreshing];
+    }
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
+    [self.tableView reloadData];
 }
 
 - (void)dealloc
@@ -435,62 +421,114 @@
     [_header free];
     
 }
-- (IBAction)showAllEvents:(id)sender
-{
-    if (self.scrollView.contentOffset.x!=0) {
-        [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    }
-    
-}
-- (IBAction)showMyEvents:(id)sender
-{
-    if (self.scrollView.contentOffset.x!=310) {
-        [self.scrollView setContentOffset:CGPointMake(310, 0) animated:YES];
-    }
-}
-- (IBAction)showFrEvents:(id)sender
-{
-    if (self.scrollView.contentOffset.x!=620) {
-        [self.scrollView setContentOffset:CGPointMake(620, 0) animated:YES];
-    }
-}
-
-- (IBAction)showTaEvents:(id)sender {
-    if (self.scrollView.contentOffset.x!=930) {
-        [self.scrollView setContentOffset:CGPointMake(930, 0) animated:YES];
-    }
-}
 
 - (IBAction)toDynamic:(id)sender {
     [self performSegueWithIdentifier:@"toDynamics" sender:self];
 }
 
+- (IBAction)closeOptionView:(id)sender {
+    if (!self.morefuctions.isHidden) {
+        [self closeButtonView];
+        [UIView beginAnimations:@"shadowViewDisappear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0;
+        [UIView commitAnimations];
+    }
+    if (_ArrangementView.frame.size.height != 0) {
+        [self chooseArrangement:nil];
+    }
+    
+}
+
+- (IBAction)CloseMenu:(id)sender {
+    if (self.morefuctions.isHidden && _ArrangementView.frame.size.height == 0) {
+        [((SlideNavigationController*)self.navigationController) closeMenuWithCompletion:nil];
+    }
+}
+
+- (IBAction)chooseArrangement:(id)sender {
+    [_morefuctions setHidden:YES];
+    if (_ArrangementView.frame.size.height == 0) {
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0.5;
+        [UIView commitAnimations];
+    }else{
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0;
+        [UIView commitAnimations];
+    }
+    
+    
+    
+    [UIView beginAnimations:@"ArrangementAppear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    CGRect frame = _ArrangementView.frame;
+    frame.size.height = (frame.size.height == 0)? 81:0;
+    self.ArrangementView.frame = frame;
+    [UIView commitAnimations];
+    
+    
+}
+
+- (IBAction)arrangebyAddTime:(id)sender {
+    [self chooseArrangement:nil];
+    if (_type == 4) {
+        [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+        [_arrangementButtons[1] setBackgroundImage:nil forState:UIControlStateNormal];
+        _type = 0;
+        [_header beginRefreshing];
+    }
+}
+
+- (IBAction)arrangebyStartTime:(id)sender {
+    [self chooseArrangement:nil];
+    if (_type == 0) {
+        [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+        [_arrangementButtons[0] setBackgroundImage:nil forState:UIControlStateNormal];
+        _type = 4;
+        [_header beginRefreshing];
+    }
+    
+}
+
+
 
 -(void)option
 {
     if (self.morefuctions.isHidden) {
+        if (_ArrangementView.frame.size.height != 0) {
+            [UIView beginAnimations:@"ArrangementAppear" context:nil];
+            [UIView setAnimationDuration:0.5];
+            [UIView setAnimationDelegate:self];
+            CGRect frame = _ArrangementView.frame;
+            frame.size.height = (frame.size.height == 0)? 81:0;
+            self.ArrangementView.frame = frame;
+            [UIView commitAnimations];
+        }
         [self.morefuctions setHidden:NO];
-        //[self.view bringSubviewToFront:self.morefuctions];
-        //设置“更多”图层边框阴影
-        [self.morefuctions.layer setShadowOffset:CGSizeMake(1,1)];
-        [self.morefuctions.layer setShadowOpacity:1.0];
-        [self.morefuctions.layer setShadowRadius:5];
-        [self.morefuctions.layer setShadowColor:[UIColor blackColor].CGColor];
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0.5;
+        [UIView commitAnimations];
+        
     }else{
-        [self closeButtonView];
+        [self closeOptionView:nil];
     }
 }
 
-- (IBAction)more:(id)sender {
-    [self.controlView setContentOffset:CGPointMake(65, 0) animated:YES];
-    
-}
+
+
 
 -(void)closeButtonView
 {
     [self.morefuctions setHidden:YES];
-    //[self.view sendSubviewToBack:self.morefuctions];
-    
 }
 
 @end
