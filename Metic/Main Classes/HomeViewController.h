@@ -30,12 +30,19 @@
 @property(nonatomic,strong)MTUser *user;
 @property (strong, nonatomic) IBOutlet UIView *updateInfoView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
+@property (strong, nonatomic) IBOutlet UIView *ArrangementView;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *arrangementButtons;
 
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 - (void)option;
 @property (strong, nonatomic) IBOutlet UIView *morefuctions;
 - (IBAction)toDynamic:(id)sender;
+- (IBAction)closeOptionView:(id)sender;
+- (IBAction)CloseMenu:(id)sender;
+- (IBAction)chooseArrangement:(id)sender;
+- (IBAction)arrangebyAddTime:(id)sender;
+- (IBAction)arrangebyStartTime:(id)sender;
 
 
 @property (nonatomic,strong)NSNumber *selete_Eventid;

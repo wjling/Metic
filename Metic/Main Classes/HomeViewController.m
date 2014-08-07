@@ -49,9 +49,17 @@
     _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
-    
-    
+
     [self createMenuButton];
+    
+    [_morefuctions.layer setCornerRadius:6];
+    [_ArrangementView.layer setCornerRadius:6];
+    _ArrangementView.
+    clipsToBounds = YES;
+    for (UIButton* button in _arrangementButtons) {
+        
+        [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
+    }
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
@@ -88,7 +96,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.view bringSubviewToFront: self.shadowView];
+    [self.shadowView setAlpha:0];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
 }
 
@@ -139,15 +147,6 @@
         }
     }
 }
-#pragma mark - UIScrollView Methods -
-
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (![self.morefuctions isHidden]) {
-        [self closeButtonView];
-    }
-}
 
 #pragma mark - SlideNavigationController Methods -
 
@@ -164,7 +163,7 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
-        [self.view bringSubviewToFront:self.shadowView];
+        //[self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
     }else{
         //self.shadowView.hidden = YES;
@@ -360,8 +359,8 @@
             return;
         }
         
-        int beginEventId = _events.count;
-        int endEventId = beginEventId + 10;
+        NSInteger beginEventId = [_events count];
+        NSInteger endEventId = beginEventId + 10;
         if (endEventId > _eventIds_all.count) {
             endEventId = _eventIds_all.count;
         }
@@ -426,28 +425,94 @@
     [self performSegueWithIdentifier:@"toDynamics" sender:self];
 }
 
+- (IBAction)closeOptionView:(id)sender {
+    if (!self.morefuctions.isHidden) {
+        [self closeButtonView];
+        [UIView beginAnimations:@"shadowViewDisappear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0;
+        [UIView commitAnimations];
+    }
+    if (_ArrangementView.frame.size.height != 0) {
+        [self chooseArrangement:nil];
+    }
+    
+}
+
+- (IBAction)CloseMenu:(id)sender {
+    if (self.morefuctions.isHidden && _ArrangementView.frame.size.height == 0) {
+        [((SlideNavigationController*)self.navigationController) closeMenuWithCompletion:nil];
+    }
+}
+
+- (IBAction)chooseArrangement:(id)sender {
+    [_morefuctions setHidden:YES];
+    if (_ArrangementView.frame.size.height == 0) {
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0.5;
+        [UIView commitAnimations];
+    }else{
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0;
+        [UIView commitAnimations];
+    }
+    
+    
+    
+    [UIView beginAnimations:@"ArrangementAppear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    CGRect frame = _ArrangementView.frame;
+    frame.size.height = (frame.size.height == 0)? 81:0;
+    self.ArrangementView.frame = frame;
+    [UIView commitAnimations];
+    
+    
+}
+
+- (IBAction)arrangebyAddTime:(id)sender {
+}
+
+- (IBAction)arrangebyStartTime:(id)sender {
+}
+
+
 
 -(void)option
 {
     if (self.morefuctions.isHidden) {
+        if (_ArrangementView.frame.size.height != 0) {
+            [UIView beginAnimations:@"ArrangementAppear" context:nil];
+            [UIView setAnimationDuration:0.5];
+            [UIView setAnimationDelegate:self];
+            CGRect frame = _ArrangementView.frame;
+            frame.size.height = (frame.size.height == 0)? 81:0;
+            self.ArrangementView.frame = frame;
+            [UIView commitAnimations];
+        }
         [self.morefuctions setHidden:NO];
-        //[self.view bringSubviewToFront:self.morefuctions];
-        //设置“更多”图层边框阴影
-        [self.morefuctions.layer setShadowOffset:CGSizeMake(1,1)];
-        [self.morefuctions.layer setShadowOpacity:1.0];
-        [self.morefuctions.layer setShadowRadius:5];
-        [self.morefuctions.layer setShadowColor:[UIColor blackColor].CGColor];
+        [UIView beginAnimations:@"shadowViewAppear" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        self.shadowView.alpha = 0.5;
+        [UIView commitAnimations];
+        
     }else{
-        [self closeButtonView];
+        [self closeOptionView:nil];
     }
 }
+
+
 
 
 -(void)closeButtonView
 {
     [self.morefuctions setHidden:YES];
-    //[self.view sendSubviewToBack:self.morefuctions];
-    
 }
 
 @end
