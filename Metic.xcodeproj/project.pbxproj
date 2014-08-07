@@ -17,6 +17,7 @@
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
+		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -243,6 +244,8 @@
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
+		04BAF6551993644F00BF00E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		04BAF6561993644F00BF00E1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -880,6 +883,8 @@
 		48151F14194947EB009E156E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				04BAF6551993644F00BF00E1 /* Reachability.h */,
+				04BAF6561993644F00BF00E1 /* Reachability.m */,
 				08B3F7021957013F003B32B7 /* GTMBase64 */,
 				48A4DDE3194FE42D0066BF8D /* PinYin4Objc */,
 				485F47CC19494A30003AAD30 /* SocketRocket */,
@@ -1652,6 +1657,7 @@
 				510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */,
 				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */,
+				04BAF6571993644F00BF00E1 /* Reachability.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,

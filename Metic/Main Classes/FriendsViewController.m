@@ -33,6 +33,8 @@
 @synthesize DB;
 @synthesize addFriendBtn;
 @synthesize friendTableView;
+@synthesize friendSearchBar;
+@synthesize searchDisplayController;
 
 - (void)viewDidLoad
 {
@@ -45,7 +47,6 @@
     
     
     self.sectionTitlesArray = [NSMutableArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z",@"#", nil];
-    
     
     [self initParams];
 //    [self initTableData];
