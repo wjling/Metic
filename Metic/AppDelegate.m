@@ -14,14 +14,17 @@
 @implementation AppDelegate
 {
     BOOL isConnected;
+    BOOL isNetworkConnected;
     int numOfSyncMessages;
 //    NSString* DB_path;
 }
 @synthesize mySocket;
+@synthesize hostReach;
 @synthesize heartBeatTimer;
 @synthesize syncMessages;
 @synthesize sql;
 @synthesize notificationDelegate;
+@synthesize networkStatusNotifier_view;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -46,6 +49,8 @@
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
+    isNetworkConnected = YES;
+    [self initViews];
     [[MTUser alloc]init];
     
     _mapManager = [[BMKMapManager alloc]init];
@@ -66,6 +71,14 @@
     [[AVAudioSession sharedInstance]
      setActive: YES
      error: &activationErr];
+    
+    // 监测网络情况
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name: kReachabilityChangedNotification
+                                               object: nil];
+    hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    [hostReach startNotifier];
     
     application.applicationIconBadgeNumber = 0;
     return YES;
@@ -136,8 +149,116 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(void)initViews
+{
+//    UIWindow* window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    CGRect frame = [UIScreen mainScreen].bounds;
+    networkStatusNotifier_view = [[UIView alloc]initWithFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 30)];
+//    [networkStatusNotifier_view setBackgroundColor:[UIColor yellowColor]];
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 30)];
+    label.text = @"网络连接异常，请检查网络设置";
+    [label setBackgroundColor:[UIColor redColor]];
+    label.font = [UIFont systemFontOfSize:13];
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+//    label.center = networkStatusNotifier_view.center;
+    label.tag = 110;
+    [networkStatusNotifier_view addSubview:label];
+//    networkStatusNotifier_view.hidden = YES;
+}
+//======================================Network Status Checking=====================================
 
-//===================================MY METHODS============================================
+- (void)reachabilityChanged:(NSNotification *)note {
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+    NetworkStatus status = [curReach currentReachabilityStatus];
+    
+    if (status == NotReachable) {
+        if (isNetworkConnected) {
+            [self showNetworkNotification:@"网络连接异常，请检查网络设置"];
+        }
+        isNetworkConnected = NO;
+        
+        if (isConnected) {
+            [self disconnect];
+        }
+        
+        NSLog(@"Network is not reachable");
+    }
+    else
+    {
+        if (!isNetworkConnected) {
+            [self showNetworkNotification:@"网络连接恢复正常"];
+        }
+        isNetworkConnected = YES;
+        if (!isConnected) {
+            [self connect];
+        }
+        
+        NSLog(@"Network is reachable");
+    }
+}
+
++(BOOL)isEnableWIFI
+{
+    return ([[Reachability reachabilityForLocalWiFi] currentReachabilityStatus] != NotReachable);
+}
+
++(BOOL)isEnableGPRS
+{
+    return ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] != NotReachable);
+}
+
+-(void)showNetworkNotification:(NSString*)message
+{
+    UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
+    label.text = message;
+    CGRect frame = [UIScreen mainScreen].bounds;
+    [self.window.rootViewController.view addSubview:networkStatusNotifier_view];
+    
+    [UIView beginAnimations:@"showNetworkStatus" context:nil];
+//    networkStatusNotifier_view.hidden = NO;
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDidStopSelector:@selector(hideNetworkNotification)];
+    
+    [UIView setAnimationDuration:1];
+//    [UIView setAnimationRepeatCount:1];
+    [UIView setAnimationDelegate:self];
+    
+    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height - 30, frame.size.width, 30)];
+    [UIView commitAnimations];
+    NSLog(@"show newwork notification");
+}
+
+-(void)hideNetworkNotification
+{
+    CGRect frame = [UIScreen mainScreen].bounds;
+    [UIView beginAnimations:@"hideNetworkStatus" context:nil];
+    //    networkStatusNotifier_view.hidden = NO;
+    [UIView setAnimationDelay:5];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    
+    
+    [UIView setAnimationDidStopSelector:@selector(NetworkNotificationDidHide)];
+    [UIView setAnimationDuration:1];
+//    [UIView setAnimationRepeatCount:1];
+    [UIView setAnimationDelegate:self];
+    
+    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 30)];
+    [UIView commitAnimations];
+    
+    NSLog(@"hide newwork notification");
+    
+}
+
+-(void)NetworkNotificationDidHide
+{
+    [networkStatusNotifier_view removeFromSuperview];
+}
+
+//==========================================================================================
+
+//===================================SOCKET METHODS============================================
 
 - (void)handleReceivedNotifications
 {
@@ -246,8 +367,8 @@
     {
         [self disconnect];
         NSLog(@"Disconnected");
-        [self connect];
-        NSLog(@"Reconnecting...");
+//        [self connect];
+//        NSLog(@"Reconnecting...");
     }
     
 }
@@ -406,17 +527,25 @@
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
     NSLog(@":( Websocket Failed With Error %@", error);
-    mySocket = nil;
     isConnected = NO;
+    if (isNetworkConnected) {
+        [self connect];
+        NSLog(@"Reconnecting from fail...");
+    }
+    
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
-    mySocket = nil;
     isConnected = NO;
-    [self connect];
+    if (isNetworkConnected) {
+        [self connect];
+        NSLog(@"Reconnecting from close...");
+    }
 }
+//=============================================================================================
+
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {

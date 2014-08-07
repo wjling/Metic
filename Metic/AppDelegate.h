@@ -16,7 +16,7 @@
 #import "UMSocial.h"
 #import <AVFoundation/AVFoundation.h>
 #import "BMapKit.h"
-
+#import "Reachability.h"
 
 //推送消息的通知协议，收到任何消息之后的逻辑可以通过实现notificationDidReceive方法
 //说明：
@@ -41,13 +41,18 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong,nonatomic) SRWebSocket* mySocket;
+@property (strong, nonatomic) Reachability* hostReach;
 @property (strong, nonatomic)NSTimer* heartBeatTimer;
 @property (strong, nonatomic)MySqlite* sql;
 @property (strong, atomic)NSMutableArray* syncMessages;
 @property (strong, nonatomic) id<NotificationDelegate> notificationDelegate;
 @property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) UIViewController* homeViewController;
+@property (strong, nonatomic) UIView* networkStatusNotifier_view;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
+
++(BOOL)isEnableWIFI;
++(BOOL)isEnableGPRS;
 
 - (void)connect;
 - (void)scheduleHeartBeat;
@@ -56,5 +61,6 @@
 - (void)disconnect;
 
 - (void)handleReceivedNotifications;
+
 
 @end
