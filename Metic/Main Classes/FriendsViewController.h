@@ -34,6 +34,7 @@
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) IBOutlet UIButton *addFriendBtn;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
 
 
 - (void)initParams;

@@ -227,7 +227,7 @@
     
     [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height - 30, frame.size.width, 30)];
     [UIView commitAnimations];
-    NSLog(@"show newwork notification");
+    NSLog(@"show network notification");
 }
 
 -(void)hideNetworkNotification
@@ -247,7 +247,7 @@
     [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 30)];
     [UIView commitAnimations];
     
-    NSLog(@"hide newwork notification");
+    NSLog(@"hide network notification");
     
 }
 
