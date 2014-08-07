@@ -60,6 +60,7 @@
         
         [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     }
+    [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
     self.user = [MTUser sharedInstance];
     [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
     //[self.user updateAvatarList];
@@ -476,9 +477,24 @@
 }
 
 - (IBAction)arrangebyAddTime:(id)sender {
+    [self chooseArrangement:nil];
+    if (_type == 4) {
+        [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+        [_arrangementButtons[1] setBackgroundImage:nil forState:UIControlStateNormal];
+        _type = 0;
+        [_header beginRefreshing];
+    }
 }
 
 - (IBAction)arrangebyStartTime:(id)sender {
+    [self chooseArrangement:nil];
+    if (_type == 0) {
+        [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+        [_arrangementButtons[0] setBackgroundImage:nil forState:UIControlStateNormal];
+        _type = 4;
+        [_header beginRefreshing];
+    }
+    
 }
 
 
