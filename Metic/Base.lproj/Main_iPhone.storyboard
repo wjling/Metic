@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
@@ -296,7 +296,9 @@
                             <constraint firstItem="9yk-TC-UiH" firstAttribute="top" secondItem="itj-X4-kAr" secondAttribute="bottom" id="VVd-r5-QMB"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Profile" id="Zic-II-wRo"/>
+                    <navigationItem key="navigationItem" title="Profile" id="Zic-II-wRo">
+                        <barButtonItem key="backBarButtonItem" title=" " id="sYX-7I-CC1"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="msg" destination="p3v-gp-Nin" id="0a4-A0-zmL"/>
                         <outlet property="shadowView" destination="itj-X4-kAr" id="8cB-fK-b6C"/>
@@ -400,6 +402,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="好友中心" id="ObQ-44-r4f">
+                        <barButtonItem key="backBarButtonItem" title=" " id="jYm-HN-Tgd"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Tif-OU-Zzl">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ppn-p0-Wt2">
                                 <rect key="frame" x="279" y="9" width="25" height="25"/>
@@ -736,6 +739,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="消息中心" id="siV-z3-2cW">
+                        <barButtonItem key="backBarButtonItem" title=" " id="Zzs-9k-kaM"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Djn-1T-Bbv">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Eow-OI-lju">
                                 <rect key="frame" x="274" y="2" width="30" height="40"/>
@@ -1048,6 +1052,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="历史记录" id="Wnk-Vh-FOI">
+                        <barButtonItem key="backBarButtonItem" title=" " id="2Tm-3W-6XM"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="UmY-jI-WUj">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YUA-Ti-PdX">
                                 <rect key="frame" x="274" y="2" width="30" height="40"/>
@@ -1167,7 +1172,9 @@
                             <constraint firstItem="iaO-1k-CTl" firstAttribute="top" secondItem="7Eo-S4-Zwh" secondAttribute="bottom" id="smk-LQ-8mv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ"/>
+                    <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ">
+                        <barButtonItem key="backBarButtonItem" title=" " id="YuC-WP-Ela"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="avatar_imageView" destination="TeT-cC-fCq" id="m8r-OU-Jev"/>
                         <outlet property="banner_UIview" destination="caP-i2-TqL" id="6Y8-Hl-a9G"/>
@@ -1231,6 +1238,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="请选择所在地" id="LkC-xL-S4L">
+                        <barButtonItem key="backBarButtonItem" title=" " id="8bi-97-dhu"/>
                         <barButtonItem key="leftBarButtonItem" style="plain" id="lfR-5B-BJX">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WXU-jA-hwc">
                                 <rect key="frame" x="16" y="7" width="30" height="30"/>
@@ -1289,6 +1297,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="修改个人描述" id="Nyh-tg-ykC">
+                        <barButtonItem key="backBarButtonItem" title=" " id="goq-ua-CAb"/>
                         <barButtonItem key="rightBarButtonItem" image="勾选前icon" id="7CI-Va-rIV">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
@@ -1336,6 +1345,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="修改昵称" id="Urb-eR-66l">
+                        <barButtonItem key="backBarButtonItem" title=" " id="0et-LU-vis"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="c4V-qO-OBI">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ADs-QQ-jfz">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
@@ -1441,7 +1451,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="意见反馈" id="Ooz-Hi-wRc">
-                        <barButtonItem key="backBarButtonItem" title="返回" id="dou-2W-7zZ"/>
+                        <barButtonItem key="backBarButtonItem" title=" " id="dou-2W-7zZ"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="XET-fl-Cnd">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9bK-B3-0FZ">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
@@ -1597,7 +1607,9 @@
                             <constraint firstAttribute="trailing" secondItem="iCh-82-s7t" secondAttribute="trailing" constant="10" id="tVA-aq-eCG"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="好友信息" id="v3P-On-aQU"/>
+                    <navigationItem key="navigationItem" title="好友信息" id="v3P-On-aQU">
+                        <barButtonItem key="backBarButtonItem" title=" " id="Pha-vT-xAU"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="friendInfoEvents_tableView" destination="iCh-82-s7t" id="uKX-eb-Cda"/>
                         <outlet property="root" destination="5Rh-hg-SF0" id="nU3-VF-DAB"/>
@@ -1756,7 +1768,9 @@
                             <constraint firstItem="2Mc-wX-xFY" firstAttribute="leading" secondItem="8f3-T1-C39" secondAttribute="leading" id="tUh-Qb-QY6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="搜索好友" id="91d-Cj-zaP"/>
+                    <navigationItem key="navigationItem" title="搜索好友" id="91d-Cj-zaP">
+                        <barButtonItem key="backBarButtonItem" title=" " id="qfq-8y-SGe"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="content_tableview" destination="2Mc-wX-xFY" id="tQu-m1-ud4"/>
                         <outlet property="fsearchBar" destination="2SS-YG-BZF" id="e41-fX-Atx"/>
@@ -1781,7 +1795,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Right Menu Only" id="bLf-Hj-W8m"/>
+                    <navigationItem key="navigationItem" title="Right Menu Only" id="bLf-Hj-W8m">
+                        <barButtonItem key="backBarButtonItem" title=" " id="en5-iX-WMZ"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y9i-yV-9MD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1799,13 +1815,17 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Jg-6Em">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lap-Jg-6Em">
                                 <rect key="frame" x="10" y="15" width="300" height="356"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFF-qU-MsW">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vFF-qU-MsW">
                                         <rect key="frame" x="15" y="15" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="38F-Tb-5YG"/>
+                                            <constraint firstAttribute="width" constant="40" id="CvX-ZV-hQJ"/>
+                                        </constraints>
                                     </imageView>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bmh-ab-rdi">
                                         <rect key="frame" x="15" y="70" width="270" height="270"/>
@@ -1836,6 +1856,10 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.0" green="0.70588237047195435" blue="0.56470590829849243" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstItem="vFF-qU-MsW" firstAttribute="leading" secondItem="lap-Jg-6Em" secondAttribute="leading" constant="15" id="5VB-Es-cmb"/>
+                                    <constraint firstItem="vFF-qU-MsW" firstAttribute="top" secondItem="lap-Jg-6Em" secondAttribute="top" constant="15" id="qal-s0-sXS"/>
+                                </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mu1-ho-pK0">
                                 <rect key="frame" x="10" y="370" width="150" height="35"/>
@@ -1872,7 +1896,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="活动二维码" id="iRI-FJ-zn6"/>
+                    <navigationItem key="navigationItem" title="活动二维码" id="iRI-FJ-zn6">
+                        <barButtonItem key="backBarButtonItem" title=" " id="A9w-0z-cku"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="TwodCode" destination="aVk-fW-gu7" id="ezR-iR-YNG"/>
                         <outlet property="activity" destination="okl-Vj-pvv" id="9Tg-Ib-ASG"/>
@@ -2179,12 +2205,16 @@
                     </view>
                     <navigationItem key="navigationItem" id="Q1r-io-uov">
                         <nil key="title"/>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4sO-b5-kOY">
+                        <barButtonItem key="backBarButtonItem" title=" " id="oLm-FK-07p"/>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4sO-b5-kOY">
                             <rect key="frame" x="96" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <state key="normal" title="活动中心">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="highlighted">
+                                <color key="titleColor" white="1" alpha="0.59999999999999998" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="chooseArrangement:" destination="von-Oa-xrt" eventType="touchUpInside" id="4yJ-h1-DbS"/>
@@ -2389,7 +2419,9 @@
                             <constraint firstItem="vqa-kY-CEn" firstAttribute="top" secondItem="ZGm-dy-cGR" secondAttribute="bottom" id="gaZ-O1-viU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="动态列表" id="ybQ-Dz-gs7"/>
+                    <navigationItem key="navigationItem" title="动态列表" id="ybQ-Dz-gs7">
+                        <barButtonItem key="backBarButtonItem" title=" " id="0kw-3v-VU1"/>
+                    </navigationItem>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
                         <outlet property="atMe_button" destination="bVQ-oV-pLZ" id="Pdj-kv-TC6"/>
@@ -2463,6 +2495,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
+                        <barButtonItem key="backBarButtonItem" title=" " id="bTp-CA-xkb"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="H2j-n1-6M4">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Agz-Hd-Hpf">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
@@ -2643,6 +2676,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="封面选择" id="ggF-sM-F4G">
+                        <barButtonItem key="backBarButtonItem" title=" " id="I2g-Bv-ZO6"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="wZW-3r-qlN">
                             <view key="customView" alpha="0.0" contentMode="scaleToFill" id="lth-3k-7hu">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
@@ -2712,6 +2746,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="4aq-hJ-Rkd">
+                        <barButtonItem key="backBarButtonItem" title=" " id="bRa-JO-Nu6"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="9Mq-ar-AcL">
                             <view key="customView" contentMode="scaleToFill" id="m2Y-Wo-86l">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
@@ -2822,6 +2857,7 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="邀请好友" id="MDQ-55-dj7">
+                        <barButtonItem key="backBarButtonItem" title=" " id="wrl-a6-0y5"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="2Yc-jm-Dfc">
                             <view key="customView" contentMode="scaleToFill" id="TCM-cC-4rf">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
@@ -3052,6 +3088,7 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="发起活动" id="REA-Vz-rxX">
+                        <barButtonItem key="backBarButtonItem" title=" " id="mg3-fo-QP2"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="xUx-DT-FdS">
                             <view key="customView" alpha="0.0" contentMode="scaleToFill" id="tUj-5o-dFN">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
@@ -3128,21 +3165,32 @@
                             <constraint firstItem="4Gl-Fe-oyc" firstAttribute="top" secondItem="pqB-KE-UOQ" secondAttribute="bottom" id="mok-z3-9p9"/>
                         </constraints>
                     </view>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="上传图片" id="fHq-iP-Avq">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="M5K-ed-yNE">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NEB-pg-7ae">
-                                <rect key="frame" x="262" y="11" width="42" height="21"/>
+                        <barButtonItem key="backBarButtonItem" title=" " id="7h2-79-ufo"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="6Ip-cq-zow">
+                            <view key="customView" alpha="0.0" contentMode="scaleToFill" id="UfQ-kb-QxZ">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.058823533359999999" green="0.68627452850000004" blue="0.55686277149999996" alpha="1" colorSpace="deviceRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="上传">
-                                    <color key="titleColor" red="0.85098046059999999" green="0.90196084980000002" blue="0.89411771299999998" alpha="1" colorSpace="deviceRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="upload:" destination="0NQ-fO-IlQ" eventType="touchUpInside" id="7Xb-Zy-pIg"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kTM-72-dXp">
+                                        <rect key="frame" x="21" y="3" width="50" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <state key="normal" title="上传" backgroundImage="头部小按钮">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" backgroundImage="头部小按钮按下效果">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="upload:" destination="0NQ-fO-IlQ" eventType="touchUpInside" id="mZg-bc-3TE"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -3194,6 +3242,10 @@
                                                     <rect key="frame" x="5" y="10" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="Z50-qP-PCx">
+                                                    <rect key="frame" x="5" y="10" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -3204,7 +3256,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="活动参与者" id="nhd-Ty-h8e"/>
+                    <navigationItem key="navigationItem" title="活动参与者" id="nhd-Ty-h8e">
+                        <barButtonItem key="backBarButtonItem" title=" " id="G3x-R7-dXz"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="ovw-7j-mrG" id="Dtq-0q-cNb"/>
                         <segue destination="pBR-B0-6IX" kind="push" identifier="inviteFriends" id="eBE-9B-Hp2"/>
@@ -3246,6 +3300,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="图片墙" id="emD-kW-msS">
+                        <barButtonItem key="backBarButtonItem" title=" " id="LTR-Mb-3jG"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="VIt-Hw-29u">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oTp-Ua-5ge">
                                 <rect key="frame" x="278" y="9" width="26" height="26"/>
@@ -3270,7 +3325,7 @@
             </objects>
             <point key="canvasLocation" x="3041" y="-391"/>
         </scene>
-        <!--Photo Display View Controller-->
+        <!--Photo Display View Controller - 照片详情-->
         <scene sceneID="W3X-7y-wZo">
             <objects>
                 <viewController id="h8r-CT-ILs" customClass="PhotoDisplayViewController" sceneMemberID="viewController">
@@ -3369,7 +3424,9 @@
                             <constraint firstItem="zlu-Fc-0ZR" firstAttribute="top" secondItem="hcD-J7-89T" secondAttribute="bottom" id="AED-7r-MKM"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="p2G-M1-4Ut"/>
+                    <navigationItem key="navigationItem" title="照片详情" id="p2G-M1-4Ut">
+                        <barButtonItem key="backBarButtonItem" title=" " id="nyw-Vg-nvR"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="InfoView" destination="hcD-J7-89T" id="Re0-Bz-zbO"/>
                         <outlet property="avatar" destination="333-FN-zW4" id="Iex-jZ-h3e"/>
@@ -3387,7 +3444,7 @@
             </objects>
             <point key="canvasLocation" x="3511" y="-391"/>
         </scene>
-        <!--Photo Detail View Controller-->
+        <!--Photo Detail View Controller - 照片评论-->
         <scene sceneID="v7Q-Vv-RB3">
             <objects>
                 <viewController id="vtf-A0-qgM" customClass="PhotoDetailViewController" sceneMemberID="viewController">
@@ -3400,7 +3457,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="114" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="wJW-xi-MsO">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="381"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="371"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
@@ -3438,14 +3495,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DBC-PM-woG">
-                                <rect key="frame" x="0.0" y="381" width="320" height="35"/>
+                                <rect key="frame" x="0.0" y="371" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pZT-L4-2hm">
-                                        <rect key="frame" x="0.0" y="0.0" width="80" height="35"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="CdF-WE-jb1"/>
+                                            <constraint firstAttribute="height" constant="45" id="CdF-WE-jb1"/>
                                             <constraint firstAttribute="width" constant="80" id="eNZ-Tw-uPb"/>
                                         </constraints>
                                         <state key="normal" image="图片评论icon图标1">
@@ -3457,11 +3514,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ygo-LO-AWi">
-                                        <rect key="frame" x="80" y="0.0" width="80" height="35"/>
+                                        <rect key="frame" x="80" y="0.0" width="80" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="NkQ-dR-Bbg"/>
-                                            <constraint firstAttribute="height" constant="35" id="UZ5-G8-R49"/>
+                                            <constraint firstAttribute="height" constant="45" id="UZ5-G8-R49"/>
                                         </constraints>
                                         <state key="normal" image="图片评论icon图标2">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3472,11 +3529,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jvT-WR-3lJ">
-                                        <rect key="frame" x="160" y="0.0" width="80" height="35"/>
+                                        <rect key="frame" x="160" y="0.0" width="80" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="80" id="eSr-6c-Gth"/>
-                                            <constraint firstAttribute="height" constant="35" id="mFB-yB-yPZ"/>
+                                            <constraint firstAttribute="height" constant="45" id="mFB-yB-yPZ"/>
                                         </constraints>
                                         <state key="normal" image="图片评论icon图标3">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3487,10 +3544,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CLr-x0-Y7a">
-                                        <rect key="frame" x="240" y="0.0" width="80" height="35"/>
+                                        <rect key="frame" x="240" y="0.0" width="80" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="35" id="HUX-DM-zep"/>
+                                            <constraint firstAttribute="height" constant="45" id="HUX-DM-zep"/>
                                             <constraint firstAttribute="width" constant="80" id="RrS-VK-9RR"/>
                                         </constraints>
                                         <state key="normal" image="图片评论icon图标4">
@@ -3502,7 +3559,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.21176472306251526" green="0.21176472306251526" blue="0.21176472306251526" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="jvT-WR-3lJ" secondAttribute="bottom" id="02z-2N-KYx"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="3D4-Cf-emS"/>
@@ -3516,7 +3573,7 @@
                                     <constraint firstItem="CLr-x0-Y7a" firstAttribute="leading" secondItem="jvT-WR-3lJ" secondAttribute="trailing" id="UaZ-GJ-Lka"/>
                                     <constraint firstAttribute="bottom" secondItem="CLr-x0-Y7a" secondAttribute="bottom" id="Vak-DK-iRX"/>
                                     <constraint firstAttribute="bottom" secondItem="pZT-L4-2hm" secondAttribute="bottom" id="fey-7U-xXa"/>
-                                    <constraint firstAttribute="height" constant="35" id="jgs-Tc-wI1"/>
+                                    <constraint firstAttribute="height" constant="45" id="jgs-Tc-wI1"/>
                                     <constraint firstItem="pZT-L4-2hm" firstAttribute="leading" secondItem="DBC-PM-woG" secondAttribute="leading" id="lKi-4C-u45"/>
                                     <constraint firstAttribute="width" constant="320" id="lag-Qi-AsY"/>
                                     <constraint firstItem="Ygo-LO-AWi" firstAttribute="leading" secondItem="pZT-L4-2hm" secondAttribute="trailing" id="sIs-9U-Dry"/>
@@ -3526,7 +3583,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="cXw-gB-Z6b" secondAttribute="bottom" id="767-h3-37k"/>
-                            <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" constant="35" id="Rxr-hx-8zA"/>
+                            <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" constant="45" id="Rxr-hx-8zA"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="aPi-JA-uwa"/>
                             <constraint firstItem="DBC-PM-woG" firstAttribute="leading" secondItem="Lcc-RR-XGm" secondAttribute="leading" id="mth-uX-K6x"/>
                             <constraint firstItem="wJW-xi-MsO" firstAttribute="top" secondItem="FjB-eN-NGH" secondAttribute="bottom" id="pJk-ro-FQ3"/>
@@ -3534,7 +3591,9 @@
                             <constraint firstAttribute="trailing" secondItem="DBC-PM-woG" secondAttribute="trailing" id="xoj-0t-MtE"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Rpt-us-etF"/>
+                    <navigationItem key="navigationItem" title="照片评论" id="Rpt-us-etF">
+                        <barButtonItem key="backBarButtonItem" title=" " id="bPU-ud-f91"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="commentView" destination="cXw-gB-Z6b" id="QT8-Ce-A4n"/>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
@@ -3783,7 +3842,9 @@
                             <constraint firstItem="RI0-Cs-sfd" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="zJN-Xc-CA7"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k"/>
+                    <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k">
+                        <barButtonItem key="backBarButtonItem" title=" " id="GrL-qN-Zy2"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="inButton" destination="GFn-Gn-JH8" id="w45-Ud-JPt"/>
                         <outlet property="readerView" destination="RI0-Cs-sfd" id="YZ9-FB-0Gl"/>
@@ -3808,7 +3869,9 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </view>
-                    <navigationItem key="navigationItem" title="系统设置" id="HiN-LQ-Kft"/>
+                    <navigationItem key="navigationItem" title="系统设置" id="HiN-LQ-Kft">
+                        <barButtonItem key="backBarButtonItem" title=" " id="m4o-1v-lAd"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ntg-Cr-XsC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3845,7 +3908,9 @@
                             <constraint firstItem="gL6-uA-l7g" firstAttribute="top" secondItem="IpV-b0-tQv" secondAttribute="bottom" id="cMD-cd-P81"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="活动邀请" id="Iyr-dC-wK2"/>
+                    <navigationItem key="navigationItem" title="活动邀请" id="Iyr-dC-wK2">
+                        <barButtonItem key="backBarButtonItem" title=" " id="hE0-Xb-Ref"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="shadowView" destination="IpV-b0-tQv" id="9MR-O8-NjN"/>
                         <outlet property="tableView" destination="4Lw-9T-gxJ" id="wBG-vv-NGS"/>
@@ -3868,7 +3933,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="周边活动" id="b2O-GP-low"/>
+                    <navigationItem key="navigationItem" title="周边活动" id="b2O-GP-low">
+                        <barButtonItem key="backBarButtonItem" title=" " id="FqW-Xm-bbj"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4B-Mq-UIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3905,6 +3972,7 @@
         <image name="图片评论icon图标4" width="20" height="20"/>
         <image name="图片评论icon图标4白色" width="20" height="20"/>
         <image name="地图定位icon" width="17" height="17"/>
+        <image name="头像-116（白色底）" width="59" height="59"/>
         <image name="头部小按钮" width="83" height="43"/>
         <image name="头部小按钮按下效果" width="83" height="43"/>
         <image name="好友推荐icon" width="45" height="45"/>
@@ -3933,16 +4001,17 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="DsC-hh-HTw"/>
         <segue reference="EEO-gR-a4J"/>
         <segue reference="Bnm-KN-OgT"/>
-        <segue reference="rIK-Ci-sAS"/>
-        <segue reference="DsC-hh-HTw"/>
         <segue reference="ib8-0I-OZA"/>
         <segue reference="a7Z-Ie-XBp"/>
         <segue reference="fLJ-gw-aSw"/>
         <segue reference="UXj-VV-omZ"/>
+        <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>

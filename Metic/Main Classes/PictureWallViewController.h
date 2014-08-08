@@ -23,6 +23,7 @@
 @property(nonatomic,strong)NSMutableArray *photoPath_list;
 @property(nonatomic,strong)NSMutableDictionary *photos;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
+@property BOOL canReloadPhoto;
 - (IBAction)toUploadPhoto:(id)sender;
 
 

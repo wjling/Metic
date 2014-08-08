@@ -500,7 +500,7 @@
             nibsRegistered = YES;
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
-        NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
+        NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
         
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
@@ -556,7 +556,7 @@
 
         
         
-        NSDictionary *subCom = self.comment_list[indexPath.section - 1][indexPath.row];
+        NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
         float commentHeight = [self calculateTextHeight:text width:270.0 fontSize:10.0f];

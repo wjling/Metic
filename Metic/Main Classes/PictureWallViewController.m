@@ -21,8 +21,8 @@
 @property BOOL isOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
-@property BOOL shouldStopTimer;
-@property (nonatomic,strong) NSTimer *timer;
+//@property BOOL shouldStopTimer;
+//@property (nonatomic,strong) NSTimer *timer;
 @property (nonatomic,strong) NSMutableDictionary *cellHeight;
 @property (nonatomic,strong)SDWebImageManager *manager;
 @property int currentPhotoNum;
@@ -52,6 +52,7 @@
     [self.tableView2 setDataSource:self];
     self.seletedPhotoIndex = 0;
     self.isOpen = NO;
+    self.canReloadPhoto = YES;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
@@ -74,21 +75,29 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    _shouldStopTimer = NO;
-    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:YES];
-    [_timer invalidate];
-    [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
-    [self getPhotolist];
+//    _shouldStopTimer = NO;
+//    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:YES];
+//    [_timer invalidate];
+    
+    if (_canReloadPhoto) {
+        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
+        _canReloadPhoto = NO;
+        self.sequence = [[NSNumber alloc]initWithInt:0];
+        [_photo_list removeAllObjects];
+        [_photo_list_all removeAllObjects];
+        [self getPhotolist];
+    }
+    
 }
 
 
 -(void)viewDidDisappear:(BOOL)animated
 {
-    if (_shouldStopTimer){
-        _shouldStopTimer = NO;
-        [_timer invalidate];
-        
-    }
+//    if (_shouldStopTimer){
+//        _shouldStopTimer = NO;
+//        [_timer invalidate];
+//        
+//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -198,11 +207,11 @@
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (_shouldStopTimer){
-        _shouldStopTimer = NO;
-        [_timer invalidate];
-    
-    }
+//    if (_shouldStopTimer){
+//        _shouldStopTimer = NO;
+//        [_timer invalidate];
+//    
+//    }
     _footer.scrollView = scrollView;
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         [_tableView2 setContentSize:_tableView1.contentSize];
@@ -342,7 +351,7 @@
             self.sequence = [response1 valueForKey:@"sequence"];
             [self.photo_list_all addObjectsFromArray:newphoto_list];
             int count = self.photo_list.count;
-            for (int i = count; i < count + 5 && i < self.photo_list_all.count; i++) {
+            for (int i = count; i < count + 10 && i < self.photo_list_all.count; i++) {
                 [self.photo_list addObject:self.photo_list_all[i]];
             }
             [self getPhotoPathlist];
@@ -388,8 +397,8 @@
     }
     
     int count = self.photo_list.count;
-    if (photo_rest_num >= 5 || [_sequence intValue] == -1) {//加载剩余的，然后再拉
-        for (int i = count; i < count + 5 && i < _photo_list_all.count; i++) {
+    if (photo_rest_num >= 10 || [_sequence intValue] == -1) {//加载剩余的，然后再拉
+        for (int i = count; i < count + 10 && i < _photo_list_all.count; i++) {
             [self.photo_list addObject:self.photo_list_all[i]];
         }
         [self getPhotoPathlist];

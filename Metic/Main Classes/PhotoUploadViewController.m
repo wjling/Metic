@@ -7,6 +7,7 @@
 //
 
 #import "PhotoUploadViewController.h"
+#import "PictureWallViewController.h"
 #import "../Utils/CommonUtils.h"
 
 
@@ -127,7 +128,8 @@
 
 - (IBAction)upload:(id)sender {
     if (!self.uploadImage) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
+        UIAlertView* alert =[CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
+        [alert setTag:250];
     }
     [self showWaitingView];
     self.upLoad = sender;
@@ -322,8 +324,12 @@
 #pragma mark - Alert Delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
     // the user clicked OK
+    if ([alertView tag] == 250) {
+        return;
+    }
     if (buttonIndex == 0)
     {
+        ((PictureWallViewController*)self.photoWallController).canReloadPhoto = YES;
         [self.navigationController popToViewController:self.photoWallController animated:YES];
     }
 }

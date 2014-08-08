@@ -96,8 +96,6 @@
         NSDictionary* participant = _participants[indexPath.row];
         UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
         UILabel* name = (UILabel*)[cell viewWithTag:2];
-        avatar.layer.masksToBounds = YES;
-        [avatar.layer setCornerRadius:5];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
         [getter getPhoto];
         name.text = [participant valueForKey:@"name"];

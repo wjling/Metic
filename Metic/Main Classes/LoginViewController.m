@@ -91,6 +91,7 @@
     if (!_waitingView) {
         CGRect frame = self.view.bounds;
         _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setUserInteractionEnabled:NO];
         [_waitingView setBackgroundColor:[UIColor blackColor]];
         [_waitingView setAlpha:0.5f];
         frame.origin.x = (frame.size.width - 100)/2.0;
@@ -108,7 +109,7 @@
 -(void)removeWaitingView
 {
     if (_waitingView) {
-        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
+        //[((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
         [_waitingView removeFromSuperview];
     }
 }
@@ -134,7 +135,7 @@
         self.textField_password.text = password;
         self.logInEmail = userName;
         self.logInPassword = password;
-        _timer = [NSTimer scheduledTimerWithTimeInterval:3.5f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
         [self login];
     }else [self.button_login setEnabled:YES];
 }
@@ -182,7 +183,7 @@
     NSLog(@"%@",[self.textField_userName text]);
     self.logInEmail = [self.textField_userName text];
     self.logInPassword = [self.textField_password text];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:3.5f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
     [self.textField_password endEditing:YES];
     [self.textField_userName endEditing:YES];
     [self login];
