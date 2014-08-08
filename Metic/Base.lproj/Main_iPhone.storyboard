@@ -3243,6 +3243,10 @@
                                                     <rect key="frame" x="5" y="10" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="Z50-qP-PCx">
+                                                    <rect key="frame" x="5" y="10" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -3969,6 +3973,7 @@
         <image name="图片评论icon图标4" width="20" height="20"/>
         <image name="图片评论icon图标4白色" width="20" height="20"/>
         <image name="地图定位icon" width="17" height="17"/>
+        <image name="头像-116（白色底）" width="59" height="59"/>
         <image name="头部小按钮" width="83" height="43"/>
         <image name="头部小按钮按下效果" width="83" height="43"/>
         <image name="好友推荐icon" width="45" height="45"/>

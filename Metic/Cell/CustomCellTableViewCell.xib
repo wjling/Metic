@@ -101,7 +101,7 @@
                                 <rect key="frame" x="6" y="4" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="动参与者圆头像的边框图" id="a3q-YY-iKi">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活主头像蒙板" id="a3q-YY-iKi">
                                 <rect key="frame" x="5" y="2" width="34" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -228,6 +228,22 @@
                                 <rect key="frame" x="98" y="5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="头像蒙板-42(白色底）" id="NYp-fd-1e9">
+                                <rect key="frame" x="8" y="5" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="头像蒙板-42(白色底）" id="GEt-0x-0Cn">
+                                <rect key="frame" x="38" y="5" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="头像蒙板-42(白色底）" id="STL-P0-cfn">
+                                <rect key="frame" x="68" y="5" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="头像蒙板-42(白色底）" id="OeB-Nm-CDL">
+                                <rect key="frame" x="98" y="5" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
                     </view>
@@ -251,9 +267,10 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="动参与者圆头像的边框图" width="32" height="32"/>
         <image name="发起人icon" width="7" height="7"/>
         <image name="图片墙图标" width="13" height="13"/>
+        <image name="头像蒙板-42(白色底）" width="22" height="22"/>
+        <image name="活主头像蒙板" width="33" height="33"/>
         <image name="活动地点icon" width="7" height="7"/>
         <image name="活动时间icon" width="6" height="6"/>
     </resources>

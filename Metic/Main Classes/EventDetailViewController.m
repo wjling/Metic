@@ -516,7 +516,7 @@
         frame.size.height = commentHeight+25;
         [cell setFrame:frame];
         frame = [cell viewWithTag:100].frame;
-        frame.size.height =  commentHeight+25;
+        frame.size.height =  commentHeight+24;
         [[cell viewWithTag:100] setFrame:frame];
         [cell.comment setFrame:CGRectMake(10, 5, 270, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
