@@ -254,7 +254,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int comment_num = 0;
+    NSInteger comment_num = 0;
     if (self.pcomment_list) {
         comment_num = [self.pcomment_list count];
     }
@@ -279,22 +279,22 @@
         [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:back];
         
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(40, height+13, 150, 12)];
+        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 150, 12)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];
         author.text = [self.photoInfo valueForKey:@"author"];
         [cell addSubview:author];
         
-        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(40, height+25, 150, 13)];
-        [date setFont:[UIFont systemFontOfSize:12]];
+        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
+        [date setFont:[UIFont systemFontOfSize:11]];
         [date setTextColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0]];
         date.text = [self.photoInfo valueForKey:@"time"];
         [date setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:date];
         
         NSLog(@"%f",self.specificationHeight);
-        UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(40, height+38, 270, self.specificationHeight+15)];
+        UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, height+38, 260, self.specificationHeight+15)];
         [specification setFont:[UIFont systemFontOfSize:12]];
         [specification setNumberOfLines:0];
         specification.text = [self.photoInfo valueForKey:@"specification"];
@@ -303,14 +303,17 @@
         
         if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.delete_button setFrame:CGRectMake(275, height+18, 35, 18)];
+            [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
             [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];
             [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
-            [self.delete_button setBackgroundImage:[UIImage imageNamed:@"删除评论的背景图"] forState:UIControlStateNormal];
+            [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
+            [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
+            
+            
             [cell addSubview:self.delete_button];
         }
         
-        UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 20, 20)];
+        UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
         [getter getPhoto];
         [cell addSubview:avatar];
@@ -373,11 +376,12 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:270.0 ];
+        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 ];
         NSLog(@"%f",self.specificationHeight);
         height = self.photo.size.height *320.0/self.photo.size.width;
         height += 3;
         height += 50;
+        height += 30;//delete button
         height += self.specificationHeight;
         
     }else{

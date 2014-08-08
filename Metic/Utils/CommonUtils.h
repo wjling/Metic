@@ -27,7 +27,7 @@
 +(NSMutableString*)MD5EncryptionWithString:(NSString*)str;
 
 //生成简单alertView
-+(void)showSimpleAlertViewWithTitle:(NSString*)title WithMessage:(NSString*)message WithDelegate:(id)delegate WithCancelTitle:(NSString*)cancelTitle;
++(UIAlertView*)showSimpleAlertViewWithTitle:(NSString*)title WithMessage:(NSString*)message WithDelegate:(id)delegate WithCancelTitle:(NSString*)cancelTitle;
 
 //NSString转换成NSNumber
 + (NSNumber*)NSNumberWithNSString:(NSString*)string;
