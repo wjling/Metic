@@ -904,6 +904,11 @@ enum Response_Type
 -(void)eventBtnClicked:(UIButton*)sender
 {
     MenuViewController* mvc = (MenuViewController*)[SlideNavigationController sharedInstance].leftMenu;
+    if (mvc.eventInvitationViewController == nil) {
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                 bundle: nil];
+        mvc.eventInvitationViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
+    }
     
     [self.navigationController pushViewController:mvc.eventInvitationViewController animated:YES];
 }

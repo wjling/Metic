@@ -20,8 +20,9 @@
 #import "MySqlite.h"
 #import "PhotoGetter.h"
 #import "FriendInfoViewController.h"
+#import "BDSuggestLabel.h"
 
-@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
+@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,UISearchDisplayDelegate>
 
 @property(nonatomic,strong)MTUser *user;
 @property(nonatomic,strong)NSMutableArray* friendList;
@@ -34,7 +35,8 @@
 @property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) IBOutlet UIButton *addFriendBtn;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
-@property (strong, nonatomic) IBOutlet UISearchDisplayController *searchDisplayController;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *friendSearchDisplayController;
+
 
 
 - (void)initParams;

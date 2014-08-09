@@ -40,7 +40,6 @@
 	
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
-	//leftMenu.view.backgroundColor = [UIColor lightGrayColor];
 	leftMenu.cellIdentifier = @"leftMenuCell";
 	
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
@@ -51,7 +50,7 @@
     numOfSyncMessages = -1;
     isNetworkConnected = YES;
     [self initViews];
-    [[MTUser alloc]init];
+//    [self initApp];
     
     _mapManager = [[BMKMapManager alloc]init];
     
@@ -147,6 +146,12 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
++(void)initApp
+{
+     [[MTUser alloc]init];
+
 }
 
 -(void)initViews
@@ -366,7 +371,6 @@
     else
     {
         [self disconnect];
-        NSLog(@"Disconnected");
 //        [self connect];
 //        NSLog(@"Reconnecting...");
     }
@@ -377,6 +381,7 @@
 {
     [self.mySocket close];
     [self unscheduleHeartBeat];
+    NSLog(@"Disconnected");
 }
 
 #pragma mark - SRWebSocketDelegate
@@ -528,6 +533,7 @@
 {
     NSLog(@":( Websocket Failed With Error %@", error);
     isConnected = NO;
+    [self disconnect];
     if (isNetworkConnected) {
         [self connect];
         NSLog(@"Reconnecting from fail...");

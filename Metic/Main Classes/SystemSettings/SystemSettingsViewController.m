@@ -154,6 +154,7 @@
     else if (buttonIndex == 1)
     {
         NSLog(@"切换账号");
+        [AppDelegate initApp];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

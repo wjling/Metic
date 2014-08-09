@@ -51,6 +51,8 @@
 @property (strong, nonatomic) UIView* networkStatusNotifier_view;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 
++(void)initApp;
+
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;
 

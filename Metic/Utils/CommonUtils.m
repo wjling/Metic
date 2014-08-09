@@ -144,6 +144,34 @@
     return [PinyinHelper toHanyuPinyinStringWithNSString:str withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
 }
 
++ (NSString*)pinyinHeadFromNSString:(NSString *)str {
+    HanyuPinyinOutputFormat *outputFormat = [[HanyuPinyinOutputFormat alloc] init];
+    [outputFormat setToneType:ToneTypeWithoutTone];
+    [outputFormat setVCharType:VCharTypeWithV];
+    [outputFormat setCaseType:CaseTypeLowercase];
+    NSMutableString *outputPinyin = [[NSMutableString alloc] init];
+    for (int i=0;i <str.length;i++) {
+        NSString *mainPinyinStrOfChar = [PinyinHelper getFirstHanyuPinyinStringWithChar:[str characterAtIndex:i] withHanyuPinyinOutputFormat:outputFormat];
+        if (nil!=mainPinyinStrOfChar) {
+            [outputPinyin appendString:[mainPinyinStrOfChar substringToIndex:1]];
+        } else {
+            break;
+        }
+    }
+    return outputPinyin;
+}
+
++ (BOOL)isIncludeChineseInString:(NSString*)str {
+    for (int i=0; i<str.length; i++) {
+        unichar ch = [str characterAtIndex:i];
+        if (0x4e00 < ch  && ch < 0x9fff) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 
 +(UIImage*)downloadfile:(NSString*)url path:(NSString*)path
 {
