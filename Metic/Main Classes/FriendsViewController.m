@@ -1,4 +1,3 @@
-//
 //  FriendsViewController.m
 //  SlideMenu
 //
@@ -34,7 +33,7 @@
 @synthesize addFriendBtn;
 @synthesize friendTableView;
 @synthesize friendSearchBar;
-@synthesize searchDisplayController;
+@synthesize friendSearchDisplayController;
 
 - (void)viewDidLoad
 {
@@ -68,7 +67,22 @@
     self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
-    self.friendSearchBar.delegate = self;
+//    self.friendSearchBar.delegate = self;
+    self.searchFriendList = [[NSMutableArray alloc]init];
+    
+    friendSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+    friendSearchBar.delegate = self;
+    [friendSearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [friendSearchBar sizeToFit];
+    [self.view addSubview:friendSearchBar];
+    
+    friendSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:friendSearchBar contentsController:self];
+    self.friendSearchDisplayController.delegate = self;
+    self.friendSearchDisplayController.searchResultsDelegate = self;
+    self.friendSearchDisplayController.searchResultsDataSource = self;
+//    self.searchDisplayController.delegate = self;
+//    self.searchDisplayController.searchResultsDelegate = self;
+//    self.searchDisplayController.searchResultsDataSource = self;
     
 //    UIImage* img = [[UIImage imageNamed:@"添加好友icon.png"] stretchableImageWithLeftCapWidth:3 topCapHeight: 3];
 //    [self.addFriendBtn setBackButtonBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -129,10 +143,16 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section < initialSectionForFriendList) {
+    if (tableView == friendTableView) {
+        if (section < initialSectionForFriendList) {
+            return 0;
+        }
+        return 23;
+    }
+    else
+    {
         return 0;
     }
-    return 23;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -151,17 +171,22 @@
 {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
-    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
-    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
-    NSLog(@"afriend: %@",aFriend);
-    selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
-//    selectedFriendID = [aFriend objectForKey:@"id"];
-    if ([selectedFriendID isKindOfClass:[NSString class]]) {
-        NSLog(@"NSString fid value: %@",selectedFriendID);
+    if (tableView == friendTableView) {
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+        NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
+        NSLog(@"afriend: %@",aFriend);
+        selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
+        if ([selectedFriendID isKindOfClass:[NSString class]]) {
+            NSLog(@"NSString fid value: %@",selectedFriendID);
+        }
+        else if([selectedFriendID isKindOfClass:[NSNumber class]])
+        {
+            NSLog(@"NSNumber fid value: %@",selectedFriendID);
+        }
     }
-    else if([selectedFriendID isKindOfClass:[NSNumber class]])
+    else if (tableView == self.searchDisplayController.searchResultsTableView)
     {
-        NSLog(@"NSNumber fid value: %@",selectedFriendID);
+        
     }
     
     return indexPath;
@@ -194,18 +219,37 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
-    if (groupOfFriends) {
-        return groupOfFriends.count;
+    if (tableView == friendTableView) {
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
+        if (groupOfFriends) {
+            return groupOfFriends.count;
+        }
+        else
+            return 0;
+    }
+    else if (tableView == self.friendSearchDisplayController.searchResultsTableView)
+    {
+        return searchFriendList.count;
     }
     else
+    {
         return 0;
+    }
 //    return groupOfFriends.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return sectionArray.count;
+    if (tableView == friendTableView) {
+        return sectionArray.count;
+    }
+//    else if (tableView == searchDisplayController.searchResultsTableView)
+//    {
+//        return 0;
+//    }
+    else{
+        return 1;
+    }
 }
 
 
@@ -213,49 +257,76 @@
 {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
-    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
-    if (groupOfFriends) {
-    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
-    NSString* label = [aFriend objectForKey:@"name"];
-    NSNumber* fid = [aFriend objectForKey:@"id"];
-    
-        
-    
-    if (section == 0) {
-        if (row == 0)
-        {
-            NotificationCenterCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"notificationcentercell"];
-            if (nil == cell) {
-                cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
-            }
-            cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
-//            cell.imageView
-            cell.title.text = label;
+    if (tableView == friendTableView) {
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+        if (groupOfFriends) {
+            NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
+            NSString* label = [aFriend objectForKey:@"name"];
+            NSNumber* fid = [aFriend objectForKey:@"id"];
             
-            return cell ;
+            if (section == 0) {
+                if (row == 0)
+                {
+                    NotificationCenterCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"notificationcentercell"];
+                    if (nil == cell) {
+                        cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
+                    }
+                    cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
+                    //            cell.imageView
+                    cell.title.text = label;
+                    
+                    return cell ;
+                }
+            }
+            else
+            {
+                FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
+                if (nil == cell) {
+                    cell = [[FriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendcell"];
+                }
+                
+                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
+                [getter getPhoto];
+                
+                if (label) {
+                    cell.title.text = label;
+                }
+                else
+                {
+                    cell.title.text = @"default";
+                }
+                return cell;
+            }
         }
     }
-    else
+    else if (tableView == self.friendSearchDisplayController.searchResultsTableView)
     {
-        FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
-        if (nil == cell) {
-            cell = [[FriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"friendcell"];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"] ;
         }
-
-        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
-        [getter getPhoto];
-        
-        if (label) {
-            cell.title.text = label;
-        }
-        else
-        {
-            cell.title.text = @"default";
-        }
+        NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
+//        for(UIView * elem in [cell.contentView subviews])
+//        {
+//            if([elem isKindOfClass:[BDSuggestLabel class]])
+//            {
+//                NSLog(@"remove");
+//                [elem removeFromSuperview];
+//            }
+//        }
+//        BDSuggestLabel * richTextLabel = [[BDSuggestLabel alloc] initWithFrame:CGRectMake(10, 10, 300, 25)];
+//        richTextLabel.text = [friend_dic objectForKey:@"name"];
+//        richTextLabel.keyWord = friendSearchBar.text;//设置当前搜索的关键字
+//        richTextLabel.backgroundColor = [UIColor clearColor];
+//        richTextLabel.font = [UIFont systemFontOfSize:17.0f];
+//        richTextLabel.textColor = [UIColor grayColor];
+//        [cell.contentView addSubview:richTextLabel];
+        NSString* name = [friend_dic objectForKey:@"name"];
+        cell.textLabel.text = name;
+        NSLog(@"cell of searched friend, name: %@",name);
         return cell;
     }
-        
-    }
+    
     
     return nil;
     
@@ -264,18 +335,37 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self.sectionArray objectAtIndex:section];
+    if (tableView == friendTableView) {
+        return [self.sectionArray objectAtIndex:section];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    return sectionTitlesArray;
+    if (tableView == friendTableView) {
+        return sectionTitlesArray;
+    }
+    else
+    {
+        return nil;
+    }
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    NSInteger sectionIndex = [sectionArray indexOfObject:[sectionTitlesArray objectAtIndex:index]];
-    return sectionIndex;
+    if (tableView == friendTableView) {
+        NSInteger sectionIndex = [sectionArray indexOfObject:[sectionTitlesArray objectAtIndex:index]];
+        return sectionIndex;
+    }
+    else
+    {
+        return index;
+    }
 }
 
 #pragma mark - UISearchBarDelegate
@@ -297,6 +387,50 @@
 }
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText   // called when text changes (including clear)
 {
+    searchFriendList = [[NSMutableArray alloc]init];
+    if (friendSearchBar.text.length>0&&![CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
+        for (int i=0; i<friendList.count; i++) {
+            NSMutableDictionary* aFriend = [friendList objectAtIndex:i];
+            NSString* fname = [aFriend objectForKey:@"name"];
+            if ([CommonUtils isIncludeChineseInString:fname]) {
+                NSString *tempPinYinStr = [CommonUtils pinyinFromNSString:fname];
+                NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                if (titleResult.length>0) {
+                    [searchFriendList addObject:friendList[i]];
+                }
+                NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:fname];
+                NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                if (titleHeadResult.length>0) {
+                    [searchFriendList addObject:friendList[i]];
+                }
+            }
+            else {
+                NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                if (titleResult.length>0) {
+                    [searchFriendList addObject:friendList[i]];
+                }
+            }
+        }
+    } else if (friendSearchBar.text.length>0&&[CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
+        for (NSMutableDictionary *tempDic in friendList) {
+            NSString* fname = [tempDic objectForKey:@"name"];
+            NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+            if (titleResult.length>0) {
+                [searchFriendList addObject:tempDic];
+            }
+        }
+    }
+    NSLog(@"search friend list: %@",searchFriendList);
+
+}
+
+#pragma mark - UISearchDisplayDelegate
+- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller{
+	/*
+     Bob: Because the searchResultsTableView will be released and allocated automatically, so each time we start to begin search, we set its delegate here.
+     */
+//	[friendSearchDisplayController.searchResultsTableView setDelegate:self];
+//    [friendSearchDisplayController.searchResultsTableView setDataSource:self];
     
 }
 

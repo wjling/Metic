@@ -18,6 +18,8 @@
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
+		04BAF65E1994D7DD00BF00E1 /* BDSuggestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF65D1994D7DD00BF00E1 /* BDSuggestLabel.m */; };
+		04BAF6611994D82700BF00E1 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6601994D82700BF00E1 /* NSAttributedString+Attributes.m */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -246,6 +248,10 @@
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
 		04BAF6551993644F00BF00E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		04BAF6561993644F00BF00E1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		04BAF65C1994D7DD00BF00E1 /* BDSuggestLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDSuggestLabel.h; sourceTree = "<group>"; };
+		04BAF65D1994D7DD00BF00E1 /* BDSuggestLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDSuggestLabel.m; sourceTree = "<group>"; };
+		04BAF65F1994D82700BF00E1 /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
+		04BAF6601994D82700BF00E1 /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -722,6 +728,8 @@
 		04CB1B7C1977760200BC083C /* Custom Wedgets */ = {
 			isa = PBXGroup;
 			children = (
+				04BAF65C1994D7DD00BF00E1 /* BDSuggestLabel.h */,
+				04BAF65D1994D7DD00BF00E1 /* BDSuggestLabel.m */,
 				04CB1BB4197824CF00BC083C /* CustomIOS7AlertView.h */,
 				04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */,
 				04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */,
@@ -883,6 +891,8 @@
 		48151F14194947EB009E156E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				04BAF65F1994D82700BF00E1 /* NSAttributedString+Attributes.h */,
+				04BAF6601994D82700BF00E1 /* NSAttributedString+Attributes.m */,
 				04BAF6551993644F00BF00E1 /* Reachability.h */,
 				04BAF6561993644F00BF00E1 /* Reachability.m */,
 				08B3F7021957013F003B32B7 /* GTMBase64 */,
@@ -1672,6 +1682,8 @@
 				04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */,
 				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				08DB69AC19541F3A00F80F3F /* MCommentTableViewCell.m in Sources */,
+				04BAF65E1994D7DD00BF00E1 /* BDSuggestLabel.m in Sources */,
+				04BAF6611994D82700BF00E1 /* NSAttributedString+Attributes.m in Sources */,
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,

@@ -45,6 +45,7 @@
 {
     [super viewDidLoad];
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
+    [AppDelegate initApp];
     self.user = [MTUser sharedInstance];
     self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
@@ -129,7 +130,7 @@
         self.textField_password.text = password;
         self.logInEmail = userName;
         self.logInPassword = password;
-        _timer = [NSTimer scheduledTimerWithTimeInterval:3.5f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
         [self login];
     }else [self.button_login setEnabled:YES];
 }
@@ -244,6 +245,7 @@
             [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];
             [user setUid:userid];
+            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
             //[user getInfo:userid myid:userid delegateId:self];
             
             [self jumpToMainView];
@@ -270,14 +272,14 @@
         case NORMAL_REPLY:
         {
             [_timer invalidate];
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+//            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常1，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
             break;
             
         default:{
             [_timer invalidate];
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常2，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
         }
             break;

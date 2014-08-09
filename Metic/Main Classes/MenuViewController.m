@@ -23,6 +23,11 @@
 @end
 @implementation MenuViewController
 @synthesize eventInvitationViewController;
+@synthesize friendsViewController;
+@synthesize notificationsViewController;
+@synthesize scaningViewController;
+@synthesize feedBackViewController;
+@synthesize systemSettingsViewController;
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
 
@@ -51,6 +56,17 @@
     }
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [getter getPhoto];
+}
+
+-(void)clearVC
+{
+    eventInvitationViewController = nil;
+    friendsViewController = nil;
+    notificationsViewController = nil;
+    scaningViewController = nil;
+    feedBackViewController = nil;
+    systemSettingsViewController = nil;
+    
 }
 
 -(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
@@ -189,10 +205,10 @@
 			break;
 			
 		case 2:
-            if (!_friendsViewController) {
+            if (!friendsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
-                _friendsViewController = vc;
-            }else vc = _friendsViewController;
+                friendsViewController = vc;
+            }else vc = friendsViewController;
 			break;
 			
 //		case 2:
@@ -200,29 +216,29 @@
 //			break;
             
         case 3:
-            if (!_notificationsViewController) {
+            if (!notificationsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
-                _notificationsViewController = vc;
-            }else vc = _notificationsViewController;
+                notificationsViewController = vc;
+            }else vc = notificationsViewController;
 			break;
         case 4:
-            if (!_scaningViewController) {
+            if (!scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
-                _scaningViewController = vc;
-            }else vc = _scaningViewController;
+                scaningViewController = vc;
+            }else vc = scaningViewController;
 			break;
         case 5:
-            if (!_feedBackViewController) {
+            if (!feedBackViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
-                _feedBackViewController = vc;
-            }else vc = _feedBackViewController;
+                feedBackViewController = vc;
+            }else vc = feedBackViewController;
 			break;
         case 6:
         {
-            if (!_systemSettingsViewController) {
+            if (!systemSettingsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"SystemSettingsViewController"];
-                _systemSettingsViewController = vc;
-            }else vc = _systemSettingsViewController;
+                systemSettingsViewController = vc;
+            }else vc = systemSettingsViewController;
         }
             break;
 

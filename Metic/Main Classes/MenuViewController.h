@@ -29,4 +29,5 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 
 - (IBAction)selector_tap:(id)sender;
+-(void)clearVC;
 @end

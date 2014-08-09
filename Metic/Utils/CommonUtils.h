@@ -40,6 +40,10 @@
 
 //中文转成拼音（如果是英文还是转成英文）
 + (NSString*)pinyinFromNSString:(NSString*)str;
+//转换为拼音首字母
++ (NSString*)pinyinHeadFromNSString:(NSString *)str;
+//判断字符串中是否有中文
++ (BOOL)isIncludeChineseInString:(NSString*)str;
 
 //从url下载图片，并保存到document／media下 path 为在media下的相对路径
 +(UIImage*)downloadfile:(NSString*)url path:(NSString*)path;
