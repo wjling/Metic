@@ -146,7 +146,7 @@
         
         [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self.mDelegate finishwithOperationStatus:YES type:2 data:nil path:nil];
+        [self.mDelegate finishwithOperationStatus:YES type:2 data:nil path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:nil];
     }];

@@ -45,7 +45,6 @@
 {
     [super viewDidLoad];
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    [AppDelegate initApp];
     self.user = [MTUser sharedInstance];
     self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
@@ -179,6 +178,26 @@
 
 #pragma mark - Button click
 - (IBAction)loginButtonClicked:(id)sender {
+    if ([textField_userName text] != nil && [[textField_userName text] length]!= 0) {
+        
+        if (![CommonUtils isEmailValid: textField_userName.text]) {
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"邮箱格式不正确" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+        }
+        
+    }
+    if ([textField_password text] != nil) {
+        
+        if ([[textField_password text] length] < 5) {
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"密码长度请不要小于5" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert show];
+            return;
+        }
+        
+    }
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
     NSLog(@"%@",[self.textField_userName text]);
@@ -252,7 +271,8 @@
             [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];
             [user setUid:userid];
-            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+            
+//            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
             //[user getInfo:userid myid:userid delegateId:self];
             
             [self jumpToMainView];
@@ -308,35 +328,35 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
 {
-    switch (textField.tag) {
-            
-        case Tag_userName:
-        {
-            if ([textField text] != nil && [[textField text] length]!= 0) {
-                
-                if (![CommonUtils isEmailValid: textField.text]) {
-                    
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The format of email is invalid" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-                    [alert show];
-                }
-            }
-        }
-            break;
-        case Tag_password:
-        {
-            if ([textField text] != nil && [[textField text] length]!= 0) {
-                
-                if ([[textField text] length] < 5) {
-                    
-                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The length of the password should't less than 5" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-                    [alert show];
-                }
-            }
-        }
-            break;
-        default:
-            break;
-    }
+//    switch (textField.tag) {
+//            
+//        case Tag_userName:
+//        {
+//            if ([textField text] != nil && [[textField text] length]!= 0) {
+//                
+//                if (![CommonUtils isEmailValid: textField.text]) {
+//                    
+//                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The format of email is invalid" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
+//                    [alert show];
+//                }
+//            }
+//        }
+//            break;
+//        case Tag_password:
+//        {
+//            if ([textField text] != nil && [[textField text] length]!= 0) {
+//                
+//                if ([[textField text] length] < 5) {
+//                    
+//                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The length of the password should't less than 5" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
+//                    [alert show];
+//                }
+//            }
+//        }
+//            break;
+//        default:
+//            break;
+//    }
     
     [textField resignFirstResponder];
     

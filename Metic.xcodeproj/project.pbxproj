@@ -11,7 +11,6 @@
 		0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */; };
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
 		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
-		04A450CA198CE77C0094FE51 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A450C9198CE77C0094FE51 /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -20,6 +19,7 @@
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04BAF65E1994D7DD00BF00E1 /* BDSuggestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF65D1994D7DD00BF00E1 /* BDSuggestLabel.m */; };
 		04BAF6611994D82700BF00E1 /* NSAttributedString+Attributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6601994D82700BF00E1 /* NSAttributedString+Attributes.m */; };
+		04BAF66C199685BE00BF00E1 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BAF66B199685BE00BF00E1 /* libbaidumapapi.a */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -236,7 +236,6 @@
 		0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
 		04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoricalNotificationViewController.h; sourceTree = "<group>"; };
 		04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoricalNotificationViewController.m; sourceTree = "<group>"; };
-		04A450C9198CE77C0094FE51 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -252,6 +251,7 @@
 		04BAF65D1994D7DD00BF00E1 /* BDSuggestLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDSuggestLabel.m; sourceTree = "<group>"; };
 		04BAF65F1994D82700BF00E1 /* NSAttributedString+Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Attributes.h"; sourceTree = "<group>"; };
 		04BAF6601994D82700BF00E1 /* NSAttributedString+Attributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Attributes.m"; sourceTree = "<group>"; };
+		04BAF66B199685BE00BF00E1 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -669,7 +669,7 @@
 				4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */,
 				51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */,
 				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
-				04A450CA198CE77C0094FE51 /* libbaidumapapi.a in Frameworks */,
+				04BAF66C199685BE00BF00E1 /* libbaidumapapi.a in Frameworks */,
 				51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */,
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
@@ -1170,7 +1170,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				04A450C9198CE77C0094FE51 /* libbaidumapapi.a */,
+				04BAF66B199685BE00BF00E1 /* libbaidumapapi.a */,
 				51F06C28197E0193000E8428 /* libiconv.dylib */,
 				51F06C26197E017F000E8428 /* CoreVideo.framework */,
 				51F06C24197E0173000E8428 /* CoreMedia.framework */,
@@ -1482,7 +1482,6 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
-				510FA1351994803700F33A16 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1628,22 +1627,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		510FA1351994803700F33A16 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {

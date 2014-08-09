@@ -22,6 +22,7 @@
 
 @end
 @implementation MenuViewController
+@synthesize homeViewController;
 @synthesize eventInvitationViewController;
 @synthesize friendsViewController;
 @synthesize notificationsViewController;
@@ -33,7 +34,7 @@
 
 -(void)viewDidLoad
 {
-    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+//    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
 
@@ -55,11 +56,46 @@
 
     }
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
+    NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getPhoto];
+}
+
+-(void)refresh
+{
+    self.userName.text = [MTUser sharedInstance].name;
+    self.email.text = [MTUser sharedInstance].email;
+    self.img.layer.masksToBounds = YES;
+    [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.img.layer setBorderWidth:3.0f];
+    [self.img.layer setCornerRadius:33];
+//    if (!_gender && [MTUser sharedInstance].gender) {
+//        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
+//        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
+//        if ([[MTUser sharedInstance].gender intValue] == 1) {
+//            [self.gender setImage:[UIImage imageNamed:@"男icon"]];
+//        }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
+//        [self.view addSubview:_gender];
+//        
+//    }
+    float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
+    if (!_gender) {
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
+        [self.view addSubview:_gender];
+    }
+    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25);
+    if ([[MTUser sharedInstance].gender intValue] == 1) {
+        [self.gender setImage:[UIImage imageNamed:@"男icon"]];
+    }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
+    NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
+    [getter getPhoto];
+    NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
 }
 
 -(void)clearVC
 {
+    NSLog(@"homeViewController is cleared ");
+    homeViewController = nil;
     eventInvitationViewController = nil;
     friendsViewController = nil;
     notificationsViewController = nil;
@@ -191,10 +227,13 @@
 	switch (indexPath.row)
 	{
 		case 0:
-            if (!_homeViewController) {
-                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
-                _homeViewController = vc;
-            }else vc = _homeViewController;
+            if (!homeViewController) {
+//                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+//                _homeViewController = vc;
+                NSLog(@"homeViewController is nil");
+                homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+                vc = homeViewController;
+            }else vc = homeViewController;
 			break;
 			
 		case 1:

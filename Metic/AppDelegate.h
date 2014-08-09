@@ -52,6 +52,7 @@
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 
 +(void)initApp;
++(void)refreshMenu;
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;

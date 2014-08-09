@@ -98,6 +98,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.shadowView setAlpha:0];
+    
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
 }
 
@@ -187,7 +188,9 @@
             if ([response1 valueForKey:@"name"]) {//更新用户信息
                 
                 [self.user initWithData:response1];
-                
+                [AppDelegate refreshMenu];
+                ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
+                NSLog(@"set homeViewController");
             }
             
             else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
@@ -203,7 +206,13 @@
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
                 //[self.eventIds removeAllObjects];
                 //[_eventIds addObjectsFromArray:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
-                [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
+                if (self.eventIds_all) {
+                    int rangeLen = 10;
+                    if (self.eventIds_all.count< rangeLen) {
+                        rangeLen = self.eventIds_all.count;
+                    }
+                    [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(0, rangeLen)]];
+                }
             }
         }
             break;

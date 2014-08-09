@@ -44,7 +44,7 @@
 	
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
-    
+    [[MTUser alloc]init];
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
@@ -150,8 +150,22 @@
 
 +(void)initApp
 {
-     [[MTUser alloc]init];
+    
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//															 bundle: nil];
+//    MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
+//                                                         instantiateViewControllerWithIdentifier: @"MenuViewController"];
+//	leftMenu.cellIdentifier = @"leftMenuCell";
+//    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
+//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
+//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
 
+}
+
++(void)refreshMenu
+{
+    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
+    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
 }
 
 -(void)initViews
@@ -379,7 +393,7 @@
 
 - (void)disconnect
 {
-    [self.mySocket close];
+//    [self.mySocket close];
     [self unscheduleHeartBeat];
     NSLog(@"Disconnected");
 }
@@ -545,6 +559,7 @@
 {
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     isConnected = NO;
+    [self disconnect];
     if (isNetworkConnected) {
         [self connect];
         NSLog(@"Reconnecting from close...");

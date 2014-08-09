@@ -154,7 +154,7 @@
     
 }
 
--(void)uploadAvatar
+-(void)uploadAvatar  //type 21
 {
     self.isUpload = YES;
     UIImage* compressedImage1 = self.uploadImage;
@@ -289,6 +289,10 @@
 {
     if (self.isUpload) {
         if (status){
+            if (type == 21) {
+                SDImageCache* cache = [SDImageCache sharedImageCache];
+                [cache removeImageForKey:path];
+            }
             [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
