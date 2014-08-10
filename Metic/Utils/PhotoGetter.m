@@ -118,21 +118,29 @@
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    if (compressedImage.size.width> 640) {
-        CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
-        compressedImage = [compressedImage imageByScalingToSize:imagesize];
-        imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    }
-    float para = 1.0;
-    int restOp = 5;
-    while (imageData.length > 100000) {
-        imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
-        compressedImage = [UIImage imageWithData:imageData];
-        if (!restOp--) {
-            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
-            return;
+    BOOL flag = YES;
+    float adjustWidth = 640.0;
+    while (flag) {
+        if (compressedImage.size.width> adjustWidth) {
+            CGSize imagesize=CGSizeMake(adjustWidth, compressedImage.size.height * adjustWidth/compressedImage.size.width);
+            compressedImage = [compressedImage imageByScalingToSize:imagesize];
+            imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+        }
+        float para = 1.0;
+        int restOp = 5;
+        while (imageData.length > 100000) {
+            imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
+            compressedImage = [UIImage imageWithData:imageData];
+            if (!restOp--) {
+                adjustWidth *= 2/3;
+                break;
+            }
+        }
+        if (imageData.length < 100000) {
+            flag = NO;
         }
     }
+    
 
     
     
@@ -231,21 +239,30 @@
     self.isUpload = YES;
     UIImage* compressedImage = self.uploadImage;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    if (compressedImage.size.width> 640) {
-        CGSize imagesize=CGSizeMake(640.0, compressedImage.size.height * 640.0/compressedImage.size.width);
-        compressedImage = [compressedImage imageByScalingToSize:imagesize];
-        imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
-    }
-    float para = 0.8;
-    int restOp = 5;
-    while (imageData.length > 50000) {
-        imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
-        compressedImage = [UIImage imageWithData:imageData];
-        if (!restOp--) {
-            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"文件太大，不能处理" WithDelegate:nil WithCancelTitle:@"确定"];
-            return;
+    BOOL flag = YES;
+    float adjustWidth = 640.0;
+    while (flag) {
+        if (compressedImage.size.width> adjustWidth) {
+            CGSize imagesize=CGSizeMake(adjustWidth, compressedImage.size.height * adjustWidth/compressedImage.size.width);
+            compressedImage = [compressedImage imageByScalingToSize:imagesize];
+            imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+        }
+        float para = 0.8;
+        int restOp = 5;
+        while (imageData.length > 50000) {
+            imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
+            compressedImage = [UIImage imageWithData:imageData];
+            if (!restOp--) {
+                adjustWidth *= 2/3;
+                break;
+            }
+        }
+        if (imageData.length < 100000) {
+            flag = NO;
         }
     }
+
+    
     
     
     
