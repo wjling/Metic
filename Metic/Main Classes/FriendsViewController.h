@@ -21,6 +21,7 @@
 #import "PhotoGetter.h"
 #import "FriendInfoViewController.h"
 #import "BDSuggestLabel.h"
+#import "TTTAttributedLabel.h"
 
 @interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,UISearchDisplayDelegate>
 
@@ -28,6 +29,7 @@
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
+@property (nonatomic,strong) NSMutableArray* searchFriendKeyWordRangeArr;
 @property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong, nonatomic) NSMutableArray* sectionTitlesArray;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;

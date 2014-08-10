@@ -9,6 +9,9 @@
 #import "RegisterViewController.h"
 
 @interface RegisterViewController ()
+{
+    BOOL registerSucceeded;
+}
 
 @end
 
@@ -78,9 +81,11 @@
     textField_confromPassword.placeholder = @"请再次输入密码";
     textField_email.placeholder = @"请输入您的邮箱";
     textField_password.placeholder = @"请输入您的密码，至少6位";
-    textField_userName.placeholder = @"请输入您的用户名";
+    textField_userName.placeholder = @"请输入您的昵称";
     
     textField_email.keyboardType = UIKeyboardTypeEmailAddress;
+    textField_password.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    textField_confromPassword.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     
     textField_password.secureTextEntry = YES;
     textField_confromPassword.secureTextEntry = YES;
@@ -92,13 +97,18 @@
 
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    registerSucceeded = NO;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -106,8 +116,17 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if (registerSucceeded) {
+        if ([segue.destinationViewController isKindOfClass:[LoginViewController class]]) {
+            LoginViewController* vc = segue.destinationViewController;
+            vc.text_userName = self.textField_email.text;
+            vc.text_password = self.textField_password.text;
+            vc.fromRegister = YES;
+        }
+    }
+    
 }
-*/
+
 
 - (void)jumpToLogin
 {
@@ -227,7 +246,8 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
             NSLog(@"register succeeded");
-            [self jumpToMain];
+            registerSucceeded = YES;
+            [self jumpToLogin];
             break;
         case USER_EXIST:
             NSLog(@"user existed");

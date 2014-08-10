@@ -29,6 +29,7 @@
 @synthesize sectionArray;
 @synthesize sectionTitlesArray;
 @synthesize searchFriendList;
+@synthesize searchFriendKeyWordRangeArr;
 @synthesize DB;
 @synthesize addFriendBtn;
 @synthesize friendTableView;
@@ -80,6 +81,7 @@
     self.friendSearchDisplayController.delegate = self;
     self.friendSearchDisplayController.searchResultsDelegate = self;
     self.friendSearchDisplayController.searchResultsDataSource = self;
+    self.friendSearchDisplayController.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 //    self.searchDisplayController.delegate = self;
 //    self.searchDisplayController.searchResultsDelegate = self;
 //    self.searchDisplayController.searchResultsDataSource = self;
@@ -133,13 +135,89 @@
 }
 
 
+-(void)getRangesOfText:(NSString*)text withKeyWord:(NSString*)keyWord
+{
+    NSMutableArray* ranges_arr = [[NSMutableArray alloc]init];
+//    NSMutableArray* textChar_arr = [[NSMutableArray alloc]init];
+    NSMutableArray* textCharRange_arr = [[NSMutableArray alloc]init];
+    NSInteger location = 0;
+    NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
+    NSLog(@"PINYIN head: %@",temp_text_head);
+    NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+    if (range_head.length > 0) {
+        NSValue* value = [NSValue valueWithRange:range_head];
+        [ranges_arr addObject:value];
+        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+    }
+    else
+    {
+        NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
+        NSInteger checkStringEnd = 0;
+        NSLog(@"PINYIN all: %@",temp_text_all);
+        for (NSInteger i = 0; i < text.length; i++) {
+            NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
+            NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
+            [textCharRange_arr addObject:value];
+            location = location + char_str.length;
+        }
+        NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+//        NSInteger range_all_begin = range_all.location;
+        NSInteger range_all_end = range_all.length + range_all.location - 1;
+        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
+        NSInteger begin = -1, end = -1;
+        BOOL beginSet = NO;
+        for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
+            NSRange range = [textCharRange_arr[i] rangeValue];
+            if (!beginSet) {
+                if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
+                    begin = i;
+                    beginSet = YES;
+                }
+//                else if (range.location == range_all.location)
+//                {
+//                    begin = i;
+//                    beginSet = YES;
+//                }
+            }
+            else
+            {
+                if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
+                    end = i;
+                    break;
+                }
+                else if (checkStringEnd > range_all_end)
+                {
+                    end = i - 1;
+                    break;
+                }
+            }
+            checkStringEnd += range.length;
+            
+        }
+//        if (end == -1) {
+//            end = textCharRange_arr.count - 1;
+//        }
+        NSLog(@"colored begin: %d, end: %d",begin,end);
+        NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
+        [ranges_arr addObject:value];
+        NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+
+    }
+    [self.searchFriendKeyWordRangeArr addObject:ranges_arr];
+    
+    
+}
+
 - (IBAction)switchToAddFriendView:(id)sender
 {
     
 }
 
 #pragma mark - UITableViewDelegate
-
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -163,6 +241,27 @@
 //    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
 //    selectedFriendID = [aFriend objectForKey:@"id"];
 //    NSLog(@"get1 fid value: %@",selectedFriendID);
+    if (tableView == self.friendSearchDisplayController.searchResultsTableView) {
+        [self.friendSearchDisplayController setActive:NO animated:YES];
+        NSMutableDictionary* aFriend = [searchFriendList objectAtIndex:indexPath.row];
+        NSString* fname = [aFriend objectForKey:@"name"];
+        NSString* fname_head = [CommonUtils pinyinHeadFromNSString:[fname substringToIndex:1]].uppercaseString;
+        NSLog(@"fname head: %@",fname_head);
+        NSInteger section = [sectionArray indexOfObject:fname_head];
+        NSInteger row;
+        NSMutableArray* friends = [sortedFriendDic objectForKey:fname_head];
+        for (NSInteger i = 0; i < friends.count; i++) {
+            NSMutableDictionary* friend = [friends objectAtIndex:i];
+            NSString* name = [friend objectForKey:@"name"];
+            if ([name isEqualToString:fname]) {
+                row = i;
+                break;
+            }
+        }
+        NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:section];
+        [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
 }
@@ -307,6 +406,7 @@
         }
         NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
         NSString* name = [friend_dic objectForKey:@"name"];
+        NSNumber* fid = [friend_dic objectForKey:@"id"];
 //        for(UIView * elem in [cell.contentView subviews])
 //        {
 //            if([elem isKindOfClass:[BDSuggestLabel class]])
@@ -322,9 +422,47 @@
 //        richTextLabel.font = [UIFont systemFontOfSize:17.0f];
 //        richTextLabel.textColor = [UIColor grayColor];
 //        [cell.contentView addSubview:richTextLabel];
+        UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+        NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc]initWithString:name];
+        NSMutableArray* rangeArr = [self.searchFriendKeyWordRangeArr objectAtIndex:indexPath.row];
+        for (NSInteger i = 0; i < rangeArr.count; i++) {
+            NSRange range = [[rangeArr objectAtIndex:i] rangeValue];
+            [attrStr addAttribute:(NSString *)kCTForegroundColorAttributeName
+                            value:(id)color.CGColor
+                            range:range];
+
+        }
+        [attrStr addAttribute:(NSString *)kCTFontAttributeName
+                        value:(id)CFBridgingRelease(CTFontCreateWithName((CFStringRef)[UIFont systemFontOfSize:15].fontName, 15, NULL))
+                        range:NSMakeRange(0, name.length)];
+        for(UIView * elem in [cell.contentView subviews])
+        {
+            if([elem isKindOfClass:[TTTAttributedLabel class]])
+            {
+//                NSLog(@"remove");
+                [elem removeFromSuperview];
+            }
+        }
         
-        cell.textLabel.text = name;
-        NSLog(@"cell of searched friend, name: %@",name);
+        UIImageView* imgV = (UIImageView*)[cell viewWithTag:111];
+        if (!imgV) {
+            imgV = [[UIImageView alloc]initWithFrame:CGRectMake(15, 5, 35, 35)];
+            imgV.tag = 111;
+            [cell.contentView addSubview:imgV];
+        }
+
+        TTTAttributedLabel* label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(60, 10, 300, 30)];
+        [label setText:attrStr];
+        [cell.contentView addSubview:label];
+        
+        
+        
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:imgV authorId:fid];
+        [getter getPhoto];
+        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        cell.layer.borderWidth = 0.3f;
+//        cell.textLabel.text = name;
+//        NSLog(@"cell of searched friend, name: %@",name);
         return cell;
     }
     
@@ -389,6 +527,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText   // called when text changes (including clear)
 {
     searchFriendList = [[NSMutableArray alloc]init];
+    searchFriendKeyWordRangeArr = [[NSMutableArray alloc]init];
     if (friendSearchBar.text.length>0&&![CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
         for (int i=0; i<friendList.count; i++) {
             NSMutableDictionary* aFriend = [friendList objectAtIndex:i];
@@ -398,17 +537,24 @@
                 NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                 if (titleResult.length>0) {
                     [searchFriendList addObject:friendList[i]];
+                    [self getRangesOfText:fname withKeyWord:friendSearchBar.text];
                 }
-                NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:fname];
-                NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                if (titleHeadResult.length>0) {
-                    [searchFriendList addObject:friendList[i]];
+                else
+                {
+                    NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:fname];
+                    NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                    if (titleHeadResult.length>0) {
+                        [searchFriendList addObject:friendList[i]];
+                        [self getRangesOfText:fname withKeyWord:friendSearchBar.text];
+                    }
+
                 }
             }
             else {
                 NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                 if (titleResult.length>0) {
                     [searchFriendList addObject:friendList[i]];
+                    [self getRangesOfText:fname withKeyWord:friendSearchBar.text];
                 }
             }
         }
@@ -418,10 +564,11 @@
             NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
             if (titleResult.length>0) {
                 [searchFriendList addObject:tempDic];
+                [self getRangesOfText:fname withKeyWord:friendSearchBar.text];
             }
         }
     }
-    NSLog(@"search friend list: %@",searchFriendList);
+//    NSLog(@"search friend list: %@",searchFriendList);
 
 }
 
