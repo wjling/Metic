@@ -139,6 +139,12 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"退出程序");
+        [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
+        NSLog(@"Metic被用户残忍杀死了");
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        if ([MTUser sharedInstance]) {
+            [((AppDelegate *)[[UIApplication sharedApplication] delegate]) saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+        }
         [UIView beginAnimations:@"exitApplication" context:nil];
         [UIView setAnimationDuration:0.5];
         [UIView setAnimationDelegate:self];

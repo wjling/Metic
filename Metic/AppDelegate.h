@@ -65,6 +65,7 @@
 - (void)disconnect;
 
 - (void)handleReceivedNotifications;
+- (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath;
 
 
 @end

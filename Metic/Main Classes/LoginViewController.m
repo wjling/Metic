@@ -67,7 +67,7 @@
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = @"";
-    [self checkPreUP];
+    //[self checkPreUP];
 
 
 }
@@ -75,6 +75,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self checkPreUP];
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,8 +138,9 @@
         self.textField_password.text = password;
         self.logInEmail = userName;
         self.logInPassword = password;
-        _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
-        [self login];
+        [self.button_login setEnabled:YES];
+//        _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
+//        [self login];
     }else [self.button_login setEnabled:YES];
 }
 
