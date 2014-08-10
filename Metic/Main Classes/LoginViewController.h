@@ -25,7 +25,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *Img_register;
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
-@property(nonatomic,strong)MTUser *user;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
 
 

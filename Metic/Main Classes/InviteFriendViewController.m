@@ -19,7 +19,6 @@
     NSString* DB_path;
     NSInteger initialSectionForFriendList;
 }
-@synthesize user;
 @synthesize friendList;
 @synthesize sortedFriendDic;
 @synthesize sectionArray;
@@ -49,8 +48,7 @@
 
 - (void) initParams
 {
-    self.user = [MTUser sharedInstance];
-    DB_path = [NSString stringWithFormat:@"%@/db",user.userid];
+    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     initialSectionForFriendList = 1;
     self.sectionArray = [[NSMutableArray alloc]init];
     self.DB = [[MySqlite alloc]init];

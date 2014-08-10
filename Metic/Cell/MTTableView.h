@@ -14,7 +14,6 @@
 
 @interface MTTableView : UITableView<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)HomeViewController* homeController;
-@property(nonatomic,strong)MTUser *user;
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property (nonatomic,strong) NSOperationQueue *queue;
 @end

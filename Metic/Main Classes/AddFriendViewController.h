@@ -21,7 +21,6 @@
 #import "SearchFriendViewController.h"
 
 @interface AddFriendViewController : UIViewController<HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
-@property(nonatomic,strong)MTUser *user;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
 @property(nonatomic,strong)NSMutableArray* searchFriendList;
 @property (strong, nonatomic) IBOutlet UITableView *searchedFriendsTableView;

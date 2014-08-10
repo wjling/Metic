@@ -33,7 +33,6 @@
 @property BOOL isCircle;
 @property UIColor *borderColor;
 @property CGFloat borderWidth;
-@property (nonatomic,strong)MTUser *user;
 @property (nonatomic,strong) MySqlite* sql;
 
 -(instancetype)initWithData:(UIImageView*)animageView authorId:(NSNumber*)authorId;

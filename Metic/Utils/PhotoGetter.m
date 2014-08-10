@@ -26,7 +26,6 @@
 {
     if (self) {
         self = [super init];
-        self.user = [MTUser sharedInstance];
         self.imageView = animageView;
         self.avatarId = authorId;
         self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",authorId];
@@ -39,7 +38,6 @@
 {
     if (self) {
         self = [super init];
-        self.user = [MTUser sharedInstance];
         self.uploadImage = aImage;
         self.type = type;
     }

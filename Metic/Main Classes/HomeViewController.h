@@ -27,7 +27,7 @@
 
 
 
-@property(nonatomic,strong)MTUser *user;
+
 @property (strong, nonatomic) IBOutlet UIView *updateInfoView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *ArrangementView;

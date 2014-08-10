@@ -10,6 +10,7 @@
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaHandler.h"
 #import "Source/security/SFHFKeychainUtils.h"
+#import "Main Classes/MTUser.h"
 
 
 @implementation AppDelegate
@@ -149,7 +150,10 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     NSLog(@"Metic被残忍杀死了");
     NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-    [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+    if ([[MTUser sharedInstance].userid intValue]) {
+        [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+    }
+    
 }
 
 -(void)initApp
@@ -159,6 +163,7 @@
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
         NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
         if (!users || users.count == 0) {
+            [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
             [[MTUser alloc]init];
         }
     }else{

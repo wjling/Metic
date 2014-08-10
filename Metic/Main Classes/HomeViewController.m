@@ -61,8 +61,7 @@
         [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     }
     [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
-    self.user = [MTUser sharedInstance];
-    [self.user getInfo:self.user.userid myid:self.user.userid delegateId:self];
+    [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
     //[self.user updateAvatarList];
     
     self.tableView.homeController= self;
@@ -187,7 +186,7 @@
         {
             if ([response1 valueForKey:@"name"]) {//更新用户信息
                 
-                [self.user initWithData:response1];
+                [[MTUser sharedInstance] initWithData:response1];
                 [AppDelegate refreshMenu];
                 ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
                 NSLog(@"set homeViewController");
@@ -271,7 +270,7 @@
 - (void) getEventids
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:_user.userid forKey:@"id"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];

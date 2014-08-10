@@ -17,7 +17,6 @@
     int friendPosition;
 }
 
-@synthesize user;
 @synthesize searchedFriendsTableView;
 @synthesize friendSearchBar;
 @synthesize searchFriendList;
@@ -42,7 +41,6 @@
     }
 
     // Do any additional setup after loading the view.
-    self.user = [MTUser sharedInstance];
     self.friendSearchBar.delegate = self;
     self.searchedFriendsTableView.delegate = self;
     self.searchedFriendsTableView.dataSource = self;
@@ -99,7 +97,7 @@
 //        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
 //    }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
+    dictionary = [CommonUtils packParamsInDictionary:text,@"name",[MTUser sharedInstance].userid,@"myId",nil];
     NSLog(@"%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -278,7 +276,7 @@
             else if (buttonIndex == okBtnIndex)
             {
                 NSString* cm = [alertView textFieldAtIndex:0].text;
-                NSNumber* userId = user.userid;
+                NSNumber* userId = [MTUser sharedInstance].userid;
                 NSNumber* friendId = [[searchFriendList objectAtIndex:friendPosition] objectForKey:@"id"];
                 NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];

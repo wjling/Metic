@@ -29,7 +29,6 @@
 @synthesize button_register;
 @synthesize logInEmail;
 @synthesize logInPassword;
-@synthesize user;
 @synthesize rootView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -45,7 +44,6 @@
 {
     [super viewDidLoad];
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    self.user = [MTUser sharedInstance];
     self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
     [self.view setBackgroundColor:backgroundColor];
@@ -274,7 +272,7 @@
             NSLog(@"login succeeded");
             [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];
-            [user setUid:userid];
+            [[MTUser sharedInstance] setUid:userid];
             
 //            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
             //[user getInfo:userid myid:userid delegateId:self];

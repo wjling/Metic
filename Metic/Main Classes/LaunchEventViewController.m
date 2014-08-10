@@ -21,7 +21,6 @@
 @property (nonatomic,strong) UIDatePicker *datePicker;
 @property (nonatomic,strong) UIView *datePickerView;
 @property (nonatomic,strong) UITextField *seletedText;
-@property (nonatomic,strong) MTUser *user;
 @property (nonatomic,strong) NSMutableSet *FriendsIds;
 @property (nonatomic,strong) NSMutableArray *FriendsIds_array;
 @property (nonatomic,strong) NSDictionary* positions;
@@ -68,7 +67,6 @@
     self.event_text.delegate = self;
     self.location_text.delegate = self;
     self.detail_text.delegate = self;
-    self.user = [MTUser sharedInstance];
     [self initInviteFriendsView];
     _visibility = 0;
     _code = 1;
@@ -322,7 +320,7 @@
     [self showWaitingView];
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
-    [dictionary setValue:_user.userid forKey:@"id"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
     [dictionary setValue:self.begin_time_text.text forKey:@"time"];
     [dictionary setValue:self.end_time_text.text forKey:@"endTime"];
