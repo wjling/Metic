@@ -122,9 +122,15 @@
 {
     [self.button_login setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
-    NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
-    NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
-    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
+//    NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
+//    NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
+//    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
+    
+    NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
+    NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithFile: MtsecretPath];
+    NSString *userName = [arr objectAtIndex:0];
+    NSString *password =  [arr objectAtIndex:1];
+    NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         //处理登录状态下，直接跳转 需要读取默认信息。
         [self removeWaitingView];
@@ -268,10 +274,17 @@
         case LOGIN_SUC:
         {
             [_timer invalidate];
-            [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
-            [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
-            [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];
+//            BOOL name = [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
+//            BOOL key = [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
+//            BOOL status = [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
+            //保存信息
+            NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
+            NSArray *Array = [NSArray arrayWithObjects:self.logInEmail, self.logInPassword, nil];
+            [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [NSKeyedArchiver archiveRootObject:Array toFile:MtsecretPath];
+
             [self removeWaitingView];
             NSNumber *userid = [response1 valueForKey:@"id"];
             [[MTUser sharedInstance] setUid:userid];

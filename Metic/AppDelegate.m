@@ -158,12 +158,13 @@
 
 -(void)initApp
 {
-    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
+    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
         NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
         if (!users || users.count == 0) {
-            [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
+            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             [[MTUser alloc]init];
         }
     }else{

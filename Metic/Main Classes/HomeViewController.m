@@ -110,8 +110,8 @@
 
 -(void)createMenuButton
 {
-    UIImage* image = [UIImage imageNamed:@"dian"];
-    CGRect frame = CGRectMake(1000,0,25,44);
+    UIImage* image = [UIImage imageNamed:@"头部右上角图标-加号"];
+    CGRect frame = CGRectMake(1000,0,31,31);
     UIButton* backButton= [[UIButton alloc] initWithFrame:frame];
     [backButton setBackgroundImage:image forState:UIControlStateNormal];
     [backButton setTitle:@"" forState:UIControlStateNormal];

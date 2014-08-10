@@ -139,7 +139,8 @@
 {
     if (buttonIndex == 0) {
         NSLog(@"退出程序");
-        [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
+        [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         NSLog(@"Metic被用户残忍杀死了");
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
         if ([MTUser sharedInstance]) {
@@ -162,7 +163,8 @@
     {
         NSLog(@"切换账号");
         [[MTUser alloc]init];
-        [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
+        [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
