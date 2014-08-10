@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaHandler.h"
+#import "Source/security/SFHFKeychainUtils.h"
 
 
 @implementation AppDelegate
@@ -44,7 +45,7 @@
 	
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
-    [[MTUser alloc]init];
+    [self initApp];
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
@@ -146,19 +147,23 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    NSLog(@"Metic被残忍杀死了");
+    NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+    [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
 }
 
-+(void)initApp
+-(void)initApp
 {
-    
-//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-//															 bundle: nil];
-//    MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
-//                                                         instantiateViewControllerWithIdentifier: @"MenuViewController"];
-//	leftMenu.cellIdentifier = @"leftMenuCell";
-//    [SlideNavigationController sharedInstance].leftMenu = leftMenu;
-//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
-//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
+        if (!users || users.count == 0) {
+            [[MTUser alloc]init];
+        }
+    }else{
+        [[MTUser alloc]init];
+    }
 
 }
 
@@ -166,6 +171,7 @@
 {
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+
 }
 
 -(void)initViews
@@ -580,5 +586,22 @@
     return  [UMSocialSnsService handleOpenURL:url];
 }
 
+- (NSMutableArray *)loadMarkersFromFilePath:(NSString *)filePath {
+    NSMutableArray *markers = nil;
+    if (filePath == nil || [filePath length] == 0 ||
+        [[NSFileManager defaultManager] fileExistsAtPath:filePath] == NO) {
+        markers = [[NSMutableArray alloc] init];
+    } else {
+        markers = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+    }
+    return markers;
+}
+
+
+
+
+- (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath {
+    [NSKeyedArchiver archiveRootObject:markers toFile:filePath];
+}
 
 @end
