@@ -16,6 +16,8 @@
         Tag_userName = 50,
         Tag_password
     };
+    
+    
 }
 @property (strong, nonatomic) UIView* waitingView;
 @property (strong, nonatomic) NSTimer* timer;
@@ -30,6 +32,9 @@
 @synthesize logInEmail;
 @synthesize logInPassword;
 @synthesize rootView;
+@synthesize fromRegister;
+@synthesize text_userName;
+@synthesize text_password;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,7 +63,7 @@
     self.textField_userName.delegate = self.rootView;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = @"";
+    self.textField_userName.text = text_userName? text_userName:@"";
     
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
@@ -68,6 +73,17 @@
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = @"";
     //[self checkPreUP];
+    self.textField_password.text = text_password? text_password:@"";
+    if (!fromRegister) {
+        [self checkPreUP];
+    }
+    else
+    {
+        fromRegister = NO;
+        text_password = nil;
+        text_userName = nil;
+    }
+    
 
 
 }

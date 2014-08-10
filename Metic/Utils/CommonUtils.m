@@ -151,7 +151,8 @@
     [outputFormat setCaseType:CaseTypeLowercase];
     NSMutableString *outputPinyin = [[NSMutableString alloc] init];
     for (int i=0;i <str.length;i++) {
-        NSString *mainPinyinStrOfChar = [PinyinHelper getFirstHanyuPinyinStringWithChar:[str characterAtIndex:i] withHanyuPinyinOutputFormat:outputFormat];
+        NSString *mainPinyinStrOfChar = [PinyinHelper toHanyuPinyinStringWithNSString:[str substringWithRange:NSMakeRange(i,1)] withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
+//        NSLog(@"char %d: %@",i,mainPinyinStrOfChar);
         if (nil!=mainPinyinStrOfChar) {
             [outputPinyin appendString:[mainPinyinStrOfChar substringToIndex:1]];
         } else {

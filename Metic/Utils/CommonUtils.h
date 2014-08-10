@@ -40,7 +40,7 @@
 
 //中文转成拼音（如果是英文还是转成英文）
 + (NSString*)pinyinFromNSString:(NSString*)str;
-//转换为拼音首字母
+//中文转换为拼音首字母，英文还是英文
 + (NSString*)pinyinHeadFromNSString:(NSString *)str;
 //判断字符串中是否有中文
 + (BOOL)isIncludeChineseInString:(NSString*)str;

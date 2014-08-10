@@ -26,9 +26,12 @@
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
+@property (nonatomic)BOOL fromRegister;
+@property (strong,nonatomic) NSString* text_userName;
+@property (strong,nonatomic) NSString* text_password;
 
 
-
+-(void)login;
 - (BOOL)isTextFieldEmpty;
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerBtnClicked:(id)sender;
