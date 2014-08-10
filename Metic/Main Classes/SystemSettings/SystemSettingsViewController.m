@@ -7,6 +7,7 @@
 //
 
 #import "SystemSettingsViewController.h"
+#import "../../Source/security/SFHFKeychainUtils.h"
 
 @interface SystemSettingsViewController ()
 
@@ -154,7 +155,8 @@
     else if (buttonIndex == 1)
     {
         NSLog(@"切换账号");
-        [AppDelegate initApp];
+        [[MTUser alloc]init];
+        [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"out" forServiceName:@"Metic0713" updateExisting:1 error:nil];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }

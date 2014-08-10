@@ -70,6 +70,63 @@ static MTUser *singletonInstance;
     return self;
 }
 
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        singletonInstance = self;
+        _avatar = [aDecoder decodeObjectForKey:@"avatar"];
+        _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
+        _bannerURL = [aDecoder decodeObjectForKey:@"bannerURL"];
+        _friendIds = [aDecoder decodeObjectForKey:@"friendIds"];
+        friendList = [aDecoder decodeObjectForKey:@"friendList"];
+        sortedFriendDic = [aDecoder decodeObjectForKey:@"sortedFriendDic"];
+        sectionArray = [aDecoder decodeObjectForKey:@"sectionArray"];
+        friendsIdSet = [aDecoder decodeObjectForKey:@"friendsIdSet"];
+        updateEventIds = [aDecoder decodeObjectForKey:@"updateEventIds"];
+        atMeEvents = [aDecoder decodeObjectForKey:@"atMeEvents"];
+        eventRequestMsg = [aDecoder decodeObjectForKey:@"eventRequestMsg"];
+        friendRequestMsg = [aDecoder decodeObjectForKey:@"friendRequestMsg"];
+        systemMsg = [aDecoder decodeObjectForKey:@"systemMsg"];
+        historicalMsg = [aDecoder decodeObjectForKey:@"historicalMsg"];
+        userid = [aDecoder decodeObjectForKey:@"userid"];
+        _name = [aDecoder decodeObjectForKey:@"name"];
+        _gender = [aDecoder decodeObjectForKey:@"gender"];
+        _email = [aDecoder decodeObjectForKey:@"email"];
+        _sign = [aDecoder decodeObjectForKey:@"sign"];
+        _phone = [aDecoder decodeObjectForKey:@"phone"];
+        _location = [aDecoder decodeObjectForKey:@"location"];
+    }
+    
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.avatar forKey:@"avatar"];
+    [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
+    [aCoder encodeObject:self.bannerURL forKey:@"bannerURL"];
+    [aCoder encodeObject:self.friendIds forKey:@"friendIds"];
+    [aCoder encodeObject:self.friendList forKey:@"friendList"];
+    [aCoder encodeObject:self.sortedFriendDic forKey:@"sortedFriendDic"];
+    [aCoder encodeObject:self.sectionArray forKey:@"sectionArray"];
+    [aCoder encodeObject:self.friendsIdSet forKey:@"friendsIdSet"];
+    [aCoder encodeObject:self.updateEventIds forKey:@"updateEventIds"];
+    [aCoder encodeObject:self.atMeEvents forKey:@"atMeEvents"];
+    [aCoder encodeObject:self.eventRequestMsg forKey:@"eventRequestMsg"];
+    [aCoder encodeObject:self.friendRequestMsg forKey:@"friendRequestMsg"];
+    [aCoder encodeObject:self.systemMsg forKey:@"systemMsg"];
+    [aCoder encodeObject:self.historicalMsg forKey:@"historicalMsg"];
+    [aCoder encodeObject:self.userid forKey:@"userid"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.gender forKey:@"gender"];
+    [aCoder encodeObject:self.email forKey:@"email"];
+    [aCoder encodeObject:self.sign forKey:@"sign"];
+    [aCoder encodeObject:self.phone forKey:@"phone"];
+    [aCoder encodeObject:self.location forKey:@"location"];
+}
+
+
+
 - (void)getInfo:(NSNumber *)uid myid:(NSNumber *)myid delegateId:(id) aDelegate
 {
     

@@ -13,7 +13,7 @@
 #import "MySqlite.h"
 #import "CommonUtils.h"
 
-@interface MTUser : NSObject<HttpSenderDelegate>
+@interface MTUser : NSObject<HttpSenderDelegate,NSCoding>
 @property(nonatomic,strong)NSNumber *userid;
 @property(nonatomic,strong)NSString *name;
 @property(nonatomic,strong)NSNumber *gender;

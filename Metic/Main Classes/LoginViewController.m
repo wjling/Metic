@@ -45,7 +45,7 @@
 {
     [super viewDidLoad];
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    [AppDelegate initApp];
+    //[AppDelegate initApp];
     self.user = [MTUser sharedInstance];
     self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
@@ -128,8 +128,12 @@
     NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
     NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
     if ([userStatus isEqualToString:@"in"]) {
-        NSLog(@"直接跳转  fail");
-        //处理登录状态下，直接跳转 需要读取默认信息。 暂未保存默认信息。
+        //处理登录状态下，直接跳转 需要读取默认信息。
+        [self removeWaitingView];
+        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+        [self jumpToMainView];
+        [button_login setEnabled:YES];
+        return;
     }
     if (userName && password) {
         self.textField_userName.text = userName;
