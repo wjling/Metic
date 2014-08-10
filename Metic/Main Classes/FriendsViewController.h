@@ -20,7 +20,6 @@
 #import "MySqlite.h"
 #import "PhotoGetter.h"
 #import "FriendInfoViewController.h"
-#import "BDSuggestLabel.h"
 #import "TTTAttributedLabel.h"
 
 @interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,UISearchDisplayDelegate>
