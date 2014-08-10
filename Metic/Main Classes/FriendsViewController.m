@@ -306,6 +306,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"] ;
         }
         NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
+        NSString* name = [friend_dic objectForKey:@"name"];
 //        for(UIView * elem in [cell.contentView subviews])
 //        {
 //            if([elem isKindOfClass:[BDSuggestLabel class]])
@@ -321,7 +322,7 @@
 //        richTextLabel.font = [UIFont systemFontOfSize:17.0f];
 //        richTextLabel.textColor = [UIColor grayColor];
 //        [cell.contentView addSubview:richTextLabel];
-        NSString* name = [friend_dic objectForKey:@"name"];
+        
         cell.textLabel.text = name;
         NSLog(@"cell of searched friend, name: %@",name);
         return cell;

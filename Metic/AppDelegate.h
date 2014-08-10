@@ -50,6 +50,7 @@
 @property (strong, nonatomic) UIViewController* homeViewController;
 @property (strong, nonatomic) UIView* networkStatusNotifier_view;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
+@property (nonatomic) BOOL isNetworkConnected;
 
 +(void)initApp;
 +(void)refreshMenu;

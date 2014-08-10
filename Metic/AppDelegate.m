@@ -14,7 +14,6 @@
 @implementation AppDelegate
 {
     BOOL isConnected;
-    BOOL isNetworkConnected;
     int numOfSyncMessages;
 //    NSString* DB_path;
 }
@@ -25,6 +24,7 @@
 @synthesize sql;
 @synthesize notificationDelegate;
 @synthesize networkStatusNotifier_view;
+@synthesize isNetworkConnected;
 //@synthesize operationQueue;
 
 //@synthesize user;
