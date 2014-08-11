@@ -171,14 +171,13 @@
 #pragma mark tableView dataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
     int tag = [tableView tag];
     switch (tag) {
-        case 101:{
+        case 111:{
             return [_nearbyEvents count];
         }
             break;
-        case 102:{
+        case 112:{
             return [_searchEvents count];
         }
             break;
@@ -193,7 +192,7 @@
     int tag = [tableView tag];
     UITableViewCell* useless_cell;
     switch (tag) {
-        case 101:{
+        case 111:{
             static NSString *CellIdentifier = @"nearbyEventCell";
             BOOL nibsRegistered = NO;
             if (!nibsRegistered) {
@@ -234,14 +233,14 @@
                     [miniGetter getPhoto];
                 }else tmp.image = nil;
             }
-            //[cell setBackgroundColor:[UIColor whiteColor]];
+            [cell setBackgroundColor:[UIColor whiteColor]];
             return cell;
             
             
             
         }
             break;
-        case 102:{
+        case 112:{
             
         }
             break;
@@ -256,11 +255,11 @@
 {
     int tag = [tableView tag];
     switch (tag) {
-        case 101:{
+        case 111:{
             return 258;
         }
             break;
-        case 102:{
+        case 112:{
             return 100;
         }
             break;
@@ -301,13 +300,12 @@
 -(void)sendDistance:(float)distance
 {
     if (distance > 0) {
-        NSLog(@"%f",distance);
-        _shadowView.hidden = NO;
-        //[self.view bringSubviewToFront:self.shadowView];
+        self.shadowView.hidden = NO;
+        [self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
-        [self.shadowView setBackgroundColor:[UIColor blackColor]];
     }else{
-        //[self.view sendSubviewToBack:_shadowView];
+        //self.shadowView.hidden = YES;
+        //[self.view sendSubviewToBack:self.shadowView];
     }
 }
 

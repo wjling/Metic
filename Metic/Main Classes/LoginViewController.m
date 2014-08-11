@@ -151,6 +151,7 @@
         //处理登录状态下，直接跳转 需要读取默认信息。
         [self removeWaitingView];
         [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+        [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
         [self jumpToMainView];
         [button_login setEnabled:YES];
         return;
