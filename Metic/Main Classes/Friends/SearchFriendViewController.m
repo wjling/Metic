@@ -72,6 +72,13 @@
             }
         }
     }
+    else if ([[segue identifier] isEqualToString:@"searchfriend_comfirmMsg"])
+    {
+        if ([[segue destinationViewController] isKindOfClass:[AddFriendComfirmViewController class]]) {
+            AddFriendComfirmViewController* vc = segue.destinationViewController;
+            vc.fid = [NSNumber numberWithInt:friendPosition];
+        }
+    }
 }
 
 -(void)startIndicator
@@ -116,12 +123,13 @@
 
 -(void)addFriendBtnClicked:(UIButton*)sender
 {
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    confirmAlert.tag = 0;
     friendPosition = sender.tag;
-    confirmAlert.delegate = self;
-    [confirmAlert show];
+//    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+//    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+//    confirmAlert.tag = 0;
+//    confirmAlert.delegate = self;
+//    [confirmAlert show];
+    [self performSegueWithIdentifier:@"searchfriend_comfirmMsg" sender:sender];
 }
 
 //=======================================================================

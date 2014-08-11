@@ -66,7 +66,7 @@ enum CloudOperation_Code
 enum Return_Code
 {
     NORMAL_REPLY =100,
-    USER_NOT_FOUND,
+    USER_NOT_FOUND = 101,
     LOGIN_SUC = 102,
     PASSWD_NOT_CORRECT = 103,
     GET_SALT = 104,
