@@ -122,6 +122,15 @@
             }
         });
     });
+    
+    //预先保存mtuser内容
+    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        if ([MTUser sharedInstance].name) {
+            [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+        }
+    }
    
 }
 
@@ -149,10 +158,14 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     NSLog(@"Metic被残忍杀死了");
-    NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-    if ([[MTUser sharedInstance].userid intValue]) {
-        [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        if ([MTUser sharedInstance].name) {
+            [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+        }
     }
+    
     
 }
 
@@ -163,6 +176,7 @@
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
         NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
         if (!users || users.count == 0) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"Test" WithMessage:@"居然发生这种事" WithDelegate:nil WithCancelTitle:@"不放过"];
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [[MTUser alloc]init];
