@@ -10,6 +10,7 @@
 #import "FriendsViewController.h"
 #import "NotificationsViewController.h"
 #import "EventInvitationViewController.h"
+#import "NearbyEventViewController.h"
 #import "MTUser.h"
 
 
@@ -26,6 +27,7 @@
 @synthesize eventInvitationViewController;
 @synthesize friendsViewController;
 @synthesize notificationsViewController;
+@synthesize nearbyEventViewController;
 @synthesize scaningViewController;
 @synthesize feedBackViewController;
 @synthesize systemSettingsViewController;
@@ -99,6 +101,7 @@
     eventInvitationViewController = nil;
     friendsViewController = nil;
     notificationsViewController = nil;
+    nearbyEventViewController = nil;
     scaningViewController = nil;
     feedBackViewController = nil;
     systemSettingsViewController = nil;
@@ -146,16 +149,19 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     float val = 21.0/255.0;
     [cell setBackgroundColor:[UIColor colorWithRed:val green:val blue:val alpha:1.0f]];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [cell setBackgroundColor:[UIColor clearColor]];});
 }
 
--(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [cell setBackgroundColor:[UIColor clearColor]];
-}
+//-(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//    [cell setBackgroundColor:[UIColor clearColor]];
+//}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 7;
+	return 8;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -187,19 +193,19 @@
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
 			break;
-//        case 6:
-//			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
-//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
-//			break;
         case 4:
+			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
+			break;
+        case 5:
 			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
 			break;
-        case 5:
+        case 6:
 			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
 			break;
-        case 6:
+        case 7:
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
 			break;
@@ -217,6 +223,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -261,18 +270,24 @@
             }else vc = notificationsViewController;
 			break;
         case 4:
+            if (!nearbyEventViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NearbyEventViewController"];
+                nearbyEventViewController = vc;
+            }else vc = nearbyEventViewController;
+			break;
+        case 5:
             if (!scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
                 scaningViewController = vc;
             }else vc = scaningViewController;
 			break;
-        case 5:
+        case 6:
             if (!feedBackViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FeedBackViewController"];
                 feedBackViewController = vc;
             }else vc = feedBackViewController;
 			break;
-        case 6:
+        case 7:
         {
             if (!systemSettingsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"SystemSettingsViewController"];

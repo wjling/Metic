@@ -83,4 +83,7 @@
 
 //将颜色值转换成UIColor
 +(UIColor*)colorWithValue:(NSInteger)rgbValue;
+
+//根据开始时间 结束时间 生成活动时间信息简述
++(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime;
 @end

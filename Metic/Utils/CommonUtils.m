@@ -319,4 +319,42 @@
             green:((float)((rgbValue & 0xFF00) >> 8))/255.0
             blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0];
 }
+
++(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime
+{
+    NSString* timeInfo = @"";
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    NSDate* begin = [dateFormatter dateFromString:beginTime];
+    NSDate* end = [dateFormatter dateFromString:endTime];
+    NSTimeInterval begins = [begin timeIntervalSince1970];
+    NSTimeInterval ends = [end timeIntervalSince1970];
+    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@日",[[launchTime substringWithRange:NSMakeRange(5, 5)] stringByReplacingOccurrencesOfString:@"-" withString:@"月"]];
+    int dis = ends-begins;
+    if (dis > 0) {
+        NSString* duration = @"";
+        if (dis >= 31536000) {
+            duration = [NSString stringWithFormat:@"%d年",dis/31536000];
+        }else if (dis >= 2592000) {
+            duration = [NSString stringWithFormat:@"%d月",dis/2592000];
+        }else if (dis >= 86400) {
+            duration = [NSString stringWithFormat:@"%d日",dis/86400];
+        }else if (dis >= 3600) {
+            duration = [NSString stringWithFormat:@"%d小时",dis/3600];
+        }else if (dis >= 60) {
+            duration = [NSString stringWithFormat:@"%d分钟",dis/60];
+        }else{
+            duration = [NSString stringWithFormat:@"%d秒",dis];
+        }
+        
+        timeInfo = [NSString stringWithFormat:@"活动持续时间：%@",duration];
+        while (timeInfo.length < 15) {
+            timeInfo = [timeInfo stringByAppendingString:@" "];
+        }
+        timeInfo = [timeInfo stringByAppendingString:launchInfo];
+    }else timeInfo = launchInfo;
+    return timeInfo;
+}
 @end

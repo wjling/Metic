@@ -58,7 +58,7 @@
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
         cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
         cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
-        cell.timeInfo.text = [self calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
+        cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
         int participator_count = [[a valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
@@ -92,43 +92,6 @@
 	return cell;
 }
 
--(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime
-{
-    NSString* timeInfo = @"";
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    NSDate* begin = [dateFormatter dateFromString:beginTime];
-    NSDate* end = [dateFormatter dateFromString:endTime];
-    NSTimeInterval begins = [begin timeIntervalSince1970];
-    NSTimeInterval ends = [end timeIntervalSince1970];
-    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@日",[[launchTime substringWithRange:NSMakeRange(5, 5)] stringByReplacingOccurrencesOfString:@"-" withString:@"月"]];
-    int dis = ends-begins;
-    if (dis > 0) {
-        NSString* duration = @"";
-        if (dis >= 31536000) {
-            duration = [NSString stringWithFormat:@"%d年",dis/31536000];
-        }else if (dis >= 2592000) {
-            duration = [NSString stringWithFormat:@"%d月",dis/2592000];
-        }else if (dis >= 86400) {
-            duration = [NSString stringWithFormat:@"%d日",dis/86400];
-        }else if (dis >= 3600) {
-            duration = [NSString stringWithFormat:@"%d小时",dis/3600];
-        }else if (dis >= 60) {
-            duration = [NSString stringWithFormat:@"%d分钟",dis/60];
-        }else{
-            duration = [NSString stringWithFormat:@"%d秒",dis];
-        }
-        
-        timeInfo = [NSString stringWithFormat:@"活动持续时间：%@",duration];
-        while (timeInfo.length < 15) {
-            timeInfo = [timeInfo stringByAppendingString:@" "];
-        }
-        timeInfo = [timeInfo stringByAppendingString:launchInfo];
-    }else timeInfo = launchInfo;
-    return timeInfo;
-}
 
 
 

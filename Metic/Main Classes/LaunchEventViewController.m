@@ -27,10 +27,9 @@
 @property (nonatomic,strong) NSDictionary* locationInfo;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *getLocButton;
-//@property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
 @property (nonatomic, strong) BMKLocationService* locService;
-@property (strong, nonatomic) BMKMapManager *mapManager;
+//@property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 @property int visibility;
@@ -44,7 +43,7 @@
 @end
 
 @implementation LaunchEventViewController
-@synthesize mapManager;
+//@synthesize mapManager;
 //double longitude = 999.999999;
 //double latitude = 999.999999;
 
@@ -71,15 +70,6 @@
     _visibility = 0;
     _code = 1;
     self.FriendsIds = [[NSMutableSet alloc]init];
-    
-    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    mapManager = appDelegate.mapManager;
-    
-    BOOL ret = [mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];
-	if (!ret) {
-		NSLog(@"manager start failed!");
-	}
-
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     _locService = [[BMKLocationService alloc]init];
     self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
@@ -117,7 +107,7 @@
 {
     _geocodesearch.delegate = nil;
     
-    [mapManager stop];
+    //[mapManager stop];
     NSLog(@"delete");
 }
 - (void)didReceiveMemoryWarning

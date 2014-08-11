@@ -64,9 +64,11 @@
 
 
 - (IBAction)dynamics_pressdown:(id)sender {
+    [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 - (IBAction)atMe_pressdown:(id)sender {
+    [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
 }
 
 #pragma mark tableView Delegate

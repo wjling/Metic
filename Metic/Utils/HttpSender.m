@@ -147,6 +147,9 @@
         case 25:
             resultCode = @"get_avatar_updatetime";
             break;
+        case 30:
+            resultCode = @"get_event_recommend";
+            break;
         case 35:
             resultCode = @"uploadphoto";
             break;
