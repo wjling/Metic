@@ -14,6 +14,7 @@
 #import "SearchedFriendTableViewCell.h"
 #import "FriendInfoViewController.h"
 #import "PhotoGetter.h"
+#import "AddFriendComfirmViewController.h"
 
 @interface SearchFriendViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *content_tableview;

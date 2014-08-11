@@ -379,8 +379,8 @@ enum Response_Type
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch* touch = [touches anyObject];
-    lastX = [touch locationInView:self.view].x;
+//    UITouch* touch = [touches anyObject];
+//    lastX = [touch locationInView:self.view].x;
     
 
 }
@@ -388,26 +388,26 @@ enum Response_Type
 
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    UITouch* touch = [touches anyObject];
-    CGPoint p = [touch locationInView:self.view];
-    CGFloat x = p.x;
-    if (tab_index == 0) {
-        if (x > lastX) {
-            NSLog(@"swipe right");
-            self.content_scrollView.scrollEnabled = NO;
-        }
-        else{
-            NSLog(@"swipe left");
-            self.content_scrollView.scrollEnabled = YES;
-        }
-
-    }
+//    UITouch* touch = [touches anyObject];
+//    CGPoint p = [touch locationInView:self.view];
+//    CGFloat x = p.x;
+//    if (tab_index == 0) {
+//        if (x > lastX) {
+//            NSLog(@"swipe right");
+//            self.content_scrollView.scrollEnabled = NO;
+//        }
+//        else{
+//            NSLog(@"swipe left");
+//            self.content_scrollView.scrollEnabled = YES;
+//        }
+//
+//    }
         //    NSLog(@"touches moved,x: %f, y: %f",p.x , p.y);
 }
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    self.content_scrollView.scrollEnabled = YES;
+//    self.content_scrollView.scrollEnabled = YES;
     
 }
 
@@ -615,9 +615,9 @@ enum Response_Type
             default:
                 break;
         }
-        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
+//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+//        cell.layer.borderColor = borderColor.CGColor;
+//        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if(tableView == self.friendRequest_tableView)
@@ -669,9 +669,9 @@ enum Response_Type
             default:
                 break;
         }
-        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
+//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+//        cell.layer.borderColor = borderColor.CGColor;
+//        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if (tableView == self.systemMessage_tableView)
@@ -723,9 +723,9 @@ enum Response_Type
             default:
                 break;
         }
-        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
+//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+//        cell.layer.borderColor = borderColor.CGColor;
+//        cell.layer.borderWidth = 0.3;
         return cell;
     }
     temp_cell.textLabel.text = @"没有新的消息啦";

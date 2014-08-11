@@ -120,7 +120,7 @@
 
 -(void)quit
 {
-    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请选择退出方式" delegate:self cancelButtonTitle:@"退出程序" otherButtonTitles:@"切换账号", nil];
+    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请选择退出方式" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出程序",@"切换账号", nil];
     [alertView show];
 }
 
@@ -137,7 +137,7 @@
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0) {
+    if (buttonIndex == 1) {
         NSLog(@"退出程序");
         [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -159,7 +159,7 @@
 //        exit(0);
         
     }
-    else if (buttonIndex == 1)
+    else if (buttonIndex == 2)
     {
         NSLog(@"切换账号");
         [[MTUser alloc]init];
