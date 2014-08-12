@@ -180,6 +180,8 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
+		51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DFF381199A121900BF5FED /* UserTableViewCell.m */; };
+		51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51DFF382199A121900BF5FED /* UserTableViewCell.xib */; };
 		51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */; };
 		51E546B3199896E5003FA551 /* nearbyEventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51E546B1199896E5003FA551 /* nearbyEventTableViewCell.xib */; };
 		51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E55C731987389000D62C36 /* BannerSelectorViewController.m */; };
@@ -595,6 +597,9 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
+		51DFF380199A121900BF5FED /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewCell.h; sourceTree = "<group>"; };
+		51DFF381199A121900BF5FED /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableViewCell.m; sourceTree = "<group>"; };
+		51DFF382199A121900BF5FED /* UserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserTableViewCell.xib; sourceTree = "<group>"; };
 		51E546AF199896E5003FA551 /* nearbyEventTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nearbyEventTableViewCell.h; sourceTree = "<group>"; };
 		51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nearbyEventTableViewCell.m; sourceTree = "<group>"; };
 		51E546B1199896E5003FA551 /* nearbyEventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = nearbyEventTableViewCell.xib; sourceTree = "<group>"; };
@@ -863,6 +868,9 @@
 				51E546AF199896E5003FA551 /* nearbyEventTableViewCell.h */,
 				51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */,
 				51E546B1199896E5003FA551 /* nearbyEventTableViewCell.xib */,
+				51DFF380199A121900BF5FED /* UserTableViewCell.h */,
+				51DFF381199A121900BF5FED /* UserTableViewCell.m */,
+				51DFF382199A121900BF5FED /* UserTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1601,6 +1609,7 @@
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
 				51F06C1F197E0109000E8428 /* zbar-samples.png in Resources */,
+				51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */,
 				51F06C1E197E0109000E8428 /* zbar-helpicons.png in Resources */,
 				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
@@ -1776,6 +1785,7 @@
 				510D459C196E8A960081672A /* SDWebImageDownloader.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
+				51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,12 +9,14 @@
 #import "ScanViewController.h"
 #import "../Utils/CommonUtils.h"
 #import "../Cell/CustomCellTableViewCell.h"
+#import "../Cell/UserTableViewCell.h"
 
 @interface ScanViewController ()
 @property(nonatomic,strong)NSString* result;
 @property(nonatomic,strong)NSString* type;
 @property(nonatomic,strong)NSNumber* efid;
 @property(nonatomic,strong)NSDictionary* events;
+@property(nonatomic,strong)NSDictionary* friend;
 @property BOOL isScaning;
 @end
 
@@ -41,6 +43,7 @@
 {
     [readerView.scanner setSymbology:ZBAR_I25 config:ZBAR_CFG_ENABLE to:0];
     readerView.torchMode=0;
+    
     if (!_isScaning) {
         _isScaning = YES;
         [readerView start];
@@ -48,13 +51,14 @@
     
 }
 
--(void) viewDidDisappear:(BOOL)animated
+-(void) viewWillDisappear:(BOOL)animated
 {
     if (_isScaning) {
         _isScaning = NO;
         [readerView stop];
     }
     [_resultView setHidden:YES];
+    [_controlView setHidden:YES];
     [_showView setHidden:YES];
     
 }
@@ -74,9 +78,13 @@
 }
 
 - (IBAction)wantIn:(id)sender {
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [confirmAlert show];
+    if ([_type isEqualToString: @"event"]) {
+        UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [confirmAlert show];
+    }else if ([_type isEqualToString: @"user"]){
+        //添加好友
+    }
 
 }
 
@@ -93,64 +101,124 @@
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT];
 }
 
+- (void) searchUser: (NSNumber *)userid
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:userid forKey:@"friendId"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"myId"];
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
+}
+
 -(void)showResult
 {
-    NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"CustomCellTableViewCell" owner:self options:nil];
-    CustomCellTableViewCell *cell = [nib objectAtIndex:0];
-    [cell setFrame:CGRectMake(0, 46, 300, 250)];
-    NSDictionary *a = _events;
-    if ([[a valueForKey:@"isIn"] intValue] == 1){
-        [_inButton setTitle:@"已加入" forState:UIControlStateNormal];
-        [_inButton setHighlighted:YES];
-        [_inButton setEnabled:NO];
-    }else{
-        [_inButton setTitle:@"加入活动" forState:UIControlStateNormal];
-        [_inButton setHighlighted:NO];
-        [_inButton setEnabled:YES];
-    }
-    cell.eventName.text = [a valueForKey:@"subject"];
-    NSString* beginT = [a valueForKey:@"time"];
-    NSString* endT = [a valueForKey:@"endTime"];
-    cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-    cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
-    cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
-    cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-    int participator_count = [[a valueForKey:@"member_count"] intValue];
-    cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-    cell.eventId = [a valueForKey:@"event_id"];
-    cell.avatar.layer.masksToBounds = YES;
-    [cell.avatar.layer setCornerRadius:15];
-    
-    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-    [avatarGetter getPhoto];
-    
-    PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-    [bannerGetter getBanner:[a valueForKey:@"code"]];
-    
-    //cell.homeController = self.homeController;
-    
-    NSArray *memberids = [a valueForKey:@"member"];
-    
-    for (int i =3; i>=0; i--) {
-        UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
-        tmp.layer.masksToBounds = YES;
-        [tmp.layer setCornerRadius:5];
-        if (i < participator_count) {
-            PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-            [miniGetter getPhoto];
-        }else tmp.image = nil;
+    if ([_type isEqualToString: @"event"]) {
+        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"CustomCellTableViewCell" owner:self options:nil];
+        [[_resultView viewWithTag:151] removeFromSuperview];
+        [[_resultView viewWithTag:152] removeFromSuperview];
+        CustomCellTableViewCell *cell = [nib objectAtIndex:0];
+        [cell setTag:151];
+        [cell setFrame:CGRectMake(0, 46, 300, 250)];
+        NSDictionary *a = _events;
+        if ([[a valueForKey:@"isIn"] intValue] == 1){
+            [_inButton setTitle:@"已加入" forState:UIControlStateNormal];
+            [_inButton setHighlighted:YES];
+            [_inButton setEnabled:NO];
+        }else{
+            [_inButton setTitle:@"加入活动" forState:UIControlStateNormal];
+            [_inButton setHighlighted:NO];
+            [_inButton setEnabled:YES];
+        }
+        cell.eventName.text = [a valueForKey:@"subject"];
+        NSString* beginT = [a valueForKey:@"time"];
+        NSString* endT = [a valueForKey:@"endTime"];
+        cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
+        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
+        cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
+        int participator_count = [[a valueForKey:@"member_count"] intValue];
+        cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
+        cell.eventId = [a valueForKey:@"event_id"];
+        cell.avatar.layer.masksToBounds = YES;
+        [cell.avatar.layer setCornerRadius:15];
         
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
+        [avatarGetter getPhoto];
+        
+        PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
+        [bannerGetter getBanner:[a valueForKey:@"code"]];
+        
+        //cell.homeController = self.homeController;
+        
+        NSArray *memberids = [a valueForKey:@"member"];
+        
+        for (int i =3; i>=0; i--) {
+            UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
+            tmp.layer.masksToBounds = YES;
+            [tmp.layer setCornerRadius:5];
+            if (i < participator_count) {
+                PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+                [miniGetter getPhoto];
+            }else tmp.image = nil;
+            
+        }
+        CGRect frame = _resultView.frame;
+        frame.origin.y = 30;
+        frame.size.height = 292;
+        [_resultView setFrame:frame];
+        [_resultView addSubview:cell];
+        [_resultView setHidden:NO];
+        [_controlView setHidden:NO];
+    }else if([_type isEqualToString: @"user"])
+    {
+        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"UserTableViewCell" owner:self options:nil];
+        [[_resultView viewWithTag:151] removeFromSuperview];
+        [[_resultView viewWithTag:152] removeFromSuperview];
+        UserTableViewCell *cell = [nib objectAtIndex:0];
+        [cell setTag:152];
+        [cell setFrame:CGRectMake(0, 50, 300, 160)];
+        NSDictionary *a = _friend;
+        if ([[a valueForKey:@"isFriend"] boolValue] == YES){
+            [_inButton setTitle:@"已是好友" forState:UIControlStateNormal];
+            [_inButton setHighlighted:YES];
+            [_inButton setEnabled:NO];
+        }else{
+            [_inButton setTitle:@"加为好友" forState:UIControlStateNormal];
+            [_inButton setHighlighted:NO];
+            [_inButton setEnabled:YES];
+        }
+        cell.name.text = [a valueForKey:@"name"];
+        cell.signature.text = [a valueForKey:@"sign"];
+        cell.location.text = [a valueForKey:@"location"];
+        cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"男icon"]:[UIImage imageNamed:@"女icon"];
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
+        [avatarGetter getPhoto];
+        
+        [[_resultView viewWithTag:151] removeFromSuperview];
+        [_resultView addSubview:cell];
+        CGRect frame = _resultView.frame;
+        frame.origin.y = 120;
+        frame.size.height = 172;
+        [_resultView setFrame:frame];
+        [_resultView setHidden:NO];
+        [_controlView setHidden:NO];
     }
-    [_resultView addSubview:cell];
-    [_resultView setHidden:NO];
+    
     
 }
 
 -(void)resultAnalysis
 {
+    if (_result.length < 24 || ![[_result substringToIndex:24] isEqualToString:@"http://www.whatsact.com/"]) {
+        UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
+        [alertView setTag:10];
+        return;
+    }
     NSString* validInfo = [_result substringFromIndex:24];
     NSRange range = [validInfo rangeOfString:@"/"];
     NSString* type = [validInfo substringToIndex:range.location];
@@ -163,6 +231,11 @@
     _efid = [CommonUtils NSNumberWithNSString:text];
     if ([type isEqualToString:@"event"]) {
         [self searchEvent:_efid];
+    }else if ([type isEqualToString:@"user"]){
+        [self searchUser:_efid];
+    }else {
+        UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
+        [alertView setTag:10];
     }
 }
 
@@ -179,13 +252,14 @@
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
             if ([response1 valueForKey:@"isIn"]) {
                 self.events = response1;
                 [self showResult];
+                
+            
             }else{
                 UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"请等待发起人验证" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [alert show];
@@ -194,7 +268,30 @@
             }
             
         }
-        break;
+            break;
+        case USER_EXIST:
+        {
+            NSArray *friends = [response1 valueForKey:@"friend_list"];
+            if (friends.count > 0) {
+                self.friend = friends[0];
+                [self showResult];
+            }else{
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"用户不存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alert setTag:10];
+                [alert show];
+                
+            }
+            
+            
+        }
+            break;
+        case USER_NOT_FOUND:
+        {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"用户不存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            [alert setTag:10];
+            [alert show];
+        }
+            break;
     }
 }
 #pragma mark - ZBarReaderView Delegate -
@@ -227,17 +324,6 @@
 }
 -(void)sendDistance:(float)distance
 {
-//    if (distance>20) {
-//        if (_isScaning) {
-//            _isScaning = NO;
-//            [readerView stop];
-//        }
-//    }else{
-//        if (!_isScaning) {
-//            _isScaning = YES;
-//            [readerView start];
-//        }
-//    }
 
     if (distance > 0) {
         _shadowView.hidden = NO;
@@ -272,6 +358,12 @@
                 [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
 
             }
+        }
+            break;
+        case 10:{
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
         }
             break;
             

@@ -21,6 +21,8 @@
 @property (strong, nonatomic) IBOutlet UIView *resultView;
 @property (nonatomic, retain) ZBarReaderView *readerView;
 @property (strong, nonatomic) IBOutlet UIButton *inButton;
+@property (strong, nonatomic) IBOutlet UIButton *backButton;
+@property (strong, nonatomic) IBOutlet UIView *controlView;
 - (IBAction)back:(id)sender;
 - (IBAction)wantIn:(id)sender;
 

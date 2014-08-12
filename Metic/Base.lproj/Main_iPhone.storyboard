@@ -3895,7 +3895,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </activityIndicatorView>
                                     <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ci3-t9-ayB">
-                                        <rect key="frame" x="10" y="30" width="300" height="332"/>
+                                        <rect key="frame" x="10" y="30" width="300" height="292"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="    扫描结果" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FPM-hh-lbc">
@@ -3912,8 +3912,15 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qp1-rE-p61">
+                                        <rect key="frame" x="10" y="322" width="300" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nsZ-uf-Vg2">
-                                                <rect key="frame" x="0.0" y="292" width="150" height="40"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="150" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="返回">
@@ -3928,7 +3935,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GFn-Gn-JH8">
-                                                <rect key="frame" x="150" y="292" width="150" height="40"/>
+                                                <rect key="frame" x="150" y="0.0" width="150" height="40"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <state key="normal" title="加入活动">
@@ -3965,6 +3972,8 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="GrL-qN-Zy2"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="backButton" destination="nsZ-uf-Vg2" id="OCS-7a-zMk"/>
+                        <outlet property="controlView" destination="Qp1-rE-p61" id="zjM-aO-b9N"/>
                         <outlet property="inButton" destination="GFn-Gn-JH8" id="w45-Ud-JPt"/>
                         <outlet property="readerView" destination="RI0-Cs-sfd" id="YZ9-FB-0Gl"/>
                         <outlet property="resultView" destination="ci3-t9-ayB" id="wWC-9J-PTn"/>
