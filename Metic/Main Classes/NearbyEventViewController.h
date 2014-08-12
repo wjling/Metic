@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BMapKit.h"
 #import "MJRefreshHeaderView.h"
+#import "MJRefreshFooterView.h"
 #import "../Source/SlideNavigationController.h"
 
 @interface NearbyEventViewController : UIViewController<SlideNavigationControllerDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,BMKLocationServiceDelegate,MJRefreshBaseViewDelegate>
@@ -24,5 +25,6 @@
 
 @property BOOL shouldRefresh;
 @property(strong, nonatomic) MJRefreshHeaderView* header;
+@property(strong, nonatomic) MJRefreshFooterView* footer;
 @property(nonatomic,strong) NSNumber* selectedEventId;
 @end

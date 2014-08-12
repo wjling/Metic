@@ -20,6 +20,7 @@
 @property(nonatomic,strong) NSMutableArray* eventIds_all;
 @property BOOL clearIds;
 @property BOOL Headeropen;
+@property BOOL Footeropen;
 
 @property(nonatomic,strong) NSMutableArray* searchEvents;
 @end
@@ -59,6 +60,11 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.nearbyTableView;
+    
+    //初始化上拉加载功能
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.nearbyTableView;
     
     _shouldRefresh = YES;
     
@@ -136,8 +142,13 @@
         _Headeropen = NO;
         [_header endRefreshing];
     }
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
     [self.nearbyTableView reloadData];
 }
+
 
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
@@ -148,6 +159,17 @@
         _clearIds = YES;
         [_locService startUserLocationService];
         [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    }else{
+        _Footeropen = YES;
+        _clearIds = NO;
+        NSInteger beginIndex = _nearbyEvents.count;
+        if (beginIndex == _eventIds_all.count) {
+            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+        }
+        NSInteger endIndex = beginIndex + 10;
+        if (endIndex > _eventIds_all.count) endIndex = _eventIds_all.count;
+        [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(beginIndex, endIndex - beginIndex)]];
+        
     }
 }
 
@@ -173,7 +195,7 @@
                 //[self.eventIds removeAllObjects];
                 //[_eventIds addObjectsFromArray:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
                 if (self.eventIds_all) {
-                    int rangeLen = 40;
+                    int rangeLen = 10;
                     if (self.eventIds_all.count< rangeLen) {
                         rangeLen = self.eventIds_all.count;
                     }

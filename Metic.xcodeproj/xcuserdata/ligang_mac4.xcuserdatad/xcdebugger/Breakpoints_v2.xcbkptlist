@@ -2950,11 +2950,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503232.104855"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "-didUpdateUserLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2966,11 +2966,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503049.041905"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -2982,11 +2982,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503049.041905"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -2998,11 +2998,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503232.104855"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "-didUpdateUserLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3014,11 +3014,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503049.041905"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "-viewDidAppear:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3046,11 +3046,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/NearbyEventViewController.m"
-            timestampString = "429503232.104855"
+            timestampString = "429516049.859505"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "336"
-            endingLineNumber = "336"
+            startingLineNumber = "357"
+            endingLineNumber = "357"
             landmarkName = "-sendDistance:"
             landmarkType = "5">
          </BreakpointContent>
