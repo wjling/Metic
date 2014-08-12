@@ -19,6 +19,7 @@
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04BAF6781998CD3F00BF00E1 /* AddFriendComfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendComfirmViewController.m */; };
 		04BAF67C1999181F00BF00E1 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BAF67B1999181F00BF00E1 /* libbaidumapapi.a */; };
+		04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -253,6 +254,8 @@
 		04BAF6761998CD3F00BF00E1 /* AddFriendComfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddFriendComfirmViewController.h; path = Friends/AddFriendComfirmViewController.h; sourceTree = "<group>"; };
 		04BAF6771998CD3F00BF00E1 /* AddFriendComfirmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddFriendComfirmViewController.m; path = Friends/AddFriendComfirmViewController.m; sourceTree = "<group>"; };
 		04BAF67B1999181F00BF00E1 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04BAF687199A569F00BF00E1 /* WelcomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomePageViewController.h; path = WelcomePage/WelcomePageViewController.h; sourceTree = "<group>"; };
+		04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomePageViewController.m; path = WelcomePage/WelcomePageViewController.m; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -730,6 +733,15 @@
 				04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */,
 			);
 			name = Notifications;
+			sourceTree = "<group>";
+		};
+		04BAF684199A55B200BF00E1 /* WelcomePage */ = {
+			isa = PBXGroup;
+			children = (
+				04BAF687199A569F00BF00E1 /* WelcomePageViewController.h */,
+				04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */,
+			);
+			name = WelcomePage;
 			sourceTree = "<group>";
 		};
 		04CB1B7C1977760200BC083C /* Custom Wedgets */ = {
@@ -1263,6 +1275,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				04BAF684199A55B200BF00E1 /* WelcomePage */,
 				04B22C3F1984F3F100B33B7C /* SystemSettings */,
 				04EF4A5D1976382200649DC0 /* UserInfo */,
 				04B3F5E919756BA600C0A6EB /* FeedBack */,
@@ -1687,6 +1700,7 @@
 				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
+				04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */,
 				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
 				08DB69B119541F3A00F80F3F /* UIActivityIndicatorView+AFNetworking.m in Sources */,

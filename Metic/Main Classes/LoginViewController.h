@@ -13,6 +13,7 @@
 #import "CommonUtils.h"
 #import "AppConstants.h"
 #import "InputHandleView.h"
+#import "WelcomePageViewController.h"
 
 @interface LoginViewController : UIViewController <InputHandleViewDelegate,HttpSenderDelegate>
 

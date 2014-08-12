@@ -194,7 +194,7 @@
 
 - (IBAction)pageControlClicked:(id)sender
 {
-    int page = pControl.currentPage;
+    NSInteger page = pControl.currentPage;
     
     CGRect kFrame = sView.frame;
     kFrame.origin.x = kFrame.size.width * page;

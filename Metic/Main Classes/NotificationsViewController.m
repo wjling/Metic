@@ -21,6 +21,7 @@
     NSInteger tab_index;
     CGFloat lastX;
     BOOL clickTab;
+    UIView* tabIndicator;
 }
 
 enum Response_Type
@@ -149,6 +150,7 @@ enum Response_Type
     self.systemMessage_tableView.delegate = self;
     self.systemMessage_tableView.dataSource = self;
     
+    
     [functions_uiview setHidden:YES];
     UIColor* color1 = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
     UIColor* color2 = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
@@ -168,6 +170,11 @@ enum Response_Type
     UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height)];
     UIButton* systemMsg_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width*2, 0, width, height)];
     self.tabs = [[NSMutableArray alloc]initWithObjects:eventR_button,friendR_button,systemMsg_button, nil];
+    
+    UIColor *tabIndicatorColor = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+    tabIndicator = [[UIView alloc]initWithFrame:CGRectMake(10, height - 3, width - 20, 3)];
+    
+    [self.tabbar_scrollview addSubview:tabIndicator];
 //    eventR_button.showsTouchWhenHighlighted = NO;
 //    friendR_button.showsTouchWhenHighlighted = NO;
 //    systemMsg_button.showsTouchWhenHighlighted = NO;
@@ -178,11 +185,11 @@ enum Response_Type
     UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
     UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
     UIColor* tColor_normal = [UIColor colorWithRed:0.553 green:0.553 blue:0.553 alpha:1];
-    UIColor* tColor_selected = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1];
+    UIColor* tColor_selected = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
     
-    [eventR_button setBackgroundColor:bColor_selected];
-    [friendR_button setBackgroundColor:bColor_normal];
-    [systemMsg_button setBackgroundColor:bColor_normal];
+//    [eventR_button setBackgroundColor:bColor_selected];
+//    [friendR_button setBackgroundColor:bColor_normal];
+//    [systemMsg_button setBackgroundColor:bColor_normal];
     
 //    [eventR_button setBackgroundColor:[UIColor clearColor]];
 //    [friendR_button setBackgroundColor:[UIColor clearColor]];
@@ -208,13 +215,13 @@ enum Response_Type
 //    [eventR_button backgroundRectForBounds:CGRectMake(0, eventR_button.frame.size.height - 5, eventR_button.frame.size.width, 5)];
     [eventR_button setSelected:YES];
     
-    UIColor* borderColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
-    [eventR_button.layer setBorderWidth:0.5];
-    [eventR_button.layer setBorderColor:borderColor.CGColor];
-    [friendR_button.layer setBorderWidth:0.5];
-    [friendR_button.layer setBorderColor:borderColor.CGColor];
-    [systemMsg_button.layer setBorderWidth:0.5];
-    [systemMsg_button.layer setBorderColor:borderColor.CGColor];
+//    UIColor* borderColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
+//    [eventR_button.layer setBorderWidth:0.5];
+//    [eventR_button.layer setBorderColor:borderColor.CGColor];
+//    [friendR_button.layer setBorderWidth:0.5];
+//    [friendR_button.layer setBorderColor:borderColor.CGColor];
+//    [systemMsg_button.layer setBorderWidth:0.5];
+//    [systemMsg_button.layer setBorderColor:borderColor.CGColor];
     
     [eventR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [friendR_button addTarget:self action:@selector(tabBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -223,6 +230,7 @@ enum Response_Type
     [self.tabbar_scrollview addSubview:eventR_button];
     [self.tabbar_scrollview addSubview:friendR_button];
     [self.tabbar_scrollview addSubview:systemMsg_button];
+    [tabIndicator setBackgroundColor:tabIndicatorColor];
     
     self.content_scrollView.pagingEnabled = YES;
     self.content_scrollView.scrollEnabled = YES;
@@ -240,15 +248,17 @@ enum Response_Type
     clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
+    UIButton* currentBtn = (UIButton*)sender;
     NSLog(@"selected button: %d",index);
     lastBtn.selected = NO;
-    [((UIButton*)sender) setSelected: YES];
+    currentBtn.selected = YES;
     
     UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
     UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
-    [(UIButton*)sender setBackgroundColor:bColor_selected];
-    [lastBtn setBackgroundColor:bColor_normal];
-    
+//    [currentBtn setBackgroundColor:bColor_selected];
+//    [lastBtn setBackgroundColor:bColor_normal];
+    CGRect frame = CGRectMake(currentBtn.frame.origin.x + 10, tabIndicator.frame.origin.y, tabIndicator.frame.size.width, tabIndicator.frame.size.height) ;
+    [self scrollTabIndicator:frame];
     tab_index = index;
     
 //    NSLog(@"clicked, x: %f,y: %f, width: %f, height: %f",self.bgOfTabs.frame.origin.x, self.bgOfTabs.frame.origin.y,self.bgOfTabs.frame.size.width,self.bgOfTabs.frame.size.height);
@@ -273,9 +283,20 @@ enum Response_Type
     
 }
 
+-(void)scrollTabIndicator:(CGRect)frame
+{
+    [UIView beginAnimations:@"tab indicator scrolling" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationDelegate:self];
+    [UIView  setAnimationCurve: UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
+    [tabIndicator setFrame:frame];
+    [UIView commitAnimations];
+}
+
 - (IBAction)rightBarBtnClicked:(id)sender {
     if (!functions_uiview.hidden) {
-        [functions_uiview setHidden:YES];
+        
         //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
         [UIView beginAnimations:@"View shows" context:nil];
         //动画持续时间
@@ -287,6 +308,7 @@ enum Response_Type
         //设置动画方式，并指出动画发生的位置
         [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
         
+        [functions_uiview setHidden:YES];
         //提交UIView动画
         [UIView commitAnimations];
         
@@ -294,11 +316,11 @@ enum Response_Type
     else{
         
         [UIView beginAnimations:@"View shows" context:nil];
-        [functions_uiview setHidden:NO];
         [UIView setAnimationDuration:0.5];
         [UIView setAnimationDelegate:self];
         [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
         [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
+        [functions_uiview setHidden:NO];
         [UIView commitAnimations];
 
         
@@ -379,8 +401,15 @@ enum Response_Type
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    UITouch* touch = [touches anyObject];
-//    lastX = [touch locationInView:self.view].x;
+    UITouch* touch = [touches anyObject];
+    lastX = [touch locationInView:self.view].x;
+    if (lastX <= 10) {
+        self.content_scrollView.scrollEnabled = NO;
+    }
+    else
+    {
+        self.content_scrollView.scrollEnabled = YES;
+    }
     
 
 }
@@ -407,7 +436,7 @@ enum Response_Type
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    self.content_scrollView.scrollEnabled = YES;
+    self.content_scrollView.scrollEnabled = YES;
     
 }
 
@@ -615,9 +644,9 @@ enum Response_Type
             default:
                 break;
         }
-//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-//        cell.layer.borderColor = borderColor.CGColor;
-//        cell.layer.borderWidth = 0.3;
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if(tableView == self.friendRequest_tableView)
@@ -669,9 +698,9 @@ enum Response_Type
             default:
                 break;
         }
-//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-//        cell.layer.borderColor = borderColor.CGColor;
-//        cell.layer.borderWidth = 0.3;
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if (tableView == self.systemMessage_tableView)
@@ -723,9 +752,9 @@ enum Response_Type
             default:
                 break;
         }
-//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-//        cell.layer.borderColor = borderColor.CGColor;
-//        cell.layer.borderWidth = 0.3;
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     temp_cell.textLabel.text = @"没有新的消息啦";
@@ -1112,18 +1141,19 @@ enum Response_Type
         CGFloat page_width = scrollView.frame.size.width;
         NSInteger last_tab_index = tab_index;
         tab_index = floor((scrollView.contentOffset.x - page_width/2) / page_width) +1;
-        if (clickTab) {
-            return;
-        }
+
         UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
         UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
         UIButton* lastBtn = (UIButton*)[tabs objectAtIndex:last_tab_index];
         UIButton* currentBtn = (UIButton*)[tabs objectAtIndex:tab_index];
         
-        [lastBtn setBackgroundColor:bColor_normal];
         lastBtn.selected = NO;
-        [currentBtn setBackgroundColor:bColor_selected];
         currentBtn.selected = YES;
+        
+//        [lastBtn setBackgroundColor:bColor_normal];
+//        [currentBtn setBackgroundColor:bColor_selected];
+        CGRect frame = CGRectMake(currentBtn.frame.origin.x + 10, tabIndicator.frame.origin.y, tabIndicator.frame.size.width, tabIndicator.frame.size.height);
+        [self scrollTabIndicator:frame];
         
 //        if (tab_index == 0) {
 //            [self.eventRequest_tableView reloadData];

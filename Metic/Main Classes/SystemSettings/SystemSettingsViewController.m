@@ -17,6 +17,8 @@
 {
     NSInteger numOfSections;
     BOOL statusOfSwitch1,statusOfSwitch2;
+    UITapGestureRecognizer* backgroundRecognizer;
+    UIAlertView* quitAlert;
 }
 @synthesize settings_tableview;
 
@@ -81,6 +83,24 @@
     statusOfSwitch1 = [userDf boolForKey:@"systemSettings1"];
     statusOfSwitch2 = [userDf boolForKey:@"systemSettings2"];
     
+    backgroundRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundClicked)];
+//    [self.settings_tableview addGestureRecognizer:backgroundRecognizer];
+    
+}
+
+#pragma mark - Touches
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.nextResponder touchesBegan:touches withEvent:event];
+    NSLog(@"touch begin");
+    [quitAlert dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+
+-(void)backgroundClicked
+{
+    NSLog(@"quit alert");
+    [quitAlert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 -(void)switch1Clicked:(UISwitch*)sender
@@ -120,8 +140,9 @@
 
 -(void)quit
 {
-    UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请选择退出方式" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出程序",@"切换账号", nil];
-    [alertView show];
+    quitAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请选择退出方式" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"退出程序",@"切换账号", nil];
+    [quitAlert show];
+    
 }
 
 - (void)animationFinished:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
@@ -169,8 +190,15 @@
     }
 }
 
-- (void)alertViewCancel:(UIAlertView *)alertView
+- (void)didPresentAlertView:(UIAlertView *)alertView
 {
+    NSLog(@"did present alertview");
+//    UIView* view = [alertView superview];
+//    if (view) {
+//        NSLog(@"add gesture in view ");
+//        view.userInteractionEnabled = YES;
+//        [view addGestureRecognizer:backgroundRecognizer];
+//    }
     
 }
 

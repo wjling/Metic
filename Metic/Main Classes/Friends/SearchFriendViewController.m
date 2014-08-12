@@ -76,7 +76,7 @@
     {
         if ([[segue destinationViewController] isKindOfClass:[AddFriendComfirmViewController class]]) {
             AddFriendComfirmViewController* vc = segue.destinationViewController;
-            vc.fid = [NSNumber numberWithInt:friendPosition];
+            vc.fid = [[self.searchFriendList objectAtIndex:friendPosition] objectForKey:@"id"];;
         }
     }
 }
