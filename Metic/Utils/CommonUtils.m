@@ -7,6 +7,7 @@
 //
 
 #import "CommonUtils.h"
+#import <CoreLocation/CLLocation.h>
 
 @implementation CommonUtils
 
@@ -356,5 +357,13 @@
         timeInfo = [timeInfo stringByAppendingString:launchInfo];
     }else timeInfo = launchInfo;
     return timeInfo;
+}
+
++(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2
+{
+    CLLocation *orig=[[CLLocation alloc] initWithLatitude:lat1  longitude:lng1];
+    CLLocation* dist=[[CLLocation alloc] initWithLatitude:lat2  longitude:lng2];
+    
+    CLLocationDistance meters=[orig distanceFromLocation:dist];    return meters;
 }
 @end

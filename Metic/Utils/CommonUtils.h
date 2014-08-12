@@ -86,4 +86,7 @@
 
 //根据开始时间 结束时间 生成活动时间信息简述
 +(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime;
+
+//计算两经纬度间距离
++(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2;
 @end
