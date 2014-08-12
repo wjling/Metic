@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "BMapKit.h"
+#import "MJRefreshHeaderView.h"
 #import "../Source/SlideNavigationController.h"
 
-@interface NearbyEventViewController : UIViewController<SlideNavigationControllerDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,BMKLocationServiceDelegate>
+@interface NearbyEventViewController : UIViewController<SlideNavigationControllerDelegate,UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,BMKLocationServiceDelegate,MJRefreshBaseViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -21,4 +22,6 @@
 - (IBAction)nearbyButton_pressed:(id)sender;
 - (IBAction)searchButton_pressed:(id)sender;
 
+@property BOOL shouldRefresh;
+@property(strong, nonatomic) MJRefreshHeaderView* header;
 @end

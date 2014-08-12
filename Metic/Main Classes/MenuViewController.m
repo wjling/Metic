@@ -274,6 +274,7 @@
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NearbyEventViewController"];
                 nearbyEventViewController = vc;
             }else vc = nearbyEventViewController;
+            ((NearbyEventViewController*)nearbyEventViewController).shouldRefresh = YES;
 			break;
         case 5:
             if (!scaningViewController) {

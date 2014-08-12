@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface nearbyEventTableViewCell : UITableViewCell
+@interface nearbyEventTableViewCell : UITableViewCell<UIAlertViewDelegate>
 {
     IBOutlet UIImageView *avatar;
     IBOutlet UILabel *eventName;

@@ -74,7 +74,7 @@
 }
 
 - (IBAction)wantIn:(id)sender {
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     [confirmAlert show];
 

@@ -18,6 +18,7 @@
 @property(nonatomic,strong) NSMutableArray* nearbyEvents;
 @property(nonatomic,strong) NSMutableArray* eventIds_all;
 @property BOOL clearIds;
+@property BOOL Headeropen;
 
 @property(nonatomic,strong) NSMutableArray* searchEvents;
 @end
@@ -53,7 +54,12 @@
     //百度定位
     _locService = [[BMKLocationService alloc]init];
     
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.nearbyTableView;
     
+    _shouldRefresh = YES;
     
     
 }
@@ -63,9 +69,13 @@
 {
     [self.shadowView setAlpha:0];
     _locService.delegate = self;
-    [_locService startUserLocationService];
     [_nearbyTableView reloadData];
     [_searchTableView reloadData];
+    
+    if (_shouldRefresh){
+        [_header beginRefreshing];
+        _shouldRefresh = NO;
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -119,6 +129,27 @@
     [_scrollView setContentOffset:CGPointMake(310, 0) animated:YES];
 }
 
+-(void)closeRJ
+{
+    if (_Headeropen) {
+        _Headeropen = NO;
+        [_header endRefreshing];
+    }
+    [self.nearbyTableView reloadData];
+}
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if (refreshView == _header) {
+        NSLog(@"header Begin");
+        _Headeropen = YES;
+        _clearIds = YES;
+        [_locService startUserLocationService];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    }
+}
+
 #pragma mark - HttpSenderDelegate
 
 -(void)finishWithReceivedData:(NSData *)rData
@@ -134,18 +165,14 @@
             if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 if (_clearIds) [_nearbyEvents removeAllObjects];
                 [_nearbyEvents addObjectsFromArray:[response1 valueForKey:@"event_list"]];
-                [_nearbyTableView reloadData];
-                //[self closeRJ];
-                //[self updateEventToDB:[response1 valueForKey:@"event_list"]];
-                
-                
+                [self closeRJ];
             }
             else{//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
                 //[self.eventIds removeAllObjects];
                 //[_eventIds addObjectsFromArray:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
                 if (self.eventIds_all) {
-                    int rangeLen = 10;
+                    int rangeLen = 40;
                     if (self.eventIds_all.count< rangeLen) {
                         rangeLen = self.eventIds_all.count;
                     }

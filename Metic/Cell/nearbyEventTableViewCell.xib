@@ -203,6 +203,9 @@
                                 <state key="highlighted">
                                     <color key="titleColor" red="0.33333333333333331" green="0.79607843137254897" blue="0.6705882352941176" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="wantIn:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="DUV-Qo-qlE"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
