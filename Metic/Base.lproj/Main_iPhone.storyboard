@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -4111,6 +4111,7 @@
                         <outlet property="searchButton" destination="EJH-7Q-J5w" id="7CD-6L-Gs7"/>
                         <outlet property="searchTableView" destination="9YN-e2-nzO" id="xrs-e0-LbX"/>
                         <outlet property="shadowView" destination="8ef-xb-8pH" id="Ap7-3a-rI5"/>
+                        <segue destination="MVl-Wy-DVz" kind="push" identifier="nearbyToshowparticipant" id="YnG-LV-8dG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G4B-Mq-UIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4177,16 +4178,13 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="cOi-1F-viY"/>
-        <segue reference="DsC-hh-HTw"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="Bnm-KN-OgT"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="eBE-9B-Hp2"/>
-        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="YnG-LV-8dG"/>
         <segue reference="eBE-9B-Hp2"/>
         <segue reference="ib8-0I-OZA"/>
         <segue reference="hOW-ww-bKW"/>
+        <segue reference="Bnm-KN-OgT"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="a7Z-Ie-XBp"/>
     </inferredMetricsTieBreakers>
 </document>

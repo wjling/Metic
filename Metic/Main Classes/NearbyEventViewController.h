@@ -24,4 +24,5 @@
 
 @property BOOL shouldRefresh;
 @property(strong, nonatomic) MJRefreshHeaderView* header;
+@property(nonatomic,strong) NSNumber* selectedEventId;
 @end

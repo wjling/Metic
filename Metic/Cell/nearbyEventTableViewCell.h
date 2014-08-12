@@ -23,6 +23,7 @@
     IBOutlet UILabel *launcherinfo;
     IBOutlet UILabel *member_count;
 }
+- (IBAction)showParticipant:(id)sender;
 
 @property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
@@ -37,5 +38,6 @@
 //@property(nonatomic,strong) UILabel *eventDetail;
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
+@property(nonatomic,strong) UIViewController* nearbyEventViewController;
 
 @end

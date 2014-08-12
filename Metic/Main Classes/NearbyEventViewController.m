@@ -7,6 +7,7 @@
 //
 
 #import "NearbyEventViewController.h"
+#import "showParticipatorsViewController.h"
 #import "../Cell/nearbyEventTableViewCell.h"
 #import "PhotoGetter.h"
 #import "MTUser.h"
@@ -243,7 +244,7 @@
             cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
             cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
             cell.eventId = [a valueForKey:@"event_id"];
-            
+            cell.nearbyEventViewController = self;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
             [avatarGetter getPhoto];
             
@@ -333,6 +334,17 @@
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];
+    }
+}
+
+
+#pragma mark - 跳转前数据准备 Methods -
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
+        showParticipatorsViewController *nextViewController = segue.destinationViewController;
+        nextViewController.eventId = _selectedEventId;
+        nextViewController.visibility = NO;
     }
 }
 

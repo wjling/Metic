@@ -7,6 +7,7 @@
 //
 
 #import "nearbyEventTableViewCell.h"
+#import "NearbyEventViewController.h"
 #import "../Utils/HttpSender.h"
 #import "../Utils/CommonUtils.h"
 #import "MTUser.h"
@@ -57,6 +58,12 @@
     [confirmAlert show];
     
 }
+
+- (IBAction)showParticipant:(id)sender {
+    ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;
+    [self.nearbyEventViewController performSegueWithIdentifier:@"nearbyToshowparticipant" sender:self.nearbyEventViewController];
+}
+
 
 -(void)dismissAlertView:(UIAlertView*) alertView
 {
@@ -114,4 +121,5 @@
             break;
     }
 }
+
 @end
