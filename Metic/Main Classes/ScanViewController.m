@@ -100,8 +100,13 @@
     [cell setFrame:CGRectMake(0, 46, 300, 250)];
     NSDictionary *a = _events;
     if ([[a valueForKey:@"isIn"] intValue] == 1){
+        [_inButton setTitle:@"已加入" forState:UIControlStateNormal];
         [_inButton setHighlighted:YES];
         [_inButton setEnabled:NO];
+    }else{
+        [_inButton setTitle:@"加入活动" forState:UIControlStateNormal];
+        [_inButton setHighlighted:NO];
+        [_inButton setEnabled:YES];
     }
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
