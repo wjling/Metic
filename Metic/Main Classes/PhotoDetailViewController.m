@@ -310,7 +310,7 @@
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
             
             
-            [cell addSubview:self.delete_button];
+            //[cell addSubview:self.delete_button];
         }
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
