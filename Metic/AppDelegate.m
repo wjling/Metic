@@ -39,6 +39,18 @@
 //                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if (![userDf boolForKey:@"everLauched"]) {
+        [userDf setBool:YES forKey:@"everLauched"];
+        [userDf setBool:YES forKey:@"firstLauched"];
+        NSLog(@"The first lauch");
+        
+    }
+    else
+    {
+        NSLog(@"Not the first lauch");
+        [userDf setBool:NO forKey:@"firstLauched"];
+    }
 	
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];

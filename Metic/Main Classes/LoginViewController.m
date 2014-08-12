@@ -48,6 +48,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
@@ -90,6 +91,13 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if ([userDf boolForKey:@"firstLauch"]) {
+        NSLog(@"login: it is first lauch");
+//        WelcomePageViewController* vc = [[WelcomePageViewController alloc]init];
+//        [self presentViewController:vc animated:YES completion:nil];
+    }
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self checkPreUP];
 }
