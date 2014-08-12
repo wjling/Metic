@@ -130,6 +130,7 @@
     if (!self.uploadImage) {
         UIAlertView* alert =[CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
         [alert setTag:250];
+        return;
     }
     [self showWaitingView];
     self.upLoad = sender;
