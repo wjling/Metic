@@ -19,8 +19,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <state key="normal" title="     视频墙">
-                            <color key="titleColor" red="0.5411764979" green="0.5411764979" blue="0.5411764979" alpha="1" colorSpace="deviceRGB"/>
+                        <state key="normal" title="   视频墙">
+                            <color key="titleColor" red="0.33725490200000002" green="0.79215686269999996" blue="0.6705882353" alpha="1" colorSpace="deviceRGB"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <state key="highlighted">
@@ -34,9 +34,9 @@
                         <rect key="frame" x="0.0" y="250" width="149" height="33"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <state key="normal" title="         图片墙">
-                            <color key="titleColor" red="0.54117649793624878" green="0.54117649793624878" blue="0.54117649793624878" alpha="1" colorSpace="deviceRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <state key="normal" title="        图片墙">
+                            <color key="titleColor" red="0.33725490196078434" green="0.792156862745098" blue="0.6705882352941176" alpha="1" colorSpace="deviceRGB"/>
                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </state>
                         <state key="highlighted">
@@ -46,11 +46,11 @@
                             <action selector="jumpToPictureWall:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="8Jp-hk-JgR"/>
                         </connections>
                     </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="图片墙图标" id="5gO-uP-Pcx">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-绿色" highlightedImage="IOS版本照片墙图标-白色" id="5gO-uP-Pcx">
                         <rect key="frame" x="40" y="255" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="图片墙图标" id="PUg-rp-xto">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-绿色" highlightedImage="IOS版本视频墙图标-白色" id="PUg-rp-xto">
                         <rect key="frame" x="180" y="255" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -267,8 +267,11 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="IOS版本照片墙图标-白色" width="20" height="20"/>
+        <image name="IOS版本照片墙图标-绿色" width="20" height="20"/>
+        <image name="IOS版本视频墙图标-白色" width="20" height="20"/>
+        <image name="IOS版本视频墙图标-绿色" width="20" height="20"/>
         <image name="发起人icon" width="7" height="7"/>
-        <image name="图片墙图标" width="13" height="13"/>
         <image name="头像蒙板-42(白色底）" width="22" height="22"/>
         <image name="活主头像蒙板" width="33" height="33"/>
         <image name="活动地点icon" width="7" height="7"/>
