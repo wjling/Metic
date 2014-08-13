@@ -114,6 +114,7 @@
 
 -(void)showResult
 {
+    
     if ([_type isEqualToString: @"event"]) {
         NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"CustomCellTableViewCell" owner:self options:nil];
         [[_resultView viewWithTag:151] removeFromSuperview];
@@ -192,18 +193,18 @@
             [_inButton setHighlighted:NO];
             [_inButton setEnabled:YES];
         }
+
         cell.name.text = [a valueForKey:@"name"];
-        cell.signature.text = [a valueForKey:@"sign"];
-        cell.location.text = [a valueForKey:@"location"];
+        cell.signature.text = ([[a valueForKey:@"sign"] isEqual:[NSNull null]])?@"":[a valueForKey:@"sign"];
+        cell.location.text = ([[a valueForKey:@"location"] isEqual:[NSNull null]])?@"":[a valueForKey:@"location"];
         cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"男icon"]:[UIImage imageNamed:@"女icon"];
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
         [avatarGetter getPhoto];
-        
-        [[_resultView viewWithTag:151] removeFromSuperview];
         [_resultView addSubview:cell];
         CGRect frame = _resultView.frame;
         frame.origin.y = 120;
         frame.size.height = 172;
+        
         [_resultView setFrame:frame];
         [_resultView setHidden:NO];
         [_controlView setHidden:NO];
