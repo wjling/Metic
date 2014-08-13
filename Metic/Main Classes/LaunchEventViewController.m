@@ -10,6 +10,7 @@
 #import "LaunchEventViewController.h"
 #import "InviteFriendViewController.h"
 #import "BannerSelectorViewController.h"
+#import "HomeViewController.h"
 #import "MapViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
@@ -204,8 +205,7 @@
 }
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    self.scrollView.contentOffset = CGPointMake(0, textView.frame.origin.y - 55);
-    
+    [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 55) animated:YES];
     return YES;
 }
 
@@ -260,7 +260,7 @@
         return NO;
         
     }else{
-        self.scrollView.contentOffset = CGPointMake(0, textField.superview.frame.origin.y - 100);
+        [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         return YES;
     }
 }
@@ -292,8 +292,10 @@
         friends = [NSString stringWithFormat:friends,friendid];
     }
     friends = [friends stringByAppendingString:@"]"];
-    
-    
+    NSString*end_Time = self.end_time_text.text;
+    if ([end_Time isEqualToString:@""]) end_Time = self.begin_time_text.text;
+    NSString* location = self.location_text.text;
+    if ([location isEqualToString:@""]) location = @"未定";
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([self.event_text.text isEqualToString: @""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
@@ -303,19 +305,19 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动开始时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
-    if ([self.end_time_text.text isEqualToString: @""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
-        return;
-    }
+//    if ([self.end_time_text.text isEqualToString: @"未定"]) {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
+//        return;
+//    }
     [self showWaitingView];
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
     [dictionary setValue:self.begin_time_text.text forKey:@"time"];
-    [dictionary setValue:self.end_time_text.text forKey:@"endTime"];
+    [dictionary setValue:end_Time forKey:@"endTime"];
     [dictionary setValue:self.detail_text.text forKey:@"remark"];
-    [dictionary setValue:self.location_text.text forKey:@"location"];
+    [dictionary setValue:location forKey:@"location"];
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
@@ -335,7 +337,7 @@
     [self.getLocIndicator startAnimating];
     self.location_text.text = @"定位中";
     self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
-    self.positionInfo = @"(^_^)";
+    self.positionInfo = @"";
     //[_locManager startUpdatingLocation];
     [_locService startUserLocationService];
     
@@ -554,7 +556,9 @@
     if (buttonIndex == 0)
     {
         [self removeWaitingView];
+        ((HomeViewController*)self.controller).shouldRefresh = YES;
         [self.navigationController popToViewController:self.controller animated:YES];
+        
     }
 }
 

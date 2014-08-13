@@ -78,6 +78,7 @@
     _header.delegate = self;
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
+    _shouldRefresh = NO;
 
     //初始化上拉加载更多
     _footer = [[MJRefreshFooterView alloc]init];
@@ -103,6 +104,10 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    if (_shouldRefresh) {
+        _shouldRefresh = NO;
+        [_header beginRefreshing];
+    }
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
 }
 

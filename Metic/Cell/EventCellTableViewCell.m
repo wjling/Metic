@@ -72,6 +72,7 @@
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
+    [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"敬请期待" WithDelegate:nil WithCancelTitle:@"确定"];
 }
 
 - (IBAction)addComment:(id)sender {

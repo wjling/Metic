@@ -51,7 +51,7 @@
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property(atomic,strong)NSMutableArray *events;
 @property(nonatomic,strong)MySqlite *sql;
-
+@property BOOL shouldRefresh;
 @property(strong,nonatomic)AppDelegate* listenerDelegate;
 
 

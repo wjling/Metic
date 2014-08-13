@@ -42,7 +42,7 @@
         [indictor setHighlighted:NO];
     }
     _code = [sender tag];
-    [((UIImageView*)_selectorIndictors[[sender tag] - 2]) setHighlighted:YES];
+    [((UIImageView*)_selectorIndictors[[sender tag] - 1]) setHighlighted:YES];
 }
 
 - (IBAction)getMyBanner:(id)sender {
@@ -66,7 +66,7 @@
 - (IBAction)confirmBanner:(id)sender {
     if(self.controller.code!=0){
         self.controller.code = _code;
-        [self.controller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-2]).imageView.image forState:UIControlStateNormal];
+        [self.controller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-1]).imageView.image forState:UIControlStateNormal];
     }
     [self.navigationController popToViewController:self.controller animated:YES];
     self.controller = nil;

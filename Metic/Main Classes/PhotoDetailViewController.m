@@ -47,7 +47,7 @@
     self.tableView.dataSource = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [self initButtons];
+    //[self initButtons];
     [self setGoodButton];
 
     
@@ -78,8 +78,8 @@
 -(void) setGoodButton
 {
     if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论icon点赞"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论icon图标1"] forState:UIControlStateNormal];
+        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
+    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
 }
 
 -(float)calculateTextHeight:(NSString*)text width:(float)width

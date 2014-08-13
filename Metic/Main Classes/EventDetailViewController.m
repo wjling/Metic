@@ -397,7 +397,7 @@
         UILabel *textView = (UILabel*)[cell viewWithTag:4];
         NSString* text = [mainCom valueForKey:@"content"];
         textView.text = text;
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:10.0f];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:12.0f];
         if (commentHeight < 15) commentHeight = 15;
         CGRect frame = textView.frame;
         frame.size.height = commentHeight;
@@ -471,7 +471,7 @@
 
         
         
-        float commentHeight = [self calculateTextHeight:text width:270 fontSize:10.0f];
+        float commentHeight = [self calculateTextHeight:text width:270 fontSize:12.0f];
         CGRect frame = cell.frame;
         frame.size.height = commentHeight+25;
         [cell setFrame:frame];
@@ -503,9 +503,9 @@
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         NSString* text = [mainCom valueForKey:@"content"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:10.0f];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:12.0f];
         if (commentHeight < 15.0f) commentHeight = 15.0f;
-        return 60.0f + commentHeight;
+        return 65.0f + commentHeight;
         
     }else
     {
@@ -513,13 +513,10 @@
         if (indexPath.row > comments.count - 1) {
             return 30;
         }
-
-        
-        
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:270.0 fontSize:10.0f];
+        float commentHeight = [self calculateTextHeight:text width:270.0 fontSize:12.0f];
         return commentHeight+25;
     }
 }

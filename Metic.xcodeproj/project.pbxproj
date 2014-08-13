@@ -123,6 +123,7 @@
 		510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4594196E8A960081672A /* UIImageView+WebCache.m */; };
 		510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4596196E8A960081672A /* UIView+WebCacheOperation.m */; };
 		510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */; };
+		51176830199B400A00B13CD5 /* 1星空.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5117682F199B400A00B13CD5 /* 1星空.jpg */; };
 		5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */; };
 		5138B05619766C2000817821 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5138B05519766C2000817821 /* mapapi.bundle */; };
 		5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5144D980196B880300C953FB /* UMSocialLocalizable.strings */; };
@@ -451,6 +452,7 @@
 		510D4596196E8A960081672A /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		510D45A7196EA5700081672A /* UIImage+UIImageExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIImageExtras.h"; sourceTree = "<group>"; };
 		510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIImageExtras.m"; sourceTree = "<group>"; };
+		5117682F199B400A00B13CD5 /* 1星空.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1星空.jpg"; sourceTree = "<group>"; };
 		5127DED9198F21A100FB5A41 /* NearbyEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyEventViewController.h; sourceTree = "<group>"; };
 		5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyEventViewController.m; sourceTree = "<group>"; };
 		5138B02119766BF300817821 /* BMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMapKit.h; sourceTree = "<group>"; };
@@ -1383,6 +1385,7 @@
 		519C658D1989F61B00710B26 /* banner */ = {
 			isa = PBXGroup;
 			children = (
+				5117682F199B400A00B13CD5 /* 1星空.jpg */,
 				519C658E1989F61B00710B26 /* 2聚餐.jpg */,
 				519C658F1989F61B00710B26 /* 3兜风.jpg */,
 				519C65901989F61B00710B26 /* 4喝酒.jpg */,
@@ -1639,6 +1642,7 @@
 				519C65981989F61B00710B26 /* 6听课.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
+				51176830199B400A00B13CD5 /* 1星空.jpg in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 				5144D99E196B880300C953FB /* UMSCommentInputControlleriPad.xib in Resources */,
 				5144D9A0196B880300C953FB /* UMShareEditViewControlleriPad.xib in Resources */,

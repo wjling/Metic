@@ -2591,7 +2591,7 @@
                                 <color key="separatorColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5U-Ih-F1e">
-                                <rect key="frame" x="0.0" y="372" width="320" height="163"/>
+                                <rect key="frame" x="0.0" y="381" width="320" height="35"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="输入框" translatesAutoresizingMaskIntoConstraints="NO" id="sQ8-MQ-vf4">
@@ -2643,7 +2643,6 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
                         <outlet property="commentView" destination="c5U-Ih-F1e" id="FBR-ZQ-EkW"/>
@@ -2667,11 +2666,11 @@
                         <viewControllerLayoutGuide type="bottom" id="7Bx-uh-sig"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="VMM-1v-gas">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="936"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="936"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
@@ -2702,72 +2701,86 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VeA-PM-2vT">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VeA-PM-2vT">
                                         <rect key="frame" x="10" y="88" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="300" id="ijk-Eb-yty"/>
                                             <constraint firstAttribute="height" constant="115" id="pxu-Oo-NP4"/>
                                         </constraints>
-                                        <state key="normal" image="2聚餐.jpg">
+                                        <state key="normal" image="1星空.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="fYQ-xD-AuW"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hlA-Jo-zTD">
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hlA-Jo-zTD">
                                         <rect key="frame" x="10" y="213" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="3兜风.jpg">
+                                        <state key="normal" image="2聚餐.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="wXv-LT-ocE"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-az-reg">
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-az-reg">
                                         <rect key="frame" x="10" y="338" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="4喝酒.jpg">
+                                        <state key="normal" image="3兜风.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="sO4-j2-WaR"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-5p-JFd">
+                                    <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-5p-JFd">
                                         <rect key="frame" x="10" y="463" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="5健身.jpg">
+                                        <state key="normal" image="4喝酒.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="ddd-Kk-bky"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="6" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czb-gJ-8X2">
+                                    <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czb-gJ-8X2">
                                         <rect key="frame" x="10" y="588" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="6听课.jpg">
+                                        <state key="normal" image="5健身.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="w9Z-4c-Ufq"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="7" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAs-sP-gJ0">
+                                    <button opaque="NO" tag="6" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nAs-sP-gJ0">
                                         <rect key="frame" x="10" y="713" width="300" height="115"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="115" id="d8h-0V-9Me"/>
                                             <constraint firstAttribute="width" constant="300" id="npf-Xo-qPZ"/>
                                         </constraints>
-                                        <state key="normal" image="7夜店.jpg">
+                                        <state key="normal" image="6听课.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="aJ7-Nu-qZq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="7" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEn-rg-8zc">
+                                        <rect key="frame" x="10" y="838" width="300" height="115"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="fAh-A0-lfQ"/>
+                                            <constraint firstAttribute="height" constant="115" id="gO9-h0-c4F"/>
+                                        </constraints>
+                                        <state key="normal" image="7夜店.jpg">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="acO-d2-krI"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="nLV-JZ-daA">
@@ -2794,12 +2807,16 @@
                                         <rect key="frame" x="282" y="718" width="23" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="0iP-2Y-Po7">
+                                        <rect key="frame" x="282" y="843" width="23" height="23"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
                                     <constraint firstItem="VeA-PM-2vT" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="top" constant="88" id="BW3-5H-Z6b"/>
-                                    <constraint firstAttribute="bottom" secondItem="nAs-sP-gJ0" secondAttribute="bottom" constant="10" id="DTO-qx-CBx"/>
-                                    <constraint firstItem="nAs-sP-gJ0" firstAttribute="top" secondItem="VeA-PM-2vT" secondAttribute="bottom" constant="510" id="M6K-m3-grN"/>
+                                    <constraint firstAttribute="bottom" secondItem="OEn-rg-8zc" secondAttribute="bottom" constant="10" id="dnA-f8-VsZ"/>
+                                    <constraint firstItem="OEn-rg-8zc" firstAttribute="top" secondItem="VeA-PM-2vT" secondAttribute="bottom" constant="635" id="won-2Q-cnz"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -2836,6 +2853,8 @@
                             </view>
                         </barButtonItem>
                     </navigationItem>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="1000"/>
                     <connections>
                         <outletCollection property="defaultBanners" destination="VeA-PM-2vT" id="Mz7-tC-ejj"/>
                         <outletCollection property="defaultBanners" destination="hlA-Jo-zTD" id="S1g-As-8oj"/>
@@ -2849,6 +2868,8 @@
                         <outletCollection property="selectorIndictors" destination="1gz-QY-Esw" id="gbG-S6-89E"/>
                         <outletCollection property="selectorIndictors" destination="2Zn-zp-MbM" id="zZZ-89-GLv"/>
                         <outletCollection property="selectorIndictors" destination="tAc-fn-tsd" id="HfO-nV-Pak"/>
+                        <outletCollection property="defaultBanners" destination="OEn-rg-8zc" id="tL9-m7-4Bt"/>
+                        <outletCollection property="selectorIndictors" destination="0iP-2Y-Po7" id="qsf-RX-djb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7tN-v5-auA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3639,10 +3660,10 @@
                                             <constraint firstAttribute="height" constant="45" id="CdF-WE-jb1"/>
                                             <constraint firstAttribute="width" constant="80" id="eNZ-Tw-uPb"/>
                                         </constraints>
-                                        <state key="normal" image="图片评论icon图标1">
+                                        <state key="normal" image="图片评论_点赞图标">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" image="图片评论icon图标1白色"/>
+                                        <state key="highlighted" image="图片评论_已赞"/>
                                         <connections>
                                             <action selector="good:" destination="vtf-A0-qgM" eventType="touchUpInside" id="gvA-5N-5Wt"/>
                                         </connections>
@@ -3654,10 +3675,9 @@
                                             <constraint firstAttribute="width" constant="80" id="NkQ-dR-Bbg"/>
                                             <constraint firstAttribute="height" constant="45" id="UZ5-G8-R49"/>
                                         </constraints>
-                                        <state key="normal" image="图片评论icon图标2">
+                                        <state key="normal" image="图片评论_评论图标">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" image="图片评论icon图标2白色"/>
                                         <connections>
                                             <action selector="comment:" destination="vtf-A0-qgM" eventType="touchUpInside" id="5OW-w3-jYU"/>
                                         </connections>
@@ -3669,10 +3689,9 @@
                                             <constraint firstAttribute="width" constant="80" id="eSr-6c-Gth"/>
                                             <constraint firstAttribute="height" constant="45" id="mFB-yB-yPZ"/>
                                         </constraints>
-                                        <state key="normal" image="图片评论icon图标3">
+                                        <state key="normal" image="图片评论_分享图标">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" image="图片评论icon图标3白色"/>
                                         <connections>
                                             <action selector="share:" destination="vtf-A0-qgM" eventType="touchUpInside" id="UjG-Id-uyV"/>
                                         </connections>
@@ -3684,10 +3703,9 @@
                                             <constraint firstAttribute="height" constant="45" id="HUX-DM-zep"/>
                                             <constraint firstAttribute="width" constant="80" id="RrS-VK-9RR"/>
                                         </constraints>
-                                        <state key="normal" image="图片评论icon图标4">
+                                        <state key="normal" image="图片评论_下载图标">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="highlighted" image="图片评论icon图标4白色"/>
                                         <connections>
                                             <action selector="download:" destination="vtf-A0-qgM" eventType="touchUpInside" id="MO7-KA-S8f"/>
                                         </connections>
@@ -4248,6 +4266,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="1星空.jpg" width="640" height="244"/>
         <image name="2聚餐.jpg" width="640" height="245"/>
         <image name="3兜风.jpg" width="640" height="245"/>
         <image name="4喝酒.jpg" width="640" height="245"/>
@@ -4276,14 +4295,11 @@
         <image name="发起活动icon" width="13" height="13"/>
         <image name="发送至图片墙对号" width="34" height="34"/>
         <image name="发送至图片墙对号按下效果" width="34" height="34"/>
-        <image name="图片评论icon图标1" width="20" height="20"/>
-        <image name="图片评论icon图标1白色" width="20" height="20"/>
-        <image name="图片评论icon图标2" width="20" height="20"/>
-        <image name="图片评论icon图标2白色" width="20" height="20"/>
-        <image name="图片评论icon图标3" width="20" height="20"/>
-        <image name="图片评论icon图标3白色" width="20" height="20"/>
-        <image name="图片评论icon图标4" width="20" height="20"/>
-        <image name="图片评论icon图标4白色" width="20" height="20"/>
+        <image name="图片评论_下载图标" width="29" height="29"/>
+        <image name="图片评论_分享图标" width="29" height="29"/>
+        <image name="图片评论_已赞" width="29" height="29"/>
+        <image name="图片评论_点赞图标" width="29" height="29"/>
+        <image name="图片评论_评论图标" width="29" height="29"/>
         <image name="地图定位icon" width="17" height="17"/>
         <image name="头像-116（白色底）" width="59" height="59"/>
         <image name="头部小按钮" width="83" height="43"/>
@@ -4316,13 +4332,13 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Bnm-KN-OgT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="YnG-LV-8dG"/>
-        <segue reference="eBE-9B-Hp2"/>
-        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="Bnm-KN-OgT"/>
         <segue reference="fLJ-gw-aSw"/>
         <segue reference="EEO-gR-a4J"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="eBE-9B-Hp2"/>
         <segue reference="hOW-ww-bKW"/>
     </inferredMetricsTieBreakers>
 </document>

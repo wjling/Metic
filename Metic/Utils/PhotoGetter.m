@@ -60,12 +60,12 @@
         case 0:
         {
             NSString *url = [self getLocalBannerUrl];
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"]];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
         case 1:
         {
-            [self.imageView setImage:[UIImage imageNamed:@"event.png"]];
+            [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
         case 2:
