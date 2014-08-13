@@ -15,6 +15,7 @@
 @interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView1;
 @property (strong, nonatomic) IBOutlet UITableView *tableView2;
+@property (strong, nonatomic) IBOutlet UILabel *promt;
 @property (strong, nonatomic) UIView *indicatorView;
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSNumber *sequence;

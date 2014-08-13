@@ -75,10 +75,9 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-//    _shouldStopTimer = NO;
-//    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:YES];
-//    [_timer invalidate];
-    
+    if (!_photo_list || _photo_list.count == 0) {
+        [_promt setHidden:NO];
+    }else [_promt setHidden:YES];
     if (_canReloadPhoto) {
         [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
         _canReloadPhoto = NO;
@@ -93,11 +92,6 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
-//    if (_shouldStopTimer){
-//        _shouldStopTimer = NO;
-//        [_timer invalidate];
-//        
-//    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -357,6 +351,9 @@
             [self getPhotoPathlist];
             [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
             [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
+            if (!_photo_list || _photo_list.count == 0) {
+                [_promt setHidden:NO];
+            }else [_promt setHidden:YES];
 
         }
             break;

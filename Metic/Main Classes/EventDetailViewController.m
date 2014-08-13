@@ -201,6 +201,10 @@
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isPublish = YES;
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
+    if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
+        ((UITextField*)[self.inputField viewWithTag:1]).text = @"";
+        return;
+    }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];

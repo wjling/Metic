@@ -89,6 +89,7 @@
 
 -(void)mapview:(BMKMapView *)mapView onLongClick:(CLLocationCoordinate2D)coordinate
 {
+    [_locService stopUserLocationService];
     [mapView removeAnnotation:_panPoint];
     _panPoint.coordinate = coordinate;
     [mapView addAnnotation:_panPoint];
