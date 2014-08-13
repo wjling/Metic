@@ -52,6 +52,7 @@
 @property (strong, nonatomic) UIView* networkStatusNotifier_view;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 @property (nonatomic) BOOL isNetworkConnected;
+@property (nonatomic) BOOL isLogined;
 
 +(void)initApp;
 +(void)refreshMenu;

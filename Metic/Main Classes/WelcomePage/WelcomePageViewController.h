@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CommonUtils.h"
 
 @interface WelcomePageViewController : UIViewController<UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet UIView *rootView;
