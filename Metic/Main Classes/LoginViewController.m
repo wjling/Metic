@@ -16,7 +16,7 @@
         Tag_userName = 50,
         Tag_password
     };
-    
+    UIViewController* launchV;
     
 }
 @property (strong, nonatomic) UIView* waitingView;
@@ -48,6 +48,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if ([userDf boolForKey:@"firstLaunched"]) {
+        NSLog(@"login: it is the first launch");
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+        [self presentViewController:vc animated:NO completion:nil];
+    }
+    else
+    {
+        NSLog(@"login: it is not the first launch");
+        [self showLaunchView];
+        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+    }
     
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.rootView.myDelegate = self;
@@ -91,12 +105,6 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if ([userDf boolForKey:@"firstLauch"]) {
-        NSLog(@"login: it is first lauch");
-//        WelcomePageViewController* vc = [[WelcomePageViewController alloc]init];
-//        [self presentViewController:vc animated:YES completion:nil];
-    }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self checkPreUP];
@@ -106,6 +114,34 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)showLaunchView
+{
+    CGRect bounds = [UIScreen mainScreen].bounds;
+    CGFloat view_width = bounds.size.width;
+    CGFloat view_height = bounds.size.height;
+    UIColor* bgColor = [CommonUtils colorWithValue:0x57caab];
+    launchV = [[UIViewController alloc]init];
+//    [launchV.view setBackgroundColor:[UIColor greenColor]];
+    UIView* page4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
+    UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, 70, view_width - 42, 115)];
+    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
+    [page4 setBackgroundColor:bgColor];
+    imgV4_1.image = [UIImage imageNamed:@"出图-文字4"];
+    imgV4_2.image = [UIImage imageNamed:@"出图-主视觉4"];
+    page4.clipsToBounds = YES;
+    [page4 addSubview:imgV4_1];
+    [page4 addSubview:imgV4_2];
+    [launchV.view addSubview:page4];
+    launchV.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self presentViewController:launchV animated:NO completion:nil];
+}
+
+-(void)dismissLaunchView
+{
+    
+    [launchV dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -303,6 +339,7 @@
 //            BOOL key = [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
 //            BOOL status = [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];
             NSLog(@"login succeeded");
+            ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
             //保存信息
             NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
             NSArray *Array = [NSArray arrayWithObjects:self.logInEmail, self.logInPassword, nil];

@@ -183,6 +183,8 @@
     else if (buttonIndex == 2)
     {
         NSLog(@"切换账号");
+        ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
+        [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
         [[MTUser alloc]init];
         [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];

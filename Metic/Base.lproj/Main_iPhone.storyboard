@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -28,7 +28,7 @@
         <!--Welcome Page View Controller-->
         <scene sceneID="Wqb-Iu-OUn">
             <objects>
-                <viewController id="mnA-nY-JGf" customClass="WelcomePageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WelcomePageViewController" id="mnA-nY-JGf" customClass="WelcomePageViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lMS-Yz-5Sm"/>
                         <viewControllerLayoutGuide type="bottom" id="9MC-wg-Opu"/>
@@ -37,26 +37,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-w1-7mT">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-w1-7mT">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7om-3M-0Vm">
+                                    <view hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7om-3M-0Vm">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉1" translatesAutoresizingMaskIntoConstraints="NO" id="m0w-VJ-RGx">
+                                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉1" translatesAutoresizingMaskIntoConstraints="NO" id="m0w-VJ-RGx">
                                                 <rect key="frame" x="0.0" y="210" width="320" height="270"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字1" translatesAutoresizingMaskIntoConstraints="NO" id="sju-RH-cWN">
+                                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字1" translatesAutoresizingMaskIntoConstraints="NO" id="sju-RH-cWN">
                                                 <rect key="frame" x="0.0" y="40" width="320" height="130"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UWJ-mh-mJM">
+                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UWJ-mh-mJM">
                                         <rect key="frame" x="320" y="0.0" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -69,9 +69,9 @@
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             </imageView>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
+                                        <color key="backgroundColor" red="1" green="0.01003315345" blue="0.10135292" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mnf-zc-yaT">
+                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mnf-zc-yaT">
                                         <rect key="frame" x="640" y="0.0" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -86,7 +86,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMl-ec-PCl">
+                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMl-ec-PCl">
                                         <rect key="frame" x="960" y="0.0" width="320" height="480"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
@@ -102,6 +102,13 @@
                                         <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
                                     </view>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="7om-3M-0Vm" firstAttribute="leading" secondItem="Km0-w1-7mT" secondAttribute="leading" id="BE2-37-hFq"/>
+                                    <constraint firstItem="mnf-zc-yaT" firstAttribute="leading" secondItem="UWJ-mh-mJM" secondAttribute="trailing" id="FEX-lA-kM5"/>
+                                    <constraint firstAttribute="trailing" secondItem="aMl-ec-PCl" secondAttribute="trailing" constant="-960" id="egK-iG-GWN"/>
+                                    <constraint firstItem="UWJ-mh-mJM" firstAttribute="leading" secondItem="7om-3M-0Vm" secondAttribute="trailing" id="fgi-Nf-XrQ"/>
+                                    <constraint firstItem="aMl-ec-PCl" firstAttribute="leading" secondItem="mnf-zc-yaT" secondAttribute="trailing" id="yg5-nb-0AX"/>
+                                </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -110,11 +117,11 @@
                             <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="7om-3M-0Vm" secondAttribute="bottom" id="95u-oJ-79O"/>
                             <constraint firstItem="aMl-ec-PCl" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="FnF-xg-Nde"/>
                             <constraint firstItem="7om-3M-0Vm" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="NnV-iL-f6c"/>
-                            <constraint firstItem="Km0-w1-7mT" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="abF-n8-isT"/>
                             <constraint firstItem="mnf-zc-yaT" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="jWL-xx-e4g"/>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="Km0-w1-7mT" secondAttribute="bottom" id="pkN-nk-q8K"/>
+                            <constraint firstItem="Km0-w1-7mT" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="kKh-tC-qLl"/>
                             <constraint firstItem="UWJ-mh-mJM" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="qvR-vQ-qFj"/>
                             <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="UWJ-mh-mJM" secondAttribute="bottom" id="rhv-Zp-6E1"/>
+                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="Km0-w1-7mT" secondAttribute="bottom" id="upH-aB-4IX"/>
                             <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="mnf-zc-yaT" secondAttribute="bottom" id="xPj-S1-Wq3"/>
                         </constraints>
                     </view>
@@ -491,7 +498,7 @@
                                 <sections/>
                             </tableView>
                             <view hidden="YES" alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hc6-Qr-xXh">
-                                <rect key="frame" x="0.0" y="110" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -1845,10 +1852,10 @@
             </objects>
             <point key="canvasLocation" x="2846" y="700"/>
         </scene>
-        <!--Add Friend Comfirm View Controller - 添加好友-->
+        <!--Add Friend Confirm View Controller - 添加好友-->
         <scene sceneID="qtL-q5-EMi">
             <objects>
-                <viewController id="kY6-mG-9ve" customClass="AddFriendComfirmViewController" sceneMemberID="viewController">
+                <viewController id="kY6-mG-9ve" customClass="AddFriendConfirmViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="utP-v1-8o3"/>
                         <viewControllerLayoutGuide type="bottom" id="Kix-dL-92r"/>
@@ -2038,7 +2045,7 @@
             </objects>
             <point key="canvasLocation" x="2453" y="390"/>
         </scene>
-        <!--Login View Controller - 登陆-->
+        <!--Login View Controller - 登录-->
         <scene sceneID="c37-aP-6j7">
             <objects>
                 <viewController id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
@@ -2143,7 +2150,7 @@
                             <constraint firstItem="y6K-RO-Ldz" firstAttribute="leading" secondItem="3yY-CU-vOh" secondAttribute="leading" constant="10" id="pmJ-mi-ZHH"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="登陆" id="QFT-Ua-zat"/>
+                    <navigationItem key="navigationItem" title="登录" id="QFT-Ua-zat"/>
                     <size key="freeformSize" width="320" height="640"/>
                     <connections>
                         <outlet property="Img_password" destination="iig-DP-8Ji" id="6aJ-dF-J4E"/>
@@ -4308,12 +4315,12 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="ib8-0I-OZA"/>
+        <segue reference="DsC-hh-HTw"/>
         <segue reference="YnG-LV-8dG"/>
         <segue reference="eBE-9B-Hp2"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="Bnm-KN-OgT"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="a7Z-Ie-XBp"/>
     </inferredMetricsTieBreakers>
 </document>

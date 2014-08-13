@@ -6,13 +6,13 @@
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
-#import "AddFriendComfirmViewController.h"
+#import "AddFriendConfirmViewController.h"
 
-@interface AddFriendComfirmViewController ()
+@interface AddFriendConfirmViewController ()
 
 @end
 
-@implementation AddFriendComfirmViewController
+@implementation AddFriendConfirmViewController
 @synthesize fid;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

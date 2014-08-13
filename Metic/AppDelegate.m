@@ -27,6 +27,7 @@
 @synthesize notificationDelegate;
 @synthesize networkStatusNotifier_view;
 @synthesize isNetworkConnected;
+@synthesize isLogined;
 //@synthesize operationQueue;
 
 //@synthesize user;
@@ -40,16 +41,18 @@
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if (![userDf boolForKey:@"everLauched"]) {
-        [userDf setBool:YES forKey:@"everLauched"];
-        [userDf setBool:YES forKey:@"firstLauched"];
-        NSLog(@"The first lauch");
+    if (![userDf boolForKey:@"everLaunched"]) {
+        [userDf setBool:YES forKey:@"everLaunched"];
+        [userDf setBool:YES forKey:@"firstLaunched"];
+        NSLog(@"The first launch");
+        [userDf synchronize];
         
     }
     else
     {
-        NSLog(@"Not the first lauch");
-        [userDf setBool:NO forKey:@"firstLauched"];
+        NSLog(@"Not the first launch");
+        [userDf setBool:NO forKey:@"firstLaunched"];
+        [userDf synchronize];
     }
 	
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
@@ -63,6 +66,7 @@
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     isNetworkConnected = YES;
+    isLogined = NO;
     [self initViews];
 //    [self initApp];
     
@@ -251,9 +255,14 @@
             [self showNetworkNotification:@"网络连接恢复正常"];
         }
         isNetworkConnected = YES;
+        while (!isLogined) {
+            [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+        }
         if (!isConnected) {
             [self connect];
         }
+
+        
         
         NSLog(@"Network is reachable");
     }
@@ -434,7 +443,7 @@
 
 - (void)disconnect
 {
-//    [self.mySocket close];
+    [self.mySocket close];
     [self unscheduleHeartBeat];
     NSLog(@"Disconnected");
 }
@@ -589,7 +598,7 @@
     NSLog(@":( Websocket Failed With Error %@", error);
     isConnected = NO;
     [self disconnect];
-    if (isNetworkConnected) {
+    if (isNetworkConnected && isLogined) {
         [self connect];
         NSLog(@"Reconnecting from fail...");
     }
@@ -601,7 +610,7 @@
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     isConnected = NO;
     [self disconnect];
-    if (isNetworkConnected) {
+    if (isNetworkConnected && isLogined) {
         [self connect];
         NSLog(@"Reconnecting from close...");
     }

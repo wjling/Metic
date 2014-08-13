@@ -74,8 +74,8 @@
     }
     else if ([[segue identifier] isEqualToString:@"searchfriend_comfirmMsg"])
     {
-        if ([[segue destinationViewController] isKindOfClass:[AddFriendComfirmViewController class]]) {
-            AddFriendComfirmViewController* vc = segue.destinationViewController;
+        if ([[segue destinationViewController] isKindOfClass:[AddFriendConfirmViewController class]]) {
+            AddFriendConfirmViewController* vc = segue.destinationViewController;
             vc.fid = [[self.searchFriendList objectAtIndex:friendPosition] objectForKey:@"id"];;
         }
     }
