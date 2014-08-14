@@ -564,8 +564,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </scrollView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Adz-kL-fW6">
-                                <rect key="frame" x="0.0" y="40" width="320" height="464"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Adz-kL-fW6" customClass="myScrollView">
+                                <rect key="frame" x="0.0" y="40" width="320" height="376"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <tableView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bju-hI-gfv" userLabel="event Table View">
@@ -703,8 +703,8 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
-                                    <tableView clipsSubviews="YES" alpha="0.5" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="HlR-s1-oMN" userLabel="system Table View">
-                                        <rect key="frame" x="640" y="0.0" width="320" height="464"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="HlR-s1-oMN" userLabel="system Table View">
+                                        <rect key="frame" x="640" y="0.0" width="320" height="376"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <prototypes>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationsSystemMessageTableViewCell" rowHeight="50" id="ZQw-gY-4Oa" customClass="NotificationsSystemMessageTableViewCell">
@@ -742,8 +742,8 @@
                                     </tableView>
                                 </subviews>
                             </scrollView>
-                            <view hidden="YES" alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCv-GU-pwd">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCv-GU-pwd">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -798,7 +798,7 @@
                             <constraint firstItem="bkl-GJ-uzZ" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" constant="40" id="1JM-pc-8wI"/>
                             <constraint firstItem="umw-Ff-J50" firstAttribute="top" secondItem="bkl-GJ-uzZ" secondAttribute="bottom" id="8f9-mc-WDW"/>
                             <constraint firstItem="umw-Ff-J50" firstAttribute="top" secondItem="HlR-s1-oMN" secondAttribute="bottom" id="BMn-bX-oC7"/>
-                            <constraint firstItem="Adz-kL-fW6" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" constant="40" id="OZ7-Ob-cmd"/>
+                            <constraint firstItem="Adz-kL-fW6" firstAttribute="top" secondItem="Lyi-aI-pIE" secondAttribute="bottom" id="EfE-YX-yKz"/>
                             <constraint firstItem="JCv-GU-pwd" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" id="R0z-y3-oX6"/>
                             <constraint firstItem="umw-Ff-J50" firstAttribute="top" secondItem="JCv-GU-pwd" secondAttribute="bottom" id="R5p-Bw-cMt"/>
                             <constraint firstItem="bju-hI-gfv" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" constant="40" id="Vpk-ak-zmk"/>
@@ -824,7 +824,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="content_scrollView" destination="Adz-kL-fW6" id="JJr-uX-fc7"/>
+                        <outlet property="content_scrollView" destination="Adz-kL-fW6" id="XNI-Fm-wsk"/>
                         <outlet property="eventRequest_tableView" destination="bju-hI-gfv" id="P38-nm-zJU"/>
                         <outlet property="friendRequest_tableView" destination="bkl-GJ-uzZ" id="LWU-jP-X6V"/>
                         <outlet property="function1_button" destination="sTJ-lu-Q67" id="N8k-PJ-s6h"/>
