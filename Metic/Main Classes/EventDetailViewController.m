@@ -204,6 +204,54 @@
     self.repliedId = nil;
     self.mainCommentId = 0;
 }
+
+-(void)resendComment:(id)sender{
+    id cell = [sender superview];
+    while (![cell isKindOfClass:[UITableViewCell class]] ) {
+        cell = [cell superview];
+    }
+    
+    int row = [_tableView indexPathForCell:cell].row;
+    int section = [_tableView indexPathForCell:cell].section;
+    NSMutableDictionary *waitingComment;
+    
+    if (row == 0) {
+        waitingComment = _comment_list[section-1][0];
+    }else{
+        waitingComment = _comment_list[section-1][[_comment_list[section-1] count] - row];
+    }
+    NSString *comment = [waitingComment valueForKey:@"content"];
+    [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"comment_id"];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    [dictionary setValue:comment forKey:@"content"];
+    [dictionary setValue:[NSNumber numberWithLong:self.mainCommentId] forKey:@"master"];
+    if ([waitingComment valueForKey:@"replied"]) {
+        [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
+    }
+    
+    
+    
+    [_tableView reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if(waitingComment && [[waitingComment valueForKey:@"comment_id"] intValue]== -1){
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+            [_tableView reloadData];
+            
+        }
+    });
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+
+}
+
+
+
 - (IBAction)publishComment:(id)sender {
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
@@ -213,10 +261,7 @@
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
-        [dictionary setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
-    }
+
     
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -228,6 +273,11 @@
     [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     NSString*time = [dateFormatter stringFromDate:[NSDate date]];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
+    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
+        [dictionary setValue:_repliedId forKey:@"replied"];
+        [newComment setValue:_repliedId forKey:@"replied"];
+        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+    }
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
     [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"comment_num"];
@@ -254,6 +304,14 @@
         }
             break;
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if(newComment && [[newComment valueForKey:@"comment_id"] intValue]== -1){
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+            [_tableView reloadData];
+            
+        }
+    });
+
     [_tableView reloadData];
     self.inputField.text = @"";
     [self.inputField resignFirstResponder];
@@ -347,7 +405,7 @@
     }
     else if (indexPath.row == 0) {
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-        if ([cell.commentid intValue] == -1 ) {
+        if ([cell.commentid intValue] < 0 ) {
             return;
         }
         [self.inputField becomeFirstResponder];
@@ -363,7 +421,7 @@
             return;
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-        if ([cell.commentid intValue] == -1 ) {
+        if ([cell.commentid intValue] < 0 ) {
             return;
         }
         [self.inputField becomeFirstResponder];
@@ -480,9 +538,20 @@
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView startAnimating];
+            [cell.resend_Button setHidden:YES];
+            
+            
+        }else if([[mainCom valueForKey:@"comment_id"] intValue] == -2){
+            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+            [cell.zanView setHidden:YES];
+            [cell.waitView stopAnimating];
+            [cell.resend_Button setHidden:NO];
+            [cell.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
+
         }else{
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
+            [cell.resend_Button setHidden:YES];
             if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
                 [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             }
@@ -535,8 +604,14 @@
 
         if ([[subCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [cell.waitView startAnimating];
+            [cell.resend_Button setHidden:YES];
+        }else if([[subCom valueForKey:@"comment_id"] intValue] == -2){
+            [cell.waitView stopAnimating];
+            [cell.resend_Button setHidden:NO];
+            [cell.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }else{
             [cell.waitView stopAnimating];
+            [cell.resend_Button setHidden:YES];
         }
 
         

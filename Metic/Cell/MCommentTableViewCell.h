@@ -25,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *good_num;
 @property (strong, nonatomic) IBOutlet UIImageView *subCommentBG;
 @property (strong, nonatomic) IBOutlet UIView *zanView;
+@property (strong, nonatomic) IBOutlet UIButton *resend_Button;
+@property (strong, nonatomic) IBOutlet UILabel *comment;
 
 
 @end

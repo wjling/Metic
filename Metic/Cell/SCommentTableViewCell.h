@@ -21,4 +21,5 @@
 @property (strong, nonatomic) IBOutlet TTTAttributedLabel *comment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property(nonatomic,strong) EventDetailViewController *controller;
+@property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @end
