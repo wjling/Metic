@@ -20,6 +20,7 @@
 		04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */; };
 		04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */; };
 		04BAF696199B78E200BF00E1 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BAF695199B78E200BF00E1 /* libbaidumapapi.a */; };
+		04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6A0199BCF7500BF00E1 /* myScrollView.m */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -256,6 +257,8 @@
 		04BAF687199A569F00BF00E1 /* WelcomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomePageViewController.h; path = WelcomePage/WelcomePageViewController.h; sourceTree = "<group>"; };
 		04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomePageViewController.m; path = WelcomePage/WelcomePageViewController.m; sourceTree = "<group>"; };
 		04BAF695199B78E200BF00E1 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04BAF69F199BCF7500BF00E1 /* myScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myScrollView.h; path = "Custom Wedgets/myScrollView.h"; sourceTree = "<group>"; };
+		04BAF6A0199BCF7500BF00E1 /* myScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = myScrollView.m; path = "Custom Wedgets/myScrollView.m"; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -753,6 +756,8 @@
 				04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */,
 				04E657C5197A4EA20091524F /* InputHandleView.h */,
 				04E657C6197A4EA20091524F /* InputHandleView.m */,
+				04BAF69F199BCF7500BF00E1 /* myScrollView.h */,
+				04BAF6A0199BCF7500BF00E1 /* myScrollView.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -1678,6 +1683,7 @@
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
+				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,

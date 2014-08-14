@@ -134,7 +134,7 @@
     [page4 addSubview:imgV4_1];
     [page4 addSubview:imgV4_2];
     [launchV.view addSubview:page4];
-    launchV.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    launchV.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:launchV animated:NO completion:nil];
 }
 
