@@ -18,6 +18,7 @@
 #import "NotificationsSystemMessageTableViewCell.h"
 #import "PhotoGetter.h"
 #import "HistoricalNotificationViewController.h"
+#import "myScrollView.h"
 
 
 @interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,NotificationDelegate>
@@ -34,7 +35,9 @@
 @property (weak,nonatomic) AppDelegate* appListener;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIScrollView *tabbar_scrollview;
-@property (strong, nonatomic) IBOutlet UIScrollView *content_scrollView;
+//@property (strong, nonatomic) IBOutlet UIScrollView *content_scrollView;
+@property (strong, nonatomic) IBOutlet myScrollView *content_scrollView;
+
 @property (strong, nonatomic) IBOutlet UIView *rootView;
 @property (strong, nonatomic) IBOutlet UIButton *rightBarButton;
 @property (strong, nonatomic) IBOutlet UIView *functions_uiview;

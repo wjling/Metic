@@ -267,7 +267,7 @@ enum Response_Type
     
     CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
     [self.content_scrollView setContentOffset:point animated:YES];
-    
+    [self.content_scrollView setScrollEnabled:YES];
 //    if (index == 0) {
 //        [self.eventRequest_tableView reloadData];
 //    }
@@ -399,24 +399,30 @@ enum Response_Type
 
 #pragma mark - Touches
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    UITouch* touch = [touches anyObject];
-    lastX = [touch locationInView:self.view].x;
-    if (lastX <= 10) {
-        self.content_scrollView.scrollEnabled = NO;
-    }
-    else
-    {
-        self.content_scrollView.scrollEnabled = YES;
-    }
-    
+//- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    UITouch* touch = [touches anyObject];
+//    lastX = [touch locationInView:self.view].x;
+//    NSLog(@"touch X: %f",lastX);
+//    if (lastX <= 10) {
+////        self.content_scrollView.userInteractionEnabled = NO;
+////        [super touchesBegan:touches withEvent:event];
+////        self.content_scrollView.canCancelContentTouches = YES;
+//        NSLog(@"touches begin: scrollview disabled");
+//    }
+//    else
+//    {
+////        self.content_scrollView.userInteractionEnabled = YES;
+////        self.content_scrollView.canCancelContentTouches = NO;
+//        NSLog(@"touches begin: scrollview enabled");
+//    }
+//    
+//
+//}
 
-}
 
-
-- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
+//- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//{
 //    UITouch* touch = [touches anyObject];
 //    CGPoint p = [touch locationInView:self.view];
 //    CGFloat x = p.x;
@@ -431,14 +437,15 @@ enum Response_Type
 //        }
 //
 //    }
-        //    NSLog(@"touches moved,x: %f, y: %f",p.x , p.y);
-}
+//    NSLog(@"touches moved,x: %f, y: %f",p.x , p.y);
+//}
 
-- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    self.content_scrollView.scrollEnabled = YES;
-    
-}
+//- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    self.content_scrollView.scrollEnabled = YES;
+//    NSLog(@"touches end: scrollview enabled");
+//    
+//}
 
 //==========================================================================================
 
@@ -589,7 +596,7 @@ enum Response_Type
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    UIColor* bgColor = [UIColor colorWithRed:0.94 green:0.94 blue:0.94 alpha:1];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
     if (tableView == self.eventRequest_tableView) {
         NotificationsEventRequestTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
@@ -644,6 +651,7 @@ enum Response_Type
             default:
                 break;
         }
+        [cell.contentView setBackgroundColor:bgColor];
         UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
         cell.layer.borderColor = borderColor.CGColor;
         cell.layer.borderWidth = 0.3;

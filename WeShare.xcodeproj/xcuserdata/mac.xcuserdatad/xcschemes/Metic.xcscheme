@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "51581D1F1933575300943606"
                BuildableName = "Metic.app"
-               BlueprintName = "Metic"
-               ReferencedContainer = "container:Metic.xcodeproj">
+               BlueprintName = "WeShare"
+               ReferencedContainer = "container:WeShare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "51581D431933575300943606"
                BuildableName = "MeticTests.xctest"
-               BlueprintName = "MeticTests"
-               ReferencedContainer = "container:Metic.xcodeproj">
+               BlueprintName = "WeShareTests"
+               ReferencedContainer = "container:WeShare.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,8 +44,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
             BuildableName = "Metic.app"
-            BlueprintName = "Metic"
-            ReferencedContainer = "container:Metic.xcodeproj">
+            BlueprintName = "WeShare"
+            ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
             BuildableName = "Metic.app"
-            BlueprintName = "Metic"
-            ReferencedContainer = "container:Metic.xcodeproj">
+            BlueprintName = "WeShare"
+            ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -93,8 +93,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
             BuildableName = "Metic.app"
-            BlueprintName = "Metic"
-            ReferencedContainer = "container:Metic.xcodeproj">
+            BlueprintName = "WeShare"
+            ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

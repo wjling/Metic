@@ -20,6 +20,7 @@
 		04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */; };
 		04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */; };
 		04BAF696199B78E200BF00E1 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BAF695199B78E200BF00E1 /* libbaidumapapi.a */; };
+		04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6A0199BCF7500BF00E1 /* myScrollView.m */; };
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
@@ -256,6 +257,8 @@
 		04BAF687199A569F00BF00E1 /* WelcomePageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WelcomePageViewController.h; path = WelcomePage/WelcomePageViewController.h; sourceTree = "<group>"; };
 		04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WelcomePageViewController.m; path = WelcomePage/WelcomePageViewController.m; sourceTree = "<group>"; };
 		04BAF695199B78E200BF00E1 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04BAF69F199BCF7500BF00E1 /* myScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myScrollView.h; path = "Custom Wedgets/myScrollView.h"; sourceTree = "<group>"; };
+		04BAF6A0199BCF7500BF00E1 /* myScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = myScrollView.m; path = "Custom Wedgets/myScrollView.m"; sourceTree = "<group>"; };
 		04CB1B791976EFD300BC083C /* NameSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NameSettingViewController.h; path = UserInfo/NameSettingViewController.h; sourceTree = "<group>"; };
 		04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NameSettingViewController.m; path = UserInfo/NameSettingViewController.m; sourceTree = "<group>"; };
 		04CB1B7D1977769E00BC083C /* SingleSelectionAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleSelectionAlertView.h; path = "Custom Wedgets/SingleSelectionAlertView.h"; sourceTree = "<group>"; };
@@ -541,14 +544,14 @@
 		514812141937064E00DBBED7 /* MJRefreshHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJRefreshHeaderView.m; sourceTree = "<group>"; };
 		5148121A19372B4200DBBED7 /* EventDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailViewController.h; sourceTree = "<group>"; };
 		5148121B19372B4200DBBED7 /* EventDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailViewController.m; sourceTree = "<group>"; };
-		51581D201933575300943606 /* Metic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Metic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		51581D201933575300943606 /* WeShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51581D231933575300943606 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		51581D251933575300943606 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		51581D271933575300943606 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		51581D2B1933575300943606 /* Metic-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Metic-Info.plist"; sourceTree = "<group>"; };
+		51581D2B1933575300943606 /* WeShare-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeShare-Info.plist"; sourceTree = "<group>"; };
 		51581D2D1933575300943606 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		51581D2F1933575300943606 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		51581D311933575300943606 /* Metic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Metic-Prefix.pch"; sourceTree = "<group>"; };
+		51581D311933575300943606 /* WeShare-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WeShare-Prefix.pch"; sourceTree = "<group>"; };
 		51581D321933575300943606 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		51581D331933575300943606 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		51581D361933575300943606 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
@@ -556,9 +559,9 @@
 		51581D3B1933575300943606 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		51581D3C1933575300943606 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		51581D3E1933575300943606 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		51581D441933575300943606 /* MeticTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MeticTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		51581D441933575300943606 /* WeShareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeShareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		51581D451933575300943606 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		51581D4D1933575300943606 /* MeticTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MeticTests-Info.plist"; sourceTree = "<group>"; };
+		51581D4D1933575300943606 /* WeShareTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeShareTests-Info.plist"; sourceTree = "<group>"; };
 		51581D4F1933575300943606 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		51581D511933575300943606 /* MeticTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeticTests.m; sourceTree = "<group>"; };
 		51581D5C19335A8700943606 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
@@ -753,6 +756,8 @@
 				04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */,
 				04E657C5197A4EA20091524F /* InputHandleView.h */,
 				04E657C6197A4EA20091524F /* InputHandleView.m */,
+				04BAF69F199BCF7500BF00E1 /* myScrollView.h */,
+				04BAF6A0199BCF7500BF00E1 /* myScrollView.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -1174,7 +1179,7 @@
 		51581D171933575300943606 = {
 			isa = PBXGroup;
 			children = (
-				51581D291933575300943606 /* Metic */,
+				51581D291933575300943606 /* WeShare */,
 				51581D4B1933575300943606 /* MeticTests */,
 				51581D221933575300943606 /* Frameworks */,
 				51581D211933575300943606 /* Products */,
@@ -1184,8 +1189,8 @@
 		51581D211933575300943606 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				51581D201933575300943606 /* Metic.app */,
-				51581D441933575300943606 /* MeticTests.xctest */,
+				51581D201933575300943606 /* WeShare.app */,
+				51581D441933575300943606 /* WeShareTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1218,7 +1223,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		51581D291933575300943606 /* Metic */ = {
+		51581D291933575300943606 /* WeShare */ = {
 			isa = PBXGroup;
 			children = (
 				04CB1B7C1977760200BC083C /* Custom Wedgets */,
@@ -1239,6 +1244,7 @@
 				51581D3C1933575300943606 /* ViewController.m */,
 				51581D2A1933575300943606 /* Supporting Files */,
 			);
+			name = WeShare;
 			path = Metic;
 			sourceTree = "<group>";
 		};
@@ -1246,10 +1252,10 @@
 			isa = PBXGroup;
 			children = (
 				04E657C119797A380091524F /* Provinces.plist */,
-				51581D2B1933575300943606 /* Metic-Info.plist */,
+				51581D2B1933575300943606 /* WeShare-Info.plist */,
 				51581D2C1933575300943606 /* InfoPlist.strings */,
 				51581D2F1933575300943606 /* main.m */,
-				51581D311933575300943606 /* Metic-Prefix.pch */,
+				51581D311933575300943606 /* WeShare-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1266,7 +1272,7 @@
 		51581D4C1933575300943606 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				51581D4D1933575300943606 /* MeticTests-Info.plist */,
+				51581D4D1933575300943606 /* WeShareTests-Info.plist */,
 				51581D4E1933575300943606 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -1499,9 +1505,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		51581D1F1933575300943606 /* Metic */ = {
+		51581D1F1933575300943606 /* WeShare */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 51581D551933575300943606 /* Build configuration list for PBXNativeTarget "Metic" */;
+			buildConfigurationList = 51581D551933575300943606 /* Build configuration list for PBXNativeTarget "WeShare" */;
 			buildPhases = (
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
@@ -1511,14 +1517,14 @@
 			);
 			dependencies = (
 			);
-			name = Metic;
+			name = WeShare;
 			productName = Metic;
-			productReference = 51581D201933575300943606 /* Metic.app */;
+			productReference = 51581D201933575300943606 /* WeShare.app */;
 			productType = "com.apple.product-type.application";
 		};
-		51581D431933575300943606 /* MeticTests */ = {
+		51581D431933575300943606 /* WeShareTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 51581D581933575300943606 /* Build configuration list for PBXNativeTarget "MeticTests" */;
+			buildConfigurationList = 51581D581933575300943606 /* Build configuration list for PBXNativeTarget "WeShareTests" */;
 			buildPhases = (
 				51581D401933575300943606 /* Sources */,
 				51581D411933575300943606 /* Frameworks */,
@@ -1529,9 +1535,9 @@
 			dependencies = (
 				51581D4A1933575300943606 /* PBXTargetDependency */,
 			);
-			name = MeticTests;
+			name = WeShareTests;
 			productName = MeticTests;
-			productReference = 51581D441933575300943606 /* MeticTests.xctest */;
+			productReference = 51581D441933575300943606 /* WeShareTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -1548,7 +1554,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 51581D1B1933575300943606 /* Build configuration list for PBXProject "Metic" */;
+			buildConfigurationList = 51581D1B1933575300943606 /* Build configuration list for PBXProject "WeShare" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1568,8 +1574,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				51581D1F1933575300943606 /* Metic */,
-				51581D431933575300943606 /* MeticTests */,
+				51581D1F1933575300943606 /* WeShare */,
+				51581D431933575300943606 /* WeShareTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1677,6 +1683,7 @@
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
+				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
@@ -1799,7 +1806,7 @@
 /* Begin PBXTargetDependency section */
 		51581D4A1933575300943606 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 51581D1F1933575300943606 /* Metic */;
+			target = 51581D1F1933575300943606 /* WeShare */;
 			targetProxy = 51581D491933575300943606 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1931,6 +1938,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: WANG JINLING (FE7PW8KK5S)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1938,13 +1946,13 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
+				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					src/Classes/,
 				);
-				INFOPLIST_FILE = "Metic/Metic-Info.plist";
+				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1957,7 +1965,7 @@
 					"$(PROJECT_DIR)/Metic/Source/ZBarSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WeShare;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1968,6 +1976,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: WANG JINLING (FE7PW8KK5S)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1975,13 +1984,13 @@
 					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
+				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					src/Classes/,
 				);
-				INFOPLIST_FILE = "Metic/Metic-Info.plist";
+				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1994,7 +2003,7 @@
 					"$(PROJECT_DIR)/Metic/Source/ZBarSDK",
 				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WeShare;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -2014,8 +2023,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "MeticTests/MeticTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "MeticTests/WeShareTests-Info.plist";
+				PRODUCT_NAME = WeShareTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -2032,8 +2041,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/Metic-Prefix.pch";
-				INFOPLIST_FILE = "MeticTests/MeticTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "MeticTests/WeShareTests-Info.plist";
+				PRODUCT_NAME = WeShareTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -2042,7 +2051,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		51581D1B1933575300943606 /* Build configuration list for PBXProject "Metic" */ = {
+		51581D1B1933575300943606 /* Build configuration list for PBXProject "WeShare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				51581D531933575300943606 /* Debug */,
@@ -2051,7 +2060,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		51581D551933575300943606 /* Build configuration list for PBXNativeTarget "Metic" */ = {
+		51581D551933575300943606 /* Build configuration list for PBXNativeTarget "WeShare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				51581D561933575300943606 /* Debug */,
@@ -2060,7 +2069,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		51581D581933575300943606 /* Build configuration list for PBXNativeTarget "MeticTests" */ = {
+		51581D581933575300943606 /* Build configuration list for PBXNativeTarget "WeShareTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				51581D591933575300943606 /* Debug */,
