@@ -18,12 +18,13 @@
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSArray * pcomment_list;
+@property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) NSString* herName;
 @property BOOL isKeyBoard;
+@property long Selete_section;
 
 @end
 
@@ -155,12 +156,11 @@
 }
 
 - (IBAction)publishComment:(id)sender {
-    NSString *comment = [((UITextField*)[self.commentView viewWithTag:10]).text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];;
-    if ([comment isEqualToString:@""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"写点内容吧" WithDelegate:self WithCancelTitle:@"确定"];
+    NSString *comment = ((UITextField*)[self.commentView viewWithTag:10]).text;
+    if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
+        ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
         return;
     }
-    
     [[self.commentView viewWithTag:10] resignFirstResponder];
     ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
     NSLog(comment,nil);
@@ -174,7 +174,29 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSString*time = [dateFormatter stringFromDate:[NSDate date]];
+    NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
+    [newComment setValue:_photoId forKey:@"photo_id"];
+    [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
+    [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
+    [newComment setValue:comment forKey:@"content"];
+    [newComment setValue:time forKey:@"time"];
+    [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
+
+    if ([_pcomment_list isKindOfClass:[NSArray class]]) {
+        _pcomment_list = [[NSMutableArray alloc]initWithArray:_pcomment_list];
+    }
+    [_pcomment_list insertObject:newComment atIndex:0];
+
+    [_tableView reloadData];
+    ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
+    [((UITextField*)[self.commentView viewWithTag:10]) resignFirstResponder];
     
+
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -341,7 +363,10 @@
         cell1.authorName = [Pcomment valueForKey:@"author"];
         cell1.authorId = [Pcomment valueForKey:@"author_id"];
         cell1.date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
-        //cell1.comment.text = [Pcomment valueForKey:@"content"];
+        cell1.pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
+        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] == -1 ) {
+            [cell1.waitView startAnimating];
+        }else [cell1.waitView stopAnimating];
 
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar authorId:[Pcomment valueForKey:@"author_id"]];
         [getter getPhoto];
@@ -406,6 +431,7 @@
     }else{
         NSLog(@"aaa");
         PcommentTableViewCell *cell = (PcommentTableViewCell*)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:5];
+        if ([cell.pcomment_id intValue] == -1) return;
         self.herName = cell.authorName;
         if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
             [((UITextField*)[self.commentView viewWithTag:10]) setPlaceholder:[NSString stringWithFormat:@"回复%@:",_herName]];

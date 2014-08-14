@@ -15,5 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSNumber *authorId;
+@property (strong, nonatomic) IBOutlet NSNumber *pcomment_id;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 
 @end
