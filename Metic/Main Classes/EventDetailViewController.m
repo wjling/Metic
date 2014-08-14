@@ -507,10 +507,12 @@
             [content setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
             [cell addSubview:content];
             UILabel* more = [[UILabel alloc]initWithFrame:CGRectMake(100, 0, 100, 30)];
+            [more setBackgroundColor:[UIColor clearColor]];
             [more setText:@"查看更多评论"];
             [more setTextAlignment:NSTextAlignmentCenter];
             [more setFont:[UIFont systemFontOfSize:12]];
             [content addSubview:more];
+            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
             
         }

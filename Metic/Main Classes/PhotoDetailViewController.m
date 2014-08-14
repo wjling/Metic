@@ -155,7 +155,7 @@
     //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
 }
 
--(void)resend:(id)sender
+-(void)resendComment:(id)sender
 {
     
     id cell = [sender superview];
@@ -163,47 +163,23 @@
         cell = [cell superview];
     }
     NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
+    cell = [[cell superview]superview];
+    int row = [_tableView indexPathForCell:cell].row;
+    NSMutableDictionary *waitingComment = _pcomment_list[row-1];
+    [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
     
-    
-    ////////////////待续////////////
-    [[self.commentView viewWithTag:10] resignFirstResponder];
-    ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
-    NSLog(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
-        [dictionary setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
-    }
-
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    NSString*time = [dateFormatter stringFromDate:[NSDate date]];
-    NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
-    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
-    [newComment setValue:_photoId forKey:@"photo_id"];
-    [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
-    [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
-    [newComment setValue:comment forKey:@"content"];
-    [newComment setValue:time forKey:@"time"];
-    [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
-    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
     
-    if ([_pcomment_list isKindOfClass:[NSArray class]]) {
-        _pcomment_list = [[NSMutableArray alloc]initWithArray:_pcomment_list];
-    }
-    [_pcomment_list insertObject:newComment atIndex:0];
     
     [_tableView reloadData];
-    ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
-    [((UITextField*)[self.commentView viewWithTag:10]) resignFirstResponder];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(newComment && [[newComment valueForKey:@"pcomment_id"] intValue]== -1){
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if(waitingComment && [[waitingComment valueForKey:@"pcomment_id"] intValue]== -1){
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
             [_tableView reloadData];
             
         }
@@ -256,7 +232,7 @@
     [_tableView reloadData];
     ((UITextField*)[self.commentView viewWithTag:10]).text = @"";
     [((UITextField*)[self.commentView viewWithTag:10]) resignFirstResponder];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(newComment && [[newComment valueForKey:@"pcomment_id"] intValue]== -1){
             [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
             [_tableView reloadData];
@@ -437,8 +413,7 @@
         }else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
             [cell1.waitView stopAnimating];
             [cell1.resend_Button setHidden:NO];
-
-            [cell1.resend_Button addTarget:self action:@selector(resend:) forControlEvents:UIControlEventTouchUpInside];
+            [cell1.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }
         else{
             [cell1.waitView stopAnimating];
@@ -451,6 +426,7 @@
         
         int height = [self calculateTextHeight:commentText width:255.0];
         UILabel* comment = [[UILabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
+        cell1.comment = comment;
         [comment setFont:[UIFont systemFontOfSize:12]];
         [comment setNumberOfLines:0];
         comment.text = [Pcomment valueForKey:@"content"];
