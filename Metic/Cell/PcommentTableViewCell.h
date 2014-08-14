@@ -17,5 +17,8 @@
 @property (strong, nonatomic) NSNumber *authorId;
 @property (strong, nonatomic) IBOutlet NSNumber *pcomment_id;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
+@property (strong, nonatomic) IBOutlet UIButton *resend_Button;
+- (IBAction)resend:(id)sender;
+
 
 @end
