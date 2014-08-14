@@ -1550,11 +1550,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429439580.775229"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2124,12 +2124,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429609911.98312"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "534"
-            endingLineNumber = "534"
-            landmarkName = "-keyboardWillShow:"
+            startingLineNumber = "566"
+            endingLineNumber = "566"
+            landmarkName = "-textFieldShouldReturn:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2732,11 +2732,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429439580.775229"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "307"
-            endingLineNumber = "307"
+            startingLineNumber = "339"
+            endingLineNumber = "339"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2748,11 +2748,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429609911.98312"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "623"
-            endingLineNumber = "623"
+            startingLineNumber = "655"
+            endingLineNumber = "655"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2764,11 +2764,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429609911.98312"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "629"
-            endingLineNumber = "629"
+            startingLineNumber = "661"
+            endingLineNumber = "661"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2780,11 +2780,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/EventDetailViewController.m"
-            timestampString = "429609911.98312"
+            timestampString = "429687737.645761"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "625"
-            endingLineNumber = "625"
+            startingLineNumber = "657"
+            endingLineNumber = "657"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -2881,8 +2881,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "491"
             endingLineNumber = "491"
-            landmarkName = "-arrangebyAddTime:"
-            landmarkType = "5">
+            landmarkName = "@implementation HomeViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2897,8 +2897,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "510"
             endingLineNumber = "510"
-            landmarkName = "@implementation HomeViewController"
-            landmarkType = "3">
+            landmarkName = "-arrangebyStartTime:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

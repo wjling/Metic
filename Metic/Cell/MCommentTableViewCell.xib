@@ -49,6 +49,10 @@
                             <action selector="delete_Comment:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="34m-k8-rjJ"/>
                         </connections>
                     </button>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" id="fP5-Ga-bgO">
+                        <rect key="frame" x="276" y="10" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </activityIndicatorView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="10" baselineAdjustment="none" adjustsFontSizeToFit="NO" id="rkY-dG-AMd">
                         <rect key="frame" x="15" y="45" width="300" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -92,6 +96,7 @@
                 <outlet property="good_button" destination="XRf-dQ-MZD" id="MHn-Od-zTM"/>
                 <outlet property="good_num" destination="i2g-0Y-byj" id="Rcl-Ui-jPp"/>
                 <outlet property="subCommentBG" destination="na1-Oj-ist" id="yP9-H6-Yd8"/>
+                <outlet property="waitView" destination="fP5-Ga-bgO" id="h9b-Ac-Kdl"/>
                 <outlet property="zanView" destination="B3G-zL-nWL" id="KPp-bb-fn8"/>
             </connections>
         </tableViewCell>

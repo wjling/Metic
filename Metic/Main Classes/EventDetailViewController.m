@@ -210,15 +210,47 @@
         [dictionary setValue:_repliedId forKey:@"replied"];
         comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
     }
+    
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     [dictionary setValue:[NSNumber numberWithLong:self.mainCommentId] forKey:@"master"];
     
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSString*time = [dateFormatter stringFromDate:[NSDate date]];
+    NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
+    [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"comment_num"];
+    [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"comment_id"];
+    [newComment setValue:comment forKey:@"content"];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"master"];
+    [newComment setValue:time forKey:@"time"];
+    [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
+    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
+    switch (_mainCommentId) {
+        case 0:{
+            
+            //加入到评论数组里
+            [_comment_list addObject:[[NSMutableArray alloc] initWithObjects:newComment, nil]];
+        }
+            break;
+            
+        default:{
+            
+        }
+            break;
+    }
+
+    
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT];
+    
+    
 }
 
 - (IBAction)show2Dcode:(id)sender {
