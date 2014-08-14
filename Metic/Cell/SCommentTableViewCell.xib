@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="middleTruncation" numberOfLines="20" adjustsFontSizeToFit="NO" id="2r7-AY-86d" customClass="TTTAttributedLabel">
-                                <rect key="frame" x="10" y="0.0" width="270" height="21"/>
+                                <rect key="frame" x="10" y="0.0" width="265" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="highlightedColor"/>
@@ -45,6 +45,10 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="biq-3i-uzC">
+                                <rect key="frame" x="275" y="10" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="deviceRGB"/>
                     </view>
@@ -54,6 +58,7 @@
             <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
             <connections>
                 <outlet property="comment" destination="2r7-AY-86d" id="dRh-4D-t5X"/>
+                <outlet property="waitView" destination="biq-3i-uzC" id="Wvz-uP-XgK"/>
             </connections>
         </tableViewCell>
     </objects>

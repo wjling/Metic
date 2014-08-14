@@ -19,5 +19,6 @@
 @property(strong,nonatomic) NSNumber* authorid;
 @property(strong,nonatomic) NSNumber* commentid;
 @property (strong, nonatomic) IBOutlet TTTAttributedLabel *comment;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property(nonatomic,strong) EventDetailViewController *controller;
 @end

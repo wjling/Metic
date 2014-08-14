@@ -26,9 +26,11 @@
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
+
 @property(nonatomic,strong) NSString* herName;
 @property BOOL visibility;
 @property long mainCommentId;
+@property long Selete_section;
 @property BOOL isOpen;
 @property BOOL isKeyBoard;
 @property BOOL Headeropen;
@@ -197,14 +199,19 @@
     
 }
 
+- (void)readyforMainC
+{
+    self.repliedId = nil;
+    self.mainCommentId = 0;
+}
 - (IBAction)publishComment:(id)sender {
-    self.master_sequence = [NSNumber numberWithInt:0];
-    self.isPublish = YES;
     NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         ((UITextField*)[self.inputField viewWithTag:1]).text = @"";
         return;
     }
+    self.master_sequence = [NSNumber numberWithInt:0];
+    self.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
@@ -234,15 +241,22 @@
         case 0:{
             
             //加入到评论数组里
-            [_comment_list addObject:[[NSMutableArray alloc] initWithObjects:newComment, nil]];
+            [_comment_list insertObject:[[NSMutableArray alloc] initWithObjects:newComment, nil] atIndex:0];
+            
         }
             break;
             
         default:{
-            
+            if ([_comment_list[_Selete_section-1] isKindOfClass:[NSArray class]]) {
+                _comment_list[_Selete_section-1] = [[NSMutableArray alloc]initWithArray:_comment_list[_Selete_section-1]];
+            }
+            [_comment_list[_Selete_section-1] insertObject:newComment atIndex:1];
         }
             break;
     }
+    [_tableView reloadData];
+    self.inputField.text = @"";
+    [self.inputField resignFirstResponder];
 
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -332,10 +346,14 @@
         self.mainCommentId = 0;
     }
     else if (indexPath.row == 0) {
-        [self.inputField becomeFirstResponder];
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        if ([cell.commentid intValue] == -1 ) {
+            return;
+        }
+        [self.inputField becomeFirstResponder];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.Selete_section = indexPath.section;
         self.repliedId = nil;
     }else{
         NSMutableArray *comments = self.comment_list[indexPath.section -1];
@@ -344,11 +362,15 @@
             [self getmoreComments:[lastSubComment valueForKey:@"master"] sub_Sequence:[lastSubComment valueForKey:@"comment_id"]];
             return;
         }
-        [self.inputField becomeFirstResponder];
         SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        if ([cell.commentid intValue] == -1 ) {
+            return;
+        }
+        [self.inputField becomeFirstResponder];
         [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
         self.repliedId = cell.authorid;
+        self.Selete_section = indexPath.section;
         self.herName = cell.author;
     }
 }
@@ -433,7 +455,7 @@
         UILabel *textView = (UILabel*)[cell viewWithTag:4];
         NSString* text = [mainCom valueForKey:@"content"];
         textView.text = text;
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:12.0f];
+        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:12.0f];
         if (commentHeight < 15) commentHeight = 15;
         CGRect frame = textView.frame;
         frame.size.height = commentHeight;
@@ -454,17 +476,21 @@
         if (cell.isZan) {
             [cell.good_button setBackgroundImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
         }else [cell.good_button setBackgroundImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
-        if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
+        if ([[mainCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+            [cell.zanView setHidden:YES];
+            [cell.waitView startAnimating];
+        }else{
+            [cell.waitView stopAnimating];
+            [cell.zanView setHidden:NO];
+            if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
+                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+            }
+            else{
+                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
+            }
         }
-        else{
-            [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
-        }
-        
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
-        //((UIImageView*)[cell viewWithTag:1]).layer.masksToBounds = YES;
-        [((UIImageView*)[cell viewWithTag:1]).layer setCornerRadius:5];
-        
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
         [avatarGetter getPhoto];
@@ -505,16 +531,21 @@
         [cell.comment setLineBreakMode:NSLineBreakByTruncatingTail];
         [((TTTAttributedLabel*)cell.comment) setText:hintString1];
 
+        if ([[subCom valueForKey:@"comment_id"] intValue] == -1 ) {
+            [cell.waitView startAnimating];
+        }else{
+            [cell.waitView stopAnimating];
+        }
+
         
-        
-        float commentHeight = [self calculateTextHeight:text width:270 fontSize:12.0f];
+        float commentHeight = [self calculateTextHeight:text width:265 fontSize:12.0f];
         CGRect frame = cell.frame;
         frame.size.height = commentHeight+25;
         [cell setFrame:frame];
         frame = [cell viewWithTag:100].frame;
         frame.size.height =  commentHeight+24;
         [[cell viewWithTag:100] setFrame:frame];
-        [cell.comment setFrame:CGRectMake(10, 5, 270, commentHeight+15)];
+        [cell.comment setFrame:CGRectMake(10, 5, 265, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = [subCom valueForKey:@"author"];
@@ -539,7 +570,7 @@
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         NSString* text = [mainCom valueForKey:@"content"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:12.0f];
+        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:12.0f];
         if (commentHeight < 15.0f) commentHeight = 15.0f;
         return 65.0f + commentHeight;
         
@@ -552,7 +583,7 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:270.0 fontSize:12.0f];
+        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:12.0f];
         return commentHeight+25;
     }
 }
@@ -670,9 +701,8 @@
                 
             }else
             {
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
-                self.inputField.text = @"";
-                [self.inputField resignFirstResponder];
+                //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+                
                 [self pullMainCommentFromAir];
                 
                 

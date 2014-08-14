@@ -23,6 +23,7 @@
 }
 
 - (IBAction)delete_Comment:(id)sender {
+    [_controller readyforMainC];
     _controller.master_sequence = [NSNumber numberWithInt:0];
     _controller.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
