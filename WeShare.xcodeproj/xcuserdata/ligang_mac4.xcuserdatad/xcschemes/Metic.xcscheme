@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "51581D1F1933575300943606"
-               BuildableName = "Metic.app"
+               BuildableName = "WeShare.app"
                BlueprintName = "WeShare"
                ReferencedContainer = "container:WeShare.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "51581D431933575300943606"
-               BuildableName = "MeticTests.xctest"
+               BuildableName = "WeShareTests.xctest"
                BlueprintName = "WeShareTests"
                ReferencedContainer = "container:WeShare.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
-            BuildableName = "Metic.app"
+            BuildableName = "WeShare.app"
             BlueprintName = "WeShare"
             ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
-            BuildableName = "Metic.app"
+            BuildableName = "WeShare.app"
             BlueprintName = "WeShare"
             ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51581D1F1933575300943606"
-            BuildableName = "Metic.app"
+            BuildableName = "WeShare.app"
             BlueprintName = "WeShare"
             ReferencedContainer = "container:WeShare.xcodeproj">
          </BuildableReference>

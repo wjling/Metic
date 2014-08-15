@@ -163,7 +163,6 @@
         cell = [cell superview];
     }
     NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
-    cell = [[cell superview]superview];
     int row = [_tableView indexPathForCell:cell].row;
     NSMutableDictionary *waitingComment = _pcomment_list[row-1];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
@@ -188,7 +187,27 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+                {
+                    [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
+                    [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                    [_pcomment_list removeObject:waitingComment];
+                    [_pcomment_list insertObject:waitingComment atIndex:0];
+                    [_tableView reloadData];
+                }
+            }else{
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+                [_tableView reloadData];
+            }
+        }else{
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            [_tableView reloadData];
+        }
+    }];
 }
 
 
@@ -243,7 +262,28 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+                {
+                    [newComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
+                    [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                    [_pcomment_list removeObject:newComment];
+                    [_pcomment_list insertObject:newComment atIndex:0];
+                    [_tableView reloadData];
+                }
+            }else{
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+                [_tableView reloadData];
+            }
+        }else{
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            [_tableView reloadData];
+        }
+
+    }];
 }
 
 - (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
@@ -288,9 +328,9 @@
                 self.pcomment_list = [response1 valueForKey:@"pcomment_list"];
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self.tableView reloadData];
-            }else if ([response1 valueForKey:@"pcomment_id"]){
-                self.sequence = [NSNumber numberWithInt:0];
-                [self pullMainCommentFromAir];
+//            }else if ([response1 valueForKey:@"pcomment_id"]){
+//                self.sequence = [NSNumber numberWithInt:0];
+//                [self pullMainCommentFromAir];
             }else{
                 BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
                 int good = [[self.photoInfo valueForKey:@"good"]intValue];
@@ -389,7 +429,7 @@
     
     
     }else{
-        cell = [[UITableViewCell alloc]init];
+        //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"pCommentCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
@@ -397,36 +437,40 @@
             [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
             nibsRegistered = YES;
         }
-        PcommentTableViewCell* cell1 = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        [cell1 setTag:5];
+        cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
         NSString* commentText = [Pcomment valueForKey:@"content"];
         
-        cell1.author.text = [Pcomment valueForKey:@"author"];
-        cell1.authorName = [Pcomment valueForKey:@"author"];
-        cell1.authorId = [Pcomment valueForKey:@"author_id"];
-        cell1.date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
-        cell1.pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
+        ((PcommentTableViewCell *)cell).author.text = [Pcomment valueForKey:@"author"];
+        ((PcommentTableViewCell *)cell).authorName = [Pcomment valueForKey:@"author"];
+        ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
+        ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
         if ([[Pcomment valueForKey:@"pcomment_id"] intValue] == -1 ) {
-            [cell1.waitView startAnimating];
-            [cell1.resend_Button setHidden:YES];
+            [((PcommentTableViewCell *)cell).waitView startAnimating];
+            [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
-            [cell1.waitView stopAnimating];
-            [cell1.resend_Button setHidden:NO];
-            [cell1.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
+            [((PcommentTableViewCell *)cell).waitView stopAnimating];
+            [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
+            [((PcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }
         else{
-            [cell1.waitView stopAnimating];
-            [cell1.resend_Button setHidden:YES];
+            [((PcommentTableViewCell *)cell).waitView stopAnimating];
+            [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
 
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:cell1.avatar authorId:[Pcomment valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((PcommentTableViewCell *)cell).avatar authorId:[Pcomment valueForKey:@"author_id"]];
         [getter getPhoto];
         
         
         int height = [self calculateTextHeight:commentText width:255.0];
-        UILabel* comment = [[UILabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
-        cell1.comment = comment;
+        
+        UILabel* comment =((PcommentTableViewCell *)cell).comment;
+        if (!comment){
+            comment = [[UILabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
+            ((PcommentTableViewCell *)cell).comment = comment;
+        }
+        else [comment setFrame:CGRectMake(50, 24, 255, height)];
         [comment setFont:[UIFont systemFontOfSize:12]];
         [comment setNumberOfLines:0];
         comment.text = [Pcomment valueForKey:@"content"];
@@ -434,13 +478,20 @@
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
         
-        UIView *backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
+        UIView* backguand = ((PcommentTableViewCell *)cell).background;
+        if (!backguand){
+            backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
+            ((PcommentTableViewCell *)cell).background = backguand;
+        }
+        else [backguand setFrame:CGRectMake(10, 0, 300, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         [cell addSubview:backguand];
-        [cell addSubview:cell1];
+        [cell sendSubviewToBack:backguand];
+        //[cell addSubview:cell1];
         [cell addSubview:comment];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        [cell setUserInteractionEnabled:YES];
         return cell;
         
     }
@@ -483,7 +534,11 @@
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
         NSLog(@"aaa");
-        PcommentTableViewCell *cell = (PcommentTableViewCell*)[[tableView cellForRowAtIndexPath:indexPath] viewWithTag:5];
+        PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        [cell.background setAlpha:0.5];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [cell.background setAlpha:1.0];
+        });
         if ([cell.pcomment_id intValue] < 0) return;
         self.herName = cell.authorName;
         if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {

@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet NSNumber *pcomment_id;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
+@property (strong, nonatomic) UIView* background;
 - (IBAction)resend:(id)sender;
 
 

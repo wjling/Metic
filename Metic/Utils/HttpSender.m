@@ -57,7 +57,9 @@
 //}
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    NSLog(@"error");
+    if (self.finishBlock) {
+        self.finishBlock(nil);
+    }
 }
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
 {
@@ -69,8 +71,9 @@
 -(void)connectionDidFinishLoading:(NSURLConnection*)connection
 {
 //    NSLog(@"connectionDidFinishLoading");
-
-    [self.mDelegate finishWithReceivedData:responseData];
+    if (self.finishBlock) {
+        self.finishBlock(responseData);
+    }else [self.mDelegate finishWithReceivedData:responseData];
 }
 
 
@@ -196,6 +199,21 @@
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
 {
+    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
+    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:jsonData];
+    
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    //NSLog(@"request sent");
+    
+}
+
+-(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+{
+    self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
     httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
