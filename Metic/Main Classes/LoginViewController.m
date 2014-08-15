@@ -50,11 +50,12 @@
     [super viewDidLoad];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if ([userDf boolForKey:@"firstLaunched"]) {
-        NSLog(@"login: it is the first launch");
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-															 bundle: nil];
-        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        [self presentViewController:vc animated:NO completion:nil];
+//        NSLog(@"login: it is the first launch");
+//        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//															 bundle: nil];
+//        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+//        [self presentViewController:vc animated:NO completion:nil];
+//        [self.navigationController pushViewController:vc animated:NO];
     }
     else
     {

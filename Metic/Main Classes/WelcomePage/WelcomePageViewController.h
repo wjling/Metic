@@ -10,8 +10,12 @@
 #import "CommonUtils.h"
 
 @interface WelcomePageViewController : UIViewController<UIScrollViewDelegate>
-@property (strong, nonatomic) IBOutlet UIView *rootView;
 @property (strong, nonatomic) IBOutlet UIScrollView *page_scrollview;
 @property (strong, nonatomic) UIPageControl* pageControl;
+@property (strong, nonatomic) UIView* page1;
+@property (strong, nonatomic) UIView* page2;
+@property (strong, nonatomic) UIView* page3;
+@property (strong, nonatomic) UIView* page4;
+@property (strong, nonatomic) UIView* scrollContentView;
 
 @end

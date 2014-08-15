@@ -26,113 +26,37 @@
             <point key="canvasLocation" x="22" y="49"/>
         </scene>
         <!--Welcome Page View Controller-->
-        <scene sceneID="Wqb-Iu-OUn">
+        <scene sceneID="D8E-O6-Z3D">
             <objects>
-                <viewController storyboardIdentifier="WelcomePageViewController" id="mnA-nY-JGf" customClass="WelcomePageViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WelcomePageViewController" id="cSJ-rk-7tA" customClass="WelcomePageViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="lMS-Yz-5Sm"/>
-                        <viewControllerLayoutGuide type="bottom" id="9MC-wg-Opu"/>
+                        <viewControllerLayoutGuide type="top" id="PIt-0H-cAe"/>
+                        <viewControllerLayoutGuide type="bottom" id="jJx-F6-S4z"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="E1b-Js-t8x">
+                    <view key="view" contentMode="scaleToFill" id="nxG-89-q4T">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" keyboardDismissMode="onDrag" translatesAutoresizingMaskIntoConstraints="NO" id="Km0-w1-7mT">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7D-8a-Njr">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <view hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7om-3M-0Vm">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        <subviews>
-                                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉1" translatesAutoresizingMaskIntoConstraints="NO" id="m0w-VJ-RGx">
-                                                <rect key="frame" x="0.0" y="210" width="320" height="270"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </imageView>
-                                            <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字1" translatesAutoresizingMaskIntoConstraints="NO" id="sju-RH-cWN">
-                                                <rect key="frame" x="0.0" y="40" width="320" height="130"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UWJ-mh-mJM">
-                                        <rect key="frame" x="320" y="0.0" width="320" height="480"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉2" translatesAutoresizingMaskIntoConstraints="NO" id="hVh-n2-5HT">
-                                                <rect key="frame" x="0.0" y="210" width="320" height="270"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字2" translatesAutoresizingMaskIntoConstraints="NO" id="FbE-cI-LJp">
-                                                <rect key="frame" x="0.0" y="40" width="320" height="130"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="1" green="0.01003315345" blue="0.10135292" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mnf-zc-yaT">
-                                        <rect key="frame" x="640" y="0.0" width="320" height="480"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉3" translatesAutoresizingMaskIntoConstraints="NO" id="2tW-ha-DDw">
-                                                <rect key="frame" x="0.0" y="210" width="320" height="270"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字3" translatesAutoresizingMaskIntoConstraints="NO" id="Ybf-QW-Smr">
-                                                <rect key="frame" x="0.0" y="40" width="320" height="130"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aMl-ec-PCl">
-                                        <rect key="frame" x="960" y="0.0" width="320" height="480"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-主视觉4" translatesAutoresizingMaskIntoConstraints="NO" id="56S-Zc-7ub">
-                                                <rect key="frame" x="0.0" y="210" width="320" height="270"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="出图-文字4" translatesAutoresizingMaskIntoConstraints="NO" id="1FH-cH-rQF">
-                                                <rect key="frame" x="0.0" y="40" width="320" height="130"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="7om-3M-0Vm" firstAttribute="leading" secondItem="Km0-w1-7mT" secondAttribute="leading" id="BE2-37-hFq"/>
-                                    <constraint firstItem="mnf-zc-yaT" firstAttribute="leading" secondItem="UWJ-mh-mJM" secondAttribute="trailing" id="FEX-lA-kM5"/>
-                                    <constraint firstAttribute="trailing" secondItem="aMl-ec-PCl" secondAttribute="trailing" constant="-960" id="egK-iG-GWN"/>
-                                    <constraint firstItem="UWJ-mh-mJM" firstAttribute="leading" secondItem="7om-3M-0Vm" secondAttribute="trailing" id="fgi-Nf-XrQ"/>
-                                    <constraint firstItem="aMl-ec-PCl" firstAttribute="leading" secondItem="mnf-zc-yaT" secondAttribute="trailing" id="yg5-nb-0AX"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="aMl-ec-PCl" secondAttribute="bottom" id="2ca-nU-rDB"/>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="7om-3M-0Vm" secondAttribute="bottom" id="95u-oJ-79O"/>
-                            <constraint firstItem="aMl-ec-PCl" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="FnF-xg-Nde"/>
-                            <constraint firstItem="7om-3M-0Vm" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="NnV-iL-f6c"/>
-                            <constraint firstItem="mnf-zc-yaT" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="jWL-xx-e4g"/>
-                            <constraint firstItem="Km0-w1-7mT" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="kKh-tC-qLl"/>
-                            <constraint firstItem="UWJ-mh-mJM" firstAttribute="top" secondItem="lMS-Yz-5Sm" secondAttribute="bottom" constant="-20" id="qvR-vQ-qFj"/>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="UWJ-mh-mJM" secondAttribute="bottom" id="rhv-Zp-6E1"/>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="Km0-w1-7mT" secondAttribute="bottom" id="upH-aB-4IX"/>
-                            <constraint firstItem="9MC-wg-Opu" firstAttribute="top" secondItem="mnf-zc-yaT" secondAttribute="bottom" id="xPj-S1-Wq3"/>
+                            <constraint firstAttribute="bottom" secondItem="T7D-8a-Njr" secondAttribute="bottom" id="BfA-gE-85J"/>
+                            <constraint firstItem="T7D-8a-Njr" firstAttribute="top" secondItem="nxG-89-q4T" secondAttribute="top" id="P0b-0c-Roh"/>
+                            <constraint firstAttribute="trailing" secondItem="T7D-8a-Njr" secondAttribute="trailing" id="P1v-Ad-ECR"/>
+                            <constraint firstItem="T7D-8a-Njr" firstAttribute="leading" secondItem="nxG-89-q4T" secondAttribute="leading" id="yGh-Zp-PBq"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="page_scrollview" destination="Km0-w1-7mT" id="eKw-qH-dMR"/>
-                        <outlet property="rootView" destination="E1b-Js-t8x" id="fwx-TY-MX5"/>
+                        <outlet property="page_scrollview" destination="T7D-8a-Njr" id="nXu-Vz-xZg"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QMI-bK-eis" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nB5-yD-bzv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="22" y="617"/>
+            <point key="canvasLocation" x="28" y="630"/>
         </scene>
         <!--Register View Controller - 注册-->
         <scene sceneID="CW3-Zz-73w">
@@ -4260,14 +4184,6 @@
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
         <image name="二维码" width="22" height="22"/>
-        <image name="出图-主视觉1" width="996" height="875"/>
-        <image name="出图-主视觉2" width="996" height="875"/>
-        <image name="出图-主视觉3" width="996" height="875"/>
-        <image name="出图-主视觉4" width="996" height="875"/>
-        <image name="出图-文字1" width="588" height="250"/>
-        <image name="出图-文字2" width="588" height="250"/>
-        <image name="出图-文字3" width="588" height="250"/>
-        <image name="出图-文字4" width="588" height="250"/>
         <image name="加入活动加号icon" width="29" height="29"/>
         <image name="加号icon" width="12" height="12"/>
         <image name="勾选前icon" width="34" height="34"/>

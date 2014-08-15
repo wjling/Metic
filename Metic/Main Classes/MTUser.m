@@ -391,6 +391,9 @@ static MTUser *singletonInstance;
 
 - (void) getMsgFromDataBase
 {
+    [self.eventRequestMsg removeAllObjects];
+    [self.friendRequestMsg removeAllObjects];
+    [self.systemMsg removeAllObjects];
     MySqlite* mySql = [[MySqlite alloc]init];
     [mySql openMyDB:DB_path];
     self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];

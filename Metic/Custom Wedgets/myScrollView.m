@@ -38,6 +38,7 @@
     
 //    NSLog(@"self content size: width: %f, height: %f",self.originContentSize.width,self.originContentSize.height);
 }
+
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 //{
 //    UITouch* touch = [touches anyObject];
