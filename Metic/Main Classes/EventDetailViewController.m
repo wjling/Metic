@@ -157,7 +157,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS];
 }
 
--(void)getmoreComments:(NSNumber*) master sub_Sequence:(NSNumber*)sub_Sequence
+-(void)getmoreComments:(NSNumber*) master sub_Sequence:(NSNumber*)sub_Sequence Scomments:(NSMutableArray*)Scomments
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -167,7 +167,26 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS];
+    [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY) {
+                NSMutableArray *comments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
+                for (int i = 0; i < comments.count; i++) {
+                    NSMutableDictionary* comment = [[NSMutableDictionary alloc]initWithDictionary:comments[i]];
+                    comments[i] = comment;
+                }
+                [Scomments addObjectsFromArray:comments];
+                [_tableView reloadData];
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+
+    }];
 }
 
 
@@ -532,7 +551,7 @@
         NSMutableArray *comments = self.comment_list[indexPath.section -1];
         if (indexPath.row > comments.count - 1) {
             NSDictionary* lastSubComment = [comments lastObject];
-            [self getmoreComments:[lastSubComment valueForKey:@"master"] sub_Sequence:[lastSubComment valueForKey:@"comment_id"]];
+            [self getmoreComments:[lastSubComment valueForKey:@"master"] sub_Sequence:[lastSubComment valueForKey:@"comment_id"]Scomments:comments];
             return;
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
@@ -879,20 +898,7 @@
                     }else if (_Footeropen || _Headeropen) {
                         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
                     }else [_tableView reloadData];
-                }else{
-                    for (int i = 0; i < _comment_list.count; i++) {
-                        NSMutableArray* comments = [[NSMutableArray alloc]initWithArray: _comment_list[i]];
-                        NSMutableDictionary* comment = [[NSMutableDictionary alloc]initWithDictionary: comments[0]];
-                        if ([[comment valueForKey:@"comment_id"] intValue] == type) {
-                            [comments addObjectsFromArray:tmp];
-                            _comment_list[i] = comments;
-                            [_tableView reloadData];
-                            return;
-                        }
-                    }
-
                 }
-                
             }
             
         }
