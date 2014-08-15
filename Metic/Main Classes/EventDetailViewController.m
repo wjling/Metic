@@ -70,7 +70,6 @@
     self.mainCommentId = 0;
     self.Headeropen = NO;
     self.Footeropen = NO;
-    self.isPublish = NO;
     self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
@@ -211,10 +210,10 @@
         cell = [cell superview];
     }
     
-    int row = [_tableView indexPathForCell:cell].row;
-    int section = [_tableView indexPathForCell:cell].section;
+    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSInteger section = [_tableView indexPathForCell:cell].section;
     NSMutableDictionary *waitingComment;
-    
+    NSMutableArray *comments = _comment_list[section-1];
     if (row == 0) {
         waitingComment = _comment_list[section-1][0];
     }else{
@@ -232,10 +231,10 @@
         [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     }
     
-    
+
     
     [_tableView reloadData];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(waitingComment && [[waitingComment valueForKey:@"comment_id"] intValue]== -1){
             [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
             [_tableView reloadData];
@@ -246,7 +245,30 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
+                [waitingComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                if (row == 0) {
+                    [_comment_list removeObject:comments];
+                    [_comment_list insertObject:comments atIndex:0];
+                }else{
+                    [comments removeObject:waitingComment];
+                    [comments insertObject:waitingComment atIndex:1];
+                }
+                [_tableView reloadData];
+            }else{
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                [_tableView reloadData];
+            }
+        }else{
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+            [_tableView reloadData];
+        }
+    }];
 
 }
 
@@ -259,7 +281,6 @@
         return;
     }
     self.master_sequence = [NSNumber numberWithInt:0];
-    self.isPublish = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
 
     
@@ -287,11 +308,13 @@
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
+    NSMutableArray*newComments;
     switch (_mainCommentId) {
         case 0:{
             
             //加入到评论数组里
-            [_comment_list insertObject:[[NSMutableArray alloc] initWithObjects:newComment, nil] atIndex:0];
+            newComments = [[NSMutableArray alloc] initWithObjects:newComment, nil];
+            [_comment_list insertObject:newComments atIndex:0];
             
         }
             break;
@@ -300,11 +323,12 @@
             if ([_comment_list[_Selete_section-1] isKindOfClass:[NSArray class]]) {
                 _comment_list[_Selete_section-1] = [[NSMutableArray alloc]initWithArray:_comment_list[_Selete_section-1]];
             }
-            [_comment_list[_Selete_section-1] insertObject:newComment atIndex:1];
+            newComments = _comment_list[_Selete_section-1];
+            [newComments insertObject:newComment atIndex:1];
         }
             break;
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(newComment && [[newComment valueForKey:@"comment_id"] intValue]== -1){
             [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
             [_tableView reloadData];
@@ -320,7 +344,34 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
+                {
+                    [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                    [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                    if (_mainCommentId == 0) {
+                        [_comment_list removeObject:newComments];
+                        [_comment_list insertObject:newComments atIndex:0];
+                    }else{
+                        [newComments removeObject:newComment];
+                        [newComments insertObject:newComment atIndex:1];
+                    }
+                    [_tableView reloadData];
+                }
+            }else{
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                [_tableView reloadData];
+            }
+        }else{
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+            [_tableView reloadData];
+        }
+        
+
+    }];
     
     
 }
@@ -751,10 +802,10 @@
                     
                     self.master_sequence = [response1 valueForKey:@"sequence"];
                     if (_Headeropen) [_comment_list removeAllObjects];
-                    if (_isPublish){
-                        _isPublish = NO;
-                        [_comment_list removeAllObjects];
-                    }
+//                    if (_isPublish){
+//                        _isPublish = NO;
+//                        [_comment_list removeAllObjects];
+//                    }
                     [self.comment_list addObjectsFromArray:tmp];
                     if (_Footeropen && [_master_sequence intValue] == -1) {
                         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
@@ -780,7 +831,7 @@
             {
                 //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
                 
-                [self pullMainCommentFromAir];
+                //[self pullMainCommentFromAir];
                 
                 
             }
