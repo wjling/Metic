@@ -49,18 +49,28 @@
 {
     [super viewDidLoad];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if ([userDf boolForKey:@"firstLaunched"]) {
-        NSLog(@"login: it is the first launch");
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-															 bundle: nil];
-        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        [self presentViewController:vc animated:NO completion:nil];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0)
+    {
+//        [self showLaunchView];
+//        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
     else
     {
-        NSLog(@"login: it is not the first launch");
-        [self showLaunchView];
-        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+        if ([userDf boolForKey:@"firstLaunched"]) {
+            NSLog(@"login: it is the first launch");
+            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                 bundle: nil];
+            WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+            [self presentViewController:vc animated:NO completion:nil];
+//            [self.navigationController pushViewController:vc animated:NO];
+        }
+        else
+        {
+            NSLog(@"login: it is not the first launch");
+            [self showLaunchView];
+            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+        }
+
     }
     
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];

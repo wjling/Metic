@@ -253,7 +253,7 @@
     NSInteger row = indexPath.row;
     if (section == 0) {
         cell.textLabel.text = @"通知栏提醒";
-        UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
+        UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
         [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
         nSwitch1.on = statusOfSwitch1;
         nSwitch1.tag = 1;
@@ -267,7 +267,7 @@
     {
         if (row == 0) {
             cell.textLabel.text = @"版本更新提醒";
-            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(233, 8, 30, 30)];
+            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
             [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
             nSwitch2.on = statusOfSwitch2;
             nSwitch2.tag = 2;
