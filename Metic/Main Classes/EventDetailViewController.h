@@ -29,6 +29,8 @@
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)show2Dcode:(id)sender;
+- (void)delete_Comment:(id)sender;
+- (void)appreciate:(id)sender;
 - (void)readyforMainC;
 
 

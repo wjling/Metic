@@ -204,6 +204,73 @@
     self.mainCommentId = 0;
 }
 
+
+- (void)delete_Comment:(id)sender {
+    
+    id cell = [sender superview];
+    while (![cell isKindOfClass:[UITableViewCell class]] ) {
+        cell = [cell superview];
+    }
+    NSInteger section = [_tableView indexPathForCell:cell].section;
+    NSMutableArray *comments = _comment_list[section-1];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:((MCommentTableViewCell*)cell).commentid forKey:@"comment_id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT finshedBlock:^(NSData *rData) {
+        [_comment_list removeObject:comments];
+        [_tableView reloadData];
+    }];
+}
+
+- (void)appreciate:(id)sender {
+    id cell = [sender superview];
+    while (![cell isKindOfClass:[UITableViewCell class]] ) {
+        cell = [cell superview];
+    }
+    NSInteger section = [_tableView indexPathForCell:cell].section;
+    NSMutableArray *comments = _comment_list[section-1];
+    NSMutableDictionary *waitingComment = _comment_list[section-1][0];
+    BOOL isZan = [[waitingComment valueForKey:@"isZan"] boolValue];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    [dictionary setValue:((MCommentTableViewCell*)cell).commentid forKey:@"comment_id"];
+    [dictionary setValue:[NSNumber numberWithInt:isZan? 0:1]  forKey:@"operation"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY) {
+                [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+                int zan_num = [[waitingComment valueForKey:@"good"] intValue];
+                if (isZan) {
+                    zan_num --;
+                }else{
+                    zan_num ++;
+                }
+                [waitingComment setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+                [_tableView reloadData];
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+
+    }];
+}
+
+
 -(void)resendComment:(id)sender{
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
@@ -320,9 +387,6 @@
             break;
             
         default:{
-            if ([_comment_list[_Selete_section-1] isKindOfClass:[NSArray class]]) {
-                _comment_list[_Selete_section-1] = [[NSMutableArray alloc]initWithArray:_comment_list[_Selete_section-1]];
-            }
             newComments = _comment_list[_Selete_section-1];
             [newComments insertObject:newComment atIndex:1];
         }
@@ -798,14 +862,16 @@
             if ([response1 valueForKey:@"comment_list"]) {
                 int type = [[response1 valueForKey:@"type"]intValue];
                 NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
+                for (int i = 0; i < tmp.count; i++) {
+                    tmp[i] = [[NSMutableArray alloc] initWithArray:tmp[i]];
+                    for (int j = 0; j < ((NSMutableArray*)tmp[i]).count; j++) {
+                        tmp[i][j] = [[NSMutableDictionary alloc]initWithDictionary:tmp[i][j]];
+                    }
+                }
                 if (type == 0) {
                     
                     self.master_sequence = [response1 valueForKey:@"sequence"];
                     if (_Headeropen) [_comment_list removeAllObjects];
-//                    if (_isPublish){
-//                        _isPublish = NO;
-//                        [_comment_list removeAllObjects];
-//                    }
                     [self.comment_list addObjectsFromArray:tmp];
                     if (_Footeropen && [_master_sequence intValue] == -1) {
                         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
@@ -826,13 +892,6 @@
                     }
 
                 }
-                
-            }else
-            {
-                //[CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论发布成功" WithDelegate:self WithCancelTitle:@"确定"];
-                
-                //[self pullMainCommentFromAir];
-                
                 
             }
             
