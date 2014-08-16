@@ -99,7 +99,7 @@
         }
             break;
         default:
-            [self.imageView setImage:[UIImage imageNamed:@"event.png"]];
+            [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
             break;
         }
   
