@@ -50,9 +50,7 @@
     [self.img.layer setCornerRadius:28];
     if (!_gender && [MTUser sharedInstance].gender) {
         float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
-        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 25, 25)];
-        [_gender.layer setBorderColor:[UIColor redColor].CGColor];
-        [_gender.layer setBorderWidth:2];
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20 , 20)];
         if ([[MTUser sharedInstance].gender intValue] == 1) {
             [self.gender setImage:[UIImage imageNamed:@"男icon"]];
         }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
@@ -93,10 +91,10 @@
 //    }
     float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
     if (!_gender) {
-        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 20, 20)];
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20)];
         [self.view addSubview:_gender];
     }
-    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 20, 20);
+    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20);
     if ([[MTUser sharedInstance].gender intValue] == 1) {
         [self.gender setImage:[UIImage imageNamed:@"男icon"]];
     }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];

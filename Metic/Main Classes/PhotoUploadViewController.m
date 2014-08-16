@@ -114,11 +114,13 @@
     UIImage *image = self.uploadImage;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
-    CGFloat length = MIN(width, height);
-    controller.imageCropRect = CGRectMake((width - length) / 2,
-                                          (height - length) / 2,
-                                          length,
-                                          length);
+    controller.imageCropRect = CGRectMake(0, 0, width, height);
+    [controller setToolbarHidden:YES];
+//    CGFloat length = MIN(width, height);
+//    controller.imageCropRect = CGRectMake((width - length) / 2,
+//                                          (height - length) / 2,
+//                                          length,
+//                                          length);
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
@@ -133,7 +135,7 @@
 
 - (IBAction)upload:(id)sender {
     if (!self.uploadImage) {
-        UIAlertView* alert =[CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择照片" WithDelegate:self WithCancelTitle:@"确定"];
+        UIAlertView* alert =[CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:self WithCancelTitle:@"确定"];
         [alert setTag:250];
         return;
     }
