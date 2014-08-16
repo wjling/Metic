@@ -47,10 +47,12 @@
     self.img.layer.masksToBounds = YES;
     [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.img.layer setBorderWidth:3.0f];
-    [self.img.layer setCornerRadius:33];
+    [self.img.layer setCornerRadius:28];
     if (!_gender && [MTUser sharedInstance].gender) {
-        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
-        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
+        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 25, 25)];
+        [_gender.layer setBorderColor:[UIColor redColor].CGColor];
+        [_gender.layer setBorderWidth:2];
         if ([[MTUser sharedInstance].gender intValue] == 1) {
             [self.gender setImage:[UIImage imageNamed:@"男icon"]];
         }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
@@ -62,6 +64,16 @@
     [getter getPhoto];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+        CGRect frame = self.view.frame;
+        frame.origin.y = 20;
+        [self.view setFrame:frame];
+    }
+    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
 -(void)refresh
 {
     self.userName.text = [MTUser sharedInstance].name;
@@ -69,7 +81,7 @@
     self.img.layer.masksToBounds = YES;
     [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.img.layer setBorderWidth:3.0f];
-    [self.img.layer setCornerRadius:33];
+    [self.img.layer setCornerRadius:28];
 //    if (!_gender && [MTUser sharedInstance].gender) {
 //        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
 //        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
@@ -79,12 +91,12 @@
 //        [self.view addSubview:_gender];
 //        
 //    }
-    float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
+    float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
     if (!_gender) {
-        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
+        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 20, 20)];
         [self.view addSubview:_gender];
     }
-    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25);
+    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 5, 20, 20, 20);
     if ([[MTUser sharedInstance].gender intValue] == 1) {
         [self.gender setImage:[UIImage imageNamed:@"男icon"]];
     }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];

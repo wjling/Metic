@@ -14,6 +14,7 @@
 @interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
+@property (strong, nonatomic) IBOutlet UIView *UserInfoView;
 @property (strong, nonatomic) IBOutlet UIImageView *img;
 @property (strong, nonatomic) IBOutlet UILabel *userName;
 @property (strong, nonatomic) IBOutlet UILabel *email;
