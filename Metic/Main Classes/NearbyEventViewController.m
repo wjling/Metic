@@ -39,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     _nearbyEvents = [[NSMutableArray alloc]init];
     _searchEvents = [[NSMutableArray alloc]init];
     _eventIds_all = [[NSMutableArray alloc]init];
@@ -94,6 +95,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)createScrollingBar

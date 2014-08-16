@@ -35,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     readerView.readerDelegate = self;
     _isScaning = NO;
 }
@@ -69,7 +70,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (IBAction)back:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];

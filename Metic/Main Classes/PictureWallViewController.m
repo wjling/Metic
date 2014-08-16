@@ -45,6 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     self.photos = [[NSMutableDictionary alloc]init];
     [self.tableView1 setDelegate:self];
     [self.tableView1 setDataSource:self];
@@ -103,6 +104,12 @@
 {
     [cell removeFromSuperview];
 }
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)getPhotolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];

@@ -35,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
     //[self.InfoView setHidden:YES];
@@ -84,6 +85,11 @@
     // Dispose of any resources that can be recreated.
 }
 //
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)refreshGood
 {

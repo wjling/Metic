@@ -34,11 +34,11 @@
                         <viewControllerLayoutGuide type="bottom" id="jJx-F6-S4z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nxG-89-q4T">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7D-8a-Njr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </scrollView>
                         </subviews>
@@ -2560,7 +2560,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
-                        <barButtonItem key="backBarButtonItem" title=" " id="bTp-CA-xkb"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="H2j-n1-6M4">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Agz-Hd-Hpf">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
@@ -4267,13 +4266,13 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="fLJ-gw-aSw"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="DsC-hh-HTw"/>
         <segue reference="ib8-0I-OZA"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="fLJ-gw-aSw"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="YnG-LV-8dG"/>
+        <segue reference="QDz-81-eMP"/>
     </inferredMetricsTieBreakers>
 </document>

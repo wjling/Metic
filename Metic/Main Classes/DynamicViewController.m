@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     [self createScrollingBar];
     _scrollView.delegate = self;
     _dynamic_tableView.delegate = self;
@@ -52,6 +53,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)createScrollingBar

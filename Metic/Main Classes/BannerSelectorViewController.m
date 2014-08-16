@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     _code = 1;
     // Do any additional setup after loading the view.
 }
@@ -36,6 +37,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (IBAction)selectBanner:(id)sender {
     for (UIImageView* indictor in _selectorIndictors) {

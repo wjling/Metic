@@ -366,4 +366,17 @@
     
     CLLocationDistance meters=[orig distanceFromLocation:dist];    return meters;
 }
+
++(void)addLeftButton:(UIViewController*)controller
+{
+    UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+    [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
+    [leftButton setTitle:@"        " forState:UIControlStateNormal];
+    [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+    [leftButton addTarget:controller action:@selector(MTpopViewController) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+    controller.navigationItem.leftBarButtonItem = leftButtonItem;
+}
+
 @end

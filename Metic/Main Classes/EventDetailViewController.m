@@ -65,6 +65,7 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [CommonUtils addLeftButton:self];
     self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
     self.mainCommentId = 0;
@@ -139,6 +140,22 @@
 
 }
 
+//-(void)initLeftButton
+//{
+//        UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+//        [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
+//        [leftButton setTitle:@"        " forState:UIControlStateNormal];
+//        [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+//        [leftButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+//        UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+//        self.navigationItem.leftBarButtonItem = leftButtonItem;
+//}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 #pragma mark - 数据库操作
 - (void)updateEventToDB
 {

@@ -163,8 +163,6 @@
 		51581D6519335A8700943606 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D5F19335A8700943606 /* HomeViewController.m */; };
 		51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D6119335A8700943606 /* ProfileDetailViewController.m */; };
 		51581D6719335A8700943606 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D6319335A8700943606 /* ProfileViewController.m */; };
-		51581D7119335CDD00943606 /* menu-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 51581D6D19335CDD00943606 /* menu-button.png */; };
-		51581D7219335CDD00943606 /* menu-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 51581D6E19335CDD00943606 /* menu-button@2x.png */; };
 		51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D7019335CDD00943606 /* SlideNavigationController.m */; };
 		51581D76193361A500943606 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D75193361A500943606 /* MenuViewController.m */; };
 		515F9FF419736D58009D96BA /* MapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 515F9FF319736D58009D96BA /* MapViewController.mm */; };
@@ -574,8 +572,6 @@
 		51581D6119335A8700943606 /* ProfileDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileDetailViewController.m; sourceTree = "<group>"; };
 		51581D6219335A8700943606 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		51581D6319335A8700943606 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		51581D6D19335CDD00943606 /* menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-button.png"; sourceTree = "<group>"; };
-		51581D6E19335CDD00943606 /* menu-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-button@2x.png"; sourceTree = "<group>"; };
 		51581D6F19335CDD00943606 /* SlideNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideNavigationController.h; sourceTree = "<group>"; };
 		51581D7019335CDD00943606 /* SlideNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideNavigationController.m; sourceTree = "<group>"; };
 		51581D74193361A500943606 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
@@ -1365,8 +1361,6 @@
 			isa = PBXGroup;
 			children = (
 				04B63B4D196463DD0015357B /* default_avatar.jpg */,
-				51581D6D19335CDD00943606 /* menu-button.png */,
-				51581D6E19335CDD00943606 /* menu-button@2x.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1619,7 +1613,6 @@
 				5144D99F196B880300C953FB /* UMShareEditViewController.xib in Resources */,
 				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
 				48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */,
-				51581D7119335CDD00943606 /* menu-button.png in Resources */,
 				04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */,
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
@@ -1651,7 +1644,6 @@
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
 				088857F8199F63A500A6A60D /* 1星空.jpg in Resources */,
-				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 				5144D99E196B880300C953FB /* UMSCommentInputControlleriPad.xib in Resources */,
 				5144D9A0196B880300C953FB /* UMShareEditViewControlleriPad.xib in Resources */,
 			);

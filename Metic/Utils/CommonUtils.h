@@ -89,4 +89,7 @@
 
 //计算两经纬度间距离
 +(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2;
+
+//添加返回上一层按钮
++(void)addLeftButton:(UIViewController*)controller;
 @end

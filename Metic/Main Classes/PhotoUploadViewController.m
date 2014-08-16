@@ -40,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     self.scrollView.delegate = self;
     _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
     [_textView setBackgroundColor:[UIColor whiteColor]];
@@ -81,6 +82,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)UesrImageClicked
 {

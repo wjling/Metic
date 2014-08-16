@@ -212,7 +212,16 @@ static SlideNavigationController *singletonInstance;
 	else
 	{
 		UIImage *image = [UIImage imageNamed:MENU_IMAGE];
-        return [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:selector];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+            UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+            [leftButton setImage:image forState:UIControlStateNormal];
+            [leftButton setTitle:@"        " forState:UIControlStateNormal];
+            [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+            [leftButton addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+            UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+            return leftButtonItem;
+        }else return [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:selector];
 	}
 }
 

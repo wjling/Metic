@@ -60,6 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     [self turnRoundCorner];
     self.scrollView.delegate = self;
     self.begin_time_text.delegate = self;
@@ -111,10 +112,18 @@
     //[mapManager stop];
     NSLog(@"delete");
 }
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)initInviteFriendsView

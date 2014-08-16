@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -51,7 +52,10 @@
     [super didReceiveMemoryWarning];
 }
 
-
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 #pragma mark UITableViewDataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

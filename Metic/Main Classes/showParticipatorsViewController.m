@@ -29,6 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     _fids = [[NSMutableArray alloc]init];
     _participants = [[NSMutableArray alloc]init];
     //self.inviteFids = [[NSMutableSet alloc]initWithArray:self.fids];
@@ -44,7 +45,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)getEventParticipants
 {

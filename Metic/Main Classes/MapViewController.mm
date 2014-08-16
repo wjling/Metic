@@ -33,6 +33,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self];
     //适配ios7
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {
@@ -86,6 +87,10 @@
     // Release any cached data, images, etc. that aren't in use.
 }
 
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)mapview:(BMKMapView *)mapView onLongClick:(CLLocationCoordinate2D)coordinate
 {
