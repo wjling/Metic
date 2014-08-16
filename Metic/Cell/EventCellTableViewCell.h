@@ -36,6 +36,7 @@
 - (IBAction)jumpToVideoWall:(id)sender;
 - (IBAction)addComment:(id)sender;
 - (IBAction)showParticipators:(id)sender;
+- (IBAction)showBanner:(id)sender;
 
 
 

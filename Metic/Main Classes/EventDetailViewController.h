@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property BOOL isPublish;
+@property BOOL isKeyBoard;
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)show2Dcode:(id)sender;

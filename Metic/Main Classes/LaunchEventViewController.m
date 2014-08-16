@@ -143,6 +143,7 @@
     [_isAllowStrangerView addSubview:_isAllowStrangerButton];
     
     UILabel *isAllowStrangerLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 5, 200, 30)];
+    [isAllowStrangerLabel setBackgroundColor:[UIColor clearColor]];
     isAllowStrangerLabel.text = @"允许陌生人参与";
     [isAllowStrangerLabel setFont:[UIFont systemFontOfSize:16]];
     [isAllowStrangerLabel setTextAlignment:NSTextAlignmentLeft];

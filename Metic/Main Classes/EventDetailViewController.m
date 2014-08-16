@@ -32,7 +32,6 @@
 @property long mainCommentId;
 @property long Selete_section;
 @property BOOL isOpen;
-@property BOOL isKeyBoard;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
 

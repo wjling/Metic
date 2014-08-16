@@ -51,6 +51,7 @@
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
+		0880F7F5199FAB8A0044B3E2 /* BannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0880F7F4199FAB8A0044B3E2 /* BannerViewController.m */; };
 		088857F8199F63A500A6A60D /* 1星空.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 088857F7199F63A500A6A60D /* 1星空.jpg */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		089337A5197579CE00AD940B /* PECropRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379B197579CE00AD940B /* PECropRectView.m */; };
@@ -311,6 +312,8 @@
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		0880F7F3199FAB8A0044B3E2 /* BannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerViewController.h; sourceTree = "<group>"; };
+		0880F7F4199FAB8A0044B3E2 /* BannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerViewController.m; sourceTree = "<group>"; };
 		088857F7199F63A500A6A60D /* 1星空.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1星空.jpg"; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
@@ -1333,6 +1336,8 @@
 				51E55C731987389000D62C36 /* BannerSelectorViewController.m */,
 				5127DED9198F21A100FB5A41 /* NearbyEventViewController.h */,
 				5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */,
+				0880F7F3199FAB8A0044B3E2 /* BannerViewController.h */,
+				0880F7F4199FAB8A0044B3E2 /* BannerViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -1678,6 +1683,7 @@
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
 				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
 				0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */,
+				0880F7F5199FAB8A0044B3E2 /* BannerViewController.m in Sources */,
 				51EDF3AB19752D8A005BEA39 /* TTTAttributedLabel.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,

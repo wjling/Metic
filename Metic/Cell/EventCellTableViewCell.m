@@ -7,6 +7,7 @@
 //
 
 #import "EventCellTableViewCell.h"
+#import "BannerViewController.h"
 
 @implementation EventCellTableViewCell
 
@@ -79,7 +80,19 @@
 }
 
 - (IBAction)showParticipators:(id)sender {
-    [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+    if (_eventController.isKeyBoard) {
+        [_eventController.inputField resignFirstResponder];
+    } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+}
+
+- (IBAction)showBanner:(id)sender {
+    if (_eventController.isKeyBoard) {
+        [_eventController.inputField resignFirstResponder];
+    } else{
+        BannerViewController* bannerView = [[BannerViewController alloc] init];
+        bannerView.banner = themePhoto.image;
+        [self.eventController presentViewController:bannerView animated:YES completion:^{}];
+    }
 }
 
 
