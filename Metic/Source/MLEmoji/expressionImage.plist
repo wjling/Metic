@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>/害羞</key>
+	<string>face01</string>
+	<key>/汗</key>
+	<string>face02</string>
+	<key>/呵呵</key>
+	<string>face03</string>
+	<key>/哼</key>
+	<string>face04</string>
+	<key>/坏笑</key>
+	<string>face05</string>
+	<key>/惊恐</key>
+	<string>face06</string>
+	<key>/囧</key>
+	<string>face07</string>
+	<key>/开心</key>
+	<string>face08</string>
+	<key>/可爱</key>
+	<string>face09</string>
+	<key>/抠鼻</key>
+	<string>face10</string>
+	<key>/酷</key>
+	<string>face11</string>
+	<key>/泪奔</key>
+	<string>face12</string>
+	<key>/么么哒</key>
+	<string>face13</string>
+	<key>/难过</key>
+	<string>face14</string>
+	<key>/怒</key>
+	<string>face15</string>
+	<key>/撇嘴</key>
+	<string>face16</string>
+	<key>/叹气</key>
+	<string>face17</string>
+	<key>/嘻嘻</key>
+	<string>face18</string>
+	<key>/疑问</key>
+	<string>face19</string>
+	<key>/折磨</key>
+	<string>face20</string>
+	<key>/吐血</key>
+	<string>face21</string>
+	<key>/鄙视</key>
+	<string>face22</string>
+	<key>/你懂的</key>
+	<string>face23</string>
+	<key>/赞</key>
+	<string>face24</string>
+	<key>/拜拜</key>
+	<string>face25</string>
+	<key>/敬礼</key>
+	<string>face26</string>
+	<key>/色</key>
+	<string>face27</string>
+</dict>
+</plist>

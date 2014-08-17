@@ -32,9 +32,9 @@
     self = [super init];
 //    URL_mainServer = @"http://222.200.182.183:10087/";
 //    URL_mainServer = @"http://115.29.103.9:10087/";
-//    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云
+    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云
 
-    URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
+//    URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
     PHOTO_mainServer = @"http://203.195.174.128:20000/";
     feedBack_mainServer = @"http://203.195.174.128:10089/";
     

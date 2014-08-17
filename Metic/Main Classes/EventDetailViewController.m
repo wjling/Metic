@@ -15,10 +15,12 @@
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
-#import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "showParticipatorsViewController.h"
+#import "../Source/MLEmoji/MLEmojiLabel.h"
 
-
+#define MainFontSize 14
+#define MainCFontSize 13
+#define SubCFontSize 12
 
 @interface EventDetailViewController ()
 @property(nonatomic,strong) NSDictionary *event;
@@ -116,7 +118,7 @@
     
     CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
     height = labelsize.height;
-    return height < 8.0? 8.0:height+1;
+    return height < 8.0? 8.0:height+5;
 }
 
 
@@ -139,17 +141,6 @@
 
 }
 
-//-(void)initLeftButton
-//{
-//        UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
-//        [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
-//        [leftButton setTitle:@"        " forState:UIControlStateNormal];
-//        [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
-//        [leftButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-//        UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
-//        self.navigationItem.leftBarButtonItem = leftButtonItem;
-//}
 
 //返回上一层
 -(void)MTpopViewController{
@@ -476,6 +467,7 @@
 }
 
 - (IBAction)show2Dcode:(id)sender {
+
     [self performSegueWithIdentifier:@"2Dcode" sender:self];
 }
 
@@ -615,7 +607,7 @@
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:MainCFontSize];
         if (commentHeight < 25) commentHeight = 25;
         cell.eventDetail.text = text;
         CGRect frame = cell.eventDetail.frame;
@@ -660,14 +652,24 @@
         else [cell.subCommentBG setHidden:NO];
         
         
-        UILabel *textView = (UILabel*)[cell viewWithTag:4];
+        MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
+//        [textView.layer setBorderWidth:2];
+//        [textView.layer setBorderColor:[UIColor redColor].CGColor];
         NSString* text = [mainCom valueForKey:@"content"];
-        textView.text = text;
-        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:12.0f];
-        if (commentHeight < 15) commentHeight = 15;
+        
+        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
+        if (commentHeight < 25) commentHeight = 25;
         CGRect frame = textView.frame;
         frame.size.height = commentHeight;
         [textView setFrame:frame];
+        
+        textView.numberOfLines = 0;
+        textView.font = [UIFont systemFontOfSize:MainCFontSize];
+        textView.backgroundColor = [UIColor clearColor];
+        textView.lineBreakMode = NSLineBreakByCharWrapping;
+        textView.isNeedAtAndPoundSign = YES;
+        
+        textView.emojiText = text;
         
         
         frame = cell.frame;
@@ -748,9 +750,15 @@
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
         [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
+        cell.comment.authorLength = ((NSString*)[subCom valueForKey:@"author"]).length;
+        cell.comment.font = [UIFont systemFontOfSize:SubCFontSize];
         [cell.comment setNumberOfLines:0];
-        [cell.comment setLineBreakMode:NSLineBreakByTruncatingTail];
-        [((TTTAttributedLabel*)cell.comment) setText:hintString1];
+        [cell.comment setLineBreakMode:NSLineBreakByCharWrapping];
+//        [cell.comment.layer setBorderColor:[UIColor redColor].CGColor];
+//        [cell.comment.layer setBorderWidth:2];
+        
+        cell.comment.emojiText = text;
+        //[((MLEmojiLabel*)cell.comment) setText:hintString1];
 
         if ([[subCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [cell.waitView startAnimating];
@@ -765,14 +773,14 @@
         }
 
         
-        float commentHeight = [self calculateTextHeight:text width:265 fontSize:12.0f];
+        float commentHeight = [self calculateTextHeight:text width:265 fontSize:SubCFontSize];
         CGRect frame = cell.frame;
-        frame.size.height = commentHeight+25;
+        frame.size.height = commentHeight+15;
         [cell setFrame:frame];
         frame = [cell viewWithTag:100].frame;
-        frame.size.height =  commentHeight+24;
+        frame.size.height =  commentHeight+14.5f;
         [[cell viewWithTag:100] setFrame:frame];
-        [cell.comment setFrame:CGRectMake(10, 5, 265, commentHeight+15)];
+        [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight+15)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = [subCom valueForKey:@"author"];
@@ -790,15 +798,15 @@
 {
     if (indexPath.section == 0) {
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:13.0f];
+        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:MainFontSize];
         if (commentHeight < 25) commentHeight = 25;
         return 248.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         NSString* text = [mainCom valueForKey:@"content"];
-        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:12.0f];
-        if (commentHeight < 15.0f) commentHeight = 15.0f;
+        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
+        if (commentHeight < 25.0f) commentHeight = 25.0f;
         return 65.0f + commentHeight;
         
     }else
@@ -810,8 +818,8 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:12.0f];
-        return commentHeight+25;
+        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:SubCFontSize];
+        return commentHeight+15;
     }
 }
 

@@ -11,6 +11,7 @@
 #import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
 #import "../Main Classes/EventDetailViewController.h"
+#import "MLEmojiLabel.h"
 
 @interface MCommentTableViewCell : UITableViewCell
 - (IBAction)delete_Comment:(id)sender;
@@ -26,7 +27,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *subCommentBG;
 @property (strong, nonatomic) IBOutlet UIView *zanView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
-@property (strong, nonatomic) IBOutlet UILabel *comment;
+@property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 
 
 @end

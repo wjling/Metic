@@ -11,14 +11,14 @@
 #import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
 #import "../Main Classes/EventDetailViewController.h"
-#import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
+#import "../Source/MLEmoji/MLEmojiLabel.h"
 
 @interface SCommentTableViewCell : UITableViewCell
 - (IBAction)delete_Comment:(id)sender;
 @property(strong,nonatomic) NSString* author;
 @property(strong,nonatomic) NSNumber* authorid;
 @property(strong,nonatomic) NSNumber* commentid;
-@property (strong, nonatomic) IBOutlet TTTAttributedLabel *comment;
+@property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property(nonatomic,strong) EventDetailViewController *controller;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;

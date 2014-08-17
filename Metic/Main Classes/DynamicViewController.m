@@ -8,7 +8,7 @@
 
 #import "DynamicViewController.h"
 #import "EventDetailViewController.h"
-#import "../Source/TTTAttributedLabel/TTTAttributedLabel.h"
+#import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "../Utils/PhotoGetter.h"
 
 @interface DynamicViewController ()
