@@ -30,11 +30,17 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     self.historicalNF_tableview.delegate = self;
     self.historicalNF_tableview.dataSource = self;
     self.historicalNF_tableview.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     self.functions_view.hidden = YES;
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated

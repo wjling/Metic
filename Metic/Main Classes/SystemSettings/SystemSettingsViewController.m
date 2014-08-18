@@ -35,6 +35,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     settings_tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     settings_tableview.delegate = self;
     settings_tableview.dataSource = self;
@@ -58,6 +59,10 @@
 
     
     
+}
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

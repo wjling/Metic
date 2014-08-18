@@ -59,6 +59,7 @@ enum Response_Type
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.appListener.notificationDelegate = self;
     [self initParams];
@@ -69,6 +70,11 @@ enum Response_Type
 //    self.friendRequestMsg = [MTUser sharedInstance].friendRequestMsg;
 //    self.systemMsg = [MTUser sharedInstance].systemMsg;
 //    self.historicalMsg = [MTUser sharedInstance].historicalMsg;
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -161,20 +167,21 @@ enum Response_Type
     [function2_button addTarget:self action:@selector(function2Clicked:) forControlEvents:UIControlEventTouchUpInside];
     
     self.tabbar_scrollview.scrollEnabled = NO;
+    [self.tabbar_scrollview setBackgroundColor:[UIColor grayColor]];
     CGRect frame = self.tabbar_scrollview.frame;
     
     int x = 0;
     CGFloat width = frame.size.width/3;
     int height = frame.size.height;
-    UIButton* eventR_button = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, height)];
-    UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height)];
-    UIButton* systemMsg_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width*2, 0, width, height)];
+    UIButton* eventR_button = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, height - 1)];
+    UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height - 1)];
+    UIButton* systemMsg_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width*2, 0, width, height - 1)];
     self.tabs = [[NSMutableArray alloc]initWithObjects:eventR_button,friendR_button,systemMsg_button, nil];
     
     UIColor *tabIndicatorColor = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
     tabIndicator = [[UIView alloc]initWithFrame:CGRectMake(10, height - 3, width - 20, 3)];
     
-    [self.tabbar_scrollview addSubview:tabIndicator];
+    
 //    eventR_button.showsTouchWhenHighlighted = NO;
 //    friendR_button.showsTouchWhenHighlighted = NO;
 //    systemMsg_button.showsTouchWhenHighlighted = NO;
@@ -187,9 +194,9 @@ enum Response_Type
     UIColor* tColor_normal = [UIColor colorWithRed:0.553 green:0.553 blue:0.553 alpha:1];
     UIColor* tColor_selected = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
     
-//    [eventR_button setBackgroundColor:bColor_selected];
-//    [friendR_button setBackgroundColor:bColor_normal];
-//    [systemMsg_button setBackgroundColor:bColor_normal];
+    [eventR_button setBackgroundColor:[UIColor whiteColor]];
+    [friendR_button setBackgroundColor:[UIColor whiteColor]];
+    [systemMsg_button setBackgroundColor:[UIColor whiteColor]];
     
 //    [eventR_button setBackgroundColor:[UIColor clearColor]];
 //    [friendR_button setBackgroundColor:[UIColor clearColor]];
@@ -230,6 +237,7 @@ enum Response_Type
     [self.tabbar_scrollview addSubview:eventR_button];
     [self.tabbar_scrollview addSubview:friendR_button];
     [self.tabbar_scrollview addSubview:systemMsg_button];
+    [self.tabbar_scrollview addSubview:tabIndicator];
     [tabIndicator setBackgroundColor:tabIndicatorColor];
     
     self.content_scrollView.pagingEnabled = YES;

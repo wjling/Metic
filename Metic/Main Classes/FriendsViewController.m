@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {
@@ -51,6 +52,11 @@
 //    [self initTableData];
 //    NSLog(@"did reload friends");
 //    [self.friendTableView reloadData];
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated

@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     // Do any additional setup after loading the view.
     selected_province_index = -1;
     selected_city_index = -1;
@@ -64,6 +65,11 @@
     [left_barButton addTarget:self action:@selector(leftBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
     [right_barButton addTarget:self action:@selector(rightBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
     
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

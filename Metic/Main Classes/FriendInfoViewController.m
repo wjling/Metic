@@ -54,12 +54,18 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     kNumberOfPages = 2;
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     
     [self initViews];
     [self getUserInfo];
      NSLog(@"friend info fid: %@",fid);
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -172,7 +178,7 @@
     
     self.fDescriptionView = [[UIImageView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
-    self.fDescriptionView.image = [UIImage imageNamed:@"1星空"];
+    self.fDescriptionView.image = [UIImage imageNamed:@"1星空.jpg"];
     title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
     [title_label setBackgroundColor:[UIColor clearColor]];

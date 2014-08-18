@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
     self.content_textView.layer.borderColor = color.CGColor;
     self.content_textView.layer.borderWidth = 2;
@@ -39,6 +40,11 @@
     [self.right_barButton addTarget:self action:@selector(rightBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

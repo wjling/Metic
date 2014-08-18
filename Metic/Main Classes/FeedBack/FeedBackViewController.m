@@ -30,6 +30,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     // Do any additional setup after loading the view.
     self.content_textView.font = [UIFont systemFontOfSize:14];
     self.content_textView.delegate = self.rootView;
@@ -42,6 +43,11 @@
     self.contact2_textField.delegate = rootView;
     rootView.myDelegate = self;
     
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)didReceiveMemoryWarning

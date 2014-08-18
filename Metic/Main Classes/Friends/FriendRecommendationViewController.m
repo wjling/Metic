@@ -54,6 +54,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initTabBar];
     [self initContentView];
     
@@ -65,6 +66,11 @@
     [locate start];
     
     [NSThread detachNewThreadSelector:@selector(getKanKan) toTarget:self withObject:nil];
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
