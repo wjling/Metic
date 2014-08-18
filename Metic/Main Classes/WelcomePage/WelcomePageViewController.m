@@ -68,8 +68,8 @@
     UIImageView* imgV1_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
 //    [page1 setBackgroundColor:[UIColor redColor]];
     [page1 setBackgroundColor:bgColor];
-    imgV1_1.image = [UIImage imageNamed:@"出图-文字1"];
-    imgV1_2.image = [UIImage imageNamed:@"出图-主视觉1"];
+    imgV1_1.image = [UIImage imageNamed:@"splash_text1"];
+    imgV1_2.image = [UIImage imageNamed:@"splash_img1"];
     page1.clipsToBounds = YES;
     [page1 addSubview:imgV1_1];
     [page1 addSubview:imgV1_2];
@@ -79,8 +79,8 @@
     UIImageView* imgV2_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
 //    [page2 setBackgroundColor:[UIColor blueColor]];
     [page2 setBackgroundColor:bgColor];
-    imgV2_1.image = [UIImage imageNamed:@"出图-文字2"];
-    imgV2_2.image = [UIImage imageNamed:@"出图-主视觉2"];
+    imgV2_1.image = [UIImage imageNamed:@"splash_text2"];
+    imgV2_2.image = [UIImage imageNamed:@"splash_img2"];
     page2.clipsToBounds = YES;
     [page2 addSubview:imgV2_1];
     [page2 addSubview:imgV2_2];
@@ -90,8 +90,8 @@
     UIImageView* imgV3_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
 //    [page3 setBackgroundColor:[UIColor greenColor]];
     [page3 setBackgroundColor:bgColor];
-    imgV3_1.image = [UIImage imageNamed:@"出图-文字3"];
-    imgV3_2.image = [UIImage imageNamed:@"出图-主视觉3"];
+    imgV3_1.image = [UIImage imageNamed:@"splash_text3"];
+    imgV3_2.image = [UIImage imageNamed:@"splash_img3"];
     page3.clipsToBounds = YES;
     [page3 addSubview:imgV3_1];
     [page3 addSubview:imgV3_2];
@@ -101,8 +101,8 @@
     UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
 //    [page4 setBackgroundColor:[UIColor orangeColor]];
     [page4 setBackgroundColor:bgColor];
-    imgV4_1.image = [UIImage imageNamed:@"出图-文字4"];
-    imgV4_2.image = [UIImage imageNamed:@"出图-主视觉4"];
+    imgV4_1.image = [UIImage imageNamed:@"splash_text4"];
+    imgV4_2.image = [UIImage imageNamed:@"splash_img4"];
     page4.clipsToBounds = YES;
     [page4 addSubview:imgV4_1];
     [page4 addSubview:imgV4_2];

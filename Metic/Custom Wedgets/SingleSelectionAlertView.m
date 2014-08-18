@@ -64,11 +64,13 @@
     }
     NSLog(@"width: %f, height: %f",content_width,content_height);
     contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, content_width, content_height)];
+    [contentView setBackgroundColor:[UIColor clearColor]];
     
     self.title_label = [[UILabel alloc]initWithFrame:CGRectMake(5, 5, content_width-10, 25)];
 //    [self.title_label setBackgroundColor:[UIColor lightGrayColor]];
     self.title_label.text = theTitle;
     self.title_label.textAlignment = NSTextAlignmentCenter;
+    [self.title_label setBackgroundColor:[UIColor clearColor]];
     self.optionView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 30, content_width, content_height-30)];
     CGSize content_size = CGSizeMake(content_width, 30*numberOfOptions);
     self.optionView.contentSize = content_size;
@@ -91,6 +93,7 @@
         
         
         option_label.text = [self.options objectAtIndex:i];
+        [option_label setBackgroundColor:[UIColor clearColor]];
         option_button.tag = i;
         [option_button setBackgroundImage:[UIImage imageNamed:@"勾选前icon"] forState:UIControlStateNormal];
         [option_button setBackgroundImage:[UIImage imageNamed:@"勾选后icon"] forState:UIControlStateSelected];

@@ -213,13 +213,14 @@
 
 }
 
+//======================================Network Status Checking=====================================
 -(void)initViews
 {
-//    UIWindow* window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+//    UIWindow* window = [UIApplication sharedApplication].keyWindow;
     CGRect frame = [UIScreen mainScreen].bounds;
-    networkStatusNotifier_view = [[UIView alloc]initWithFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 30)];
+    networkStatusNotifier_view = [[UIView alloc]initWithFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 20)];
 //    [networkStatusNotifier_view setBackgroundColor:[UIColor yellowColor]];
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 30)];
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 20)];
     label.text = @"网络连接异常，请检查网络设置";
     [label setBackgroundColor:[UIColor redColor]];
     label.font = [UIFont systemFontOfSize:13];
@@ -228,9 +229,15 @@
 //    label.center = networkStatusNotifier_view.center;
     label.tag = 110;
     [networkStatusNotifier_view addSubview:label];
+//    [self.window addSubview:networkStatusNotifier_view];
+//    [self.window.rootViewController.view addSubview:networkStatusNotifier_view];
+//    [self.window bringSubviewToFront:networkStatusNotifier_view];
+//    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:networkStatusNotifier_view];
 //    networkStatusNotifier_view.hidden = YES;
+    CGRect f = networkStatusNotifier_view.frame;
+    NSLog(@"network view: x: %f, y: %f, width: %f, height: %f",f.origin.x,f.origin.y,f.size.width,f.size.height);
 }
-//======================================Network Status Checking=====================================
+
 
 - (void)reachabilityChanged:(NSNotification *)note {
     Reachability* curReach = [note object];
@@ -252,7 +259,16 @@
     else
     {
         if (!isNetworkConnected) {
-            [self showNetworkNotification:@"网络连接恢复正常"];
+            
+            [UIView beginAnimations:@"showNetworkStatus" context:nil];
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+            [UIView setAnimationDidStopSelector:@selector(hideNetworkNotification)];
+            [UIView setAnimationDuration:3];
+            [UIView setAnimationDelegate:self];
+            UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
+            label.text = @"网络连接恢复正常";
+            [UIView commitAnimations];
+
         }
         isNetworkConnected = YES;
         while (!isLogined) {
@@ -282,21 +298,21 @@
 {
     UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
     label.text = message;
-    CGRect frame = [UIScreen mainScreen].bounds;
-    [self.window.rootViewController.view addSubview:networkStatusNotifier_view];
+    CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
+    [[UIApplication sharedApplication].keyWindow addSubview:networkStatusNotifier_view];
     
     [UIView beginAnimations:@"showNetworkStatus" context:nil];
-//    networkStatusNotifier_view.hidden = NO;
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDidStopSelector:@selector(hideNetworkNotification)];
+//    [UIView setAnimationDidStopSelector:@selector(hideNetworkNotification)];
     
     [UIView setAnimationDuration:1];
 //    [UIView setAnimationRepeatCount:1];
     [UIView setAnimationDelegate:self];
     
-    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height - 30, frame.size.width, 30)];
+    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height - networkStatusNotifier_view.frame.size.height, frame.size.width, networkStatusNotifier_view.frame.size.height)];
     [UIView commitAnimations];
     NSLog(@"show network notification");
+    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
 }
 
 -(void)hideNetworkNotification
@@ -313,7 +329,7 @@
 //    [UIView setAnimationRepeatCount:1];
     [UIView setAnimationDelegate:self];
     
-    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, 30)];
+    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, networkStatusNotifier_view.frame.size.height)];
     [UIView commitAnimations];
     
     NSLog(@"hide network notification");
@@ -400,10 +416,10 @@
     [mySocket close];
     
 //    NSString* str = @"ws://203.195.174.128:10088/";
-//    NSString* str = @"ws://42.96.203.86:10088/";
+    NSString* str = @"ws://42.96.203.86:10088/";//阿里
 //    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
-    NSString* str = @"ws://203.195.174.128:10088/";//腾讯
+//    NSString* str = @"ws://203.195.174.128:10088/";//腾讯
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     

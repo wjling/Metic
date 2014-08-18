@@ -36,8 +36,7 @@
     self.content_textView.layer.borderColor = color.CGColor;
     self.content_textView.layer.borderWidth = 2;
     self.content_textView.delegate = rootView;
-    [self.right_barButton setTarget:self];
-    [self.right_barButton setAction:@selector(rightBarBtnClicked:)];
+    [self.right_barButton addTarget:self action:@selector(rightBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     
 }

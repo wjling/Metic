@@ -15,7 +15,7 @@
 @interface SignSetttingViewController : UIViewController<HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *content_textView;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *right_barButton;
+@property (strong, nonatomic) IBOutlet UIButton *right_barButton;
 
 -(void)rightBarBtnClicked:(id)sender;
 @end

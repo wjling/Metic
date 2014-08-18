@@ -48,6 +48,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"UserInfoViewController viewWillAppear");
+    UIColor* bgColor = [UIColor colorWithRed:0.82 green:0.85 blue:0.88 alpha:1];
+    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0)
+    {
+        [self.view setBackgroundColor:bgColor];
+    }
+    
     [self refresh];
 }
 
@@ -182,13 +188,22 @@
     }
     return 30;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 8;
+//    if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0) {
+//        return 0;
+//    }
+    return 5;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0;
+//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+//    {
+//        return 5;
+//    }
+    return 3;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -274,8 +289,12 @@
                 cell.content_label.text = [MTUser sharedInstance].name;
                 cell.title_label.textColor = textColor1;
                 cell.content_label.textColor = textColor2;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+
+                }
                 return cell;
             }
             else if(indexPath.row == 1)
@@ -295,8 +314,12 @@
                 }
                 cell.title_label.textColor = textColor1;
                 cell.content_label.textColor = textColor2;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+
+                }
                 return cell;
             }
             else if (indexPath.row == 2)
@@ -316,8 +339,12 @@
                 }
                 cell.title_label.textColor = textColor1;
                 cell.content_label.textColor = textColor2;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+
+                }
                 return cell;
             }
             
@@ -334,8 +361,11 @@
                 cell.content_label.text = @"";
                 cell.title_label.textColor = textColor1;
 //                cell.content_label.textColor = textColor2;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+                }
                 return cell;
             }
             else if (indexPath.row == 1)
@@ -351,8 +381,11 @@
                 }
                 cell.textLabel.textColor = textColor2;
                 cell.userInteractionEnabled = NO;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+                }
                 return cell;
             }
 
@@ -368,8 +401,11 @@
                 cell.title_label.text = @"安全中心";
                 cell.content_label.text = @"";
                 cell.title_label.textColor = textColor2;
-                cell.layer.borderColor = borderColor.CGColor;
-                cell.layer.borderWidth = 0.3;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+                }
                 return cell;
             }
         }

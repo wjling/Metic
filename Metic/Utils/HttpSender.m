@@ -33,10 +33,13 @@
 //    URL_mainServer = @"http://222.200.182.183:10087/";
 //    URL_mainServer = @"http://115.29.103.9:10087/";
     URL_mainServer = @"http://42.96.203.86:10087/";//阿里云
-
 //    URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
-    PHOTO_mainServer = @"http://203.195.174.128:20000/";
-    feedBack_mainServer = @"http://203.195.174.128:10089/";
+    
+    PHOTO_mainServer = @"http://42.96.203.86:20000/";
+//    PHOTO_mainServer = @"http://203.195.174.128:20000/";
+    
+    feedBack_mainServer = @"http://42.96.203.86:10089/";
+//    feedBack_mainServer = @"http://203.195.174.128:10089/";
     
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
@@ -152,6 +155,12 @@
             break;
         case 30:
             resultCode = @"get_event_recommend";
+            break;
+        case 33:
+            resultCode = @"get_nearby_friends";
+            break;
+        case 34:
+            resultCode = @"kankan";
             break;
         case 35:
             resultCode = @"uploadphoto";
