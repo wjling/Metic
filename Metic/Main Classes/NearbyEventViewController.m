@@ -39,7 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     _nearbyEvents = [[NSMutableArray alloc]init];
     _searchEvents = [[NSMutableArray alloc]init];
     _eventIds_all = [[NSMutableArray alloc]init];

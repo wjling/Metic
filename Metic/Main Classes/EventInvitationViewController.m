@@ -34,7 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
     _tableView.dataSource = self;
     _tableView.delegate = self;

@@ -33,7 +33,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     //适配ios7
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {

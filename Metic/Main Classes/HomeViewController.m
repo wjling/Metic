@@ -40,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     _type = 0;
     _clearIds = NO;
     _Headeropen = NO;
@@ -111,7 +112,10 @@
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
 }
 
-
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)createMenuButton
 {
@@ -124,17 +128,6 @@
     [self.navigationController.navigationBar addSubview:backButton];
     UIBarButtonItem* rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
-        //[self.navigationItem.backBarButtonItem setTitle:@"返回"];
-        //[self.navigationItem.backBarButtonItem setBackgroundImage:[UIImage imageNamed:@"头部右上角图标-加号"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//        UIBarButtonItem *backItem=[[UIBarButtonItem alloc]init];
-//        [backItem setStyle:UIBarButtonItemStyleBordered];
-//        backItem.title=@"返回去";
-//        backItem.tintColor=[UIColor colorWithRed:129/255.0 green:129/255.0  blue:129/255.0 alpha:1.0];
-//        [backItem setBackgroundImage:[UIImage imageNamed:@"头部右上角图标-加号"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-//        self.navigationItem.backBarButtonItem = backItem;
-        
-    }else [self.navigationItem.backBarButtonItem setTitle:@" "];
 }
 
 
@@ -195,7 +188,9 @@
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+    if ([response1 isKindOfClass:[NSDictionary class]]) NSLog(@"不可变");
+    if ([response1 isKindOfClass:[NSMutableDictionary class]]) NSLog(@"可变");
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
         case NORMAL_REPLY:

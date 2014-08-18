@@ -91,7 +91,7 @@
 +(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2;
 
 //添加返回上一层按钮
-+(void)addLeftButton:(UIViewController*)controller;
++(void)addLeftButton:(UIViewController*)controller isFirstPage:(BOOL)isFirstPage;
 
 //从文件中提取Dictionary
 + (NSDictionary *)dictionaryFromFile:(NSString*)fileName;

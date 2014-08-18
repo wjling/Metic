@@ -42,7 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     self.sequence = [NSNumber numberWithInt:0];
     self.isKeyBoard = NO;
     self.tableView.delegate = self;

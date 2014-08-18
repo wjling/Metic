@@ -40,7 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     self.scrollView.delegate = self;
     _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
     [_textView setBackgroundColor:[UIColor whiteColor]];

@@ -31,7 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     [self createScrollingBar];
     _scrollView.delegate = self;
     _dynamic_tableView.delegate = self;

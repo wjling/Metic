@@ -35,7 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
     //[self.InfoView setHidden:YES];

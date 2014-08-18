@@ -60,7 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     [self turnRoundCorner];
     self.scrollView.delegate = self;
     self.begin_time_text.delegate = self;

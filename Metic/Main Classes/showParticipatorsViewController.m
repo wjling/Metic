@@ -29,7 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     _fids = [[NSMutableArray alloc]init];
     _participants = [[NSMutableArray alloc]init];
     //self.inviteFids = [[NSMutableSet alloc]initWithArray:self.fids];

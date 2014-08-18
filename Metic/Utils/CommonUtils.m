@@ -367,16 +367,29 @@
     CLLocationDistance meters=[orig distanceFromLocation:dist];    return meters;
 }
 
-+(void)addLeftButton:(UIViewController*)controller
++(void)addLeftButton:(UIViewController*)controller isFirstPage:(BOOL)isFirstPage
 {
-    UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
-    [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
-    [leftButton setTitle:@"        " forState:UIControlStateNormal];
-    [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
-    [leftButton addTarget:controller action:@selector(MTpopViewController) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
-    controller.navigationItem.leftBarButtonItem = leftButtonItem;
+    if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)){
+        if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
+        {
+            UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] init];
+            temporaryBarButtonItem.title = @" ";
+            temporaryBarButtonItem.target = controller;
+            //temporaryBarButtonItem.action = @selector(MTpopViewController);
+            controller.navigationItem.backBarButtonItem = temporaryBarButtonItem;
+        }
+    }else{
+        if (isFirstPage) return;
+        UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+        [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
+        [leftButton setTitle:@"        " forState:UIControlStateNormal];
+        [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+        [leftButton addTarget:controller action:@selector(MTpopViewController) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+        controller.navigationItem.leftBarButtonItem = leftButtonItem;
+
+    }
 }
 
 //从文件中提取Dictionary
