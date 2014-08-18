@@ -379,4 +379,23 @@
     controller.navigationItem.leftBarButtonItem = leftButtonItem;
 }
 
+//从文件中提取Dictionary
++ (NSDictionary *)dictionaryFromFile:(NSString*)fileName {
+    NSDictionary *dictionary = nil;
+
+    NSString *dictionaryFilePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:fileName];
+    dictionary = [[NSDictionary alloc] initWithContentsOfFile:dictionaryFilePath];
+
+	return dictionary;
+}
+
+//从文件中提取Array
++ (NSArray *)arrayFromFile:(NSString*)fileName {
+    NSArray *array = nil;
+    
+    NSString *arrayFilePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:fileName];
+    array = [[NSArray alloc] initWithContentsOfFile:arrayFilePath];
+    
+	return array;
+}
 @end

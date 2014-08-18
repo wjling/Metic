@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -1859,7 +1859,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y9i-yV-9MD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1929" y="395"/>
+            <point key="canvasLocation" x="1965" y="390"/>
         </scene>
         <!--Event2 Dcode View Controller - 活动二维码-->
         <scene sceneID="yjz-Jf-0SP">
@@ -2529,8 +2529,19 @@
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uux-SG-p2U">
+                                        <rect key="frame" x="5" y="5" width="24" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="button_emotion">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" image="button_emotion_pressed"/>
+                                        <connections>
+                                            <action selector="button_Emotionpress:" destination="cGW-AM-0QH" eventType="touchUpInside" id="12U-1R-mrc"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oLS-E0-JBf">
-                                        <rect key="frame" x="12" y="0.0" width="280" height="35"/>
+                                        <rect key="frame" x="38" y="0.0" width="250" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <textInputTraits key="textInputTraits"/>
@@ -2550,6 +2561,11 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="ieU-wN-f0B"/>
                                 </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="08Q-Er-FO7" customClass="emotion_Keyboard">
+                                <rect key="frame" x="0.0" y="504" width="320" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -2575,7 +2591,9 @@
                     </navigationItem>
                     <size key="freeformSize" width="320" height="480"/>
                     <connections>
+                        <outlet property="button_Emotion" destination="uux-SG-p2U" id="1gm-sF-n8p"/>
                         <outlet property="commentView" destination="c5U-Ih-F1e" id="FBR-ZQ-EkW"/>
+                        <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
                         <outlet property="inputField" destination="oLS-E0-JBf" id="WdI-tt-BYf"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
@@ -4216,6 +4234,8 @@
         <image name="5健身.jpg" width="640" height="245"/>
         <image name="6听课.jpg" width="640" height="245"/>
         <image name="7夜店.jpg" width="640" height="245"/>
+        <image name="button_emotion" width="24" height="24"/>
+        <image name="button_emotion_pressed" width="24" height="24"/>
         <image name="dian" width="32" height="44"/>
         <image name="event" width="300" height="113"/>
         <image name="上传按钮" width="26" height="26"/>
@@ -4259,7 +4279,7 @@
         <image name="系统消息图标" width="45" height="45"/>
         <image name="输入框" width="320" height="35"/>
         <image name="输入框-1" width="295" height="43"/>
-        <image name="默认用户头像" width="60" height="60"/>
+        <image name="默认用户头像" width="125" height="125"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -4267,13 +4287,13 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="DsC-hh-HTw"/>
-        <segue reference="ib8-0I-OZA"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="EEO-gR-a4J"/>
         <segue reference="UXj-VV-omZ"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
     </inferredMetricsTieBreakers>
 </document>

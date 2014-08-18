@@ -92,4 +92,10 @@
 
 //添加返回上一层按钮
 +(void)addLeftButton:(UIViewController*)controller;
+
+//从文件中提取Dictionary
++ (NSDictionary *)dictionaryFromFile:(NSString*)fileName;
+
+//从文件中提取Array
++ (NSArray *)arrayFromFile:(NSString*)fileName;
 @end

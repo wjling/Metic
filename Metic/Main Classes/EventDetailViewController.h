@@ -24,9 +24,12 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
+@property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property BOOL isPublish;
 @property BOOL isKeyBoard;
+@property BOOL isEmotionOpen;
+- (IBAction)button_Emotionpress:(id)sender;
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)show2Dcode:(id)sender;

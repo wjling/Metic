@@ -214,6 +214,7 @@
 		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
+		51DDBF6619A19DA70051B88C /* emotion_Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DDBF6519A19DA70051B88C /* emotion_Keyboard.m */; };
 		51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DFF381199A121900BF5FED /* UserTableViewCell.m */; };
 		51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51DFF382199A121900BF5FED /* UserTableViewCell.xib */; };
 		51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */; };
@@ -669,6 +670,8 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
+		51DDBF6419A19DA70051B88C /* emotion_Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emotion_Keyboard.h; path = "Custom Wedgets/emotion_Keyboard.h"; sourceTree = "<group>"; };
+		51DDBF6519A19DA70051B88C /* emotion_Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emotion_Keyboard.m; path = "Custom Wedgets/emotion_Keyboard.m"; sourceTree = "<group>"; };
 		51DFF380199A121900BF5FED /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewCell.h; sourceTree = "<group>"; };
 		51DFF381199A121900BF5FED /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableViewCell.m; sourceTree = "<group>"; };
 		51DFF382199A121900BF5FED /* UserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserTableViewCell.xib; sourceTree = "<group>"; };
@@ -822,6 +825,8 @@
 				04E657C6197A4EA20091524F /* InputHandleView.m */,
 				04BAF69F199BCF7500BF00E1 /* myScrollView.h */,
 				04BAF6A0199BCF7500BF00E1 /* myScrollView.m */,
+				51DDBF6419A19DA70051B88C /* emotion_Keyboard.h */,
+				51DDBF6519A19DA70051B88C /* emotion_Keyboard.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -1883,6 +1888,7 @@
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
+				51DDBF6619A19DA70051B88C /* emotion_Keyboard.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */,
 				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,

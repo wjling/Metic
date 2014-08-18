@@ -82,13 +82,17 @@
 - (IBAction)showParticipators:(id)sender {
     if (_eventController.isKeyBoard) {
         [_eventController.inputField resignFirstResponder];
+    }else if (_eventController.isEmotionOpen){
+        [_eventController button_Emotionpress:nil];
     } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
 }
 
 - (IBAction)showBanner:(id)sender {
     if (_eventController.isKeyBoard) {
         [_eventController.inputField resignFirstResponder];
-    } else{
+    }else if (_eventController.isEmotionOpen){
+        [_eventController button_Emotionpress:nil];
+    }else{
         BannerViewController* bannerView = [[BannerViewController alloc] init];
         bannerView.banner = themePhoto.image;
         [self.eventController presentViewController:bannerView animated:YES completion:^{}];

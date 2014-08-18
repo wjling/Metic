@@ -17,6 +17,7 @@
 #import "../Cell/EventCellTableViewCell.h"
 #import "showParticipatorsViewController.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
+#import "emotion_Keyboard.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -28,6 +29,7 @@
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
+@property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
 
 @property(nonatomic,strong) NSString* herName;
 @property BOOL visibility;
@@ -75,7 +77,10 @@
     self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
+    self.isEmotionOpen = NO;
     self.isKeyBoard = NO;
+    _inputField.delegate = self;
+    _emotionKeyboard.textField = _inputField;
     //self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
@@ -83,6 +88,7 @@
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.inputField setPlaceholder:@"回复楼主"];
     [self.view bringSubviewToFront:self.commentView];
+    [self.view bringSubviewToFront:self.emotionKeyboard];
     [self pullEventFromDB];
     [self pullMainCommentFromAir];
     
@@ -93,6 +99,8 @@
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = self.tableView;
+
+    [_emotionKeyboard initCollectionView];
     
     
 }
@@ -151,6 +159,59 @@
 {
     
 }
+//点击表情按钮
+- (IBAction)button_Emotionpress:(id)sender {
+    if (!_emotionKeyboard) {
+        _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
+        
+
+        
+    }
+    if (!_isEmotionOpen) {
+        _isEmotionOpen = YES;
+        if (_isKeyBoard) {
+            [_inputField resignFirstResponder];
+        }
+        //[self.view bringSubviewToFront:_emotionKeyboard];
+        //[self.view addSubview:_emotionKeyboard];
+        CGRect keyboardBounds = _emotionKeyboard.frame;
+        // get a rect for the textView frame
+        CGRect containerFrame = self.commentView.frame;
+        containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
+        // animations settings
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.25];
+        [UIView setAnimationCurve:7];
+        
+        // set views with new info
+        self.commentView.frame = containerFrame;
+        CGRect frame = _emotionKeyboard.frame;
+        frame.origin.y = self.view.frame.size.height - frame.size.height;
+        [_emotionKeyboard setFrame:frame];
+        
+        // commit animations
+        [UIView commitAnimations];
+    }else {
+        _isEmotionOpen = NO;
+        CGRect containerFrame = self.commentView.frame;
+        containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+        // animations settings
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.25];
+        [UIView setAnimationCurve:7];
+        self.commentView.frame = containerFrame;
+        CGRect frame = _emotionKeyboard.frame;
+        frame.origin.y = self.view.frame.size.height;
+        [_emotionKeyboard setFrame:frame];
+        [UIView commitAnimations];
+        //[_emotionKeyboard removeFromSuperview];
+    }
+    
+    
+}
+
 - (void)pullMainCommentFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -220,7 +281,7 @@
     self.isOpen = YES;
     [self.commentView setHidden:NO];
     [self.comment_button setEnabled:NO];
-    [self.view bringSubviewToFront:self.commentView];
+    //[self.view bringSubviewToFront:self.commentView];
     
 }
 
@@ -428,8 +489,8 @@
 
     [_tableView reloadData];
     self.inputField.text = @"";
-    [self.inputField resignFirstResponder];
-
+    if (_isKeyBoard) [self.inputField resignFirstResponder];
+    if (_isEmotionOpen) [self button_Emotionpress:nil];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
@@ -538,7 +599,10 @@
         [self.inputField resignFirstResponder];
         return;
     }
-    
+    if (self.isEmotionOpen) {
+        [self button_Emotionpress:nil];
+        return;
+    }
     if (indexPath.section == 0) {
         [self.inputField becomeFirstResponder];
         [self.inputField setPlaceholder:@"回复楼主:"];
@@ -653,8 +717,6 @@
         
         
         MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
-//        [textView.layer setBorderWidth:2];
-//        [textView.layer setBorderColor:[UIColor redColor].CGColor];
         NSString* text = [mainCom valueForKey:@"content"];
         
         float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
@@ -754,8 +816,6 @@
         cell.comment.font = [UIFont systemFontOfSize:SubCFontSize];
         [cell.comment setNumberOfLines:0];
         [cell.comment setLineBreakMode:NSLineBreakByCharWrapping];
-//        [cell.comment.layer setBorderColor:[UIColor redColor].CGColor];
-//        [cell.comment.layer setBorderWidth:2];
         
         cell.comment.emojiText = text;
         //[((MLEmojiLabel*)cell.comment) setText:hintString1];
@@ -830,6 +890,14 @@
     [textField resignFirstResponder];
     return YES;
 }
+
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (_isEmotionOpen) {
+        [self button_Emotionpress:nil];
+    }
+    return YES;
+}
 #pragma mark - keyboard observer method
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{
@@ -839,7 +907,6 @@
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    
     // Need to translate the bounds to account for rotation.
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     
@@ -865,7 +932,6 @@
     //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
