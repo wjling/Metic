@@ -245,6 +245,7 @@ enum Response_Type
 - (void)tabBtnClicked:(id)sender
 
 {
+    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollView.contentSize.width,self.content_scrollView.contentSize.height);
     clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];

@@ -148,7 +148,7 @@
     NSInteger index = indexPath.row;
     NSDictionary* msg_dic = [historicalMsgs objectAtIndex:index];
     NSNumber* cmd = [msg_dic objectForKey:@"cmd"];
-    NSNumber* ishandled = [msg_dic objectForKey:@"ishandled"];
+    NSNumber* ishandled = [CommonUtils NSNumberWithNSString:[msg_dic objectForKey:@"ishandled"]];
     if ([cmd integerValue] == ADD_FRIEND_NOTIFICATION) {
         NotificationsFriendRequestTableViewCell* cell = [self.historicalNF_tableview dequeueReusableCellWithIdentifier:@"NotificationsFriendRequestTableViewCell"];
         if (nil == cell) {
@@ -205,10 +205,7 @@
         return cell;
 
     }
-//    NotificationsEventRequestTableViewCell* cell = [self.historicalNF_tableview dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
-//    if (cell == nil) {
-//        cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
-//    }
+
     return nil;
 }
 

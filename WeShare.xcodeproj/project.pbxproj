@@ -15,6 +15,10 @@
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
 		04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B63B4D196463DD0015357B /* default_avatar.jpg */; };
+		04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04B6F85B199E6DDA00229393 /* 1星空.jpg */; };
+		04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F86019A0ADB300229393 /* FriendRecommendationViewController.m */; };
+		04B6F86319A0EEA500229393 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B6F86219A0EEA500229393 /* AddressBook.framework */; };
+		04B6F86519A0EEBB00229393 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B6F86419A0EEBB00229393 /* AddressBookUI.framework */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */; };
@@ -248,6 +252,11 @@
 		04B3F5EA19756DAE00C0A6EB /* FeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedBackViewController.h; path = FeedBack/FeedBackViewController.h; sourceTree = "<group>"; };
 		04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedBackViewController.m; path = FeedBack/FeedBackViewController.m; sourceTree = "<group>"; };
 		04B63B4D196463DD0015357B /* default_avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default_avatar.jpg; sourceTree = "<group>"; };
+		04B6F85B199E6DDA00229393 /* 1星空.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1星空.jpg"; sourceTree = "<group>"; };
+		04B6F85F19A0ADB300229393 /* FriendRecommendationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendRecommendationViewController.h; path = Friends/FriendRecommendationViewController.h; sourceTree = "<group>"; };
+		04B6F86019A0ADB300229393 /* FriendRecommendationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendRecommendationViewController.m; path = Friends/FriendRecommendationViewController.m; sourceTree = "<group>"; };
+		04B6F86219A0EEA500229393 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		04B6F86419A0EEBB00229393 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
 		04BAF6551993644F00BF00E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -663,6 +672,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B6F86519A0EEBB00229393 /* AddressBookUI.framework in Frameworks */,
+				04B6F86319A0EEA500229393 /* AddressBook.framework in Frameworks */,
 				51F06C29197E0193000E8428 /* libiconv.dylib in Frameworks */,
 				51F06C27197E017F000E8428 /* CoreVideo.framework in Frameworks */,
 				51F06C25197E0173000E8428 /* CoreMedia.framework in Frameworks */,
@@ -964,6 +975,8 @@
 				04B22E381988B5F300B33B7C /* SearchFriendViewController.m */,
 				04BAF6761998CD3F00BF00E1 /* AddFriendConfirmViewController.h */,
 				04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */,
+				04B6F85F19A0ADB300229393 /* FriendRecommendationViewController.h */,
+				04B6F86019A0ADB300229393 /* FriendRecommendationViewController.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -1198,6 +1211,8 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04B6F86419A0EEBB00229393 /* AddressBookUI.framework */,
+				04B6F86219A0EEA500229393 /* AddressBook.framework */,
 				04BAF695199B78E200BF00E1 /* libbaidumapapi.a */,
 				51F06C28197E0193000E8428 /* libiconv.dylib */,
 				51F06C26197E017F000E8428 /* CoreVideo.framework */,
@@ -1389,6 +1404,7 @@
 		519C658D1989F61B00710B26 /* banner */ = {
 			isa = PBXGroup;
 			children = (
+				04B6F85B199E6DDA00229393 /* 1星空.jpg */,
 				519C658E1989F61B00710B26 /* 2聚餐.jpg */,
 				519C658F1989F61B00710B26 /* 3兜风.jpg */,
 				519C65901989F61B00710B26 /* 4喝酒.jpg */,
@@ -1647,6 +1663,7 @@
 				519C65981989F61B00710B26 /* 6听课.jpg in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
 				08DB69AD19541F3A00F80F3F /* MCommentTableViewCell.xib in Resources */,
+				04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */,
 				51581D7219335CDD00943606 /* menu-button@2x.png in Resources */,
 				5144D99E196B880300C953FB /* UMSCommentInputControlleriPad.xib in Resources */,
 				5144D9A0196B880300C953FB /* UMShareEditViewControlleriPad.xib in Resources */,
@@ -1729,6 +1746,7 @@
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
 				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
@@ -1942,7 +1960,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: WANG JINLING (FE7PW8KK5S)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1982,7 +2000,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: WANG JINLING (5E864DZ9V3)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

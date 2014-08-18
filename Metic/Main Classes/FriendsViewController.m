@@ -259,6 +259,14 @@
         NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:section];
         [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
+    else if (tableView == self.friendTableView)
+    {
+        if (indexPath.section == 0) {
+            if (indexPath.row == 0) {
+                [self performSegueWithIdentifier:@"friendCenter_friendRecommendation" sender:self];
+            }
+        }
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     

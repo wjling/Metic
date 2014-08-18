@@ -56,9 +56,27 @@
     // Do any additional setup after loading the view.
     kNumberOfPages = 2;
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    
     [self initViews];
     [self getUserInfo];
      NSLog(@"friend info fid: %@",fid);
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"view will appear");
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"view did appear");
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
+        NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
+        [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
+        
+    }
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,14 +125,14 @@
     
     
     name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 150, 25)];
-    name_label.text = @"喵喵喵喵星人";
+    name_label.text = @"用户名";
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
     [name_label setBackgroundColor:[UIColor clearColor]];
     [name_label setTag:1];
     
     location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 100, 20)];
-    location_label.text = @"广东 广州";
+    location_label.text = @"地址";
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
     [location_label setBackgroundColor:[UIColor clearColor]];
@@ -154,7 +172,7 @@
     
     self.fDescriptionView = [[UIImageView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
-    self.fDescriptionView.image = [UIImage imageNamed:@"event"];
+    self.fDescriptionView.image = [UIImage imageNamed:@"1星空"];
     title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
     [title_label setBackgroundColor:[UIColor clearColor]];
@@ -176,6 +194,7 @@
     
     self.friendInfoEvents_tableView.delegate = self;
     self.friendInfoEvents_tableView.dataSource = self;
+
     
     [self.fDescriptionView addSubview:title_label];
     [self.fDescriptionView addSubview:description_label];
@@ -405,6 +424,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    NSLog(@"events count: %d",events.count);
+//    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+//        NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
+//        [friendInfoEvents_tableView setFrame:CGRectMake(0, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width, friendInfoEvents_tableView.frame.size.height)];
+//    }
     return 1;
 }
 
@@ -418,9 +441,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"tableview x: %f, width: %f",friendInfoEvents_tableView.frame.origin.x, friendInfoEvents_tableView.frame.size.width);
     NSDictionary* event = [events objectAtIndex:indexPath.section];
     NSArray* member_ids = [event objectForKey:@"member"];
-    NSLog(@"section index: %d",indexPath.section);
+//    NSLog(@"section index: %d",indexPath.section);
     FriendInfoEventsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (nil == cell) {
         NSLog(@"friendinfoeventstableviewcell");
@@ -482,9 +506,9 @@
     }
     [cell.add_button addTarget:self action:@selector(participate_event:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
-    cell.layer.borderColor = borderColor.CGColor;
-    cell.layer.borderWidth = 0.3;
+//    UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
+//    cell.layer.borderColor = borderColor.CGColor;
+//    cell.layer.borderWidth = 0.3;
     return cell;
     
 }

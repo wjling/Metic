@@ -54,6 +54,7 @@
 @property (nonatomic) BOOL isNetworkConnected;
 @property (nonatomic) BOOL isLogined;
 
+-(void)initViews;
 +(void)initApp;
 +(void)refreshMenu;
 

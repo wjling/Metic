@@ -109,6 +109,7 @@
         text_userName = nil;
     }
     
+    
 
 
 }
@@ -118,6 +119,12 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self checkPreUP];
+//    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -138,8 +145,8 @@
     UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, 70, view_width - 42, 115)];
     UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
     [page4 setBackgroundColor:bgColor];
-    imgV4_1.image = [UIImage imageNamed:@"出图-文字4"];
-    imgV4_2.image = [UIImage imageNamed:@"出图-主视觉4"];
+    imgV4_1.image = [UIImage imageNamed:@"splash_text4"];
+    imgV4_2.image = [UIImage imageNamed:@"splash_img4"];
     page4.clipsToBounds = YES;
     [page4 addSubview:imgV4_1];
     [page4 addSubview:imgV4_2];
