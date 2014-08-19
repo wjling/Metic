@@ -15,10 +15,12 @@
 #import "AppConstants.h"
 #import "UIImageView+WebCache.h"
 #import "MobClick.h"
+#import "NSString+JSON.h"
 
 
 
 @interface PictureWallViewController ()
+@property(nonatomic,strong)MySqlite *sql;
 @property BOOL isOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
@@ -28,6 +30,7 @@
 @property (nonatomic,strong)SDWebImageManager *manager;
 @property int currentPhotoNum;
 @property (nonatomic,strong) NSString* urlFormat;
+@property BOOL canCleanData;
 
 @end
 
@@ -55,11 +58,15 @@
     self.seletedPhotoIndex = 0;
     self.isOpen = NO;
     self.canReloadPhoto = YES;
+    self.canCleanData = YES;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     self.photoPath_list = [[NSMutableArray alloc]init];
     self.cellHeight = [[NSMutableDictionary alloc]init];
+    self.sql = [[MySqlite alloc]init];
+    [self pullPhotoInfosFromDB];
+    
     _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
@@ -79,15 +86,15 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
-    if (!_photo_list || _photo_list.count == 0) {
-        [_promt setHidden:NO];
-    }else [_promt setHidden:YES];
+    
     if (_canReloadPhoto) {
         [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
         _canReloadPhoto = NO;
         self.sequence = [[NSNumber alloc]initWithInt:0];
-        [_photo_list removeAllObjects];
-        [_photo_list_all removeAllObjects];
+        if (!_canCleanData) {
+            [_photo_list removeAllObjects];
+            [_photo_list_all removeAllObjects];
+        }
         [self getPhotolist];
     }
     
@@ -192,6 +199,9 @@
     //[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:_indicatorView cache:YES];
     _indicatorView.frame = CGRectMake(60, 10, 200, 50);
     [UIView commitAnimations];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self indicatorDisappear];
+    });
 }
 
 -(void)indicatorDisappear
@@ -201,6 +211,47 @@
     [UIView setAnimationDelegate:self];
     _indicatorView.frame = CGRectMake(60, -50, 200, 50);
     [UIView commitAnimations];
+    if (!_photo_list || _photo_list.count == 0) {
+        [_promt setHidden:NO];
+    }else {
+        [_promt setHidden:YES];
+    }
+}
+
+- (void)updatePhotoInfoToDB:(NSMutableArray*)photoInfos
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    for (NSDictionary *photoInfo in photoInfos) {
+        NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
+        photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
+        
+        [self.sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    }
+    [self.sql closeMyDB];
+}
+
+- (void)pullPhotoInfosFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    
+    //self.events = [[NSMutableArray alloc]init];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
+    NSMutableArray *result = [self.sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
+    for (NSDictionary *temp in result) {
+        NSString *tmpa = [temp valueForKey:@"photoInfo"];
+        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+        [self.photo_list_all addObject:photoInfo];
+        [self.photo_list addObject:photoInfo];
+    }
+    
+    [self.sql closeMyDB];
 }
 
 #pragma mark 代理方法-UIScrollView
@@ -354,7 +405,13 @@
         case NORMAL_REPLY:
         {
             NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
+            [self updatePhotoInfoToDB:newphoto_list];
             self.sequence = [response1 valueForKey:@"sequence"];
+            if (_canCleanData) {
+                [self.photo_list_all removeAllObjects];
+                [self.photo_list removeAllObjects];
+                _canCleanData = NO;
+            }
             [self.photo_list_all addObjectsFromArray:newphoto_list];
             int count = self.photo_list.count;
             for (int i = count; i < count + 10 && i < self.photo_list_all.count; i++) {
