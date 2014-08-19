@@ -417,7 +417,7 @@
             for (int i = count; i < count + 10 && i < self.photo_list_all.count; i++) {
                 [self.photo_list addObject:self.photo_list_all[i]];
             }
-            [self getPhotoPathlist];
+            //[self getPhotoPathlist];
             [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
             [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
             if (!_photo_list || _photo_list.count == 0) {
@@ -438,6 +438,7 @@
     if ([sender isKindOfClass:[PictureWallViewController class]]) {
         if ([segue.destinationViewController isKindOfClass:[PhotoDisplayViewController class]]) {
             PhotoDisplayViewController *nextViewController = segue.destinationViewController;
+            [self getPhotoPathlist];
             nextViewController.photoPath_list = self.photoPath_list;
             nextViewController.photo_list = self.photo_list;
             nextViewController.photoIndex = self.seletedPhotoIndex;
@@ -467,7 +468,7 @@
         for (int i = count; i < count + 10 && i < _photo_list_all.count; i++) {
             [self.photo_list addObject:self.photo_list_all[i]];
         }
-        [self getPhotoPathlist];
+        //[self getPhotoPathlist];
         [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
     }else{
         [self getPhotolist];

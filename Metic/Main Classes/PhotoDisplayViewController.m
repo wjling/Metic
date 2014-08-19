@@ -50,7 +50,7 @@
     self.scrollView = [[UIScrollView alloc]initWithFrame:frame];
     [self.scrollView setPagingEnabled:YES];
     self.scrollView.delegate = self;
-    [self.scrollView setClipsToBounds:NO];
+    [self.scrollView setClipsToBounds:YES];
     [self.scrollView setContentSize:CGSizeMake(320*self.photoPath_list.count, self.view.bounds.size.height)];
     [self.scrollView setContentOffset:CGPointMake(320*self.photoIndex, 0)];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];

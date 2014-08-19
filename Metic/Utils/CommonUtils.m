@@ -370,14 +370,13 @@
 +(void)addLeftButton:(UIViewController*)controller isFirstPage:(BOOL)isFirstPage
 {
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)){
-        if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
-        {
-            UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] init];
-            temporaryBarButtonItem.title = @" ";
-            temporaryBarButtonItem.target = controller;
-            //temporaryBarButtonItem.action = @selector(MTpopViewController);
-            controller.navigationItem.backBarButtonItem = temporaryBarButtonItem;
-        }
+
+        UIBarButtonItem *temporaryBarButtonItem = [[UIBarButtonItem alloc] init];
+        temporaryBarButtonItem.title = @" ";
+        temporaryBarButtonItem.target = controller;
+        //temporaryBarButtonItem.action = @selector(MTpopViewController);
+        controller.navigationItem.backBarButtonItem = temporaryBarButtonItem;
+
     }else{
         if (isFirstPage) return;
         UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
