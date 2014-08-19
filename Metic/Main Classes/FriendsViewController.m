@@ -38,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self isFirstPage:YES];
+    
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {
@@ -49,6 +49,7 @@
     self.sectionTitlesArray = [NSMutableArray arrayWithObjects:@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z",@"#", nil];
     
     [self initParams];
+    [CommonUtils addLeftButton:self isFirstPage:YES];
 //    [self initTableData];
 //    NSLog(@"did reload friends");
 //    [self.friendTableView reloadData];

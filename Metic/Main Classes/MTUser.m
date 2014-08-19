@@ -194,6 +194,7 @@ static MTUser *singletonInstance;
     [self.sectionArray removeAllObjects];
     [self synchronizeFriends];
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
 }
 
 - (void)initUserDir
@@ -246,6 +247,19 @@ static MTUser *singletonInstance;
     self.location = [mdictionary valueForKey:@"location"];
     self.email = [mdictionary valueForKey:@"email"];
     
+}
+
+-(void)systemSettingsInit:(NSNumber*)uid
+{
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",uid]];
+    if (!userSettings) {
+        userSettings = [[NSMutableDictionary alloc]init];
+        [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
+        [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
+        [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
+        [userDf synchronize];
+    }
 }
 
 //======================================SYNCHRONIZE FRIENDS=================================

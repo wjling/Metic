@@ -12,8 +12,11 @@
 #import "HttpSender.h"
 #import "PhotoGetter.h"
 #import "BMapKit.h"
+#import "ContactsRecommendTableViewCell.h"
+#import "SearchedFriendTableViewCell.h"
+#import "AddFriendConfirmViewController.h"
 
-@interface FriendRecommendationViewController : UIViewController<UIScrollViewDelegate,BMKLocationServiceDelegate>
+@interface FriendRecommendationViewController : UIViewController<UIScrollViewDelegate,BMKLocationServiceDelegate,UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *tabbar_scrollview;
 @property (strong, nonatomic) IBOutlet UIScrollView *content_scrollview;
 
@@ -27,7 +30,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *nearbyFriends_tableview;
 
 @property (strong, nonatomic) IBOutlet UIView *tabPage3_view;
-@property (strong, nonatomic) IBOutlet UITableView *randomFriends_tableview;
+@property (strong, nonatomic) IBOutlet UITableView *kankan_tableview;
 
 @property (strong, nonatomic) NSMutableArray* contacts_arr;
 @property CLLocationCoordinate2D coordinate;

@@ -162,7 +162,8 @@
     NSString* location = [aFriend objectForKey:@"location"];
     NSInteger gender = [[aFriend objectForKey:@"gender"] integerValue];
     NSNumber* fid = [aFriend objectForKey:@"id"];
-    NSLog(@"friend name: %@",name);
+    NSNumber* isFriend = [aFriend objectForKey:@"isFriend"];
+    NSLog(@"is friend ?: %@",isFriend);
     //    NSData* name = [aFriend objectForKey:@"name"];
     //    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
     //    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
@@ -201,10 +202,12 @@
         cell.gender_imageview.image = [UIImage imageNamed:@"男icon"];
     }
     [cell.contentView addSubview:cell.gender_imageview];
+    
     NSLog(@"gender frame: x: %f, y: %f, width: %f, height: %f",cell.gender_imageview.frame.origin.x,cell.gender_imageview.frame.origin.y,cell.gender_imageview.frame.size.width,cell.gender_imageview.frame.size.height);
     cell.add_button.tag = indexPath.row;
     [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
+    cell.theLabel.hidden = YES;
     return cell;
 }
 
