@@ -231,7 +231,7 @@
     [request setHTTPBody:jsonData];
     
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    //NSLog(@"request sent");
+    NSLog(@"URL: %@ ",httpURL);
     
 }
 

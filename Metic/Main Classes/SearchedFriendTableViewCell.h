@@ -14,6 +14,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *location_label;
 @property (strong, nonatomic) UIImageView *gender_imageview;
 @property (strong, nonatomic) IBOutlet UIButton *add_button;
+@property (strong, nonatomic) IBOutlet UILabel *theLabel;
+@property (strong, nonatomic) UIView* cellSeperator;
 
 
 @end

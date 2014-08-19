@@ -53,6 +53,7 @@
 		04B6F8AF19A25D5C00229393 /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F88F19A25D5C00229393 /* TTTAttributedLabel.m */; };
 		04B6F8B219A25FCC00229393 /* BannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8B119A25FCC00229393 /* BannerViewController.m */; };
 		04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8B419A2607800229393 /* emotion_Keyboard.m */; };
+		04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */; };
 		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */; };
@@ -329,6 +330,8 @@
 		04B6F8B119A25FCC00229393 /* BannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerViewController.m; sourceTree = "<group>"; };
 		04B6F8B319A2607800229393 /* emotion_Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emotion_Keyboard.h; path = "Custom Wedgets/emotion_Keyboard.h"; sourceTree = "<group>"; };
 		04B6F8B419A2607800229393 /* emotion_Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emotion_Keyboard.m; path = "Custom Wedgets/emotion_Keyboard.m"; sourceTree = "<group>"; };
+		04B6F8BA19A2F98A00229393 /* ContactsRecommendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsRecommendTableViewCell.h; path = Friends/ContactsRecommendTableViewCell.h; sourceTree = "<group>"; };
+		04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsRecommendTableViewCell.m; path = Friends/ContactsRecommendTableViewCell.m; sourceTree = "<group>"; };
 		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
 		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
 		04BAF6551993644F00BF00E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -1112,6 +1115,8 @@
 				04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */,
 				04B6F85F19A0ADB300229393 /* FriendRecommendationViewController.h */,
 				04B6F86019A0ADB300229393 /* FriendRecommendationViewController.m */,
+				04B6F8BA19A2F98A00229393 /* ContactsRecommendTableViewCell.h */,
+				04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -1668,7 +1673,6 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
-				51DDBF7719A31CA70051B88C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1849,22 +1853,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		51DDBF7719A31CA70051B88C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1899,6 +1887,7 @@
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
 				04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */,
 				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
+				04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
 				08DB69B119541F3A00F80F3F /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
@@ -2154,7 +2143,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: WANG JINLING (FE7PW8KK5S)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

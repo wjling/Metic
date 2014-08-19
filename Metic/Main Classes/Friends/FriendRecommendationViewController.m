@@ -15,6 +15,7 @@
     NSMutableArray* tab_arr;
     NSInteger tab_index;
     BOOL clickTab;
+    NSNumber* selectedFriendID;
 }
 
 @end
@@ -33,7 +34,7 @@
 @synthesize nearbyFriends_tableview;
 
 @synthesize tabPage3_view;
-@synthesize randomFriends_tableview;
+@synthesize kankan_tableview;
 
 @synthesize contacts_arr;
 @synthesize locationService;
@@ -59,13 +60,19 @@
     [self initContentView];
     
     locationService = [[BMKLocationService alloc]init];
+    contacts_arr = [[NSMutableArray alloc]init];
     nearbyFriends_arr = [[NSMutableArray alloc]init];
     kankan_arr = [[NSMutableArray alloc]init];
-//    [locationService startUserLocationService];
-    NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
-    [locate start];
     
-    [NSThread detachNewThreadSelector:@selector(getKanKan) toTarget:self withObject:nil];
+    contacts_tableview.delegate = self;
+    contacts_tableview.dataSource = self;
+    nearbyFriends_tableview.delegate = self;
+    nearbyFriends_tableview.dataSource = self;
+    kankan_tableview.delegate = self;
+    kankan_tableview.dataSource = self;
+//    [locationService startUserLocationService];
+    
+    
 }
 
 //返回上一层
@@ -104,7 +111,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -112,8 +119,12 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"friendRecommend_addFriend"]) {
+        AddFriendConfirmViewController* vc = segue.destinationViewController;
+        vc.fid = selectedFriendID;
+    }
 }
-*/
+
 
 -(void)initTabBar
 {
@@ -164,6 +175,7 @@
 
 -(void)initContentView
 {
+    UIColor* bgColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.949 alpha:1];
     hasUpload_view.hidden = YES;
     self.content_scrollview.scrollEnabled = YES;
     self.content_scrollview.pagingEnabled = YES;
@@ -172,7 +184,26 @@
     
     self.contacts_tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.nearbyFriends_tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.randomFriends_tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.kankan_tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self.tabPage1_view setBackgroundColor:bgColor];
+    [self.contacts_tableview setBackgroundColor:bgColor];
+    [self.nearbyFriends_tableview setBackgroundColor:bgColor];
+    [self.kankan_tableview setBackgroundColor:bgColor];
+    
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    if (![userDf boolForKey:@"hasUploadContact"]) {
+//        self.noUpload_view.hidden = NO;
+//        self.hasUpload_view.hidden = YES;
+//        [userDf setBool:NO forKey:@"hasUploadContact"];
+//    }
+//    else
+//    {
+//        self.noUpload_view.hidden = YES;
+//        self.hasUpload_view.hidden = NO;
+//        [userDf setBool:YES forKey:@"hasUploadContact"];
+//    }
+    
 }
 
 -(void)getPeopleInContact
@@ -204,8 +235,8 @@
         for (id tmpPerson in contacts_arr) {
             ABMultiValueRef phones = ABRecordCopyValue((__bridge ABRecordRef)(tmpPerson), kABPersonPhoneProperty);
             for (NSInteger i = 0; i < ABMultiValueGetCount(phones); i++) {
-                NSString* phoneNumber = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
-                [phoneNumbers addObject:phoneNumber];
+                NSMutableString* phoneNumber = (__bridge NSMutableString *)(ABMultiValueCopyValueAtIndex(phones, i));
+                [phoneNumbers addObject:[phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""]];
             }
         }
     }
@@ -214,7 +245,7 @@
 
 -(void)tabClicked:(UIButton*)sender
 {
-    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+//    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
     clickTab = YES;
     NSInteger index = [tab_arr indexOfObject:sender];
     UIButton* lastBtn = [tab_arr objectAtIndex:tab_index];
@@ -228,6 +259,21 @@
     CGPoint point = CGPointMake(self.contacts_tableview.frame.size.width * index, currentBtn.frame.origin.y);
     [self.content_scrollview setContentOffset:point animated:YES];
     tab_index = index;
+    if (tab_index == 0) {
+        
+    }
+    else if (tab_index == 1)
+    {
+        NSLog(@"tab 1");
+        NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
+        [locate start];
+    }
+    else if (tab_index == 2)
+    {
+        NSLog(@"tab 2");
+//        [NSThread detachNewThreadSelector:@selector(getKanKan) toTarget:self withObject:nil];
+        [self getKanKan];
+    }
     
 }
 
@@ -259,16 +305,18 @@
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
         if ([cmd integerValue] == 100) {
-            
+            nearbyFriends_arr = [response1 objectForKey:@"friend_list"];
+            [nearbyFriends_tableview reloadData];
         }
     };
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [MTUser sharedInstance].userid,@"id",
-                              coordinate.latitude,@"latitude",
-                              coordinate.longitude,@"longitude",nil];
+                              [NSNumber numberWithDouble:coordinate.latitude],@"latitude",
+                              [NSNumber numberWithDouble:coordinate.longitude],@"longitude",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:GET_NEARBY_FRIENDS finshedBlock:getNearbyFriendsDone];
+    NSLog(@"doing getNearbyFriends, json: %@",json_dic);
 }
 
 -(void)getKanKan
@@ -280,25 +328,211 @@
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
         if ([cmd integerValue] == 100) {
-            
+            kankan_arr = [response1 objectForKey:@"friend_list"];
+            [kankan_tableview reloadData];
         }
     };
     NSDictionary* jsonDic = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid, @"id",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:jsonData withOperationCode:GET_NEARBY_FRIENDS finshedBlock:getKanKanDone];
+    [http sendMessage:jsonData withOperationCode:KANKAN finshedBlock:getKanKanDone];
+    NSLog(@"doing getKanKan, json: %@",jsonDic);
+}
+
+//返回两个坐标（coordinateA和coordinateB)之间的距离(单位：m)
+-(double)getDistanceWithCoordinateA:(CLLocationCoordinate2D)coordinateA andCoordinateB:(CLLocationCoordinate2D)coordinateB
+{
+    double EARTH_RADIUS = 6371.393 * 1000.0;
+    double PI = 3.141592654;
+    double distance = EARTH_RADIUS * acos(cos(coordinateA.latitude * PI / 180.0) * cos(coordinateB.latitude * PI / 180.0) *
+                                          cos(coordinateA.longitude * PI / 180.0 - coordinateB.longitude * PI / 180.0) +
+                                          sin(coordinateA.latitude * PI / 180.0) * sin(coordinateB.latitude * PI / 180.0));
+    return distance;
+}
+
+-(void)addFriendBtnClicked:(UIButton*)sender
+{
+    selectedFriendID = [NSNumber numberWithInteger:sender.tag];
+    [self performSegueWithIdentifier:@"friendRecommend_addFriend" sender:self];
+    
 }
 
 #pragma mark - HttpSenderDelegate
-- (void)finishWithReceivedData:(NSData *)rData
+//- (void)finishWithReceivedData:(NSData *)rData
+//{
+//    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//    NSLog(@"Received Data: %@",temp);
+//    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+//    NSLog(@"cmd: %@",cmd);
+//    switch ([cmd integerValue]) {
+//    }
+//}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
-    switch ([cmd integerValue]) {
+    if (tableView == contacts_tableview) {
+        return contacts_arr.count;
     }
+    else if (tableView == self.nearbyFriends_tableview)
+    {
+        return nearbyFriends_arr.count;
+    }
+    else if (tableView == self.kankan_tableview)
+    {
+        return kankan_arr.count;
+    }
+    return 0;
+}
+
+// Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
+// Cell gets various attributes set automatically based on table (separators) and data source (accessory views, editing controls)
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIColor* bgColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.949 alpha:1];
+    UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
+    
+    if (tableView == contacts_tableview) {
+        ContactsRecommendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ContactsRecommendTableViewCell"];
+        if (nil == cell) {
+            cell = [[ContactsRecommendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ContactsRecommendTableViewCell"];
+            
+        }
+    }
+    else if (tableView == nearbyFriends_tableview)
+    {
+        SearchedFriendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
+        if (nil == cell) {
+            cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
+        }
+        NSMutableDictionary* friend = [nearbyFriends_arr objectAtIndex:indexPath.row];
+        NSNumber* fid = [friend objectForKey:@"id"];
+        NSNumber* latitude = [friend objectForKey:@"latitude"];
+        NSNumber* longitude = [friend objectForKey:@"longitude"];
+        NSString* fname = [friend objectForKey:@"name"];
+        NSNumber* gender = [friend objectForKey:@"gender"];
+        NSNumber* isFriend = [friend objectForKey:@"isFriend"];
+        NSLog(@"is friend: %@",isFriend);
+        CLLocationCoordinate2D fcoordinate;
+        fcoordinate.latitude = [latitude doubleValue];
+        fcoordinate.longitude = [longitude doubleValue];
+//        double distance = [self getDistanceWithCoordinateA:coordinate andCoordinateB:fcoordinate];
+        double distance = [CommonUtils GetDistance:coordinate.latitude lng1:coordinate.longitude lat2:fcoordinate.latitude lng2:fcoordinate.longitude];
+        cell.friendNameLabel.text = fname;
+        if (distance / 1000 >= 1) {
+            cell.location_label.text = [NSString stringWithFormat:@"%.2f公里 以内", distance];
+        }
+        else
+        {
+            cell.location_label.text = [NSString stringWithFormat:@"%.2f米 以内", distance];
+        }
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageview authorId:fid];
+        [getter getPhoto];
+        
+        UIFont* mFont = [UIFont systemFontOfSize:15];
+        CGSize sizeOfName = [cell.friendNameLabel.text sizeWithFont:mFont constrainedToSize:CGSizeMake(MAXFLOAT, 0) lineBreakMode:NSLineBreakByCharWrapping];
+        if (cell.gender_imageview) {
+            [cell.gender_imageview removeFromSuperview];
+        }
+        else
+        {
+            cell.gender_imageview = [[UIImageView alloc]init];
+        }
+        cell.gender_imageview.frame = CGRectMake(cell.friendNameLabel.frame.origin.x + sizeOfName.width + 5, 5, 16, 16);
+        if (gender == 0) {
+            cell.gender_imageview.image = [UIImage imageNamed:@"女icon"];
+        }
+        else{
+            cell.gender_imageview.image = [UIImage imageNamed:@"男icon"];
+        }
+        [cell.contentView addSubview:cell.gender_imageview];
+        
+        if ([isFriend intValue] == 0) {
+            cell.theLabel.hidden = YES;
+            cell.add_button.hidden = NO;
+        }
+        else{
+            cell.theLabel.hidden = NO;
+            cell.add_button.hidden = YES;
+        }
+        
+        cell.add_button.tag = [fid integerValue];
+        [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        [cell setBackgroundColor:bgColor];
+        
+        if (!cell.cellSeperator) {
+            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
+            [cell.contentView addSubview:cell.cellSeperator];
+        }
+        
+        return cell;
+    }
+    else if (tableView == kankan_tableview)
+    {
+        SearchedFriendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
+        if (nil == cell) {
+            cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
+        }
+        NSMutableDictionary* friend = [kankan_arr objectAtIndex:indexPath.row];
+        NSNumber* fid = [friend objectForKey:@"id"];
+        NSString* fname = [friend objectForKey:@"name"];
+        NSNumber* gender = [friend objectForKey:@"gender"];
+        NSString* location = [friend objectForKey:@"location"];
+        
+        cell.friendNameLabel.text = fname;
+        if ([location isEqual: [NSNull null]]) {
+            cell.location_label.text = @"暂无地址信息";
+        }
+        else
+        {
+            cell.location_label.text = location;
+        }
+        
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageview authorId:fid];
+        [getter getPhoto];
+        
+        UIFont* mFont = [UIFont systemFontOfSize:15];
+        CGSize sizeOfName = [cell.friendNameLabel.text sizeWithFont:mFont constrainedToSize:CGSizeMake(MAXFLOAT, 0) lineBreakMode:NSLineBreakByCharWrapping];
+        if (cell.gender_imageview) {
+            [cell.gender_imageview removeFromSuperview];
+        }
+        else
+        {
+            cell.gender_imageview = [[UIImageView alloc]init];
+        }
+        cell.gender_imageview.frame = CGRectMake(cell.friendNameLabel.frame.origin.x + sizeOfName.width + 5, 5, 16, 16);
+        if (gender == 0) {
+            cell.gender_imageview.image = [UIImage imageNamed:@"女icon"];
+        }
+        else{
+            cell.gender_imageview.image = [UIImage imageNamed:@"男icon"];
+        }
+        [cell.contentView addSubview:cell.gender_imageview];
+        
+        cell.add_button.hidden = NO;
+        cell.theLabel.hidden = YES;
+        
+        cell.add_button.tag = [fid integerValue];
+        [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+//        UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
+        [cell setBackgroundColor:bgColor];
+        
+        if (!cell.cellSeperator) {
+            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+            [cell.cellSeperator setBackgroundColor:seperatorColor];
+            [cell.contentView addSubview:cell.cellSeperator];
+        }
+
+        return cell;
+        
+    }
+    return nil;
 }
 
 
@@ -353,13 +587,17 @@
         
         CGRect frame = CGRectMake(currentBtn.frame.origin.x + 10, tabIndicator_view.frame.origin.y, tabIndicator_view.frame.size.width, tabIndicator_view.frame.size.height);
         [self scrollTabIndicator:frame];
+        if (tab_index == 1) {
+            NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
+            [locate start];
+        }
         
     }
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    
+    clickTab = NO;
 }
 
 

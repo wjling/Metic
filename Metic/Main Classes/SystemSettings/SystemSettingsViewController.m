@@ -16,7 +16,7 @@
 @implementation SystemSettingsViewController
 {
     NSInteger numOfSections;
-    BOOL statusOfSwitch1,statusOfSwitch2;
+    NSNumber *statusOfSwitch1,*statusOfSwitch2;
     UITapGestureRecognizer* backgroundRecognizer;
     UIAlertView* quitAlert;
 }
@@ -85,8 +85,9 @@
 -(void)initParams
 {
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    statusOfSwitch1 = [userDf boolForKey:@"systemSettings1"];
-    statusOfSwitch2 = [userDf boolForKey:@"systemSettings2"];
+    NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]];
+    statusOfSwitch1 = [userSettings objectForKey:@"systemSetting1"];
+    statusOfSwitch2 = [userSettings objectForKey:@"systemSetting2"];
     
     backgroundRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundClicked)];
 //    [self.settings_tableview addGestureRecognizer:backgroundRecognizer];
@@ -110,20 +111,29 @@
 
 -(void)switch1Clicked:(UISwitch*)sender
 {
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [userDf objectForKey:key];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:sender.on forKey:@"systemSettings1"];
-        NSLog(@"switch1: %d",sender.on);
+//        [userDf setBool:sender.on forKey:@"systemSettings1"];
+        [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting1"];
+        [userDf setObject:userSettings forKey:key];
+        NSLog(@"switch1: %@",[NSNumber numberWithBool:sender.on]);
     }
     [userDf synchronize];
 }
 
 -(void)switch2Clicked:(UISwitch*)sender
 {
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* tmpDic = [userDf objectForKey:key];
+    
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     if ([sender isKindOfClass:[UISwitch class]]) {
-        [userDf setBool:sender.on forKey:@"systemSettings2"];
-        NSLog(@"switch2: %d",sender.on);
+        [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting2"];
+        [userDf setObject:userSettings forKey:key];
+        NSLog(@"switch2: %@",[NSNumber numberWithBool:sender.on]);;
     }
     [userDf synchronize];
 }
@@ -260,7 +270,7 @@
         cell.textLabel.text = @"通知栏提醒";
         UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
         [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
-        nSwitch1.on = statusOfSwitch1;
+        nSwitch1.on = [statusOfSwitch1 boolValue];
         nSwitch1.tag = 1;
         [cell addSubview:nSwitch1];
     }
@@ -274,7 +284,7 @@
             cell.textLabel.text = @"版本更新提醒";
             UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
             [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
-            nSwitch2.on = statusOfSwitch2;
+            nSwitch2.on = [statusOfSwitch2 boolValue];
             nSwitch2.tag = 2;
             [cell addSubview:nSwitch2];
         }
