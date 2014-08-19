@@ -41,18 +41,24 @@
         frame.origin.y = 20;
         [self.view setFrame:frame];
     }
+    self.img.layer.masksToBounds = YES;
+    [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
+    [self.img.layer setBorderWidth:3.0f];
+    [self.img.layer setCornerRadius:28];
 //    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
 
 -(void)viewWillAppear:(BOOL)animated
 {
+
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
-    self.img.layer.masksToBounds = YES;
-    [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
-    [self.img.layer setBorderWidth:3.0f];
-    [self.img.layer setCornerRadius:28];
+    
     if (!_gender && [MTUser sharedInstance].gender) {
         float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
         _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20 , 20)];
@@ -60,16 +66,11 @@
             [self.gender setImage:[UIImage imageNamed:@"男icon"]];
         }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
         [self.view addSubview:_gender];
-
+        
     }
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getPhoto];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
@@ -77,19 +78,6 @@
 {
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
-    self.img.layer.masksToBounds = YES;
-    [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
-    [self.img.layer setBorderWidth:3.0f];
-    [self.img.layer setCornerRadius:28];
-//    if (!_gender && [MTUser sharedInstance].gender) {
-//        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:21];
-//        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 5, 36, 25, 25)];
-//        if ([[MTUser sharedInstance].gender intValue] == 1) {
-//            [self.gender setImage:[UIImage imageNamed:@"男icon"]];
-//        }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
-//        [self.view addSubview:_gender];
-//        
-//    }
     float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
     if (!_gender) {
         _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20)];
@@ -140,15 +128,19 @@
 
 
 - (IBAction)selector_tap:(id)sender {
+    __block float val = 21.0/255.0;
+    UIColor *color = _UserInfoView.backgroundColor;
+    [_UserInfoView setBackgroundColor:([UIColor colorWithRed:val green:val blue:val alpha:1.0f])];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_UserInfoView setBackgroundColor:color];
+    });
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
 	
 	UIViewController *vc ;
     vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-    
-//    [self.navigationController pushViewController:vc animated:YES];
     [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
-//    [self presentModalViewController:vc animated:YES];
 
 }
 
