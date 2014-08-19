@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "../Source/MLEmoji/MLEmojiLabel.h"
 
 @interface PcommentTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
-@property (strong, nonatomic) IBOutlet UILabel *comment;
+@property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSNumber *authorId;

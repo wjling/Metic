@@ -12,6 +12,7 @@
 #import "HomeViewController.h"
 #import "../Utils/CommonUtils.h"
 #import "MobClick.h"
+#import "MLEmojiLabel.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -99,14 +100,15 @@
     }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
 }
 
--(float)calculateTextHeight:(NSString*)text width:(float)width
+
+-(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
     float height = 0;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
     //设置自动行数与字符换行，为0标示无限制
     [label setNumberOfLines:0];
     label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
-    UIFont *font = [UIFont systemFontOfSize:12.0];
+    UIFont *font = [UIFont systemFontOfSize:fsize];
     label.font = font;
     
     CGSize size = CGSizeMake(width,CGFLOAT_MAX);//LableWight标签宽度，固定的
@@ -114,10 +116,8 @@
     
     CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
     height = labelsize.height;
-    return height < 8.0? 8.0:height+1;
+    return height < 25? 25:height*1.3;
 }
-
-
 
 - (void)pullMainCommentFromAir
 {
@@ -461,16 +461,20 @@
         ((PcommentTableViewCell *)cell).authorName = [Pcomment valueForKey:@"author"];
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
         ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
         if ([[Pcomment valueForKey:@"pcomment_id"] intValue] == -1 ) {
+            commentWidth = 230;
             [((PcommentTableViewCell *)cell).waitView startAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
+            commentWidth = 230;
             [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
             [((PcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }
         else{
+            commentWidth = 255;
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
@@ -479,17 +483,20 @@
         [getter getPhoto];
         
         
-        int height = [self calculateTextHeight:commentText width:255.0];
+        int height = [self calculateTextHeight:commentText width:255.0 fontSize:12.0];
         
-        UILabel* comment =((PcommentTableViewCell *)cell).comment;
+        MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
         if (!comment){
-            comment = [[UILabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
+            comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
             ((PcommentTableViewCell *)cell).comment = comment;
         }
-        else [comment setFrame:CGRectMake(50, 24, 255, height)];
-        [comment setFont:[UIFont systemFontOfSize:12]];
-        [comment setNumberOfLines:0];
-        comment.text = [Pcomment valueForKey:@"content"];
+        else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
+        comment.numberOfLines = 0;
+        comment.font = [UIFont systemFontOfSize:12.0f];
+        comment.backgroundColor = [UIColor clearColor];
+        comment.lineBreakMode = NSLineBreakByCharWrapping;
+        
+        comment.emojiText = [Pcomment valueForKey:@"content"];
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
@@ -521,7 +528,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 ];
+        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0];
         NSLog(@"%f",self.specificationHeight);
         height = self.photo.size.height *320.0/self.photo.size.width;
         height += 3;
@@ -531,8 +538,13 @@
         
     }else{
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        float commentWidth = 0;
         NSString* commentText = [Pcomment valueForKey:@"content"];
-        height = [self calculateTextHeight:commentText width:255];
+        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] > 0) {
+            commentWidth = 255;
+        }else commentWidth = 230;
+        
+        height = [self calculateTextHeight:commentText width:commentWidth fontSize:12.0];
         height += 32;
     }
     return height;
