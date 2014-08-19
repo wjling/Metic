@@ -18,6 +18,7 @@
 #import "showParticipatorsViewController.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
 #import "emotion_Keyboard.h"
+#import "MobClick.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -107,10 +108,15 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
-    
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"活动详情"];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"活动详情"];
+}
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
     float height = 0;

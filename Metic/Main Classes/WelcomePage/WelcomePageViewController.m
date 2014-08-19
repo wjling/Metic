@@ -7,6 +7,7 @@
 //
 
 #import "WelcomePageViewController.h"
+#import "MobClick.h"
 
 @interface WelcomePageViewController ()
 {
@@ -146,9 +147,16 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"启动页"];
     self.page_scrollview.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, self.view.frame.size.height);
 //    NSLog(@"view did appear");
 //    NSLog(@"content size: width: %f, height: %f",self.page_scrollview.contentSize.width, self.page_scrollview.contentSize.height);
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"启动页"];
 }
 
 - (void)didReceiveMemoryWarning

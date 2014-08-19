@@ -10,6 +10,7 @@
 #import "../Cell/EventInvitationTableViewCell.h"
 #import "PhotoGetter.h"
 #import "MTUser.h"
+#import "MobClick.h"
 
 @interface EventInvitationViewController ()
 {
@@ -47,6 +48,19 @@
 {
     [_tableView reloadData];
 }
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"活动邀请"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"活动邀请"];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

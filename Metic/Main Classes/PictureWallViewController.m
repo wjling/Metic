@@ -14,6 +14,7 @@
 #import "../Utils/HttpSender.h"
 #import "AppConstants.h"
 #import "UIImageView+WebCache.h"
+#import "MobClick.h"
 
 
 
@@ -76,6 +77,8 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"图片墙"];
     if (!_photo_list || _photo_list.count == 0) {
         [_promt setHidden:NO];
     }else [_promt setHidden:YES];
@@ -93,6 +96,8 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"图片墙"];
 }
 
 - (void)didReceiveMemoryWarning

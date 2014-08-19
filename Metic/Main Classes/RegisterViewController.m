@@ -7,6 +7,7 @@
 //
 
 #import "RegisterViewController.h"
+#import "MobClick.h"
 
 @interface RegisterViewController ()
 {
@@ -100,6 +101,14 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     registerSucceeded = NO;
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"注册首页"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"注册首页"];
 }
 
 - (void)didReceiveMemoryWarning

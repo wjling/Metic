@@ -11,6 +11,7 @@
 #import "../Cell/nearbyEventTableViewCell.h"
 #import "PhotoGetter.h"
 #import "MTUser.h"
+#import "MobClick.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -75,6 +76,8 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"周边活动"];
     [self.shadowView setAlpha:0];
     _locService.delegate = self;
     [_nearbyTableView reloadData];
@@ -88,6 +91,8 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"周边活动"];
     _locService.delegate = nil;
     [_locService stopUserLocationService];
 }

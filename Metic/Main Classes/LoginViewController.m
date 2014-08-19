@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "../Source/security/SFHFKeychainUtils.h"
+#import "MobClick.h"
 
 @interface LoginViewController ()
 {
@@ -124,9 +125,15 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"登录"];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"登录"];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

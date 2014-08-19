@@ -7,6 +7,7 @@
 //
 
 #import "UserInfoViewController.h"
+#import "MobClick.h"
 
 
 @interface UserInfoViewController ()
@@ -61,6 +62,18 @@
     }
     
     [self refresh];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"用户主页"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"用户主页"];
 }
 
 - (void)initParams

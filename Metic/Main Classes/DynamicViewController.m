@@ -10,6 +10,7 @@
 #import "EventDetailViewController.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "../Utils/PhotoGetter.h"
+#import "MobClick.h"
 
 @interface DynamicViewController ()
 @property(nonatomic,strong) UIView *bar;
@@ -48,7 +49,16 @@
         [_scrollView setContentOffset:CGPointMake(320, 0) animated:NO];
     }
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"新动态"];
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"新动态"];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

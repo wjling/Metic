@@ -7,6 +7,7 @@
 //
 
 #import "HistoricalNotificationViewController.h"
+#import "MobClick.h"
 
 @interface HistoricalNotificationViewController ()
 {
@@ -52,9 +53,16 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"历史动态"];
 //    CGRect frame = [self.historicalNF_tableview.tableHeaderView frame];
 //    frame.size.height = 0;
 //    [self.historicalNF_tableview.tableHeaderView setFrame:frame];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"历史动态"];
 }
 
 - (void)didReceiveMemoryWarning

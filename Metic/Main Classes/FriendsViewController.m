@@ -6,6 +6,7 @@
 //
 
 #import "FriendsViewController.h"
+#import "MobClick.h"
 
 
 
@@ -63,7 +64,16 @@
 {
     [self initTableData];
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"好友中心"];
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"好友中心"];
+}
 - (void) initParams
 {
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];

@@ -7,6 +7,7 @@
 //
 
 #import "NotificationsViewController.h"
+#import "MobClick.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
 #define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
@@ -72,6 +73,13 @@ enum Response_Type
 //    self.historicalMsg = [MTUser sharedInstance].historicalMsg;
 }
 
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"消息中心"];
+}
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
@@ -115,6 +123,7 @@ enum Response_Type
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"消息中心"];
 //    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);

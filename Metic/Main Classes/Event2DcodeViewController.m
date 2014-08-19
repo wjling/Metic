@@ -9,6 +9,7 @@
 #import "Event2DcodeViewController.h"
 #import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
 #import "../Utils/PhotoGetter.h"
+#import "MobClick.h"
 
 @interface Event2DcodeViewController ()
 @property(nonatomic,strong) UIImage* event2Dcode;
@@ -34,6 +35,18 @@
     
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"活动二维码"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"活动二维码"];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

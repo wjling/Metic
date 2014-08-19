@@ -15,6 +15,8 @@
 #import "PictureWallViewController.h"
 #import "LaunchEventViewController.h"
 #import "DynamicViewController.h"
+#import "AdViewController.h"
+#import "MobClick.h"
 
 @interface HomeViewController ()
 
@@ -25,6 +27,7 @@
 @property (nonatomic,strong) NSMutableArray* updateEvents;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 @property (nonatomic,strong) UIAlertView *Alert;
+@property (nonatomic,strong) NSString *AdUrl;
 @property int type;
 @property BOOL clearIds;
 @property BOOL Headeropen;
@@ -93,8 +96,8 @@
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     
-    
 }
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -105,6 +108,8 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"活动主页"];
     if (_shouldRefresh) {
         _shouldRefresh = NO;
         [_header beginRefreshing];
@@ -112,11 +117,43 @@
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"活动主页"];
+}
+
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)initAdvertisementView
+{
+    _AdUrl = [MobClick getAdURL];
+    if ( _AdUrl && ![_AdUrl isEqualToString:@""]) {
+        NSLog(@"广告广告广告广告广告%f广告：%@",self.view.frame.size.height,_AdUrl);
+        UIView* adView = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 124, 320, 60)];
+        [adView setBackgroundColor:[UIColor whiteColor]];
+        UIButton* ad = [UIButton buttonWithType:UIButtonTypeCustom];
+        [ad setTitle:@"Advertisement" forState:UIControlStateNormal];
+        [ad.titleLabel setFont:[UIFont systemFontOfSize:25]];
+        [ad.titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [ad setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [ad setFrame:CGRectMake(0, 0, 320, 60)];
+        [adView addSubview:ad];
+        [self.view addSubview:adView];
+        [ad addTarget:self action:@selector(openAdView) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+
+-(void)openAdView
+{
+    AdViewController* adViewController = [[AdViewController alloc]init];
+    adViewController.AdUrl = _AdUrl;
+    [self.navigationController pushViewController:adViewController animated:YES];
+}
 -(void)createMenuButton
 {
     UIImage* image = [UIImage imageNamed:@"头部右上角图标-加号"];

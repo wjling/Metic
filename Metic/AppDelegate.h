@@ -29,6 +29,8 @@
  "seq": int
  "msg": json(string),形如{"cmd": int, "event_id":int,...}，其中cmd可参考Return_Code部分
  */
+//友盟统计 appkey
+#define UMENG_APPKEY @"53f2af05fd98c59abf001eb8"
 @protocol NotificationDelegate
 
 @optional

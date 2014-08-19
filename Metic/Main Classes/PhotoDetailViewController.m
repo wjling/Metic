@@ -11,6 +11,7 @@
 #import "../Cell/PcommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "../Utils/CommonUtils.h"
+#import "MobClick.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -57,8 +58,16 @@
 }
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"图片主页"];
     self.sequence = [NSNumber numberWithInt:0];
     [self pullMainCommentFromAir];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"图片主页"];
 }
 
 - (void)didReceiveMemoryWarning

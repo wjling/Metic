@@ -7,6 +7,7 @@
 //
 
 #import "FeedBackViewController.h"
+#import "MobClick.h"
 
 @interface FeedBackViewController ()
 {
@@ -43,6 +44,18 @@
     self.contact2_textField.delegate = rootView;
     rootView.myDelegate = self;
     
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"反馈"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"反馈"];
 }
 
 //返回上一层
