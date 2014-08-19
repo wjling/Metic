@@ -18,6 +18,7 @@
 @property(strong,nonatomic) NSNumber* commentid;
 @property(strong,nonatomic) NSNumber* eventId;
 @property(strong,nonatomic) NSString* author;
+@property(strong,nonatomic) NSNumber* authorId;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property(nonatomic,strong) EventDetailViewController *controller;
 @property BOOL isZan;

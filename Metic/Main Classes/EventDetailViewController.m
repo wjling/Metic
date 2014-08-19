@@ -748,6 +748,7 @@
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.eventId = _eventId;
         cell.author = [mainCom valueForKey:@"author"];
+        cell.authorId = [mainCom valueForKey:@"author_id"];
         cell.controller = self;
         cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
         cell.isZan = [[mainCom valueForKey:@"isZan"] boolValue];

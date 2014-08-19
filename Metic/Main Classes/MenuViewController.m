@@ -36,6 +36,11 @@
 
 -(void)viewDidLoad
 {
+    if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
+        CGRect frame = self.view.frame;
+        frame.origin.y = 20;
+        [self.view setFrame:frame];
+    }
 //    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
@@ -57,18 +62,14 @@
         [self.view addSubview:_gender];
 
     }
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getPhoto];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
-        CGRect frame = self.view.frame;
-        frame.origin.y = 20;
-        [self.view setFrame:frame];
-    }
+    
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 

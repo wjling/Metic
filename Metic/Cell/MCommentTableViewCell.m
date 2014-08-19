@@ -7,6 +7,7 @@
 //
 
 #import "MCommentTableViewCell.h"
+#import "FriendInfoViewController.h"
 
 @implementation MCommentTableViewCell
 
@@ -31,5 +32,10 @@
     [_controller appreciate:sender];
 }
 
+- (IBAction)pushToFriendView:(id)sender {
+    FriendInfoViewController* friendView = [[FriendInfoViewController alloc]init];
+    friendView.fid = self.authorId;
+    [_controller.navigationController pushViewController:friendView animated:YES];
+}
 
 @end
