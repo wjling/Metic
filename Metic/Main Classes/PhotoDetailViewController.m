@@ -26,6 +26,7 @@
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) NSString* herName;
 @property BOOL isKeyBoard;
+@property BOOL Footeropen;
 @property long Selete_section;
 
 @end
@@ -47,12 +48,18 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.sequence = [NSNumber numberWithInt:0];
     self.isKeyBoard = NO;
+    self.Footeropen = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.pcomment_list = [[NSMutableArray alloc]init];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     //[self initButtons];
     [self setGoodButton];
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
 
     
     // Do any additional setup after loading the view.
@@ -318,6 +325,20 @@
     }else [self.navigationController popToViewController:self.photoDisplayController animated:YES];
 }
 
+-(void)closeRJ
+{
+//    if (_Headeropen) {
+//        _Headeropen = NO;
+//        [_header endRefreshing];
+//    }
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
+    [self.tableView reloadData];
+}
+
+
 //#pragma mark - UIScrollViewDelegate
 //-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 //{
@@ -340,13 +361,12 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if ([response1 valueForKey:@"photo_name"]) {
-                self.pcomment_list = [response1 valueForKey:@"pcomment_list"];
+            if ([response1 valueForKey:@"pcomment_list"]) {
+                NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
+                [self.pcomment_list addObjectsFromArray:newComments] ;
                 self.sequence = [response1 valueForKey:@"sequence"];
-                [self.tableView reloadData];
-//            }else if ([response1 valueForKey:@"pcomment_id"]){
-//                self.sequence = [NSNumber numberWithInt:0];
-//                [self pullMainCommentFromAir];
+                [self closeRJ];
+//
             }else{
                 BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
                 int good = [[self.photoInfo valueForKey:@"good"]intValue];
@@ -577,6 +597,17 @@
     }
 }
 
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+//    if (refreshView == _header) {
+//        _Headeropen = YES;
+//        self.master_sequence = [NSNumber numberWithInt:0];
+//    }else
+    _Footeropen = YES;
+    [self pullMainCommentFromAir];
+}
 #pragma mark - keyboard observer method
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{

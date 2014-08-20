@@ -393,8 +393,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
-            landmarkName = "-initUploadMethod:type:"
-            landmarkType = "5">
+            landmarkName = "@implementation PhotoGetter"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -409,8 +409,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "128"
             endingLineNumber = "128"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-downloadfile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -727,7 +727,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "181"
             endingLineNumber = "181"
-            landmarkName = "-uploadBanner:"
+            landmarkName = "-uploadAvatar"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -742,7 +742,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "230"
-            endingLineNumber = "230">
+            endingLineNumber = "230"
+            landmarkName = "-uploadAvatar"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -757,8 +759,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
             endingLineNumber = "129"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-downloadfile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -773,8 +775,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "130"
             endingLineNumber = "130"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-downloadfile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -789,8 +791,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "127"
             endingLineNumber = "127"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-downloadfile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -805,8 +807,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
             endingLineNumber = "58"
-            landmarkName = "-connection:didFailWithError:"
-            landmarkType = "5">
+            landmarkName = "@implementation HttpSender"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -821,7 +823,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "65"
             endingLineNumber = "65"
-            landmarkName = "-connection:didReceiveData:"
+            landmarkName = "-connection:didFailWithError:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -837,8 +839,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
             endingLineNumber = "73"
-            landmarkName = "-connectionDidFinishLoading:"
-            landmarkType = "5">
+            landmarkName = "@implementation HttpSender"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -894,11 +896,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
@@ -910,12 +912,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
-            landmarkName = "-calculateTextHeight:width:"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "-calculateTextHeight:width:fontSize:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -926,11 +928,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "165"
+            endingLineNumber = "165"
             landmarkName = "-share:"
             landmarkType = "5">
          </BreakpointContent>
@@ -942,11 +944,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "381"
-            endingLineNumber = "381"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -958,11 +960,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "-pullMainCommentFromAir"
             landmarkType = "5">
          </BreakpointContent>
@@ -990,11 +992,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "@implementation PhotoDetailViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1010,7 +1012,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "258"
-            endingLineNumber = "258">
+            endingLineNumber = "258"
+            landmarkName = "-uploadBanner:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1024,7 +1028,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "256"
-            endingLineNumber = "256">
+            endingLineNumber = "256"
+            landmarkName = "-uploadBanner:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1066,11 +1072,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
             landmarkName = "-good:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1130,11 +1136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "301"
-            endingLineNumber = "301"
+            startingLineNumber = "308"
+            endingLineNumber = "308"
             landmarkName = "-publishComment:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1146,11 +1152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
+            startingLineNumber = "381"
+            endingLineNumber = "381"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1162,11 +1168,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "488"
-            endingLineNumber = "488"
+            startingLineNumber = "510"
+            endingLineNumber = "510"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1327,8 +1333,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "159"
             endingLineNumber = "159"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-deletefile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1375,8 +1381,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "158"
             endingLineNumber = "158"
-            landmarkName = "@implementation CloudOperation"
-            landmarkType = "3">
+            landmarkName = "-deletefile:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1583,7 +1589,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "165"
             endingLineNumber = "165"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-deletefile:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1599,8 +1605,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "166"
             endingLineNumber = "166"
-            landmarkName = "-finishWithReceivedData:"
-            landmarkType = "5">
+            landmarkName = "@implementation CloudOperation"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1615,8 +1621,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "110"
             endingLineNumber = "110"
-            landmarkName = "@implementation PhotoGetter"
-            landmarkType = "3">
+            landmarkName = "-updatePhoto"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1663,7 +1669,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "104"
             endingLineNumber = "104"
-            landmarkName = "-downloadfile:path:"
+            landmarkName = "-downloadfile:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1679,7 +1685,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "102"
             endingLineNumber = "102"
-            landmarkName = "-downloadfile:path:"
+            landmarkName = "-downloadfile:"
             landmarkType = "5">
             <Locations>
                <Location
@@ -1725,7 +1731,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "103"
             endingLineNumber = "103"
-            landmarkName = "-downloadfile:path:"
+            landmarkName = "-downloadfile:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1908,7 +1914,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/MenuViewController.m"
@@ -1917,8 +1923,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "50"
             endingLineNumber = "50"
-            landmarkName = "-viewWillAppear:"
-            landmarkType = "5">
+            landmarkName = "@implementation MenuViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1933,7 +1939,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "49"
             endingLineNumber = "49"
-            landmarkName = "-viewWillAppear:"
+            landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2920,11 +2926,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.h"
-            timestampString = "429155809.220521"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13"
-            endingLineNumber = "13"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
             landmarkName = "@interface PhotoDetailViewController"
             landmarkType = "2">
          </BreakpointContent>
@@ -3192,11 +3198,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
             landmarkName = "-resendComment:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3208,11 +3214,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "@implementation PhotoDetailViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -3224,11 +3230,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "-resendComment:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3240,11 +3246,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "536"
-            endingLineNumber = "536"
+            startingLineNumber = "558"
+            endingLineNumber = "558"
             landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -3256,12 +3262,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "547"
-            endingLineNumber = "547"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            startingLineNumber = "569"
+            endingLineNumber = "569"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3272,12 +3278,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/PhotoDetailViewController.m"
-            timestampString = "430120177.468641"
+            timestampString = "430199539.254429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "549"
-            endingLineNumber = "549"
-            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            startingLineNumber = "571"
+            endingLineNumber = "571"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3351,7 +3357,7 @@
                   symbolName = "-[EventDetailViewController delete_Comment:]"
                   moduleName = "WeShare"
                   urlString = "file:///Users/ligang_mac4/Metic/Metic/Main%20Classes/EventDetailViewController.m"
-                  timestampString = "430137271.302431"
+                  timestampString = "430203427.089824"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "318"
@@ -3365,7 +3371,7 @@
                   symbolName = "__44-[EventDetailViewController delete_Comment:]_block_invoke"
                   moduleName = "WeShare"
                   urlString = "file:///Users/ligang_mac4/Metic/Metic/Main%20Classes/EventDetailViewController.m"
-                  timestampString = "430137271.302595"
+                  timestampString = "430203427.091144"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "318"
@@ -3692,6 +3698,70 @@
             startingLineNumber = "38"
             endingLineNumber = "38"
             landmarkName = "-viewDidLoad"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/PhotoDisplayViewController.m"
+            timestampString = "430201830.544104"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
+            landmarkName = "-appreciate:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/PhotoDisplayViewController.m"
+            timestampString = "430201901.923235"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "-comment:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/PhotoDisplayViewController.m"
+            timestampString = "430202017.147756"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/PhotoDetailViewController.m"
+            timestampString = "430203426.691886"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "364"
+            endingLineNumber = "364"
+            landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

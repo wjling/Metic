@@ -1470,10 +1470,10 @@
 				084EC7271966446500E9B48F /* PhotoUploadViewController.h */,
 				084EC7281966446500E9B48F /* PhotoUploadViewController.m */,
 				080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */,
+				080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */,
 				084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */,
 				084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */,
 				0842A89819588DA5003229A9 /* InviteFriendViewController.h */,
-				080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */,
 				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
 				51581D6119335A8700943606 /* ProfileDetailViewController.m */,
@@ -1673,6 +1673,7 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
+				51DDBF8719A452D00051B88C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1852,6 +1853,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		51DDBF8719A452D00051B88C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {

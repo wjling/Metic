@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoGetter.h"
+#import "../MJRefresh/MJRefreshFooterView.h"
 #import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
 
-@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate>
+@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong)NSNumber* photoId;
 @property(nonatomic,strong)NSNumber* eventId;
@@ -18,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+@property (strong, nonatomic) MJRefreshFooterView* footer;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;
 - (IBAction)share:(id)sender;
