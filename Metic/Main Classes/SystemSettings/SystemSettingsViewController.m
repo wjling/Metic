@@ -113,7 +113,7 @@
 {
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [userDf objectForKey:key];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     if ([sender isKindOfClass:[UISwitch class]]) {
 //        [userDf setBool:sender.on forKey:@"systemSettings1"];
         [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting1"];
@@ -127,8 +127,6 @@
 {
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* tmpDic = [userDf objectForKey:key];
-    
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     if ([sender isKindOfClass:[UISwitch class]]) {
         [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting2"];

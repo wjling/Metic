@@ -258,6 +258,7 @@ static MTUser *singletonInstance;
         userSettings = [[NSMutableDictionary alloc]init];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
+        [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];
     }

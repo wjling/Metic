@@ -11,12 +11,13 @@
 @interface FriendRecommendationViewController ()
 {
     UIView* tabIndicator_view;
-    UIButton *tab1, *tab2, *tab3;
+//    UIButton *tab1, *tab2, *tab3;
     NSMutableArray* tab_arr;
     NSInteger tab_index;
     BOOL clickTab;
     NSNumber* selectedFriendID;
 }
+
 
 @end
 
@@ -36,11 +37,14 @@
 @synthesize tabPage3_view;
 @synthesize kankan_tableview;
 
+@synthesize activityIndicator;
+
 @synthesize contacts_arr;
 @synthesize locationService;
 @synthesize coordinate;
 @synthesize nearbyFriends_arr;
 @synthesize kankan_arr;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -96,10 +100,10 @@
 
     [super viewDidAppear:animated];
     locationService.delegate = self;
-//    self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
+    self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
 //    NSLog(@"friend recommendation view did appear");
-//    NSLog(@"content view, width: %f, height: %f",content_scrollview.frame.size.width,content_scrollview.frame.size.height);
-//    
+    NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
+    NSLog(@"tabbar content size, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
 //    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 //    self.content_scrollview.contentSize = CGSizeMake(960, self.content_scrollview.frame.size.height);
 //    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
@@ -138,9 +142,15 @@
     [tabIndicator_view setBackgroundColor:myGreen];
     
     
-    tab1 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, tab_width, tab_height)];
-    tab2 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width, 0, tab_width, tab_height)];
-    tab3 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width * 2, 0, tab_width, tab_height)];
+    UIButton* tab1 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, tab_width, tab_height)];
+    UIButton* tab2 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width, 0, tab_width, tab_height)];
+    UIButton* tab3 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width * 2, 0, tab_width, tab_height)];
+//    tab1 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    tab2 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    tab3 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [tab1 setFrame:CGRectMake(0, 0, tab_width, tab_height)];
+//    [tab2 setFrame:CGRectMake(tab_width, 0, tab_width, tab_height)];
+//    [tab3 setFrame:CGRectMake(tab_width * 2, 0, tab_width, tab_height)];
     tab_arr = [[NSMutableArray alloc]initWithObjects:tab1,tab2,tab3, nil];
     
     UIColor* tColor_normal = [UIColor colorWithRed:0.553 green:0.553 blue:0.553 alpha:1];
@@ -166,19 +176,22 @@
     [tab1 setSelected:YES];
     tab_index = 0;
     clickTab = NO;
-    
-    [tabbar_scrollview addSubview:tab1];
-    [tabbar_scrollview addSubview:tab2];
-    [tabbar_scrollview addSubview:tab3];
-    [tabbar_scrollview addSubview:tabIndicator_view];
+//    [self.tabbar_scrollview setBackgroundColor:[UIColor clearColor]];
+    [self.tabbar_scrollview addSubview:tab1];
+    [self.tabbar_scrollview addSubview:tab2];
+    [self.tabbar_scrollview addSubview:tab3];
+//    [tab1 setNeedsDisplay];
+    [self.tabbar_scrollview addSubview:tabIndicator_view];
 }
 
 -(void)initContentView
 {
     UIColor* bgColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.949 alpha:1];
-    hasUpload_view.hidden = YES;
     self.content_scrollview.scrollEnabled = YES;
     self.content_scrollview.pagingEnabled = YES;
+    self.content_scrollview.bounces = NO;
+    self.content_scrollview.showsHorizontalScrollIndicator = NO;
+    self.content_scrollview.showsVerticalScrollIndicator = NO;
     self.content_scrollview.delegate = self;
     [self.addContacts_button addTarget:self action:@selector(uploadContacts:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -191,23 +204,29 @@
     [self.nearbyFriends_tableview setBackgroundColor:bgColor];
     [self.kankan_tableview setBackgroundColor:bgColor];
     
-//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-//    if (![userDf boolForKey:@"hasUploadContact"]) {
-//        self.noUpload_view.hidden = NO;
-//        self.hasUpload_view.hidden = YES;
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
+    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
+    if (![hasUploadContact boolValue]) {
+        self.noUpload_view.hidden = NO;
+        self.hasUpload_view.hidden = YES;
 //        [userDf setBool:NO forKey:@"hasUploadContact"];
-//    }
-//    else
-//    {
-//        self.noUpload_view.hidden = YES;
-//        self.hasUpload_view.hidden = NO;
+    }
+    else
+    {
+        self.noUpload_view.hidden = YES;
+        self.hasUpload_view.hidden = NO;
 //        [userDf setBool:YES forKey:@"hasUploadContact"];
-//    }
+        
+    }
+    
     
 }
 
 -(void)getPeopleInContact
 {
+    ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
+    NSLog(@"address book authorization status: %ld",status);
     ABAddressBookRef addressBook = nil;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 6.0) {
         addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -220,6 +239,9 @@
     else
     {
         addressBook = ABAddressBookCreate();
+    }
+    if (status == kABAuthorizationStatusDenied) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您曾经拒绝了活动宝的通讯录访问，请您在\n设置->隐私->通讯录\n里面授权活动宝获取您的通讯录内容" WithDelegate:self WithCancelTitle:@"确定"];
     }
     
     if (addressBook == nil) {
@@ -291,9 +313,12 @@
 -(void)uploadContacts:(id)sender
 {
     NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-    [self getPeopleInContact];
-    NSMutableArray* phoneNums = [self getFriendsPhoneNumber];
-    NSLog(@"phone numbers: %@", phoneNums);
+    UIAlertView* alertview = [[UIAlertView alloc]initWithTitle:@"请绑定您的手机号码" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alertview.alertViewStyle = UIAlertViewStylePlainTextInput;
+    alertview.delegate = self;
+    alertview.tag = 119;
+    [alertview show];
+    
 }
 
 -(void)getNearbyFriends
@@ -421,8 +446,8 @@
 //        double distance = [self getDistanceWithCoordinateA:coordinate andCoordinateB:fcoordinate];
         double distance = [CommonUtils GetDistance:coordinate.latitude lng1:coordinate.longitude lat2:fcoordinate.latitude lng2:fcoordinate.longitude];
         cell.friendNameLabel.text = fname;
-        if (distance / 1000 >= 1) {
-            cell.location_label.text = [NSString stringWithFormat:@"%.2f公里 以内", distance];
+        if (distance / 1000.0 >= 1) {
+            cell.location_label.text = [NSString stringWithFormat:@"%.2f公里 以内", distance / 1000.0];
         }
         else
         {
@@ -598,6 +623,64 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     clickTab = NO;
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 119) {
+        if (buttonIndex == 0) //cancel button
+        {
+            
+        }
+        else if (buttonIndex == 1)
+        {
+            NSString* phone = [alertView textFieldAtIndex:0].text;
+            if ([phone isEqualToString:@""]) {
+                [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您不可以绑定一个空号哦" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+            else
+            {
+                NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+                NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+                NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
+                [userSettings setValue:phone forKey:@"userPhoneNumber"];
+                [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"hasUploadPhoneNumber"];
+                [userDf setObject:userSettings forKey:key];
+                [userDf synchronize];
+                NSLog(@"user settings : %@",userSettings);
+                
+                [self getPeopleInContact];
+                NSMutableArray* phoneNums = [self getFriendsPhoneNumber];
+                NSLog(@"phone numbers: %@", phoneNums);
+                
+                void (^uploadContactsDone)(NSData*) = ^(NSData *rData)
+                {
+                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSLog(@"upload contact done, received Data: %@",temp);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+                    if ([cmd integerValue] == 100)
+                    {
+                        contacts_arr = [response1 objectForKey:@"friend_list"];
+                        [contacts_tableview reloadData];
+                    }
+
+                };
+                NSDictionary* jsonDic = [CommonUtils packParamsInDictionary:
+                                         [MTUser sharedInstance].userid, @"id",
+                                         phone, @"my_phone_number",
+                                         phoneNums, @"friends_phone",nil];
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:uploadContactsDone];
+                self.noUpload_view.hidden = YES;
+                self.hasUpload_view.hidden = NO;
+            }
+            
+        }
+
+    }
 }
 
 

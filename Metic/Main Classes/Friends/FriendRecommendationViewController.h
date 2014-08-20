@@ -16,7 +16,7 @@
 #import "SearchedFriendTableViewCell.h"
 #import "AddFriendConfirmViewController.h"
 
-@interface FriendRecommendationViewController : UIViewController<UIScrollViewDelegate,BMKLocationServiceDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface FriendRecommendationViewController : UIViewController<UIScrollViewDelegate,BMKLocationServiceDelegate,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *tabbar_scrollview;
 @property (strong, nonatomic) IBOutlet UIScrollView *content_scrollview;
 
@@ -31,6 +31,8 @@
 
 @property (strong, nonatomic) IBOutlet UIView *tabPage3_view;
 @property (strong, nonatomic) IBOutlet UITableView *kankan_tableview;
+
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (strong, nonatomic) NSMutableArray* contacts_arr;
 @property CLLocationCoordinate2D coordinate;
