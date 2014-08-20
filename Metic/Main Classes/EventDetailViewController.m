@@ -440,7 +440,6 @@
         ((UITextField*)[self.inputField viewWithTag:1]).text = @"";
         return;
     }
-    self.master_sequence = [NSNumber numberWithInt:0];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
 
     

@@ -197,7 +197,6 @@
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
         NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
         if (!users || users.count == 0) {
-            [CommonUtils showSimpleAlertViewWithTitle:@"Test" WithMessage:@"居然发生这种事" WithDelegate:nil WithCancelTitle:@"不放过"];
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [[MTUser alloc]init];
