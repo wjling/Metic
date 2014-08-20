@@ -98,11 +98,17 @@
             NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
             [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[updateInfo valueForKey:@"subject"]).length)];
             
-            TTTAttributedLabel *update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, 200, 30)];
+            TTTAttributedLabel *update_label = (TTTAttributedLabel*)[cell viewWithTag:131];
+            if (!update_label) {
+                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, 200, 30)];
+                [cell addSubview:update_label];
+                [update_label setTag:131];
+            }
+            
             [update_label setNumberOfLines:0];
             [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
             [update_label setText:hintString1];
-            [cell addSubview:update_label];
+            
             }
         return cell;
 
