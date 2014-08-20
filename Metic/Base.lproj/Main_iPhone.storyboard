@@ -1464,7 +1464,7 @@
         <!--Friend Info View Controller - 好友信息-->
         <scene sceneID="CSm-aA-FZ8">
             <objects>
-                <viewController id="FXr-Y8-zhi" customClass="FriendInfoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FriendInfoViewController" id="FXr-Y8-zhi" customClass="FriendInfoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bCG-BS-MNC"/>
                         <viewControllerLayoutGuide type="bottom" id="Eci-5E-0Y3"/>
@@ -3739,7 +3739,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DYb-Gb-6Ib" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3041" y="-391"/>
+            <point key="canvasLocation" x="2979" y="-396"/>
         </scene>
         <!--Photo Display View Controller - 图片详情-->
         <scene sceneID="W3X-7y-wZo">
@@ -3860,12 +3860,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yae-7W-sYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3511" y="-391"/>
+            <point key="canvasLocation" x="3480" y="-396"/>
         </scene>
         <!--Photo Detail View Controller - 图片评论-->
         <scene sceneID="v7Q-Vv-RB3">
             <objects>
-                <viewController id="vtf-A0-qgM" customClass="PhotoDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoDetailViewController" id="vtf-A0-qgM" customClass="PhotoDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FjB-eN-NGH"/>
                         <viewControllerLayoutGuide type="bottom" id="yL4-QP-KUp"/>
@@ -4598,14 +4598,14 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="UXj-VV-omZ"/>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="YnG-LV-8dG"/>
         <segue reference="ib8-0I-OZA"/>
         <segue reference="hOW-ww-bKW"/>
         <segue reference="KQw-JA-BHy"/>
-        <segue reference="fLJ-gw-aSw"/>
         <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -33,7 +33,9 @@
 }
 
 - (IBAction)pushToFriendView:(id)sender {
-    FriendInfoViewController* friendView = [[FriendInfoViewController alloc]init];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+	FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
     friendView.fid = self.authorId;
     [_controller.navigationController pushViewController:friendView animated:YES];
 }

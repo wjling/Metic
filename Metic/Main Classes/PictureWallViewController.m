@@ -329,6 +329,9 @@
     
     cell.avatar.layer.masksToBounds = YES;
     [cell.avatar.layer setCornerRadius:5];
+    cell.photoInfo = a;
+    cell.PhotoWall = self;
+    cell.photo_id = [a valueForKey:@"photo_id"];
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
     [avatarGetter getPhoto];

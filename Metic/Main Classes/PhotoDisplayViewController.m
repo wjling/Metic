@@ -271,6 +271,7 @@
     //这里我很谨慎的对sender和目标视图控制器作了判断
     if ([segue.sourceViewController isKindOfClass:[PhotoDisplayViewController class]]) {
         if ([segue.destinationViewController isKindOfClass:[PhotoDetailViewController class]]) {
+            
             PhotoDetailViewController *nextViewController = segue.destinationViewController;
             int index = self.scrollView.contentOffset.x/320;
             
@@ -281,6 +282,7 @@
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
+            nextViewController.type = 1;
         }
         
     }

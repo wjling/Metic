@@ -7,6 +7,7 @@
 //
 
 #import "PhotoTableViewCell.h"
+#import "PhotoDetailViewController.h"
 
 @implementation PhotoTableViewCell
 
@@ -23,4 +24,17 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)button_DetailPressed:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"]; ;
+    
+    viewcontroller.photoId = self.photo_id;
+    viewcontroller.photo = self.imgView.image;
+    viewcontroller.eventId = self.PhotoWall.eventId;
+    viewcontroller.photoInfo = self.photoInfo;
+    viewcontroller.type = 2;
+    [self.PhotoWall.navigationController pushViewController:viewcontroller animated:YES];
+
+}
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PictureWallViewController.h"
 
 @interface PhotoTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
@@ -15,5 +16,10 @@
 @property (strong, nonatomic) IBOutlet UIView *infoView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) IBOutlet UIButton *button_Detail;
+@property (strong, nonatomic) NSNumber *photo_id;
+@property (strong, nonatomic) NSMutableDictionary* photoInfo;
+@property (strong, nonatomic) PictureWallViewController* PhotoWall;
+- (IBAction)button_DetailPressed:(id)sender;
 
 @end

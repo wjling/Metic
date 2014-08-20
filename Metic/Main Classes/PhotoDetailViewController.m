@@ -8,6 +8,7 @@
 
 #import "PhotoDetailViewController.h"
 #import "PhotoDisplayViewController.h"
+#import "BannerViewController.h"
 #import "../Cell/PcommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "../Utils/CommonUtils.h"
@@ -322,7 +323,21 @@
 {
     if (_isKeyBoard) {
         [[self.commentView viewWithTag:10] resignFirstResponder];
-    }else [self.navigationController popToViewController:self.photoDisplayController animated:YES];
+    }else {
+        switch (self.type) {
+            case 1:
+                [self.navigationController popViewControllerAnimated:YES];
+                break;
+            case 2:{
+                BannerViewController* bannerView = [[BannerViewController alloc] init];
+                bannerView.banner = self.photo;
+                [self presentViewController:bannerView animated:YES completion:^{}];
+            }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 -(void)closeRJ

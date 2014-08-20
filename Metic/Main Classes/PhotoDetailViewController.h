@@ -20,6 +20,7 @@
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
+@property int type;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;
 - (IBAction)share:(id)sender;
