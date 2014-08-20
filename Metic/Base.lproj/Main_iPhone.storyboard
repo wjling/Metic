@@ -1658,8 +1658,8 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D1r-Zh-bqe">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="128"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D1r-Zh-bqe">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.87058830261230469" green="0.87058830261230469" blue="0.87058830261230469" alpha="1" colorSpace="deviceRGB"/>
                             </scrollView>
@@ -1682,7 +1682,7 @@
                                                         <color key="textColor" red="0.70196080207824707" green="0.70196080207824707" blue="0.70196080207824707" alpha="1" colorSpace="deviceRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FbK-Oo-Drf">
+                                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FbK-Oo-Drf">
                                                         <rect key="frame" x="15" y="55" width="290" height="40"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <state key="normal" title="添加通讯录朋友" backgroundImage="登录按钮">
@@ -1921,13 +1921,20 @@
                                     <constraint firstItem="szJ-BA-ort" firstAttribute="leading" secondItem="5Ii-Ec-mVD" secondAttribute="leading" id="tgf-ht-sXM"/>
                                 </constraints>
                             </scrollView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="6TK-h0-xwm">
+                                <rect key="frame" x="150" y="198" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" red="0.26666668059999998" green="0.79607850309999995" blue="0.6784313917" alpha="1" colorSpace="deviceRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4LY-4K-OPW" firstAttribute="top" secondItem="a8s-J6-mBn" secondAttribute="bottom" constant="40" id="1Ng-g0-WmS"/>
                             <constraint firstItem="v27-11-V9J" firstAttribute="top" secondItem="a8s-J6-mBn" secondAttribute="bottom" constant="40" id="ARk-YO-VQL"/>
+                            <constraint firstItem="6TK-h0-xwm" firstAttribute="leading" secondItem="B8z-vi-wDl" secondAttribute="leading" constant="150" id="Dwp-Kb-DL7"/>
+                            <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="D1r-Zh-bqe" secondAttribute="bottom" constant="376" id="Iff-mK-aWq"/>
                             <constraint firstAttribute="trailing" secondItem="D1r-Zh-bqe" secondAttribute="trailing" id="Jh4-27-AY1"/>
-                            <constraint firstItem="5Ii-Ec-mVD" firstAttribute="top" secondItem="D1r-Zh-bqe" secondAttribute="bottom" id="Poh-Cx-azR"/>
+                            <constraint firstAttribute="trailing" secondItem="6TK-h0-xwm" secondAttribute="trailing" constant="150" id="PjG-be-y6V"/>
                             <constraint firstItem="2HH-Sy-W1c" firstAttribute="top" secondItem="a8s-J6-mBn" secondAttribute="bottom" constant="40" id="Ull-wC-K7A"/>
                             <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="2HH-Sy-W1c" secondAttribute="bottom" id="Xly-Sk-iCP"/>
                             <constraint firstItem="vph-Vh-Sl5" firstAttribute="top" secondItem="a8s-J6-mBn" secondAttribute="bottom" constant="40" id="a3B-sC-24I"/>
@@ -1935,12 +1942,15 @@
                             <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="vph-Vh-Sl5" secondAttribute="bottom" id="cy2-vs-ld1"/>
                             <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="4LY-4K-OPW" secondAttribute="bottom" id="hcX-Xs-Snv"/>
                             <constraint firstItem="D1r-Zh-bqe" firstAttribute="leading" secondItem="B8z-vi-wDl" secondAttribute="leading" id="jHg-yu-2RK"/>
+                            <constraint firstItem="6TK-h0-xwm" firstAttribute="top" secondItem="a8s-J6-mBn" secondAttribute="bottom" constant="198" id="mPp-jC-UlS"/>
                             <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="v27-11-V9J" secondAttribute="bottom" id="vCe-br-5wO"/>
                             <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="5Ii-Ec-mVD" secondAttribute="bottom" id="w7x-kh-IWs"/>
+                            <constraint firstItem="pu1-f4-9TS" firstAttribute="top" secondItem="6TK-h0-xwm" secondAttribute="bottom" constant="198" id="yne-Ox-9OP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="好友推荐" id="IfF-LH-Yi8"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="6TK-h0-xwm" id="4WH-Af-eah"/>
                         <outlet property="addContacts_button" destination="FbK-Oo-Drf" id="ZlU-Xj-Gcl"/>
                         <outlet property="contacts_tableview" destination="bZE-H4-FzL" id="qoI-Pq-Qdg"/>
                         <outlet property="content_scrollview" destination="5Ii-Ec-mVD" id="Dd5-hy-Z6E"/>

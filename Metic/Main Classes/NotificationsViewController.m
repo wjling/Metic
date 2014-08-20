@@ -220,10 +220,6 @@ enum Response_Type
     [friendR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
     [systemMsg_button setTitleColor:tColor_normal forState:UIControlStateNormal];
     
-//    [eventR_button setAlpha:0.1];
-//    [friendR_button setAlpha:0.1];
-//    [systemMsg_button setAlpha:0.1];
-    
     [eventR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
     [friendR_button setTitleColor:tColor_selected forState:UIControlStateSelected];
     [systemMsg_button setTitleColor:tColor_selected forState:UIControlStateSelected];
