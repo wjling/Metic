@@ -408,6 +408,10 @@
         case NORMAL_REPLY:
         {
             NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
+            for (int i = 0; i < newphoto_list.count; i++) {
+                NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list[i]];
+                newphoto_list[i] = dictionary;
+            }
             [self updatePhotoInfoToDB:newphoto_list];
             self.sequence = [response1 valueForKey:@"sequence"];
             if (_canCleanData) {
