@@ -518,7 +518,7 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     newAvatar = croppedImage;
-    PhotoGetter* getter = [[PhotoGetter alloc]initUploadMethod:croppedImage type:1];
+    PhotoGetter* getter = [[PhotoGetter alloc]initUploadMethod:croppedImage type:21];
     [getter uploadAvatar];
 }
 

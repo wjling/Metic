@@ -25,6 +25,10 @@
 @synthesize tabbar_scrollview;
 @synthesize content_scrollview;
 
+@synthesize tab1;
+@synthesize tab2;
+@synthesize tab3;
+
 @synthesize tabPage1_view;
 @synthesize noUpload_view;
 @synthesize addContacts_button;
@@ -100,10 +104,11 @@
 
     [super viewDidAppear:animated];
     locationService.delegate = self;
+    NSLog(@"tabbar content size==before, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
     self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
 //    NSLog(@"friend recommendation view did appear");
     NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
-    NSLog(@"tabbar content size, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
+    NSLog(@"tabbar content size==after, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
 //    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 //    self.content_scrollview.contentSize = CGSizeMake(960, self.content_scrollview.frame.size.height);
 //    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
@@ -135,16 +140,19 @@
     UIColor* myGreen = [UIColor colorWithRed:0.27 green:0.80 blue:0.68 alpha:1];
     CGFloat tab_width = self.tabbar_scrollview.frame.size.width/3.0;
     CGFloat tab_height = self.tabbar_scrollview.frame.size.height - 1;
+    NSLog(@"tab_height: %f, tab_width: %f",tab_height,tab_width);
 //    self.tabbar_scrollview.scrollEnabled = NO;
+    self.tabbar_scrollview = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
+    [self.view addSubview:self.tabbar_scrollview];
     [self.tabbar_scrollview setBackgroundColor:[CommonUtils colorWithValue:0xd9d9d9]];
     
     tabIndicator_view = [[UIView alloc]initWithFrame:CGRectMake(10, tab_height - 3, tab_width - 20, 3)];
     [tabIndicator_view setBackgroundColor:myGreen];
     
     
-    UIButton* tab1 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, tab_width, tab_height)];
-    UIButton* tab2 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width, 0, tab_width, tab_height)];
-    UIButton* tab3 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width * 2, 0, tab_width, tab_height)];
+    tab1 = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, tab_width, tab_height)];
+    tab2 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width, 0, tab_width, tab_height)];
+    tab3 = [[UIButton alloc]initWithFrame:CGRectMake(tab_width * 2, 0, tab_width, tab_height)];
 //    tab1 = [UIButton buttonWithType:UIButtonTypeCustom];
 //    tab2 = [UIButton buttonWithType:UIButtonTypeCustom];
 //    tab3 = [UIButton buttonWithType:UIButtonTypeCustom];
