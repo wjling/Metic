@@ -13,8 +13,9 @@
 #import "MJRefreshHeaderView.h"
 #import "MJRefreshFooterView.h"
 #import "../Utils/PhotoGetter.h"
+#import "../Source/MLEmoji/MLEmojiLabel.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;

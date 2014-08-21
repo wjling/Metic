@@ -7,12 +7,13 @@
 //
 
 #import "SCommentTableViewCell.h"
+#import "FriendInfoViewController.h"
 
 @implementation SCommentTableViewCell
 
 - (void)awakeFromNib
 {
-    // Initialization code
+    self.comment.emojiDelegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -64,4 +65,39 @@
             break;
     }
 }
+
+- (void)mlEmojiLabel:(MLEmojiLabel*)emojiLabel didSelectLink:(NSString*)link withType:(MLEmojiLabelLinkType)type
+{
+    switch(type){
+        case MLEmojiLabelLinkTypeURL:
+            NSLog(@"点击了链接%@",link);
+            break;
+        case MLEmojiLabelLinkTypePhoneNumber:
+        {
+            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                     bundle: nil];
+            FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+            friendView.fid = self.authorid;
+            [_controller.navigationController pushViewController:friendView animated:YES];
+
+            
+            NSLog(@"点击了用户%@",link);
+        }
+            break;
+        case MLEmojiLabelLinkTypeEmail:
+            NSLog(@"点击了邮箱%@",link);
+            break;
+        case MLEmojiLabelLinkTypeAt:
+            NSLog(@"点击了用户%@",link);
+            break;
+        case MLEmojiLabelLinkTypePoundSign:
+            NSLog(@"点击了话题%@",link);
+            break;
+        default:
+            NSLog(@"点击了不知道啥%@",link);
+            break;
+    }
+    
+}
+
 @end

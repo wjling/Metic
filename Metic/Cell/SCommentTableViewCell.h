@@ -13,7 +13,7 @@
 #import "../Main Classes/EventDetailViewController.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
 
-@interface SCommentTableViewCell : UITableViewCell
+@interface SCommentTableViewCell : UITableViewCell<MLEmojiLabelDelegate>
 - (IBAction)delete_Comment:(id)sender;
 @property(strong,nonatomic) NSString* author;
 @property(strong,nonatomic) NSNumber* authorid;

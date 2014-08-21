@@ -524,12 +524,14 @@
         if (!comment){
             comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
             ((PcommentTableViewCell *)cell).comment = comment;
+            [comment setDisableThreeCommon:YES];
         }
         else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
         comment.numberOfLines = 0;
         comment.font = [UIFont systemFontOfSize:12.0f];
         comment.backgroundColor = [UIColor clearColor];
         comment.lineBreakMode = NSLineBreakByCharWrapping;
+        
         
         comment.emojiText = [Pcomment valueForKey:@"content"];
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
