@@ -120,7 +120,7 @@
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
-            [avatarGetter getPhoto];
+            [avatarGetter getAvatar];
             
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
             ((UILabel*)[cell viewWithTag:3]).text = [atMeInfo valueForKey:@"content"];
@@ -130,7 +130,7 @@
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
-            [avatarGetter getPhoto];
+            [avatarGetter getAvatar];
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
         }
         return cell;

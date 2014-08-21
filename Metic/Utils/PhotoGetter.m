@@ -44,14 +44,46 @@
     return self;
 }
 
-
-
--(void)getPhoto
+-(void)getAvatar
 {
     
     NSString *url = [self getLocalAvatarUrl];
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
 }
+
+//-(void)getAvatar
+//{
+//    __block NSString* url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+//    if (!url) {
+//        [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
+//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//        [dictionary setValue:@"GET" forKey:@"method"];
+//        [dictionary setValue:[NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId] forKey:@"object"];
+//        
+//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//        [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+//            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//            switch ([cmd intValue]) {
+//                case NORMAL_REPLY:
+//                {
+//                    url = (NSString*)[response1 valueForKey:@"url"];
+//                    NSLog(@"%@",url);
+//                    [[MTUser sharedInstance].avatarURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+//                    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+//                }
+//                    break;
+//            }
+//        }];
+//
+//        
+//    }else{
+//        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+//    }
+//    
+//}
 
 
 -(void)getBanner:(NSNumber*)code
@@ -63,6 +95,36 @@
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
+//        case 0:
+//        {
+//            __block NSString* url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+//            if (!url) {
+//                [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
+//                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//                [dictionary setValue:@"GET" forKey:@"method"];
+//                [dictionary setValue:[NSString stringWithFormat:@"/banner/%@.jpg",self.avatarId] forKey:@"object"];
+//                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//                NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//                [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+//                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//                    switch ([cmd intValue]) {
+//                        case NORMAL_REPLY:
+//                        {
+//                            url = (NSString*)[response1 valueForKey:@"url"];
+//                            NSLog(@"%@",url);
+//                            [[MTUser sharedInstance].bannerURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
+//                            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
+//                        }
+//                            break;
+//                    }
+//                }];   
+//            }else{
+//                [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
+//            }
+//        }
+//            break;
         case 1:
         {
             [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];

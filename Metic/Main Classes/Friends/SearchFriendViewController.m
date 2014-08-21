@@ -183,7 +183,7 @@
     }
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageview authorId:fid];
-    [getter getPhoto];
+    [getter getAvatar];
     
     UIFont* mFont = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [cell.friendNameLabel.text sizeWithFont:mFont constrainedToSize:CGSizeMake(MAXFLOAT, 0) lineBreakMode:NSLineBreakByCharWrapping];

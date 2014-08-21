@@ -471,7 +471,7 @@
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
-        [getter getPhoto];
+        [getter getAvatar];
         [cell addSubview:avatar];
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -515,7 +515,7 @@
         }
 
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((PcommentTableViewCell *)cell).avatar authorId:[Pcomment valueForKey:@"author_id"]];
-        [getter getPhoto];
+        [getter getAvatar];
         
         
         int height = [self calculateTextHeight:commentText width:255.0 fontSize:12.0];

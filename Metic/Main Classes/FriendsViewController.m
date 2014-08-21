@@ -408,7 +408,7 @@
                 }
                 
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
-                [getter getPhoto];
+                [getter getAvatar];
                 
                 if (label) {
                     cell.title.text = label;
@@ -481,7 +481,7 @@
         
         
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:imgV authorId:fid];
-        [getter getPhoto];
+        [getter getAvatar];
         cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
         cell.layer.borderWidth = 0.3f;
 //        cell.textLabel.text = name;

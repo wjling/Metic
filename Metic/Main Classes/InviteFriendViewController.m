@@ -199,7 +199,7 @@
         }
         
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
-        [getter getPhoto];
+        [getter getAvatar];
         
         if (label) {
             cell.title.text = label;

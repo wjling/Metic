@@ -279,7 +279,7 @@
             cell.eventId = [a valueForKey:@"event_id"];
             cell.nearbyEventViewController = self;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-            [avatarGetter getPhoto];
+            [avatarGetter getAvatar];
             
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             [bannerGetter getBanner:[a valueForKey:@"code"]];
@@ -291,7 +291,7 @@
                 UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
                 if (i < participator_count) {
                     PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                    [miniGetter getPhoto];
+                    [miniGetter getAvatar];
                 }else tmp.image = nil;
             }
             [cell setBackgroundColor:[UIColor whiteColor]];

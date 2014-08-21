@@ -67,7 +67,8 @@
     self.sql = [[MySqlite alloc]init];
     [self pullPhotoInfosFromDB];
     
-    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";
+//    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
+    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
     
@@ -141,9 +142,42 @@
     [self.photoPath_list removeAllObjects];
     for(NSDictionary* dict in self.photo_list)
     {
-        NSString *url = [NSString stringWithFormat:_urlFormat,[dict valueForKey:@"photo_name"] ,[dict valueForKey:@"url"]];
+        //NSString *url = [NSString stringWithFormat:_urlFormat,[dict valueForKey:@"photo_name"] ,[dict valueForKey:@"url"]];
+        NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]]];
         [self.photoPath_list addObject:url];
     }
+    
+//    [self.photoPath_list removeAllObjects];
+//    for(int i = 0; i < self.photo_list.count ; i++ )
+//    {
+//        NSDictionary* dict = self.photo_list[i];
+//        [self.photoPath_list addObject:@""];
+//        __block NSString* url = [[MTUser sharedInstance].photoURL valueForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"photo_id"]]];
+//        if (!url) {
+//            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//            [dictionary setValue:@"GET" forKey:@"method"];
+//            [dictionary setValue:[NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]] forKey:@"object"];
+//            
+//            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//            NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//            [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+//                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//                switch ([cmd intValue]) {
+//                    case NORMAL_REPLY:
+//                    {
+//                        url = (NSString*)[response1 valueForKey:@"url"];
+//                        NSLog(@"%@",url);
+//                        [[MTUser sharedInstance].photoURL setValue:url forKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"photo_id"]]];
+//                        self.photoPath_list[i] = url;
+//                        break;
+//                    }
+//                }
+//            }];
+//        }else self.photoPath_list[i] = url;
+//
+//    }
 }
 
 
@@ -334,20 +368,60 @@
     cell.photo_id = [a valueForKey:@"photo_id"];
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
-    [avatarGetter getPhoto];
-    
-        
-    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    [avatarGetter getAvatar];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
-    //[cell.layer setBorderColor:[UIColor redColor].CGColor];
-    //[cell.layer setBorderWidth:2];
+        
+    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
+    NSLog(@"%@",url);
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (self && image && cacheType == SDImageCacheTypeNone) {
             [tableView reloadData];
             NSLog(@"reloadData %@",imageURL);
         }
     }];
+    //服务器获取url准备
+//    __block NSString* url = [[MTUser sharedInstance].photoURL valueForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"photo_id"]]];
+//    if (!url) {
+//        [photo setImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//        [dictionary setValue:@"GET" forKey:@"method"];
+//        [dictionary setValue:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] forKey:@"object"];
+//        
+//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+//        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//        [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+//            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//            switch ([cmd intValue]) {
+//                case NORMAL_REPLY:
+//                {
+//                    url = (NSString*)[response1 valueForKey:@"url"];
+//                    NSLog(@"%@",url);
+//                    [[MTUser sharedInstance].photoURL setValue:url forKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"photo_id"]]];
+//                    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//                        if (self && image && cacheType == SDImageCacheTypeNone) {
+//                            [tableView reloadData];
+//                            NSLog(@"reloadData %@",imageURL);
+//                        }
+//                    }];
+//                }
+//                    break;
+//            }
+//        }];
+//    }else{
+//        [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+//            if (self && image && cacheType == SDImageCacheTypeNone) {
+//                [tableView reloadData];
+//                NSLog(@"reloadData %@",imageURL);
+//            }
+//        }];
+//    }
+    
+    
+    
     //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     NSNumber* Cellheight = [_cellHeight valueForKey:url];
     if (Cellheight) {

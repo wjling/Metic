@@ -698,7 +698,7 @@
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                [miniGetter getPhoto];
+                [miniGetter getAvatar];
             }else tmp.image = nil;
             
         }
@@ -782,7 +782,7 @@
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
-        [avatarGetter getPhoto];
+        [avatarGetter getAvatar];
         
         return cell;
     }

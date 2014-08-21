@@ -153,7 +153,7 @@
         [cell.avatar.layer setCornerRadius:15];
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-        [avatarGetter getPhoto];
+        [avatarGetter getAvatar];
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
         [bannerGetter getBanner:[a valueForKey:@"code"]];
@@ -168,7 +168,7 @@
             [tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                [miniGetter getPhoto];
+                [miniGetter getAvatar];
             }else tmp.image = nil;
             
         }
@@ -203,7 +203,7 @@
         cell.location.text = ([[a valueForKey:@"location"] isEqual:[NSNull null]])?@"":[a valueForKey:@"location"];
         cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"男icon"]:[UIImage imageNamed:@"女icon"];
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
-        [avatarGetter getPhoto];
+        [avatarGetter getAvatar];
         [_resultView addSubview:cell];
         CGRect frame = _resultView.frame;
         frame.origin.y = 120;

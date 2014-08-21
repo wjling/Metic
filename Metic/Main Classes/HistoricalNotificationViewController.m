@@ -174,7 +174,7 @@
         cell.name_label.text = name;
         cell.conform_msg_label.text = confirm_msg;
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
-        [getter getPhoto];
+        [getter getAvatar];
 
         if ([ishandled integerValue] == 0) {
             cell.remark_label.text = @"已拒绝";
@@ -203,7 +203,7 @@
         cell.name_label.text = launcher;
         [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
-        [getter getPhoto];
+        [getter getAvatar];
         
         if ([ishandled integerValue] == 0) {
             cell.remark_label.text = @"已拒绝";

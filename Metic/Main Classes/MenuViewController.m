@@ -70,7 +70,7 @@
     }
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
-    [getter getPhoto];
+    [getter getAvatar];
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
@@ -89,7 +89,7 @@
     }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
-    [getter getPhoto];
+    [getter getAvatar];
     NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
 }
 

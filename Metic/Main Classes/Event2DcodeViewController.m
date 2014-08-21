@@ -69,7 +69,7 @@
     [[_TwodCode superview].layer setBorderColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:1.0].CGColor];
     [[_TwodCode superview].layer setBorderWidth:1];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:_avatar authorId:launcherId];
-    [getter getPhoto];
+    [getter getAvatar];
     
     
 }

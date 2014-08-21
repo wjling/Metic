@@ -405,7 +405,7 @@
         avatar.layer.masksToBounds = YES;
         [avatar.layer setCornerRadius:5];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:_FriendsIds_array[indexPath.row] ];
-        [getter getPhoto];
+        [getter getAvatar];
         //name.text = [MTUser sharedInstance].
         name.text = @"xxxx";
         

@@ -79,7 +79,7 @@
 - (void)initParams
 {
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
-    [getter getPhoto];
+    [getter getAvatar];
     self.avatar_imageView.layer.cornerRadius = self.avatar_imageView.frame.size.width/2;
     self.avatar_imageView.layer.masksToBounds = YES;
     self.avatar_imageView.layer.borderColor = ([UIColor lightGrayColor].CGColor);

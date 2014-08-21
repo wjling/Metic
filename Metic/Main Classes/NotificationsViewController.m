@@ -631,7 +631,7 @@ enum Response_Type
                 cell.name_label.text = launcher;
                 [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
-                [getter getPhoto];
+                [getter getAvatar];
                 
                 cell.okBtn.hidden = YES;
                 cell.noBtn.hidden = YES;
@@ -690,7 +690,7 @@ enum Response_Type
                 cell.name_label.text = name;
                 cell.conform_msg_label.text = confirm_msg;
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
-                [getter getPhoto];
+                [getter getAvatar];
                 
                 if (ishandled == -1) {
                     cell.okBtn.hidden = NO;

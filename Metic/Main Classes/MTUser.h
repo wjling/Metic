@@ -24,6 +24,7 @@
 @property(nonatomic,strong)NSMutableDictionary *avatar;
 @property(nonatomic,strong)NSMutableDictionary *avatarURL;
 @property(nonatomic,strong)NSMutableDictionary *bannerURL;
+@property(nonatomic,strong)NSMutableDictionary *photoURL;
 @property(nonatomic,strong)NSMutableSet *friendIds;
 //@property(nonatomic,strong)MySqlite *sql;
 @property float wait;

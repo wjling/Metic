@@ -308,7 +308,7 @@
 //    }
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
-    [getter getPhoto];
+    [getter getAvatar];
     name_label.text = name;
     
     UIFont* font = [UIFont systemFontOfSize:15];
@@ -504,7 +504,7 @@
         NSNumber* uid = [member_ids objectAtIndex:i];
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar authorId:uid];
-        [getter getPhoto];
+        [getter getAvatar];
         [cell.avatars addObject:avatar];
         [cell.contentView addSubview:avatar];
         

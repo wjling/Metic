@@ -116,7 +116,7 @@
     self.publishTime.text = [[dict valueForKey:@"time"] substringToIndex:10];
     self.photoId = [dict valueForKey:@"photo_id"];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[dict valueForKey:@"author_id"]];
-    [getter getPhoto];
+    [getter getAvatar];
     
     
     

@@ -32,14 +32,14 @@
     self = [super init];
 //    URL_mainServer = @"http://222.200.182.183:10087/";
 //    URL_mainServer = @"http://115.29.103.9:10087/";
-    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云
-//    URL_mainServer = @"http://203.195.174.128:10087/";//腾讯
+    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云//测试服
+//    URL_mainServer = @"http://203.195.174.128:10087/";//腾讯//正式服
     
-    PHOTO_mainServer = @"http://42.96.203.86:20000/";
-//    PHOTO_mainServer = @"http://203.195.174.128:20000/";
+    PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
+//    PHOTO_mainServer = @"http://203.195.174.128:20000/";//正式服
     
-    feedBack_mainServer = @"http://42.96.203.86:10089/";
-//    feedBack_mainServer = @"http://203.195.174.128:10089/";
+    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
+//    feedBack_mainServer = @"http://203.195.174.128:10089/";//正式服
     
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];

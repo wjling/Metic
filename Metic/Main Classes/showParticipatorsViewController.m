@@ -101,7 +101,7 @@
         UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
         UILabel* name = (UILabel*)[cell viewWithTag:2];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
-        [getter getPhoto];
+        [getter getAvatar];
         name.text = [participant valueForKey:@"name"];
 
     }else{
