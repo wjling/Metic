@@ -366,7 +366,7 @@
 {
     if (self.isUpload) {
         if (status){
-            if (type == 21) {
+            if (self.type == 21) {
                 SDImageCache* cache = [SDImageCache sharedImageCache];
                 [cache removeImageForKey:path];
             }
