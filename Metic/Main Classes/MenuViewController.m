@@ -183,7 +183,12 @@
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
 			break;
 			
-		case 2:
+        case 2:
+			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
+			break;
+
+		case 3:
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
@@ -192,13 +197,9 @@
 //			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
 //            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
 //			break;
-        case 3:
+        case 4:
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
-			break;
-        case 4:
-			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
 			break;
         case 5:
 			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
@@ -255,7 +256,14 @@
             }else vc = eventInvitationViewController;
 			break;
 			
-		case 2:
+        case 2:
+            if (!nearbyEventViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NearbyEventViewController"];
+                nearbyEventViewController = vc;
+            }else vc = nearbyEventViewController;
+            ((NearbyEventViewController*)nearbyEventViewController).shouldRefresh = YES;
+			break;
+		case 3:
             if (!friendsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendsViewController"];
                 friendsViewController = vc;
@@ -266,19 +274,13 @@
 //            vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ProfileViewController"];
 //			break;
             
-        case 3:
+        case 4:
             if (!notificationsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
                 notificationsViewController = vc;
             }else vc = notificationsViewController;
 			break;
-        case 4:
-            if (!nearbyEventViewController) {
-                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NearbyEventViewController"];
-                nearbyEventViewController = vc;
-            }else vc = nearbyEventViewController;
-            ((NearbyEventViewController*)nearbyEventViewController).shouldRefresh = YES;
-			break;
+        
         case 5:
             if (!scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
