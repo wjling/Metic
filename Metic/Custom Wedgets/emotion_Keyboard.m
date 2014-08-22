@@ -111,10 +111,20 @@
         if (emotion) {
             
             NSString* emotionExpression = _emotionImgArray[indexPath.row];
-            if (_textField) _textField.text = [_textField.text stringByAppendingString:emotionExpression];
+            if (_textField){
+                _textField.text = [_textField.text stringByAppendingString:emotionExpression];
+            }
             if (_textView) _textView.text = [_textView.text stringByAppendingString:emotionExpression];
         }
-    }else NSLog(@"删除一个表情 或一个字符");
+    }else
+    {
+        if (_textField && _textField.text.length > 0){
+            _textField.text = [_textField.text substringToIndex:(_textField.text.length - 1)];
+        }
+        if (_textView && _textView.text.length > 0){
+            _textView.text = [_textView.text substringToIndex:(_textView.text.length - 1)];
+        }
+    }
 }
 
 

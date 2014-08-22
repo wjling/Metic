@@ -17,6 +17,7 @@
 #import "../Cell/EventCellTableViewCell.h"
 #import "showParticipatorsViewController.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
+#import "NSString+JSON.h"
 #import "emotion_Keyboard.h"
 #import "MobClick.h"
 
@@ -107,6 +108,11 @@
     
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self pullEventFromAir];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -161,11 +167,7 @@
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
-#pragma mark - 数据库操作
-- (void)updateEventToDB
-{
-    
-}
+
 //点击表情按钮
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
@@ -278,9 +280,39 @@
         self.event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
     }
     [self.sql closeMyDB];
-    
 }
 
+-(void)pullEventFromAir
+{
+    NSArray* eventids = @[_eventId];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:eventids forKey:@"sequence"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            self.event = [response1 valueForKey:@"event_list"][0];
+            if(_event)[self updateEventToDB:_event];
+            [_tableView reloadData];
+        }
+        
+    }];
+}
+
+- (void)updateEventToDB:(NSDictionary*)event
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    NSString *eventData = [NSString jsonStringWithDictionary:_event];
+    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",eventData], nil];
+    
+    [self.sql insertToTable:@"event" withColumns:columns andValues:values];
+    [self.sql closeMyDB];
+}
 
 - (void)addComment
 {
