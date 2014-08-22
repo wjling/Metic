@@ -13,6 +13,8 @@
 @interface showParticipatorsViewController ()
 @property (nonatomic,strong) NSMutableSet *inviteFids;
 @property (nonatomic,strong) NSMutableArray* participants;
+@property BOOL isRemoving;
+@property BOOL isManaging;
 @end
 
 @implementation showParticipatorsViewController
@@ -29,6 +31,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if(_canManage) [_manage_Button setHidden:NO];
+    else [_manage_Button setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     _fids = [[NSMutableArray alloc]init];
     _participants = [[NSMutableArray alloc]init];
@@ -37,6 +41,13 @@
     _collectionView.delegate = self;
     [self getEventParticipants];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    _isManaging = NO;
+    _isRemoving = NO;
+    [_collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -48,6 +59,16 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)manage:(id)sender {
+    if (!_isManaging) {
+        _isManaging = YES;
+        _isRemoving = NO;
+    }else{
+        _isManaging = NO;
+    }
+    [self.collectionView reloadData];
 }
 
 -(void)getEventParticipants
@@ -89,24 +110,44 @@
 #pragma mark - CollectionViewDelegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _visibility? _participants.count + 1:_participants.count;
+    if (!_isManaging) return _participants.count;
+    else{
+        if (_isMine) return _participants.count + 2;
+        else return _visibility? _participants.count + 1:_participants.count;
+    }
+    
 }
 
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participatorCell" forIndexPath:indexPath];
-    if(indexPath.row != _participants.count){
+    if(indexPath.row < _participants.count){
         NSDictionary* participant = _participants[indexPath.row];
         UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
         UILabel* name = (UILabel*)[cell viewWithTag:2];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
         [getter getAvatar];
         name.text = [participant valueForKey:@"name"];
+        [[cell viewWithTag:3] setHidden:NO];
+        if (_isRemoving) {
+            [[cell viewWithTag:4] setHidden:NO];
+        }else [[cell viewWithTag:4] setHidden:YES];
 
+    }else if (indexPath.row == _participants.count){
+        UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+        [add setImage:[UIImage imageNamed:@"添加图标"]];
+        UILabel* name = (UILabel*)[cell viewWithTag:2];
+        name.text = @"";
+        [[cell viewWithTag:4] setHidden:YES];//delete icon
+        [[cell viewWithTag:3] setHidden:YES];//mask
     }else{
         UIImageView* add = (UIImageView*)[cell viewWithTag:1];
-        [add setImage:[UIImage imageNamed:@"添加参与者icon"]];
+        [add setImage:[UIImage imageNamed:@"grid_remove"]];
+        UILabel* name = (UILabel*)[cell viewWithTag:2];
+        name.text = @"";
+        [[cell viewWithTag:4] setHidden:YES];//delete icon
+        [[cell viewWithTag:3] setHidden:YES];//mask
     }
     return cell;
 }
@@ -115,6 +156,9 @@
 {
     if (indexPath.row == _participants.count) {
         [self performSegueWithIdentifier:@"inviteFriends" sender:self];
+    }else if(indexPath.row == _participants.count + 1){
+        self.isRemoving = !_isRemoving;
+        [self.collectionView reloadData];
     }
 }
 
@@ -132,6 +176,7 @@
     }
 
 }
+
 
 
 

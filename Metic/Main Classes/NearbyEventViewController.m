@@ -377,7 +377,7 @@
     if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
         showParticipatorsViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = _selectedEventId;
-        nextViewController.visibility = NO;
+        nextViewController.canManage = NO;
     }
 }
 

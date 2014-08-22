@@ -11,7 +11,12 @@
 
 @interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) IBOutlet UIButton *manage_Button;
+- (IBAction)manage:(id)sender;
 @property (strong, nonatomic) NSMutableArray* fids;
 @property (strong, nonatomic) NSNumber* eventId;
-@property BOOL visibility;
+@property BOOL canManage;  //必填
+@property BOOL visibility; //canManage的情况下 必填
+@property BOOL isMine;     //canManage的情况下 必填
+
 @end

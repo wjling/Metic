@@ -3665,9 +3665,13 @@
                                                     <rect key="frame" x="5" y="10" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="Z50-qP-PCx">
+                                                <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="Z50-qP-PCx">
                                                     <rect key="frame" x="5" y="10" width="50" height="50"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_remove" translatesAutoresizingMaskIntoConstraints="NO" id="jwh-i2-K2r">
+                                                    <rect key="frame" x="38" y="7" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3681,9 +3685,24 @@
                     </view>
                     <navigationItem key="navigationItem" title="活动参与者" id="nhd-Ty-h8e">
                         <barButtonItem key="backBarButtonItem" title=" " id="G3x-R7-dXz"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="2pC-c6-0pK">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Nel-Oi-aOR">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="       管理">
+                                    <color key="titleColor" red="0.96470594409999999" green="0.36078432199999999" blue="0.13725490870000001" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="manage:" destination="MVl-Wy-DVz" eventType="touchUpInside" id="5bc-H7-zZ9"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="ovw-7j-mrG" id="Dtq-0q-cNb"/>
+                        <outlet property="manage_Button" destination="Nel-Oi-aOR" id="hMN-ZE-hBb"/>
                         <segue destination="pBR-B0-6IX" kind="push" identifier="inviteFriends" id="eBE-9B-Hp2"/>
                     </connections>
                 </viewController>
@@ -4586,6 +4605,7 @@
         <image name="button_emotion" width="24" height="24"/>
         <image name="button_emotion_pressed" width="24" height="24"/>
         <image name="dian" width="32" height="44"/>
+        <image name="ic_remove" width="31" height="31"/>
         <image name="上传按钮" width="26" height="26"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
@@ -4637,12 +4657,12 @@
     <inferredMetricsTieBreakers>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="EEO-gR-a4J"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="UXj-VV-omZ"/>
+        <segue reference="hOW-ww-bKW"/>
         <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="hOW-ww-bKW"/>
+        <segue reference="eBE-9B-Hp2"/>
         <segue reference="KQw-JA-BHy"/>
     </inferredMetricsTieBreakers>
 </document>

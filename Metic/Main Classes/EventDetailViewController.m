@@ -34,6 +34,7 @@
 
 @property(nonatomic,strong) NSString* herName;
 @property BOOL visibility;
+@property BOOL isMine;
 @property long mainCommentId;
 @property long Selete_section;
 @property BOOL isOpen;
@@ -673,7 +674,8 @@
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"]];
-        _visibility = [[_event valueForKey:@"visibility"] boolValue] || ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+        _isMine = [[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
+        _visibility = [[_event valueForKey:@"visibility"] boolValue] || _isMine;
         if (_visibility) {
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
@@ -1016,7 +1018,10 @@
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = _eventId;
+            nextViewController.canManage = _visibility;
+            nextViewController.isMine = _isMine;
             nextViewController.visibility = _visibility;
+            
         }
         if ([segue.destinationViewController isKindOfClass:[Event2DcodeViewController class]]) {
             Event2DcodeViewController *nextViewController = segue.destinationViewController;
