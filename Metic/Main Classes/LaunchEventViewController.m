@@ -407,7 +407,7 @@
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:_FriendsIds_array[indexPath.row] ];
         [getter getAvatar];
         //name.text = [MTUser sharedInstance].
-        name.text = @"xxxx";
+        name.text = [[MTUser sharedInstance].nameFromID_dic valueForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
         
     }else{
         UIImageView* add = (UIImageView*)[cell viewWithTag:1];
