@@ -50,29 +50,23 @@
 {
     [super viewDidLoad];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0)
-    {
-//        [self showLaunchView];
-//        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+    if ([userDf boolForKey:@"firstLaunched"]) {
+        NSLog(@"login: it is the first launch");
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+        {
+            [self presentViewController:vc animated:NO completion:nil];
+        }
     }
     else
     {
-        if ([userDf boolForKey:@"firstLaunched"]) {
-            NSLog(@"login: it is the first launch");
-            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                                 bundle: nil];
-            WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-            [self presentViewController:vc animated:NO completion:nil];
-//            [self.navigationController pushViewController:vc animated:NO];
-        }
-        else
-        {
-            NSLog(@"login: it is not the first launch");
-            [self showLaunchView];
-            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
-        }
-
+        NSLog(@"login: it is not the first launch");
+        [self showLaunchView];
+        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
+
     
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.rootView.myDelegate = self;
@@ -143,14 +137,22 @@
 -(void)showLaunchView
 {
     CGRect bounds = [UIScreen mainScreen].bounds;
+    CGFloat y;
+    if (bounds.size.height <= 480) {
+        y = 40;
+    }
+    else
+    {
+        y = 70;
+    }
     CGFloat view_width = bounds.size.width;
     CGFloat view_height = bounds.size.height;
     UIColor* bgColor = [CommonUtils colorWithValue:0x57caab];
     launchV = [[UIViewController alloc]init];
 //    [launchV.view setBackgroundColor:[UIColor greenColor]];
     UIView* page4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
-    UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, 70, view_width - 42, 115)];
-    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 385, view_width + 120, 385)];
+    UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
+    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
     [page4 setBackgroundColor:bgColor];
     imgV4_1.image = [UIImage imageNamed:@"splash_text4"];
     imgV4_2.image = [UIImage imageNamed:@"splash_img4"];

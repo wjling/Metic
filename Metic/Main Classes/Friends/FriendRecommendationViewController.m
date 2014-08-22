@@ -48,6 +48,7 @@
 @synthesize coordinate;
 @synthesize nearbyFriends_arr;
 @synthesize kankan_arr;
+@synthesize phoneNumbers;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -233,8 +234,6 @@
 
 -(void)getPeopleInContact
 {
-    ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
-    NSLog(@"address book authorization status: %ld",status);
     ABAddressBookRef addressBook = nil;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 6.0) {
         addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -248,9 +247,6 @@
     {
         addressBook = ABAddressBookCreate();
     }
-    if (status == kABAuthorizationStatusDenied) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您曾经拒绝了活动宝的通讯录访问，请您在\n设置->隐私->通讯录\n里面授权活动宝获取您的通讯录内容" WithDelegate:self WithCancelTitle:@"确定"];
-    }
     
     if (addressBook == nil) {
         return;
@@ -260,17 +256,17 @@
 
 -(NSMutableArray*)getFriendsPhoneNumber
 {
-    NSMutableArray* phoneNumbers = [[NSMutableArray alloc]init];
+    NSMutableArray* tels = [[NSMutableArray alloc]init];
     if (contacts_arr) {
         for (id tmpPerson in contacts_arr) {
             ABMultiValueRef phones = ABRecordCopyValue((__bridge ABRecordRef)(tmpPerson), kABPersonPhoneProperty);
             for (NSInteger i = 0; i < ABMultiValueGetCount(phones); i++) {
                 NSMutableString* phoneNumber = (__bridge NSMutableString *)(ABMultiValueCopyValueAtIndex(phones, i));
-                [phoneNumbers addObject:[phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""]];
+                [tels addObject:[phoneNumber stringByReplacingOccurrencesOfString:@"-" withString:@""]];
             }
         }
     }
-    return phoneNumbers;
+    return tels;
 }
 
 -(void)tabClicked:(UIButton*)sender
@@ -320,13 +316,23 @@
 
 -(void)uploadContacts:(id)sender
 {
+    [self getPeopleInContact];
+    phoneNumbers = [self getFriendsPhoneNumber];
+    NSLog(@"phone numbers: %@", phoneNumbers);
     NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-    UIAlertView* alertview = [[UIAlertView alloc]initWithTitle:@"请绑定您的手机号码" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    alertview.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alertview.delegate = self;
-    alertview.tag = 119;
-    [alertview show];
-    
+    ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
+    NSLog(@"address book authorization status: %ld",status);
+    if (status == kABAuthorizationStatusDenied) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您曾经拒绝了活动宝的通讯录访问，请您在\n设置->隐私->通讯录\n里面授权活动宝获取您的通讯录内容" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    else
+    {
+        UIAlertView* alertview = [[UIAlertView alloc]initWithTitle:@"请绑定您的手机号码" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alertview.alertViewStyle = UIAlertViewStylePlainTextInput;
+        alertview.delegate = self;
+        alertview.tag = 119;
+        [alertview show];
+    }
 }
 
 -(void)getNearbyFriends
@@ -433,6 +439,7 @@
             cell = [[ContactsRecommendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ContactsRecommendTableViewCell"];
             
         }
+        
     }
     else if (tableView == nearbyFriends_tableview)
     {
@@ -658,10 +665,6 @@
                 [userDf synchronize];
                 NSLog(@"user settings : %@",userSettings);
                 
-                [self getPeopleInContact];
-                NSMutableArray* phoneNums = [self getFriendsPhoneNumber];
-                NSLog(@"phone numbers: %@", phoneNums);
-                
                 void (^uploadContactsDone)(NSData*) = ^(NSData *rData)
                 {
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
@@ -678,7 +681,8 @@
                 NSDictionary* jsonDic = [CommonUtils packParamsInDictionary:
                                          [MTUser sharedInstance].userid, @"id",
                                          phone, @"my_phone_number",
-                                         phoneNums, @"friends_phone",nil];
+                                         phoneNumbers, @"friends_phone",nil];
+                NSLog(@"upload number json: %@",jsonDic);
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:uploadContactsDone];

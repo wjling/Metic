@@ -24,7 +24,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *tab2;
 @property (strong, nonatomic) IBOutlet UIButton *tab3;
 
-
 @property (strong, nonatomic) IBOutlet UIView *tabPage1_view;
 @property (strong, nonatomic) IBOutlet UIView *noUpload_view;
 @property (strong, nonatomic) IBOutlet UIButton *addContacts_button;
@@ -44,5 +43,6 @@
 @property (strong, nonatomic) BMKLocationService* locationService;
 @property (strong, nonatomic) NSMutableArray* nearbyFriends_arr;
 @property (strong, nonatomic) NSMutableArray* kankan_arr;
+@property (strong, nonatomic) NSMutableArray* phoneNumbers;
 
 @end

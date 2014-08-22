@@ -450,10 +450,10 @@
     [mySocket close];
     
 //    NSString* str = @"ws://203.195.174.128:10088/";
-    NSString* str = @"ws://42.96.203.86:10088/";//阿里
+    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
 //    NSString* str = @"ws://115.29.103.9:10088/";
     //    NSString* str = @"ws://localhost:9000/chat";
-//    NSString* str = @"ws://203.195.174.128:10088/";//腾讯
+//    NSString* str = @"ws://203.195.174.128:10088/";//腾讯 正式服
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     
