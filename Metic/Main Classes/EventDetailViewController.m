@@ -353,12 +353,14 @@
                 }
                 [waitingComment setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
                 [_tableView reloadData];
-            }else{
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
             }
-        }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+//            else{
+//                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+//            }
         }
+//        else{
+//            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+//        }
 
     }];
 }
@@ -752,8 +754,8 @@
         cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
         cell.isZan = [[mainCom valueForKey:@"isZan"] boolValue];
         if (cell.isZan) {
-            [cell.good_button setBackgroundImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
-        }else [cell.good_button setBackgroundImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
+            [cell.good_button setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
+        }else [cell.good_button setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if ([[mainCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
@@ -1001,6 +1003,7 @@
             break;
     }
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

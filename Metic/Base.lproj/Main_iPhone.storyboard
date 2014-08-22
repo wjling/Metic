@@ -4618,7 +4618,7 @@
         <image name="添加好友icon" width="13" height="13"/>
         <image name="添加好友icon白" width="16" height="16"/>
         <image name="灰色按钮条" width="300" height="38"/>
-        <image name="点赞图" width="23" height="23"/>
+        <image name="点赞图" width="11" height="11"/>
         <image name="登录按钮" width="290" height="29"/>
         <image name="登录按钮按下效果" width="290" height="29"/>
         <image name="登录界面按钮" width="580" height="76"/>

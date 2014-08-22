@@ -59,7 +59,7 @@
 - (NSMutableDictionary*)sortFriendList;
 - (void)rankFriendsInArray:(NSMutableArray*)friends;
 //- (void)updateAvatar;
-//- (void)updateAvatarList;
+- (void)updateAvatarList;
 - (void)initWithData:(NSDictionary *)mdictionary;
 - (void)setUid:(NSNumber *)user_id;
 -(void)friendListDidChanged;

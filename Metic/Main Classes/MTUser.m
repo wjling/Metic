@@ -8,6 +8,7 @@
 
 #import "MTUser.h"
 #import "../Utils/PhotoGetter.h"
+#import "SDImageCache.h"
 
 
 @interface MTUser ()
@@ -144,46 +145,65 @@ static MTUser *singletonInstance;
 
 }
 
-//-(void)updateAvatarList
-//{
-//    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//    [dictionary setValue:self.userid  forKey:@"id"];
-//    
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//    [httpSender sendMessage:jsonData withOperationCode:GET_AVATAR_UPDATETIME];
-//    
-//}
+-(void)updateAvatarList
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:self.userid  forKey:@"id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_AVATAR_UPDATETIME finshedBlock:^(NSData *rData) {
+        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                self.avatarInfo = [response1 valueForKey:@"list"];
+                [self updateAvatar];
+            }
+                break;
+            default:
+            {
+            }
+                break;
+        }
 
-//-(void)updateAvatar
-//{
-//    self.sql = [[MySqlite alloc]init];
-//    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-//    [self.sql openMyDB:path];
-//    for (NSDictionary *dictionary in self.avatarInfo) {
-//        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
-//        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
-//        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
-//        NSMutableArray *results = [self.sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
-//        if (!results.count) {
-//            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-//            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-//            [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
-//        }else{
-//            NSDictionary* result = results[0];
-//            NSString *local_update = [result valueForKey:@"updatetime"];
-//            NSString *net_update = [dictionary valueForKey:@"updatetime"];
-//            if (![local_update isEqualToString:net_update]) {
-//                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-//                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-//                [self.sql insertToTable:@"avatar" withColumns:columns andValues:values];
-//                PhotoGetter *getter = [[PhotoGetter alloc]initWithData:nil path:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid] type:2 cache:[MTUser sharedInstance].avatar];
-//                [getter updatePhoto];
-//            }
-//        }
-//    }
-//    [self.sql closeMyDB];
-//}
+    }];
+    
+}
+
+-(void)updateAvatar
+{
+    MySqlite *sql = [[MySqlite alloc]init];
+    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+    [sql openMyDB:path];
+    NSLog(@"%@",self.avatarInfo);
+    for (NSDictionary *dictionary in self.avatarInfo) {
+        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
+        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
+        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
+        NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
+        if (!results.count) {
+            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+            [sql insertToTable:@"avatar" withColumns:columns andValues:values];
+        }else{
+            NSDictionary* result = results[0];
+            NSString *local_update = [result valueForKey:@"updatetime"];
+            NSString *net_update = [dictionary valueForKey:@"updatetime"];
+            if (![local_update isEqualToString:net_update]) {
+                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+                [sql insertToTable:@"avatar" withColumns:columns andValues:values];
+                NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
+                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
+                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
+                }];
+            }
+        }
+    }
+    [sql closeMyDB];
+}
 
 - (void)setUid:(NSNumber*) user_id
 {
@@ -235,7 +255,7 @@ static MTUser *singletonInstance;
     [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
     [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
     [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",nil];
-    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",@"url",nil];
+    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
     [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
     [sql closeMyDB];
     //self.logined = YES;
@@ -491,7 +511,7 @@ static MTUser *singletonInstance;
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            self.avatarInfo = [response1 valueForKey:@"list"];
+            //self.avatarInfo = [response1 valueForKey:@"list"];
             //[self updateAvatar];NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             if (tempFriends) {

@@ -66,7 +66,7 @@
     }
     [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
     [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
-    //[self.user updateAvatarList];
+    [[MTUser sharedInstance] updateAvatarList];
     
     self.tableView.homeController= self;
     [self.tableView setDelegate:self];
