@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "../Utils/HttpSender.h"
 
-@interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,HttpSenderDelegate>
+@interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) IBOutlet UIButton *manage_Button;
 - (IBAction)manage:(id)sender;

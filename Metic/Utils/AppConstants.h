@@ -53,6 +53,8 @@ enum Operation_Code
     UPLOADPHOTO = 35,
     GET_FILE_URL = 36,
     VIDEOSERVER = 37,
+    KICK_OUT = 38,
+    QUIT_EVENT = 39,
 };
 
 enum CloudOperation_Code

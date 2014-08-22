@@ -13,6 +13,7 @@
 @interface showParticipatorsViewController ()
 @property (nonatomic,strong) NSMutableSet *inviteFids;
 @property (nonatomic,strong) NSMutableArray* participants;
+@property (nonatomic,strong) NSNumber* kickingId;
 @property BOOL isRemoving;
 @property BOOL isManaging;
 @end
@@ -130,7 +131,8 @@
         [getter getAvatar];
         name.text = [participant valueForKey:@"name"];
         [[cell viewWithTag:3] setHidden:NO];
-        if (_isRemoving) {
+        BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+        if (_isRemoving && !isMe) {
             [[cell viewWithTag:4] setHidden:NO];
         }else [[cell viewWithTag:4] setHidden:YES];
 
@@ -159,6 +161,19 @@
     }else if(indexPath.row == _participants.count + 1){
         self.isRemoving = !_isRemoving;
         [self.collectionView reloadData];
+    }else{
+        NSDictionary* participant = _participants[indexPath.row];
+        BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+        
+        
+        if (_isRemoving && !isMe) {
+            NSString* message = [NSString stringWithFormat:@"确定要将用户 %@ 请出此活动？",[participant valueForKey:@"name"]];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+            [alert show];
+            [alert setTag:1];
+            _kickingId = [participant valueForKey:@"id"];
+        }
     }
 }
 
@@ -175,6 +190,55 @@
         nextViewController.eventId = _eventId;
     }
 
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case 1:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+                [dictionary setValue:_eventId forKey:@"event_id"];
+                [dictionary setValue:[NSString stringWithFormat:@"[%@]",_kickingId] forKey:@"participant"];
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+                NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:KICK_OUT finshedBlock:^(NSData *rData) {
+                    if (rData) {
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSLog(@"received Data: %@",response1);
+                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case NORMAL_REPLY:
+                            {
+                                UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"移除成功" WithDelegate:self WithCancelTitle:@"确定"];
+                                [alert setTag:2];
+                            }
+                                break;
+                        }
+                
+                        }}];
+            }
+        }
+            break;
+            
+        case 2:
+        {
+            [self getEventParticipants];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 

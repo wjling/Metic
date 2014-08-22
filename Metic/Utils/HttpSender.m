@@ -171,6 +171,12 @@
         case 37:
             resultCode = @"videoserver";
             break;
+        case 38:
+            resultCode = @"kick_out";
+            break;
+        case 39:
+            resultCode = @"quit_event";
+            break;
         default:
             resultCode = @"json";
             break;
