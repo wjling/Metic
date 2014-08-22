@@ -25,7 +25,6 @@
 @property(nonatomic,strong)NSMutableDictionary *avatarURL;
 @property(nonatomic,strong)NSMutableDictionary *bannerURL;
 @property(nonatomic,strong)NSMutableDictionary *photoURL;
-@property(nonatomic,strong)NSMutableSet *friendIds;
 //@property(nonatomic,strong)MySqlite *sql;
 @property float wait;
 
@@ -34,6 +33,7 @@
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
 @property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong,nonatomic) NSMutableSet* friendsIdSet;
+@property (strong,nonatomic) NSMutableDictionary* nameFromID_dic;
 
 //For HomeViewController
 @property (nonatomic,strong) NSMutableSet* updateEventIds;

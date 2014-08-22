@@ -24,6 +24,7 @@
 @synthesize sortedFriendDic;
 @synthesize sectionArray;
 @synthesize friendsIdSet;
+@synthesize nameFromID_dic;
 
 @synthesize updateEventIds;
 @synthesize updateEvents;
@@ -53,7 +54,6 @@ static MTUser *singletonInstance;
         self.avatarURL = [[NSMutableDictionary alloc]init];
         self.bannerURL = [[NSMutableDictionary alloc]init];
         self.photoURL = [[NSMutableDictionary alloc]init];
-        self.friendIds = [[NSMutableSet alloc]init];
         self.friendList = [[NSMutableArray alloc]initWithCapacity:0];
         self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
@@ -80,7 +80,6 @@ static MTUser *singletonInstance;
         _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
         _bannerURL = [aDecoder decodeObjectForKey:@"bannerURL"];
         _photoURL = [aDecoder decodeObjectForKey:@"photoURL"];
-        _friendIds = [aDecoder decodeObjectForKey:@"friendIds"];
         friendList = [aDecoder decodeObjectForKey:@"friendList"];
         sortedFriendDic = [aDecoder decodeObjectForKey:@"sortedFriendDic"];
         sectionArray = [aDecoder decodeObjectForKey:@"sectionArray"];
@@ -109,7 +108,6 @@ static MTUser *singletonInstance;
     [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
     [aCoder encodeObject:self.bannerURL forKey:@"bannerURL"];
     [aCoder encodeObject:self.photoURL forKey:@"photoURL"];
-    [aCoder encodeObject:self.friendIds forKey:@"friendIds"];
     [aCoder encodeObject:self.friendList forKey:@"friendList"];
     [aCoder encodeObject:self.sortedFriendDic forKey:@"sortedFriendDic"];
     [aCoder encodeObject:self.sectionArray forKey:@"sectionArray"];
@@ -179,7 +177,6 @@ static MTUser *singletonInstance;
     [sql openMyDB:path];
     NSLog(@"%@",self.avatarInfo);
     for (NSDictionary *dictionary in self.avatarInfo) {
-        [self.friendIds addObject:[dictionary valueForKey:@"id"]];
         NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
         NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
@@ -292,9 +289,12 @@ static MTUser *singletonInstance;
 - (void) synchronizeFriends
 {
     self.friendList = [self getFriendsFromDB];
+    self.nameFromID_dic = [[NSMutableDictionary alloc]init];
     for (NSDictionary* friend in friendList) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
+        NSString* fname = [friend objectForKey:@"name"];
         [friendsIdSet addObject:fid];
+        [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
     NSLog(@"get friends from DB, friendList: %@",self.friendList);
     NSDictionary* json = [CommonUtils packParamsInDictionary:
@@ -417,7 +417,9 @@ static MTUser *singletonInstance;
     self.sortedFriendDic = [self sortFriendList];
     for (NSDictionary* friend in friendList) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
+        NSString* fname = [friend valueForKey:@"name"];
         [friendsIdSet addObject:fid];
+        [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
     NSLog(@"friend id set: %@",friendsIdSet);
 }
