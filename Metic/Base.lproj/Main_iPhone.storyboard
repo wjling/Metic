@@ -2448,7 +2448,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="新消息条数底块" translatesAutoresizingMaskIntoConstraints="NO" id="WAB-Zf-CBw">
-                                        <rect key="frame" x="173" y="7" width="26" height="26"/>
+                                        <rect key="frame" x="174" y="8" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </imageView>
@@ -2882,6 +2882,47 @@
                                     <constraint firstAttribute="width" constant="320" id="qgz-CA-AMI"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="goc-b1-4sh">
+                                <rect key="frame" x="175" y="0.0" width="135" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7J8-Yu-7G5">
+                                        <rect key="frame" x="30" y="0.0" width="72" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="二维码">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" title="二维码">
+                                            <color key="titleColor" red="0.89019614459999996" green="0.89019614459999996" blue="0.89019614459999996" alpha="1" colorSpace="deviceRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="show2Dcode:" destination="cGW-AM-0QH" eventType="touchUpInside" id="awe-jc-FKK"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LI7-Fj-vGQ">
+                                        <rect key="frame" x="5" y="40" width="82" height="1"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.88235300780000003" green="0.88235300780000003" blue="0.88235300780000003" alpha="1" colorSpace="deviceRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrB-Qe-prQ">
+                                        <rect key="frame" x="30" y="40" width="72" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="匿名投诉">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" title="匿名投诉">
+                                            <color key="titleColor" red="0.89019614459999996" green="0.89019614459999996" blue="0.89019614459999996" alpha="1" colorSpace="deviceRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -2896,11 +2937,11 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Agz-Hd-Hpf">
                                 <rect key="frame" x="274" y="7" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="二维码">
+                                <state key="normal" backgroundImage="头部右上角图标-更多">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="show2Dcode:" destination="cGW-AM-0QH" eventType="touchUpInside" id="KHG-y1-735"/>
+                                    <action selector="more:" destination="cGW-AM-0QH" eventType="touchUpInside" id="Oya-zx-evB"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -2911,6 +2952,7 @@
                         <outlet property="commentView" destination="c5U-Ih-F1e" id="FBR-ZQ-EkW"/>
                         <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
                         <outlet property="inputField" destination="oLS-E0-JBf" id="WdI-tt-BYf"/>
+                        <outlet property="moreView" destination="goc-b1-4sh" id="LdL-1t-jHa"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
@@ -4612,7 +4654,6 @@
         <image name="上传按钮" width="26" height="26"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
-        <image name="二维码" width="22" height="22"/>
         <image name="加入活动加号icon" width="29" height="29"/>
         <image name="加号icon" width="12" height="12"/>
         <image name="勾选前icon" width="34" height="34"/>
@@ -4628,6 +4669,7 @@
         <image name="图片评论_评论图标" width="29" height="29"/>
         <image name="地图定位icon" width="17" height="17"/>
         <image name="头像-116（白色底）" width="59" height="59"/>
+        <image name="头部右上角图标-更多" width="52" height="52"/>
         <image name="头部小按钮" width="83" height="43"/>
         <image name="头部小按钮按下效果" width="83" height="43"/>
         <image name="好友推荐icon" width="45" height="45"/>
@@ -4658,14 +4700,14 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="KQw-JA-BHy"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="hOW-ww-bKW"/>
     </inferredMetricsTieBreakers>
 </document>

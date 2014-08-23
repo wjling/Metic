@@ -49,7 +49,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    [mapView viewWillAppear];
+    [super viewWillAppear:animated];
     [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:NO];
     mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     mapView.centerCoordinate = _position;
@@ -66,12 +66,13 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-    [mapView viewWillDisappear];
+    [super viewWillDisappear:animated];
     [_locService stopUserLocationService];
     mapView.delegate = nil; // 不用时，置nil
     _geoCodeSearch.delegate = nil;
     [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:YES];
 }
+
 
 
 - (void)dealloc {

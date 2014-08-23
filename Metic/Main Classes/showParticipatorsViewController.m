@@ -127,6 +127,7 @@
         NSDictionary* participant = _participants[indexPath.row];
         UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
         UILabel* name = (UILabel*)[cell viewWithTag:2];
+        avatar.image = nil;
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
         [getter getAvatar];
         name.text = [participant valueForKey:@"name"];

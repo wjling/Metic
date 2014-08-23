@@ -19,6 +19,8 @@
 @property int lastViewIndex;
 @property int movedown;
 @property (nonatomic,strong)SDWebImageManager *manager;
+@property (nonatomic,strong)UIView* shadowView;
+@property (nonatomic,strong)UIView* optionView;
 @end
 
 @implementation PhotoDisplayViewController
@@ -64,10 +66,13 @@
     singleRecognizer.numberOfTapsRequired=1;
     //双击手势
     UITapGestureRecognizer * doubleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap)];
+    //长按手势
+    UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
     doubleRecognizer.numberOfTapsRequired=2;
     [singleRecognizer requireGestureRecognizerToFail:doubleRecognizer];
     [self.scrollView addGestureRecognizer:singleRecognizer];
     [self.scrollView addGestureRecognizer:doubleRecognizer];
+    [self.scrollView addGestureRecognizer:longRecognizer];
     
     [self displaythreePhoto:self.photoIndex];
     // Do any additional setup after loading the view.
@@ -145,7 +150,65 @@
 {
 }
 
+-(void)showOption:(UIGestureRecognizer*)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        NSLog(@"showOption");
+        if (!_shadowView) {
+            CGRect frame = self.view.frame;
+            frame.origin = CGPointMake(0, 0);
+            _shadowView = [[UIView alloc]initWithFrame:frame];
+            [_shadowView setBackgroundColor:[UIColor blackColor]];
+            [_shadowView setAlpha:0.7];
+            //单击手势
+            UITapGestureRecognizer * singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissOption)];
+            [_shadowView addGestureRecognizer:singleRecognizer];
+            
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            _optionView = button;
+            frame.origin = CGPointMake(40, (frame.size.height - 40)/2);
+            frame.size = CGSizeMake(frame.size.width-80, 40);
+            [button setFrame:frame];
+            [button setTitle:@"匿名投诉" forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
+            [button addTarget:self action:@selector(report) forControlEvents:UIControlEventTouchUpInside];
+            [button setUserInteractionEnabled:YES];
+            [self.view addSubview:_shadowView];
+            [self.view addSubview:button];
+            [button setBackgroundColor:[UIColor whiteColor]];
+            [button.layer setBorderColor:[UIColor darkGrayColor].CGColor];
+            [button.layer setBorderWidth:2];
+            button.layer.masksToBounds = YES;
+            [button.layer setCornerRadius:5];
+            [button setAlpha:1.0];
+        }
 
+    }
+}
+
+-(void)dismissOption
+{
+    NSLog(@"dismissOption");
+    if (_shadowView) {
+        [_shadowView removeFromSuperview];
+        _shadowView = nil;
+    }
+    if (_optionView) {
+        [_optionView removeFromSuperview];
+        _optionView = nil;
+    }
+}
+
+-(void)report{
+    NSLog(@"匿名投诉");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_shadowView) {
+            [self dismissOption];
+        }
+        
+    });
+}
 -(void)displaythreePhoto:(int)photoIndex
 {
     [self displaynthPhoto:photoIndex];

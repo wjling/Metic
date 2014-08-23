@@ -151,21 +151,22 @@ static MTUser *singletonInstance;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_AVATAR_UPDATETIME finshedBlock:^(NSData *rData) {
-        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber *cmd = [response1 valueForKey:@"cmd"];
-        switch ([cmd intValue]) {
-            case NORMAL_REPLY:
-            {
-                self.avatarInfo = [response1 valueForKey:@"list"];
-                [self updateAvatar];
+        if (rData) {
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    self.avatarInfo = [response1 valueForKey:@"list"];
+                    [self updateAvatar];
+                }
+                    break;
+                default:
+                {
+                }
+                    break;
             }
-                break;
-            default:
-            {
-            }
-                break;
         }
-
     }];
     
 }

@@ -34,6 +34,7 @@
 @property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
 
 @property(nonatomic,strong) NSString* herName;
+@property(nonatomic,strong) UIView* shadowView;
 @property BOOL visibility;
 @property BOOL isMine;
 @property long mainCommentId;
@@ -69,6 +70,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [CommonUtils addLeftButton:self isFirstPage:NO];
@@ -110,6 +112,8 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [_moreView setHidden:YES];
+    if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
 }
 
@@ -123,7 +127,17 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"活动详情"];
+    [self.inputField resignFirstResponder];
 }
+
+-(void)initUI
+{
+    _moreView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+	_moreView.layer.shadowRadius = 10;
+	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;
+	_moreView.layer.shadowOpacity = 1;
+}
+
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
     float height = 0;
@@ -328,6 +342,26 @@
 {
     self.repliedId = nil;
     self.mainCommentId = 0;
+}
+
+- (IBAction)more:(id)sender {
+    if (_moreView.isHidden) {
+        [_moreView setHidden:NO];
+        [self.inputField resignFirstResponder];
+        CGRect frame = self.view.frame;
+        frame.origin = CGPointMake(0, 0);
+        _shadowView = [[UIView alloc]initWithFrame:frame];
+        [self.view addSubview:_shadowView];
+        [self.view bringSubviewToFront:_moreView];
+        UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(more:)];
+        [_shadowView addGestureRecognizer:tapRecognizer];
+    }else{
+        [_moreView setHidden:YES];
+        if (_shadowView) {
+            [_shadowView removeFromSuperview];
+            _shadowView = nil;
+        }
+    }
 }
 
 

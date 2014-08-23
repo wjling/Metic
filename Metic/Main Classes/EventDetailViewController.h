@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
 @property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
+@property (strong, nonatomic) IBOutlet UIView *moreView;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property BOOL isPublish;
 @property BOOL isKeyBoard;
@@ -37,6 +38,7 @@
 - (void)delete_Comment:(id)sender;
 - (void)appreciate:(id)sender;
 - (void)readyforMainC;
+- (IBAction)more:(id)sender;
 
 
 

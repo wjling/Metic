@@ -7,3 +7,4 @@
 #import "BMKMapComponent.h"
 #import "BMKSearchComponent.h"
 #import "BMKLocationComponent.h"
+#import "BMKUtilsComponent.h"
