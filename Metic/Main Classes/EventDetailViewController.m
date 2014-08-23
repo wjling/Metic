@@ -112,7 +112,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [_moreView setHidden:YES];
+    [_optionView setHidden:YES];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
 }
@@ -345,18 +345,18 @@
 }
 
 - (IBAction)more:(id)sender {
-    if (_moreView.isHidden) {
-        [_moreView setHidden:NO];
+    if (_optionView.isHidden) {
+        [_optionView setHidden:NO];
         [self.inputField resignFirstResponder];
         CGRect frame = self.view.frame;
         frame.origin = CGPointMake(0, 0);
         _shadowView = [[UIView alloc]initWithFrame:frame];
         [self.view addSubview:_shadowView];
-        [self.view bringSubviewToFront:_moreView];
+        [self.view bringSubviewToFront:_optionView];
         UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(more:)];
         [_shadowView addGestureRecognizer:tapRecognizer];
     }else{
-        [_moreView setHidden:YES];
+        [_optionView setHidden:YES];
         if (_shadowView) {
             [_shadowView removeFromSuperview];
             _shadowView = nil;
@@ -604,6 +604,10 @@
 - (IBAction)show2Dcode:(id)sender {
 
     [self performSegueWithIdentifier:@"2Dcode" sender:self];
+}
+
+- (IBAction)report:(id)sender {
+    
 }
 
 -(void)closeRJ

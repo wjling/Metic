@@ -27,6 +27,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *inputField;
 @property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
+@property (strong, nonatomic) IBOutlet UIView *optionView;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property BOOL isPublish;
 @property BOOL isKeyBoard;
@@ -35,6 +36,7 @@
 - (void)pullMainCommentFromAir;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)show2Dcode:(id)sender;
+- (IBAction)report:(id)sender;
 - (void)delete_Comment:(id)sender;
 - (void)appreciate:(id)sender;
 - (void)readyforMainC;

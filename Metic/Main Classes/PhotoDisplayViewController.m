@@ -169,7 +169,7 @@
             frame.origin = CGPointMake(40, (frame.size.height - 40)/2);
             frame.size = CGSizeMake(frame.size.width-80, 40);
             [button setFrame:frame];
-            [button setTitle:@"匿名投诉" forState:UIControlStateNormal];
+            [button setTitle:@"匿名举报" forState:UIControlStateNormal];
             [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
             [button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
             [button addTarget:self action:@selector(report) forControlEvents:UIControlEventTouchUpInside];
