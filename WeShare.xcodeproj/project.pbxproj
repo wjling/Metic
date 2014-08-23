@@ -941,6 +941,13 @@
 			name = UserInfo;
 			sourceTree = "<group>";
 		};
+		087759BB19A81B670034BB58 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		0892072E197224C30076D2BC /* security */ = {
 			isa = PBXGroup;
 			children = (
@@ -1382,6 +1389,7 @@
 		51581D291933575300943606 /* WeShare */ = {
 			isa = PBXGroup;
 			children = (
+				087759BB19A81B670034BB58 /* Category */,
 				04CB1B7C1977760200BC083C /* Custom Wedgets */,
 				08DB696C19541F3A00F80F3F /* AFNetworking */,
 				08DB698019541F3A00F80F3F /* Cell */,

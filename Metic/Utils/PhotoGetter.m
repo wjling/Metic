@@ -48,7 +48,10 @@
 {
     
     NSString *url = [self getLocalAvatarUrl];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+    
+    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageLowPriority];
+    }else [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
 }
 
 //-(void)getAvatar
