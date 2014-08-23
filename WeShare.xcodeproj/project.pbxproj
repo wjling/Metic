@@ -91,6 +91,7 @@
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		087759FF19A8B2AD0034BB58 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 087759FE19A8B2AD0034BB58 /* mapapi.bundle */; };
+		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		089337A5197579CE00AD940B /* PECropRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379B197579CE00AD940B /* PECropRectView.m */; };
 		089337A6197579CE00AD940B /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379D197579CE00AD940B /* PECropView.m */; };
@@ -454,6 +455,8 @@
 		087759FC19A8B2AD0034BB58 /* BMKUtilsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUtilsComponent.h; sourceTree = "<group>"; };
 		087759FD19A8B2AD0034BB58 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
 		087759FE19A8B2AD0034BB58 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
+		08775A0419A8F7840034BB58 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportViewController.h; path = Report/ReportViewController.h; sourceTree = "<group>"; };
+		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		0893379A197579CE00AD940B /* PECropRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropRectView.h; sourceTree = "<group>"; };
@@ -1018,6 +1021,15 @@
 			path = BMKinc;
 			sourceTree = "<group>";
 		};
+		08775A0119A8F6E40034BB58 /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				08775A0419A8F7840034BB58 /* ReportViewController.h */,
+				08775A0519A8F7840034BB58 /* ReportViewController.m */,
+			);
+			name = Report;
+			sourceTree = "<group>";
+		};
 		0892072E197224C30076D2BC /* security */ = {
 			isa = PBXGroup;
 			children = (
@@ -1455,6 +1467,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				08775A0119A8F6E40034BB58 /* Report */,
 				04BAF684199A55B200BF00E1 /* WelcomePage */,
 				04B22C3F1984F3F100B33B7C /* SystemSettings */,
 				04EF4A5D1976382200649DC0 /* UserInfo */,
@@ -1973,6 +1986,7 @@
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
+				08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */,
 				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
 				089337A7197579CE00AD940B /* PECropViewController.m in Sources */,
 				51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */,

@@ -19,6 +19,7 @@
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据
 @property(nonatomic,strong)NSNumber* photoId;
 @property(nonatomic,strong)NSNumber* eventId;
+@property(nonatomic,strong)NSString* eventName;
 @property long photoIndex;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;

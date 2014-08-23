@@ -360,6 +360,7 @@
     
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
+    self.selete_EventName = cell.eventName.text;
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
 }
 
@@ -377,6 +378,7 @@
     if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
             PictureWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.selete_Eventid;
+            nextViewController.eventName = self.selete_EventName;
 
     }
     if ([segue.destinationViewController isKindOfClass:[LaunchEventViewController class]]) {

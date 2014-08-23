@@ -2087,6 +2087,103 @@
             </objects>
             <point key="canvasLocation" x="2846" y="700"/>
         </scene>
+        <!--Report View Controller - 举报-->
+        <scene sceneID="2Rq-eV-AMQ">
+            <objects>
+                <viewController id="RNm-zE-pmQ" customClass="ReportViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="hU4-8e-KNB"/>
+                        <viewControllerLayoutGuide type="bottom" id="JXv-w7-WZ6"/>
+                    </layoutGuides>
+                    <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="IxG-cE-w9g">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="frp-uc-AD8">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="【iPhone 举报】" placeholder="标题（可选）" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="BM1-xx-m6P">
+                                        <rect key="frame" x="20" y="10" width="280" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="URa-6A-2Fp"/>
+                                    <constraint firstAttribute="width" constant="320" id="cmh-Ik-2Ff"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uxV-dd-lHf">
+                                <rect key="frame" x="0.0" y="46" width="320" height="1"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="U7Y-V7-Q3U"/>
+                                    <constraint firstAttribute="width" constant="320" id="UHA-oW-hO3"/>
+                                </constraints>
+                                <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                            </view>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="                     " translatesAutoresizingMaskIntoConstraints="NO" id="czn-HU-HZh">
+                                <rect key="frame" x="20" y="60" width="280" height="330"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="czn-HU-HZh" firstAttribute="leading" secondItem="IxG-cE-w9g" secondAttribute="leading" constant="20" id="8aZ-es-1RC"/>
+                            <constraint firstItem="uxV-dd-lHf" firstAttribute="top" secondItem="hU4-8e-KNB" secondAttribute="bottom" constant="46" id="FOZ-IA-a9J"/>
+                            <constraint firstItem="JXv-w7-WZ6" firstAttribute="top" secondItem="czn-HU-HZh" secondAttribute="bottom" constant="26" id="LWx-Zm-6PH"/>
+                            <constraint firstItem="frp-uc-AD8" firstAttribute="top" secondItem="hU4-8e-KNB" secondAttribute="bottom" id="Nk2-OP-fqM"/>
+                            <constraint firstItem="czn-HU-HZh" firstAttribute="top" secondItem="hU4-8e-KNB" secondAttribute="bottom" constant="60" id="Vdx-3u-Cyu"/>
+                            <constraint firstItem="uxV-dd-lHf" firstAttribute="leading" secondItem="IxG-cE-w9g" secondAttribute="leading" id="gHQ-05-91n"/>
+                            <constraint firstItem="frp-uc-AD8" firstAttribute="leading" secondItem="IxG-cE-w9g" secondAttribute="leading" id="lXA-gf-zaa"/>
+                            <constraint firstAttribute="trailing" secondItem="czn-HU-HZh" secondAttribute="trailing" constant="20" id="ldc-ue-rbQ"/>
+                        </constraints>
+                        <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+                        <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="举报" id="bFU-kz-jfb">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Eow-5q-lSa">
+                            <view key="customView" alpha="0.0" contentMode="scaleToFill" id="nCn-tW-tIR">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MV8-7z-9XZ">
+                                        <rect key="frame" x="21" y="3" width="50" height="27"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <state key="normal" title="确定" backgroundImage="头部小按钮">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" backgroundImage="头部小按钮按下效果">
+                                            <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="confirmBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="SIc-0P-gqr"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="textView" destination="czn-HU-HZh" id="C0u-YY-ve9"/>
+                        <outlet property="titleTextField" destination="BM1-xx-m6P" id="EnU-nP-jHd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X1d-8C-1mN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3736" y="221"/>
+        </scene>
         <!--Add Friend Confirm View Controller - 添加好友-->
         <scene sceneID="qtL-q5-EMi">
             <objects>
@@ -2972,11 +3069,12 @@
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
                         <segue destination="AQh-VD-se3" kind="push" identifier="2Dcode" id="Tfa-UW-HTg"/>
+                        <segue destination="RNm-zE-pmQ" kind="push" identifier="EventToReport" id="06u-oh-4gy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RKA-5E-VEX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2453" y="-379"/>
+            <point key="canvasLocation" x="2453" y="-396"/>
         </scene>
         <!--Banner Selector View Controller - 封面选择-->
         <scene sceneID="uMZ-ij-H19">
@@ -3962,6 +4060,7 @@
                         <outlet property="pictureDescription" destination="ZGG-Te-c2F" id="qXV-gP-XIP"/>
                         <outlet property="publishTime" destination="jCf-kJ-g8f" id="Cjd-Pd-L3v"/>
                         <outlet property="zan_num" destination="uiz-zb-TVs" id="v2K-sc-ntJ"/>
+                        <segue destination="RNm-zE-pmQ" kind="push" identifier="photoToreport" id="L2M-th-cr6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yae-7W-sYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4716,14 +4815,15 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="KQw-JA-BHy"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="fLJ-gw-aSw"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="QDz-81-eMP"/>
         <segue reference="hB7-KS-rrK"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="L2M-th-cr6"/>
         <segue reference="eBE-9B-Hp2"/>
         <segue reference="hOW-ww-bKW"/>
+        <segue reference="KQw-JA-BHy"/>
     </inferredMetricsTieBreakers>
 </document>

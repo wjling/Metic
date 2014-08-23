@@ -1084,6 +1084,7 @@
         if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
             PictureWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
+            nextViewController.eventName = [self.event valueForKey:@"subject"];
         }
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;

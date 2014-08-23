@@ -8,6 +8,7 @@
 
 #import "PhotoDisplayViewController.h"
 #import "PhotoDetailViewController.h"
+#import "ReportViewController.h"
 #import "../Source/MRZoomScrollView.h"
 #import "../Utils/PhotoGetter.h"
 #import "../Utils/CommonUtils.h"
@@ -205,6 +206,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (_shadowView) {
             [self dismissOption];
+            [self performSegueWithIdentifier:@"photoToreport" sender:self];
         }
         
     });
@@ -346,6 +348,16 @@
             nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
             nextViewController.type = 1;
+        }
+        if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
+            
+            ReportViewController *nextViewController = segue.destinationViewController;
+            int index = self.scrollView.contentOffset.x/320;
+            
+            nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
+            nextViewController.eventId = _eventId;
+            nextViewController.event = self.eventName;
+
         }
         
     }
