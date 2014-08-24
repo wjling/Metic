@@ -893,6 +893,7 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
         
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        cell.originComment = [subCom valueForKey:@"content"];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
         [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
         cell.comment.authorLength = ((NSString*)[subCom valueForKey:@"author"]).length;
