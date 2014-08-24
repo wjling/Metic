@@ -94,11 +94,8 @@
     self.textField_password.text = @"";
     //[self checkPreUP];
     self.textField_password.text = text_password? text_password:@"";
-    if (!fromRegister) {
-        [self checkPreUP];
-    }
-    else
-    {
+   
+    if (fromRegister) {
         fromRegister = NO;
         text_password = nil;
         text_userName = nil;
@@ -113,7 +110,9 @@
 {
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    [self checkPreUP];
+    if (!fromRegister) {
+        [self checkPreUP];
+    }
 //    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
 }
 
@@ -222,7 +221,9 @@
         [self removeWaitingView];
         [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-        [self jumpToMainView];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self jumpToMainView];
+        });
         [button_login setEnabled:YES];
         return;
     }
@@ -265,6 +266,13 @@
 - (void)jumpToMainView
 {
     [self performSegueWithIdentifier:@"LoginToHome" sender:self];
+    
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//															 bundle: nil];
+//    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+//    
+//    [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+    
 }
 
 - (void)jumpToRegisterView
