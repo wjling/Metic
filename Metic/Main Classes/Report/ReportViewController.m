@@ -65,10 +65,13 @@
         NSString*text;
         switch (_type) {
             case 1:
-                text = [NSString stringWithFormat:@"举报：%@ 活动\n",_event];
+                text = [NSString stringWithFormat:@"举报：%@ 活动\n\n",_event];
                 break;
             case 2:
-                text = [NSString stringWithFormat:@"举报：%@ 活动图片\n",_event];
+                text = [NSString stringWithFormat:@"举报：%@ 活动图片\n\n",_event];
+                break;
+            case 3:
+                text = [NSString stringWithFormat:@"举报：%@ 活动评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
             default:
                 break;

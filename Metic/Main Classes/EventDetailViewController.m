@@ -27,7 +27,6 @@
 #define SubCFontSize 12
 
 @interface EventDetailViewController ()
-@property(nonatomic,strong) NSDictionary *event;
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
@@ -36,6 +35,7 @@
 
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
+
 @property BOOL visibility;
 @property BOOL isMine;
 @property long mainCommentId;
@@ -800,7 +800,7 @@
         
         MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
         NSString* text = [mainCom valueForKey:@"content"];
-        
+        cell.origincomment = text;
         float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
         if (commentHeight < 25) commentHeight = 25;
         CGRect frame = textView.frame;

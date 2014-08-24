@@ -67,9 +67,9 @@
     singleRecognizer.numberOfTapsRequired=1;
     //双击手势
     UITapGestureRecognizer * doubleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap)];
+    doubleRecognizer.numberOfTapsRequired=2;
     //长按手势
     UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
-    doubleRecognizer.numberOfTapsRequired=2;
     [singleRecognizer requireGestureRecognizerToFail:doubleRecognizer];
     [self.scrollView addGestureRecognizer:singleRecognizer];
     [self.scrollView addGestureRecognizer:doubleRecognizer];

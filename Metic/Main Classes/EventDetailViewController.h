@@ -29,6 +29,10 @@
 @property (strong, nonatomic) IBOutlet UIView *moreView;
 @property (strong, nonatomic) IBOutlet UIView *optionView;
 @property (nonatomic,strong) NSNumber *master_sequence;
+@property (nonatomic,strong) UIView* optionShadowView;
+@property (nonatomic,strong) UIView* commentOptionView;
+@property (nonatomic,strong) NSDictionary *event;
+
 @property BOOL isPublish;
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;

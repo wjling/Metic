@@ -2090,7 +2090,7 @@
         <!--Report View Controller - 举报-->
         <scene sceneID="2Rq-eV-AMQ">
             <objects>
-                <viewController id="RNm-zE-pmQ" customClass="ReportViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReportViewController" id="RNm-zE-pmQ" customClass="ReportViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hU4-8e-KNB"/>
                         <viewControllerLayoutGuide type="bottom" id="JXv-w7-WZ6"/>
