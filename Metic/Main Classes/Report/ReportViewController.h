@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+//type  case 1:举报活动  case 2:举报图片 
 @interface ReportViewController : UIViewController
 @property (nonatomic,strong) NSString* event;
 @property (nonatomic,strong) NSNumber* eventId;
@@ -15,5 +15,5 @@
 @property (nonatomic,strong) NSNumber* photoId;
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UITextView *textView;
-@property (nonatomic,strong) NSNumber* type;
+@property NSInteger type;
 @end

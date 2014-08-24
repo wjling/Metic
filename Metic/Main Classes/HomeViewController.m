@@ -360,7 +360,10 @@
     
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
-    self.selete_EventName = cell.eventName.text;
+    
+    
+    
+    ;
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
 }
 

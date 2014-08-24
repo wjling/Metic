@@ -67,6 +67,7 @@
 
 - (IBAction)jumpToPictureWall:(id)sender {
     self.homeController.selete_Eventid = self.eventId;
+    self.homeController.selete_EventName = _event;
     [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
 }
 

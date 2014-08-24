@@ -357,6 +357,7 @@
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
             nextViewController.eventId = _eventId;
             nextViewController.event = self.eventName;
+            nextViewController.type = 2;
 
         }
         

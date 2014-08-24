@@ -11,6 +11,7 @@
 #import "Event2DcodeViewController.h"
 #import "MTUser.h"
 #import "PictureWallViewController.h"
+#import "Report/ReportViewController.h"
 #import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
@@ -607,7 +608,9 @@
 }
 
 - (IBAction)report:(id)sender {
-    
+
+    [self performSegueWithIdentifier:@"EventToReport" sender:self];
+
 }
 
 -(void)closeRJ
@@ -1098,6 +1101,12 @@
             Event2DcodeViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = _eventId;
             nextViewController.eventInfo = _event;
+        }
+        if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
+            ReportViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = _eventId;
+            nextViewController.event = [self.event valueForKey:@"subject"];
+            nextViewController.type = 1;
         }
     }
 }

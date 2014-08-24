@@ -52,6 +52,7 @@
 @property(nonatomic,strong) UIButton *imgWall;
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
+@property(nonatomic,strong) NSString *event;
 
 
 

@@ -28,6 +28,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initFormat];
     if (_event) {
         NSString* text = [NSString stringWithFormat:@"举报：%@ 活动\n",_event];
         [self.textView setText:text];
@@ -53,6 +54,25 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)initFormat
+{
+    if (_event) {
+        NSString*text;
+        switch (_type) {
+            case 1:
+                text = [NSString stringWithFormat:@"举报：%@ 活动\n",_event];
+                break;
+            case 2:
+                text = [NSString stringWithFormat:@"举报：%@ 活动图片\n",_event];
+                break;
+            default:
+                break;
+        }
+        
+        [self.textView setText:text];
+    }
 }
 
 @end

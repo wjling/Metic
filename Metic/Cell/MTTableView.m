@@ -52,6 +52,7 @@
     if (self.eventsSource) {
         NSDictionary *a = self.eventsSource[indexPath.row];
         cell.eventName.text = [a valueForKey:@"subject"];
+        cell.event = [a valueForKey:@"subject"];
         NSString* beginT = [a valueForKey:@"time"];
         NSString* endT = [a valueForKey:@"endTime"];
         cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
