@@ -32,8 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if(_canManage) [_manage_Button setHidden:NO];
-    else [_manage_Button setHidden:YES];
+    [_manage_Button setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     _fids = [[NSMutableArray alloc]init];
     _participants = [[NSMutableArray alloc]init];
@@ -95,7 +94,8 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            
+            if(_canManage) [_manage_Button setHidden:NO];
+            else [_manage_Button setHidden:YES];
             [_participants removeAllObjects];
             [_participants addObjectsFromArray:(NSArray*)[response1 valueForKey:@"participant"]];
             [_fids removeAllObjects];
@@ -227,7 +227,7 @@
                                 break;
                             default:
                             {
-                                UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，移除失败" WithDelegate:nil WithCancelTitle:@"确定"];
+                                [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，移除失败" WithDelegate:nil WithCancelTitle:@"确定"];
                             }
                         }
                     }

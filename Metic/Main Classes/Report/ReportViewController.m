@@ -7,6 +7,7 @@
 //
 
 #import "ReportViewController.h"
+#import "CommonUtils.h"
 #import "MobClick.h"
 
 
@@ -28,6 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initFormat];
     // Do any additional setup after loading the view from its nib.
 }
@@ -50,6 +52,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)initFormat

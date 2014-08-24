@@ -12,6 +12,7 @@
 
 @interface InviteFriendViewController ()
 @property (nonatomic,strong) NSMutableSet *tmp_fids;
+@property (strong, nonatomic) UIView* waitingView;
 
 @end
 @implementation InviteFriendViewController
@@ -77,6 +78,32 @@
 - (IBAction)seleteAll:(id)sender {
 }
 
+-(void)showWaitingView
+{
+    if (!_waitingView) {
+        CGRect frame = self.view.bounds;
+        _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setBackgroundColor:[UIColor blackColor]];
+        [_waitingView setAlpha:0.5f];
+        frame.origin.x = (frame.size.width - 100)/2.0;
+        frame.origin.y = (frame.size.height - 100)/2.0;
+        frame.size = CGSizeMake(100, 100);
+        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+        [indicator startAnimating];
+        [_waitingView addSubview:indicator];
+        [self.view addSubview:_waitingView];
+    }
+}
+
+-(void)removeWaitingView
+{
+    if (_waitingView) {
+        [_waitingView removeFromSuperview];
+        _waitingView = nil;
+    }
+}
+
+
 - (IBAction)confirm:(id)sender {
     if ([self.controller isKindOfClass:[LaunchEventViewController class]]) {
         [_FriendsIds removeAllObjects];
@@ -107,7 +134,36 @@
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMessage:jsonData withOperationCode:INVITE_FRIENDS];
+        [httpSender sendMessage:jsonData withOperationCode:INVITE_FRIENDS finshedBlock:^(NSData *rData) {
+            [self removeWaitingView];
+            if (rData) {
+                NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
+                NSLog(@"received Data: %@",temp);
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                switch ([cmd intValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"邀请信息已经发送，等待对方处理" WithDelegate:self WithCancelTitle:@"确定"];
+                    }
+                        break;
+                    default:
+                    {
+                        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                    }
+                }
+
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+            }
+        }];
+        [self showWaitingView];
+        
+        
+        
+        
+        
     }
     
 }
