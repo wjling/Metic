@@ -42,7 +42,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)selectBanner:(id)sender {
+- (IBAction)selectBanner:(UIButton*)sender {
     for (UIImageView* indictor in _selectorIndictors) {
         [indictor setHighlighted:NO];
     }
@@ -67,6 +67,7 @@
     [sheet showInView:self.view];
 
 }
+
 
 - (IBAction)confirmBanner:(id)sender {
     if(self.controller.code!=0){

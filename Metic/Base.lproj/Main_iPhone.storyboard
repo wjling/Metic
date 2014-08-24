@@ -3104,7 +3104,7 @@
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="getMyBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="6qa-95-a5i"/>
+                                            <action selector="getMyBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="dQD-hN-hDQ"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="默认封面" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHS-W6-huD">

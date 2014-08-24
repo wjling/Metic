@@ -29,10 +29,6 @@
 {
     [super viewDidLoad];
     [self initFormat];
-    if (_event) {
-        NSString* text = [NSString stringWithFormat:@"举报：%@ 活动\n",_event];
-        [self.textView setText:text];
-    }
     // Do any additional setup after loading the view from its nib.
 }
 

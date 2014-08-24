@@ -27,7 +27,10 @@
     if (self) {
         self = [super init];
         self.imageView = animageView;
-        self.avatarId = authorId;
+        if ([authorId isKindOfClass:[NSString class]]) {
+            self.avatarId = [CommonUtils NSNumberWithNSString:authorId];
+        }else self.avatarId = authorId;
+        
         self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",authorId];
         self.isUpload = NO;
     }
@@ -48,10 +51,11 @@
 {
     
     NSString *url = [self getLocalAvatarUrl];
-    
     if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-    }else [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+    }else{
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
+    }
 }
 
 //-(void)getAvatar
