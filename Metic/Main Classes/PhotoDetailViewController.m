@@ -24,8 +24,8 @@
 @property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
-@property(nonatomic,strong) NSNumber* repliedId;
-@property(nonatomic,strong) NSString* herName;
+@property (nonatomic,strong) NSNumber* repliedId;
+@property (nonatomic,strong) NSString* herName;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
@@ -495,6 +495,8 @@
         ((PcommentTableViewCell *)cell).author.text = [Pcomment valueForKey:@"author"];
         ((PcommentTableViewCell *)cell).authorName = [Pcomment valueForKey:@"author"];
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
+        ((PcommentTableViewCell *)cell).origincomment = [Pcomment valueForKey:@"content"];
+        ((PcommentTableViewCell *)cell).controller = self;
         ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];

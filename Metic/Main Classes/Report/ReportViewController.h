@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-//type  case 1:举报活动  case 2:举报图片  case 3:举报活动评论
+//type  case 1:举报活动  case 2:举报图片  case 3:举报活动评论  case 4:举报活动图片评论
 @interface ReportViewController : UIViewController
 @property (nonatomic,strong) NSString* event;
 @property (nonatomic,strong) NSNumber* authorId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSNumber* commentId;
+@property (nonatomic,strong) NSNumber* pcommentId;
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSString* commentAuthor;
 @property (nonatomic,strong) NSString* comment;

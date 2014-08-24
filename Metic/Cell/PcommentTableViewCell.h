@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "../Source/MLEmoji/MLEmojiLabel.h"
+#import "PhotoDetailViewController.h"
 
 @interface PcommentTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
+@property (strong, nonatomic) NSString *origincomment;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSNumber *authorId;
@@ -20,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @property (strong, nonatomic) UIView* background;
+@property (strong, nonatomic) PhotoDetailViewController* controller;
 - (IBAction)resend:(id)sender;
 
 

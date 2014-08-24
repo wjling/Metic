@@ -73,6 +73,9 @@
             case 3:
                 text = [NSString stringWithFormat:@"举报：%@ 活动评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
+            case 4:
+                text = [NSString stringWithFormat:@"举报：%@ 活动图片评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
+                break;
             default:
                 break;
         }

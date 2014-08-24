@@ -347,6 +347,7 @@
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = dict;
             nextViewController.photoDisplayController = self;
+            nextViewController.eventName = _eventName;
             nextViewController.type = 1;
         }
         if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {

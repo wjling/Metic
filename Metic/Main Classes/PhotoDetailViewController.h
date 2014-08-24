@@ -12,14 +12,17 @@
 #import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
 
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate>
-@property(nonatomic,strong) UIImage* photo;
-@property (nonatomic,strong)NSNumber* photoId;
-@property(nonatomic,strong)NSNumber* eventId;
+@property (nonatomic,strong) UIImage* photo;
+@property (nonatomic,strong) NSNumber* photoId;
+@property (nonatomic,strong) NSNumber* eventId;
+@property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSDictionary * photoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
+@property (nonatomic,strong) UIView* optionShadowView;
+@property (nonatomic,strong) UIView* commentOptionView;
 @property int type;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;

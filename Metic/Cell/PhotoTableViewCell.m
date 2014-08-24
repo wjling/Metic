@@ -33,6 +33,7 @@
     viewcontroller.photo = self.imgView.image;
     viewcontroller.eventId = self.PhotoWall.eventId;
     viewcontroller.photoInfo = self.photoInfo;
+    viewcontroller.eventName = _PhotoWall.eventName;
     viewcontroller.type = 2;
     [self.PhotoWall.navigationController pushViewController:viewcontroller animated:YES];
 
