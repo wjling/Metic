@@ -225,9 +225,14 @@
                                 [alert setTag:2];
                             }
                                 break;
+                            default:
+                            {
+                                UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，移除失败" WithDelegate:nil WithCancelTitle:@"确定"];
+                            }
                         }
-                
-                        }}];
+                    }
+                    else [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常，移除失败" WithDelegate:nil WithCancelTitle:@"确定"];
+                }];
             }
         }
             break;
