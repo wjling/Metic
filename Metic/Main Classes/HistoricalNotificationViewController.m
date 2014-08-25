@@ -201,6 +201,7 @@
         NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
         
         cell.name_label.text = launcher;
+        cell.text_label.text = @"邀请你加入";
         [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
         [getter getAvatar];
@@ -218,6 +219,36 @@
         cell.remark_label.hidden = NO;
         return cell;
 
+    }
+    else if ([cmd integerValue] == REQUEST_EVENT)
+    {
+        NotificationsEventRequestTableViewCell* cell = [self.historicalNF_tableview dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
+        if (nil == cell) {
+            cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
+        }
+        
+        NSString* subject = [msg_dic objectForKey:@"subject"];
+        NSString* fname = [msg_dic objectForKey:@"name"];
+        NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
+        
+        cell.name_label.text = fname;
+        cell.text_label.text = @"请求加入";
+        [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
+        [getter getAvatar];
+        
+        if ([ishandled integerValue] == 0) {
+            cell.remark_label.text = @"已拒绝";
+        }
+        else if ([ishandled integerValue] == 1)
+        {
+            cell.remark_label.text = @"已同意";
+        }
+        
+        cell.okBtn.hidden = YES;
+        cell.noBtn.hidden = YES;
+        cell.remark_label.hidden = NO;
+        return cell;
     }
 
     return nil;

@@ -27,7 +27,8 @@
 
 enum Response_Type
 {
-    RESPONSE_EVENT = 0,
+    RESPONSE_EVENT_INVITE = 0,
+    RESPONSE_EVENT_REQUEST,
     RESPONSE_FRIEND,
     RESPONSE_SYSTEM
 };
@@ -198,8 +199,8 @@ enum Response_Type
     friendR_button.adjustsImageWhenHighlighted = NO;
     systemMsg_button.adjustsImageWhenHighlighted = NO;
     
-    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
-    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+//    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+//    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
     UIColor* tColor_normal = [UIColor colorWithRed:0.553 green:0.553 blue:0.553 alpha:1];
     UIColor* tColor_selected = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
     
@@ -267,8 +268,8 @@ enum Response_Type
     lastBtn.selected = NO;
     currentBtn.selected = YES;
     
-    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
-    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+//    UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+//    UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
 //    [currentBtn setBackgroundColor:bColor_selected];
 //    [lastBtn setBackgroundColor:bColor_normal];
     CGRect frame = CGRectMake(currentBtn.frame.origin.x + 10, tabIndicator.frame.origin.y, tabIndicator.frame.size.width, tabIndicator.frame.size.height) ;
@@ -552,11 +553,13 @@ enum Response_Type
             }
                 break;
             case EVENT_INVITE_RESPONSE:
+            case REQUEST_EVENT_RESPONSE:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
             }
                 break;
             case NEW_EVENT_NOTIFICATION:
+            case REQUEST_EVENT:
             {
                 [self.eventRequestMsg insertObject:msg_dic atIndex:0];
             }
@@ -629,6 +632,7 @@ enum Response_Type
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
                 
                 cell.name_label.text = launcher;
+                cell.text_label.text = @"邀请你加入";
                 [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getAvatar];
@@ -661,7 +665,45 @@ enum Response_Type
 //                [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
             }
                 break;
+            case REQUEST_EVENT: //995
+            {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSNumber* uid = [msg_dic valueForKey:@"id"];
+                NSString* fname = [msg_dic valueForKey:@"name"];
+                NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
                 
+                cell.name_label.text = fname;
+                cell.text_label.text = @"请求加入";
+                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
+                [getter getAvatar];
+                
+                if (ishandled == -1) {
+                    cell.okBtn.hidden = NO;
+                    cell.noBtn.hidden = NO;
+                    cell.remark_label.hidden = YES;
+                }
+                else if(ishandled == 0)
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已拒绝";
+                }
+                else if (ishandled == 1)
+                {
+                    cell.okBtn.hidden = YES;
+                    cell.noBtn.hidden = YES;
+                    cell.remark_label.hidden = NO;
+                    cell.remark_label.text = @"已同意";
+                }
+
+                [cell.okBtn addTarget:self action:@selector(event_request_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.noBtn addTarget:self action:@selector(event_request_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+//                [cell.event_name_button addTarget:self action:@selector(eventBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+            }
+                break;
             default:
                 break;
         }
@@ -716,7 +758,6 @@ enum Response_Type
                 
             }
                 break;
-                
             default:
                 break;
         }
@@ -759,11 +800,29 @@ enum Response_Type
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* text = @"";
                 if (result) {
-                    text = [NSString stringWithFormat:@"%@ 同意加入你的活动 %@ ",name,subject];
+                    text = [NSString stringWithFormat:@"%@ 同意加入你的活动: %@ ",name,subject];
                 }
                 else
                 {
-                    text = [NSString stringWithFormat:@"%@ 拒绝加入你的活动 %@ ",name,subject];
+                    text = [NSString stringWithFormat:@"%@ 拒绝加入你的活动: %@ ",name,subject];
+                    
+                }
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+            case REQUEST_EVENT_RESPONSE:  //994
+            {
+                NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
+                NSString* launcher = [msg_dic objectForKey:@"launcher"];
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text = @"";
+                if (result) {
+                    text = [NSString stringWithFormat:@"%@ 同意你加入活动: %@ ",launcher,subject];
+                }
+                else
+                {
+                    text = [NSString stringWithFormat:@"%@ 拒绝你加入活动: %@ ",launcher,subject];
                     
                 }
                 cell.title_label.text = @"活动消息";
@@ -886,7 +945,7 @@ enum Response_Type
     
 }
 
-- (IBAction)participate_event_okBtnClicked:(id)sender
+- (IBAction)event_request_okBtnClicked:(id)sender
 {
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
@@ -897,29 +956,30 @@ enum Response_Type
     selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
     NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+    NSLog(@"event request cell seq: %@, row: %d",seq,selectedPath.row);
     
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSNumber* requester_id = [msg_dic valueForKey:@"id"];
     NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
                                  [NSNumber numberWithInteger:selectedPath.row],@"item_index",
-                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT_REQUEST],@"response_type",
                                  [NSNumber numberWithInteger:1],@"response_result",
                                  nil];
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:994],@"cmd",
                                  [NSNumber numberWithInt:1],@"result",
                                  [MTUser sharedInstance].userid,@"id",
+                                 requester_id,@"requester_id",
                                  eventid,@"event_id",
                                  item_id_dic,@"item_id",
-                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
                                  nil];
-    NSLog(@"participate event okBtn, http json : %@",json );
+    NSLog(@"event request okBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
 }
 
-- (IBAction)participate_event_noBtnClicked:(id)sender
+- (IBAction)event_request_noBtnClicked:(id)sender
 {
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
@@ -930,23 +990,24 @@ enum Response_Type
     selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
     NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+    NSLog(@"event request cell seq: %@, row: %d",seq,selectedPath.row);
     
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSNumber* requester_id = [msg_dic valueForKey:@"id"];
     NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
                                  [NSNumber numberWithInteger:selectedPath.row],@"item_index",
-                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+                                 [NSNumber numberWithInt:RESPONSE_EVENT_REQUEST],@"response_type",
                                  [NSNumber numberWithInteger:0],@"response_result",
                                  nil];
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:994],@"cmd",
                                  [NSNumber numberWithInt:0],@"result",
                                  [MTUser sharedInstance].userid,@"id",
+                                 requester_id,@"requester_id",
                                  eventid,@"event_id",
                                  item_id_dic,@"item_id",
-                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
                                  nil];
-    NSLog(@"participate event noBtn, http json : %@",json );
+    NSLog(@"event request event noBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
@@ -1059,7 +1120,7 @@ enum Response_Type
                 }
 
             }
-            else if ([response_type intValue] == RESPONSE_EVENT)
+            else if ([response_type intValue] == RESPONSE_EVENT_INVITE || [response_type integerValue] == RESPONSE_EVENT_REQUEST)
             {
                 [self.eventRequest_tableView reloadData];
                 NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:[item_index intValue]];

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
@@ -519,7 +519,7 @@
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdi-5U-MkR">
+                                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdi-5U-MkR">
                                                             <rect key="frame" x="111" y="28" width="78" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -541,18 +541,44 @@
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvD-aY-C9c">
+                                                            <rect key="frame" x="219" y="16" width="43" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                                            <state key="normal" title="同意" backgroundImage="小按钮绿色">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yzq-Mw-eko">
+                                                            <rect key="frame" x="272" y="16" width="43" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                                                            <state key="normal" title="拒绝" backgroundImage="小按钮橙色">
+                                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="Yzq-Mw-eko" firstAttribute="top" secondItem="Lol-fh-Xe1" secondAttribute="top" constant="16" id="07n-5o-wNe"/>
                                                         <constraint firstAttribute="bottom" secondItem="ssY-Pc-cXP" secondAttribute="bottom" constant="9" id="7yd-mK-KFw"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Yzq-Mw-eko" secondAttribute="bottom" constant="16" id="8yO-VB-7nS"/>
+                                                        <constraint firstItem="Yzq-Mw-eko" firstAttribute="leading" secondItem="bvD-aY-C9c" secondAttribute="trailing" constant="10" id="9WI-wC-o5v"/>
+                                                        <constraint firstAttribute="bottom" secondItem="bvD-aY-C9c" secondAttribute="bottom" constant="16" id="HQA-ux-RdR"/>
                                                         <constraint firstAttribute="bottom" secondItem="kdi-5U-MkR" secondAttribute="bottom" constant="7" id="K2A-ij-fcc"/>
                                                         <constraint firstItem="XQy-r5-mCs" firstAttribute="leading" secondItem="ssY-Pc-cXP" secondAttribute="trailing" constant="9" id="KF4-HS-G9h"/>
+                                                        <constraint firstItem="bvD-aY-C9c" firstAttribute="top" secondItem="Lol-fh-Xe1" secondAttribute="top" constant="16" id="Leb-d1-9DA"/>
                                                         <constraint firstAttribute="trailing" secondItem="JGm-yQ-W6o" secondAttribute="trailing" priority="250" constant="10" id="N1a-Am-aFP"/>
                                                         <constraint firstAttribute="trailing" secondItem="6Rh-QL-aUB" secondAttribute="trailing" constant="103" id="NCs-8t-Ugb"/>
                                                         <constraint firstItem="kdi-5U-MkR" firstAttribute="top" secondItem="Lol-fh-Xe1" secondAttribute="top" constant="28" id="PfT-Q1-zJK"/>
                                                         <constraint firstItem="JGm-yQ-W6o" firstAttribute="leading" secondItem="kdi-5U-MkR" secondAttribute="trailing" constant="2" id="XDs-99-yc2"/>
                                                         <constraint firstItem="ssY-Pc-cXP" firstAttribute="top" secondItem="Lol-fh-Xe1" secondAttribute="top" constant="10" id="ZmW-oM-jAt"/>
+                                                        <constraint firstItem="bvD-aY-C9c" firstAttribute="leading" secondItem="Lol-fh-Xe1" secondAttribute="leading" constant="219" id="a4t-EX-ev1"/>
                                                         <constraint firstItem="ssY-Pc-cXP" firstAttribute="leading" secondItem="Lol-fh-Xe1" secondAttribute="leading" constant="15" id="eoX-lI-4lr"/>
                                                         <constraint firstItem="6Rh-QL-aUB" firstAttribute="leading" secondItem="ssY-Pc-cXP" secondAttribute="trailing" constant="9" id="p6d-Do-d4T"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Yzq-Mw-eko" secondAttribute="trailing" constant="5" id="tbj-W6-310"/>
+                                                        <constraint firstItem="bvD-aY-C9c" firstAttribute="leading" secondItem="JGm-yQ-W6o" secondAttribute="trailing" priority="500" id="yfM-iy-8Rd"/>
                                                         <constraint firstItem="kdi-5U-MkR" firstAttribute="leading" secondItem="XQy-r5-mCs" secondAttribute="trailing" constant="2" id="zpe-ZD-lk7"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
@@ -560,6 +586,9 @@
                                                     <outlet property="avatar_imageView" destination="ssY-Pc-cXP" id="Vny-6l-wEa"/>
                                                     <outlet property="event_name_button" destination="kdi-5U-MkR" id="wMz-Xc-BlF"/>
                                                     <outlet property="name_label" destination="6Rh-QL-aUB" id="fRq-39-sZO"/>
+                                                    <outlet property="noBtn" destination="Yzq-Mw-eko" id="j4M-R2-18R"/>
+                                                    <outlet property="okBtn" destination="bvD-aY-C9c" id="w01-VC-Qc2"/>
+                                                    <outlet property="text_label" destination="XQy-r5-mCs" id="Vm9-WC-63M"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -846,7 +875,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="DW2-rX-QdI" firstAttribute="leading" secondItem="BJ3-CD-EE8" secondAttribute="trailing" priority="750" constant="10" id="2eI-D6-LSp"/>
+                                                <constraint firstItem="DW2-rX-QdI" firstAttribute="leading" secondItem="BJ3-CD-EE8" secondAttribute="trailing" priority="500" constant="10" id="2eI-D6-LSp"/>
                                                 <constraint firstItem="BJ3-CD-EE8" firstAttribute="top" secondItem="yQV-XX-rVi" secondAttribute="top" id="4sJ-KY-2fm"/>
                                                 <constraint firstItem="Ure-A2-lIo" firstAttribute="top" secondItem="LUJ-SO-Et4" secondAttribute="top" constant="9" id="9uP-Ar-BwC"/>
                                                 <constraint firstItem="Wx6-WZ-gf6" firstAttribute="leading" secondItem="DTo-G7-i9E" secondAttribute="trailing" constant="9" id="9z9-Ne-brc"/>
@@ -1758,7 +1787,6 @@
                                                                 </tableViewCellContentView>
                                                                 <connections>
                                                                     <outlet property="add_button" destination="oDx-0h-BeU" id="uh3-63-4jw"/>
-                                                                    <outlet property="friendNameLabel" destination="xhs-38-wcG" id="3jP-G7-W02"/>
                                                                     <outlet property="hasAdd_label" destination="eaZ-d1-Kdj" id="Blo-3T-1b8"/>
                                                                     <outlet property="invite_button" destination="roZ-hh-YlT" id="3wj-r4-6a5"/>
                                                                     <outlet property="name_label" destination="xhs-38-wcG" id="yC3-j4-Tio"/>

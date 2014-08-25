@@ -14,6 +14,7 @@
 @interface MTUser ()
 {
     NSString* DB_path;
+    NSTimer* synchronizeFriendTimer;
 }
 @property(nonatomic,strong) NSArray *avatarInfo;
 @end
@@ -35,7 +36,13 @@
 @synthesize friendRequestMsg;
 @synthesize systemMsg;
 @synthesize historicalMsg;
+
 @synthesize hasInitNotification;
+@synthesize getSynchronizeFriendResponse;
+@synthesize doingSortingFriends;
+@synthesize sortingFriendsDone;
+@synthesize doingSynchronizeFriend;
+@synthesize synchronizeFriendDone;
 
 static MTUser *singletonInstance;
 
@@ -66,6 +73,8 @@ static MTUser *singletonInstance;
         self.systemMsg = [[NSMutableArray alloc]init];
         self.historicalMsg = [[NSMutableArray alloc]init];
         self.hasInitNotification = NO;
+        self.getSynchronizeFriendResponse = NO;
+        self.doingSortingFriends = NO;
        
         self.wait = 0.1;
     }
@@ -288,6 +297,13 @@ static MTUser *singletonInstance;
 
 - (void) synchronizeFriends
 {
+    getSynchronizeFriendResponse = NO;
+    doingSynchronizeFriend = YES;
+    synchronizeFriendDone = NO;
+    
+    synchronizeFriendTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(synchronizeTimerDoing) userInfo:nil repeats:NO];
+    [[NSRunLoop currentRunLoop]addTimer:synchronizeFriendTimer forMode:NSRunLoopCommonModes];
+    
     self.friendList = [self getFriendsFromDB];
     self.nameFromID_dic = [[NSMutableDictionary alloc]init];
     for (NSDictionary* friend in friendList) {
@@ -304,6 +320,11 @@ static MTUser *singletonInstance;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
     NSLog(@"synchronize friend json: %@",json);
+}
+
+-(void)synchronizeTimerDoing
+{
+    doingSynchronizeFriend = NO;
 }
 
 - (NSMutableArray*)getFriendsFromDB
@@ -351,10 +372,10 @@ static MTUser *singletonInstance;
         }
     }
     
-    for (NSString* key in sorted) {
+    for (NSString* key in sectionArray) {
         NSMutableArray* arr = [sorted objectForKey:key];
         [self rankFriendsInArray:arr];
-        //        NSLog(@"sorted array: %@",arr);
+//        NSLog(@"sorted array: %@",arr);
     }
     [self.sectionArray sortUsingComparator:^(id obj1, id obj2)
      {
@@ -414,7 +435,11 @@ static MTUser *singletonInstance;
 
 -(void)friendListDidChanged
 {
+    doingSortingFriends = YES;
+    sortingFriendsDone = NO;
     self.sortedFriendDic = [self sortFriendList];
+    sortingFriendsDone = YES;
+    doingSortingFriends = NO;
     for (NSDictionary* friend in friendList) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
         NSString* fname = [friend valueForKey:@"name"];
@@ -468,11 +493,13 @@ static MTUser *singletonInstance;
                     break;
                 case ADD_FRIEND_RESULT:
                 case EVENT_INVITE_RESPONSE:
+                case REQUEST_EVENT_RESPONSE:
                 {
                     [self.systemMsg addObject:msg_dic];
                 }
                     break;
                 case NEW_EVENT_NOTIFICATION:
+                case REQUEST_EVENT:
                 {
                     [self.eventRequestMsg addObject:msg_dic];
                 }
@@ -505,6 +532,8 @@ static MTUser *singletonInstance;
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    
+    [synchronizeFriendTimer invalidate];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
@@ -532,7 +561,15 @@ static MTUser *singletonInstance;
                 NSLog(@"synchronize friends: %@",friendList);
                 
             }
-            [self friendListDidChanged];
+            dispatch_async(dispatch_get_global_queue(0, 0), ^
+                           {
+                               [self friendListDidChanged];
+                               dispatch_async(dispatch_get_main_queue(), ^
+                                              {
+                                                  doingSynchronizeFriend = NO;
+                                                  synchronizeFriendDone = YES;
+                                              });
+                           });
                     
         }
             break;
@@ -544,6 +581,7 @@ static MTUser *singletonInstance;
         }
             break;
     }
+    getSynchronizeFriendResponse = YES;
 }
 
 

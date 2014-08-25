@@ -87,6 +87,7 @@
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"您已成功发送验证信息" WithDelegate:nil WithCancelTitle:@"确定"];
+            [self.navigationController popViewControllerAnimated:YES];
             break;
         case ALREADY_FRIENDS:
             break;

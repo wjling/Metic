@@ -16,6 +16,8 @@
     NSInteger tab_index;
     BOOL clickTab;
     NSNumber* selectedFriendID;
+    UIActivityIndicatorView* actIndicator;
+    UIView* waitingView;
 }
 
 
@@ -46,6 +48,7 @@
 @synthesize contacts_arr;
 @synthesize locationService;
 @synthesize coordinate;
+@synthesize contactFriends_arr;
 @synthesize nearbyFriends_arr;
 @synthesize kankan_arr;
 @synthesize phoneNumbers;
@@ -65,11 +68,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    [self initTabBar];
-    [self initContentView];
     
     locationService = [[BMKLocationService alloc]init];
     contacts_arr = [[NSMutableArray alloc]init];
+    contactFriends_arr = [[NSMutableArray alloc]init];
     nearbyFriends_arr = [[NSMutableArray alloc]init];
     kankan_arr = [[NSMutableArray alloc]init];
     
@@ -79,6 +81,12 @@
     nearbyFriends_tableview.dataSource = self;
     kankan_tableview.delegate = self;
     kankan_tableview.dataSource = self;
+    
+    [self initTabBar];
+    [self initContentView];
+    
+    
+
 //    [locationService startUserLocationService];
     
     
@@ -92,6 +100,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
 //    NSLog(@"friend recommendation view will appear");
 //    
 //    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
@@ -99,6 +108,7 @@
 //    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 
 }
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -110,6 +120,26 @@
 //    NSLog(@"friend recommendation view did appear");
     NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
     NSLog(@"tabbar content size==after, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
+    waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
+    actIndicator.center = waitingView.center;
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
+    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
+    if (![hasUploadContact boolValue]) {
+        self.noUpload_view.hidden = NO;
+        self.hasUpload_view.hidden = YES;
+        //        [userDf setBool:NO forKey:@"hasUploadContact"];
+    }
+    else
+    {
+        self.noUpload_view.hidden = YES;
+        self.hasUpload_view.hidden = NO;
+        [self getContactFriends];
+        //        [userDf setBool:YES forKey:@"hasUploadContact"];
+        
+    }
+
+    
 //    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 //    self.content_scrollview.contentSize = CGSizeMake(960, self.content_scrollview.frame.size.height);
 //    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
@@ -213,22 +243,18 @@
     [self.nearbyFriends_tableview setBackgroundColor:bgColor];
     [self.kankan_tableview setBackgroundColor:bgColor];
     
-    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
-    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
-    if (![hasUploadContact boolValue]) {
-        self.noUpload_view.hidden = NO;
-        self.hasUpload_view.hidden = YES;
-//        [userDf setBool:NO forKey:@"hasUploadContact"];
-    }
-    else
-    {
-        self.noUpload_view.hidden = YES;
-        self.hasUpload_view.hidden = NO;
-//        [userDf setBool:YES forKey:@"hasUploadContact"];
-        
-    }
     
+    
+    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
+    waitingView = [[UIView alloc]init];
+    waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
+    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollview.frame.size.width,self.content_scrollview.frame.size.height);
+    [waitingView setBackgroundColor:waitingBgColor];
+    [waitingView setAlpha:0.5];
+    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
+    [waitingView addSubview:actIndicator];
+    [actIndicator startAnimating];
+//    [tabPage1_view addSubview:waitingView];
     
 }
 
@@ -335,6 +361,42 @@
     }
 }
 
+-(void)getContactFriends
+{
+    [self getPeopleInContact];
+    phoneNumbers = [self getFriendsPhoneNumber];
+    NSLog(@"phone numbers: %@", phoneNumbers);
+    void (^getContactFriendsDone)(NSData*) = ^(NSData* rData)
+    {
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"get contactfriends done, received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber* cmd = [response1 objectForKey:@"cmd"];
+        if ([cmd integerValue] == 100) {
+            contactFriends_arr = [response1 objectForKey:@"friend_recom"];
+            NSLog(@"contact friend array: %@",contactFriends_arr);
+            if (contactFriends_arr) {
+                [contacts_tableview reloadData];
+            }
+            
+        }
+        [waitingView removeFromSuperview];
+
+    };
+    
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                              [MTUser sharedInstance].userid,@"id",
+                              phoneNumbers,@"friends_phone",nil];
+    NSLog(@"upload number json: %@",json_dic);
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:getContactFriendsDone];
+    NSLog(@"doing getContactFriends, json: %@",json_dic);
+    [waitingView removeFromSuperview];
+    [tabPage1_view addSubview:waitingView];
+
+}
+
 -(void)getNearbyFriends
 {
     void (^getNearbyFriendsDone)(NSData*) = ^(NSData* rData)
@@ -347,6 +409,7 @@
             nearbyFriends_arr = [response1 objectForKey:@"friend_list"];
             [nearbyFriends_tableview reloadData];
         }
+        [waitingView removeFromSuperview];
     };
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [MTUser sharedInstance].userid,@"id",
@@ -356,6 +419,8 @@
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:GET_NEARBY_FRIENDS finshedBlock:getNearbyFriendsDone];
     NSLog(@"doing getNearbyFriends, json: %@",json_dic);
+    [waitingView removeFromSuperview];
+    [tabPage2_view addSubview:waitingView];
 }
 
 -(void)getKanKan
@@ -370,12 +435,15 @@
             kankan_arr = [response1 objectForKey:@"friend_list"];
             [kankan_tableview reloadData];
         }
+        [waitingView removeFromSuperview];
     };
     NSDictionary* jsonDic = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid, @"id",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:KANKAN finshedBlock:getKanKanDone];
     NSLog(@"doing getKanKan, json: %@",jsonDic);
+    [waitingView removeFromSuperview];
+    [tabPage3_view addSubview:waitingView];
 }
 
 //返回两个坐标（coordinateA和coordinateB)之间的距离(单位：m)
@@ -396,6 +464,16 @@
     
 }
 
+-(void)showWaitingView
+{
+    
+}
+
+-(void)hideWaitingView
+{
+    
+}
+
 #pragma mark - HttpSenderDelegate
 //- (void)finishWithReceivedData:(NSData *)rData
 //{
@@ -411,8 +489,8 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == contacts_tableview) {
-        return contacts_arr.count;
+    if (tableView == self.contacts_tableview) {
+        return contactFriends_arr.count;
     }
     else if (tableView == self.nearbyFriends_tableview)
     {
@@ -422,7 +500,10 @@
     {
         return kankan_arr.count;
     }
-    return 0;
+    else
+    {
+        return 0;
+    }
 }
 
 // Row display. Implementers should *always* try to reuse cells by setting each cell's reuseIdentifier and querying for available reusable cells with dequeueReusableCellWithIdentifier:
@@ -434,11 +515,41 @@
     UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
     
     if (tableView == contacts_tableview) {
-        ContactsRecommendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ContactsRecommendTableViewCell"];
+        ContactsRecommendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ContactsRecommendTableViewCell" forIndexPath:indexPath];
         if (nil == cell) {
             cell = [[ContactsRecommendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ContactsRecommendTableViewCell"];
             
         }
+        NSMutableDictionary* friend = [contactFriends_arr objectAtIndex:indexPath.row];
+        NSLog(@"a contact friend: %@",friend);
+        NSNumber* fid = [friend valueForKey:@"id"];
+        NSString* fname = [friend valueForKey:@"name"];
+        NSNumber* isFriend = [friend valueForKey:@"isFriend"];
+        NSLog(@"isFriend: %hhd",[isFriend boolValue]);
+        cell.name_label.text = fname;
+        if ([isFriend boolValue]) {
+            cell.add_button.hidden = YES;
+            cell.invite_button.hidden = YES;
+            cell.hasAdd_label.hidden = NO;
+        }
+        else
+        {
+            cell.add_button.hidden = NO;
+            cell.invite_button.hidden = YES;
+            cell.hasAdd_label.hidden = YES;
+        }
+        
+        cell.add_button.tag = [fid integerValue];
+        [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell setBackgroundColor:bgColor];
+        
+        if (!cell.cellSeperator) {
+            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
+            [cell.contentView addSubview:cell.cellSeperator];
+        }
+        return cell;
         
     }
     else if (tableView == nearbyFriends_tableview)
@@ -673,7 +784,7 @@
                     NSNumber* cmd = [response1 objectForKey:@"cmd"];
                     if ([cmd integerValue] == 100)
                     {
-                        contacts_arr = [response1 objectForKey:@"friend_list"];
+                        contactFriends_arr = [response1 objectForKey:@"friend_recom"];
                         [contacts_tableview reloadData];
                     }
 
