@@ -40,7 +40,7 @@
         //        self.edgesForExtendedLayout=UIRectEdgeNone;
         self.navigationController.navigationBar.translucent = NO;
     }
-    _locService = [[BMKLocationService alloc]init];
+    
 
     
  
@@ -54,7 +54,7 @@
     mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     mapView.centerCoordinate = _position;
     mapView.mapType = BMKMapTypeStandard;
-    _locService.delegate = self;
+
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
     
@@ -68,6 +68,7 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [_locService stopUserLocationService];
+    _locService.delegate = nil;
     mapView.delegate = nil; // 不用时，置nil
     _geoCodeSearch.delegate = nil;
     [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:YES];
@@ -96,6 +97,8 @@
 -(void)mapview:(BMKMapView *)mapView onLongClick:(CLLocationCoordinate2D)coordinate
 {
     [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _locService = nil;
     [mapView removeAnnotation:_panPoint];
     _panPoint.coordinate = coordinate;
     [mapView addAnnotation:_panPoint];
@@ -127,6 +130,8 @@
 }
 
 - (IBAction)getLocation:(id)sender {
+    _locService = [[BMKLocationService alloc]init];
+    _locService.delegate = self;
     [_locService startUserLocationService];
     mapView.showsUserLocation = NO;
     mapView.userTrackingMode = BMKUserTrackingModeNone;
@@ -156,5 +161,13 @@
         NSLog(@"反geo检索发送失败");
     }
 }
+
+-(void)didFailToLocateUserWithError:(NSError *)error
+{
+    [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _locService = nil;
+}
+
 @end
 

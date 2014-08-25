@@ -73,7 +73,7 @@
     _code = 1;
     self.FriendsIds = [[NSMutableSet alloc]init];
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
-    _locService = [[BMKLocationService alloc]init];
+    
     self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
     self.positionInfo = @"";
     self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
@@ -83,11 +83,13 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    _locService.delegate = self;
+    [super viewWillAppear:animated];
+    //_locService.delegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     _geocodesearch.delegate = self;
     _flatDatePicker.delegate = self;
     self.location_text.text = self.positionInfo;
@@ -99,6 +101,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     _geocodesearch.delegate = nil;
     _locService.delegate = nil;
     _flatDatePicker.delegate = nil;
@@ -348,7 +351,9 @@
     self.location_text.text = @"定位中";
     self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
     self.positionInfo = @"";
-    //[_locManager startUpdatingLocation];
+
+    _locService = [[BMKLocationService alloc]init];
+    _locService.delegate = self;
     [_locService startUserLocationService];
     
 }
@@ -550,6 +555,7 @@
     }
     if ([segue.destinationViewController isKindOfClass:[MapViewController class]]) {
         MapViewController *nextViewController = segue.destinationViewController;
+        NSLog(@"初始化地理坐标为 %f  %f  ",self.pt.latitude,self.pt.longitude);
         nextViewController.position = self.pt;
         nextViewController.positionInfo = self.positionInfo;
         nextViewController.controller = self;
@@ -596,13 +602,15 @@
         NSLog(@"反geo检索发送失败");
     }
     [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _locService = nil;
 }
 /**
  *定位失败后，会调用此函数
  *@param mapView 地图View
  *@param error 错误号，参考CLError.h中定义的错误号
  */
-- (void)mapView:(BMKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
+-(void)didFailToLocateUserWithError:(NSError *)error
 {
     [self.getLocIndicator stopAnimating];
     [self.getLocButton setHidden:NO];
@@ -610,7 +618,13 @@
     [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
     [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
     [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
-    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"无法自动定位，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_locService stopUserLocationService];
+        _locService.delegate = nil;
+        _locService = nil;
+    });
+    
 }
 
 

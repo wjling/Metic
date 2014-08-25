@@ -158,6 +158,7 @@ static MTUser *singletonInstance;
                 case NORMAL_REPLY:
                 {
                     self.avatarInfo = [response1 valueForKey:@"list"];
+                    NSLog(@"%@",_avatarInfo);
                     [self updateAvatar];
                 }
                     break;
