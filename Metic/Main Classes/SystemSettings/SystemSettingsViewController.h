@@ -10,6 +10,7 @@
 #import "SlideNavigationController.h"
 #import "CommonUtils.h"
 #import "AppDelegate.h"
+#import "SDImageCache.h"
 
 @interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UITableView *settings_tableview;

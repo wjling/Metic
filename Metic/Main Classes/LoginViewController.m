@@ -64,7 +64,7 @@
     {
         NSLog(@"login: it is not the first launch");
         [self showLaunchView];
-        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
 
     

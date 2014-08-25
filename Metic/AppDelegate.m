@@ -594,11 +594,11 @@
         {
             [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
         }
-        else if (msg_cmd == EVENT_INVITE_RESPONSE)
+        else if (msg_cmd == EVENT_INVITE_RESPONSE || msg_cmd == REQUEST_EVENT_RESPONSE)
         {
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         }
-        else if (msg_cmd == NEW_EVENT_NOTIFICATION)
+        else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
         {
             [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
         }

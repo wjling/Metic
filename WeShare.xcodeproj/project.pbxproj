@@ -2206,7 +2206,7 @@
 					src/Classes/,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",
@@ -2224,7 +2224,7 @@
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2251,7 +2251,7 @@
 					src/Classes/,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",
@@ -2269,7 +2269,7 @@
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;

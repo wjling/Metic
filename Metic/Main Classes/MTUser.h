@@ -46,7 +46,14 @@
 @property (strong,nonatomic) NSMutableArray* eventRequestMsg; //活动邀请message
 @property (strong,nonatomic) NSMutableArray* systemMsg;
 @property (strong,nonatomic) NSMutableArray* historicalMsg;
+
+
 @property BOOL hasInitNotification;
+@property BOOL getSynchronizeFriendResponse;
+@property BOOL doingSortingFriends;
+@property BOOL sortingFriendsDone;
+@property BOOL doingSynchronizeFriend;
+@property BOOL synchronizeFriendDone;
 
 
 

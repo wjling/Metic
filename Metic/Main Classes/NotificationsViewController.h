@@ -52,8 +52,8 @@
 - (IBAction)friend_request_okBtnClicked:(id)sender;
 - (IBAction)friend_request_noBtnClicked:(id)sender;
 - (IBAction)delSystemMsg:(id)sender;
-- (IBAction)participate_event_okBtnClicked:(id)sender;
-- (IBAction)participate_event_noBtnClicked:(id)sender;
+- (IBAction)event_request_okBtnClicked:(id)sender;
+- (IBAction)event_request_noBtnClicked:(id)sender;
 - (void)tabBtnClicked:(id)sender;
 - (IBAction)rightBarBtnClicked:(id)sender;
 - (IBAction)function1Clicked:(id)sender;

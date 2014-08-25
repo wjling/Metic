@@ -138,7 +138,13 @@
 
 -(void)clearBuffers
 {
-    
+    SDImageCache* cache = [SDImageCache sharedImageCache];
+    [cache clearDisk];
+    [cache clearMemory];
+    NSString* documentPath = [NSString stringWithFormat:@"%@/Documents/media/avatar",NSHomeDirectory()];
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:documentPath error:nil];
+    [fileManager createDirectoryAtPath:documentPath withIntermediateDirectories:YES attributes:nil error:nil];
 }
 
 -(void)updateCheck
@@ -351,6 +357,10 @@
             [self switch1Clicked:mSwitch];
         }
     }
+    else if (section == 1)
+    {
+        [self clearBuffers];
+    }
     else if (section == 2)
     {
         if (row == 0) {
@@ -373,6 +383,7 @@
     {
         [self quit];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 

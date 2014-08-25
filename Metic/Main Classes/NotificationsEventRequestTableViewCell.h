@@ -10,6 +10,7 @@
 
 @interface NotificationsEventRequestTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar_imageView;
+@property (strong, nonatomic) IBOutlet UILabel *text_label;
 @property (strong, nonatomic) IBOutlet UIButton *event_name_button;
 @property (strong, nonatomic) IBOutlet UILabel *name_label;
 @property (strong, nonatomic) IBOutlet UIButton *okBtn;
