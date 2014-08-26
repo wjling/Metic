@@ -127,7 +127,7 @@
         }
         else //如果这时在进行好友排序
         {
-            NSLog(@"好友列表初始化：正在进行好友排序");
+            NSLog(@"好友列表初始化：正在进行好友排序或已经完成排序");
             while([MTUser sharedInstance].doingSynchronizeFriend) {
                 [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
             }

@@ -525,6 +525,7 @@ enum Response_Type
 
 -(void) notificationDidReceive:(NSArray *)messages
 {
+    [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) hideUpdateInRow:4];
     for (NSDictionary* msg in messages) {
         NSString* msg_str = [msg objectForKey:@"msg"];
         NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];

@@ -177,6 +177,9 @@
         case 39:
             resultCode = @"quit_event";
             break;
+        case 40:
+            resultCode = @"avatar";
+            break;
         default:
             resultCode = @"json";
             break;

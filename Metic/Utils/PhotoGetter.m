@@ -10,8 +10,13 @@
 #import "CommonUtils.h"
 #import "UIImage+UIImageExtras.h"
 #import "UIImageView+WebCache.h"
+#import "UserInfoViewController.h"
 
 @interface PhotoGetter ()
+{
+    UIViewController* updateAvatarViewController;
+    BOOL updateAvatarFlag;
+}
 @property(nonatomic,strong) UIImage* uploadImage;
 @property(nonatomic,strong) NSString* imgName;
 @property BOOL isUpload;
@@ -43,6 +48,17 @@
         self = [super init];
         self.uploadImage = aImage;
         self.type = type;
+    }
+    return self;
+}
+
+- (instancetype)initUploadAvatarMethod:(UIImage*)aImage type:(int)type viewController:(UIViewController*)vc
+{
+    if (self) {
+        self = [super init];
+        self.uploadImage = aImage;
+        self.type = type;
+        updateAvatarViewController = vc;
     }
     return self;
 }
@@ -299,7 +315,8 @@
     [imageData2 writeToFile:uploadfilePath atomically:YES];
     
     [cloudOP2 CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
-
+    
+   
 }
 
 
@@ -373,9 +390,45 @@
 {
     if (self.isUpload) {
         if (status){
-            if (self.type == 21) {
-                SDImageCache* cache = [SDImageCache sharedImageCache];
-                [cache removeImageForKey:path];
+            if (self.type == 21) { //上传头像
+//                SDImageCache* cache = [SDImageCache sharedImageCache];
+//                [cache removeImageForKey:path];
+                NSLog(@"removed image path: %@",path);
+                
+                NSString* avatarUrl =[CommonUtils getUrl:path];
+                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
+                    NSLog(@"removed image url: %@",avatarUrl);
+                }];
+                
+                NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                                 [MTUser sharedInstance].userid, @"id",
+                                                 [NSNumber numberWithInteger:1], @"operation", nil];
+                NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:json_data withOperationCode:UPDATE_AVATAR finshedBlock:^(NSData *rData) {
+                    
+                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSLog(@"Received Data: %@",temp);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd integerValue] == NORMAL_REPLY) {
+                        if (updateAvatarFlag) {
+                            
+                            if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[UserInfoViewController class]]) {
+                                [(UserInfoViewController*)updateAvatarViewController refresh];
+                                
+                            }
+                            [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
+                            NSLog(@"上传头像后刷新");
+                            
+                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                            [alertView show];
+                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
+                        }
+                        updateAvatarFlag = !updateAvatarFlag;
+                    }
+                }];
+
             }
             [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
         }else{
@@ -383,6 +436,11 @@
         }
         return;
     }
+}
+
+-(void)alertViewDismiss:(NSTimer*)timer
+{
+    [[timer userInfo] dismissWithClickedButtonIndex:0 animated:YES];
 }
 @end
 

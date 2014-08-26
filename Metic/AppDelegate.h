@@ -18,6 +18,7 @@
 #import "BMapKit.h"
 #import "Reachability.h"
 #import "WelcomePageViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 //推送消息的通知协议，收到任何消息之后的逻辑可以通过实现notificationDidReceive方法
 //说明：

@@ -402,6 +402,8 @@
     }
     [self.sql closeMyDB];
     
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    AudioServicesPlayAlertSound(1106);
     
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     BOOL flag = [userDf boolForKey:@"systemSettings1"];
@@ -425,6 +427,7 @@
         //notification.userInfo = infoDict; //添加额外的信息
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     }
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
@@ -648,7 +651,9 @@
     NSLog(@":( Websocket Failed With Error %@", error);
     isConnected = NO;
     [self disconnect];
-    if (isNetworkConnected && isLogined) {
+    NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
+    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
         [self connect];
         NSLog(@"Reconnecting from fail...");
     }
@@ -660,7 +665,9 @@
     NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     isConnected = NO;
     [self disconnect];
-    if (isNetworkConnected && isLogined) {
+    NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
+    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
         [self connect];
         NSLog(@"Reconnecting from close...");
     }

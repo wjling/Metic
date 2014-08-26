@@ -15,6 +15,10 @@
 
 
 @interface MenuViewController ()
+{
+    NSInteger numberOfMenus;
+    NSMutableArray* notificationSigns_arr;
+}
 @property(nonatomic,strong) UIImageView* testImageView;
 @property(nonatomic,strong) UIImage* testImage;
 @property(nonatomic,strong) UIImageView* gender;
@@ -45,6 +49,30 @@
     [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.img.layer setBorderWidth:3.0f];
     [self.img.layer setCornerRadius:28];
+    
+    numberOfMenus = 8;
+    notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
+    for (NSInteger i = 0; i < numberOfMenus; i++) {
+        if (i == 4) {
+            if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
+                [MTUser sharedInstance].friendRequestMsg.count > 0 ||
+                [MTUser sharedInstance].systemMsg.count > 0) {
+//                [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:YES]];
+                notificationSigns_arr[i] = [NSNumber numberWithBool:YES];
+            }
+            else
+            {
+//                [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+                notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
+            }
+        }
+        else
+        {
+//            [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
+            notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
+        }
+        
+    }
 //    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
@@ -88,9 +116,21 @@
         [self.gender setImage:[UIImage imageNamed:@"男icon"]];
     }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
+    [_tableView reloadData];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getAvatar];
     NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
+    
+    if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
+        [MTUser sharedInstance].friendRequestMsg.count > 0 ||
+        [MTUser sharedInstance].systemMsg.count > 0)
+    {
+        notificationSigns_arr[4] = [NSNumber numberWithBool:YES];
+    }
+    else
+    {
+        notificationSigns_arr[4] = [NSNumber numberWithBool:NO];
+    }
 }
 
 -(void)clearVC
@@ -144,6 +184,35 @@
 
 }
 
+-(void)showUpdateInRow:(NSInteger)row
+{
+//    NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:0];
+//    UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexP];
+//    UIView* dian = [cell viewWithTag:88];
+//    if (!dian) {
+//        UILabel* label = (UILabel*)[cell viewWithTag:2];
+//        NSString* text = label.text;
+//        UIFont* font = label.font;
+//        CGSize sizeOfText = [text sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 25) lineBreakMode:NSLineBreakByWordWrapping];
+//        dian = [[UIView alloc]init];
+//        dian.frame = CGRectMake(label.frame.origin.x + sizeOfText.width + 5, label.frame.origin.y, 20, 20);
+//        [cell addSubview:dian];
+//    }
+//    dian.hidden = NO;
+    [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:YES]];
+    [_tableView reloadData];
+}
+
+-(void)hideUpdateInRow:(NSInteger)row
+{
+//    NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:0];
+//    UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexP];
+//    UIView* dian = [cell viewWithTag:88];
+//    dian.hidden = YES;
+    [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
+    [_tableView reloadData];
+}
+
 
 #pragma mark - UITableView Delegate & Datasrouce -
 
@@ -164,7 +233,7 @@
 //}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return 8;
+	return numberOfMenus;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -192,11 +261,6 @@
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
 			break;
-			
-//        case 4:
-//			((UILabel*)[cell viewWithTag:2]).text = @"朋友分享";
-//            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标5"]];
-//			break;
         case 4:
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
@@ -216,6 +280,28 @@
 
             
 	}
+    
+    UIImageView* dian = (UIImageView*)[cell viewWithTag:88];
+    if (!dian) {
+        UILabel* label = (UILabel*)[cell viewWithTag:2];
+        NSString* text = label.text;
+        UIFont* font = label.font;
+        CGSize sizeOfText = [text sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 25) lineBreakMode:NSLineBreakByWordWrapping];
+        dian = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"选择点图标.png"]];
+        dian.tag = 88;
+//        [dian setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"选择点图标.png"]]];
+        dian.frame = CGRectMake(label.frame.origin.x + sizeOfText.width + 5, label.frame.origin.y, 10, 10);
+        [cell addSubview:dian];
+    }
+    BOOL flag = [[notificationSigns_arr objectAtIndex:indexPath.row] boolValue];
+    if (flag) {
+        dian.hidden = NO;
+    }
+    else
+    {
+        dian.hidden = YES;
+    }
+
     
 	return cell;
 }
@@ -306,7 +392,7 @@
             return;
             
 	}
-	
+	[self hideUpdateInRow:indexPath.row];
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 

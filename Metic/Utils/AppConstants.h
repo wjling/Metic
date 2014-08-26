@@ -55,6 +55,7 @@ enum Operation_Code
     VIDEOSERVER = 37,
     KICK_OUT = 38,
     QUIT_EVENT = 39,
+    UPDATE_AVATAR = 40,
 };
 
 enum CloudOperation_Code

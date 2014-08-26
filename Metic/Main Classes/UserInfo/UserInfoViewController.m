@@ -160,6 +160,8 @@
 {
     self.name_label.text = [MTUser sharedInstance].name;
     self.email_label.text = [MTUser sharedInstance].email;
+    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
+    [getter getAvatar];
     
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
@@ -518,7 +520,7 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     newAvatar = croppedImage;
-    PhotoGetter* getter = [[PhotoGetter alloc]initUploadMethod:croppedImage type:21];
+    PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:21 viewController:self];
     [getter uploadAvatar];
 }
 

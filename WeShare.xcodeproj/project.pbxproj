@@ -12,6 +12,7 @@
 		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
 		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
 		0435EEEF19A638C2003BB2F6 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */; };
+		0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -282,6 +283,7 @@
 		04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoricalNotificationViewController.h; sourceTree = "<group>"; };
 		04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoricalNotificationViewController.m; sourceTree = "<group>"; };
 		0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -757,6 +759,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */,
 				51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */,
 				04B6F86519A0EEBB00229393 /* AddressBookUI.framework in Frameworks */,
 				04B6F86319A0EEA500229393 /* AddressBook.framework in Frameworks */,
@@ -1380,6 +1383,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
 				0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */,
 				51DDBF7419A319B20051B88C /* libz.dylib */,
 				04B6F86419A0EEBB00229393 /* AddressBookUI.framework */,
