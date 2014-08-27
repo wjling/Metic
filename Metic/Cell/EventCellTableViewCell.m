@@ -81,7 +81,7 @@
 
 - (IBAction)showParticipators:(id)sender {
     if (_eventController.isKeyBoard) {
-        [_eventController.inputField resignFirstResponder];
+        [_eventController.inputTextView resignFirstResponder];
     }else if (_eventController.isEmotionOpen){
         [_eventController button_Emotionpress:nil];
     } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
@@ -89,7 +89,7 @@
 
 - (IBAction)showBanner:(id)sender {
     if (_eventController.isKeyBoard) {
-        [_eventController.inputField resignFirstResponder];
+        [_eventController.inputTextView resignFirstResponder];
     }else if (_eventController.isEmotionOpen){
         [_eventController button_Emotionpress:nil];
     }else{

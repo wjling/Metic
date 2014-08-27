@@ -26,7 +26,7 @@
 #define MainCFontSize 13
 #define SubCFontSize 12
 
-@interface EventDetailViewController ()
+@interface EventDetailViewController ()<UITextViewDelegate>
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
@@ -74,6 +74,7 @@
     [self initUI];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
@@ -85,14 +86,13 @@
     self.isOpen = NO;
     self.isEmotionOpen = NO;
     self.isKeyBoard = NO;
-    _inputField.delegate = self;
-    _emotionKeyboard.textField = _inputField;
-    //self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
+    _inputTextView.delegate = self;
+    _emotionKeyboard.textView = _inputTextView;
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self.inputField setPlaceholder:@"回复楼主"];
+    self.inputTextView.placeHolder = @"回复楼主";
     [self.view bringSubviewToFront:self.commentView];
     [self.view bringSubviewToFront:self.emotionKeyboard];
     [self pullEventFromDB];
@@ -128,7 +128,7 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"活动详情"];
-    [self.inputField resignFirstResponder];
+    [self.inputTextView resignFirstResponder];
 }
 
 -(void)initUI
@@ -137,6 +137,28 @@
 	_moreView.layer.shadowRadius = 10;
 	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;
 	_moreView.layer.shadowOpacity = 1;
+
+    // 初始化输入框
+    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
+    
+    // 这个是仿微信的一个细节体验
+    textView.returnKeyType = UIReturnKeySend;
+    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
+    
+    textView.placeHolder = @"发送新消息";
+    textView.delegate = self;
+    
+    [self.commentView addSubview:textView];
+	_inputTextView = textView;
+
+    _inputTextView.frame = CGRectMake(38, 5, 240, 35);
+    _inputTextView.backgroundColor = [UIColor clearColor];
+    _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    _inputTextView.layer.borderWidth = 0.65f;
+    _inputTextView.layer.cornerRadius = 6.0f;
+
+
+    
 }
 
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
@@ -194,7 +216,7 @@
     if (!_isEmotionOpen) {
         _isEmotionOpen = YES;
         if (_isKeyBoard) {
-            [_inputField resignFirstResponder];
+            [_inputTextView resignFirstResponder];
         }
         //[self.view bringSubviewToFront:_emotionKeyboard];
         //[self.view addSubview:_emotionKeyboard];
@@ -348,7 +370,7 @@
 - (IBAction)more:(id)sender {
     if (_optionView.isHidden) {
         [_optionView setHidden:NO];
-        [self.inputField resignFirstResponder];
+        [self.inputTextView resignFirstResponder];
         CGRect frame = self.view.frame;
         frame.origin = CGPointMake(0, 0);
         _shadowView = [[UIView alloc]initWithFrame:frame];
@@ -505,9 +527,10 @@
 
 
 - (IBAction)publishComment:(id)sender {
-    NSString *comment = ((UITextField*)[self.inputField viewWithTag:1]).text;
+    NSString *comment = _inputTextView.text;// ((UITextField*)[self.inputField viewWithTag:1]).text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
-        ((UITextField*)[self.inputField viewWithTag:1]).text = @"";
+        //((UITextField*)[self.inputField viewWithTag:1]).text = @"";
+        _inputTextView.text = @"";
         return;
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -563,8 +586,8 @@
     });
 
     [_tableView reloadData];
-    self.inputField.text = @"";
-    if (_isKeyBoard) [self.inputField resignFirstResponder];
+    self.inputTextView.text = @"";
+    if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -677,7 +700,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.isKeyBoard) {
-        [self.inputField resignFirstResponder];
+        [self.inputTextView resignFirstResponder];
         return;
     }
     if (self.isEmotionOpen) {
@@ -685,8 +708,8 @@
         return;
     }
     if (indexPath.section == 0) {
-        [self.inputField becomeFirstResponder];
-        [self.inputField setPlaceholder:@"回复楼主:"];
+        [self.inputTextView becomeFirstResponder];
+        self.inputTextView.placeHolder = @"回复楼主:";
         self.repliedId = nil;
         self.mainCommentId = 0;
     }
@@ -695,8 +718,8 @@
         if ([cell.commentid intValue] < 0 ) {
             return;
         }
-        [self.inputField becomeFirstResponder];
-        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
+        [self.inputTextView becomeFirstResponder];
+        self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
         self.Selete_section = indexPath.section;
         self.repliedId = nil;
@@ -711,8 +734,8 @@
         if ([cell.commentid intValue] < 0 ) {
             return;
         }
-        [self.inputField becomeFirstResponder];
-        [self.inputField setPlaceholder:[NSString stringWithFormat:@"回复%@:",cell.author]];
+        [self.inputTextView becomeFirstResponder];
+        self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
         self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
         self.repliedId = cell.authorid;
         self.Selete_section = indexPath.section;
@@ -986,6 +1009,9 @@
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{
     self.isKeyBoard = YES;
+    if (self.isEmotionOpen) {
+        [self button_Emotionpress:nil];
+    }
     // get keyboard size and loctaion
     CGRect keyboardBounds;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
@@ -1033,10 +1059,12 @@
     [UIView commitAnimations];
 }
 
+
+
 #pragma mark - Scroll view delegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [self.inputField resignFirstResponder];
+    [self.inputTextView resignFirstResponder];
 }
 
 

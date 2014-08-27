@@ -14,6 +14,7 @@
 #import "MJRefreshFooterView.h"
 #import "../Utils/PhotoGetter.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
+#import "../UIView/MTMessageTextView.h"
 
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate>
 
@@ -24,7 +25,8 @@
 @property (strong, nonatomic)  UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
-@property (strong, nonatomic) IBOutlet UITextField *inputField;
+//@property (strong, nonatomic) IBOutlet UITextField *inputField;
+@property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
 @property (strong, nonatomic) IBOutlet UIView *moreView;
 @property (strong, nonatomic) IBOutlet UIView *optionView;

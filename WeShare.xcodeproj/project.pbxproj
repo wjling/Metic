@@ -128,6 +128,7 @@
 		08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699A19541F3A00F80F3F /* UIProgressView+AFNetworking.m */; };
 		08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699C19541F3A00F80F3F /* UIRefreshControl+AFNetworking.m */; };
 		08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */; };
+		08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F7989F19AE449D002BA684 /* MTMessageTextView.m */; };
 		08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */; };
 		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
 		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
@@ -527,6 +528,8 @@
 		08DB699C19541F3A00F80F3F /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		08DB699D19541F3A00F80F3F /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		08F7989E19AE449D002BA684 /* MTMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMessageTextView.h; sourceTree = "<group>"; };
+		08F7989F19AE449D002BA684 /* MTMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMessageTextView.m; sourceTree = "<group>"; };
 		08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event2DcodeViewController.h; sourceTree = "<group>"; };
 		08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event2DcodeViewController.m; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1157,6 +1160,15 @@
 			path = "UIKit+AFNetworking";
 			sourceTree = "<group>";
 		};
+		08F7989D19AE449D002BA684 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				08F7989E19AE449D002BA684 /* MTMessageTextView.h */,
+				08F7989F19AE449D002BA684 /* MTMessageTextView.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
 		48151F14194947EB009E156E /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -1415,6 +1427,7 @@
 		51581D291933575300943606 /* WeShare */ = {
 			isa = PBXGroup;
 			children = (
+				08F7989D19AE449D002BA684 /* UIView */,
 				087759BB19A81B670034BB58 /* Category */,
 				04CB1B7C1977760200BC083C /* Custom Wedgets */,
 				08DB696C19541F3A00F80F3F /* AFNetworking */,
@@ -1708,6 +1721,7 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
+				08F798A319AE44BF002BA684 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1888,6 +1902,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		08F798A319AE44BF002BA684 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1999,6 +2029,7 @@
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
 				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
+				08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
 				510D459E196E8A960081672A /* SDWebImageManager.m in Sources */,

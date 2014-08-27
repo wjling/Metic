@@ -114,7 +114,14 @@
             if (_textField){
                 _textField.text = [_textField.text stringByAppendingString:emotionExpression];
             }
-            if (_textView) _textView.text = [_textView.text stringByAppendingString:emotionExpression];
+            if (_textView){
+                _textView.text = [_textView.text stringByAppendingString:emotionExpression];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    CGPoint bottomOffset = CGPointMake(0.0f, _textView.contentSize.height - _textView.bounds.size.height);
+                    [_textView setContentOffset:bottomOffset animated:YES];
+                });
+                
+            }
         }
     }else
     {

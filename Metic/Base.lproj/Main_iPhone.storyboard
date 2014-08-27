@@ -2958,15 +2958,11 @@
                                 <color key="separatorColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5U-Ih-F1e">
-                                <rect key="frame" x="0.0" y="534" width="320" height="35"/>
+                                <rect key="frame" x="0.0" y="524" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="输入框" translatesAutoresizingMaskIntoConstraints="NO" id="sQ8-MQ-vf4">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uux-SG-p2U">
-                                        <rect key="frame" x="5" y="5" width="24" height="24"/>
+                                        <rect key="frame" x="5" y="10" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="button_emotion">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -2976,16 +2972,10 @@
                                             <action selector="button_Emotionpress:" destination="cGW-AM-0QH" eventType="touchUpInside" id="12U-1R-mrc"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oLS-E0-JBf">
-                                        <rect key="frame" x="38" y="0.0" width="250" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qs8-jC-KCY">
-                                        <rect key="frame" x="285" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal">
+                                        <state key="normal" image="输入框">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -2995,7 +2985,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="ieU-wN-f0B"/>
+                                    <constraint firstAttribute="height" constant="45" id="ieU-wN-f0B"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="08Q-Er-FO7" customClass="emotion_Keyboard">
@@ -3068,7 +3058,7 @@
                             <constraint firstItem="08Q-Er-FO7" firstAttribute="top" secondItem="PLs-O3-Ixn" secondAttribute="bottom" id="G0m-vH-PPt"/>
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="c5U-Ih-F1e" secondAttribute="bottom" id="Nv1-GW-LUg"/>
                             <constraint firstItem="sad-WS-38C" firstAttribute="top" secondItem="R69-RB-EZ5" secondAttribute="bottom" id="QQq-Xe-gnu"/>
-                            <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="35" id="uxe-yV-kTm"/>
+                            <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="45" id="uxe-yV-kTm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
@@ -3090,7 +3080,6 @@
                         <outlet property="button_Emotion" destination="uux-SG-p2U" id="1gm-sF-n8p"/>
                         <outlet property="commentView" destination="c5U-Ih-F1e" id="FBR-ZQ-EkW"/>
                         <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
-                        <outlet property="inputField" destination="oLS-E0-JBf" id="WdI-tt-BYf"/>
                         <outlet property="moreView" destination="goc-b1-4sh" id="LdL-1t-jHa"/>
                         <outlet property="optionView" destination="zec-bo-Dqj" id="VGI-PA-Hj1"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
@@ -4833,7 +4822,7 @@
         <image name="登录界面按钮按下效果" width="580" height="76"/>
         <image name="白色箭头" width="17" height="17"/>
         <image name="系统消息图标" width="45" height="45"/>
-        <image name="输入框" width="320" height="35"/>
+        <image name="输入框" width="35" height="35"/>
         <image name="输入框-1" width="295" height="43"/>
         <image name="默认用户头像" width="125" height="125"/>
     </resources>
