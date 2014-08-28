@@ -4103,23 +4103,23 @@
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXw-gB-Z6b">
-                                <rect key="frame" x="0.0" y="459" width="320" height="35"/>
+                                <rect key="frame" x="0.0" y="449" width="320" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="输入框" translatesAutoresizingMaskIntoConstraints="NO" id="WWX-8I-ixf">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="35"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfT-Pi-FEW">
+                                        <rect key="frame" x="5" y="10" width="24" height="24"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <textField opaque="NO" clipsSubviews="YES" tag="10" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kur-KZ-z7u">
-                                        <rect key="frame" x="12" y="0.0" width="280" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
+                                        <state key="normal" image="button_emotion">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="button_Emotionpress:" destination="vtf-A0-qgM" eventType="touchUpInside" id="H5U-bx-5NB"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xha-s1-rDN">
-                                        <rect key="frame" x="285" y="0.0" width="35" height="35"/>
+                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal">
+                                        <state key="normal" image="输入框">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -4130,7 +4130,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="35" id="fYq-1d-eXf"/>
+                                    <constraint firstAttribute="height" constant="45" id="fYq-1d-eXf"/>
                                     <constraint firstAttribute="width" constant="320" id="gAJ-VE-pLL"/>
                                 </constraints>
                             </view>
@@ -4245,6 +4245,7 @@
                         <outlet property="commentView" destination="cXw-gB-Z6b" id="QT8-Ce-A4n"/>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
                         <outlet property="download_button" destination="CLr-x0-Y7a" id="vrd-CL-xYV"/>
+                        <outlet property="emotionKeyboard" destination="oGJ-mZ-er7" id="4az-Id-TBV"/>
                         <outlet property="good_button" destination="pZT-L4-2hm" id="Pcs-y9-BHb"/>
                         <outlet property="tableView" destination="wJW-xi-MsO" id="d3J-vv-iVx"/>
                         <outletCollection property="buttons" destination="pZT-L4-2hm" id="b9j-Fx-rOr"/>

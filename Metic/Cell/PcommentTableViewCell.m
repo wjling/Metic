@@ -15,6 +15,7 @@
 {
     // Initialization code
     //长按手势
+    [_comment setDisableThreeCommon:YES];
     UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
     [self addGestureRecognizer:longRecognizer];
 }

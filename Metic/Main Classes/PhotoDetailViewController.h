@@ -10,8 +10,9 @@
 #import "PhotoGetter.h"
 #import "../MJRefresh/MJRefreshFooterView.h"
 #import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
+#import "../UIView/MTMessageTextView.h"
 
-@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate>
+@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate>
 @property (nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
@@ -23,11 +24,14 @@
 @property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
+@property (strong, nonatomic) IBOutlet UIView *commentView;
+@property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property int type;
+@property BOOL isEmotionOpen;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;
 - (IBAction)share:(id)sender;
 - (IBAction)download:(id)sender;
 - (IBAction)publishComment:(id)sender;
-
+- (IBAction)button_Emotionpress:(id)sender;
 @end
