@@ -853,12 +853,14 @@
                                 break;
                             default:
                             {
+                                [self.delete_button setEnabled:YES];
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];
                             }
                         }
                         
                     }else{
+                        [self.delete_button setEnabled:YES];
                         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
                     }
                     
@@ -882,7 +884,9 @@
     if (status){
         UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
         [alert setTag:1];
+        [self.delete_button setEnabled:YES];
     }else{
+        [self.delete_button setEnabled:YES];
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
     }
 
