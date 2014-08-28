@@ -10,6 +10,7 @@
 #import "../Utils/HttpSender.h"
 #import "../Utils/PhotoGetter.h"
 #import "UIImageView+WebCache.h"
+#import "PictureWallViewController.h"
 
 @interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate,HttpSenderDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
@@ -20,6 +21,7 @@
 @property(nonatomic,strong)NSNumber* photoId;
 @property(nonatomic,strong)NSNumber* eventId;
 @property(nonatomic,strong)NSString* eventName;
+@property (strong, nonatomic) PictureWallViewController* controller;
 @property long photoIndex;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;

@@ -525,6 +525,7 @@
             nextViewController.photoIndex = self.seletedPhotoIndex;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
+            nextViewController.controller = self;
         }
         if ([segue.destinationViewController isKindOfClass:[PhotoUploadViewController class]]) {
             PhotoUploadViewController *nextViewController = segue.destinationViewController;

@@ -165,7 +165,41 @@
     [op start];
 }
 
-
+-(void)deletePhoto:(NSString*)path
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:@"DELETE" forKey:@"method"];
+    [dictionary setValue:path forKey:@"object"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    httpURL = (NSString*)[response1 valueForKey:@"url"];
+                    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+                    AFHTTPRequestOperation *op = [manager DELETE:httpURL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                        [self.mDelegate finishwithOperationStatus:YES type:3 data:nil path:mpath];
+                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                        [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
+                    }];
+                    [op start];
+                }
+                    break;
+                default:{
+                    [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
+                }
+            }
+        }else{
+            [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
+        }
+    }];
+}
 
 #pragma mark - HttpSenderDelegate
 

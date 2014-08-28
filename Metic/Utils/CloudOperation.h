@@ -63,5 +63,6 @@
 
 //删除云存储上的图片
 -(void)deletefile:(NSString*)url;
+-(void)deletePhoto:(NSString*)path;
 
 @end

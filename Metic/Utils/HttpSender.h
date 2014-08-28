@@ -45,7 +45,7 @@ typedef void (^FinishBlock)(NSData* rData);
 //向服务器传送数据（jsonData）,操作码为operationCode，操作码可从AppConstants.h里面查找
 -(void)sendMessage:(NSData*)jsonData withOperationCode:(int)operationCode;
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
--(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code;
+-(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
 
 -(void)sendFeedBackMessage:(NSDictionary*)json;
 

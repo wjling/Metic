@@ -291,7 +291,7 @@
         [dictionary setValue:self.textInput.text forKey:@"specification"];
         
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO];
+        [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:nil];
         
         
         

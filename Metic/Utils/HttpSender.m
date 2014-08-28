@@ -187,8 +187,9 @@
     return resultCode;
 }
 
--(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code
+-(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
+    self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
     httpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
@@ -198,8 +199,13 @@
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
+    if ([dictionary valueForKey:@"photos"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
+    if ([dictionary valueForKey:@"specification"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
+    if ([dictionary valueForKey:@"photo_id"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"photo_id",[dictionary valueForKey:@"photo_id"]]];
+    
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];

@@ -56,8 +56,6 @@
     self.tableView.dataSource = self;
     _emotionKeyboard.textView = _inputTextView;
     self.pcomment_list = [[NSMutableArray alloc]init];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     //[self initButtons];
     [self setGoodButton];
     //初始化上拉加载更多
@@ -73,6 +71,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.inputTextView resignFirstResponder];
     [MobClick beginLogPageView:@"图片主页"];
     self.sequence = [NSNumber numberWithInt:0];
@@ -83,6 +83,8 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"图片主页"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -252,6 +254,19 @@
     [self.download_button setEnabled:NO];
     UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
+}
+
+-(void)deletePhoto:(UIButton*)button
+{
+    [button setEnabled:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (button) {
+            [button setEnabled:YES];
+        }
+    });
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这张照片？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
+    
 }
 
 -(void)resendComment:(id)sender
@@ -433,6 +448,16 @@
     [self.tableView reloadData];
 }
 
+- (void)deletePhotoInfoFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
+    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
+    [sql closeMyDB];
+}
+
 
 //#pragma mark - UIScrollViewDelegate
 //-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -442,6 +467,7 @@
 //        //[self.view sendSubviewToBack:self.commentView];
 //    }
 //}
+
 
 
 #pragma mark - HttpSenderDelegate
@@ -544,9 +570,8 @@
             [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            
-            
-            //[cell addSubview:self.delete_button];
+            [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:self.delete_button];
         }
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
@@ -629,7 +654,6 @@
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         [cell addSubview:backguand];
         [cell sendSubviewToBack:backguand];
-        //[cell addSubview:cell1];
         [cell addSubview:comment];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setUserInteractionEnabled:YES];
@@ -787,5 +811,82 @@
         [_commentView setFrame:frame];
     }
 }
+
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (alertView.tag) {
+        case 0:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+                [dictionary setValue:self.eventId forKey:@"event_id"];
+                [dictionary setValue:@"delete" forKey:@"cmd"];
+                [dictionary setValue:self.photoId forKey:@"photo_id"];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
+                    if (rData) {
+                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
+                        NSLog(@"received Data: %@",temp);
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case NORMAL_REPLY:
+                            {
+                                //百度云 删除
+                                CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+                                [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
+                                //数据库 删除
+                                [self deletePhotoInfoFromDB];
+                                
+                                
+                            }
+                                break;
+                            default:
+                            {
+                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+                                [alert setTag:1];
+                            }
+                        }
+                        
+                    }else{
+                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                    }
+                    
+                }];
+            }
+
+        }
+            break;
+        case 1:{
+            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
+            [self.navigationController popToViewController:self.controller animated:YES];
+        }
+        default:
+            break;
+    }
+}
+
+#pragma mark - CloudOperationDelegate
+-(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
+{
+    if (status){
+        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+        [alert setTag:1];
+    }else{
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+    }
+
+}
+
 
 @end
