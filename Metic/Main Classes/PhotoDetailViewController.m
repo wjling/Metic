@@ -196,20 +196,10 @@
 
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
-    float height = 0;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-    //设置自动行数与字符换行，为0标示无限制
-    [label setNumberOfLines:0];
-    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
     UIFont *font = [UIFont systemFontOfSize:fsize];
-    label.font = font;
-    
-    CGSize size = CGSizeMake(width,CGFLOAT_MAX);//LableWight标签宽度，固定的
-    //计算实际frame大小，并将label的frame变成实际大小
-    
-    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
-    height = labelsize.height;
-    return height < 25? 25:height*1.3;
+    CGSize size = CGSizeMake(width,2000);
+    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
+    return ceil(labelRect.size.height)*1.25;
 }
 
 - (void)pullMainCommentFromAir

@@ -172,20 +172,10 @@
 
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
-    float height = 0;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-    //设置自动行数与字符换行，为0标示无限制
-    [label setNumberOfLines:0];
-    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
     UIFont *font = [UIFont systemFontOfSize:fsize];
-    label.font = font;
-    
-    CGSize size = CGSizeMake(width,CGFLOAT_MAX);//LableWight标签宽度，固定的
-    //计算实际frame大小，并将label的frame变成实际大小
-    
-    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
-    height = labelsize.height;
-    return height < 8.0? 8.0:height+5;
+    CGSize size = CGSizeMake(width,2000);
+    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
+    return ceil(labelRect.size.height)*1.25;
 }
 
 
@@ -849,7 +839,6 @@
         
         textView.emojiText = text;
         
-        
         frame = cell.frame;
         frame.size.height = 60 + commentHeight;
         [cell setFrame:frame];
@@ -950,15 +939,14 @@
             [cell.resend_Button setHidden:YES];
         }
 
-        
         float commentHeight = [self calculateTextHeight:text width:265 fontSize:SubCFontSize];
         CGRect frame = cell.frame;
-        frame.size.height = commentHeight+15;
+        frame.size.height = commentHeight+0.5f;
         [cell setFrame:frame];
         frame = [cell viewWithTag:100].frame;
-        frame.size.height =  commentHeight+14.5f;
+        frame.size.height =  commentHeight;
         [[cell viewWithTag:100] setFrame:frame];
-        [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight+15)];
+        [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = [subCom valueForKey:@"author"];
@@ -997,7 +985,7 @@
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
         float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:SubCFontSize];
-        return commentHeight+15;
+        return commentHeight+0.5;
     }
 }
 
