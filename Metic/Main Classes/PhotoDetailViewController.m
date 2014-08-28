@@ -327,7 +327,12 @@
         return;
     }
     [self.inputTextView resignFirstResponder];
+    if (_isEmotionOpen) [self button_Emotionpress:nil];
     self.inputTextView.text = @"";
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self textViewDidChange:nil];
+        self.inputTextView.text = @"";
+    });
     NSLog(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
@@ -776,6 +781,20 @@
         //得到分享到的微博平台名
         NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+}
+#pragma mark - UITextView Delegate
+-(void)textViewDidChange:(UITextView *)textView
+{
+    CGRect frame = _inputTextView.frame;
+    float change = _inputTextView.contentSize.height - frame.size.height;
+    if (change != 0 && _inputTextView.contentSize.height < 120) {
+        frame.size.height = _inputTextView.contentSize.height;
+        [_inputTextView setFrame:frame];
+        frame = _commentView.frame;
+        frame.origin.y -= change;
+        frame.size.height += change;
+        [_commentView setFrame:frame];
     }
 }
 

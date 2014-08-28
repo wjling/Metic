@@ -35,7 +35,7 @@
 }
 
 + (NSUInteger)maxCharactersPerLine {
-    return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 33 : 109;
+    return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 26 : 109;
 }
 
 + (NSUInteger)numberOfLinesForMessage:(NSString *)text {

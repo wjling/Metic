@@ -72,8 +72,6 @@
 {
     [super viewDidLoad];
     [self initUI];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.commentIds = [[NSMutableArray alloc]init];
@@ -116,6 +114,10 @@
     [_optionView setHidden:YES];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -129,6 +131,15 @@
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"活动详情"];
     [self.inputTextView resignFirstResponder];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+}
+
+-(void)dealloc
+{
+    
 }
 
 -(void)initUI
@@ -156,9 +167,7 @@
     _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     _inputTextView.layer.borderWidth = 0.65f;
     _inputTextView.layer.cornerRadius = 6.0f;
-
-
-    
+   
 }
 
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
@@ -527,9 +536,8 @@
 
 
 - (IBAction)publishComment:(id)sender {
-    NSString *comment = _inputTextView.text;// ((UITextField*)[self.inputField viewWithTag:1]).text;
+    NSString *comment = _inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
-        //((UITextField*)[self.inputField viewWithTag:1]).text = @"";
         _inputTextView.text = @"";
         return;
     }
@@ -589,7 +597,10 @@
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self textChangedExt:nil];
+        self.inputTextView.text = @"";
+    });
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -1139,4 +1150,20 @@
         }
     }
 }
+
+-(void)textChangedExt:(NSNotification *)notification
+{
+    CGRect frame = _inputTextView.frame;
+    float change = _inputTextView.contentSize.height - frame.size.height;
+    if (change != 0 && _inputTextView.contentSize.height < 120) {
+        frame.size.height = _inputTextView.contentSize.height;
+        [_inputTextView setFrame:frame];
+        frame = _commentView.frame;
+        frame.origin.y -= change;
+        frame.size.height += change;
+        [_commentView setFrame:frame];
+    }
+}
+
+
 @end
