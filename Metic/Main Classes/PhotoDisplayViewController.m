@@ -294,7 +294,6 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -359,7 +358,7 @@
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
             nextViewController.eventId = _eventId;
             nextViewController.event = self.eventName;
-            nextViewController.type = 2;
+            nextViewController.type = 3;
 
         }
         

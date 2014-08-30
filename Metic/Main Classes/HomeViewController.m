@@ -223,11 +223,9 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
+    
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-    if ([response1 isKindOfClass:[NSDictionary class]]) NSLog(@"不可变");
-    if ([response1 isKindOfClass:[NSMutableDictionary class]]) NSLog(@"可变");
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
         case NORMAL_REPLY:

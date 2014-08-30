@@ -2194,6 +2194,7 @@
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
+                                            <action selector="confirm:" destination="RNm-zE-pmQ" eventType="touchUpInside" id="Vyr-hP-AbE"/>
                                             <action selector="confirmBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="SIc-0P-gqr"/>
                                         </connections>
                                     </button>
@@ -2204,6 +2205,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="confirm_Button" destination="MV8-7z-9XZ" id="aC9-b0-xHt"/>
                         <outlet property="textView" destination="czn-HU-HZh" id="C0u-YY-ve9"/>
                         <outlet property="titleTextField" destination="BM1-xx-m6P" id="EnU-nP-jHd"/>
                     </connections>

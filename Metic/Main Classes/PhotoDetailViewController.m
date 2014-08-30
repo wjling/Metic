@@ -475,7 +475,6 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -835,7 +834,6 @@
                 [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
                     if (rData) {
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                        rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
                         NSLog(@"received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSNumber *cmd = [response1 valueForKey:@"cmd"];

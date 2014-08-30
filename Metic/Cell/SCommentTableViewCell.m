@@ -47,7 +47,6 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    rData = [temp dataUsingEncoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -174,7 +173,7 @@
             viewcontroller.authorId = self.authorid;
             viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
             
-            viewcontroller.type = 3;
+            viewcontroller.type = 2;
             [self.controller.navigationController pushViewController:viewcontroller animated:YES];
         }
         

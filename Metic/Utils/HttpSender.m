@@ -180,6 +180,9 @@
         case 40:
             resultCode = @"avatar";
             break;
+        case 41:
+            resultCode = @"complain";
+            break;
         default:
             resultCode = @"json";
             break;

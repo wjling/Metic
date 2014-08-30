@@ -119,7 +119,7 @@
             viewcontroller.authorId = self.authorId;
             viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
             
-            viewcontroller.type = 3;
+            viewcontroller.type = 2;
             [self.controller.navigationController pushViewController:viewcontroller animated:YES];
         }
         
