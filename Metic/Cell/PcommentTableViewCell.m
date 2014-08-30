@@ -8,6 +8,8 @@
 
 #import "PcommentTableViewCell.h"
 #import "../Main Classes/Report/ReportViewController.h"
+#import "../Main Classes/UserInfo/UserInfoViewController.h"
+#import "../Main Classes/FriendInfoViewController.h"
 
 @implementation PcommentTableViewCell
 
@@ -107,6 +109,20 @@
     });
 }
 
-
+- (IBAction)pushToFriendView:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [_controller.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = self.authorId;
+        [_controller.navigationController pushViewController:friendView animated:YES];
+    }
+	
+}
 
 @end

@@ -28,6 +28,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *info_tableView;
 @property (strong, nonatomic) NameSettingViewController* name_vc;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
+@property BOOL needPopBack;
 
 -(void)refresh;
 

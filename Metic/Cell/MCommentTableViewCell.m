@@ -9,6 +9,7 @@
 #import "MCommentTableViewCell.h"
 #import "FriendInfoViewController.h"
 #import "ReportViewController.h"
+#import "../Main Classes/UserInfo/UserInfoViewController.h"
 
 @interface MCommentTableViewCell ()
 
@@ -44,9 +45,17 @@
 - (IBAction)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-	FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-    friendView.fid = self.authorId;
-    [_controller.navigationController pushViewController:friendView animated:YES];
+    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [_controller.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = self.authorId;
+        [_controller.navigationController pushViewController:friendView animated:YES];
+    }
+	
 }
 
 -(void)showOption:(UIGestureRecognizer*)sender

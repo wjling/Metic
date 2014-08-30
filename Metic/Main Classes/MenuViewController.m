@@ -11,6 +11,7 @@
 #import "NotificationsViewController.h"
 #import "EventInvitationViewController.h"
 #import "NearbyEventViewController.h"
+#import "UserInfo/UserInfoViewController.h"
 #import "MTUser.h"
 
 
@@ -178,8 +179,9 @@
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
 	
-	UIViewController *vc ;
+	UserInfoViewController *vc ;
     vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+    vc.needPopBack = NO;
     [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 
 }

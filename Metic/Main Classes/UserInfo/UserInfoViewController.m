@@ -43,7 +43,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [CommonUtils addLeftButton:self isFirstPage:NO];
+    [CommonUtils addLeftButton:self isFirstPage:_needPopBack];
     [self initParams];
 }
 
@@ -565,7 +565,7 @@
 #pragma mark - SlideNavigationControllerDelegate
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
-	return YES;
+	return !_needPopBack;
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayRightMenu
