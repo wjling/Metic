@@ -10,6 +10,9 @@
 #import "../../Source/security/SFHFKeychainUtils.h"
 
 @interface SystemSettingsViewController ()
+{
+    NSString* currentVersion;
+}
 
 @end
 
@@ -149,12 +152,44 @@
 
 -(void)updateCheck
 {
+    currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSLog(@"version: %@",currentVersion);
     
+    NSString *URL = @"http://itunes.apple.com/lookup?id=909214472";
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:URL]];
+    [request setHTTPMethod:@"POST"];
+    NSHTTPURLResponse *urlResponse = nil;
+    NSError *error = nil;
+    NSData *recervedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    
+    NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [CommonUtils NSDictionaryWithNSString:results];
+    NSLog(@"get update dictionary: %@",dic);
+    NSArray *infoArray = [dic objectForKey:@"results"];
+    if ([infoArray count]) {
+        NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+        NSString *lastVersion = [releaseInfo objectForKey:@"version"];
+        
+        if (![lastVersion isEqualToString:currentVersion]) {
+            //trackViewURL = [releaseInfo objectForKey:@"trackVireUrl"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+            alert.tag = 10000;
+            [alert show];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"此版本为最新版本" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+            alert.tag = 10001;
+            [alert show];
+        }
+    }
+
 }
 
 -(void)aboutApp
 {
-    
+    [self performSegueWithIdentifier:@"systemsettings_about" sender:self];
 }
 
 -(void)quit
@@ -177,37 +212,47 @@
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        NSLog(@"退出程序");
-        [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        NSLog(@"Metic被用户残忍杀死了");
-        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-        if ([MTUser sharedInstance]) {
-            [((AppDelegate *)[[UIApplication sharedApplication] delegate]) saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+    if (alertView == quitAlert) {
+        if (buttonIndex == 1) {
+            NSLog(@"退出程序");
+            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            NSLog(@"Metic被用户残忍杀死了");
+            NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+            if ([MTUser sharedInstance]) {
+                [((AppDelegate *)[[UIApplication sharedApplication] delegate]) saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+            }
+            [UIView beginAnimations:@"exitApplication" context:nil];
+            [UIView setAnimationDuration:0.5];
+            [UIView setAnimationDelegate:self];
+            //        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+            [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view.window cache:NO];
+            [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
+            self.view.window.bounds = CGRectMake(0, 0, 0, 0);
+            [(SlideNavigationController*)self.navigationController leftMenu].view.hidden = YES;
+            //        [(AppDelegate*)[UIApplication sharedApplication].delegate window].bounds = CGRectMake(0, 0, 0, 0);
+            [UIView commitAnimations];
+            //        exit(0);
+            
         }
-        [UIView beginAnimations:@"exitApplication" context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-//        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-        [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view.window cache:NO];
-        [UIView setAnimationDidStopSelector:@selector(animationFinished:finished:context:)];
-        self.view.window.bounds = CGRectMake(0, 0, 0, 0);
-        [(SlideNavigationController*)self.navigationController leftMenu].view.hidden = YES;
-//        [(AppDelegate*)[UIApplication sharedApplication].delegate window].bounds = CGRectMake(0, 0, 0, 0);
-        [UIView commitAnimations];
-//        exit(0);
-        
+        else if (buttonIndex == 2)
+        {
+            NSLog(@"切换账号");
+            ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
+            [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
+            [[MTUser alloc]init];
+            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+
     }
-    else if (buttonIndex == 2)
+    else if (alertView.tag == 10000)
     {
-        NSLog(@"切换账号");
-        ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
-        [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
-        [[MTUser alloc]init];
-        [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        if (buttonIndex==1) {
+            NSURL *url = [NSURL URLWithString:@"https://itunes.apple.com"];
+            [[UIApplication sharedApplication]openURL:url];
+        }
     }
 }
 
@@ -372,11 +417,11 @@
         }
         else if (row == 1)
         {
-            
+            [self updateCheck];
         }
         else if (row == 2)
         {
-            
+            [self aboutApp];
         }
     }
     else if (section == 3)

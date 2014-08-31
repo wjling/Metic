@@ -14,6 +14,7 @@
 #import "AppConstants.h"
 #import "InputHandleView.h"
 #import "WelcomePageViewController.h"
+#import "FillinInfoViewController.h"
 
 @interface LoginViewController : UIViewController <InputHandleViewDelegate,HttpSenderDelegate>
 
@@ -30,7 +31,7 @@
 @property (nonatomic)BOOL fromRegister;
 @property (strong,nonatomic) NSString* text_userName;
 @property (strong,nonatomic) NSString* text_password;
-
+@property (strong, nonatomic) NSNumber* gender; //用于注册后的信息
 
 -(void)login;
 - (BOOL)isTextFieldEmpty;

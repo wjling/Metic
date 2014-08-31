@@ -12,6 +12,7 @@
 @interface RegisterViewController ()
 {
     BOOL registerSucceeded;
+    NSNumber* gender;
 }
 
 @end
@@ -74,27 +75,27 @@
     [self.genderRoot_view addSubview:female_button];
     
     rootView.myDelegate = self;
-    textField_confromPassword.delegate = rootView;
+//    textField_confromPassword.delegate = rootView;
     textField_email.delegate = rootView;
     textField_password.delegate = rootView;
     textField_userName.delegate = rootView;
     
-    textField_confromPassword.placeholder = @"请再次输入密码";
+//    textField_confromPassword.placeholder = @"请再次输入密码";
     textField_email.placeholder = @"请输入您的邮箱";
     textField_password.placeholder = @"请输入您的密码，至少6位";
     textField_userName.placeholder = @"请输入您的昵称";
     
     textField_email.keyboardType = UIKeyboardTypeEmailAddress;
     textField_password.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-    textField_confromPassword.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+//    textField_confromPassword.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     
     textField_password.secureTextEntry = YES;
-    textField_confromPassword.secureTextEntry = YES;
+//    textField_confromPassword.secureTextEntry = YES;
     
     textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField_email.clearButtonMode = UITextFieldViewModeWhileEditing;
-    textField_confromPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+//    textField_confromPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
 
 }
 
@@ -125,13 +126,16 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if (registerSucceeded) {
-        if ([segue.destinationViewController isKindOfClass:[LoginViewController class]]) {
-            LoginViewController* vc = segue.destinationViewController;
+    
+    if ([segue.destinationViewController isKindOfClass:[LoginViewController class]]) {
+        LoginViewController* vc = segue.destinationViewController;
+        if (registerSucceeded) {
             vc.text_userName = self.textField_email.text;
             vc.text_password = self.textField_password.text;
-            vc.fromRegister = YES;
+            vc.gender = gender;
         }
+        vc.fromRegister = YES;
+        NSLog(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,vc.fromRegister);
     }
     
 }
@@ -148,14 +152,17 @@
 }
 
 
+
+
 #pragma mark - button click
 -(IBAction)signUpButtonClicked:(id)sender
 {
     NSString* email = [textField_email text];
     NSString* password = [textField_password text];
-    NSString* conformPassword = [textField_confromPassword text];
-    NSString* userName = [textField_userName text];
-    NSNumber* gender;
+//    NSString* conformPassword = [textField_confromPassword text];
+//    NSString* userName = [textField_userName text];
+    NSString* userName = email;
+    
     NSString* salt = [CommonUtils randomStringWithLength:6];
     
     if (male_button.selected) {
@@ -166,17 +173,17 @@
         gender = [NSNumber numberWithInt:0];
     }
     //    NSLog(@"random String: %@",salt);
-    if (password.length<6) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong password length" WithDelegate:self WithCancelTitle:@"OK"];
-    }
-    else if (![CommonUtils isEmailValid:email]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong email format" WithDelegate:self WithCancelTitle:@"OK"];
-    }
-    else if (![conformPassword isEqualToString:password])
-    {
-        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Password conformed error" WithDelegate:self WithCancelTitle:@"OK"];
-    }
-    else
+//    if (password.length<6) {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong password length" WithDelegate:self WithCancelTitle:@"OK"];
+//    }
+//    else if (![CommonUtils isEmailValid:email]) {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong email format" WithDelegate:self WithCancelTitle:@"OK"];
+//    }
+//    else if (![conformPassword isEqualToString:password])
+//    {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Password conformed error" WithDelegate:self WithCancelTitle:@"OK"];
+//    }
+//    else
     {
         NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
         NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",md5_str,@"passwd",userName,@"name",gender,@"gender",salt,@"salt",nil];
@@ -186,6 +193,9 @@
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:REGISTER];
+//        [self jumpToFillinInfo];
+//        registerSucceeded = YES;
+//        [self jumpToLogin];
     }
     
     
@@ -197,6 +207,7 @@
 
 - (IBAction)backToLoginButtonClicked:(id)sender
 {
+    
     [self jumpToLogin];
 }
 
@@ -225,8 +236,18 @@
 }
 
 - (IBAction)step_next:(id)sender {
-    CGPoint offset = CGPointMake(0, 201);
-    [self.scrollView setContentOffset:offset animated:YES];
+    if (textField_password.text.length<6) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少为5" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    else if (![CommonUtils isEmailValid:textField_email.text]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"账号请填写正确的邮箱格式" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    else
+    {
+        CGPoint offset = CGPointMake(0, 201);
+        [self.scrollView setContentOffset:offset animated:YES];
+    }
+
 }
 
 - (IBAction)genderBtnClicked:(UIButton *)sender {
@@ -257,13 +278,24 @@
             NSLog(@"register succeeded");
             registerSucceeded = YES;
             [self jumpToLogin];
+//            [self jumpToFillinInfo];
             break;
         case USER_EXIST:
+        {
             NSLog(@"user existed");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
             break;
+        }
         default:
             break;
     }
+}
+
+-(void)alertViewDismiss:(NSTimer*)timer
+{
+    [[timer userInfo] dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 

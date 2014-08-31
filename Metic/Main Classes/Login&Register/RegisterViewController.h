@@ -12,6 +12,7 @@
 #import "AppConstants.h"
 #import "InputHandleView.h"
 #import "LoginViewController.h"
+#import "FillinInfoViewController.h"
 
 @interface RegisterViewController : UIViewController <InputHandleViewDelegate, HttpSenderDelegate,UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField_email;
