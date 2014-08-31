@@ -86,6 +86,7 @@
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
+            NSLog(@"个人描述修改成功");
             [MTUser sharedInstance].sign = newSign;
             [self.navigationController popViewControllerAnimated:YES];
         }

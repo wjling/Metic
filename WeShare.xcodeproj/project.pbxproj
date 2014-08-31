@@ -13,6 +13,10 @@
 		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
 		0435EEEF19A638C2003BB2F6 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */; };
 		0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */; };
+		0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */; };
+		0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1819AF702F003BB2F6 /* LoginViewController.m */; };
+		0435EF1C19AF702F003BB2F6 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */; };
+		0435EF2019B3585B003BB2F6 /* AboutPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1F19B3585B003BB2F6 /* AboutPageViewController.m */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -217,8 +221,6 @@
 		519C65991989F61B00710B26 /* 7夜店.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65931989F61B00710B26 /* 7夜店.jpg */; };
 		519C6602198B8E8000710B26 /* EventInvitationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 519C6600198B8E8000710B26 /* EventInvitationTableViewCell.m */; };
 		519C6603198B8E8000710B26 /* EventInvitationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 519C6601198B8E8000710B26 /* EventInvitationTableViewCell.xib */; };
-		51A01D0D19339EE50043963F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0C19339EE50043963F /* LoginViewController.m */; };
-		51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D0F19339F0B0043963F /* RegisterViewController.m */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
 		51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DDBF7419A319B20051B88C /* libz.dylib */; };
@@ -284,6 +286,14 @@
 		04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoricalNotificationViewController.m; sourceTree = "<group>"; };
 		0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FillinInfoViewController.h; path = "Login&Register/FillinInfoViewController.h"; sourceTree = "<group>"; };
+		0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FillinInfoViewController.m; path = "Login&Register/FillinInfoViewController.m"; sourceTree = "<group>"; };
+		0435EF1719AF702F003BB2F6 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = "Login&Register/LoginViewController.h"; sourceTree = "<group>"; };
+		0435EF1819AF702F003BB2F6 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = "Login&Register/LoginViewController.m"; sourceTree = "<group>"; };
+		0435EF1919AF702F003BB2F6 /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterViewController.h; path = "Login&Register/RegisterViewController.h"; sourceTree = "<group>"; };
+		0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = "Login&Register/RegisterViewController.m"; sourceTree = "<group>"; };
+		0435EF1E19B3585B003BB2F6 /* AboutPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutPageViewController.h; path = SystemSettings/AboutPageViewController.h; sourceTree = "<group>"; };
+		0435EF1F19B3585B003BB2F6 /* AboutPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutPageViewController.m; path = SystemSettings/AboutPageViewController.m; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -687,10 +697,6 @@
 		519C65FF198B8E8000710B26 /* EventInvitationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventInvitationTableViewCell.h; sourceTree = "<group>"; };
 		519C6600198B8E8000710B26 /* EventInvitationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInvitationTableViewCell.m; sourceTree = "<group>"; };
 		519C6601198B8E8000710B26 /* EventInvitationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventInvitationTableViewCell.xib; sourceTree = "<group>"; };
-		51A01D0B19339EE50043963F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		51A01D0C19339EE50043963F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		51A01D0E19339F0B0043963F /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
-		51A01D0F19339F0B0043963F /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		51A01D111933A1FF0043963F /* MTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUser.h; sourceTree = "<group>"; };
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
@@ -804,11 +810,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0435EF1119AF6DC1003BB2F6 /* Login&Register */ = {
+			isa = PBXGroup;
+			children = (
+				0435EF1719AF702F003BB2F6 /* LoginViewController.h */,
+				0435EF1819AF702F003BB2F6 /* LoginViewController.m */,
+				0435EF1919AF702F003BB2F6 /* RegisterViewController.h */,
+				0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */,
+				0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */,
+				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
+			);
+			name = "Login&Register";
+			sourceTree = "<group>";
+		};
 		04B22C3F1984F3F100B33B7C /* SystemSettings */ = {
 			isa = PBXGroup;
 			children = (
 				04B22C431984F43400B33B7C /* SystemSettingsViewController.h */,
 				04B22C441984F43400B33B7C /* SystemSettingsViewController.m */,
+				0435EF1E19B3585B003BB2F6 /* AboutPageViewController.h */,
+				0435EF1F19B3585B003BB2F6 /* AboutPageViewController.m */,
 			);
 			name = SystemSettings;
 			sourceTree = "<group>";
@@ -1471,6 +1492,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0435EF1119AF6DC1003BB2F6 /* Login&Register */,
 				08775A0119A8F6E40034BB58 /* Report */,
 				04BAF684199A55B200BF00E1 /* WelcomePage */,
 				04B22C3F1984F3F100B33B7C /* SystemSettings */,
@@ -1482,10 +1504,6 @@
 				51A01D121933A1FF0043963F /* MTUser.m */,
 				51A01D141934EB270043963F /* MTEvent.h */,
 				51A01D151934EB270043963F /* MTEvent.m */,
-				51A01D0E19339F0B0043963F /* RegisterViewController.h */,
-				51A01D0F19339F0B0043963F /* RegisterViewController.m */,
-				51A01D0B19339EE50043963F /* LoginViewController.h */,
-				51A01D0C19339EE50043963F /* LoginViewController.m */,
 				51581D74193361A500943606 /* MenuViewController.h */,
 				51581D75193361A500943606 /* MenuViewController.m */,
 				51581D5E19335A8700943606 /* HomeViewController.h */,
@@ -1893,6 +1911,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */,
 				04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */,
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
 				08DB69A319541F3A00F80F3F /* AFSecurityPolicy.m in Sources */,
@@ -1906,7 +1925,7 @@
 				519C6602198B8E8000710B26 /* EventInvitationTableViewCell.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
-				51A01D1019339F0B0043963F /* RegisterViewController.m in Sources */,
+				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
 				0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
 				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
@@ -1947,7 +1966,6 @@
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
 				04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */,
-				51A01D0D19339EE50043963F /* LoginViewController.m in Sources */,
 				08DB69AC19541F3A00F80F3F /* MCommentTableViewCell.m in Sources */,
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
@@ -1974,8 +1992,10 @@
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
 				08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */,
+				0435EF2019B3585B003BB2F6 /* AboutPageViewController.m in Sources */,
 				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
 				089337A7197579CE00AD940B /* PECropViewController.m in Sources */,
+				0435EF1C19AF702F003BB2F6 /* RegisterViewController.m in Sources */,
 				51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */,
 				510D459F196E8A960081672A /* SDWebImagePrefetcher.m in Sources */,
 				080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */,
