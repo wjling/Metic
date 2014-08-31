@@ -11,6 +11,7 @@
 #import "Event2DcodeViewController.h"
 #import "MTUser.h"
 #import "PictureWallViewController.h"
+#import "VideoWallViewController.h"
 #import "Report/ReportViewController.h"
 #import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/MCommentTableViewCell.h"
@@ -1116,13 +1117,17 @@
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
         }
+        if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
+            VideoWallViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.eventId;
+            nextViewController.eventName = [self.event valueForKey:@"subject"];
+        }
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = _eventId;
             nextViewController.canManage = _visibility;
             nextViewController.isMine = _isMine;
             nextViewController.visibility = _visibility;
-            
         }
         if ([segue.destinationViewController isKindOfClass:[Event2DcodeViewController class]]) {
             Event2DcodeViewController *nextViewController = segue.destinationViewController;

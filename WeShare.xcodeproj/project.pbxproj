@@ -128,6 +128,10 @@
 		08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699A19541F3A00F80F3F /* UIProgressView+AFNetworking.m */; };
 		08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699C19541F3A00F80F3F /* UIRefreshControl+AFNetworking.m */; };
 		08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */; };
+		08E92DD519B2CCD0002499BF /* VideoWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E92DD419B2CCD0002499BF /* VideoWallViewController.m */; };
+		08E92DDC19B2D354002499BF /* VideoWallTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E92DDA19B2D354002499BF /* VideoWallTableViewCell.m */; };
+		08E92DDD19B2D354002499BF /* VideoWallTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E92DDB19B2D354002499BF /* VideoWallTableViewCell.xib */; };
+		08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E92DDE19B37E1C002499BF /* MediaPlayer.framework */; };
 		08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F7989F19AE449D002BA684 /* MTMessageTextView.m */; };
 		08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */; };
 		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
@@ -528,6 +532,12 @@
 		08DB699C19541F3A00F80F3F /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		08DB699D19541F3A00F80F3F /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		08E92DD319B2CCD0002499BF /* VideoWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoWallViewController.h; path = Video/VideoWallViewController.h; sourceTree = "<group>"; };
+		08E92DD419B2CCD0002499BF /* VideoWallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoWallViewController.m; path = Video/VideoWallViewController.m; sourceTree = "<group>"; };
+		08E92DD919B2D354002499BF /* VideoWallTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoWallTableViewCell.h; sourceTree = "<group>"; };
+		08E92DDA19B2D354002499BF /* VideoWallTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoWallTableViewCell.m; sourceTree = "<group>"; };
+		08E92DDB19B2D354002499BF /* VideoWallTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoWallTableViewCell.xib; sourceTree = "<group>"; };
+		08E92DDE19B37E1C002499BF /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		08F7989E19AE449D002BA684 /* MTMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMessageTextView.h; sourceTree = "<group>"; };
 		08F7989F19AE449D002BA684 /* MTMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMessageTextView.m; sourceTree = "<group>"; };
 		08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event2DcodeViewController.h; sourceTree = "<group>"; };
@@ -762,6 +772,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */,
 				0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */,
 				51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */,
 				04B6F86519A0EEBB00229393 /* AddressBookUI.framework in Frameworks */,
@@ -1132,6 +1143,9 @@
 				51DFF380199A121900BF5FED /* UserTableViewCell.h */,
 				51DFF381199A121900BF5FED /* UserTableViewCell.m */,
 				51DFF382199A121900BF5FED /* UserTableViewCell.xib */,
+				08E92DD919B2D354002499BF /* VideoWallTableViewCell.h */,
+				08E92DDA19B2D354002499BF /* VideoWallTableViewCell.m */,
+				08E92DDB19B2D354002499BF /* VideoWallTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1158,6 +1172,15 @@
 				08DB699E19541F3A00F80F3F /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
+		08E92DD819B2CCDE002499BF /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				08E92DD319B2CCD0002499BF /* VideoWallViewController.h */,
+				08E92DD419B2CCD0002499BF /* VideoWallViewController.m */,
+			);
+			name = Video;
 			sourceTree = "<group>";
 		};
 		08F7989D19AE449D002BA684 /* UIView */ = {
@@ -1395,6 +1418,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
 				0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */,
 				51DDBF7419A319B20051B88C /* libz.dylib */,
@@ -1491,6 +1515,7 @@
 				04B3F5E919756BA600C0A6EB /* FeedBack */,
 				04B63B4C1963A1600015357B /* Notifications */,
 				483E01EF1935C6E400418A58 /* Friends */,
+				08E92DD819B2CCDE002499BF /* Video */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
 				51A01D141934EB270043963F /* MTEvent.h */,
@@ -1841,6 +1866,7 @@
 				04D61298197BD40000159190 /* FlatDatePicker-Icon-Close.png in Resources */,
 				04B6F8A019A25D5C00229393 /* face17.png in Resources */,
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
+				08E92DDD19B2D354002499BF /* VideoWallTableViewCell.xib in Resources */,
 				04B6F89119A25D5C00229393 /* face02.png in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51E546B3199896E5003FA551 /* nearbyEventTableViewCell.xib in Resources */,
@@ -1944,6 +1970,7 @@
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				04B6F8AE19A25D5C00229393 /* MLEmojiLabel.m in Sources */,
+				08E92DDC19B2D354002499BF /* VideoWallTableViewCell.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
@@ -2023,6 +2050,7 @@
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
+				08E92DD519B2CCD0002499BF /* VideoWallViewController.m in Sources */,
 				04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,

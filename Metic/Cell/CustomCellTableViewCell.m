@@ -72,7 +72,10 @@
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
-    [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"敬请期待" WithDelegate:nil WithCancelTitle:@"确定"];
+    //[CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"敬请期待" WithDelegate:nil WithCancelTitle:@"确定"];
+    self.homeController.selete_Eventid = self.eventId;
+    self.homeController.selete_EventName = _event;
+    [self.homeController performSegueWithIdentifier:@"HomeToVideoWall" sender:self.homeController];
 }
 
 

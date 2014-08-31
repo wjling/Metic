@@ -98,4 +98,7 @@
 
 //从文件中提取Array
 + (NSArray *)arrayFromFile:(NSString*)fileName;
+
+//简化数字表述
++(NSString*)TextFromInt:(int)num;
 @end

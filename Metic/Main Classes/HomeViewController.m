@@ -13,6 +13,7 @@
 #import "../Cell/MTTableView.h"
 #import "../Utils/PhotoGetter.h"
 #import "PictureWallViewController.h"
+#import "Video/VideoWallViewController.h"
 #import "LaunchEventViewController.h"
 #import "DynamicViewController.h"
 #import "AdViewController.h"
@@ -380,7 +381,11 @@
             PictureWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.selete_Eventid;
             nextViewController.eventName = self.selete_EventName;
-
+    }
+    if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
+        VideoWallViewController *nextViewController = segue.destinationViewController;
+        nextViewController.eventId = self.selete_Eventid;
+        nextViewController.eventName = self.selete_EventName;
     }
     if ([segue.destinationViewController isKindOfClass:[LaunchEventViewController class]]) {
         LaunchEventViewController *nextViewController = segue.destinationViewController;
@@ -395,6 +400,7 @@
         [self.updateEventIds removeAllObjects];
         [self.updateEvents removeAllObjects];
     }
+    
     
 }
 

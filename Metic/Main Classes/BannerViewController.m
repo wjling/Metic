@@ -45,6 +45,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 -(void)back{
     [self dismissViewControllerAnimated:YES completion:^{}];
 }

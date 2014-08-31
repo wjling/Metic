@@ -110,6 +110,11 @@ static SlideNavigationController *singletonInstance;
     //    [self reconnect];
 }
 
+-(BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 #pragma mark - Public Methods -
 
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion

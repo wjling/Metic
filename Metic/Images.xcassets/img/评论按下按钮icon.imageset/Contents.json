@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "评论按下按钮icon.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "评论按下按钮icon.png"
+      "scale" : "2x"
     }
   ],
   "info" : {

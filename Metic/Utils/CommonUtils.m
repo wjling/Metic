@@ -412,4 +412,20 @@
     
 	return array;
 }
+
++(NSString*)TextFromInt:(int)num
+{
+    if (num < 1000) {
+        NSString* text = [NSString stringWithFormat:@"%d",num];
+        while (text.length <3) {
+            text = [@" " stringByAppendingString:text];
+        }
+        return text;
+    }else if(num < 10000){
+        return [NSString stringWithFormat:@"%dk+",num%1000];
+    }else{
+        return [NSString stringWithFormat:@"%dw+",num%10000];
+    }
+}
+
 @end

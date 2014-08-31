@@ -153,6 +153,9 @@
         case 25:
             resultCode = @"get_avatar_updatetime";
             break;
+        case 26:
+            resultCode = @"get_video_list";
+            break;
         case 30:
             resultCode = @"get_event_recommend";
             break;
