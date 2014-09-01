@@ -666,6 +666,10 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    if (_Footeropen||_Headeropen) {
+        [refreshView endRefreshing];
+        return;
+    }
     if (refreshView == _header) {
         _Headeropen = YES;
         self.master_sequence = [NSNumber numberWithInt:0];

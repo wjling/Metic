@@ -7,16 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0400DFF8196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */; };
-		0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */; };
-		0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */; };
-		04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */; };
 		0435EEEF19A638C2003BB2F6 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */; };
 		0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */; };
 		0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */; };
 		0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1819AF702F003BB2F6 /* LoginViewController.m */; };
 		0435EF1C19AF702F003BB2F6 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */; };
 		0435EF2019B3585B003BB2F6 /* AboutPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1F19B3585B003BB2F6 /* AboutPageViewController.m */; };
+		0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF2919B45B55003BB2F6 /* SecurityCenterViewController.m */; };
+		0435EF3919B45C54003BB2F6 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF2C19B45C54003BB2F6 /* AddFriendViewController.m */; };
+		0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF2E19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m */; };
+		0435EF3B19B45C54003BB2F6 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF3019B45C54003BB2F6 /* FriendInfoViewController.m */; };
+		0435EF3C19B45C54003BB2F6 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF3219B45C54003BB2F6 /* FriendsViewController.m */; };
+		0435EF3D19B45C54003BB2F6 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF3419B45C54003BB2F6 /* FriendTableViewCell.m */; };
+		0435EF3E19B45C54003BB2F6 /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF3619B45C54003BB2F6 /* NotificationCenterCell.m */; };
+		0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF3819B45C54003BB2F6 /* SearchedFriendTableViewCell.m */; };
+		0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4119B471AB003BB2F6 /* UserQRCodeViewController.m */; };
+		0435EF4D19B49DA2003BB2F6 /* HistoricalNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4419B49DA2003BB2F6 /* HistoricalNotificationViewController.m */; };
+		0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4619B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m */; };
+		0435EF4F19B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4819B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m */; };
+		0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4A19B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m */; };
+		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -60,7 +70,6 @@
 		04B6F8B219A25FCC00229393 /* BannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8B119A25FCC00229393 /* BannerViewController.m */; };
 		04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8B419A2607800229393 /* emotion_Keyboard.m */; };
 		04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */; };
-		04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */; };
 		04BAF6571993644F00BF00E1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6561993644F00BF00E1 /* Reachability.m */; };
 		04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF6771998CD3F00BF00E1 /* AddFriendConfirmViewController.m */; };
 		04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04BAF688199A569F00BF00E1 /* WelcomePageViewController.m */; };
@@ -68,8 +77,6 @@
 		04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7A1976EFD300BC083C /* NameSettingViewController.m */; };
 		04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */; };
 		04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */; };
-		04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D53179193E180D001EDDF4 /* AddFriendViewController.m */; };
-		04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */; };
 		04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D6128D197B90D500159190 /* SignSetttingViewController.m */; };
 		04D61296197BD40000159190 /* FlatDatePicker-Icon-Check.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61290197BD40000159190 /* FlatDatePicker-Icon-Check.png */; };
 		04D61297197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04D61291197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png */; };
@@ -82,8 +89,6 @@
 		04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */; };
 		04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
-		0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC4196330800050833F /* NotificationCenterCell.m */; };
-		0835FFC8196339590050833F /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0835FFC7196339590050833F /* NotificationsViewController.m */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
@@ -140,7 +145,6 @@
 		48151F1F194947EB009E156E /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F19194947EB009E156E /* HttpSender.m */; };
 		48151F20194947EB009E156E /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1B194947EB009E156E /* MySqlite.m */; };
 		48151F21194947EB009E156E /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1D194947EB009E156E /* NSString+JSON.m */; };
-		483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 483E01F11935C70C00418A58 /* FriendInfoViewController.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
 		485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 485F47CF19494A30003AAD30 /* SRWebSocket.m */; };
 		4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4892337D1947F9BA00068BBC /* libicucore.dylib */; };
@@ -150,7 +154,6 @@
 		48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDED194FE42D0066BF8D /* PinyinFormatter.m */; };
 		48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */; };
 		48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */; };
-		48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */; };
 		510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A2195BED3A00084014 /* PhotoGetter.m */; };
 		510BE1A6195C32FE00084014 /* MTTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A5195C32FE00084014 /* MTTableView.m */; };
 		510D4574196E87A70081672A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510D4573196E87A70081672A /* ImageIO.framework */; };
@@ -204,7 +207,6 @@
 		51581D481933575300943606 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51581D271933575300943606 /* UIKit.framework */; };
 		51581D501933575300943606 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 51581D4E1933575300943606 /* InfoPlist.strings */; };
 		51581D521933575300943606 /* MeticTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D511933575300943606 /* MeticTests.m */; };
-		51581D6419335A8700943606 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D5D19335A8700943606 /* FriendsViewController.m */; };
 		51581D6519335A8700943606 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D5F19335A8700943606 /* HomeViewController.m */; };
 		51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D6119335A8700943606 /* ProfileDetailViewController.m */; };
 		51581D6719335A8700943606 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51581D6319335A8700943606 /* ProfileViewController.m */; };
@@ -277,14 +279,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0400DFF2196D398E00A187F1 /* NotificationsEventRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsEventRequestTableViewCell.h; sourceTree = "<group>"; };
-		0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsEventRequestTableViewCell.m; sourceTree = "<group>"; };
-		0400DFF4196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsFriendRequestTableViewCell.h; sourceTree = "<group>"; };
-		0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsFriendRequestTableViewCell.m; sourceTree = "<group>"; };
-		0400DFF6196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsSystemMessageTableViewCell.h; sourceTree = "<group>"; };
-		0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
-		04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoricalNotificationViewController.h; sourceTree = "<group>"; };
-		04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoricalNotificationViewController.m; sourceTree = "<group>"; };
 		0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FillinInfoViewController.h; path = "Login&Register/FillinInfoViewController.h"; sourceTree = "<group>"; };
@@ -295,6 +289,34 @@
 		0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterViewController.m; path = "Login&Register/RegisterViewController.m"; sourceTree = "<group>"; };
 		0435EF1E19B3585B003BB2F6 /* AboutPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AboutPageViewController.h; path = SystemSettings/AboutPageViewController.h; sourceTree = "<group>"; };
 		0435EF1F19B3585B003BB2F6 /* AboutPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AboutPageViewController.m; path = SystemSettings/AboutPageViewController.m; sourceTree = "<group>"; };
+		0435EF2819B45B55003BB2F6 /* SecurityCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SecurityCenterViewController.h; path = UserInfo/SecurityCenterViewController.h; sourceTree = "<group>"; };
+		0435EF2919B45B55003BB2F6 /* SecurityCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SecurityCenterViewController.m; path = UserInfo/SecurityCenterViewController.m; sourceTree = "<group>"; };
+		0435EF2B19B45C54003BB2F6 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddFriendViewController.h; path = Friends/AddFriendViewController.h; sourceTree = "<group>"; };
+		0435EF2C19B45C54003BB2F6 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AddFriendViewController.m; path = Friends/AddFriendViewController.m; sourceTree = "<group>"; };
+		0435EF2D19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendInfoEventsTableViewCell.h; path = Friends/FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
+		0435EF2E19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendInfoEventsTableViewCell.m; path = Friends/FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
+		0435EF2F19B45C54003BB2F6 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendInfoViewController.h; path = Friends/FriendInfoViewController.h; sourceTree = "<group>"; };
+		0435EF3019B45C54003BB2F6 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendInfoViewController.m; path = Friends/FriendInfoViewController.m; sourceTree = "<group>"; };
+		0435EF3119B45C54003BB2F6 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendsViewController.h; path = Friends/FriendsViewController.h; sourceTree = "<group>"; };
+		0435EF3219B45C54003BB2F6 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendsViewController.m; path = Friends/FriendsViewController.m; sourceTree = "<group>"; };
+		0435EF3319B45C54003BB2F6 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FriendTableViewCell.h; path = Friends/FriendTableViewCell.h; sourceTree = "<group>"; };
+		0435EF3419B45C54003BB2F6 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FriendTableViewCell.m; path = Friends/FriendTableViewCell.m; sourceTree = "<group>"; };
+		0435EF3519B45C54003BB2F6 /* NotificationCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationCenterCell.h; path = Friends/NotificationCenterCell.h; sourceTree = "<group>"; };
+		0435EF3619B45C54003BB2F6 /* NotificationCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCenterCell.m; path = Friends/NotificationCenterCell.m; sourceTree = "<group>"; };
+		0435EF3719B45C54003BB2F6 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchedFriendTableViewCell.h; path = Friends/SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
+		0435EF3819B45C54003BB2F6 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SearchedFriendTableViewCell.m; path = Friends/SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
+		0435EF4019B471AB003BB2F6 /* UserQRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserQRCodeViewController.h; path = Friends/UserQRCodeViewController.h; sourceTree = "<group>"; };
+		0435EF4119B471AB003BB2F6 /* UserQRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserQRCodeViewController.m; path = Friends/UserQRCodeViewController.m; sourceTree = "<group>"; };
+		0435EF4319B49DA2003BB2F6 /* HistoricalNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HistoricalNotificationViewController.h; path = Notifications/HistoricalNotificationViewController.h; sourceTree = "<group>"; };
+		0435EF4419B49DA2003BB2F6 /* HistoricalNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HistoricalNotificationViewController.m; path = Notifications/HistoricalNotificationViewController.m; sourceTree = "<group>"; };
+		0435EF4519B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsEventRequestTableViewCell.h; path = Notifications/NotificationsEventRequestTableViewCell.h; sourceTree = "<group>"; };
+		0435EF4619B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsEventRequestTableViewCell.m; path = Notifications/NotificationsEventRequestTableViewCell.m; sourceTree = "<group>"; };
+		0435EF4719B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsFriendRequestTableViewCell.h; path = Notifications/NotificationsFriendRequestTableViewCell.h; sourceTree = "<group>"; };
+		0435EF4819B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsFriendRequestTableViewCell.m; path = Notifications/NotificationsFriendRequestTableViewCell.m; sourceTree = "<group>"; };
+		0435EF4919B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsSystemMessageTableViewCell.h; path = Notifications/NotificationsSystemMessageTableViewCell.h; sourceTree = "<group>"; };
+		0435EF4A19B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsSystemMessageTableViewCell.m; path = Notifications/NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
+		0435EF4B19B49DA2003BB2F6 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Notifications/NotificationsViewController.h; sourceTree = "<group>"; };
+		0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsViewController.m; path = Notifications/NotificationsViewController.m; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -347,8 +369,6 @@
 		04B6F8B419A2607800229393 /* emotion_Keyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = emotion_Keyboard.m; path = "Custom Wedgets/emotion_Keyboard.m"; sourceTree = "<group>"; };
 		04B6F8BA19A2F98A00229393 /* ContactsRecommendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsRecommendTableViewCell.h; path = Friends/ContactsRecommendTableViewCell.h; sourceTree = "<group>"; };
 		04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsRecommendTableViewCell.m; path = Friends/ContactsRecommendTableViewCell.m; sourceTree = "<group>"; };
-		04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoEventsTableViewCell.h; sourceTree = "<group>"; };
-		04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoEventsTableViewCell.m; sourceTree = "<group>"; };
 		04BAF6551993644F00BF00E1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		04BAF6561993644F00BF00E1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		04BAF6761998CD3F00BF00E1 /* AddFriendConfirmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AddFriendConfirmViewController.h; path = Friends/AddFriendConfirmViewController.h; sourceTree = "<group>"; };
@@ -363,10 +383,6 @@
 		04CB1B7E1977769E00BC083C /* SingleSelectionAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SingleSelectionAlertView.m; path = "Custom Wedgets/SingleSelectionAlertView.m"; sourceTree = "<group>"; };
 		04CB1BB4197824CF00BC083C /* CustomIOS7AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomIOS7AlertView.h; sourceTree = "<group>"; };
 		04CB1BB5197824CF00BC083C /* CustomIOS7AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomIOS7AlertView.m; sourceTree = "<group>"; };
-		04D53178193E180D001EDDF4 /* AddFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFriendViewController.h; sourceTree = "<group>"; };
-		04D53179193E180D001EDDF4 /* AddFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFriendViewController.m; sourceTree = "<group>"; };
-		04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchedFriendTableViewCell.h; sourceTree = "<group>"; };
-		04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchedFriendTableViewCell.m; sourceTree = "<group>"; };
 		04D6128C197B90D500159190 /* SignSetttingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SignSetttingViewController.h; path = UserInfo/SignSetttingViewController.h; sourceTree = "<group>"; };
 		04D6128D197B90D500159190 /* SignSetttingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SignSetttingViewController.m; path = UserInfo/SignSetttingViewController.m; sourceTree = "<group>"; };
 		04D61290197BD40000159190 /* FlatDatePicker-Icon-Check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FlatDatePicker-Icon-Check.png"; sourceTree = "<group>"; };
@@ -386,10 +402,6 @@
 		04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoTableViewCell.m; path = UserInfo/UserInfoTableViewCell.m; sourceTree = "<group>"; };
 		080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDisplayViewController.h; sourceTree = "<group>"; };
 		080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDisplayViewController.m; sourceTree = "<group>"; };
-		0835FFC3196330800050833F /* NotificationCenterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCenterCell.h; sourceTree = "<group>"; };
-		0835FFC4196330800050833F /* NotificationCenterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCenterCell.m; sourceTree = "<group>"; };
-		0835FFC6196339590050833F /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
-		0835FFC7196339590050833F /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
 		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -553,8 +565,6 @@
 		48151F1B194947EB009E156E /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
 		48151F1C194947EB009E156E /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
 		48151F1D194947EB009E156E /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
-		483E01F01935C70C00418A58 /* FriendInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendInfoViewController.h; sourceTree = "<group>"; };
-		483E01F11935C70C00418A58 /* FriendInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendInfoViewController.m; sourceTree = "<group>"; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		485F47CD19494A30003AAD30 /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
 		485F47CE19494A30003AAD30 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
@@ -572,8 +582,6 @@
 		48A4DDEE194FE42D0066BF8D /* PinyinHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinyinHelper.h; sourceTree = "<group>"; };
 		48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinyinHelper.m; sourceTree = "<group>"; };
 		48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
-		48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
-		48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
 		510BE1A1195BED3A00084014 /* PhotoGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGetter.h; sourceTree = "<group>"; };
 		510BE1A2195BED3A00084014 /* PhotoGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoGetter.m; sourceTree = "<group>"; };
 		510BE1A4195C32FE00084014 /* MTTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableView.h; sourceTree = "<group>"; };
@@ -671,8 +679,6 @@
 		51581D4D1933575300943606 /* WeShareTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeShareTests-Info.plist"; sourceTree = "<group>"; };
 		51581D4F1933575300943606 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		51581D511933575300943606 /* MeticTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MeticTests.m; sourceTree = "<group>"; };
-		51581D5C19335A8700943606 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
-		51581D5D19335A8700943606 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		51581D5E19335A8700943606 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		51581D5F19335A8700943606 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		51581D6019335A8700943606 /* ProfileDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileDetailViewController.h; sourceTree = "<group>"; };
@@ -849,16 +855,16 @@
 		04B63B4C1963A1600015357B /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				0400DFF2196D398E00A187F1 /* NotificationsEventRequestTableViewCell.h */,
-				0400DFF3196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m */,
-				0400DFF4196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.h */,
-				0400DFF5196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m */,
-				0400DFF6196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.h */,
-				0400DFF7196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m */,
-				0835FFC6196339590050833F /* NotificationsViewController.h */,
-				0835FFC7196339590050833F /* NotificationsViewController.m */,
-				04133E16197FC5D4006F378E /* HistoricalNotificationViewController.h */,
-				04133E17197FC5D4006F378E /* HistoricalNotificationViewController.m */,
+				0435EF4319B49DA2003BB2F6 /* HistoricalNotificationViewController.h */,
+				0435EF4419B49DA2003BB2F6 /* HistoricalNotificationViewController.m */,
+				0435EF4519B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.h */,
+				0435EF4619B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m */,
+				0435EF4719B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.h */,
+				0435EF4819B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m */,
+				0435EF4919B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.h */,
+				0435EF4A19B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m */,
+				0435EF4B19B49DA2003BB2F6 /* NotificationsViewController.h */,
+				0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -972,6 +978,8 @@
 				04E657BF197978080091524F /* LocationSettingViewController.m */,
 				04D6128C197B90D500159190 /* SignSetttingViewController.h */,
 				04D6128D197B90D500159190 /* SignSetttingViewController.m */,
+				0435EF2819B45B55003BB2F6 /* SecurityCenterViewController.h */,
+				0435EF2919B45B55003BB2F6 /* SecurityCenterViewController.m */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -1220,20 +1228,20 @@
 		483E01EF1935C6E400418A58 /* Friends */ = {
 			isa = PBXGroup;
 			children = (
-				0835FFC3196330800050833F /* NotificationCenterCell.h */,
-				0835FFC4196330800050833F /* NotificationCenterCell.m */,
-				51581D5C19335A8700943606 /* FriendsViewController.h */,
-				51581D5D19335A8700943606 /* FriendsViewController.m */,
-				483E01F01935C70C00418A58 /* FriendInfoViewController.h */,
-				483E01F11935C70C00418A58 /* FriendInfoViewController.m */,
-				48FE5A2B193879D40093AF83 /* FriendTableViewCell.h */,
-				48FE5A2C193879D40093AF83 /* FriendTableViewCell.m */,
-				04D53178193E180D001EDDF4 /* AddFriendViewController.h */,
-				04D53179193E180D001EDDF4 /* AddFriendViewController.m */,
-				04D5317B193E266F001EDDF4 /* SearchedFriendTableViewCell.h */,
-				04D5317C193E266F001EDDF4 /* SearchedFriendTableViewCell.m */,
-				04B6FEA31965B65700B75AE2 /* FriendInfoEventsTableViewCell.h */,
-				04B6FEA41965B65700B75AE2 /* FriendInfoEventsTableViewCell.m */,
+				0435EF2B19B45C54003BB2F6 /* AddFriendViewController.h */,
+				0435EF2C19B45C54003BB2F6 /* AddFriendViewController.m */,
+				0435EF2D19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.h */,
+				0435EF2E19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m */,
+				0435EF2F19B45C54003BB2F6 /* FriendInfoViewController.h */,
+				0435EF3019B45C54003BB2F6 /* FriendInfoViewController.m */,
+				0435EF3119B45C54003BB2F6 /* FriendsViewController.h */,
+				0435EF3219B45C54003BB2F6 /* FriendsViewController.m */,
+				0435EF3319B45C54003BB2F6 /* FriendTableViewCell.h */,
+				0435EF3419B45C54003BB2F6 /* FriendTableViewCell.m */,
+				0435EF3519B45C54003BB2F6 /* NotificationCenterCell.h */,
+				0435EF3619B45C54003BB2F6 /* NotificationCenterCell.m */,
+				0435EF3719B45C54003BB2F6 /* SearchedFriendTableViewCell.h */,
+				0435EF3819B45C54003BB2F6 /* SearchedFriendTableViewCell.m */,
 				04B22E371988B5F300B33B7C /* SearchFriendViewController.h */,
 				04B22E381988B5F300B33B7C /* SearchFriendViewController.m */,
 				04BAF6761998CD3F00BF00E1 /* AddFriendConfirmViewController.h */,
@@ -1242,6 +1250,8 @@
 				04B6F86019A0ADB300229393 /* FriendRecommendationViewController.m */,
 				04B6F8BA19A2F98A00229393 /* ContactsRecommendTableViewCell.h */,
 				04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */,
+				0435EF4019B471AB003BB2F6 /* UserQRCodeViewController.h */,
+				0435EF4119B471AB003BB2F6 /* UserQRCodeViewController.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -1739,7 +1749,6 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
-				08F798A319AE44BF002BA684 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1920,22 +1929,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		08F798A319AE44BF002BA684 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1949,16 +1942,16 @@
 				089337A6197579CE00AD940B /* PECropView.m in Sources */,
 				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
 				089337A9197579CE00AD940B /* PEResizeControl.m in Sources */,
+				0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
+				0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */,
 				519C6602198B8E8000710B26 /* EventInvitationTableViewCell.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
-				0400DFF9196D398E00A187F1 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
-				51581D6419335A8700943606 /* FriendsViewController.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
@@ -1966,7 +1959,6 @@
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
-				04D5317A193E180D001EDDF4 /* AddFriendViewController.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
 				04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */,
@@ -1977,8 +1969,9 @@
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
 				519100F019651388005DF607 /* MRZoomScrollView.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
+				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
-				0400DFF8196D398E00A187F1 /* NotificationsEventRequestTableViewCell.m in Sources */,
+				0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */,
 				510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */,
 				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				04B6F8AF19A25D5C00229393 /* TTTAttributedLabel.m in Sources */,
@@ -1986,27 +1979,26 @@
 				04BAF6571993644F00BF00E1 /* Reachability.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
-				0835FFC8196339590050833F /* NotificationsViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
 				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
-				0400DFFA196D398E00A187F1 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				51581D3D1933575300943606 /* ViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
-				04133E18197FC5D4006F378E /* HistoricalNotificationViewController.m in Sources */,
 				08DB69AC19541F3A00F80F3F /* MCommentTableViewCell.m in Sources */,
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				48151F1E194947EB009E156E /* CommonUtils.m in Sources */,
+				0435EF3E19B45C54003BB2F6 /* NotificationCenterCell.m in Sources */,
 				51A01D161934EB270043963F /* MTEvent.m in Sources */,
 				04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */,
 				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
-				483E01F21935C70C00418A58 /* FriendInfoViewController.m in Sources */,
+				0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
+				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
 				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
@@ -2029,6 +2021,7 @@
 				51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */,
 				510D459F196E8A960081672A /* SDWebImagePrefetcher.m in Sources */,
 				080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */,
+				0435EF4F19B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				510D459B196E8A960081672A /* SDWebImageDecoder.m in Sources */,
 				04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */,
 				04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */,
@@ -2038,20 +2031,21 @@
 				48A4DDF2194FE42D0066BF8D /* ChineseToPinyinResource.m in Sources */,
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,
 				089337A5197579CE00AD940B /* PECropRectView.m in Sources */,
+				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
+				0435EF3C19B45C54003BB2F6 /* FriendsViewController.m in Sources */,
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
-				04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
-				48FE5A2D193879D40093AF83 /* FriendTableViewCell.m in Sources */,
 				08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
+				0435EF3B19B45C54003BB2F6 /* FriendInfoViewController.m in Sources */,
 				510D459E196E8A960081672A /* SDWebImageManager.m in Sources */,
 				04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */,
 				510D459D196E8A960081672A /* SDWebImageDownloaderOperation.m in Sources */,
@@ -2062,20 +2056,21 @@
 				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */,
-				04D5317D193E266F001EDDF4 /* SearchedFriendTableViewCell.m in Sources */,
 				04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */,
 				510D45A4196E8A960081672A /* UIImageView+HighlightedWebCache.m in Sources */,
-				0835FFC5196330800050833F /* NotificationCenterCell.m in Sources */,
 				08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */,
+				0435EF3D19B45C54003BB2F6 /* FriendTableViewCell.m in Sources */,
 				5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */,
 				510D4598196E8A960081672A /* NSData+ImageContentType.m in Sources */,
 				510D4599196E8A960081672A /* SDImageCache.m in Sources */,
+				0435EF3919B45C54003BB2F6 /* AddFriendViewController.m in Sources */,
 				08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */,
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
 				510D459C196E8A960081672A /* SDWebImageDownloader.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 				51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */,
+				0435EF4D19B49DA2003BB2F6 /* HistoricalNotificationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2258,12 +2253,12 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 				);
 				MACH_O_TYPE = mh_execute;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2303,13 +2298,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 				);
 				MACH_O_TYPE = mh_execute;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "arm64 armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

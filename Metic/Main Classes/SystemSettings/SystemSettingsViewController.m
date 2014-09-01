@@ -12,6 +12,7 @@
 @interface SystemSettingsViewController ()
 {
     NSString* currentVersion;
+    NSIndexPath* clickedIndexPath;
 }
 
 @end
@@ -139,8 +140,13 @@
     [userDf synchronize];
 }
 
--(void)clearBuffers
+-(void)clearBuffers:(NSIndexPath*)indexPath
 {
+    UITableViewCell* cell = [settings_tableview cellForRowAtIndexPath:clickedIndexPath];
+    UIActivityIndicatorView* acView = (UIActivityIndicatorView*)[cell.contentView viewWithTag:10];
+    [acView startAnimating];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(operationTimeOut:) userInfo:acView repeats:NO];
+    
     SDImageCache* cache = [SDImageCache sharedImageCache];
     [cache clearDisk];
     [cache clearMemory];
@@ -148,6 +154,8 @@
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:documentPath error:nil];
     [fileManager createDirectoryAtPath:documentPath withIntermediateDirectories:YES attributes:nil error:nil];
+    [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"清理缓存完成" WithDelegate:self WithCancelTitle:@"确定"];
+    [acView stopAnimating];
 }
 
 -(void)updateCheck
@@ -155,35 +163,44 @@
     currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSLog(@"version: %@",currentVersion);
     
-    NSString *URL = @"http://itunes.apple.com/lookup?id=909214472";
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:URL]];
-    [request setHTTPMethod:@"POST"];
-    NSHTTPURLResponse *urlResponse = nil;
-    NSError *error = nil;
-    NSData *recervedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    [MobClick setAppVersion:currentVersion];
+//    [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
+    [MobClick checkUpdateWithDelegate:self selector:@selector(callBackSelectorWithDictionary:)];
+    UITableViewCell* cell = [settings_tableview cellForRowAtIndexPath:clickedIndexPath];
+    UIActivityIndicatorView* acView = (UIActivityIndicatorView*)[cell.contentView viewWithTag:21];
+    [acView startAnimating];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(operationTimeOut:) userInfo:acView repeats:NO];
     
-    NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [CommonUtils NSDictionaryWithNSString:results];
-    NSLog(@"get update dictionary: %@",dic);
-    NSArray *infoArray = [dic objectForKey:@"results"];
-    if ([infoArray count]) {
-        NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
-        NSString *lastVersion = [releaseInfo objectForKey:@"version"];
-        
-        if (![lastVersion isEqualToString:currentVersion]) {
-            //trackViewURL = [releaseInfo objectForKey:@"trackVireUrl"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
-            alert.tag = 10000;
-            [alert show];
-        }
-        else
-        {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"此版本为最新版本" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            alert.tag = 10001;
-            [alert show];
-        }
-    }
+//    NSString *URL = @"http://itunes.apple.com/lookup?id=909214472";
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:[NSURL URLWithString:URL]];
+//    [request setHTTPMethod:@"POST"];
+//    NSHTTPURLResponse *urlResponse = nil;
+//    NSError *error = nil;
+//    NSData *recervedData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+//    
+//    NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
+//    NSDictionary *dic = [CommonUtils NSDictionaryWithNSString:results];
+//    NSLog(@"get update dictionary: %@",dic);
+//    NSArray *infoArray = [dic objectForKey:@"results"];
+//    if ([infoArray count]) {
+//        NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
+//        NSString *lastVersion = [releaseInfo objectForKey:@"version"];
+//        
+//        if (![lastVersion isEqualToString:currentVersion]) {
+//            //trackViewURL = [releaseInfo objectForKey:@"trackVireUrl"];
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"有新的版本更新，是否前往更新？" delegate:self cancelButtonTitle:@"关闭" otherButtonTitles:@"更新", nil];
+//            alert.tag = 10000;
+//            [alert show];
+//        }
+//        else
+//        {
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"更新" message:@"此版本为最新版本" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+//            alert.tag = 10001;
+//            [alert show];
+//        }
+//    }
+    
 
 }
 
@@ -207,6 +224,31 @@
         
     }
     
+}
+
+-(void)callBackSelectorWithDictionary:(NSDictionary*)appUpdateInfo
+{
+    NSLog(@"appUpdateInfo: %@",appUpdateInfo);
+    BOOL update = [[appUpdateInfo objectForKey:@"update"] boolValue];
+    if (update) {
+//        [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
+//        [MobClick checkUpdate];
+        [MobClick checkUpdateWithDelegate:nil selector:@selector(callBackSelectorWithDictionary:)];
+    }
+    else
+    {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"已经是最新的版本啦!" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    UITableViewCell* cell = [settings_tableview cellForRowAtIndexPath:clickedIndexPath];
+    UIActivityIndicatorView* acView = (UIActivityIndicatorView*)[cell.contentView viewWithTag:21];
+    [acView stopAnimating];
+
+}
+
+-(void)operationTimeOut:(NSTimer*)timer
+{
+    [[timer userInfo] stopAnimating];
+    NSLog(@"time out");
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -309,6 +351,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"setting"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"setting"];
@@ -326,6 +369,10 @@
     else if(section == 1)
     {
         cell.textLabel.text = @"清空缓存";
+        UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
+        [activityIndicator setColor:color];
+        activityIndicator.tag = 10;
+        [cell.contentView addSubview:activityIndicator];
     }
     else if(section == 2)
     {
@@ -340,6 +387,11 @@
         else if (row == 1)
         {
             cell.textLabel.text = @"检测更新";
+            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
+            [activityIndicator setColor:color];
+            activityIndicator.tag = 21;
+            [cell.contentView addSubview:activityIndicator];
+            
         }
         else if (row == 2)
         {
@@ -392,6 +444,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    clickedIndexPath = indexPath;
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
@@ -404,7 +457,7 @@
     }
     else if (section == 1)
     {
-        [self clearBuffers];
+        [self clearBuffers:indexPath];
     }
     else if (section == 2)
     {

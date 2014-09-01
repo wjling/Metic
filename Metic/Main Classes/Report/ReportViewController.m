@@ -32,13 +32,16 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    NSLog(@"举报用户:type: %d, id: %@, name: %@", _type, _userId, _userName);
     [self initFormat];
     // Do any additional setup after loading the view from its nib.
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [MobClick beginLogPageView:@"举报"];
     [self.titleTextField becomeFirstResponder];
 }
@@ -63,9 +66,12 @@
 
 -(void)initFormat
 {
-    if (_event) {
+    if (_event || _userId) {
         NSString*text;
         switch (_type) {
+            case 0:
+                text = [NSString stringWithFormat:@"举报用户：%@ \n\n",_userName];
+                break;
             case 1:
                 text = [NSString stringWithFormat:@"举报：%@ 活动\n\n",_event];
                 break;
