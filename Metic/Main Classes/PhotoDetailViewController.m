@@ -484,6 +484,7 @@
         {
             if ([response1 valueForKey:@"pcomment_list"]) {
                 NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
+                if ([_sequence intValue] == 0) [_pcomment_list removeAllObjects];
                 [self.pcomment_list addObjectsFromArray:newComments] ;
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self closeRJ];

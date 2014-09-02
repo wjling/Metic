@@ -419,6 +419,7 @@
         {
             if ([response1 valueForKey:@"vcomment_list"]) {
                 NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"vcomment_list"]];
+                if ([_sequence intValue] == 0) [self.vcomment_list removeAllObjects];
                 [self.vcomment_list addObjectsFromArray:newComments] ;
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self closeRJ];
@@ -614,7 +615,6 @@
         height = [self calculateTextHeight:commentText width:commentWidth fontSize:12.0];
         height += 32;
     }
-    NSLog(@"%f",height);
     return height;
 }
 
