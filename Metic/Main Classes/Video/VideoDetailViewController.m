@@ -14,6 +14,7 @@
 #import "MLEmojiLabel.h"
 #import "../../Custom Wedgets/emotion_Keyboard.h"
 #import "UIImageView+WebCache.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface VideoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -120,18 +121,32 @@
     [_emotionKeyboard initCollectionView];
 }
 
--(void)getthumb
-{
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@.thumb",[_videoInfo valueForKey:@"video_name"]]];
+- (void)play:(id)sender {
+    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
     NSLog(@"%@",url);
-    UIImageView*tmp = [[UIImageView alloc]init];
-    [tmp sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
-            self.video_thumb = image;
-        }
-    }];
-
+    [self openmovie:url];
 }
+
+-(void)openmovie:(NSString*)url
+{
+    MPMoviePlayerViewController *movie = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+    
+    [movie.moviePlayer prepareToPlay];
+    [self presentMoviePlayerViewControllerAnimated:movie];
+    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
+    [movie.view setBackgroundColor:[UIColor clearColor]];
+    
+    [movie.view setFrame:self.navigationController.view.bounds];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+     
+                                            selector:@selector(movieFinishedCallback:)
+     
+                                                name:MPMoviePlayerPlaybackDidFinishNotification
+     
+                                              object:movie.moviePlayer];
+    
+}
+
 
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
@@ -437,11 +452,19 @@
     if (indexPath.row == 0) {
         float height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
+        UIButton* video = [UIButton buttonWithType:UIButtonTypeCustom];
+        [video setFrame:CGRectMake(0, 0, 320,height)];
+        [video addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIImageView* videoIc = [[UIImageView alloc]initWithFrame:CGRectMake((320-75)/2, (height-75)/2, 75,75)];
+        [videoIc setUserInteractionEnabled:NO];
+        videoIc.image = [UIImage imageNamed:@"视频按钮"];
+        
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        imageView.image = self.video_thumb;
-        [cell addSubview:imageView];
+        [video setImage:self.video_thumb forState:UIControlStateNormal];
+        [cell addSubview:video];
+        [cell addSubview:videoIc];
         [cell addSubview:label];
         
         UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 200, 12)];
@@ -777,6 +800,20 @@
 //        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
 //    }
 }
-
-
+#pragma mark - MPlayer Delegate
+-(void)movieFinishedCallback:(NSNotification*)notify{
+    
+    // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
+    
+    MPMoviePlayerController* theMovie = [notify object];
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self
+     
+                                                   name:MPMoviePlayerPlaybackDidFinishNotification
+     
+                                                 object:theMovie];
+    
+    [self dismissMoviePlayerViewControllerAnimated];
+    
+}
 @end
