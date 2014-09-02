@@ -156,6 +156,15 @@
         case 26:
             resultCode = @"get_video_list";
             break;
+        case 27:
+            resultCode = @"add_vcomment";
+            break;
+        case 28:
+            resultCode = @"get_vcomments";
+            break;
+        case 29:
+            resultCode = @"delete_vcomment";
+            break;
         case 30:
             resultCode = @"get_event_recommend";
             break;

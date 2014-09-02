@@ -9,13 +9,15 @@
 //
 
 #import "VideoWallViewController.h"
+#import "VideoDetailViewController.h"
 #import "../../Cell/VideoWallTableViewCell.h"
 #import "PhotoGetter.h"
 #import "UIImageView+WebCache.h"
+#import "MobClick.h"
 
 @interface VideoWallViewController ()
-@property(nonatomic,strong) UITableView* tableView;
 @property(nonatomic,strong) NSMutableArray* videoInfos;
+@property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
 @end
@@ -34,6 +36,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+    
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     [_tableView setBackgroundColor:[UIColor clearColor]];
@@ -53,17 +57,24 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"视频墙"];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"视频墙"];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)getVideolist
@@ -135,6 +146,7 @@
     if (self.videoInfos) {
         NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
         cell.videoInfo = dictionary;
+        cell.eventId = _eventId;
         cell.controller = self;
 
         NSString* text = [dictionary valueForKey:@"title"];
@@ -159,6 +171,22 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
+    _seleted_videoInfo = dictionary;
+    [self performSegueWithIdentifier:@"toVideoDetail" sender:self];
+}
+
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([sender isKindOfClass:[VideoWallViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[VideoDetailViewController class]]) {
+            VideoDetailViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.eventId;
+            nextViewController.eventName = self.eventName;
+            nextViewController.videoInfo = self.seleted_videoInfo;
+        }
+    }
 }
 @end

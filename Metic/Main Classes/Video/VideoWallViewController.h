@@ -12,4 +12,5 @@
 @interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
+@property(nonatomic,strong) UITableView* tableView;
 @end

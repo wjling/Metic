@@ -1,40 +1,34 @@
 //
-//  PhotoDetailViewController.m
-//  Metic
+//  VideoDetailViewController.m
+//  WeShare
 //
-//  Created by ligang6 on 14-7-4.
+//  Created by ligang6 on 14-9-2.
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
-#import "PhotoDetailViewController.h"
-#import "PhotoDisplayViewController.h"
-#import "BannerViewController.h"
-#import "../Cell/PcommentTableViewCell.h"
+#import "VideoDetailViewController.h"
+#import "../../Cell/VcommentTableViewCell.h"
 #import "HomeViewController.h"
-#import "../Utils/CommonUtils.h"
+#import "../../Utils/CommonUtils.h"
 #import "MobClick.h"
 #import "MLEmojiLabel.h"
-#import "../Custom Wedgets/emotion_Keyboard.h"
+#import "../../Custom Wedgets/emotion_Keyboard.h"
 #import "UIImageView+WebCache.h"
 
-@interface PhotoDetailViewController ()
+@interface VideoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
-@property (strong, nonatomic) IBOutlet UIButton *good_button;
-@property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSMutableArray * pcomment_list;
-@property (strong, nonatomic) IBOutlet UIView *controlView;
+@property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
-
 @end
 
-@implementation PhotoDetailViewController
+@implementation VideoDetailViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,22 +44,23 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initUI];
+    [self getthumb];
     self.sequence = [NSNumber numberWithInt:0];
+    self.videoId = [_videoInfo valueForKey:@"video_id"];
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     _emotionKeyboard.textView = _inputTextView;
-    self.pcomment_list = [[NSMutableArray alloc]init];
-    //[self initButtons];
-    [self setGoodButton];
+    self.vcomment_list = [[NSMutableArray alloc]init];
+
     //初始化上拉加载更多
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = _tableView;
     
     
-
+    
     
     // Do any additional setup after loading the view.
 }
@@ -75,7 +70,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.inputTextView resignFirstResponder];
-    [MobClick beginLogPageView:@"图片主页"];
+    [MobClick beginLogPageView:@"视频详情"];
     self.sequence = [NSNumber numberWithInt:0];
     [self pullMainCommentFromAir];
 }
@@ -83,7 +78,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [MobClick endLogPageView:@"图片主页"];
+    [MobClick endLogPageView:@"视频详情"];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
@@ -98,16 +93,6 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
-}
-
--(void) initButtons
-{
-    for (UIButton* button in self.buttons) {
-        UIImage *colorImage = [CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0] ];
-        [button setBackgroundImage:colorImage forState:UIControlStateHighlighted];
-        [button resignFirstResponder];
-    }
-    
 }
 
 
@@ -135,6 +120,17 @@
     [_emotionKeyboard initCollectionView];
 }
 
+-(void)getthumb
+{
+    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@.thumb",[_videoInfo valueForKey:@"video_name"]]];
+    UIImageView*tmp = [[UIImageView alloc]init];
+    [tmp sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            self.video_thumb = image;
+        }
+    }];
+
+}
 
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
@@ -189,14 +185,6 @@
 }
 
 
--(void) setGoodButton
-{
-    if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
-}
-
-
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
     UIFont *font = [UIFont systemFontOfSize:fsize];
@@ -210,54 +198,16 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.sequence forKey:@"sequence"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:self.videoId forKey:@"video_id"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS];
+    [httpSender sendMessage:jsonData withOperationCode:GET_VCOMMENTS];
 }
 
 
-- (IBAction)good:(id)sender {
-    [self.good_button setEnabled:NO];
-    BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
-    [dictionary setValue:@"good"  forKey:@"item_id"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD];
-}
 
-- (IBAction)comment:(id)sender {
-    //[self.commentView setHidden:NO];
-    //[self.view bringSubviewToFront:self.commentView];
-    self.inputTextView.placeHolder = @"说点什么吧";
-    [self.inputTextView becomeFirstResponder];
-}
-
-- (IBAction)share:(id)sender {
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"WeShare"
-                                     shareImage:self.photo
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
-                                       delegate:self];
-}
-
-- (IBAction)download:(id)sender {
-    [self.download_button setEnabled:NO];
-    UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
-    //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
-}
-
--(void)deletePhoto:(UIButton*)button
+-(void)deleteVideo:(UIButton*)button
 {
     [button setEnabled:NO];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -265,9 +215,8 @@
             [button setEnabled:YES];
         }
     });
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这张照片？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这段视频？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
-    
 }
 
 -(void)resendComment:(id)sender
@@ -277,23 +226,21 @@
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
     }
-    NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
+    NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
     int row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _pcomment_list[row-1];
-    [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
+    NSMutableDictionary *waitingComment = _vcomment_list[row-1];
+    [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:self.videoId forKey:@"video_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
-    
-    
-    
+
     [_tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(waitingComment && [[waitingComment valueForKey:@"pcomment_id"] intValue]== -1){
-            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+        if(waitingComment && [[waitingComment valueForKey:@"vcomment_id"] intValue]== -1){
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
             
         }
@@ -302,24 +249,24 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT finshedBlock:^(NSData *rData) {
+    [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
                 {
-                    [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
+                    [waitingComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
                     [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    [_pcomment_list removeObject:waitingComment];
-                    [_pcomment_list insertObject:waitingComment atIndex:0];
+                    [_vcomment_list removeObject:waitingComment];
+                    [_vcomment_list insertObject:waitingComment atIndex:0];
                     [_tableView reloadData];
                 }
             }else{
-                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                 [_tableView reloadData];
             }
         }else{
-            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
         }
     }];
@@ -346,7 +293,7 @@
         comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:self.videoId forKey:@"video_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     
@@ -355,93 +302,65 @@
     NSString*time = [dateFormatter stringFromDate:[NSDate date]];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
-    [newComment setValue:_photoId forKey:@"photo_id"];
+    [newComment setValue:_videoId forKey:@"video_id"];
     [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
-    [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
+    [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
     [newComment setValue:comment forKey:@"content"];
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
-
-    if ([_pcomment_list isKindOfClass:[NSArray class]]) {
-        _pcomment_list = [[NSMutableArray alloc]initWithArray:_pcomment_list];
+    
+    if ([_vcomment_list isKindOfClass:[NSArray class]]) {
+        _vcomment_list = [[NSMutableArray alloc]initWithArray:_vcomment_list];
     }
-    [_pcomment_list insertObject:newComment atIndex:0];
-
+    [_vcomment_list insertObject:newComment atIndex:0];
+    
     [_tableView reloadData];
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(newComment && [[newComment valueForKey:@"pcomment_id"] intValue]== -1){
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+        if(newComment && [[newComment valueForKey:@"vcomment_id"] intValue]== -1){
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
             
         }
     });
-
+    
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_PCOMMENT finshedBlock:^(NSData *rData) {
+    [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
                 {
-                    [newComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
+                    [newComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
                     [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    [_pcomment_list removeObject:newComment];
-                    [_pcomment_list insertObject:newComment atIndex:0];
+                    [_vcomment_list removeObject:newComment];
+                    [_vcomment_list insertObject:newComment atIndex:0];
                     [_tableView reloadData];
                 }
             }else{
-                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                 [_tableView reloadData];
             }
         }else{
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
         }
-
+        
     }];
 }
 
-- (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
-    [self.download_button setEnabled:YES];
-    if (error){
-        // Do anything needed to handle the error or display it to the user
-    }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
-    }
-}
 
--(void)backToDisplay
-{
-    if (_isKeyBoard) {
-        [self.inputTextView resignFirstResponder];
-    }else {
-        switch (self.type) {
-            case 1:
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-            case 2:{
-                BannerViewController* bannerView = [[BannerViewController alloc] init];
-                bannerView.banner = self.photo;
-                [self presentViewController:bannerView animated:YES completion:^{}];
-            }
-                break;
-            default:
-                break;
-        }
-    }
-}
 
 -(void)closeRJ
 {
-//    if (_Headeropen) {
-//        _Headeropen = NO;
-//        [_header endRefreshing];
-//    }
+    //    if (_Headeropen) {
+    //        _Headeropen = NO;
+    //        [_header endRefreshing];
+    //    }
     if (_Footeropen) {
         _Footeropen = NO;
         [_footer endRefreshing];
@@ -449,15 +368,15 @@
     [self.tableView reloadData];
 }
 
-- (void)deletePhotoInfoFromDB
-{
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
-    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-    [sql closeMyDB];
-}
+//- (void)deletePhotoInfoFromDB
+//{
+//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+//    MySqlite *sql = [[MySqlite alloc]init];
+//    [sql openMyDB:path];
+//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
+//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
+//    [sql closeMyDB];
+//}
 
 
 //#pragma mark - UIScrollViewDelegate
@@ -482,25 +401,13 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if ([response1 valueForKey:@"pcomment_list"]) {
-                NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
-                [self.pcomment_list addObjectsFromArray:newComments] ;
+            if ([response1 valueForKey:@"vcomment_list"]) {
+                NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"vcomment_list"]];
+                [self.vcomment_list addObjectsFromArray:newComments] ;
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self closeRJ];
-//
-            }else{
-                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-                int good = [[self.photoInfo valueForKey:@"good"]intValue];
-                if (isZan) {
-                    good --;
-                }else good ++;
-                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-                [self setGoodButton];
-                [self.good_button setEnabled:YES];
-                
+                //
             }
-            
         }
             break;
         default:
@@ -517,8 +424,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger comment_num = 0;
-    if (self.pcomment_list) {
-        comment_num = [self.pcomment_list count];
+    if (self.vcomment_list) {
+        comment_num = [self.vcomment_list count];
     }
     return 1 + comment_num;
 }
@@ -527,31 +434,26 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-        float height = self.photo.size.height *320.0/self.photo.size.width;
+        float height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        imageView.image = self.photo;
+        imageView.image = self.video_thumb;
         [cell addSubview:imageView];
         [cell addSubview:label];
         
-        UIButton* back = [UIButton buttonWithType:UIButtonTypeCustom];
-        [back setFrame:imageView.frame];
-        [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:back];
-        
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 150, 12)];
+        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 200, 12)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];
-        author.text = [self.photoInfo valueForKey:@"author"];
+        author.text = [self.videoInfo valueForKey:@"author"];
         [cell addSubview:author];
         
         UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
         [date setFont:[UIFont systemFontOfSize:11]];
         [date setTextColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0]];
-        date.text = [self.photoInfo valueForKey:@"time"];
+        date.text = [self.videoInfo valueForKey:@"time"];
         [date setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:date];
         
@@ -559,11 +461,11 @@
         UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, height+38, 260, self.specificationHeight+15)];
         [specification setFont:[UIFont systemFontOfSize:12]];
         [specification setNumberOfLines:0];
-        specification.text = [self.photoInfo valueForKey:@"specification"];
+        specification.text = [self.videoInfo valueForKey:@"title"];
         [specification setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:specification];
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
             [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];
@@ -575,62 +477,61 @@
         }
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.videoInfo valueForKey:@"author_id"]];
         [getter getAvatar];
         [cell addSubview:avatar];
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         return cell;
-    
-    
+        
+        
     }else{
         //cell = [[UITableViewCell alloc]init];
-        static NSString *CellIdentifier = @"pCommentCell";
+        static NSString *CellIdentifier = @"vCommentCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
-            UINib *nib = [UINib nibWithNibName:NSStringFromClass([PcommentTableViewCell class]) bundle:nil];
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([VcommentTableViewCell class]) bundle:nil];
             [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
             nibsRegistered = YES;
         }
-        cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
-        NSString* commentText = [Pcomment valueForKey:@"content"];
+        cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
+        NSString* commentText = [Vcomment valueForKey:@"content"];
         
-        ((PcommentTableViewCell *)cell).author.text = [Pcomment valueForKey:@"author"];
-        ((PcommentTableViewCell *)cell).authorName = [Pcomment valueForKey:@"author"];
-        ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
-        ((PcommentTableViewCell *)cell).origincomment = [Pcomment valueForKey:@"content"];
-        ((PcommentTableViewCell *)cell).controller = self;
-        ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((VcommentTableViewCell *)cell).author.text = [Vcomment valueForKey:@"author"];
+        ((VcommentTableViewCell *)cell).authorName = [Vcomment valueForKey:@"author"];
+        ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
+        ((VcommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
+        ((VcommentTableViewCell *)cell).controller = self;
+        ((VcommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         float commentWidth = 0;
-        ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
-        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] == -1 ) {
+        ((VcommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
+        if ([[Vcomment valueForKey:@"vcomment_id"] intValue] == -1 ) {
             commentWidth = 230;
-            [((PcommentTableViewCell *)cell).waitView startAnimating];
-            [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
-        }else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
-            [((PcommentTableViewCell *)cell).waitView stopAnimating];
+            [((VcommentTableViewCell *)cell).waitView startAnimating];
+            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
+        }else if([[Vcomment valueForKey:@"vcomment_id"] intValue] == -2 ){
+            [((VcommentTableViewCell *)cell).waitView stopAnimating];
             commentWidth = 230;
-            [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
-            [((PcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else{
+            [((VcommentTableViewCell *)cell).resend_Button setHidden:NO];
+            [((VcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
+        }else{
             commentWidth = 255;
-            [((PcommentTableViewCell *)cell).waitView stopAnimating];
-            [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
+            [((VcommentTableViewCell *)cell).waitView stopAnimating];
+            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
-
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((PcommentTableViewCell *)cell).avatar authorId:[Pcomment valueForKey:@"author_id"]];
+        
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((VcommentTableViewCell *)cell).avatar authorId:[Vcomment valueForKey:@"author_id"]];
         [getter getAvatar];
         
         
         int height = [self calculateTextHeight:commentText width:255.0 fontSize:12.0];
         
-        MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
+        MLEmojiLabel* comment =((VcommentTableViewCell *)cell).comment;
         if (!comment){
             comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
-            ((PcommentTableViewCell *)cell).comment = comment;
+            ((VcommentTableViewCell *)cell).comment = comment;
         }
         else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
         [comment setDisableThreeCommon:YES];
@@ -640,15 +541,15 @@
         comment.lineBreakMode = NSLineBreakByCharWrapping;
         
         
-        comment.emojiText = [Pcomment valueForKey:@"content"];
+        comment.emojiText = [Vcomment valueForKey:@"content"];
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
         
-        UIView* backguand = ((PcommentTableViewCell *)cell).background;
+        UIView* backguand = ((VcommentTableViewCell *)cell).background;
         if (!backguand){
             backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
-            ((PcommentTableViewCell *)cell).background = backguand;
+            ((VcommentTableViewCell *)cell).background = backguand;
         }
         else [backguand setFrame:CGRectMake(10, 0, 300, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
@@ -671,25 +572,26 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0];
+        self.specificationHeight = [self calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0];
         NSLog(@"%f",self.specificationHeight);
-        height = self.photo.size.height *320.0/self.photo.size.width;
+        height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
         height += 3;
         height += 50;
         height += 30;//delete button
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
         float commentWidth = 0;
-        NSString* commentText = [Pcomment valueForKey:@"content"];
-        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] > 0) {
+        NSString* commentText = [Vcomment valueForKey:@"content"];
+        if ([[Vcomment valueForKey:@"vcomment_id"] intValue] > 0) {
             commentWidth = 255;
         }else commentWidth = 230;
         
         height = [self calculateTextHeight:commentText width:commentWidth fontSize:12.0];
         height += 32;
     }
+    NSLog(@"%f",height);
     return height;
 }
 
@@ -705,12 +607,12 @@
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
         NSLog(@"aaa");
-        PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];
         });
-        if ([cell.pcomment_id intValue] < 0) return;
+        if ([cell.vcomment_id intValue] < 0) return;
         self.herName = cell.authorName;
         if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
             self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];
@@ -724,10 +626,6 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
-//    if (refreshView == _header) {
-//        _Headeropen = YES;
-//        self.master_sequence = [NSNumber numberWithInt:0];
-//    }else
     _Footeropen = YES;
     [self pullMainCommentFromAir];
 }
@@ -787,17 +685,6 @@
     [UIView commitAnimations];
 }
 
-#pragma mark - UMSocialUIDelegate
--(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
-{
-    //根据`responseCode`得到发送结果,如果分享成功
-    if(response.responseCode == UMSResponseCodeSuccess)
-    {
-        //得到分享到的微博平台名
-        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
-    }
-}
 #pragma mark - UITextView Delegate
 -(void)textViewDidChange:(UITextView *)textView
 {
@@ -818,78 +705,77 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (alertView.tag) {
-        case 0:{
-            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
-            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
-            if (buttonIndex == cancelBtnIndex) {
-                ;
-            }
-            else if (buttonIndex == okBtnIndex)
-            {
-                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-                [dictionary setValue:self.eventId forKey:@"event_id"];
-                [dictionary setValue:@"delete" forKey:@"cmd"];
-                [dictionary setValue:self.photoId forKey:@"photo_id"];
-                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
-                    if (rData) {
-                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                        NSLog(@"received Data: %@",temp);
-                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                        switch ([cmd intValue]) {
-                            case NORMAL_REPLY:
-                            {
-                                //百度云 删除
-                                CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-                                [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
-                                //数据库 删除
-                                [self deletePhotoInfoFromDB];
-                                
-                                
-                            }
-                                break;
-                            default:
-                            {
-                                [self.delete_button setEnabled:YES];
-                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-                                [alert setTag:1];
-                            }
-                        }
-                        
-                    }else{
-                        [self.delete_button setEnabled:YES];
-                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-                    }
-                    
-                }];
-            }
-
-        }
-            break;
-        case 1:{
-            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
-            [self.navigationController popToViewController:self.controller animated:YES];
-        }
-        default:
-            break;
-    }
+//    switch (alertView.tag) {
+//        case 0:{
+//            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+//            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+//            if (buttonIndex == cancelBtnIndex) {
+//                ;
+//            }
+//            else if (buttonIndex == okBtnIndex)
+//            {
+//                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+//                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+//                [dictionary setValue:self.eventId forKey:@"event_id"];
+//                [dictionary setValue:@"delete" forKey:@"cmd"];
+//                [dictionary setValue:self.photoId forKey:@"photo_id"];
+//                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
+//                    if (rData) {
+//                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//                        NSLog(@"received Data: %@",temp);
+//                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//                        switch ([cmd intValue]) {
+//                            case NORMAL_REPLY:
+//                            {
+//                                //百度云 删除
+//                                CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+//                                [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
+//                                //数据库 删除
+//                                [self deletePhotoInfoFromDB];
+//                                
+//                                
+//                            }
+//                                break;
+//                            default:
+//                            {
+//                                [self.delete_button setEnabled:YES];
+//                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+//                                [alert setTag:1];
+//                            }
+//                        }
+//                        
+//                    }else{
+//                        [self.delete_button setEnabled:YES];
+//                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+//                    }
+//                    
+//                }];
+//            }
+//            
+//        }
+//            break;
+//        case 1:{
+//            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
+//            [self.navigationController popToViewController:self.controller animated:YES];
+//        }
+//        default:
+//            break;
+//    }
 }
 
 #pragma mark - CloudOperationDelegate
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
-    if (status){
-        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-        [alert setTag:1];
-        [self.delete_button setEnabled:YES];
-    }else{
-        [self.delete_button setEnabled:YES];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-    }
-
+//    if (status){
+//        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+//        [alert setTag:1];
+//        [self.delete_button setEnabled:YES];
+//    }else{
+//        [self.delete_button setEnabled:YES];
+//        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+//    }
 }
 
 

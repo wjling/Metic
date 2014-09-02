@@ -1,21 +1,18 @@
 //
-//  MCommentTableViewCell.m
-//  Metic
+//  VcommentTableViewCell.m
+//  WeShare
 //
-//  Created by ligang6 on 14-6-15.
+//  Created by ligang6 on 14-9-2.
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
-#import "MCommentTableViewCell.h"
-#import "FriendInfoViewController.h"
-#import "ReportViewController.h"
+
+#import "VcommentTableViewCell.h"
+#import "../Main Classes/Report/ReportViewController.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
+#import "FriendInfoViewController.h"
 
-@interface MCommentTableViewCell ()
-
-@end
-
-@implementation MCommentTableViewCell
+@implementation VcommentTableViewCell
 
 - (void)awakeFromNib
 {
@@ -28,38 +25,17 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
-- (IBAction)delete_Comment:(id)sender {
-    [_controller delete_Comment:sender];
-}
-
-
-- (IBAction)appreciate:(id)sender {
-    [_controller appreciate:sender];
-}
-
-- (IBAction)pushToFriendView:(id)sender {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-															 bundle: nil];
-    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [_controller.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = self.authorId;
-        [_controller.navigationController pushViewController:friendView animated:YES];
-    }
-	
+- (IBAction)resend:(id)sender {
+    
 }
 
 -(void)showOption:(UIGestureRecognizer*)sender
 {
-    if ([_commentid intValue]<0) {
+    if ([_vcomment_id intValue]<0) {
         return;
     }
     if (sender.state == UIGestureRecognizerStateBegan) {
@@ -107,7 +83,7 @@
     if (_controller.commentOptionView) {
         [_controller.commentOptionView removeFromSuperview];
         _controller.commentOptionView = nil;
-
+        
     }
 }
 
@@ -121,17 +97,32 @@
                                                                      bundle: nil];
             ReportViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"]; ;
             viewcontroller.eventId = _controller.eventId;
-            viewcontroller.commentId = _commentid;
+            viewcontroller.vcommentId = _vcomment_id;
             viewcontroller.comment = _origincomment;
-            viewcontroller.commentAuthor = self.author;
+            viewcontroller.commentAuthor = self.authorName;
             viewcontroller.authorId = self.authorId;
-            viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
-            
-            viewcontroller.type = 2;
+            viewcontroller.event = _controller.eventName;
+            viewcontroller.type = 4;
             [self.controller.navigationController pushViewController:viewcontroller animated:YES];
         }
         
     });
+}
+
+- (IBAction)pushToFriendView:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [_controller.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = self.authorId;
+        [_controller.navigationController pushViewController:friendView animated:YES];
+    }
+	
 }
 
 @end

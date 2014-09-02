@@ -11,6 +11,8 @@
 #import "../Utils/PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImageView+WebCache.h"
+#import "../Main Classes/UserInfo/UserInfoViewController.h"
+#import "../Main Classes/Friends/FriendsViewController.h"
 #define widthspace 10
 #define deepspace 4
 
@@ -23,6 +25,10 @@
     [_good_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xe0e0e0]] forState:UIControlStateHighlighted];
     [_comment_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xe0e0e0]] forState:UIControlStateHighlighted];
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    
+    [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
+    UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
+    [self.avatar addGestureRecognizer:tapRecognizer];
     // Initialization code
 }
 
@@ -74,7 +80,7 @@
     self.author.text = [_videoInfo valueForKey:@"author"];
     self.time.text = [[_videoInfo valueForKey:@"time"] substringToIndex:10];
     self.authorId = [_videoInfo valueForKey:@"author_id"];
-    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar.imageView authorId:self.authorId];
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:self.authorId];
     [avatarGetter getAvatar];
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
@@ -99,6 +105,63 @@
         }
     }];
 
+}
+
+-(void)good:(UIButton*)button
+{
+    [button setEnabled:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self && ![button isEnabled]) {
+            [button setEnabled:YES];
+        }
+    });
+
+    BOOL isZan = [[_videoInfo valueForKey:@"isZan"] boolValue];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:[_videoInfo valueForKey:@"video_id"] forKey:@"video_id"];
+    [dictionary setValue:[NSNumber numberWithInt:isZan? 4:5]  forKey:@"operation"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
+        [self.good_button setEnabled:YES];
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY) {
+                [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+                int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
+                if (isZan) {
+                    zan_num --;
+                }else{
+                    zan_num ++;
+                }
+                [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+                [_controller.tableView reloadData];
+            }
+        }
+    }];
+
+}
+
+- (void)pushToFriendView:(id)sender {
+    _authorId = [_videoInfo valueForKey:@"author_id"];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [_controller.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = self.authorId;
+        [_controller.navigationController pushViewController:friendView animated:YES];
+    }
+	
 }
 
 -(void)openmovie:(NSString*)url

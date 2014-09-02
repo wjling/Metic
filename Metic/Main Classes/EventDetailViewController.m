@@ -832,6 +832,7 @@
         cell.origincomment = text;
         float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
         if (commentHeight < 25) commentHeight = 25;
+        [textView setDisableThreeCommon:YES];
         CGRect frame = textView.frame;
         frame.size.height = commentHeight;
         [textView setFrame:frame];

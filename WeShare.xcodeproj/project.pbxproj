@@ -100,6 +100,9 @@
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
+		086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */; };
+		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
+		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
 		087759FF19A8B2AD0034BB58 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 087759FE19A8B2AD0034BB58 /* mapapi.bundle */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
@@ -426,6 +429,11 @@
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		086A5AB1193D6E7500880F2F /* MainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainView.m; sourceTree = "<group>"; };
+		086AE6CC19B5954000EDF629 /* VideoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoDetailViewController.h; path = Video/VideoDetailViewController.h; sourceTree = "<group>"; };
+		086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoDetailViewController.m; path = Video/VideoDetailViewController.m; sourceTree = "<group>"; };
+		086AE6D819B5C32800EDF629 /* VcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VcommentTableViewCell.h; sourceTree = "<group>"; };
+		086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VcommentTableViewCell.m; sourceTree = "<group>"; };
+		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
 		087759C519A8B2AD0034BB58 /* BMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMapKit.h; sourceTree = "<group>"; };
 		087759C619A8B2AD0034BB58 /* BMKActionPaopaoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKActionPaopaoView.h; sourceTree = "<group>"; };
 		087759C719A8B2AD0034BB58 /* BMKAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKAnnotation.h; sourceTree = "<group>"; };
@@ -1155,6 +1163,9 @@
 				0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */,
 				0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */,
 				0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */,
+				086AE6D819B5C32800EDF629 /* VcommentTableViewCell.h */,
+				086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */,
+				086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */,
 				08DB698A19541F3A00F80F3F /* SCommentTableViewCell.h */,
 				08DB698B19541F3A00F80F3F /* SCommentTableViewCell.m */,
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
@@ -1208,6 +1219,8 @@
 			children = (
 				08E92DD319B2CCD0002499BF /* VideoWallViewController.h */,
 				08E92DD419B2CCD0002499BF /* VideoWallViewController.m */,
+				086AE6CC19B5954000EDF629 /* VideoDetailViewController.h */,
+				086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -1774,6 +1787,7 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
+				086AE6C919B58C9100EDF629 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1917,6 +1931,7 @@
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
 				51F06C1C197E0109000E8428 /* zbar-back.png in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
+				086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */,
 				04B6F8AA19A25D5C00229393 /* face27.png in Resources */,
 				08DB69AB19541F3A00F80F3F /* EventCellTableViewCell.xib in Resources */,
 				04B6F89A19A25D5C00229393 /* face11.png in Resources */,
@@ -1954,6 +1969,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		086AE6C919B58C9100EDF629 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
@@ -2008,6 +2039,7 @@
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
 				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
+				086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */,
 				514812191937064E00DBBED7 /* MJRefreshHeaderView.m in Sources */,
 				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
@@ -2066,7 +2098,6 @@
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				08E92DD519B2CCD0002499BF /* VideoWallViewController.m in Sources */,
-				04B6FEA51965B65700B75AE2 /* FriendInfoEventsTableViewCell.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
@@ -2084,6 +2115,7 @@
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
+				086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */,
 				08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */,
 				04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */,
 				510D45A4196E8A960081672A /* UIImageView+HighlightedWebCache.m in Sources */,

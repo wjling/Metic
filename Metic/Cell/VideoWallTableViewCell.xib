@@ -18,13 +18,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="300" height="55"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Szf-m1-s2J">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ji7-86-6vn">
                                 <rect key="frame" x="8" y="9" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="默认用户头像">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="头像-116（白色底）" id="1iI-kX-jUS">
                                 <rect key="frame" x="8" y="9" width="37" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -132,7 +129,7 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
             <connections>
                 <outlet property="author" destination="zKN-PA-V2N" id="GUb-U8-PSg"/>
-                <outlet property="avatar" destination="Szf-m1-s2J" id="XUt-EC-aby"/>
+                <outlet property="avatar" destination="Ji7-86-6vn" id="bGp-lQ-SiW"/>
                 <outlet property="comment_button" destination="01I-XZ-xCA" id="2T4-X7-oXn"/>
                 <outlet property="controlContainer" destination="ggb-FM-QNH" id="ZbG-RU-f2I"/>
                 <outlet property="good_button" destination="XGc-gE-KBP" id="DT2-jK-seT"/>
@@ -149,6 +146,5 @@
         <image name="活动详情_点赞图按下效果" width="23" height="23"/>
         <image name="视频按钮" width="112" height="112"/>
         <image name="评论按下按钮icon" width="28" height="28"/>
-        <image name="默认用户头像" width="125" height="125"/>
     </resources>
 </document>

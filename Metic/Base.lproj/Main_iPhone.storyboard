@@ -2461,7 +2461,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X1d-8C-1mN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3736" y="677"/>
+            <point key="canvasLocation" x="3920" y="713"/>
         </scene>
         <!--Add Friend Confirm View Controller - 添加好友-->
         <scene sceneID="qtL-q5-EMi">
@@ -3215,7 +3215,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uux-SG-p2U">
-                                        <rect key="frame" x="5" y="10" width="24" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="button_emotion">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -4216,6 +4216,9 @@
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="视频墙" id="vwr-bs-2VG"/>
+                    <connections>
+                        <segue destination="YxX-6b-tde" kind="push" identifier="toVideoDetail" id="2f2-Sn-5X9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kZs-bA-rWd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4378,7 +4381,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfT-Pi-FEW">
-                                        <rect key="frame" x="5" y="10" width="24" height="24"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" image="button_emotion">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -4973,7 +4976,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jiy-va-6YZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1984" y="4177"/>
+            <point key="canvasLocation" x="1929" y="4626"/>
         </scene>
         <!--Event Invitation View Controller - 活动邀请-->
         <scene sceneID="O4T-eZ-rQ1">
@@ -5149,6 +5152,88 @@
             </objects>
             <point key="canvasLocation" x="1491" y="5913"/>
         </scene>
+        <!--Video Detail View Controller - 视频详情-->
+        <scene sceneID="CVO-Zv-HgL">
+            <objects>
+                <viewController storyboardIdentifier="VideoDetailViewController" id="YxX-6b-tde" customClass="VideoDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uu5-HW-k6z"/>
+                        <viewControllerLayoutGuide type="bottom" id="e5r-ZA-mvX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HzU-zg-tCK">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="114" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AjO-Mk-bh2">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="371"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
+                                <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-Uj-lOG">
+                                <rect key="frame" x="0.0" y="371" width="320" height="45"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CcP-Ho-o6v">
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="button_emotion">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="button_Emotionpress:" destination="YxX-6b-tde" eventType="touchUpInside" id="KrK-mk-mGj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbM-oD-LKC">
+                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="输入框">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="publishComment:" destination="cGW-AM-0QH" eventType="touchUpInside" id="bwL-nf-bBg"/>
+                                            <action selector="publishComment:" destination="YxX-6b-tde" eventType="touchUpInside" id="dND-Iv-JA3"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="FUb-2E-ENi"/>
+                                    <constraint firstAttribute="width" constant="320" id="a4v-TO-AZX"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FsU-VY-D2s" customClass="emotion_Keyboard">
+                                <rect key="frame" x="0.0" y="416" width="320" height="200"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="3ft-tT-lHk"/>
+                                    <constraint firstAttribute="width" constant="320" id="RrJ-8u-wl7"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="e5r-ZA-mvX" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" constant="45" id="00c-ZQ-MBN"/>
+                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" id="Cbo-Qs-HdX"/>
+                            <constraint firstItem="AjO-Mk-bh2" firstAttribute="top" secondItem="uu5-HW-k6z" secondAttribute="bottom" id="PFc-PP-QgR"/>
+                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leading" id="eHS-dk-HPd"/>
+                            <constraint firstItem="FsU-VY-D2s" firstAttribute="top" secondItem="e5r-ZA-mvX" secondAttribute="bottom" id="zZj-dg-uFq"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="视频详情" id="7hk-aB-QWt">
+                        <barButtonItem key="backBarButtonItem" title=" " id="EVw-mz-KlH"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="commentView" destination="f5m-Uj-lOG" id="hcL-Ca-qvT"/>
+                        <outlet property="emotionKeyboard" destination="FsU-VY-D2s" id="j6f-RF-g1N"/>
+                        <outlet property="tableView" destination="AjO-Mk-bh2" id="sqS-8T-BHg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IkT-GQ-sH8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3480" y="229"/>
+        </scene>
     </scenes>
     <resources>
         <image name="1星空.jpg" width="640" height="244"/>
@@ -5214,20 +5299,16 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="rIK-Ci-sAS"/>
-
-        <segue reference="Bnm-KN-OgT"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="kIc-uU-eUg"/>
-        <segue reference="06u-oh-4gy"/>
         <segue reference="WvQ-QJ-tqt"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="eBE-9B-Hp2"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="DsC-hh-HTw"/>
         <segue reference="KQw-JA-BHy"/>
-        <segue reference="Bdm-ot-CYp"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="kIc-uU-eUg"/>
+        <segue reference="06u-oh-4gy"/>
+        <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>
