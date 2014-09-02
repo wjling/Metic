@@ -102,6 +102,7 @@
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [self.video_button setImage:image forState:UIControlStateNormal];
+            self.videoThumb = image;
         }
     }];
 

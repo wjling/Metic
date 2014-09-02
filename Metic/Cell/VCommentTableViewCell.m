@@ -102,7 +102,7 @@
             viewcontroller.commentAuthor = self.authorName;
             viewcontroller.authorId = self.authorId;
             viewcontroller.event = _controller.eventName;
-            viewcontroller.type = 4;
+            viewcontroller.type = 6;
             [self.controller.navigationController pushViewController:viewcontroller animated:YES];
         }
         

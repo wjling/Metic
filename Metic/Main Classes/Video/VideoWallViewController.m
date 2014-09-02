@@ -18,6 +18,7 @@
 @interface VideoWallViewController ()
 @property(nonatomic,strong) NSMutableArray* videoInfos;
 @property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
+@property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
 @end
@@ -171,8 +172,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    VideoWallTableViewCell* cell = (VideoWallTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
     _seleted_videoInfo = dictionary;
+    _seleted_videoThumb = cell.videoThumb;
     [self performSegueWithIdentifier:@"toVideoDetail" sender:self];
 }
 
@@ -186,6 +189,7 @@
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
+            nextViewController.video_thumb = self.seleted_videoThumb;
         }
     }
 }

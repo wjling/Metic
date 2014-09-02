@@ -32,7 +32,6 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    NSLog(@"举报用户:type: %d, id: %@, name: %@", _type, _userId, _userName);
     [self initFormat];
     // Do any additional setup after loading the view from its nib.
     
@@ -84,6 +83,12 @@
             case 4:
                 text = [NSString stringWithFormat:@"举报：%@ 活动图片评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
+            case 5:
+                text = [NSString stringWithFormat:@"举报：%@ 活动视频\n\n",_event];
+                break;
+            case 6:
+                text = [NSString stringWithFormat:@"举报：%@ 活动视频评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
+                break;
             default:
                 break;
         }
@@ -94,6 +99,8 @@
 
 - (IBAction)confirm:(id)sender {
     [self.confirm_Button setEnabled:NO];
+    [self.textView resignFirstResponder];
+    [self.titleTextField resignFirstResponder];
     [self showWaitingView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self) {

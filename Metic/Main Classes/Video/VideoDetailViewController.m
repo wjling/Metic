@@ -44,7 +44,7 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initUI];
-    [self getthumb];
+    //[self getthumb];
     self.sequence = [NSNumber numberWithInt:0];
     self.videoId = [_videoInfo valueForKey:@"video_id"];
     self.isKeyBoard = NO;
@@ -123,6 +123,7 @@
 -(void)getthumb
 {
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@.thumb",[_videoInfo valueForKey:@"video_name"]]];
+    NSLog(@"%@",url);
     UIImageView*tmp = [[UIImageView alloc]init];
     [tmp sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
@@ -573,7 +574,6 @@
     float height = 0;
     if (indexPath.row == 0) {
         self.specificationHeight = [self calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0];
-        NSLog(@"%f",self.specificationHeight);
         height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
         height += 3;
         height += 50;
@@ -601,7 +601,7 @@
         [self.inputTextView resignFirstResponder];
         return;
     }
-    NSLog(@"kkkk");
+    NSLog(@"kkkk"); 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
