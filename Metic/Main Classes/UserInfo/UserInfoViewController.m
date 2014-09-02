@@ -229,6 +229,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
     switch (indexPath.section) {
         case 0:
@@ -264,11 +265,18 @@
             }
         }
             break;
+        case 2:
+        {
+            if (indexPath.row == 0) {
+                [self performSegueWithIdentifier:@"userInfo_securitycenter" sender:self];
+            }
+        }
+            break;
             
         default:
             break;
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 #pragma mark - UITableViewDataSource

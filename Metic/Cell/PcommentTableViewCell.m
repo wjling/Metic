@@ -9,7 +9,7 @@
 #import "PcommentTableViewCell.h"
 #import "../Main Classes/Report/ReportViewController.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
-#import "../Main Classes/FriendInfoViewController.h"
+#import "FriendInfoViewController.h"
 
 @implementation PcommentTableViewCell
 

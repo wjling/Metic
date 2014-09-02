@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-#import "../Source/security/SFHFKeychainUtils.h"
+#import "SFHFKeychainUtils.h"
 #import "MobClick.h"
 
 @interface LoginViewController ()
@@ -36,6 +36,7 @@
 @synthesize fromRegister;
 @synthesize text_userName;
 @synthesize text_password;
+@synthesize gender; 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,24 +50,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"login did load, fromRegister: %d",fromRegister);
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if ([userDf boolForKey:@"firstLaunched"]) {
-        NSLog(@"login: it is the first launch");
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                             bundle: nil];
-        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-        {
-            [self presentViewController:vc animated:NO completion:nil];
+    if (!fromRegister) {
+        if ([userDf boolForKey:@"firstLaunched"]) {
+            NSLog(@"login: it is the first launch");
+            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                 bundle: nil];
+            WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+            {
+                [self presentViewController:vc animated:NO completion:nil];
+            }
         }
-    }
-    else
-    {
-        NSLog(@"login: it is not the first launch");
-        [self showLaunchView];
-        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
-    }
+        else
+        {
+            NSLog(@"login: it is not the first launch");
+            [self showLaunchView];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+        }
 
+    }
     
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
     self.rootView.myDelegate = self;
@@ -91,15 +95,10 @@
     self.textField_password.delegate = self.rootView;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
-    self.textField_password.text = @"";
+//    self.textField_password.text = @"";
     //[self checkPreUP];
     self.textField_password.text = text_password? text_password:@"";
    
-    if (fromRegister) {
-        fromRegister = NO;
-        text_password = nil;
-        text_userName = nil;
-    }
     
     
 
@@ -108,9 +107,14 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    if (!fromRegister) {
+    NSLog(@"login will apear");
+    if (fromRegister) {
+        fromRegister = NO;
+        text_password = nil;
+        text_userName = nil;
+    }
+    else{
         [self checkPreUP];
     }
 //    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
@@ -119,6 +123,10 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    NSLog(@"login did appear, username: %@, user password: %@",text_userName, text_password);
+    
+//    textField_userName.text = text_userName;
+//    textField_password.text = text_password;
     [MobClick beginLogPageView:@"登录"];
 }
 
@@ -132,6 +140,24 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    if ([segue.destinationViewController isKindOfClass:[FillinInfoViewController class]]) {
+        FillinInfoViewController* vc = segue.destinationViewController;
+        vc.gender = gender;
+        vc.email = [textField_userName text];
+        NSLog(@"register gender: %@",vc.gender);
+    }
+    
+}
+
 
 -(void)showLaunchView
 {
@@ -280,6 +306,16 @@
     [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
 }
 
+-(void)jumpToFillinInfo
+{
+//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//															 bundle: nil];
+//    FillinInfoViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
+//    vc.email = [textField_userName text];
+//    [self.navigationController pushViewController:vc animated:YES];
+    [self performSegueWithIdentifier:@"login_fillinInfo" sender:self];
+}
+
 
 #pragma mark - Button click
 - (IBAction)loginButtonClicked:(id)sender {
@@ -387,8 +423,16 @@
             
 //            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
             //[user getInfo:userid myid:userid delegateId:self];
+            NSString* logintime = [response1 objectForKey:@"logintime"];
+            if ([logintime isEqualToString:@"None"]) {
+                [self jumpToFillinInfo];
+            }
+            else
+            {
+                [self jumpToMainView];
+//                [self jumpToFillinInfo];
+            }
             
-            [self jumpToMainView];
             [button_login setEnabled:YES];
         }
             break;

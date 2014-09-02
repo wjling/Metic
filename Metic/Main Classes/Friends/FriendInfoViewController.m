@@ -24,6 +24,7 @@
 @synthesize contentView;
 @synthesize pControl;
 @synthesize views;
+@synthesize moreFunction_view;
 
 @synthesize fInfoView;
 @synthesize photo;
@@ -37,6 +38,7 @@
 
 @synthesize root;
 @synthesize fid;
+@synthesize friendInfo_dic;
 @synthesize events;
 @synthesize rowHeights;
 @synthesize friendInfoEvents_tableView;
@@ -60,6 +62,7 @@
     
     [self initViews];
     [self getUserInfo];
+    [self.view bringSubviewToFront:moreFunction_view];
      NSLog(@"friend info fid: %@",fid);
 }
 
@@ -71,6 +74,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"view will appear");
+    if ([[MTUser sharedInstance].friendsIdSet containsObject:fid])
+    {
+        [self.navigationItem setTitle:@"好友信息"];
+    }
+    else
+    {
+        [self.navigationItem setTitle:@"用户信息"];
+    }
+
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -81,6 +93,7 @@
         [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
         
     }
+    
     
     
 }
@@ -119,7 +132,7 @@
     
     self.fInfoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
 //    [self.fInfoView setBackgroundColor:[UIColor lightGrayColor]];
-    self.fInfoView.image = [UIImage imageNamed:@"event"];
+    self.fInfoView.image = [UIImage imageNamed:@"1星空.jpg"];
     
     photo = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"default_avatar.jpg"]];
     photo.frame = CGRectMake(20, 40, 50, 50);
@@ -130,14 +143,14 @@
     photo.layer.borderWidth = 2;
     
     
-    name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 150, 25)];
+    name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 200, 25)];
     name_label.text = @"用户名";
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
     [name_label setBackgroundColor:[UIColor clearColor]];
     [name_label setTag:1];
     
-    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 100, 20)];
+    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 20)];
     location_label.text = @"地址";
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
@@ -146,7 +159,7 @@
     
     
     gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
-    gender_imageView.image = [UIImage imageNamed:@"女icon"];
+//    gender_imageView.image = [UIImage imageNamed:@"女icon"];
     [gender_imageView setTag:3];
     
     self.del_friend_Button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width-70, self.fInfoView.frame.size.height/2, 78, 25)];
@@ -166,6 +179,7 @@
     
     [self.del_friend_Button addSubview:icon];
     [self.del_friend_Button addSubview:del_btn_label];
+    [self.del_friend_Button setHidden:YES];
     
 //    self.fInfoView.layer.borderColor
     [self.fInfoView addSubview:photo];
@@ -178,7 +192,7 @@
     
     self.fDescriptionView = [[UIImageView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
-    self.fDescriptionView.image = [UIImage imageNamed:@"1星空"];
+    self.fDescriptionView.image = [UIImage imageNamed:@"1星空.jpg"];
     title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
     [title_label setBackgroundColor:[UIColor clearColor]];
@@ -376,7 +390,7 @@
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
     NSLog(@"cmd: %@",cmd);
     switch ([cmd intValue]) {
@@ -385,6 +399,7 @@
             NSNumber* uid = [response1 objectForKey:@"id"];
             if (uid) {
                 [self handleInfo:response1];
+                friendInfo_dic = response1;
             }
             else
             {
@@ -653,7 +668,7 @@
     }
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -661,8 +676,19 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.destinationViewController isKindOfClass:[UserQRCodeViewController class]]) {
+        UserQRCodeViewController* vc = segue.destinationViewController;
+        vc.friendInfo_dic = friendInfo_dic;
+    }
+    else if ([segue.destinationViewController isKindOfClass:[ReportViewController class]])
+    {
+        ReportViewController* vc = segue.destinationViewController;
+        vc.type = 0;
+        vc.userId = fid;
+        vc.userName = [friendInfo_dic objectForKey:@"name"];
+    }
 }
-*/
+
 
 
 
@@ -715,4 +741,17 @@
 //    [mine closeMyDB];
 //}
 
+- (IBAction)rightBarBtnClicked:(id)sender {
+    [moreFunction_view setHidden:!moreFunction_view.hidden];
+}
+
+- (IBAction)QRcodeClicked:(id)sender {
+    [self performSegueWithIdentifier:@"fInfo_fQRcode" sender:self];
+    [moreFunction_view setHidden:!moreFunction_view.hidden];
+}
+
+- (IBAction)reportClicked:(id)sender {
+    [self performSegueWithIdentifier:@"fInfo_report" sender:self];
+    [moreFunction_view setHidden:!moreFunction_view.hidden];
+}
 @end

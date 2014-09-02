@@ -15,6 +15,8 @@
 #import "PhotoGetter.h"
 #import "FriendInfoEventsTableViewCell.h"
 #import "FriendTableViewCell.h"
+#import "UserQRCodeViewController.h"
+#import "ReportViewController.h"
 
 
 @interface FriendInfoViewController : UIViewController <UIScrollViewDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -23,6 +25,8 @@
 @property (strong, nonatomic) UIScrollView* sView;
 @property (strong, nonatomic) UIPageControl* pControl;
 @property (strong, nonatomic) NSMutableArray* views;
+@property (strong, nonatomic) IBOutlet UIView *moreFunction_view;
+
 
 @property (strong, nonatomic) UIImageView* fInfoView;
 @property (strong, nonatomic) UIImageView* photo;
@@ -37,10 +41,13 @@
 @property (strong, nonatomic) IBOutlet UITableView *friendInfoEvents_tableView;
 @property (strong, nonatomic) IBOutlet UIView *root;
 @property (strong, nonatomic) NSNumber* fid;
+@property (strong, nonatomic) NSMutableDictionary* friendInfo_dic;
 @property (strong, nonatomic) NSMutableArray* events;
 @property (strong, nonatomic) NSMutableArray* rowHeights;
 //- (IBAction)testingClicked:(id)sender;
 
 - (IBAction)stretchBtnClicked:(id)sender;
-
+- (IBAction)rightBarBtnClicked:(id)sender;
+- (IBAction)QRcodeClicked:(id)sender;
+- (IBAction)reportClicked:(id)sender;
 @end

@@ -20,6 +20,7 @@
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* vcommentId;
 
+@property (strong,nonatomic) NSString* userName;
 @property (nonatomic,strong) NSString* commentAuthor;
 @property (nonatomic,strong) NSString* comment;
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;

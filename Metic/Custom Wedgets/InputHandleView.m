@@ -59,7 +59,7 @@
         frame = [textField convertRect:textField.frame toView:self];
     }
     NSLog(@"textField frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    textFieldOffset = frame.origin.y + textField.frame.size.height - (self.frame.size.height - 216.0);//键盘高度216
+    textFieldOffset = frame.origin.y + textField.frame.size.height - (self.frame.size.height - 216.0 - 40);//键盘高度216
     NSLog(@"textField offset: %f",textFieldOffset);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
