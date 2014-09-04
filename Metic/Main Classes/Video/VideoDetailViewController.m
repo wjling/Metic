@@ -497,7 +497,7 @@
             [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+            [self.delete_button addTarget:self action:@selector(deleteVideo:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:self.delete_button];
         }
         

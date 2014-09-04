@@ -14,6 +14,10 @@
 #import "PhotoGetter.h"
 #import "UIImageView+WebCache.h"
 #import "MobClick.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "VideoPreviewViewController.h"
+
+
 
 @interface VideoWallViewController ()
 @property(nonatomic,strong) NSMutableArray* videoInfos;
@@ -21,6 +25,7 @@
 @property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
+@property(nonatomic,strong) UIImage* preViewImage;
 @end
 
 @implementation VideoWallViewController
@@ -116,6 +121,23 @@
     
 }
 
+- (IBAction)uploadVideo:(id)sender {
+    UIActionSheet *sheet;
+    
+    // 判断是否支持相机
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择视频" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"录像", @"从相册选择", nil];
+    }
+    else {
+        sheet = [[UIActionSheet alloc] initWithTitle:@"选择视频" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
+    }
+    
+    sheet.tag = 255;
+    
+    [sheet showInView:self.view];
+}
+
 -(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
 {
     UIFont *font = [UIFont systemFontOfSize:fsize];
@@ -193,4 +215,105 @@
         }
     }
 }
+
+#pragma mark - action sheet delegte
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 255) {
+        // 跳转到相机或相册页面
+        UIImagePickerController* pickerView = [[UIImagePickerController alloc] init];
+        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        // 判断是否支持相机
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            switch (buttonIndex) {
+                case 0:
+                    return;
+                case 1: //相机
+                    sourceType = UIImagePickerControllerSourceTypeCamera;
+                    break;
+                case 2: //相册
+                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    break;
+            }
+        }
+        else {
+            if (buttonIndex == 0) {
+                return;
+            } else {
+                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            }
+        }
+        pickerView.sourceType = sourceType;
+        pickerView.videoQuality = UIImagePickerControllerQualityType640x480;
+        NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        pickerView.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
+        [self presentViewController:pickerView animated:YES completion:^{}];
+        pickerView.videoMaximumDuration = 20;
+        pickerView.delegate = self;
+    }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSURL* videoURL = info[UIImagePickerControllerMediaURL];
+    [self save:[videoURL path]];
+    NSString* fileSize = [NSString stringWithFormat:@"%d kb", [self getFileSize:[[videoURL absoluteString] substringFromIndex:16]]];
+    NSString* videoLen = [NSString stringWithFormat:@"%.0f s", [self getVideoDuration:videoURL]];
+    NSLog(@"%@   %@",fileSize,videoLen);
+    [picker dismissViewControllerAnimated:YES completion:^{
+        //[self openEditor:nil];
+    }];
+
+    VideoPreviewViewController* controller = [[VideoPreviewViewController alloc]init];
+    controller.videoURL = videoURL;
+    [self.navigationController pushViewController:controller animated:NO];
+    
+    
+}
+
+
+#pragma mark - private Method
+
+- (NSInteger) getFileSize:(NSString*) path
+{
+    NSFileManager * filemanager = [[NSFileManager alloc]init];
+    if([filemanager fileExistsAtPath:path]){
+        NSDictionary * attributes = [filemanager attributesOfItemAtPath:path error:nil];
+        NSNumber *theFileSize;
+        if ( (theFileSize = [attributes objectForKey:NSFileSize]) )
+            return  [theFileSize intValue]/1024;
+        else
+            return -1;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+- (CGFloat) getVideoDuration:(NSURL*) URL
+{
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:URL options:opts];
+    float second = 0;
+    second = urlAsset.duration.value/urlAsset.duration.timescale;
+    return second;
+}
+
+- (void)save:(NSString*)urlString{
+    ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+    [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:urlString]
+                                completionBlock:^(NSURL *assetURL, NSError *error) {
+                                    if (error) {
+                                        NSLog(@"Save video fail:%@",error);
+                                    } else {
+                                        NSLog(@"Save video succeed.");
+                                        
+                                    }
+                                }];
+}
+
+
 @end

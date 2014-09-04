@@ -115,6 +115,8 @@
 		08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
+		08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B8D63B19B87FB100552663 /* AssetsLibrary.framework */; };
+		08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B8D64019B89C9400552663 /* VideoPreviewViewController.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -514,6 +516,9 @@
 		08B3F7051957013F003B32B7 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		08B3F707195711A3003B32B7 /* CloudOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CloudOperation.h; path = Metic/Utils/CloudOperation.h; sourceTree = SOURCE_ROOT; };
 		08B3F708195711A3003B32B7 /* CloudOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CloudOperation.m; path = Metic/Utils/CloudOperation.m; sourceTree = SOURCE_ROOT; };
+		08B8D63B19B87FB100552663 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPreviewViewController.h; path = Video/VideoPreviewViewController.h; sourceTree = "<group>"; };
+		08B8D64019B89C9400552663 /* VideoPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPreviewViewController.m; path = Video/VideoPreviewViewController.m; sourceTree = "<group>"; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -792,6 +797,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */,
 				08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */,
 				0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */,
 				51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */,
@@ -1221,6 +1227,8 @@
 				08E92DD419B2CCD0002499BF /* VideoWallViewController.m */,
 				086AE6CC19B5954000EDF629 /* VideoDetailViewController.h */,
 				086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */,
+				08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */,
+				08B8D64019B89C9400552663 /* VideoPreviewViewController.m */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -1462,6 +1470,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
 				0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */,
@@ -2120,6 +2129,7 @@
 				04CB1B7B1976EFD300BC083C /* NameSettingViewController.m in Sources */,
 				510D45A4196E8A960081672A /* UIImageView+HighlightedWebCache.m in Sources */,
 				08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */,
+				08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */,
 				0435EF3D19B45C54003BB2F6 /* FriendTableViewCell.m in Sources */,
 				5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */,
 				510D4598196E8A960081672A /* NSData+ImageContentType.m in Sources */,

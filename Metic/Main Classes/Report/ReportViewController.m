@@ -142,6 +142,7 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     [dictionary setValue:object_id forKey:@"object_id"];
+    [dictionary setValue:_textView.text forKey:@"content"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
