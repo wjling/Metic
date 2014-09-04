@@ -27,12 +27,19 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     UITableView* security_tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     [self.view addSubview:security_tableview];
     security_tableview.delegate = self;
     security_tableview.dataSource = self;
+    security_tableview.scrollEnabled = NO;
     
 }
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -50,6 +57,25 @@
     // Pass the selected object to the new view controller.
 }
 */
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    switch (indexPath.section) {
+        case 0:
+        {
+            [self performSegueWithIdentifier:@"securitycenter_modifypassword" sender:self];
+        }
+            break;
+        case 1:
+        {
+            [self performSegueWithIdentifier:@"securitycenter_modifyphone" sender:self];
+        }
+            break;
+            
+        default:
+            break;
+    }}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

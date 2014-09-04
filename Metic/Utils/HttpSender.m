@@ -138,6 +138,9 @@
         case 18:
             resultCode = @"change_settings";
             break;
+        case 19:
+            resultCode = @"change_pw";
+            break;
         case 20:
             resultCode = @"add_pcomment";
             break;

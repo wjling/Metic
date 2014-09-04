@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CommonUtils.h"
 
 @interface SecurityCenterViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
