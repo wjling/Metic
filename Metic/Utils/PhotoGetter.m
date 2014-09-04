@@ -242,7 +242,10 @@
 
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     NSString* uploadfilePath = filePath;
-    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+    });
+    
     
 }
 

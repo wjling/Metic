@@ -145,7 +145,10 @@
     [self.getPhoto setEnabled:NO];
     PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
     getter.mDelegate = self;
-    [getter uploadPhoto];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [getter uploadPhoto];
+    });
+    
 }
 
 -(void)showWaitingView
