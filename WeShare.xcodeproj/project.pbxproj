@@ -27,6 +27,8 @@
 		0435EF4F19B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4819B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m */; };
 		0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4A19B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m */; };
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
+		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
+		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -317,6 +319,10 @@
 		0435EF4A19B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsSystemMessageTableViewCell.m; path = Notifications/NotificationsSystemMessageTableViewCell.m; sourceTree = "<group>"; };
 		0435EF4B19B49DA2003BB2F6 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationsViewController.h; path = Notifications/NotificationsViewController.h; sourceTree = "<group>"; };
 		0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationsViewController.m; path = Notifications/NotificationsViewController.m; sourceTree = "<group>"; };
+		0435EF5419B5EB0E003BB2F6 /* ModifyPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModifyPasswordViewController.h; path = UserInfo/ModifyPasswordViewController.h; sourceTree = "<group>"; };
+		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
+		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
+		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -980,6 +986,10 @@
 				04D6128D197B90D500159190 /* SignSetttingViewController.m */,
 				0435EF2819B45B55003BB2F6 /* SecurityCenterViewController.h */,
 				0435EF2919B45B55003BB2F6 /* SecurityCenterViewController.m */,
+				0435EF5419B5EB0E003BB2F6 /* ModifyPasswordViewController.h */,
+				0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */,
+				0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */,
+				0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -2050,7 +2060,9 @@
 				04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */,
 				510D459D196E8A960081672A /* SDWebImageDownloaderOperation.m in Sources */,
 				04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */,
+				0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */,
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
+				0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,

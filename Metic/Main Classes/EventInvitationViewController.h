@@ -14,5 +14,6 @@
 @interface EventInvitationViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
+@property (strong, nonatomic) NSMutableArray* msg_arr;
 
 @end

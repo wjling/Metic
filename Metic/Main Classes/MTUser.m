@@ -21,6 +21,7 @@
 
 @implementation MTUser
 @synthesize userid;
+@synthesize saltValue;
 @synthesize friendList;
 @synthesize sortedFriendDic;
 @synthesize sectionArray;
@@ -106,6 +107,7 @@ static MTUser *singletonInstance;
         _sign = [aDecoder decodeObjectForKey:@"sign"];
         _phone = [aDecoder decodeObjectForKey:@"phone"];
         _location = [aDecoder decodeObjectForKey:@"location"];
+        saltValue = [aDecoder decodeObjectForKey:@"saltValue"];
     }
     
     return self;
@@ -134,6 +136,7 @@ static MTUser *singletonInstance;
     [aCoder encodeObject:self.sign forKey:@"sign"];
     [aCoder encodeObject:self.phone forKey:@"phone"];
     [aCoder encodeObject:self.location forKey:@"location"];
+    [aCoder encodeObject:self.saltValue forKey:@"saltValue"];
 }
 
 

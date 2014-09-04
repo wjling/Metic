@@ -21,6 +21,7 @@
 @property(nonatomic,strong)NSString *sign;
 @property(nonatomic,strong)NSString *phone;
 @property(nonatomic,strong)NSString *location;
+@property(nonatomic,strong)NSString* saltValue;
 @property(nonatomic,strong)NSMutableDictionary *avatar;
 @property(nonatomic,strong)NSMutableDictionary *avatarURL;
 @property(nonatomic,strong)NSMutableDictionary *bannerURL;

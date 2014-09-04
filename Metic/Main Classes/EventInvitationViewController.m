@@ -18,10 +18,11 @@
     MySqlite* mySql;
     NSString* DB_path;
 }
-@property (nonatomic,strong) NSMutableArray* eventRequestMsg;
+//@property (nonatomic,strong) NSMutableArray* eventRequestMsg;
 @end
 
 @implementation EventInvitationViewController
+@synthesize msg_arr;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,7 +37,8 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
+//    _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
+    [self getMsgArray];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     selectedPath = [[NSIndexPath alloc]init];
@@ -71,6 +73,16 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)getMsgArray
+{
+    msg_arr = [[NSMutableArray alloc]init];
+    for (NSMutableDictionary* msg in [MTUser sharedInstance].eventRequestMsg) {
+        NSInteger cmd = [[msg objectForKey:@"cmd"] integerValue];
+        if (cmd != REQUEST_EVENT) {
+            [msg_arr addObject:msg];
+        }
+    }
+}
 #pragma mark UITableViewDataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -79,7 +91,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _eventRequestMsg.count;
+    return msg_arr.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,7 +106,7 @@
     EventInvitationTableViewCell *cell = (EventInvitationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     
-    NSDictionary *a = _eventRequestMsg[indexPath.row];
+    NSDictionary *a = msg_arr[indexPath.row];
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
@@ -144,7 +156,7 @@
         cell = [cell superview];
     }
     selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [_eventRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
     
@@ -175,7 +187,7 @@
         cell = [cell superview];
     }
     selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [_eventRequestMsg objectAtIndex:selectedPath.row];
+    NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
     
@@ -215,7 +227,7 @@
             NSNumber* item_index = [item_id_dic objectForKey:@"item_index"];
 //            NSNumber* response_type = [item_id_dic objectForKey:@"response_type"];
             NSNumber* result = [item_id_dic valueForKey:@"response_result"];
-            NSMutableDictionary* msg_dic = [_eventRequestMsg objectAtIndex:[item_index intValue]];
+            NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:[item_index intValue]];
             
             NSNumber* seq = [msg_dic objectForKey:@"seq"];
             NSLog(@"response event, seq: %@",seq);
@@ -229,7 +241,7 @@
                                            nil]];
             [mySql closeMyDB];
             
-            [_eventRequestMsg removeObject:msg_dic];
+            [msg_arr removeObject:msg_dic];
             [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
             [msg_dic setValue:result forKey:@"ishandled"];
             
