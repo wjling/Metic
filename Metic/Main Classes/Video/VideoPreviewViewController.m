@@ -8,11 +8,12 @@
 
 #import "VideoPreviewViewController.h"
 #import "CommonUtils.h"
+#import "../../UIView/MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface VideoPreviewViewController ()
 @property(nonatomic,strong) UIScrollView* scrollView;
-@property(nonatomic,strong) UITextView* textView;
+@property(nonatomic,strong) MTMessageTextView* textView;
 @property(nonatomic,strong) UIView* videoView;
 @property(nonatomic,strong) UIButton* videoBtn;
 @property(nonatomic,strong) UIImage* preViewImage;
@@ -68,6 +69,7 @@
 
 -(void)initUI
 {
+    [CommonUtils addLeftButton:self isFirstPage:YES];
     [self.navigationItem setTitle:@"上传视频"];
     CGFloat colorValue = 242.0/255.0;
     [self.view setBackgroundColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:colorValue]];
@@ -80,12 +82,13 @@
     _scrollView.delegate = self;
     [self.view addSubview:_scrollView];
     
-    _textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 10, 300, 60)];
+    _textView = [[MTMessageTextView alloc]initWithFrame:CGRectMake(10, 10, 300, 60)];
     [_textView setBackgroundColor:[UIColor whiteColor]];
     [_textView.layer setCornerRadius:4];
     _textView.layer.masksToBounds = YES;
     [_textView setFont:[UIFont systemFontOfSize:16]];
     _textView.delegate = self;
+    _textView.placeHolder = @"这一刻的想法...";
     [_scrollView addSubview:_textView];
     
     _videoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -108,7 +111,37 @@
     [videoIc setUserInteractionEnabled:NO];
     videoIc.image = [UIImage imageNamed:@"视频按钮"];
     [_videoView addSubview:videoIc];
+    
+    UIView* rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 71, 33)];
+    [rightView setBackgroundColor:[UIColor clearColor]];
+    
+    UIButton* rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightBtn setFrame:CGRectMake(0, 0, 90, 33)];
+    [rightBtn setImage:[UIImage imageNamed:@"头部小按钮"] forState:UIControlStateNormal];
+    [rightBtn setImage:[UIImage imageNamed:@"头部小按钮按下效果"] forState:UIControlStateHighlighted];
+    [rightBtn setTitle:@"" forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
+    [rightView addSubview:rightBtn];
+    
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(30, 5, 42, 21)];
+    [label setFont:[UIFont systemFontOfSize:15]];
+    label.text = @"确定";
+    [label setTextColor:[CommonUtils colorWithValue:0xf2f2f2]];
+    [rightView addSubview:label];
+    
+    UIBarButtonItem *rightBtnItem=[[UIBarButtonItem alloc]initWithCustomView:rightView];
+    self.navigationItem.rightBarButtonItem = rightBtnItem;
 
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)confirm:(id)sender
+{
+    NSLog(@"确定上传视频");
 }
 
 -(void)play:(id)sender
