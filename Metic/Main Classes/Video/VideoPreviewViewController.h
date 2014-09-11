@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "../../Utils/PhotoGetter.h"
 
-@interface VideoPreviewViewController : UIViewController<UITextViewDelegate>
+@interface VideoPreviewViewController : UIViewController<UITextViewDelegate,PhotoGetterDelegate>
+{
+    UIAlertView*                                        _alert;
+    NSString*                                           _mp4Path;
+}
 @property(nonatomic,strong) NSURL* videoURL;
+@property(nonatomic,strong) NSNumber* eventId;
 @end

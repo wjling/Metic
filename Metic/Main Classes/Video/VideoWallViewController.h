@@ -16,5 +16,6 @@
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) UITableView* tableView;
+@property BOOL shouldReload;
 - (IBAction)uploadVideo:(id)sender;
 @end

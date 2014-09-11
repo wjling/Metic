@@ -12,13 +12,20 @@
 #import "FriendInfoViewController.h"
 
 @implementation PcommentTableViewCell
+{
+    UILongPressGestureRecognizer * longRecognizer;
+}
 
 - (void)awakeFromNib
 {
     // Initialization code
     //长按手势
-    UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
-    [self addGestureRecognizer:longRecognizer];
+    if (longRecognizer == nil) {
+        longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
+        [self addGestureRecognizer:longRecognizer];
+    }
+    
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

@@ -42,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _shouldReload = YES;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     //init tableView
@@ -63,6 +64,8 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    _sequence = [NSNumber numberWithInt:0];
+    [self getVideolist];
     [MobClick beginLogPageView:@"视频墙"];
 }
 
@@ -240,7 +243,7 @@
             if (buttonIndex == 0) {
                 return;
             } else {
-                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+                sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             }
         }
         pickerView.sourceType = sourceType;
@@ -257,7 +260,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     NSURL* videoURL = info[UIImagePickerControllerMediaURL];
-    [self save:[videoURL path]];
+    //[self save:[videoURL path]];
     NSString* fileSize = [NSString stringWithFormat:@"%d kb", [self getFileSize:[[videoURL absoluteString] substringFromIndex:16]]];
     NSString* videoLen = [NSString stringWithFormat:@"%.0f s", [self getVideoDuration:videoURL]];
     NSLog(@"%@   %@",fileSize,videoLen);
@@ -267,6 +270,7 @@
 
     VideoPreviewViewController* controller = [[VideoPreviewViewController alloc]init];
     controller.videoURL = videoURL;
+    controller.eventId = _eventId;
     [self.navigationController pushViewController:controller animated:NO];
     
     

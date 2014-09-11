@@ -20,6 +20,8 @@
 }
 @property(nonatomic,strong) UIImage* uploadImage;
 @property(nonatomic,strong) NSString* imgName;
+@property(nonatomic,strong) NSString* videoName;
+@property(nonatomic,strong) NSString* videoFilePath;
 @property BOOL isUpload;
 
 @end
@@ -196,6 +198,7 @@
 -(void)updatePhoto
 {
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP.mineType = @"image/jpeg";
     [cloudOP CloudToDo:DOWNLOAD path:_path uploadPath:nil container:self.imageView authorId:nil];
 }
 
@@ -241,6 +244,7 @@
     [imageData writeToFile:filePath atomically:YES];
 
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP.mineType = @"image/jpeg";
     NSString* uploadfilePath = filePath;
     dispatch_async(dispatch_get_main_queue(), ^{
         [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
@@ -304,7 +308,9 @@
     NSString* avatarName2 = [NSString stringWithFormat:@"%@",[MTUser sharedInstance].userid];
     NSString* uploadfilePath;
     CloudOperation *cloudOP1 = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP1.mineType = @"image/jpeg";
     CloudOperation* cloudOP2 = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP2.mineType = @"image/jpeg";
     
     self.path = [NSString stringWithFormat:@"/avatar/%@.jpg",avatarName1];
     self.imgName =[NSString stringWithFormat:@"%@.jpg",avatarName1];
@@ -322,6 +328,8 @@
     
    
 }
+
+
 
 
 -(void)uploadBanner:(NSNumber*)eventId
@@ -362,12 +370,44 @@
     [imageData writeToFile:filePath atomically:YES];
     
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP.mineType = @"image/jpeg";
     NSString* uploadfilePath = filePath;
     [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
     
 }
 
+-(void)uploadVideoThumb
+{
+    self.isUpload = YES;
+    NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
+    [formatter setDateFormat:[NSString stringWithFormat:@"YYYYMMddHHmmssSSSSS%@",[MTUser sharedInstance].userid]];
+    NSString *date =  [formatter stringFromDate:[NSDate date]];
+    //NSString *timeLocal = [[NSString alloc] initWithFormat:@"%@", date];
+    
+    self.path = [NSString stringWithFormat:@"/video/%@.mp4.thumb",date];
+    self.imgName = nil;
+    self.videoName =[NSString stringWithFormat:@"%@.mp4",date];
+    NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+    _videoFilePath = [NSString stringWithString:filePath];
+    filePath = [filePath stringByAppendingString:@".thumb"];
+    NSData* imageData = UIImageJPEGRepresentation(_uploadImage, 0.5);
+    [imageData writeToFile:filePath atomically:YES];
+    CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP.mineType = @"image/jpeg";
+    NSString* uploadfilePath = filePath;
+    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+}
 
+-(void)uploadVideo
+{
+    self.isUpload = YES;
+    self.path = [NSString stringWithFormat:@"/video/%@",_videoName];
+    self.imgName = _videoName;
+    CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
+    cloudOP.mineType = @"video/mp4";
+    [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:_videoFilePath container:nil authorId:nil];
+}
 
 -(NSString*)getLocalAvatarUrl
 {
@@ -474,7 +514,9 @@
                 }];
 
             }
-            [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
+            if (!_imgName) {
+                [self uploadVideo];
+            }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
         }

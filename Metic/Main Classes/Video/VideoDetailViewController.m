@@ -96,6 +96,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)dealloc
+
+{
+    [_footer free];
+}
 
 -(void)initUI
 {

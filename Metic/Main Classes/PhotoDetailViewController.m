@@ -94,10 +94,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)dealloc
+
+{
+    [_footer free];
 }
 
 -(void) initButtons
@@ -834,7 +839,7 @@
                 [dictionary setValue:@"delete" forKey:@"cmd"];
                 [dictionary setValue:self.photoId forKey:@"photo_id"];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
+                [httpSender sendMediaMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
                     if (rData) {
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                         NSLog(@"received Data: %@",temp);

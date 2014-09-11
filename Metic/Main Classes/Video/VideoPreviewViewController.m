@@ -7,9 +7,13 @@
 //
 
 #import "VideoPreviewViewController.h"
+#import "VideoWallViewController.h"
 #import "CommonUtils.h"
 #import "../../UIView/MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
+
+
+#define mp4Quality AVAssetExportPreset640x480
 
 @interface VideoPreviewViewController ()
 @property(nonatomic,strong) UIScrollView* scrollView;
@@ -17,6 +21,7 @@
 @property(nonatomic,strong) UIView* videoView;
 @property(nonatomic,strong) UIButton* videoBtn;
 @property(nonatomic,strong) UIImage* preViewImage;
+@property(nonatomic,strong) UIView* waitingView;
 @property BOOL isKeyBoard;
 @end
 
@@ -36,6 +41,7 @@
     [super viewDidLoad];
     [self initData];
     [self initUI];
+    [self encodeVideo];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -141,7 +147,84 @@
 
 -(void)confirm:(id)sender
 {
-    NSLog(@"确定上传视频");
+    [_textView resignFirstResponder];
+    [self showWaitingView];
+    PhotoGetter *uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
+    uploader.mDelegate = self;
+    [uploader uploadVideoThumb];
+    
+    
+    
+    
+    
+    
+    
+    
+}
+
+- (void)encodeVideo
+{
+    _alert = [[UIAlertView alloc] init];
+    [_alert setTitle:@"Waiting.."];
+    
+    UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+
+    activity.frame = CGRectMake(140,
+                                80,
+                                CGRectGetWidth(_alert.frame),
+                                CGRectGetHeight(_alert.frame));
+    [_alert addSubview:activity];
+    [activity startAnimating];
+    [_alert show];
+
+    // output file
+    NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString* outputPath = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:outputPath])
+        [[NSFileManager defaultManager] removeItemAtPath:outputPath error:nil];
+    
+    // input file
+    //AVAsset* asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:_videoURL options:nil];
+    AVMutableComposition *composition = [AVMutableComposition composition];
+    [composition  addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    // input clip
+    AVAssetTrack *clipVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    
+    // make it square
+    AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
+    videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
+    videoComposition.frameDuration = CMTimeMake(1, 10);
+    
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30) );
+    
+    // rotate to portrait
+    AVMutableVideoCompositionLayerInstruction* transformer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:clipVideoTrack];
+//        CGAffineTransform t1 = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) /2 );
+//        CGAffineTransform t2 = CGAffineTransformRotate(t1, M_PI_2);
+//        
+//        CGAffineTransform finalTransform = t2;
+//        [transformer setTransform:finalTransform atTime:kCMTimeZero];
+    instruction.layerInstructions = [NSArray arrayWithObject:transformer];
+    videoComposition.instructions = [NSArray arrayWithObject: instruction];
+    
+    // export
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset640x480] ;
+    exporter.videoComposition = videoComposition;
+    exporter.outputURL=[NSURL fileURLWithPath:outputPath];
+    exporter.outputFileType=AVFileTypeQuickTimeMovie;
+    
+    [exporter exportAsynchronouslyWithCompletionHandler:^(void){
+        NSLog(@"Exporting done!");
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_alert dismissWithClickedButtonIndex:0 animated:YES];
+        });
+
+    }];
+
 }
 
 -(void)play:(id)sender
@@ -167,6 +250,32 @@
                                               object:movie.moviePlayer];
     
 }
+
+
+-(void)showWaitingView
+{
+    if (!_waitingView) {
+        CGRect frame = self.view.bounds;
+        _waitingView = [[UIView alloc]initWithFrame:frame];
+        [_waitingView setBackgroundColor:[UIColor blackColor]];
+        [_waitingView setAlpha:0.5f];
+        frame.origin.x = (frame.size.width - 100)/2.0;
+        frame.origin.y = (frame.size.height - 100)/2.0;
+        frame.size = CGSizeMake(100, 100);
+        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+        [_waitingView addSubview:indicator];
+        [self.view addSubview:_waitingView];
+        [indicator startAnimating];
+    }
+}
+
+-(void)removeWaitingView
+{
+    if (_waitingView) {
+        [_waitingView removeFromSuperview];
+        _waitingView = nil;
+    }
+}
 -(void)movieFinishedCallback:(NSNotification*)notify{
 
     MPMoviePlayerController* theMovie = [notify object];
@@ -179,6 +288,82 @@
     
     [self dismissMoviePlayerViewControllerAnimated];
     
+}
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    if (imageView) {
+        imageView.image = image;
+    }
+    else if (type == 100){
+        [self removeWaitingView];
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        [dictionary setValue:self.eventId forKey:@"event_id"];
+        [dictionary setValue:@"upload" forKey:@"cmd"];
+        [dictionary setValue:container forKey:@"video_name"];
+        [dictionary setValue:self.textView.text forKey:@"title"];
+        
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMediaMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                NSLog(@"received Data: %@",temp);
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                switch ([cmd intValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:100];
+                        
+                    }
+                        break;
+                    default:
+                    {
+                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+
+                    }
+                }
+
+            }
+        }];
+        
+        
+    }else if (type == 106){
+        [self removeWaitingView];
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
+    }
+}
+
+#pragma mark - private Method
+
+- (NSInteger) getFileSize:(NSString*) path
+{
+    NSFileManager * filemanager = [[NSFileManager alloc]init];
+    if([filemanager fileExistsAtPath:path]){
+        NSDictionary * attributes = [filemanager attributesOfItemAtPath:path error:nil];
+        NSNumber *theFileSize;
+        if ( (theFileSize = [attributes objectForKey:NSFileSize]) )
+            return  [theFileSize intValue]/1024;
+        else
+            return -1;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+- (CGFloat) getVideoDuration:(NSURL*) URL
+{
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:URL options:opts];
+    float second = 0;
+    second = urlAsset.duration.value/urlAsset.duration.timescale;
+    return second;
 }
 
 
@@ -202,6 +387,18 @@
     if (height < self.view.frame.size.height + _scrollView.contentOffset.y) height = self.view.frame.size.height + _scrollView.contentOffset.y;
     [_scrollView setContentSize:CGSizeMake(self.view.bounds.size.width, height)];
 
+}
+
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if (buttonIndex == 0)
+    {
+        
+        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.presentingViewController;
+        controller.shouldReload = YES;
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 #pragma mark - private Method
@@ -228,4 +425,6 @@
 {
     _isKeyBoard = NO;
 }
+
+
 @end

@@ -202,7 +202,7 @@
     return resultCode;
 }
 
--(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+-(void)sendMediaMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
     self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
@@ -220,6 +220,11 @@
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
     if ([dictionary valueForKey:@"photo_id"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"photo_id",[dictionary valueForKey:@"photo_id"]]];
+    if ([dictionary valueForKey:@"video_name"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_name",[dictionary valueForKey:@"video_name"]]];
+    if ([dictionary valueForKey:@"title"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"title",[dictionary valueForKey:@"title"]]];
+
     
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -232,8 +237,6 @@
 
     
 }
-
-
 
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code

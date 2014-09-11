@@ -50,6 +50,8 @@
 @property(nonatomic,strong)NSURLConnection* myConnection;
 @property(nonatomic,strong)id <CloudOperationDelegate> mDelegate;
 @property(nonatomic,strong)NSMutableData* responseData;
+@property(nonatomic,strong) NSString* mineType;
+
 
 
 -(id)initWithDelegate:(id)delegate;
