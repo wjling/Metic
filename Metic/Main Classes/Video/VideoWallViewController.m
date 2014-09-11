@@ -16,6 +16,7 @@
 #import "MobClick.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "VideoPreviewViewController.h"
+#import "../../Utils/NSString+JSON.h"
 
 
 
@@ -57,9 +58,9 @@
     _urlFormat = @"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@";//测试服
     
     _videoInfos = [[NSMutableArray alloc]init];
-    
-    _sequence = [NSNumber numberWithInt:0];
-    [self getVideolist];
+    [self pullVideosInfosFromDB];
+    [_tableView reloadData];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -88,6 +89,42 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    for (NSDictionary *videoInfo in videoInfos) {
+        NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
+        videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+        NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
+        
+        [sql insertToTable:@"eventVideo" withColumns:columns andValues:values];
+    }
+    [sql closeMyDB];
+}
+
+- (void)pullVideosInfosFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    
+    //self.events = [[NSMutableArray alloc]init];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by video_id desc",_eventId],@"event_id", nil];
+    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
+    for (NSDictionary *temp in result) {
+        NSString *tmpa = [temp valueForKey:@"videoInfo"];
+        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+        [self.videoInfos addObject:videoInfo];
+    }
+    
+    [sql closeMyDB];
+}
 -(void)getVideolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -105,10 +142,15 @@
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:{
+                    NSMutableArray* newvideo_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"video_list"]];
+                    for (int i = 0; i < newvideo_list.count; i++) {
+                        NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newvideo_list[i]];
+                        newvideo_list[i] = dictionary;
+                    }
+                    [self updateVideoInfoToDB:newvideo_list];
                     [_videoInfos removeAllObjects];
-                    for (NSDictionary *dictionary in [response1 valueForKey:@"video_list"]) {
-                        NSMutableDictionary* Mdictionary = [[NSMutableDictionary alloc]initWithDictionary:dictionary];
-                        [_videoInfos addObject:Mdictionary];
+                    for (NSMutableDictionary *dictionary in newvideo_list) {
+                        [_videoInfos addObject:dictionary];
                     }
                     [_tableView reloadData];
                 }
@@ -118,7 +160,6 @@
             }
 
         }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
         }
     }];
     

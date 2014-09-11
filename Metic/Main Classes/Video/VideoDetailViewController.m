@@ -394,15 +394,15 @@
     [self.tableView reloadData];
 }
 
-//- (void)deletePhotoInfoFromDB
-//{
-//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
-//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-//    [sql closeMyDB];
-//}
+- (void)deleteVideoInfoFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_videoId],@"video_id", nil];
+    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
+    [sql closeMyDB];
+}
 
 
 //#pragma mark - UIScrollViewDelegate
@@ -769,14 +769,14 @@
                                 CloudOperation * cloudOP1 = [[CloudOperation alloc]initWithDelegate:self];
                                 [cloudOP1 deletePhoto:[NSString stringWithFormat:@"/video/%@",[self.videoInfo valueForKey:@"video_name"]]];
                                 //数据库 删除
-                                //[self deletePhotoInfoFromDB];
+                                [self deleteVideoInfoFromDB];
                                 
                                 
                             }
                                 break;
                             default:
                             {
-                                //[self deletePhotoInfoFromDB];
+                                [self deleteVideoInfoFromDB];
                                 [self.delete_button setEnabled:YES];
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];
