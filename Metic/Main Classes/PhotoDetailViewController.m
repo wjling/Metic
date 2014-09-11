@@ -94,10 +94,15 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)dealloc
+
+{
+    [_footer free];
 }
 
 -(void) initButtons
@@ -192,8 +197,8 @@
 -(void) setGoodButton
 {
     if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
+        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
+    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
 }
 
 
@@ -854,6 +859,7 @@
                                 break;
                             default:
                             {
+                                [self deletePhotoInfoFromDB];
                                 [self.delete_button setEnabled:YES];
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];

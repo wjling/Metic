@@ -7,10 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import <CoreMedia/CoreMedia.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "../MTUser.h"
 
-@interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) UITableView* tableView;
+@property BOOL shouldReload;
+- (IBAction)uploadVideo:(id)sender;
 @end

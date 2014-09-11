@@ -44,5 +44,7 @@
 -(void)uploadPhoto;
 -(void)uploadAvatar;
 -(void)uploadBanner:(NSNumber*)eventId;
+-(void)uploadVideoThumb;
+-(void)uploadVideo;
 @end
 

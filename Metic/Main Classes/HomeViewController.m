@@ -343,7 +343,7 @@
 }
 -(void)performDismiss
 {
-    [_Alert dismissWithClickedButtonIndex:0 animated:NO];
+    [_Alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 #pragma mark 代理方法-UITableView

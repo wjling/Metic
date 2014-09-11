@@ -17,6 +17,7 @@
 #import "MobClick.h"
 #import "NSString+JSON.h"
 
+#define PhotoNum 20
 
 
 @interface PictureWallViewController ()
@@ -96,7 +97,7 @@
             [_photo_list removeAllObjects];
             [_photo_list_all removeAllObjects];
         }
-        [self getPhotolist];
+        [self getPhotolist];        
     }
     
 }
@@ -189,6 +190,8 @@
     }
     [self.tableView1 reloadData];
     [self.tableView2 reloadData];
+
+    
 }
 
 - (IBAction)toUploadPhoto:(id)sender {
@@ -488,21 +491,27 @@
             [self updatePhotoInfoToDB:newphoto_list];
             self.sequence = [response1 valueForKey:@"sequence"];
             if (_canCleanData) {
+                //[_tableView1 setContentOffset:CGPointMake(0, 0) animated:YES];
                 [self.photo_list_all removeAllObjects];
                 [self.photo_list removeAllObjects];
                 _canCleanData = NO;
             }
             [self.photo_list_all addObjectsFromArray:newphoto_list];
             int count = self.photo_list.count;
-            for (int i = count; i < count + 10 && i < self.photo_list_all.count; i++) {
+            for (int i = count; i < count + PhotoNum && i < self.photo_list_all.count; i++) {
                 [self.photo_list addObject:self.photo_list_all[i]];
             }
-            //[self getPhotoPathlist];
-            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-            [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
+            
+            
+            //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
+            [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
             if (!_photo_list || _photo_list.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
+            if ([_sequence intValue] == -1 && self.isOpen == YES) {
+                [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+            }else [self reloadPhoto];
 
         }
             break;
@@ -546,8 +555,8 @@
     }
     
     int count = self.photo_list.count;
-    if (photo_rest_num >= 10 || [_sequence intValue] == -1) {//加载剩余的，然后再拉
-        for (int i = count; i < count + 10 && i < _photo_list_all.count; i++) {
+    if (photo_rest_num >= PhotoNum || [_sequence intValue] == -1) {//加载剩余的，然后再拉
+        for (int i = count; i < count + PhotoNum && i < _photo_list_all.count; i++) {
             [self.photo_list addObject:self.photo_list_all[i]];
         }
         //[self getPhotoPathlist];

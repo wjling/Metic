@@ -82,6 +82,7 @@
     self.authorId = [_videoInfo valueForKey:@"author_id"];
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:self.authorId];
     [avatarGetter getAvatar];
+    
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;

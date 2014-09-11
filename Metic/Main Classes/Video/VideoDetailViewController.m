@@ -96,6 +96,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)dealloc
+
+{
+    [_footer free];
+}
 
 -(void)initUI
 {
@@ -122,6 +127,10 @@
 }
 
 - (void)play:(id)sender {
+    if (_isKeyBoard) {
+        [_inputTextView resignFirstResponder];
+        return;
+    }
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
     NSLog(@"%@",url);
     [self openmovie:url];
@@ -232,6 +241,7 @@
         }
     });
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这段视频？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setTag:100];
     [alert show];
 }
 
@@ -384,15 +394,15 @@
     [self.tableView reloadData];
 }
 
-//- (void)deletePhotoInfoFromDB
-//{
-//    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
-//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-//    [sql closeMyDB];
-//}
+- (void)deleteVideoInfoFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_videoId],@"video_id", nil];
+    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
+    [sql closeMyDB];
+}
 
 
 //#pragma mark - UIScrollViewDelegate
@@ -497,7 +507,7 @@
             [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
             [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+            [self.delete_button addTarget:self action:@selector(deleteVideo:) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:self.delete_button];
         }
         
@@ -728,77 +738,80 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-//    switch (alertView.tag) {
-//        case 0:{
-//            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
-//            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
-//            if (buttonIndex == cancelBtnIndex) {
-//                ;
-//            }
-//            else if (buttonIndex == okBtnIndex)
-//            {
-//                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-//                [dictionary setValue:self.eventId forKey:@"event_id"];
-//                [dictionary setValue:@"delete" forKey:@"cmd"];
-//                [dictionary setValue:self.photoId forKey:@"photo_id"];
-//                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
-//                    if (rData) {
-//                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//                        NSLog(@"received Data: %@",temp);
-//                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//                        switch ([cmd intValue]) {
-//                            case NORMAL_REPLY:
-//                            {
-//                                //百度云 删除
-//                                CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-//                                [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
-//                                //数据库 删除
-//                                [self deletePhotoInfoFromDB];
-//                                
-//                                
-//                            }
-//                                break;
-//                            default:
-//                            {
-//                                [self.delete_button setEnabled:YES];
-//                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-//                                [alert setTag:1];
-//                            }
-//                        }
-//                        
-//                    }else{
-//                        [self.delete_button setEnabled:YES];
-//                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-//                    }
-//                    
-//                }];
-//            }
-//            
-//        }
-//            break;
-//        case 1:{
-//            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
-//            [self.navigationController popToViewController:self.controller animated:YES];
-//        }
-//        default:
-//            break;
-//    }
+    switch (alertView.tag) {
+        case 100:{
+            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+            if (buttonIndex == cancelBtnIndex) {
+                ;
+            }
+            else if (buttonIndex == okBtnIndex)
+            {
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+                [dictionary setValue:self.eventId forKey:@"event_id"];
+                [dictionary setValue:@"delete" forKey:@"cmd"];
+                [dictionary setValue:self.videoId forKey:@"video_id"];
+                NSLog(@"%@",dictionary);
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendVideoMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
+                    if (rData) {
+                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        NSLog(@"received Data: %@",temp);
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case NORMAL_REPLY:
+                            {
+                                //百度云 删除
+                                CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:nil];
+                                [cloudOP deletePhoto:[NSString stringWithFormat:@"/video/%@.thumb",[self.videoInfo valueForKey:@"video_name"]]];
+                                CloudOperation * cloudOP1 = [[CloudOperation alloc]initWithDelegate:self];
+                                [cloudOP1 deletePhoto:[NSString stringWithFormat:@"/video/%@",[self.videoInfo valueForKey:@"video_name"]]];
+                                //数据库 删除
+                                [self deleteVideoInfoFromDB];
+                                
+                                
+                            }
+                                break;
+                            default:
+                            {
+                                [self deleteVideoInfoFromDB];
+                                [self.delete_button setEnabled:YES];
+                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+                                [alert setTag:1];
+                            }
+                        }
+                        
+                    }else{
+                        [self.delete_button setEnabled:YES];
+                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                    }
+                    
+                }];
+            }
+            
+        }
+            break;
+        case 1:{
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        default:
+            break;
+    }
 }
 
 #pragma mark - CloudOperationDelegate
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
-//    if (status){
-//        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-//        [alert setTag:1];
-//        [self.delete_button setEnabled:YES];
-//    }else{
-//        [self.delete_button setEnabled:YES];
-//        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-//    }
+    if (status){
+        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频删除成功" WithDelegate:self WithCancelTitle:@"确定"];
+        [alert setTag:1];
+        [self.delete_button setEnabled:YES];
+    }else{
+        [self.delete_button setEnabled:YES];
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+    }
 }
 #pragma mark - MPlayer Delegate
 -(void)movieFinishedCallback:(NSNotification*)notify{

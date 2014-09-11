@@ -140,12 +140,12 @@
 -(void)uploadfile:(NSString*)url path:(NSString*)path;
 {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    NSData *imageData = [NSData dataWithContentsOfFile:path];
+    NSData *fileData = [NSData dataWithContentsOfFile:path];
     NSRange range = [path rangeOfString:@"/" options:NSBackwardsSearch];
     NSString *fileName = [path substringFromIndex:range.location+1];
     AFHTTPRequestOperation *op = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
-        [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
+        [formData appendPartWithFileData:fileData name:@"file" fileName:fileName mimeType:_mineType];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self.mDelegate finishwithOperationStatus:YES type:2 data:nil path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -182,6 +182,7 @@
                 case NORMAL_REPLY:
                 {
                     httpURL = (NSString*)[response1 valueForKey:@"url"];
+                    NSLog(@"Delete url: %@",httpURL);
                     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
                     AFHTTPRequestOperation *op = [manager DELETE:httpURL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         [self.mDelegate finishwithOperationStatus:YES type:3 data:nil path:mpath];

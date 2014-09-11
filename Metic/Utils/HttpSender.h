@@ -22,7 +22,8 @@ typedef void (^FinishBlock)(NSData* rData);
 {
     NSString *URL_mainServer;
     NSString *PHOTO_mainServer;
-    NSString* feedBack_mainServer;
+    NSString *VIDEO_mainServer;
+    NSString *feedBack_mainServer;
     NSString *httpURL;
 }
 @property(nonatomic,strong)NSURLConnection* myConnection;
@@ -46,6 +47,7 @@ typedef void (^FinishBlock)(NSData* rData);
 -(void)sendMessage:(NSData*)jsonData withOperationCode:(int)operationCode;
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
 -(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
+-(void)sendVideoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
 
 -(void)sendFeedBackMessage:(NSDictionary*)json;
 
