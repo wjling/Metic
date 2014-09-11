@@ -152,14 +152,6 @@
     PhotoGetter *uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
     uploader.mDelegate = self;
     [uploader uploadVideoThumb];
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 - (void)encodeVideo
@@ -304,14 +296,15 @@
         [dictionary setValue:@"upload" forKey:@"cmd"];
         [dictionary setValue:container forKey:@"video_name"];
         [dictionary setValue:self.textView.text forKey:@"title"];
-        
+        NSLog(@"%@",dictionary);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMediaMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
+        [httpSender sendVideoMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                 NSLog(@"received Data: %@",temp);
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                NSLog(@"%@     =   %@",cmd,response1  );
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {

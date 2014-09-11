@@ -47,12 +47,13 @@
     
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
+    [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
-    //    _urlFormat = @"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@";//正式服
+//    _urlFormat = @"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@";//正式服
     _urlFormat = @"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@";//测试服
     
     _videoInfos = [[NSMutableArray alloc]init];
@@ -64,6 +65,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [_tableView setFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     _sequence = [NSNumber numberWithInt:0];
     [self getVideolist];
     [MobClick beginLogPageView:@"视频墙"];
@@ -112,7 +114,6 @@
                 }
                     break;
                 default:{
-                    
                 }
             }
 
@@ -177,6 +178,7 @@
 
         NSString* text = [dictionary valueForKey:@"title"];
         float height = [self calculateTextHeight:text width:280 fontSize:16.0f];
+        if ([text isEqualToString:@""]) height = -19;
         cell.height = height;
         [cell refresh];
     }
@@ -190,7 +192,8 @@
     NSDictionary *dictionary = self.videoInfos[indexPath.row];
     NSString* text = [dictionary valueForKey:@"title"];
     float height = [self calculateTextHeight:text width:280 fontSize:16.0f];
-    return 266 + height;
+    if ([text isEqualToString:@""]) height = -19;
+    return 341 + height;
     
 }
 #pragma tableView Delegate

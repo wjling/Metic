@@ -13,6 +13,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet UILabel *time;
+@property (strong, nonatomic) IBOutlet UIView *videoContainer;
+
 @property (strong, nonatomic) IBOutlet UIButton *video_button;
 @property (strong, nonatomic) UIImage* videoThumb;
 @property (strong, nonatomic) IBOutlet UILabel *title;

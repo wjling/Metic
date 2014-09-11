@@ -127,6 +127,10 @@
 }
 
 - (void)play:(id)sender {
+    if (_isKeyBoard) {
+        [_inputTextView resignFirstResponder];
+        return;
+    }
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
     NSLog(@"%@",url);
     [self openmovie:url];

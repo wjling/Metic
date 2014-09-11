@@ -197,8 +197,8 @@
 -(void) setGoodButton
 {
     if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
+        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
+    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
 }
 
 
@@ -839,7 +839,7 @@
                 [dictionary setValue:@"delete" forKey:@"cmd"];
                 [dictionary setValue:self.photoId forKey:@"photo_id"];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendMediaMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
+                [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
                     if (rData) {
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                         NSLog(@"received Data: %@",temp);

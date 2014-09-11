@@ -38,6 +38,9 @@
     PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
 //    PHOTO_mainServer = @"http://203.195.174.128:20000/";//正式服
     
+    VIDEO_mainServer = @"http://42.96.203.86:20001/";//测试服
+//    VIDEO_mainServer = @"http://203.195.174.128:20001/";//正式服
+    
     feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
 //    feedBack_mainServer = @"http://203.195.174.128:10089/";//正式服
     
@@ -202,29 +205,27 @@
     return resultCode;
 }
 
--(void)sendMediaMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+-(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
     self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
     httpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    NSLog(@"%@",httpURL);
     [request setHTTPMethod:@"POST"];
     NSString *body=@"";
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
+    //upload
     if ([dictionary valueForKey:@"photos"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
     if ([dictionary valueForKey:@"specification"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
+    //delete
     if ([dictionary valueForKey:@"photo_id"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"photo_id",[dictionary valueForKey:@"photo_id"]]];
-    if ([dictionary valueForKey:@"video_name"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_name",[dictionary valueForKey:@"video_name"]]];
-    if ([dictionary valueForKey:@"title"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"title",[dictionary valueForKey:@"title"]]];
-
     
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
@@ -238,6 +239,39 @@
     
 }
 
+-(void)sendVideoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+{
+    self.finishBlock = block;
+    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
+    httpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+    NSLog(@"%@",httpURL);
+    [request setHTTPMethod:@"POST"];
+    NSString *body=@"";
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
+    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
+    //delete
+    if ([dictionary valueForKey:@"video_id"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_id",[dictionary valueForKey:@"photo_id"]]];
+    //upload
+    if ([dictionary valueForKey:@"video_name"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"video_name",[dictionary valueForKey:@"video_name"]]];
+    if ([dictionary valueForKey:@"title"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"title",[dictionary valueForKey:@"title"]]];
+    
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
+    [request setHTTPBody:postData];
+    
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    
+    
+}
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
 {

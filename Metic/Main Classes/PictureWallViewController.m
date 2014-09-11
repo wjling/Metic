@@ -508,7 +508,7 @@
             if (!_photo_list || _photo_list.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1) {
+            if ([_sequence intValue] == -1 && self.isOpen == YES) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
             }else [self reloadPhoto];
