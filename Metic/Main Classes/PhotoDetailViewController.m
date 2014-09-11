@@ -859,6 +859,7 @@
                                 break;
                             default:
                             {
+                                [self deletePhotoInfoFromDB];
                                 [self.delete_button setEnabled:YES];
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];

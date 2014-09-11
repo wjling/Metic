@@ -254,7 +254,7 @@
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
     //delete
     if ([dictionary valueForKey:@"video_id"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_id",[dictionary valueForKey:@"photo_id"]]];
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_id",[dictionary valueForKey:@"video_id"]]];
     //upload
     if ([dictionary valueForKey:@"video_name"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"video_name",[dictionary valueForKey:@"video_name"]]];

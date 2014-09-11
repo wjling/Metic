@@ -182,6 +182,7 @@
                 case NORMAL_REPLY:
                 {
                     httpURL = (NSString*)[response1 valueForKey:@"url"];
+                    NSLog(@"Delete url: %@",httpURL);
                     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
                     AFHTTPRequestOperation *op = [manager DELETE:httpURL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         [self.mDelegate finishwithOperationStatus:YES type:3 data:nil path:mpath];
