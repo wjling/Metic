@@ -11,6 +11,7 @@
 #import "CommonUtils.h"
 #import "../../UIView/MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "MobClick.h"
 
 
 #define mp4Quality AVAssetExportPreset640x480
@@ -54,6 +55,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"视频预览"];
     _scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width,self.view.frame.size.height);
 }
 -(void)viewWillDisappear:(BOOL)animated
@@ -61,6 +63,11 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"视频预览"];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -76,7 +83,7 @@
 
 -(void)initUI
 {
-    [CommonUtils addLeftButton:self isFirstPage:YES];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     [self.navigationItem setTitle:@"上传视频"];
     CGFloat colorValue = 242.0/255.0;
     [self.view setBackgroundColor:[UIColor colorWithRed:colorValue green:colorValue blue:colorValue alpha:colorValue]];
