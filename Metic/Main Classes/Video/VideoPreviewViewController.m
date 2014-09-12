@@ -20,6 +20,7 @@
 @property(nonatomic,strong) MTMessageTextView* textView;
 @property(nonatomic,strong) UIView* videoView;
 @property(nonatomic,strong) UIButton* videoBtn;
+@property(nonatomic,strong) UIButton* confirmBtn;
 @property(nonatomic,strong) UIImage* preViewImage;
 @property(nonatomic,strong) UIView* waitingView;
 @property BOOL isKeyBoard;
@@ -127,6 +128,7 @@
     [rightBtn setImage:[UIImage imageNamed:@"头部小按钮按下效果"] forState:UIControlStateHighlighted];
     [rightBtn setTitle:@"" forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(confirm:) forControlEvents:UIControlEventTouchUpInside];
+    _confirmBtn = rightBtn;
     [rightView addSubview:rightBtn];
     
     UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(30, 5, 42, 21)];
@@ -147,6 +149,7 @@
 
 -(void)confirm:(id)sender
 {
+    [sender setEnabled:NO];
     [_textView resignFirstResponder];
     [self showWaitingView];
     PhotoGetter *uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
@@ -315,8 +318,8 @@
                         break;
                     default:
                     {
-                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-
+                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:102];
                     }
                 }
 
@@ -326,7 +329,8 @@
         
     }else if (type == 106){
         [self removeWaitingView];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
+        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        [alert setTag:102];
     }
 }
 
@@ -387,10 +391,15 @@
     // the user clicked OK
     if (buttonIndex == 0)
     {
+        if ([alertView tag] == 100) {
+            int index = self.navigationController.viewControllers.count - 2;
+            VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+            controller.shouldReload = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        }else if([alertView tag] == 100){
+            [_confirmBtn setEnabled:YES];
+        }
         
-        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.presentingViewController;
-        controller.shouldReload = YES;
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

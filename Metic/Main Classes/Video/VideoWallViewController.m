@@ -27,6 +27,10 @@
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
 @property(nonatomic,strong) UIImage* preViewImage;
+@property (strong,nonatomic) MJRefreshHeaderView *header;
+@property (strong,nonatomic) MJRefreshFooterView *footer;
+@property BOOL Headeropen;
+@property BOOL Footeropen;
 @end
 
 @implementation VideoWallViewController
@@ -60,6 +64,18 @@
     _videoInfos = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
     [_tableView reloadData];
+    
+    _Headeropen = NO;
+    _Footeropen = NO;
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
+    
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
 
 }
 
@@ -67,8 +83,11 @@
 {
     [super viewDidAppear:animated];
     [_tableView setFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
-    _sequence = [NSNumber numberWithInt:0];
-    [self getVideolist];
+    if (_shouldReload) {
+        _shouldReload = NO;
+        [_header beginRefreshing];
+    }
+    
     [MobClick beginLogPageView:@"视频墙"];
 }
 
@@ -87,6 +106,33 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)closeRJ
+{
+    if (_Headeropen) {
+        _Headeropen = NO;
+        [_header endRefreshing];
+    }
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
+}
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+    if (_Footeropen||_Headeropen) {
+        [refreshView endRefreshing];
+        return;
+    }
+    if (refreshView == _header) {
+        _Headeropen = YES;
+        self.sequence = [NSNumber numberWithInt:0];
+    }else _Footeropen = YES;
+    [self getVideolist];
 }
 
 - (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos
@@ -148,11 +194,16 @@
                         newvideo_list[i] = dictionary;
                     }
                     [self updateVideoInfoToDB:newvideo_list];
-                    [_videoInfos removeAllObjects];
+                    if ([_sequence intValue] == 0) [_videoInfos removeAllObjects];
+                    _sequence = [response1 valueForKey:@"sequence"];
                     for (NSMutableDictionary *dictionary in newvideo_list) {
                         [_videoInfos addObject:dictionary];
                     }
-                    [_tableView reloadData];
+                    [self.tableView reloadData];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self closeRJ];
+                    });
+                    
                 }
                     break;
                 default:{

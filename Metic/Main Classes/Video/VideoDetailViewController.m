@@ -7,6 +7,7 @@
 //
 
 #import "VideoDetailViewController.h"
+#import "VideoWallViewController.h"
 #import "../../Cell/VcommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "../../Utils/CommonUtils.h"
@@ -794,6 +795,9 @@
         }
             break;
         case 1:{
+            int index = self.navigationController.viewControllers.count - 2;
+            VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+            controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
         }
         default:

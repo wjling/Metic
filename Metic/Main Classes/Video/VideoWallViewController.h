@@ -10,9 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "MJRefreshHeaderView.h"
+#import "MJRefreshFooterView.h"
 #import "../MTUser.h"
 
-@interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) UITableView* tableView;
