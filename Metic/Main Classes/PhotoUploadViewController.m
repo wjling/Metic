@@ -300,7 +300,8 @@
         
     }else if (type == 106){
         [self removeWaitingView];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
+        [_upLoad setEnabled:YES];
     }
 }
 
@@ -325,6 +326,7 @@
             break;
         default:
         {
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传失败" WithDelegate:nil WithCancelTitle:@"确定"];
             [self removeWaitingView];
             [self.upLoad setEnabled:YES];
             [self.getPhoto setEnabled:YES];
