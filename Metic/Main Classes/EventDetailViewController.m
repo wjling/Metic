@@ -1010,6 +1010,17 @@
     }
     return YES;
 }
+
+#pragma mark - TextView view delegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        [self publishComment:nil];
+        return NO;
+    }
+    return YES;
+}
+
 #pragma mark - keyboard observer method
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{
@@ -1161,6 +1172,7 @@
         [_commentView setFrame:frame];
     }
 }
+
 
 
 @end

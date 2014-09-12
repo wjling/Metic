@@ -899,5 +899,14 @@
 
 }
 
+#pragma mark - TextView view delegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"]) {
+        [self publishComment:nil];
+        return NO;
+    }
+    return YES;
+}
 
 @end
