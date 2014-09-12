@@ -77,7 +77,7 @@
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
-    _footer.scrollView = self.tableView1;
+    _footer.scrollView = self.scrollView;
     //[_footer beginRefreshing];
     
     //等待圈圈
@@ -306,7 +306,7 @@
 //        [_timer invalidate];
 //    
 //    }
-    _footer.scrollView = scrollView;
+    _footer.scrollView = _scrollView;
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         [_tableView2 setContentSize:_tableView1.contentSize];
     }else [_tableView1 setContentSize:_tableView2.contentSize];
