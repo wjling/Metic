@@ -159,6 +159,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIColor* eventNameColor = [UIColor colorWithRed:0.33 green:0.71 blue:0.93 alpha:1];
+    UIColor* label1Color = [UIColor colorWithRed:0.58 green:0.58 blue:0.58 alpha:1];
+    
     NSInteger index = indexPath.row;
     NSDictionary* msg_dic = [historicalMsgs objectAtIndex:index];
     NSNumber* cmd = [msg_dic objectForKey:@"cmd"];
@@ -202,9 +205,41 @@
         
         cell.name_label.text = launcher;
         cell.text_label.text = @"邀请你加入";
-        [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+//        [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
         [getter getAvatar];
+        
+        UIFont* font = [UIFont systemFontOfSize:11];
+        CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
+        CGRect frame = CGRectMake(112, 28, 180, 16);
+        if (size.width <= 180) {
+            frame.size.width = size.width;
+        }
+        else
+        {
+            frame.size.width = 180;
+        }
+//        NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+        if (!cell.event_name_label) {
+            cell.event_name_label = [[UILabel alloc]init];
+            [cell.contentView addSubview:cell.event_name_label];
+            cell.event_name_label.font = [UIFont systemFontOfSize:11];
+            cell.event_name_label.textColor = eventNameColor;
+        }
+        [cell.event_name_label setFrame:frame];
+        cell.event_name_label.text = subject;
+//        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+        if (!cell.label1) {
+            cell.label1 = [[UILabel alloc]init];
+            [cell.contentView addSubview:cell.label1];
+            cell.label1.font = [UIFont systemFontOfSize:11];
+            cell.label1.textColor = label1Color;
+            cell.label1.text = @"活动";
+        }
+        [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
+//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+        
+        
         
         if ([ishandled integerValue] == 0) {
             cell.remark_label.text = @"已拒绝";
@@ -233,9 +268,39 @@
         
         cell.name_label.text = fname;
         cell.text_label.text = @"请求加入";
-        [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+//        [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
         [getter getAvatar];
+        
+        UIFont* font = [UIFont systemFontOfSize:11];
+        CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
+        CGRect frame = CGRectMake(100, 28, 180, 16);
+        if (size.width <= 180) {
+            frame.size.width = size.width;
+        }
+        else
+        {
+            frame.size.width = 180;
+        }
+        //                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+        if (!cell.event_name_label) {
+            cell.event_name_label = [[UILabel alloc]init];
+            [cell.contentView addSubview:cell.event_name_label];
+            cell.event_name_label.font = [UIFont systemFontOfSize:11];
+            cell.event_name_label.textColor = eventNameColor;
+        }
+        [cell.event_name_label setFrame:frame];
+        cell.event_name_label.text = subject;
+        //                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+        if (!cell.label1) {
+            cell.label1 = [[UILabel alloc]init];
+            [cell.contentView addSubview:cell.label1];
+            cell.label1.font = [UIFont systemFontOfSize:11];
+            cell.label1.textColor = label1Color;
+            cell.label1.text = @"活动";
+        }
+        [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
+        //                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
         
         if ([ishandled integerValue] == 0) {
             cell.remark_label.text = @"已拒绝";

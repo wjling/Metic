@@ -49,9 +49,7 @@
     _clearIds = NO;
     _Headeropen = NO;
     _Footeropen = NO;
-    _updateEventIds = [MTUser sharedInstance].updateEventIds;
-    _updateEvents = [MTUser sharedInstance].updateEvents;
-    _atMeEvents = [MTUser sharedInstance].atMeEvents;
+    
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
 
@@ -110,6 +108,9 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    _updateEventIds = [MTUser sharedInstance].updateEventIds;
+    _updateEvents = [MTUser sharedInstance].updateEvents;
+    _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [MobClick beginLogPageView:@"活动主页"];
     if (_shouldRefresh) {
         _shouldRefresh = NO;
@@ -172,7 +173,9 @@
 -(void)adjustInfoView
 {
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
-    long num = _updateEvents.count + _atMeEvents.count;
+    
+    long num = [MTUser sharedInstance].updateEvents.count + [MTUser sharedInstance].atMeEvents.count;
+    NSLog(@"有%d条新动态",[MTUser sharedInstance].updateEvents.count + [MTUser sharedInstance].atMeEvents.count);
     if (num > 0) {
         [_updateInfoView setHidden:NO];
         if (num < 10) {
@@ -441,12 +444,16 @@
 -(void)notificationDidReceive:(NSArray *)messages
 {
     for (NSDictionary* message in messages) {
-        NSLog(@"receive a message %@",message);
+        NSLog(@"homeviewcontroller receive a message %@",message);
         NSString *eventInfo = [message valueForKey:@"msg"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
+        NSLog(@"cmd: %d",cmd);
         if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
+            self.updateEvents = [MTUser sharedInstance].updateEvents;
+            self.updateEventIds = [MTUser sharedInstance].updateEventIds;
+            self.atMeEvents = [MTUser sharedInstance].atMeEvents;
             [self adjustInfoView];
         }
         
