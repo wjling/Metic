@@ -406,7 +406,9 @@
     AudioServicesPlayAlertSound(1106);
     
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    BOOL flag = [userDf boolForKey:@"systemSettings1"];
+    NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]];
+    BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
+    NSLog(@"system setting1 flag: %d",flag);
     //发送通知
     UILocalNotification *notification=[[UILocalNotification alloc] init];
     if (notification!=nil) {
@@ -420,8 +422,8 @@
             //去掉下面2行就不会弹出提示框
             notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
             notification.alertAction = @"打开";  //提示框按钮
-        }        
-        //notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+            notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        }
         
         // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
         //notification.userInfo = infoDict; //添加额外的信息
@@ -587,6 +589,7 @@
             if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
                 [[MTUser sharedInstance].updateEventIds addObject:[msg_dic valueForKey:@"event_id"]];
                 [[MTUser sharedInstance].updateEvents addObject:msg_dic];
+                NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
             }
             NSLog(@"%d",[MTUser sharedInstance].updateEventIds.count);
         }

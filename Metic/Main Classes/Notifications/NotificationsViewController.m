@@ -213,9 +213,13 @@ enum Response_Type
 //    [systemMsg_button setBackgroundColor:[UIColor clearColor]];
     
     
-    [eventR_button setTitle:@"邀请" forState:UIControlStateNormal];
-    [friendR_button setTitle:@"好友" forState:UIControlStateNormal];
-    [systemMsg_button setTitle:@"系统" forState:UIControlStateNormal];
+    [eventR_button setTitle:@"活动邀请" forState:UIControlStateNormal];
+    [friendR_button setTitle:@"好友验证" forState:UIControlStateNormal];
+    [systemMsg_button setTitle:@"系统消息" forState:UIControlStateNormal];
+    
+    [eventR_button titleLabel].font = [UIFont systemFontOfSize:14];
+    [friendR_button titleLabel].font = [UIFont systemFontOfSize:14];
+    [systemMsg_button titleLabel].font = [UIFont systemFontOfSize:14];
     
     [eventR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
     [friendR_button setTitleColor:tColor_normal forState:UIControlStateNormal];
@@ -592,6 +596,18 @@ enum Response_Type
     return 0;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//    NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
+//    NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+    if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
+        [self eventBtnClicked:self];
+    }
+    
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -615,6 +631,8 @@ enum Response_Type
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UIColor* bgColor = [UIColor colorWithRed:0.94 green:0.94 blue:0.94 alpha:1];
+    UIColor* eventNameColor = [UIColor colorWithRed:0.33 green:0.71 blue:0.93 alpha:1];
+    UIColor* label1Color = [UIColor colorWithRed:0.58 green:0.58 blue:0.58 alpha:1];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
     if (tableView == self.eventRequest_tableView) {
         NotificationsEventRequestTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
@@ -634,36 +652,48 @@ enum Response_Type
                 
                 cell.name_label.text = launcher;
                 cell.text_label.text = @"邀请你加入";
-                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+//                cell.text_label.text = [NSString stringWithFormat:@"邀请你加入%d",indexPath.row];
+//                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getAvatar];
+                
+                UIFont* font = [UIFont systemFontOfSize:11];
+                CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
+                CGRect frame = CGRectMake(112, 28, 180, 16);
+                if (size.width <= 180) {
+                    frame.size.width = size.width;
+                }
+                else
+                {
+                    frame.size.width = 180;
+                }
+//                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+                if (!cell.event_name_label) {
+                    cell.event_name_label = [[UILabel alloc]init];
+                    [cell.contentView addSubview:cell.event_name_label];
+                    cell.event_name_label.font = [UIFont systemFontOfSize:11];
+                    cell.event_name_label.textColor = eventNameColor;
+                }
+                [cell.event_name_label setFrame:frame];
+                cell.event_name_label.text = subject;
+//                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+                if (!cell.label1) {
+                    cell.label1 = [[UILabel alloc]init];
+                    [cell.contentView addSubview:cell.label1];
+                    cell.label1.font = [UIFont systemFontOfSize:11];
+                    cell.label1.textColor = label1Color;
+                    cell.label1.text = @"活动";
+                }
+                [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
+//                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+                
+                
                 
                 cell.okBtn.hidden = YES;
                 cell.noBtn.hidden = YES;
                 cell.remark_label.hidden = YES;
-                [cell.event_name_button addTarget:self action:@selector(eventBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+//                [cell.event_name_button addTarget:self action:@selector(eventBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
 
-//                if (ishandled == -1) {
-//                    cell.okBtn.hidden = NO;
-//                    cell.noBtn.hidden = NO;
-//                    cell.remark_label.hidden = YES;
-//                }
-//                else if(ishandled == 0)
-//                {
-//                    cell.okBtn.hidden = YES;
-//                    cell.noBtn.hidden = YES;
-//                    cell.remark_label.hidden = NO;
-//                    cell.remark_label.text = @"已拒绝";
-//                }
-//                else if (ishandled == 1)
-//                {
-//                    cell.okBtn.hidden = YES;
-//                    cell.noBtn.hidden = YES;
-//                    cell.remark_label.hidden = NO;
-//                    cell.remark_label.text = @"已同意";
-//                }
-//                [cell.okBtn addTarget:self action:@selector(participate_event_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-//                [cell.noBtn addTarget:self action:@selector(participate_event_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
             }
                 break;
             case REQUEST_EVENT: //995
@@ -675,7 +705,37 @@ enum Response_Type
                 
                 cell.name_label.text = fname;
                 cell.text_label.text = @"请求加入";
-                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
+                
+                UIFont* font = [UIFont systemFontOfSize:11];
+                CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
+                CGRect frame = CGRectMake(100, 28, 180, 16);
+                if (size.width <= 180) {
+                    frame.size.width = size.width;
+                }
+                else
+                {
+                    frame.size.width = 180;
+                }
+//                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+                if (!cell.event_name_label) {
+                    cell.event_name_label = [[UILabel alloc]init];
+                    [cell.contentView addSubview:cell.event_name_label];
+                    cell.event_name_label.font = [UIFont systemFontOfSize:11];
+                    cell.event_name_label.textColor = eventNameColor;
+                }
+                [cell.event_name_label setFrame:frame];
+                cell.event_name_label.text = subject;
+//                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+                if (!cell.label1) {
+                    cell.label1 = [[UILabel alloc]init];
+                    [cell.contentView addSubview:cell.label1];
+                    cell.label1.font = [UIFont systemFontOfSize:11];
+                    cell.label1.textColor = label1Color;
+                    cell.label1.text = @"活动";
+                }
+                [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
+//                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+                
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getAvatar];
                 
@@ -1014,7 +1074,7 @@ enum Response_Type
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
 }
 
--(void)eventBtnClicked:(UIButton*)sender
+-(void)eventBtnClicked:(id)sender
 {
     MenuViewController* mvc = (MenuViewController*)[SlideNavigationController sharedInstance].leftMenu;
     if (mvc.eventInvitationViewController == nil) {
@@ -1158,6 +1218,9 @@ enum Response_Type
         {
             
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
+            NSInteger row = selectedPath.row;
+            [friendRequestMsg removeObjectAtIndex:row];
+            [self.friendRequest_tableView reloadData];
 //            int count = self.msgFromDB.count;
 //            NSDictionary* msg_dic = [self.friendRequestMsg objectAtIndex:[item_index intValue]];
 //            NSNumber* seq = [msg_dic objectForKey:@"seq"];
@@ -1179,6 +1242,9 @@ enum Response_Type
         case ALREADY_IN_EVENT:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            NSInteger row = selectedPath.row;
+            [eventRequestMsg removeObjectAtIndex:row];
+            [self.eventRequest_tableView reloadData];
 //            int count = self.msgFromDB.count;
 //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
 //            NSNumber* seq = [dataMsg objectForKey:@"seq"];

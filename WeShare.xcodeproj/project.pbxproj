@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0435EEEF19A638C2003BB2F6 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */; };
 		0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */; };
 		0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */; };
 		0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF1819AF702F003BB2F6 /* LoginViewController.m */; };
@@ -29,6 +28,7 @@
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
+		04955A9819C4C19A00BC0E63 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04955A9719C4C19A00BC0E63 /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -288,7 +288,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FillinInfoViewController.h; path = "Login&Register/FillinInfoViewController.h"; sourceTree = "<group>"; };
 		0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FillinInfoViewController.m; path = "Login&Register/FillinInfoViewController.m"; sourceTree = "<group>"; };
@@ -330,6 +329,7 @@
 		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
+		04955A9719C4C19A00BC0E63 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -805,13 +805,13 @@
 				04B6F86319A0EEA500229393 /* AddressBook.framework in Frameworks */,
 				51F06C29197E0193000E8428 /* libiconv.dylib in Frameworks */,
 				51F06C27197E017F000E8428 /* CoreVideo.framework in Frameworks */,
+				04955A9819C4C19A00BC0E63 /* libbaidumapapi.a in Frameworks */,
 				51F06C25197E0173000E8428 /* CoreMedia.framework in Frameworks */,
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
-				0435EEEF19A638C2003BB2F6 /* libbaidumapapi.a in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
 				51E86D971973CA8000CBAE86 /* CoreLocation.framework in Frameworks */,
@@ -1472,9 +1472,9 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				04955A9719C4C19A00BC0E63 /* libbaidumapapi.a */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
-				0435EEEE19A638C2003BB2F6 /* libbaidumapapi.a */,
 				51DDBF7419A319B20051B88C /* libz.dylib */,
 				04B6F86419A0EEBB00229393 /* AddressBookUI.framework */,
 				04B6F86219A0EEA500229393 /* AddressBook.framework */,
@@ -1797,7 +1797,6 @@
 				51581D1C1933575300943606 /* Sources */,
 				51581D1D1933575300943606 /* Frameworks */,
 				51581D1E1933575300943606 /* Resources */,
-				086AE6C919B58C9100EDF629 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1979,22 +1978,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		086AE6C919B58C9100EDF629 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ] || [ \"${PLATFORM_NAME}\" == \"ipados\" ]; then /Applications/Xcode.app/Contents/Developer/iphoneentitlements/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\ncodesign -f -s \"iPhone Developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\";\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		51581D1C1933575300943606 /* Sources */ = {
@@ -2324,6 +2307,7 @@
 					"$(PROJECT_DIR)/Metic/Source/ZBarSDK",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.2",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
+					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2369,6 +2353,7 @@
 					"$(PROJECT_DIR)/Metic/Source/ZBarSDK",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.2",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
+					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
