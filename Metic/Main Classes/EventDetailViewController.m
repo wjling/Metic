@@ -946,12 +946,16 @@
         }
 
         float commentHeight = [self calculateTextHeight:text width:265 fontSize:SubCFontSize];
+        if (commentHeight < 25) commentHeight = 25;
         CGRect frame = cell.frame;
         frame.size.height = commentHeight+0.5f;
         [cell setFrame:frame];
-        frame = [cell viewWithTag:100].frame;
+        
+        UIView* shadow = [cell viewWithTag:100];
+        [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe7e7e7]];
+        frame = shadow.frame;
         frame.size.height =  commentHeight;
-        [[cell viewWithTag:100] setFrame:frame];
+        [shadow setFrame:frame];
         [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
@@ -965,6 +969,25 @@
 
 #pragma mark - Table view delegate
 
+-(void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section !=  0 && indexPath.row != 0)
+    {
+        SCommentTableViewCell* cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        UIView* shadow = [cell viewWithTag:100];
+        [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe0e0e0]];
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section !=  0 && indexPath.row != 0)
+    {
+        SCommentTableViewCell* cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        UIView* shadow = [cell viewWithTag:100];
+        [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe7e7e7]];
+    }
+}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -990,8 +1013,9 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:SubCFontSize];
-        return commentHeight+0.5;
+        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:SubCFontSize] + 0.5;
+        if (commentHeight < 25) commentHeight = 25;
+        return commentHeight;
     }
 }
 

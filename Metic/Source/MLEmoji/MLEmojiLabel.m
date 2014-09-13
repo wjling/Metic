@@ -45,7 +45,8 @@ REGULAREXPRESSION_OPTION(PoundSignRegularExpression, @"", NSRegularExpressionCas
 //REGULAREXPRESSION(EmojiRegularExpression, @"\\[[a-zA-Z0-9\\u4e00-\\u9fa5]+\\]")
 
 //@"/:[\\w:~!@$&*()|+<>',?-]{1,8}" , // @"/:[\\x21-\\x2E\\x30-\\x7E]{1,8}" ，经过检测发现\w会匹配中文，好奇葩。
-REGULAREXPRESSION(SlashEmojiRegularExpression, @"/[\\w:~!@$&*()|+<>',?-]{1,8}")
+//REGULAREXPRESSION(SlashEmojiRegularExpression, @"/[\\w:~!@$&*()|+<>',?-]{1,8}")
+REGULAREXPRESSION(SlashEmojiRegularExpression, @"/[\\w]{1,3}")
 
 const CGFloat kLineSpacing = 4.0;
 const CGFloat kAscentDescentScale = 0.25; //在这里的话无意义，高度的结局都是和宽度一样
@@ -321,7 +322,7 @@ static inline CGFloat TTTFlushFactorForTextAlignment(NSTextAlignment textAlignme
         if (!self.customEmojiRegularExpression) {
             //微信的表情没有结束符号,所以有可能会发现过长的只有头部才是表情的段，需要循环检测一次。微信最大表情特殊字符是8个长度，检测8次即可
             if (!imageName&&emojiKey.length>2) {
-                NSUInteger maxDetctIndex = emojiKey.length>8+2?8:emojiKey.length-2;
+                NSUInteger maxDetctIndex = emojiKey.length>3+2?3:emojiKey.length-2;
                 //从头开始检测是否有对应的
                 for (NSUInteger i=0; i<maxDetctIndex; i++) {
                     //                NSLog(@"%@",[emojiKey substringToIndex:3+i]);

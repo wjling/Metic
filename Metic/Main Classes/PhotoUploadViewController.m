@@ -123,20 +123,28 @@
 //                                          length);
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [navigationController.navigationBar setBarTintColor:[CommonUtils colorWithValue:0x56caab]];
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+
+    [navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    UILabel *customLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+    [customLab setTextColor:[UIColor whiteColor]];
+    [customLab setText:@"图片裁剪"];
+    [customLab setTextAlignment:NSTextAlignmentCenter];
+    customLab.font = [UIFont boldSystemFontOfSize:20];
+    controller.navigationItem.titleView = customLab;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         navigationController.modalPresentationStyle = UIModalPresentationFormSheet;
     }
-
-    [self presentViewController:navigationController animated:YES completion:^{
+    [self presentViewController:navigationController animated:NO completion:^{
     }];
     
 }
 
 - (IBAction)upload:(id)sender {
     if (!self.uploadImage) {
-        UIAlertView* alert =[CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:self WithCancelTitle:@"确定"];
-        [alert setTag:250];
+        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
     [self showWaitingView];
@@ -238,7 +246,7 @@
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
     [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
-    [picker dismissViewControllerAnimated:YES completion:^{
+    [picker dismissViewControllerAnimated:NO completion:^{
         [self openEditor:nil];
     }];
 
@@ -320,8 +328,8 @@
         case NORMAL_REPLY:
         {
             [self removeWaitingView];
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传成功" WithDelegate:self WithCancelTitle:@"确定"];
-            
+            ((PictureWallViewController*)self.photoWallController).canReloadPhoto = YES;
+            [self.navigationController popToViewController:self.photoWallController animated:YES];
         }
             break;
         default:
@@ -333,18 +341,7 @@
         }
     }
 }
-#pragma mark - Alert Delegate
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
-    // the user clicked OK
-    if ([alertView tag] == 250) {
-        return;
-    }
-    if (buttonIndex == 0)
-    {
-        ((PictureWallViewController*)self.photoWallController).canReloadPhoto = YES;
-        [self.navigationController popToViewController:self.photoWallController animated:YES];
-    }
-}
+
 
 
 

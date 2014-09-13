@@ -9,6 +9,8 @@
 #import "showParticipatorsViewController.h"
 #import "InviteFriendViewController.h"
 #import "../Utils/PhotoGetter.h"
+#import "UserInfo/UserInfoViewController.h"
+#import "FriendInfoViewController.h"
 
 @interface showParticipatorsViewController ()
 @property (nonatomic,strong) NSMutableSet *inviteFids;
@@ -46,6 +48,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     _isManaging = NO;
+    [self.manage_Button setTitle:@"       管理" forState:UIControlStateNormal];
     _isRemoving = NO;
     [_collectionView reloadData];
 }
@@ -60,13 +63,32 @@
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+//显示好友详情
+- (void)pushToFriendView:(NSNumber*)fid {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([fid intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [self.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = fid;
+        [self.navigationController pushViewController:friendView animated:YES];
+    }
+	
+}
+
 
 - (IBAction)manage:(id)sender {
     if (!_isManaging) {
         _isManaging = YES;
+        [self.manage_Button setTitle:@"       完成" forState:UIControlStateNormal];
         _isRemoving = NO;
     }else{
         _isManaging = NO;
+        [self.manage_Button setTitle:@"       管理" forState:UIControlStateNormal];
     }
     [self.collectionView reloadData];
 }
@@ -156,6 +178,12 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!_isManaging) {
+        NSDictionary* participant = _participants[indexPath.row];
+        [self pushToFriendView:[participant valueForKey:@"id"]];
+        return;
+    }
+
     if (indexPath.row == _participants.count) {
         [self performSegueWithIdentifier:@"inviteFriends" sender:self];
     }else if(indexPath.row == _participants.count + 1){
