@@ -126,7 +126,11 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"活动详情"];
 }
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_inputTextView resignFirstResponder];
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];

@@ -16,12 +16,14 @@
 #import "UIImageView+WebCache.h"
 #import "MobClick.h"
 #import "NSString+JSON.h"
+#import "../Utils/Reachability.h"
 
 #define PhotoNum 20
 
 
 @interface PictureWallViewController ()
 @property(nonatomic,strong)MySqlite *sql;
+@property(nonatomic,strong)UIImageView* tmpImageView;
 @property BOOL isOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
@@ -32,6 +34,14 @@
 @property int currentPhotoNum;
 @property (nonatomic,strong) NSString* urlFormat;
 @property BOOL canCleanData;
+
+
+@property (nonatomic,strong) NSMutableArray* lefPhotos;
+@property (nonatomic,strong) NSMutableArray* rigPhotos;
+@property int leftH;
+@property int rightH;
+@property BOOL isLoading;
+
 
 @end
 
@@ -52,6 +62,13 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
+    
+    _isLoading = NO;
+    _leftH = _rightH = 0;
+    _tmpImageView = [[UIImageView alloc]initWithFrame:CGRectZero];
+    _lefPhotos = [[NSMutableArray alloc]init];
+    _rigPhotos = [[NSMutableArray alloc]init];
+    
     [self.tableView1 setDelegate:self];
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
@@ -66,7 +83,16 @@
     self.photoPath_list = [[NSMutableArray alloc]init];
     self.cellHeight = [[NSMutableDictionary alloc]init];
     self.sql = [[MySqlite alloc]init];
-    [self pullPhotoInfosFromDB];
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        NSLog(@"没有网络");
+        _canReloadPhoto = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [self pullPhotoInfosFromDB];
+        });
+        
+    }
+    
     
 //    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
     _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
@@ -84,11 +110,9 @@
     
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [MobClick beginLogPageView:@"图片墙"];
-    
+    [super viewWillAppear:animated];
     if (_canReloadPhoto) {
         [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
         _canReloadPhoto = NO;
@@ -96,10 +120,19 @@
         if (!_canCleanData) {
             [_photo_list removeAllObjects];
             [_photo_list_all removeAllObjects];
+            [_lefPhotos removeAllObjects];
+            [_rigPhotos removeAllObjects];
+            _leftH = 0;
+            _rightH = 0;
         }
-        [self getPhotolist];        
+        [self getPhotolist];
     }
-    
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"图片墙"];
 }
 
 
@@ -287,9 +320,48 @@
         [self.photo_list_all addObject:photoInfo];
         [self.photo_list addObject:photoInfo];
     }
-    
     [self.sql closeMyDB];
+    [self performSelectorInBackground:@selector(classifyPhotos:) withObject:_photo_list];
 }
+
+-(void)classifyPhotos:(NSArray*)photos
+{
+    [self classifyPhotos:photos index:0];
+}
+
+-(void)classifyPhotos:(NSArray*)photos index:(int)index
+{
+    NSLog(@"loading");
+    _isLoading = YES;
+    if (index < photos.count) {
+        NSDictionary* photo = photos[index];
+        NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[photo valueForKey:@"photo_name"]]];
+        [_tmpImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if(image){
+                int H = image.size.height * 145 / image.size.width;
+                if (_leftH <= _rightH) {
+                    [_lefPhotos addObject:photo];
+                    _leftH += H;
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [_tableView1 reloadData];
+                    });
+                }else{
+                    [_rigPhotos addObject:photo];
+                    _rightH += H;
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [_tableView2 reloadData];
+                    });
+                }
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                [self classifyPhotos:photos index:index+1];
+            });
+            
+        }];
+    }
+    _isLoading = NO;
+}
+
 
 #pragma mark 代理方法-UIScrollView
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -301,25 +373,28 @@
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-//    if (_shouldStopTimer){
-//        _shouldStopTimer = NO;
-//        [_timer invalidate];
-//    
-//    }
     _footer.scrollView = _scrollView;
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
-        [_tableView2 setContentSize:_tableView1.contentSize];
-    }else [_tableView1 setContentSize:_tableView2.contentSize];
+        CGSize size = _tableView2.contentSize;
+        size.height = _tableView1.contentSize.height;
+        [_tableView2 setContentSize:size];
+    }else{
+        CGSize size = _tableView1.contentSize;
+        size.height = _tableView2.contentSize.height;
+        [_tableView1 setContentSize:size];
+    }
 }
 
 #pragma mark 代理方法-UITableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    self.seletedPhotoIndex = indexPath.row*2;
-    if (tableView == self.tableView2) {
-        self.seletedPhotoIndex +=1;
-    }
+    NSDictionary* dictionary;
+    if (tableView == _tableView1) {
+        dictionary = _lefPhotos[indexPath.row];
+    }else dictionary = _rigPhotos[indexPath.row];
+    
+    self.seletedPhotoIndex = [_photo_list indexOfObject:dictionary];
     [self performSegueWithIdentifier:@"photosShow" sender:self];
     
 }
@@ -328,24 +403,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     long max = 0;
-    if (!self.photo_list.count) {
-        return 0;
-    }
-    max = self.photo_list.count/2;
-    
     if (tableView == self.tableView1) {
-        max += self.photo_list.count%2;
-    }
+        max = _lefPhotos.count;
+    }else max = _rigPhotos.count;
     return max;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int addition = 0;
-    if (tableView == self.tableView2) {
-        addition = 1;
-    }
+//    int addition = 0;
+//    if (tableView == self.tableView2) {
+//        addition = 1;
+//    }
     static NSString *CellIdentifier = @"photocell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -360,7 +430,13 @@
     }
     [cell.imgView setFrame:CGRectZero];
     [cell.infoView setFrame:CGRectZero];
-    NSDictionary *a = self.photo_list[indexPath.row*2+addition];
+    
+    NSDictionary *a;
+    if (tableView == _tableView1) {
+        a = _lefPhotos[indexPath.row];
+    }else a = _rigPhotos[indexPath.row];
+    
+//    NSDictionary *a = self.photo_list[indexPath.row*2+addition];
     cell.author.text = [a valueForKey:@"author"];
     cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
     
@@ -379,10 +455,13 @@
     url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
     NSLog(@"%@",url);
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (self && image && cacheType == SDImageCacheTypeNone) {
-            [tableView reloadData];
-            NSLog(@"reloadData %@",imageURL);
-        }
+//        if (self && image && cacheType == SDImageCacheTypeNone) {
+//            [tableView reloadData];
+//            NSLog(@"reloadData %@",imageURL);
+//        }
+//        if (!image) {
+//            NSLog(@"can not get that photo %@",[imageURL absoluteString]);
+//        }
     }];
     //服务器获取url准备
 //    __block NSString* url = [[MTUser sharedInstance].photoURL valueForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"photo_id"]]];
@@ -452,11 +531,16 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int addition = 0;
-    if (tableView == self.tableView2) {
-        addition = 1;
-    }
-    NSDictionary *a = self.photo_list[indexPath.row*2+addition];
+//    int addition = 0;
+//    if (tableView == self.tableView2) {
+//        addition = 1;
+//    }
+//    NSDictionary *a = self.photo_list[indexPath.row*2+addition];
+    NSDictionary *a;
+    if (tableView == _tableView1) {
+        a = _lefPhotos[indexPath.row];
+    }else a = _rigPhotos[indexPath.row];
+    
     NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
     if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
@@ -494,13 +578,24 @@
                 //[_tableView1 setContentOffset:CGPointMake(0, 0) animated:YES];
                 [self.photo_list_all removeAllObjects];
                 [self.photo_list removeAllObjects];
+                [_lefPhotos removeAllObjects];
+                [_rigPhotos removeAllObjects];
+                _leftH = 0;
+                _rightH = 0;
                 _canCleanData = NO;
             }
             [self.photo_list_all addObjectsFromArray:newphoto_list];
             int count = self.photo_list.count;
-            for (int i = count; i < count + PhotoNum && i < self.photo_list_all.count; i++) {
-                [self.photo_list addObject:self.photo_list_all[i]];
-            }
+            int num = MIN(PhotoNum, _photo_list_all.count - count);
+            
+            NSArray* addPhotos = [_photo_list_all subarrayWithRange:NSMakeRange(count, num)];
+            [_photo_list addObjectsFromArray:addPhotos];
+            
+            
+            //分图
+            [self performSelectorInBackground:@selector(classifyPhotos:) withObject:addPhotos];
+            
+            
             
             
             //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
@@ -546,6 +641,15 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
+    if (_isLoading) {
+        [refreshView endRefreshing];
+        return;
+    }
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        NSLog(@"没有网络");
+        [refreshView endRefreshing];
+        return;
+    }
     self.isOpen = YES;
     int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
     if ([self.sequence intValue] == -1 && photo_rest_num == 0) {

@@ -217,7 +217,7 @@
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset640x480] ;
     exporter.videoComposition = videoComposition;
     exporter.outputURL=[NSURL fileURLWithPath:outputPath];
-    exporter.outputFileType=AVFileTypeQuickTimeMovie;
+    exporter.outputFileType=AVFileTypeMPEG4;
     
     [exporter exportAsynchronouslyWithCompletionHandler:^(void){
         NSLog(@"Exporting done!");
