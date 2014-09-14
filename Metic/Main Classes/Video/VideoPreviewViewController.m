@@ -204,7 +204,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     // make it square
     AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
     videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
-    videoComposition.frameDuration = CMTimeMake(1, 30);
+    videoComposition.frameDuration = CMTimeMake(1, 15);
     
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30) );

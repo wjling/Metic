@@ -255,6 +255,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     [self.getPhoto setBackgroundImage:croppedImage forState:UIControlStateNormal];
+    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.uploadImage = croppedImage;
 }
 
@@ -309,6 +310,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
     [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [picker dismissViewControllerAnimated:NO completion:^{
         [self openEditor:nil];
     }];
