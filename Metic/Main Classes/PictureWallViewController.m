@@ -358,6 +358,7 @@
             });
             
         }];
+        return;
     }
     _isLoading = NO;
 }
@@ -525,6 +526,8 @@
         }
 
     }else [cell setHidden:YES];
+    cell.isloading = _isLoading;
+    [cell animationBegin];
     return cell;
 }
 

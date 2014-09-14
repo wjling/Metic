@@ -37,4 +37,5 @@
 -(void)setGood_buttonNum:(NSNumber *)num;
 -(void)setComment_buttonNum:(NSNumber *)num;
 -(void)refresh;
+-(void)animationBegin;
 @end

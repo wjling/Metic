@@ -273,6 +273,7 @@
         if ([text isEqualToString:@""]) height = -19;
         cell.height = height;
         [cell refresh];
+        [cell animationBegin];
     }
     
 	return cell;

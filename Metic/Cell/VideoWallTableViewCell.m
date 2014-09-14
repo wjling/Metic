@@ -110,6 +110,16 @@
 
 }
 
+-(void)animationBegin
+{
+    [self setAlpha:0.5];
+    [UIView beginAnimations:@"shadowViewDisappear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    self.alpha = 1;
+    [UIView commitAnimations];
+}
+
 -(void)good:(UIButton*)button
 {
     [button setEnabled:NO];
