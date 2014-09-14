@@ -12,9 +12,13 @@
 #import "../../UIView/MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "MobClick.h"
+#import "THProgressView.h"
 
 
 #define mp4Quality AVAssetExportPreset640x480
+
+static const CGSize progressViewSize = { 200.0f, 30.0f };
+
 
 @interface VideoPreviewViewController ()
 @property(nonatomic,strong) UIScrollView* scrollView;
@@ -24,6 +28,7 @@
 @property(nonatomic,strong) UIButton* confirmBtn;
 @property(nonatomic,strong) UIImage* preViewImage;
 @property(nonatomic,strong) UIView* waitingView;
+@property(nonatomic,strong) THProgressView *progressView;
 @property BOOL isKeyBoard;
 @end
 
@@ -63,6 +68,7 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -198,7 +204,7 @@
     // make it square
     AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
     videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
-    videoComposition.frameDuration = CMTimeMake(1, 10);
+    videoComposition.frameDuration = CMTimeMake(1, 30);
     
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30) );
@@ -257,17 +263,26 @@
 -(void)showWaitingView
 {
     if (!_waitingView) {
-        CGRect frame = self.view.bounds;
+        CGRect frame = [UIScreen mainScreen].bounds;
         _waitingView = [[UIView alloc]initWithFrame:frame];
         [_waitingView setBackgroundColor:[UIColor blackColor]];
-        [_waitingView setAlpha:0.5f];
-        frame.origin.x = (frame.size.width - 100)/2.0;
-        frame.origin.y = (frame.size.height - 100)/2.0;
-        frame.size = CGSizeMake(100, 100);
-        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
-        [_waitingView addSubview:indicator];
+        [_waitingView setAlpha:0.7f];
         [self.view addSubview:_waitingView];
-        [indicator startAnimating];
+        
+        _progressView = [[THProgressView alloc] initWithFrame:CGRectMake(CGRectGetMidX(_waitingView.frame) - progressViewSize.width / 2.0f,
+                                                                                           CGRectGetMidY(_waitingView.frame) - progressViewSize.height / 2.0f,
+                                                                                           progressViewSize.width,
+                                                                                           progressViewSize.height)];
+        _progressView.borderTintColor = [UIColor whiteColor];
+        _progressView.progressTintColor = [UIColor whiteColor];
+        [_progressView setProgress:0 animated:NO];
+        [_waitingView addSubview:_progressView];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(modifyProgress:) name: @"uploadFile" object:nil];
+        
+        
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:_waitingView];
     }
 }
 
@@ -275,9 +290,19 @@
 {
     if (_waitingView) {
         [_waitingView removeFromSuperview];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
         _waitingView = nil;
     }
 }
+
+-(void)modifyProgress:(id)sender
+{
+    float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
+    if (_progressView) {
+        [_progressView setProgress:progress animated:YES];
+    }
+}
+
 -(void)movieFinishedCallback:(NSNotification*)notify{
 
     MPMoviePlayerController* theMovie = [notify object];
@@ -299,7 +324,7 @@
         imageView.image = image;
     }
     else if (type == 100){
-        [self removeWaitingView];
+        
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
         [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -318,8 +343,14 @@
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {
-                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
-                        [alert setTag:100];
+//                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
+//                        [alert setTag:100];
+//
+                        [self removeWaitingView];
+                        int index = self.navigationController.viewControllers.count - 2;
+                        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+                        controller.shouldReload = YES;
+                        [self.navigationController popViewControllerAnimated:YES];
                         
                     }
                         break;

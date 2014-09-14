@@ -92,6 +92,7 @@
 		04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
 		08293F6119C487D9009B637A /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08293F6019C487D9009B637A /* mapapi.bundle */; };
+		08293F8219C5DC3A009B637A /* THProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08293F8119C5DC3A009B637A /* THProgressView.m */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
@@ -475,6 +476,8 @@
 		08293F5E19C4858F009B637A /* BMKUtilsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUtilsComponent.h; sourceTree = "<group>"; };
 		08293F5F19C4858F009B637A /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
 		08293F6019C487D9009B637A /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
+		08293F8019C5DC3A009B637A /* THProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THProgressView.h; sourceTree = "<group>"; };
+		08293F8119C5DC3A009B637A /* THProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THProgressView.m; sourceTree = "<group>"; };
 		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
 		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1084,6 +1087,15 @@
 			path = BMKinc;
 			sourceTree = "<group>";
 		};
+		08293F7F19C5DC3A009B637A /* THProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				08293F8019C5DC3A009B637A /* THProgressView.h */,
+				08293F8119C5DC3A009B637A /* THProgressView.m */,
+			);
+			path = THProgressView;
+			sourceTree = "<group>";
+		};
 		087759BB19A81B670034BB58 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -1635,6 +1647,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				08293F7F19C5DC3A009B637A /* THProgressView */,
 				08293F2619C4858F009B637A /* BMKinc */,
 				51DDBF7F19A344510051B88C /* UMAnalytics_Sdk_3.1.3 */,
 				04B6F86B19A25D5C00229393 /* MLEmoji */,
@@ -2028,6 +2041,7 @@
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
+				08293F8219C5DC3A009B637A /* THProgressView.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,

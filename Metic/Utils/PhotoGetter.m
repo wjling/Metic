@@ -245,6 +245,7 @@
 
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     cloudOP.mineType = @"image/jpeg";
+    cloudOP.shouldRecordProgress = YES;
     NSString* uploadfilePath = filePath;
     dispatch_async(dispatch_get_main_queue(), ^{
         [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
@@ -406,6 +407,7 @@
     self.imgName = _videoName;
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     cloudOP.mineType = @"video/mp4";
+    cloudOP.shouldRecordProgress = YES;
     [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:_videoFilePath container:nil authorId:nil];
 }
 
