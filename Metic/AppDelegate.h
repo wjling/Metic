@@ -58,7 +58,7 @@
 @property (nonatomic) BOOL isLogined;
 
 -(void)initViews;
-+(void)initApp;
+-(void)initApp;
 +(void)refreshMenu;
 
 +(BOOL)isEnableWIFI;

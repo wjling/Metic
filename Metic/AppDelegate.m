@@ -102,7 +102,25 @@
     hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
     [hostReach startNotifier];
     
-    application.applicationIconBadgeNumber = 0;
+//    application.applicationIconBadgeNumber = 0;
+    
+    //判断是否由远程消息通知触发应用程序启动
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
+        //获取应用程序消息通知标记数
+        int badge = [UIApplication sharedApplication].applicationIconBadgeNumber;
+        if (badge > 0) {
+            badge--;
+            [UIApplication sharedApplication].applicationIconBadgeNumber = badge;
+        }
+        
+    }
+    
+    //消息推送注册
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeSound |
+     UIRemoteNotificationTypeAlert |
+     UIRemoteNotificationTypeBadge];
+    
     return YES;
 
 }
@@ -125,6 +143,7 @@
 //     }];
      NSLog(@"enter Background====================");
     application.applicationIconBadgeNumber = 0;
+    
     UIApplication*   app = [UIApplication sharedApplication];
     __block    UIBackgroundTaskIdentifier bgTask;
     bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
@@ -188,6 +207,24 @@
     }
     
     
+}
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    NSString *token = [NSString stringWithFormat:@"%@",deviceToken];
+    NSLog(@"Device token is : %@",token);
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSString *error_str = [NSString stringWithFormat:@"%@",error];
+    NSLog(@"Failed to get token, error: %@",error_str);
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    //在此处理接受到的消息
+    NSLog(@"APP receive remote notification: %@", userInfo);
 }
 
 -(void)initApp
