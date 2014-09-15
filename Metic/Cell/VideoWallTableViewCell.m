@@ -27,6 +27,7 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
+    [self.comment_button addTarget:self action:@selector(toDetail:) forControlEvents:UIControlEventTouchUpInside];
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     // Initialization code
@@ -158,6 +159,13 @@
         }
     }];
 
+}
+
+-(void)toDetail:(UIButton*)button
+{
+    _controller.seleted_videoInfo = _videoInfo;
+    _controller.seleted_videoThumb = _videoThumb;
+    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
 }
 
 - (void)pushToFriendView:(id)sender {

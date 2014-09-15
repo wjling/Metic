@@ -393,7 +393,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         case NORMAL_REPLY:
         {
             [self removeWaitingView];
-            ((PictureWallViewController*)self.photoWallController).canReloadPhoto = YES;
+            ((PictureWallViewController*)self.photoWallController).shouldReloadPhoto = YES;
             [self.navigationController popToViewController:self.photoWallController animated:YES];
         }
             break;

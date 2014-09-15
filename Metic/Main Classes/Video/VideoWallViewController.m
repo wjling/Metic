@@ -22,8 +22,6 @@
 
 @interface VideoWallViewController ()
 @property(nonatomic,strong) NSMutableArray* videoInfos;
-@property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
-@property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
 @property(nonatomic,strong) UIImage* preViewImage;

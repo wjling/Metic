@@ -881,7 +881,7 @@
         }
             break;
         case 1:{
-            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
+//            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
             [self.navigationController popToViewController:self.controller animated:YES];
         }
         default:
