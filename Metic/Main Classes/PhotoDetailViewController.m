@@ -292,7 +292,7 @@
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
-    
+    [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     
     
     [_tableView reloadData];
@@ -348,7 +348,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+        comment = [[NSString stringWithFormat:@"回复 %@ : ",_herName] stringByAppendingString:comment];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
@@ -367,6 +367,7 @@
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
+    [newComment setValue:[dictionary valueForKey:@"replied"] forKey:@"replied"];
 
     if ([_pcomment_list isKindOfClass:[NSArray class]]) {
         _pcomment_list = [[NSMutableArray alloc]initWithArray:_pcomment_list];
@@ -716,7 +717,10 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];
         });
-        if ([cell.pcomment_id intValue] < 0) return;
+        if ([cell.pcomment_id intValue] < 0){
+            [self resendComment: cell.resend_Button];
+            return;
+        }
         self.herName = cell.authorName;
         if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
             self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];
