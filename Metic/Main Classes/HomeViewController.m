@@ -397,11 +397,9 @@
     }
     if ([segue.destinationViewController isKindOfClass:[DynamicViewController class]]) {
         DynamicViewController *nextViewController = segue.destinationViewController;
-        nextViewController.updateEvents = [[NSMutableArray alloc]initWithArray: _updateEvents];
-        nextViewController.atMeEvents = [[NSMutableArray alloc] initWithArray:_atMeEvents];
-        [self.atMeEvents removeAllObjects];
-        [self.updateEventIds removeAllObjects];
-        [self.updateEvents removeAllObjects];
+        nextViewController.updateEvents = _updateEvents;
+        nextViewController.atMeEvents = _atMeEvents;
+        nextViewController.updateEventIds = _updateEventIds;
     }
     
     
@@ -451,9 +449,6 @@
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
         if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
-            self.updateEvents = [MTUser sharedInstance].updateEvents;
-            self.updateEventIds = [MTUser sharedInstance].updateEventIds;
-            self.atMeEvents = [MTUser sharedInstance].atMeEvents;
             [self adjustInfoView];
         }
         

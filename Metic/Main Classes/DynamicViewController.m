@@ -10,6 +10,7 @@
 #import "EventDetailViewController.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "../Utils/PhotoGetter.h"
+#import "AppDelegate.h"
 #import "MobClick.h"
 
 @interface DynamicViewController ()
@@ -43,16 +44,19 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
     [_dynamic_tableView reloadData];
     [_atMe_tableView reloadData];
-    if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
-        [_scrollView setContentOffset:CGPointMake(320, 0) animated:NO];
-    }
+    
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"新动态"];
+    if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
+        [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+    }
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -65,6 +69,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [_atMeEvents removeAllObjects];
+    [_updateEvents removeAllObjects];
+    [_updateEventIds removeAllObjects];
+}
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
@@ -151,6 +161,7 @@
         NSDictionary *updateInfo = _updateEvents[indexPath.row];
         _selete_Eventid = [updateInfo valueForKey:@"event_id"];
         [_updateEvents removeObjectAtIndex:indexPath.row];
+        [_updateEventIds removeObject:_selete_Eventid];
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
@@ -212,6 +223,30 @@
     }else{
         [_atMe_button setHighlighted:NO];
         [_dynamics_button setHighlighted:YES];
+    }
+}
+
+#pragma mark notificationDidReceive
+-(void)notificationDidReceive:(NSArray *)messages
+{
+    for (NSDictionary* message in messages) {
+        NSLog(@"homeviewcontroller receive a message %@",message);
+        NSString *eventInfo = [message valueForKey:@"msg"];
+        NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
+        int cmd = [[event valueForKey:@"cmd"] intValue];
+        NSLog(@"cmd: %d",cmd);
+        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
+            NSLog(@"%@",_updateEvents);
+            if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
+                [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+            }else if(_updateEvents.count != 0 && _atMeEvents.count == 0){
+                [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+            }
+            [_dynamic_tableView reloadData];
+            [_atMe_tableView reloadData];
+        }
+        
     }
 }
 @end

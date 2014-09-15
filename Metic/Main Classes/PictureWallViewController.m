@@ -352,6 +352,9 @@
                         [_tableView2 reloadData];
                     });
                 }
+            }else{
+                [_photo_list removeObject:photo];
+                [_photo_list_all removeObject:photo];
             }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                 [self classifyPhotos:photos index:index+1];
