@@ -47,13 +47,8 @@
 
     _clearIds = NO;
     
-    _scrollView.delegate = self;
     _nearbyTableView.delegate = self;
     _nearbyTableView.dataSource = self;
-    _searchTableView.delegate = self;
-    _searchTableView.dataSource = self;
-    [self createScrollingBar];
-    [_nearbyButton setHighlighted:YES];
     
     //百度定位
     _locService = [[BMKLocationService alloc]init];
@@ -78,10 +73,8 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"周边活动"];
-    [self.shadowView setAlpha:0];
     _locService.delegate = self;
     [_nearbyTableView reloadData];
-    [_searchTableView reloadData];
     
     if (_shouldRefresh){
         [_header beginRefreshing];
@@ -107,14 +100,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)createScrollingBar
-{
-    _bar = [[UIView alloc]initWithFrame:CGRectMake(0, 32, 160, 3)];
-    [_bar setBackgroundColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0f]];
-    [self.view addSubview:_bar];
-    [self.view bringSubviewToFront:_shadowView];
-}
-
 -(void)getNearbyEventIdsFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -135,16 +120,6 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
-}
-
-
-
-- (IBAction)nearbyButton_pressed:(id)sender {
-    [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-}
-
-- (IBAction)searchButton_pressed:(id)sender {
-    [_scrollView setContentOffset:CGPointMake(310, 0) animated:YES];
 }
 
 -(void)closeRJ
@@ -326,46 +301,6 @@
             
         default:return 0;
             break;
-    }
-}
-
-#pragma mark scrollView Delegate
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.tag == 100) {
-        CGRect frame =_bar.frame;
-        frame.origin.x = scrollView.contentOffset.x / 2 *32.0/31.0;
-        [_bar setFrame:frame];
-        if (scrollView.contentOffset.x > 155) {
-            [_searchButton setHighlighted:YES];
-            [_nearbyButton setHighlighted:NO];
-        }else{
-            [_searchButton setHighlighted:NO];
-            [_nearbyButton setHighlighted:YES];
-        }
-    }
-}
-
-#pragma mark - SlideNavigationController Methods -
-
-- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
-{
-	return YES;
-}
-
-- (BOOL)slideNavigationControllerShouldDisplayRightMenu
-{
-	return NO;
-}
--(void)sendDistance:(float)distance
-{
-    if (distance > 0) {
-        self.shadowView.hidden = NO;
-        [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-    }else{
-        //self.shadowView.hidden = YES;
-        //[self.view sendSubviewToBack:self.shadowView];
     }
 }
 

@@ -27,7 +27,7 @@
 @property(nonatomic,strong) UIViewController* scaningViewController;
 @property(nonatomic,strong) UIViewController* feedBackViewController;
 @property(nonatomic,strong) UIViewController* systemSettingsViewController;
-@property(nonatomic,strong) UIViewController* nearbyEventViewController;
+@property(nonatomic,strong) UIViewController* eventSquareViewController;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 
 - (IBAction)selector_tap:(id)sender;
