@@ -126,7 +126,11 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"活动详情"];
 }
-
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_inputTextView resignFirstResponder];
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -478,7 +482,7 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
-    [dictionary setValue:[NSNumber numberWithLong:self.mainCommentId] forKey:@"master"];
+    [dictionary setValue:[waitingComment valueForKey:@"master"] forKey:@"master"];
     if ([waitingComment valueForKey:@"replied"]) {
         [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     }
@@ -555,7 +559,7 @@
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"comment_num"];
     [newComment setValue:[NSNumber numberWithInt:-1] forKey:@"comment_id"];
     [newComment setValue:comment forKey:@"content"];
-    [newComment setValue:[NSNumber numberWithInt:0] forKey:@"master"];
+    [newComment setValue:[NSNumber numberWithLong:self.mainCommentId] forKey:@"master"];
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
@@ -722,6 +726,7 @@
     else if (indexPath.row == 0) {
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         if ([cell.commentid intValue] < 0 ) {
+            [self resendComment: cell.resend_Button];
             return;
         }
         [self.inputTextView becomeFirstResponder];
@@ -738,6 +743,7 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         if ([cell.commentid intValue] < 0 ) {
+            [self resendComment: cell.resend_Button];
             return;
         }
         [self.inputTextView becomeFirstResponder];

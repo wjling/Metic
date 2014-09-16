@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (strong, nonatomic) PictureWallViewController* PhotoWall;
+@property BOOL isloading;
 - (IBAction)button_DetailPressed:(id)sender;
-
+-(void)animationBegin;
 @end

@@ -39,4 +39,15 @@
     [self.PhotoWall.navigationController pushViewController:viewcontroller animated:YES];
 
 }
+
+-(void)animationBegin
+{
+    if (_isloading) return;
+    [self setAlpha:0.5];
+    [UIView beginAnimations:@"shadowViewDisappear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    self.alpha = 1;
+    [UIView commitAnimations];
+}
 @end

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
 
-@interface DynamicViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface DynamicViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,NotificationDelegate>
 @property (strong, nonatomic) IBOutlet UIButton *dynamics_button;
 @property (strong, nonatomic) IBOutlet UIButton *atMe_button;
 - (IBAction)dynamics_pressdown:(id)sender;
@@ -20,5 +21,6 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic,strong) NSMutableArray* updateEvents;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
+@property (nonatomic,strong) NSMutableSet* updateEventIds;
 
 @end

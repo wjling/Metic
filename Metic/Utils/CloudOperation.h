@@ -51,7 +51,7 @@
 @property(nonatomic,strong)id <CloudOperationDelegate> mDelegate;
 @property(nonatomic,strong)NSMutableData* responseData;
 @property(nonatomic,strong) NSString* mineType;
-
+@property BOOL shouldRecordProgress;
 
 
 -(id)initWithDelegate:(id)delegate;

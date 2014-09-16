@@ -263,6 +263,7 @@
     [dictionary setValue:self.videoId forKey:@"video_id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
+    [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
 
     [_tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -317,7 +318,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+        comment = [[NSString stringWithFormat:@"回复 %@ : ",_herName] stringByAppendingString:comment];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.videoId forKey:@"video_id"];
@@ -336,7 +337,8 @@
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
-    
+    [newComment setValue:[dictionary valueForKey:@"replied"] forKey:@"replied"];
+
     if ([_vcomment_list isKindOfClass:[NSArray class]]) {
         _vcomment_list = [[NSMutableArray alloc]initWithArray:_vcomment_list];
     }
@@ -493,7 +495,7 @@
         [date setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:date];
         
-        NSLog(@"%f",self.specificationHeight);
+        //NSLog(@"%f",self.specificationHeight);
         UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, height+38, 260, self.specificationHeight+15)];
         [specification setFont:[UIFont systemFontOfSize:12]];
         [specification setNumberOfLines:0];
@@ -635,18 +637,19 @@
         [self.inputTextView resignFirstResponder];
         return;
     }
-    NSLog(@"kkkk"); 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
-        NSLog(@"aaa");
         VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];
         });
-        if ([cell.vcomment_id intValue] < 0) return;
+        if ([cell.vcomment_id intValue] < 0){
+            [self resendComment: cell.resend_Button];
+            return;
+        }
         self.herName = cell.authorName;
         if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
             self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];

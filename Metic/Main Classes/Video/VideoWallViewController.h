@@ -18,6 +18,8 @@
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) UITableView* tableView;
+@property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
+@property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property BOOL shouldReload;
 - (IBAction)uploadVideo:(id)sender;
 @end

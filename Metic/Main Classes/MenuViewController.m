@@ -10,7 +10,7 @@
 #import "FriendsViewController.h"
 #import "NotificationsViewController.h"
 #import "EventInvitationViewController.h"
-#import "NearbyEventViewController.h"
+#import "EventSquareViewController.h"
 #import "UserInfo/UserInfoViewController.h"
 #import "MTUser.h"
 
@@ -32,7 +32,7 @@
 @synthesize eventInvitationViewController;
 @synthesize friendsViewController;
 @synthesize notificationsViewController;
-@synthesize nearbyEventViewController;
+@synthesize eventSquareViewController;
 @synthesize scaningViewController;
 @synthesize feedBackViewController;
 @synthesize systemSettingsViewController;
@@ -141,7 +141,7 @@
     eventInvitationViewController = nil;
     friendsViewController = nil;
     notificationsViewController = nil;
-    nearbyEventViewController = nil;
+    eventSquareViewController = nil;
     scaningViewController = nil;
     feedBackViewController = nil;
     systemSettingsViewController = nil;
@@ -345,11 +345,10 @@
 			break;
 			
         case 2:
-            if (!nearbyEventViewController) {
-                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NearbyEventViewController"];
-                nearbyEventViewController = vc;
-            }else vc = nearbyEventViewController;
-            ((NearbyEventViewController*)nearbyEventViewController).shouldRefresh = YES;
+            if (!eventSquareViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventSquareViewController"];
+                eventSquareViewController = vc;
+            }else vc = eventSquareViewController;
 			break;
 		case 3:
             if (!friendsViewController) {

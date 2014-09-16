@@ -151,6 +151,17 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
     }];
+    [op setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
+                                        long long totalBytesWritten,
+                                        long long totalBytesExpectedToWrite) {
+        if (_shouldRecordProgress) {
+            float progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadFile"
+                                                                object:nil
+                                                              userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:progress] forKey:@"progress"]];
+        }
+        
+    }];
     [op start];
 }
 

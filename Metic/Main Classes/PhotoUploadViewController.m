@@ -9,6 +9,10 @@
 #import "PhotoUploadViewController.h"
 #import "PictureWallViewController.h"
 #import "../Utils/CommonUtils.h"
+#import "THProgressView.h"
+#import "MobClick.h"
+
+static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 
 
@@ -23,6 +27,7 @@
 @property (strong, nonatomic) UIButton* upLoad;
 @property (strong, nonatomic) UITextField* preLabel;
 @property (strong, nonatomic) UIView* waitingView;
+@property (strong, nonatomic) THProgressView *progressView;
 
 @end
 
@@ -74,6 +79,19 @@
     [self.getPhoto addTarget:self action:@selector(UesrImageClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.imgView addSubview:self.getPhoto];
 
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"图片上传"];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick endLogPageView:@"图片上传"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -162,29 +180,74 @@
 -(void)showWaitingView
 {
     if (!_waitingView) {
-        CGRect frame = self.view.bounds;
+        [_textInput resignFirstResponder];
+        CGRect frame = [UIScreen mainScreen].bounds;
         _waitingView = [[UIView alloc]initWithFrame:frame];
         [_waitingView setBackgroundColor:[UIColor blackColor]];
-        [_waitingView setAlpha:0.5f];
-        frame.origin.x = (frame.size.width - 100)/2.0;
-        frame.origin.y = (frame.size.height - 100)/2.0;
-        frame.size = CGSizeMake(100, 100);
-        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
-        [indicator setTag:101];
-        [_waitingView addSubview:indicator];
+        [_waitingView setAlpha:0.7f];
+        [self.view addSubview:_waitingView];
+        
+        _progressView = [[THProgressView alloc] initWithFrame:CGRectMake(CGRectGetMidX(_waitingView.frame) - progressViewSize.width / 2.0f,
+                                                                         CGRectGetMidY(_waitingView.frame) - progressViewSize.height / 2.0f,
+                                                                         progressViewSize.width,
+                                                                         progressViewSize.height)];
+        _progressView.borderTintColor = [UIColor whiteColor];
+        _progressView.progressTintColor = [UIColor whiteColor];
+        [_progressView setProgress:0 animated:NO];
+        [_waitingView addSubview:_progressView];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(modifyProgress:) name: @"uploadFile" object:nil];
+        
+        
+        
+        [[UIApplication sharedApplication].keyWindow addSubview:_waitingView];
     }
-    [_textInput endEditing:YES];
-    [self.view addSubview:_waitingView];
-    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
 }
 
 -(void)removeWaitingView
 {
     if (_waitingView) {
-        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
         [_waitingView removeFromSuperview];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
+        _waitingView = nil;
     }
 }
+
+-(void)modifyProgress:(id)sender
+{
+    float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
+    NSLog(@"%f",progress);
+    if (_progressView) {
+        [_progressView setProgress:progress animated:YES];
+    }
+}
+//
+//-(void)showWaitingView
+//{
+//    if (!_waitingView) {
+//        CGRect frame = self.view.bounds;
+//        _waitingView = [[UIView alloc]initWithFrame:frame];
+//        [_waitingView setBackgroundColor:[UIColor blackColor]];
+//        [_waitingView setAlpha:0.5f];
+//        frame.origin.x = (frame.size.width - 100)/2.0;
+//        frame.origin.y = (frame.size.height - 100)/2.0;
+//        frame.size = CGSizeMake(100, 100);
+//        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
+//        [indicator setTag:101];
+//        [_waitingView addSubview:indicator];
+//    }
+//    [_textInput endEditing:YES];
+//    [self.view addSubview:_waitingView];
+//    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
+//}
+//
+//-(void)removeWaitingView
+//{
+//    if (_waitingView) {
+//        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
+//        [_waitingView removeFromSuperview];
+//    }
+//}
 
 #pragma mark - PECropViewControllerDelegate methods
 
@@ -192,6 +255,7 @@
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
     [self.getPhoto setBackgroundImage:croppedImage forState:UIControlStateNormal];
+    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.uploadImage = croppedImage;
 }
 
@@ -246,6 +310,7 @@
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     self.uploadImage = image;
     [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [picker dismissViewControllerAnimated:NO completion:^{
         [self openEditor:nil];
     }];
@@ -328,7 +393,7 @@
         case NORMAL_REPLY:
         {
             [self removeWaitingView];
-            ((PictureWallViewController*)self.photoWallController).canReloadPhoto = YES;
+            ((PictureWallViewController*)self.photoWallController).shouldReloadPhoto = YES;
             [self.navigationController popToViewController:self.photoWallController animated:YES];
         }
             break;

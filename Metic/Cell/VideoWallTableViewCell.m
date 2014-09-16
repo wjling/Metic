@@ -27,6 +27,7 @@
     [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     
     [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
+    [self.comment_button addTarget:self action:@selector(toDetail:) forControlEvents:UIControlEventTouchUpInside];
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     // Initialization code
@@ -103,10 +104,21 @@
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [self.video_button setImage:image forState:UIControlStateNormal];
+            self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;
         }
     }];
 
+}
+
+-(void)animationBegin
+{
+    [self setAlpha:0.5];
+    [UIView beginAnimations:@"shadowViewDisappear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    self.alpha = 1;
+    [UIView commitAnimations];
 }
 
 -(void)good:(UIButton*)button
@@ -147,6 +159,13 @@
         }
     }];
 
+}
+
+-(void)toDetail:(UIButton*)button
+{
+    _controller.seleted_videoInfo = _videoInfo;
+    _controller.seleted_videoThumb = _videoThumb;
+    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
 }
 
 - (void)pushToFriendView:(id)sender {
