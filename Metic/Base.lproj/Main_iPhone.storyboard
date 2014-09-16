@@ -5261,7 +5261,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" tag="111" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="S3o-ZY-H5h">
-                                <rect key="frame" x="10" y="10" width="300" height="406"/>
+                                <rect key="frame" x="10" y="0.0" width="300" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -5269,18 +5269,11 @@
                                 </constraints>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="没有更多动态了～" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vA4-cj-4zK">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.56862747670000002" green="0.56862747670000002" blue="0.56862747670000002" alpha="1" colorSpace="deviceRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
                             <constraint firstItem="Hud-jW-JyZ" firstAttribute="top" secondItem="S3o-ZY-H5h" secondAttribute="bottom" id="FWy-cl-pZP"/>
-                            <constraint firstItem="S3o-ZY-H5h" firstAttribute="top" secondItem="MJM-1G-5Pn" secondAttribute="bottom" constant="10" id="frk-zE-Cib"/>
+                            <constraint firstItem="S3o-ZY-H5h" firstAttribute="top" secondItem="MJM-1G-5Pn" secondAttribute="bottom" id="frk-zE-Cib"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="周边活动" id="b2O-GP-low">

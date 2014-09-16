@@ -22,6 +22,8 @@
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
     IBOutlet UILabel *member_count;
+    IBOutlet UILabel *statusLabel;
+    IBOutlet UIButton *wantInBtn;
 }
 - (IBAction)showParticipant:(id)sender;
 
@@ -39,5 +41,8 @@
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIViewController* nearbyEventViewController;
+@property(nonatomic,strong) UILabel* statusLabel;
+@property(nonatomic,strong) UIButton* wantInBtn;
+
 
 @end

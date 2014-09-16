@@ -12,6 +12,7 @@
 #import "PhotoGetter.h"
 #import "MTUser.h"
 #import "MobClick.h"
+#import "../Utils/Reachability.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -40,32 +41,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self isFirstPage:NO];
-    _nearbyEvents = [[NSMutableArray alloc]init];
-    _searchEvents = [[NSMutableArray alloc]init];
-    _eventIds_all = [[NSMutableArray alloc]init];
-
-    _clearIds = NO;
-    
-    _nearbyTableView.delegate = self;
-    _nearbyTableView.dataSource = self;
-    
-    //百度定位
-    _locService = [[BMKLocationService alloc]init];
-    
-    //初始化下拉刷新功能
-    _header = [[MJRefreshHeaderView alloc]init];
-    _header.delegate = self;
-    _header.scrollView = self.nearbyTableView;
-    
-    //初始化上拉加载功能
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = self.nearbyTableView;
-    
-    _shouldRefresh = YES;
-    
-    
+    [self initData];
+    [self initUI];
 }
 
 
@@ -95,14 +72,79 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [_header free];
+    [_footer free];
+}
+
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)initData
+{
+    _nearbyEvents = [[NSMutableArray alloc]init];
+    _searchEvents = [[NSMutableArray alloc]init];
+    _eventIds_all = [[NSMutableArray alloc]init];
+    
+    _clearIds = NO;
+    
+    _nearbyTableView.delegate = self;
+    _nearbyTableView.dataSource = self;
+    
+    //百度定位
+    _locService = [[BMKLocationService alloc]init];
+    
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.nearbyTableView;
+    
+    //初始化上拉加载功能
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.nearbyTableView;
+    
+    _shouldRefresh = YES;
+}
+
+-(void)initUI
+{
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+    _emptyAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.nearbyTableView.frame.size.width, 50)];
+    [_emptyAlert setFont:[UIFont systemFontOfSize:15]];
+    [_emptyAlert setTextAlignment:NSTextAlignmentCenter];
+    [_emptyAlert setTextColor:[UIColor colorWithRed:145.0/255.0 green:145.0/255.0 blue:145.0/255.0 alpha:1]];
+    
+
+    if (_type == 0)
+    {
+        [self.navigationItem setTitle:@"周边活动"];
+        _emptyAlert.text = @"附近暂时没有活动哦";
+    }
+    else
+    {
+        [self.navigationItem setTitle:@"热门活动"];
+        _emptyAlert.text = @"暂时没有热门活动哦";
+    }
+}
+
+-(void)renewEmptyAlert
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!_nearbyEvents || _nearbyEvents.count == 0) {
+            [_nearbyTableView addSubview:_emptyAlert];
+        }else [_emptyAlert removeFromSuperview];
+    });
+    
+}
+
 -(void)getNearbyEventIdsFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithDouble:_coordinate.latitude] forKey:@"latitude"];
     [dictionary setValue:[NSNumber numberWithDouble:_coordinate.longitude] forKey:@"longitude"];
@@ -132,6 +174,7 @@
         _Footeropen = NO;
         [_footer endRefreshing];
     }
+    [self renewEmptyAlert];
     [self.nearbyTableView reloadData];
 }
 
@@ -139,6 +182,21 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        NSLog(@"没有网络");
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [refreshView endRefreshing];
+            [self renewEmptyAlert];
+            return;
+        });
+        return;
+    }
+    if (_Headeropen || _Footeropen) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [refreshView endRefreshing];
+        });
+        return;
+    }
     if (refreshView == _header) {
         NSLog(@"header Begin");
         _Headeropen = YES;
@@ -258,6 +316,13 @@
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             [bannerGetter getBanner:[a valueForKey:@"code"]];
             
+            if ([[a valueForKey:@"visibility"] boolValue]) {
+                [cell.statusLabel setHidden:YES];
+                [cell.wantInBtn setHidden:NO];
+            }else{
+                [cell.statusLabel setHidden:NO];
+                [cell.wantInBtn setHidden:YES];
+            }
             
             NSArray *memberids = [a valueForKey:@"member"];
             

@@ -15,8 +15,10 @@
 @interface NearbyEventViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,BMKLocationServiceDelegate,MJRefreshBaseViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *nearbyTableView;
+@property (strong, nonatomic) UILabel *emptyAlert;
 @property BOOL shouldRefresh;
 @property(strong, nonatomic) MJRefreshHeaderView* header;
 @property(strong, nonatomic) MJRefreshFooterView* footer;
 @property(nonatomic,strong) NSNumber* selectedEventId;
+@property int type;
 @end
