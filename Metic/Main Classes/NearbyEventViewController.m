@@ -13,6 +13,7 @@
 #import "MTUser.h"
 #import "MobClick.h"
 #import "../Utils/Reachability.h"
+#import "../Source/SDWebImage/UIImageView+WebCache.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -330,7 +331,10 @@
                 if (i < participator_count) {
                     PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                     [miniGetter getAvatar];
-                }else tmp.image = nil;
+                }else{
+                    [tmp sd_cancelCurrentImageLoad];
+                    tmp.image = nil;
+                }
             }
             [cell setBackgroundColor:[UIColor whiteColor]];
             return cell;

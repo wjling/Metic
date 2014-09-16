@@ -68,7 +68,7 @@
 
 -(void)getAvatar
 {
-    
+    [self.imageView sd_cancelCurrentImageLoad];
     NSString *url = [self getLocalAvatarUrl];
     if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
