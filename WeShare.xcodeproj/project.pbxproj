@@ -101,6 +101,9 @@
 		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
 		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
+		085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4219C7FF85005FEEF9 /* square_1.jpg */; };
+		085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4319C7FF85005FEEF9 /* square_2.jpg */; };
+		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
@@ -493,6 +496,9 @@
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
 		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		085A5D4219C7FF85005FEEF9 /* square_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_1.jpg; sourceTree = "<group>"; };
+		085A5D4319C7FF85005FEEF9 /* square_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_2.jpg; sourceTree = "<group>"; };
+		085A5D4419C7FF85005FEEF9 /* square_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_3.jpg; sourceTree = "<group>"; };
 		085E7A0B19828AAA001E99E4 /* DynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicViewController.h; sourceTree = "<group>"; };
 		085E7A0C19828AAA001E99E4 /* DynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicViewController.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
@@ -1099,6 +1105,16 @@
 			path = THProgressView;
 			sourceTree = "<group>";
 		};
+		085A5D4119C7FF85005FEEF9 /* square */ = {
+			isa = PBXGroup;
+			children = (
+				085A5D4219C7FF85005FEEF9 /* square_1.jpg */,
+				085A5D4319C7FF85005FEEF9 /* square_2.jpg */,
+				085A5D4419C7FF85005FEEF9 /* square_3.jpg */,
+			);
+			path = square;
+			sourceTree = "<group>";
+		};
 		087759BB19A81B670034BB58 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -1699,6 +1715,7 @@
 		519C658C1989F61B00710B26 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				085A5D4119C7FF85005FEEF9 /* square */,
 				519C658D1989F61B00710B26 /* banner */,
 			);
 			path = Resource;
@@ -1941,9 +1958,11 @@
 				04B6F8A919A25D5C00229393 /* face26.png in Resources */,
 				04B6F89319A25D5C00229393 /* face04.png in Resources */,
 				04B6F8AD19A25D5C00229393 /* expressionImage.plist in Resources */,
+				085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */,
 				5144D9A4196B880300C953FB /* UMSocialSDKResourcesNew.bundle in Resources */,
 				5144D99F196B880300C953FB /* UMShareEditViewController.xib in Resources */,
 				04B6F89D19A25D5C00229393 /* face14.png in Resources */,
+				085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */,
 				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
 				48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */,
 				04B6F89619A25D5C00229393 /* face07.png in Resources */,
@@ -1961,6 +1980,7 @@
 				5144D9A1196B880300C953FB /* UMSLoginViewController.xib in Resources */,
 				519C65941989F61B00710B26 /* 2聚餐.jpg in Resources */,
 				5144D9A3196B880300C953FB /* UMSShareListController.xib in Resources */,
+				085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
 				51F06C1F197E0109000E8428 /* zbar-samples.png in Resources */,

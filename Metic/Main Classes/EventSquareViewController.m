@@ -11,7 +11,7 @@
 
 
 #define bannerWidth self.view.bounds.size.width
-#define bannerHeight self.view.bounds.size.width/2
+#define bannerHeight self.view.bounds.size.width*300/640
 
 
 @interface EventSquareViewController ()
@@ -84,11 +84,11 @@
 
 -(void)initData
 {
-    UIImage *image1 = [UIImage imageNamed:@"7夜店.jpg"];
-    UIImage *image2 = [UIImage imageNamed:@"4喝酒.jpg"];
-    UIImage *image3 = [UIImage imageNamed:@"2聚餐.jpg"];
-    UIImage *image4 = [UIImage imageNamed:@"3兜风.jpg"];
-    _images = [[NSMutableArray alloc]initWithObjects:image1,image2,image3,image4,nil];
+    UIImage *image1 = [UIImage imageNamed:@"square_3.jpg"];
+    UIImage *image2 = [UIImage imageNamed:@"square_1.jpg"];
+    UIImage *image3 = [UIImage imageNamed:@"square_2.jpg"];
+    //UIImage *image4 = [UIImage imageNamed:@"3兜风.jpg"];
+    _images = [[NSMutableArray alloc]initWithObjects:image1,image2,image3,nil];
     _shouldDo = NO;
     _canDo = YES;
 }
@@ -191,15 +191,7 @@
     [button3 addSubview:label3];
     [button3 addTarget:self action:@selector(toSearch:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button3];
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _shadowView = [[UIView alloc]initWithFrame:self.view.bounds];
     [_shadowView setBackgroundColor:[UIColor blackColor]];
