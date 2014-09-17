@@ -23,7 +23,6 @@
 
 @interface PictureWallViewController ()
 @property(nonatomic,strong)MySqlite *sql;
-@property(nonatomic,strong)UIImageView* tmpImageView;
 @property BOOL isOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
@@ -61,7 +60,6 @@
     
     _isLoading = NO;
     _leftH = _rightH = 0;
-    _tmpImageView = [[UIImageView alloc]initWithFrame:CGRectZero];
     _lefPhotos = [[NSMutableArray alloc]init];
     _rigPhotos = [[NSMutableArray alloc]init];
     
@@ -324,7 +322,8 @@
     if (index < photos.count) {
         NSDictionary* photo = photos[index];
         NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[photo valueForKey:@"photo_name"]]];
-        [_tmpImageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        [manager downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             if(image){
                 int H = image.size.height * 145 / image.size.width;
                 if (_leftH <= _rightH) {
@@ -347,8 +346,9 @@
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                 [self classifyPhotos:photos index:index+1];
             });
-            
+
         }];
+ 
         return;
     }
     _isLoading = NO;
@@ -437,8 +437,8 @@
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
         
-    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
+    //NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
     //NSLog(@"%@",url);
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
     }];
@@ -517,7 +517,8 @@
         a = _lefPhotos[indexPath.row];
     }else a = _rigPhotos[indexPath.row];
     
-    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+//    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
+    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
     UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
     if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
     float height = 0;
