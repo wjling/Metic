@@ -104,6 +104,7 @@
 		085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4219C7FF85005FEEF9 /* square_1.jpg */; };
 		085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4319C7FF85005FEEF9 /* square_2.jpg */; };
 		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
+		085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */; };
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
@@ -499,6 +500,8 @@
 		085A5D4219C7FF85005FEEF9 /* square_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_1.jpg; sourceTree = "<group>"; };
 		085A5D4319C7FF85005FEEF9 /* square_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_2.jpg; sourceTree = "<group>"; };
 		085A5D4419C7FF85005FEEF9 /* square_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_3.jpg; sourceTree = "<group>"; };
+		085D99FD19C996D6004362B8 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
+		085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		085E7A0B19828AAA001E99E4 /* DynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicViewController.h; sourceTree = "<group>"; };
 		085E7A0C19828AAA001E99E4 /* DynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicViewController.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
@@ -1115,6 +1118,15 @@
 			path = square;
 			sourceTree = "<group>";
 		};
+		085D9A0219C996DD004362B8 /* SDAVAssetExportSession */ = {
+			isa = PBXGroup;
+			children = (
+				085D99FD19C996D6004362B8 /* SDAVAssetExportSession.h */,
+				085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */,
+			);
+			name = SDAVAssetExportSession;
+			sourceTree = "<group>";
+		};
 		087759BB19A81B670034BB58 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -1676,6 +1688,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				085D9A0219C996DD004362B8 /* SDAVAssetExportSession */,
 				08293F7F19C5DC3A009B637A /* THProgressView */,
 				08293F2619C4858F009B637A /* BMKinc */,
 				51DDBF7F19A344510051B88C /* UMAnalytics_Sdk_3.1.3 */,
@@ -2180,6 +2193,7 @@
 				0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */,
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
 				0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */,
+				085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,
