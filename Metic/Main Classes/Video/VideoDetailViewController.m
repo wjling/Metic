@@ -662,6 +662,13 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        NSLog(@"没有网络");
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [refreshView endRefreshing];
+        });
+        return;
+    }
     [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
     _Footeropen = YES;
     [self pullMainCommentFromAir];

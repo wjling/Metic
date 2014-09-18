@@ -81,11 +81,14 @@
         for (int i =3; i>=0; i--) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             //tmp.layer.masksToBounds = YES;
-            [tmp.layer setCornerRadius:5];
+            //[tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                 [miniGetter getAvatar];
-            }else tmp.image = nil;
+            }else{
+                [tmp sd_cancelCurrentImageLoad];
+                tmp.image = nil;
+            }
             
         }
     }

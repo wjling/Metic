@@ -68,7 +68,6 @@
 
 -(void)getAvatar
 {
-    
     NSString *url = [self getLocalAvatarUrl];
     if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
@@ -114,6 +113,9 @@
 
 -(void)getBanner:(NSNumber*)code
 {
+    if ([code intValue] > 0) {
+        [_imageView sd_cancelCurrentImageLoad];
+    }
     switch ([code intValue]) {
         case 0:
         {
@@ -361,10 +363,7 @@
         }
     }
 
-    
-    
-    
-    
+
     self.path = [NSString stringWithFormat:@"/banner/%@.jpg",eventId];
     self.imgName =[NSString stringWithFormat:@"%@.jpg",eventId];
     NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];

@@ -13,6 +13,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "MobClick.h"
 #import "THProgressView.h"
+#import "../../Source/SDAVAssetExportSession.h"
 
 
 #define mp4Quality AVAssetExportPreset640x480
@@ -195,44 +196,87 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     // input file
     //AVAsset* asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:_videoURL options:nil];
-    AVMutableComposition *composition = [AVMutableComposition composition];
-    [composition  addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    // input clip
-    AVAssetTrack *clipVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    
-    // make it square
-    AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
-    videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
-    videoComposition.frameDuration = CMTimeMake(1, 15);
-    
-    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30) );
-    
-    // rotate to portrait
-    AVMutableVideoCompositionLayerInstruction* transformer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:clipVideoTrack];
-//        CGAffineTransform t1 = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) /2 );
-//        CGAffineTransform t2 = CGAffineTransformRotate(t1, M_PI_2);
-//        
-//        CGAffineTransform finalTransform = t2;
-//        [transformer setTransform:finalTransform atTime:kCMTimeZero];
-    instruction.layerInstructions = [NSArray arrayWithObject:transformer];
-    videoComposition.instructions = [NSArray arrayWithObject: instruction];
-    
-    // export
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset640x480] ;
-    exporter.videoComposition = videoComposition;
-    exporter.outputURL=[NSURL fileURLWithPath:outputPath];
-    exporter.outputFileType=AVFileTypeMPEG4;
-    
-    [exporter exportAsynchronouslyWithCompletionHandler:^(void){
-        NSLog(@"Exporting done!");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_alert dismissWithClickedButtonIndex:0 animated:YES];
-        });
+//    AVMutableComposition *composition = [AVMutableComposition composition];
+//    [composition  addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+//    
+//    // input clip
+//    AVAssetTrack *clipVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+//    
+//    // make it square
+//    AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
+//    videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
+//    videoComposition.frameDuration = CMTimeMake(1, 10);
+//    
+//    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(20, 15) );
+//    
+//    // rotate to portrait
+//    AVMutableVideoCompositionLayerInstruction* transformer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:clipVideoTrack];
+////        CGAffineTransform t1 = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) /2 );
+////        CGAffineTransform t2 = CGAffineTransformRotate(t1, M_PI_2);
+////        
+////        CGAffineTransform finalTransform = t2;
+////        [transformer setTransform:finalTransform atTime:kCMTimeZero];
+//    instruction.layerInstructions = [NSArray arrayWithObject:transformer];
+//    videoComposition.instructions = [NSArray arrayWithObject: instruction];
+//    
+//    // export
+//    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset640x480] ;
+//    exporter.videoComposition = videoComposition;
+//    exporter.outputURL=[NSURL fileURLWithPath:outputPath];
+//    exporter.outputFileType=AVFileTypeMPEG4;
+//    
+//    [exporter exportAsynchronouslyWithCompletionHandler:^(void){
+//        NSLog(@"Exporting done!");
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [_alert dismissWithClickedButtonIndex:0 animated:YES];
+//        });
+//
+//    }];
+    SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
+    encoder.outputFileType = AVFileTypeMPEG4;
+    encoder.outputURL = [NSURL fileURLWithPath:outputPath];
+    encoder.videoSettings = @
+    {
+    AVVideoCodecKey: AVVideoCodecH264,
+    AVVideoWidthKey: @640,
+    AVVideoHeightKey: @480,
+    AVVideoCompressionPropertiesKey: @
+        {
+        AVVideoAverageNonDroppableFrameRateKey:@15,
+        AVVideoAverageBitRateKey: @800000,
+        AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline30,
+        },
+    };
+    encoder.audioSettings = @
+    {
+    AVFormatIDKey: @(kAudioFormatMPEG4AAC),
+    AVNumberOfChannelsKey: @2,
+    AVSampleRateKey: @44100,
+    AVEncoderBitRateKey: @128000,
+    };
 
+    [encoder exportAsynchronouslyWithCompletionHandler:^
+    {
+        if (encoder.status == AVAssetExportSessionStatusCompleted)
+        {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_alert dismissWithClickedButtonIndex:0 animated:YES];
+            });
+            NSLog(@"Video export succeeded");
+        }
+        else if (encoder.status == AVAssetExportSessionStatusCancelled)
+        {
+            NSLog(@"Video export cancelled");
+        }
+        else
+        {
+            NSLog(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
+        }
     }];
-
+    
+    
+    
 }
 
 -(void)play:(id)sender

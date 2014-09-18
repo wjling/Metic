@@ -7,6 +7,7 @@
 //
 
 #import "EventSquareViewController.h"
+#import "NearbyEventViewController.h"
 #import "MobClick.h"
 
 
@@ -25,6 +26,7 @@
 @property (nonatomic,strong) NSTimer* timer;
 
 @property int firstIndex;
+@property int type;
 @property BOOL shouldDo;
 @property BOOL canDo;
 
@@ -230,12 +232,14 @@
 
 -(void)toNearby:(id)sender
 {
+    _type = 0;
     [self performSegueWithIdentifier:@"toNearbyEvent" sender:self];
 }
 
 -(void)toHot:(id)sender
 {
-    
+    _type = 1;
+    [self performSegueWithIdentifier:@"toNearbyEvent" sender:self];
 }
 
 -(void)toSearch:(id)sender
@@ -345,5 +349,17 @@
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];
     }
+}
+
+#pragma mark 用segue跳转时传递参数eventid
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([segue.destinationViewController isKindOfClass:[NearbyEventViewController class]]) {
+        NearbyEventViewController *nextViewController = segue.destinationViewController;
+        nextViewController.type = _type;
+    }
+    
+    
 }
 @end
