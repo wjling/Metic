@@ -216,6 +216,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)modifyProgress:(id)sender
 {
     float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
+    progress*=0.6;
     NSLog(@"%f",progress);
     if (_progressView) {
         [_progressView setProgress:progress animated:YES];
@@ -392,9 +393,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            [self removeWaitingView];
-            ((PictureWallViewController*)self.photoWallController).shouldReloadPhoto = YES;
-            [self.navigationController popToViewController:self.photoWallController animated:YES];
+            NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
+            [[SDImageCache sharedImageCache] storeImageToDisk:_uploadImage forKey:url];
+            if (_progressView) {
+                [_progressView setProgress:1.0 animated:YES];
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self removeWaitingView];
+                ((PictureWallViewController*)self.photoWallController).shouldReloadPhoto = YES;
+                [self.navigationController popToViewController:self.photoWallController animated:YES];
+            });
+            
         }
             break;
         default:

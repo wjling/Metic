@@ -86,6 +86,8 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
  */
 - (void)storeImage:(UIImage *)image forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
+//JJmake IT
+- (void)storeImageToDisk:(UIImage *)image forKey:(NSString *)key;
 /**
  * Store an image into memory and optionally disk cache at the given key.
  *

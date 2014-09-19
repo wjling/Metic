@@ -324,6 +324,11 @@
         NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[photo valueForKey:@"photo_name"]]];
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         [manager downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            if (cacheType == SDImageCacheTypeNone) {
+                NSLog(@"from air %d",index);
+            }else{
+                NSLog(@"from local %d",index);
+            }
             if(image){
                 int H = image.size.height * 145 / image.size.width;
                 if (_leftH <= _rightH) {
@@ -623,6 +628,10 @@
     }
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         NSLog(@"没有网络");
+        [refreshView endRefreshing];
+        return;
+    }
+    if (_isOpen) {
         [refreshView endRefreshing];
         return;
     }
