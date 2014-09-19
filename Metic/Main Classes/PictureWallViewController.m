@@ -36,6 +36,7 @@
 @property int leftH;
 @property int rightH;
 @property BOOL isLoading;
+@property BOOL shouldStop;
 
 
 @end
@@ -55,10 +56,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
     
     _isLoading = NO;
+    _shouldStop = NO;
     _leftH = _rightH = 0;
     _lefPhotos = [[NSMutableArray alloc]init];
     _rigPhotos = [[NSMutableArray alloc]init];
@@ -132,6 +135,10 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    if (_isLoading) {
+        _shouldStop = YES;
+    }
+    
     // Dispose of any resources that can be recreated.
 }
 -(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -305,10 +312,11 @@
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
         [self.photo_list_all addObject:photoInfo];
-        [self.photo_list addObject:photoInfo];
+        //[self.photo_list addObject:photoInfo];
     }
     [self.sql closeMyDB];
-    [self performSelectorInBackground:@selector(classifyPhotos:) withObject:_photo_list];
+    int count = MIN(PhotoNum, _photo_list_all.count);
+    [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(0, count)]];
 }
 
 -(void)classifyPhotos:(NSArray*)photos
@@ -318,6 +326,10 @@
 
 -(void)classifyPhotos:(NSArray*)photos index:(int)index
 {
+    if (_shouldStop) {
+        _shouldStop = NO;
+        return;
+    }
     _isLoading = YES;
     if (index < photos.count) {
         NSDictionary* photo = photos[index];
@@ -331,6 +343,7 @@
             }
             if(image){
                 int H = image.size.height * 145 / image.size.width;
+                [_photo_list addObject:photo];
                 if (_leftH <= _rightH) {
                     [_lefPhotos addObject:photo];
                     _leftH += H;
@@ -570,7 +583,6 @@
             int num = MIN(PhotoNum, _photo_list_all.count - count);
             
             NSArray* addPhotos = [_photo_list_all subarrayWithRange:NSMakeRange(count, num)];
-            [_photo_list addObjectsFromArray:addPhotos];
             
             
             //分图
@@ -581,7 +593,7 @@
             
             //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
             [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
-            if (!_photo_list || _photo_list.count == 0) {
+            if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
             if ([_sequence intValue] == -1 && self.isOpen == YES) {
