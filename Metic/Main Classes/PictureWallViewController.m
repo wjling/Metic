@@ -31,10 +31,6 @@
 @property int currentPhotoNum;
 @property (nonatomic,strong) NSString* urlFormat;
 
-@property (nonatomic,strong) NSMutableArray* lefPhotos;
-@property (nonatomic,strong) NSMutableArray* rigPhotos;
-@property int leftH;
-@property int rightH;
 @property BOOL isLoading;
 @property BOOL shouldStop;
 
@@ -130,12 +126,17 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"图片墙"];
+    if (_isLoading) {
+        _isLoading = NO;
+        _shouldStop = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     if (_isLoading) {
+        _isLoading = NO;
         _shouldStop = YES;
     }
     

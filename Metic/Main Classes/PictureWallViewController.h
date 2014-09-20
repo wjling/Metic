@@ -21,6 +21,10 @@
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSString* eventName;
 @property(nonatomic,strong)NSNumber *sequence;
+@property (nonatomic,strong) NSMutableArray* lefPhotos;
+@property (nonatomic,strong) NSMutableArray* rigPhotos;
+@property int leftH;
+@property int rightH;
 @property(nonatomic,strong)NSMutableArray *photo_list;//部分
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property(nonatomic,strong)NSMutableArray *photoPath_list;

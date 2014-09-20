@@ -872,6 +872,22 @@
                             {
                                 [self deletePhotoInfoFromDB];
                                 [self.delete_button setEnabled:YES];
+                                [self.controller.photo_list removeObject:_photoInfo];
+                                [self.controller.photo_list_all removeObject:_photoInfo];
+                                int H = _photo.size.height * 145 / _photo.size.width;
+                                if ([_controller.lefPhotos containsObject:_photoInfo]) {
+                                    [_controller.lefPhotos removeObject:_photoInfo];
+                                    _controller.leftH -= H;
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        [_controller.tableView1 reloadData];
+                                    });
+                                }else if ([_controller.rigPhotos containsObject:_photoInfo]){
+                                    [_controller.rigPhotos removeObject:_photoInfo];
+                                    _controller.rightH -= H;
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        [_controller.tableView2 reloadData];
+                                    });
+                                }
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];
                             }
@@ -888,7 +904,6 @@
         }
             break;
         case 1:{
-//            ((PictureWallViewController*)self.controller).canReloadPhoto = YES;
             [self.navigationController popToViewController:self.controller animated:YES];
         }
         default:
@@ -900,6 +915,23 @@
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
     if (status){
+        [self.controller.photo_list removeObject:_photoInfo];
+        [self.controller.photo_list_all removeObject:_photoInfo];
+        int H = _photo.size.height * 145 / _photo.size.width;
+        if ([_controller.lefPhotos containsObject:_photoInfo]) {
+            [_controller.lefPhotos removeObject:_photoInfo];
+            _controller.leftH -= H;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_controller.tableView1 reloadData];
+            });
+        }else if ([_controller.rigPhotos containsObject:_photoInfo]){
+            [_controller.rigPhotos removeObject:_photoInfo];
+            _controller.rightH -= H;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_controller.tableView2 reloadData];
+            });
+        }
+
         UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
         [alert setTag:1];
         [self.delete_button setEnabled:YES];
