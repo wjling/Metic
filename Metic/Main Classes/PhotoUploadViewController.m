@@ -11,6 +11,7 @@
 #import "../Utils/CommonUtils.h"
 #import "THProgressView.h"
 #import "MobClick.h"
+#import "../Utils/Reachability.h"
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 
@@ -165,6 +166,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
+    
     [self showWaitingView];
     self.upLoad = sender;
     [self.upLoad setEnabled:NO];

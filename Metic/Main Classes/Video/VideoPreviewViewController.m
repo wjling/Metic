@@ -14,6 +14,7 @@
 #import "MobClick.h"
 #import "THProgressView.h"
 #import "../../Source/SDAVAssetExportSession.h"
+#import "../../Utils/Reachability.h"
 
 
 #define mp4Quality AVAssetExportPreset640x480
@@ -163,6 +164,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 -(void)confirm:(id)sender
 {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
     [sender setEnabled:NO];
     [_textView resignFirstResponder];
     [self showWaitingView];
@@ -174,7 +179,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)encodeVideo
 {
     _alert = [[UIAlertView alloc] init];
-    [_alert setTitle:@"视频处理中，请稍候"];
+    [_alert setTitle:@"视频处理中,请稍候"];
     
     UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 

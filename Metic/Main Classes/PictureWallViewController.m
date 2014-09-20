@@ -275,7 +275,7 @@
     [UIView setAnimationDelegate:self];
     _indicatorView.frame = CGRectMake(60, -50, 200, 50);
     [UIView commitAnimations];
-    if (!_photo_list || _photo_list.count == 0) {
+    if (!_photo_list_all || _photo_list_all.count == 0) {
         [_promt setHidden:NO];
     }else {
         [_promt setHidden:YES];
