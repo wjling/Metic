@@ -8,6 +8,7 @@
 
 #import "EventSquareViewController.h"
 #import "NearbyEventViewController.h"
+#import "EventSearchViewController.h"
 #import "MobClick.h"
 
 
@@ -244,7 +245,7 @@
 
 -(void)toSearch:(id)sender
 {
-    
+    [self performSegueWithIdentifier:@"toSearchEvent" sender:self];
 }
 
 

@@ -428,4 +428,22 @@
     }
 }
 
+//计算label动态高度
++(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize isEmotion:(BOOL)isEmotion
+{
+    float height = 0;
+    UIFont *font = [UIFont systemFontOfSize:fsize];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+    {
+        CGSize size = CGSizeMake(width,2000);
+        CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
+        height = ceil(labelRect.size.height);
+        if (isEmotion) height*=1.25;
+    }else{
+        CGSize size = [text sizeWithFont:font constrainedToSize:CGSizeMake(width, 1000.0f) lineBreakMode:NSLineBreakByCharWrapping];
+        height = ceil(size.height);
+        if (isEmotion) height*=1.6;
+    }
+    return height;
+}
 @end

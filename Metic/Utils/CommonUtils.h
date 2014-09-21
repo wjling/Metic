@@ -101,4 +101,7 @@
 
 //简化数字表述
 +(NSString*)TextFromInt:(int)num;
+
+//计算label动态高度
++(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize isEmotion:(BOOL)isEmotion;
 @end

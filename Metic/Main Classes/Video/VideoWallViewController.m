@@ -246,14 +246,6 @@
     [sheet showInView:self.view];
 }
 
--(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-{
-    UIFont *font = [UIFont systemFontOfSize:fsize];
-    CGSize size = CGSizeMake(width,2000);
-    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-    return ceil(labelRect.size.height);
-}
-
 #pragma tableView DataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -281,7 +273,7 @@
         cell.controller = self;
 
         NSString* text = [dictionary valueForKey:@"title"];
-        float height = [self calculateTextHeight:text width:280 fontSize:16.0f];
+        float height = [CommonUtils calculateTextHeight:text width:280 fontSize:16.0f  isEmotion:NO];
         if ([text isEqualToString:@""]) height = -19;
         cell.height = height;
         [cell refresh];
@@ -296,7 +288,7 @@
 {
     NSDictionary *dictionary = self.videoInfos[indexPath.row];
     NSString* text = [dictionary valueForKey:@"title"];
-    float height = [self calculateTextHeight:text width:280 fontSize:16.0f];
+    float height = [CommonUtils calculateTextHeight:text width:280 fontSize:16.0f isEmotion:NO];
     if ([text isEqualToString:@""]) height = -19;
     return 341 + height;
     

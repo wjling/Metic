@@ -201,15 +201,6 @@
     }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
 }
 
-
--(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-{
-    UIFont *font = [UIFont systemFontOfSize:fsize];
-    CGSize size = CGSizeMake(width,2000);
-    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-    return ceil(labelRect.size.height)*1.25;
-}
-
 - (void)pullMainCommentFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -632,7 +623,7 @@
         [getter getAvatar];
         
         
-        int height = [self calculateTextHeight:commentText width:255.0 fontSize:12.0];
+        int height = [CommonUtils calculateTextHeight:commentText width:255.0 fontSize:12.0 isEmotion:YES];
         
         MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
         if (!comment){
@@ -678,7 +669,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0];
+        self.specificationHeight = [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0 isEmotion:YES];
         NSLog(@"%f",self.specificationHeight);
         height = self.photo.size.height *320.0/self.photo.size.width;
         height += 3;
@@ -694,7 +685,7 @@
             commentWidth = 255;
         }else commentWidth = 230;
         
-        height = [self calculateTextHeight:commentText width:commentWidth fontSize:12.0];
+        height = [CommonUtils calculateTextHeight:commentText width:commentWidth fontSize:12.0 isEmotion:YES];
         height += 32;
     }
     return height;

@@ -211,14 +211,6 @@
 }
 
 
--(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-{
-    UIFont *font = [UIFont systemFontOfSize:fsize];
-    CGSize size = CGSizeMake(width,2000);
-    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-    return ceil(labelRect.size.height)*1.25;
-}
-
 - (void)pullMainCommentFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -564,7 +556,7 @@
         [getter getAvatar];
         
         
-        int height = [self calculateTextHeight:commentText width:255.0 fontSize:12.0];
+        int height = [CommonUtils calculateTextHeight:commentText width:255.0 fontSize:12.0 isEmotion:YES];
         
         MLEmojiLabel* comment =((VcommentTableViewCell *)cell).comment;
         if (!comment){
@@ -610,7 +602,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [self calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0];
+        self.specificationHeight = [CommonUtils calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0 isEmotion:NO];
         height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
         height += 3;
         height += 50;
@@ -625,7 +617,7 @@
             commentWidth = 255;
         }else commentWidth = 230;
         
-        height = [self calculateTextHeight:commentText width:commentWidth fontSize:12.0];
+        height = [CommonUtils calculateTextHeight:commentText width:commentWidth fontSize:12.0 isEmotion:YES];
         height += 32;
     }
     return height;

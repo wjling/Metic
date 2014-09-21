@@ -95,6 +95,7 @@
 		08293F8219C5DC3A009B637A /* THProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08293F8119C5DC3A009B637A /* THProgressView.m */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
+		083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF69219CF003A001BB61E /* EventSearchViewController.m */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
@@ -486,6 +487,8 @@
 		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
 		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
+		083FF69119CF003A001BB61E /* EventSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSearchViewController.h; sourceTree = "<group>"; };
+		083FF69219CF003A001BB61E /* EventSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventSearchViewController.m; sourceTree = "<group>"; };
 		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailViewController.h; sourceTree = "<group>"; };
@@ -1280,6 +1283,8 @@
 				08E248A819C740CC0042B30F /* EventSquareViewController.m */,
 				5127DED9198F21A100FB5A41 /* NearbyEventViewController.h */,
 				5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */,
+				083FF69119CF003A001BB61E /* EventSearchViewController.h */,
+				083FF69219CF003A001BB61E /* EventSearchViewController.m */,
 			);
 			name = EventSquare;
 			sourceTree = "<group>";
@@ -2150,6 +2155,7 @@
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
+				083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */,
 				485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */,
 				51A01D131933A1FF0043963F /* MTUser.m in Sources */,
 				08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */,

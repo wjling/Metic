@@ -175,13 +175,13 @@
    
 }
 
--(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-{
-    UIFont *font = [UIFont systemFontOfSize:fsize];
-    CGSize size = CGSizeMake(width,2000);
-    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-    return ceil(labelRect.size.height)*1.25;
-}
+//-(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
+//{
+//    UIFont *font = [UIFont systemFontOfSize:fsize];
+//    CGSize size = CGSizeMake(width,2000);
+//    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
+//    return ceil(labelRect.size.height)*1.25;
+//}
 
 
 -(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
@@ -797,7 +797,7 @@
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:MainCFontSize];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         cell.eventDetail.text = text;
         CGRect frame = cell.eventDetail.frame;
@@ -845,7 +845,7 @@
         MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
         NSString* text = [mainCom valueForKey:@"content"];
         cell.origincomment = text;
-        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:280.0 fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         [textView setDisableThreeCommon:YES];
         CGRect frame = textView.frame;
@@ -960,7 +960,7 @@
             [cell.resend_Button setHidden:YES];
         }
 
-        float commentHeight = [self calculateTextHeight:text width:265 fontSize:SubCFontSize];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:265 fontSize:SubCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         CGRect frame = cell.frame;
         frame.size.height = commentHeight+0.5f;
@@ -1008,14 +1008,14 @@
 {
     if (indexPath.section == 0) {
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [self calculateTextHeight:text width:300.0 fontSize:MainFontSize];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         return 248.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         NSString* text = [mainCom valueForKey:@"content"];
-        float commentHeight = [self calculateTextHeight:text width:280.0 fontSize:MainCFontSize];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:280.0 fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25.0f) commentHeight = 25.0f;
         return 65.0f + commentHeight;
         
@@ -1028,7 +1028,7 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
         NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
         
-        float commentHeight = [self calculateTextHeight:text width:265.0 fontSize:SubCFontSize] + 0.5;
+        float commentHeight = [CommonUtils calculateTextHeight:text width:265.0 fontSize:SubCFontSize isEmotion:YES] + 0.5;
         if (commentHeight < 25) commentHeight = 25;
         return commentHeight;
     }
