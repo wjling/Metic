@@ -8,6 +8,7 @@
 
 #import "nearbyEventTableViewCell.h"
 #import "NearbyEventViewController.h"
+#import "../Main Classes/EventSearchViewController.h"
 #import "../Utils/HttpSender.h"
 #import "../Utils/CommonUtils.h"
 #import "MTUser.h"
@@ -60,8 +61,15 @@
 }
 
 - (IBAction)showParticipant:(id)sender {
-    ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;
-    [self.nearbyEventViewController performSegueWithIdentifier:@"nearbyToshowparticipant" sender:self.nearbyEventViewController];
+    ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;//searchToshowparticipant
+    NSString* segueName;
+    if ([self.nearbyEventViewController isKindOfClass:[NearbyEventViewController class]]) {
+        segueName = @"nearbyToshowparticipant";
+    }else if ([self.nearbyEventViewController isKindOfClass:[EventSearchViewController class]]){
+        segueName = @"searchToshowparticipant";
+    }
+    
+    [self.nearbyEventViewController performSegueWithIdentifier:segueName sender:self.nearbyEventViewController];
 }
 
 

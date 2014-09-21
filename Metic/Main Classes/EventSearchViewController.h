@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EventSearchViewController : UIViewController<UITabBarDelegate,UITableViewDataSource,UITableViewDelegate>
-
+@interface EventSearchViewController : UIViewController<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate>
+@property (nonatomic,strong) NSNumber* selectedEventId;
 @end

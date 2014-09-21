@@ -25,7 +25,6 @@
 @property BOOL Headeropen;
 @property BOOL Footeropen;
 
-@property(nonatomic,strong) NSMutableArray* searchEvents;
 @end
 
 @implementation NearbyEventViewController
@@ -87,7 +86,6 @@
 -(void)initData
 {
     _nearbyEvents = [[NSMutableArray alloc]init];
-    _searchEvents = [[NSMutableArray alloc]init];
     _eventIds_all = [[NSMutableArray alloc]init];
     
     _clearIds = NO;
@@ -270,11 +268,6 @@
             return [_nearbyEvents count];
         }
             break;
-        case 112:{
-            return [_searchEvents count];
-        }
-            break;
-            
         default:return 0;
             break;
     }
@@ -343,11 +336,6 @@
             
         }
             break;
-        case 112:{
-            
-        }
-            break;
-            
         default:
             break;
     }
@@ -361,12 +349,7 @@
         case 111:{
             return 258;
         }
-            break;
-        case 112:{
-            return 100;
-        }
-            break;
-            
+            break;  
         default:return 0;
             break;
     }

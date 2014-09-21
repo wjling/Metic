@@ -5263,6 +5263,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="查找活动" id="O1P-R9-gbV"/>
+                    <connections>
+                        <segue destination="MVl-Wy-DVz" kind="push" identifier="searchToshowparticipant" id="Ntp-rU-rWO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YFr-fu-uAT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5457,17 +5460,17 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hOW-ww-bKW"/>
+        <segue reference="c1O-Ly-Hfg"/>
         <segue reference="EEO-gR-a4J"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="YnG-LV-8dG"/>
+        <segue reference="Ntp-rU-rWO"/>
         <segue reference="eBE-9B-Hp2"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="0y8-RS-ijM"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="kIc-uU-eUg"/>
-        <segue reference="hB7-KS-rrK"/>
         <segue reference="L2M-th-cr6"/>
         <segue reference="IZC-tt-cO3"/>
-        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="hOW-ww-bKW"/>
     </inferredMetricsTieBreakers>
 </document>
