@@ -26,6 +26,7 @@
     IBOutlet UIButton *wantInBtn;
 }
 - (IBAction)showParticipant:(id)sender;
+-(void)drawOfficialFlag:(BOOL)isOfficial;
 
 @property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
@@ -43,6 +44,7 @@
 @property(nonatomic,strong) UIViewController* nearbyEventViewController;
 @property(nonatomic,strong) UILabel* statusLabel;
 @property(nonatomic,strong) UIButton* wantInBtn;
+@property(nonatomic,strong) UIImageView* officialFlag;
 
 
 @end

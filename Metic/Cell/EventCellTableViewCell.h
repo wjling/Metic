@@ -37,7 +37,8 @@
 - (IBAction)addComment:(id)sender;
 - (IBAction)showParticipators:(id)sender;
 - (IBAction)showBanner:(id)sender;
-
+-(void)drawOfficialFlag:(BOOL)isOfficial;
+@property(nonatomic,strong) UIImageView* officialFlag;
 
 
 

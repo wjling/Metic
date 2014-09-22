@@ -32,7 +32,7 @@
 
 - (IBAction)jumpToPictureWall:(id)sender;
 - (IBAction)jumpToVideoWall:(id)sender;
-
+-(void)drawOfficialFlag:(BOOL)isOfficial;
 
 
 
@@ -53,6 +53,7 @@
 @property(nonatomic,strong) UILabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) NSString *event;
+@property(nonatomic,strong) UIImageView* officialFlag;
 
 
 

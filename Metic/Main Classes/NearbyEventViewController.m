@@ -49,7 +49,11 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [MobClick beginLogPageView:@"周边活动"];
+    NSString* position;
+    if (_type == 0) position = @"周边活动";
+    else position = @"热门活动";
+    [MobClick beginLogPageView:position];
+    
     _locService.delegate = self;
     [_nearbyTableView reloadData];
     
@@ -62,7 +66,10 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [MobClick endLogPageView:@"周边活动"];
+    NSString* position;
+    if (_type == 0) position = @"周边活动";
+    else position = @"热门活动";
+    [MobClick endLogPageView:position];
     _locService.delegate = nil;
     [_locService stopUserLocationService];
 }
@@ -305,10 +312,10 @@
             cell.nearbyEventViewController = self;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
             [avatarGetter getAvatar];
-            
+            [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             [bannerGetter getBanner:[a valueForKey:@"code"]];
-            
+
             if ([[a valueForKey:@"visibility"] boolValue]) {
                 [cell.statusLabel setHidden:YES];
                 [cell.wantInBtn setHidden:NO];

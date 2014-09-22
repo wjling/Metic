@@ -808,6 +808,7 @@
         
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
+        [cell drawOfficialFlag:[[_event valueForKey:@"verify"] boolValue]];
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
         [bannerGetter getBanner:[_event valueForKey:@"code"]];
@@ -959,7 +960,7 @@
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:YES];
         }
-
+        
         float commentHeight = [CommonUtils calculateTextHeight:text width:265 fontSize:SubCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         CGRect frame = cell.frame;

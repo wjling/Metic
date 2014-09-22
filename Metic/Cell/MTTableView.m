@@ -68,6 +68,9 @@
         //cell.avatar.layer.masksToBounds = YES;
         [cell.avatar.layer setCornerRadius:15];
         
+        [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
+        
+        
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
         [avatarGetter getAvatar];
         

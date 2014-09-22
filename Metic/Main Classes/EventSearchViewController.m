@@ -12,6 +12,7 @@
 #import "../Utils/CommonUtils.h"
 #import "PhotoGetter.h"
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
+#import "MobClick.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -19,6 +20,8 @@
 @property(nonatomic,strong) NSMutableArray* eventIds;
 @property(nonatomic,strong) NSMutableArray* events;
 @property(nonatomic,strong) UIActivityIndicatorView* indicator;
+@property(nonatomic,strong) MJRefreshFooterView* footer;
+@property BOOL Footeropen;
 @property BOOL isFirst;
 @end
 
@@ -44,6 +47,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"活动搜索"];
     CGRect frame = self.view.bounds;
     frame.origin.x = frame.size.width * 1/32;
     frame.origin.y = 44;
@@ -55,10 +59,27 @@
         [_searchBar becomeFirstResponder];
     }
 }
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [MobClick beginLogPageView:@"活动搜索"];
+}
+
+-(void)dealloc
+{
+    [_footer free];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)initData
@@ -68,6 +89,8 @@
 
 -(void)initUI
 {
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+    
     CGRect frame = self.view.bounds;
     frame.origin.x = frame.size.width * 1/32;
     frame.origin.y = 44;
@@ -85,6 +108,11 @@
     _searchBar.delegate = self;
     [self.view addSubview:_tableView];
     [self.view addSubview:_searchBar];
+    
+    //初始化上拉加载功能
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.tableView;
 }
 
 -(void)search_eventIds
@@ -138,7 +166,7 @@
     int restNum = MIN(20, _eventIds.count - _events.count);
     if (restNum == 0){
         [self removeWaitingView];
-        //[self closeRJ];
+        [self closeRJ];
         return;
     }
     NSArray* tmp = [_eventIds subarrayWithRange:NSMakeRange(_events.count, restNum)];
@@ -169,18 +197,19 @@
                     
                     [self removeWaitingView];
                     [_tableView reloadData];
+                    [self closeRJ];
                 }
                     break;
                 default:{
                     [self removeWaitingView];
                     [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
-                    //[alert setTag:102];
+                    [self closeRJ];
                 }
                     break;
             }
         }else{
             [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
-            //[alert setTag:102];
+            [self closeRJ];
         }
     }];
 
@@ -208,6 +237,15 @@
     }
 }
 
+-(void)closeRJ
+{
+    if (_Footeropen) {
+        _Footeropen = NO;
+        [_footer endRefreshing];
+    }
+}
+
+
 #pragma mark - UISearchBar Delegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                     // called when keyboard search button pressed
 {
@@ -229,6 +267,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"%d  %d",indexPath.row,_events.count);
     static NSString *CellIdentifier = @"nearbyEventCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -239,6 +278,7 @@
     nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *a = _events[indexPath.row];
+    NSLog(@"%@",a);
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
@@ -255,7 +295,7 @@
     cell.nearbyEventViewController = self;
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
     [avatarGetter getAvatar];
-    
+    [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
     [bannerGetter getBanner:[a valueForKey:@"code"]];
     
@@ -298,4 +338,16 @@
         nextViewController.canManage = NO;
     }
 }
+
+
+#pragma mark 代理方法-进入刷新状态就会调用
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if (_Footeropen) {
+        return;
+    }
+    _Footeropen = YES;
+    [self get_events];
+}
+
 @end

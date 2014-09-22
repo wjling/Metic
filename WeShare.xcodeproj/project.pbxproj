@@ -96,6 +96,7 @@
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF69219CF003A001BB61E /* EventSearchViewController.m */; };
+		083FF69919D02962001BB61E /* flag.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 083FF69819D02962001BB61E /* flag.jpg */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
@@ -489,6 +490,7 @@
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
 		083FF69119CF003A001BB61E /* EventSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSearchViewController.h; sourceTree = "<group>"; };
 		083FF69219CF003A001BB61E /* EventSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventSearchViewController.m; sourceTree = "<group>"; };
+		083FF69819D02962001BB61E /* flag.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag.jpg; sourceTree = "<group>"; };
 		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailViewController.h; sourceTree = "<group>"; };
@@ -1733,6 +1735,7 @@
 		519C658C1989F61B00710B26 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				083FF69819D02962001BB61E /* flag.jpg */,
 				085A5D4119C7FF85005FEEF9 /* square */,
 				519C658D1989F61B00710B26 /* banner */,
 			);
@@ -1962,6 +1965,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04B6F8A519A25D5C00229393 /* face22.png in Resources */,
+				083FF69919D02962001BB61E /* flag.jpg in Resources */,
 				519C65991989F61B00710B26 /* 7夜店.jpg in Resources */,
 				51F06C1D197E0109000E8428 /* zbar-help.html in Resources */,
 				08DB69AF19541F3A00F80F3F /* SCommentTableViewCell.xib in Resources */,

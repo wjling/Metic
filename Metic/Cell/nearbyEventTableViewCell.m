@@ -72,6 +72,29 @@
     [self.nearbyEventViewController performSegueWithIdentifier:segueName sender:self.nearbyEventViewController];
 }
 
+-(void)drawOfficialFlag:(BOOL)isOfficial
+{
+    if (isOfficial) {
+        if (_officialFlag) {
+            [self addSubview:_officialFlag];
+        }else{
+            float width = self.bounds.size.width;
+            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
+            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.text = @"官";
+            label.font = [UIFont systemFontOfSize:15];
+            label.textColor = [UIColor whiteColor];
+            [_officialFlag addSubview:label];
+            [self addSubview:_officialFlag];
+        }
+    }else{
+        if (_officialFlag) {
+            [_officialFlag removeFromSuperview];
+        }
+    }
+}
 
 -(void)dismissAlertView:(UIAlertView*) alertView
 {
