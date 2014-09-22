@@ -294,6 +294,8 @@
 
 
 - (IBAction)launch:(id)sender {
+    [self.subject_text becomeFirstResponder];
+    [self.subject_text resignFirstResponder];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
     int status = 0;
@@ -305,8 +307,7 @@
         friends = [NSString stringWithFormat:friends,friendid];
     }
     friends = [friends stringByAppendingString:@"]"];
-    NSString*end_Time = self.end_time_text.text;
-    if ([end_Time isEqualToString:@""]) end_Time = self.begin_time_text.text;
+    
     NSString* location = self.location_text.text;
     if ([location isEqualToString:@""]) location = @"未定";
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -314,20 +315,42 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
-    if ([self.begin_time_text.text isEqualToString: @""]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动开始时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
-        return;
+    
+    NSString*beg_Time = self.begin_time_text.text;
+    NSString*end_Time = self.end_time_text.text;
+    if ([beg_Time isEqualToString:@""]) {
+        if (![end_Time isEqualToString:@""]) {
+            beg_Time = end_Time;
+        }else{
+            NSDateFormatter *formate = [[NSDateFormatter alloc]init];
+            [formate setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            beg_Time = [formate stringFromDate:[NSDate date]];
+        }
+    } else if ([end_Time isEqualToString:@""]){
+        end_Time = beg_Time;
+    }else{
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+        NSDate* begin = [dateFormatter dateFromString:beg_Time];
+        NSDate* end = [dateFormatter dateFromString:end_Time];
+        NSTimeInterval begins = [begin timeIntervalSince1970];
+        NSTimeInterval ends = [end timeIntervalSince1970];
+        int dis = ends-begins;
+        if (dis<0) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"结束时间必须大于开始时间" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
     }
-//    if ([self.end_time_text.text isEqualToString: @"未定"]) {
-//        [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动结束时间不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
-//        return;
-//    }
+
+    
     [self showWaitingView];
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
-    [dictionary setValue:self.begin_time_text.text forKey:@"time"];
+    [dictionary setValue:beg_Time forKey:@"time"];
     [dictionary setValue:end_Time forKey:@"endTime"];
     [dictionary setValue:self.detail_text.text forKey:@"remark"];
     [dictionary setValue:location forKey:@"location"];
