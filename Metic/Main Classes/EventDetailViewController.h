@@ -16,7 +16,7 @@
 #import "../Source/MLEmoji/MLEmojiLabel.h"
 #import "../UIView/MTMessageTextView.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;

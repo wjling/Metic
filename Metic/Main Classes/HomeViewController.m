@@ -10,7 +10,6 @@
 #import "HomeViewController.h"
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
-#import "../Cell/MTTableView.h"
 #import "../Utils/PhotoGetter.h"
 #import "PictureWallViewController.h"
 #import "Video/VideoWallViewController.h"
@@ -22,7 +21,7 @@
 @interface HomeViewController ()
 
 
-@property (strong, nonatomic) IBOutlet MTTableView *tableView;
+
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
 @property (nonatomic,strong) NSMutableArray* updateEvents;
@@ -67,7 +66,7 @@
     [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
     [[MTUser sharedInstance] updateAvatarList];
     
-    self.tableView.homeController= self;
+    _tableView.homeController= self;
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self.tableView];
     self.events = [[NSMutableArray alloc]init];

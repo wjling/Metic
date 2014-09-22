@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/HomeViewController.h"
 #import "SlideNavigationController.h"
 #import "../Utils/PhotoGetter.h"
 #import "MTUser.h"
 
 @interface MTTableView : UITableView<UITableViewDataSource,UITableViewDelegate>
-@property(nonatomic,strong)HomeViewController* homeController;
+@property(nonatomic,strong)UIViewController* homeController;
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property (nonatomic,strong) NSOperationQueue *queue;
 @end

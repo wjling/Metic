@@ -4312,6 +4312,25 @@
             </objects>
             <point key="canvasLocation" x="3480" y="-1144"/>
         </scene>
+        <!--Photo Ranking View Controller - 图片排行榜-->
+        <scene sceneID="n0r-vx-daR">
+            <objects>
+                <viewController id="JHf-vJ-onu" customClass="photoRankingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="EU9-Dp-Wts"/>
+                        <viewControllerLayoutGuide type="bottom" id="3Cp-CZ-oMv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Vdm-JC-KPG">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="图片排行榜" id="rzn-pB-cm4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rj3-9S-MlA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3992" y="-1147"/>
+        </scene>
         <!--Picture Wall View Controller - 图片墙-->
         <scene sceneID="jET-B2-Ifw">
             <objects>
@@ -4388,6 +4407,7 @@
                         <outlet property="tableView2" destination="snf-8S-WRM" id="liP-N9-JXX"/>
                         <segue destination="h8r-CT-ILs" kind="push" identifier="photosShow" id="ybG-ek-un6"/>
                         <segue destination="0NQ-fO-IlQ" kind="push" identifier="toUploadPhoto" id="1Bl-uW-u7J"/>
+                        <segue destination="JHf-vJ-onu" kind="push" identifier="toPhotoRanking" id="YD0-xD-YSu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DYb-Gb-6Ib" userLabel="First Responder" sceneMemberID="firstResponder"/>

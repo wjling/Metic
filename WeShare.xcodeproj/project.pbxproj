@@ -97,6 +97,7 @@
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF69219CF003A001BB61E /* EventSearchViewController.m */; };
 		083FF69919D02962001BB61E /* flag.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 083FF69819D02962001BB61E /* flag.jpg */; };
+		083FF6A319D06048001BB61E /* photoRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF6A219D06048001BB61E /* photoRankingViewController.m */; };
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
@@ -491,6 +492,8 @@
 		083FF69119CF003A001BB61E /* EventSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSearchViewController.h; sourceTree = "<group>"; };
 		083FF69219CF003A001BB61E /* EventSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventSearchViewController.m; sourceTree = "<group>"; };
 		083FF69819D02962001BB61E /* flag.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag.jpg; sourceTree = "<group>"; };
+		083FF6A119D06048001BB61E /* photoRankingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = photoRankingViewController.h; sourceTree = "<group>"; };
+		083FF6A219D06048001BB61E /* photoRankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = photoRankingViewController.m; sourceTree = "<group>"; };
 		0842A89819588DA5003229A9 /* InviteFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteFriendViewController.h; sourceTree = "<group>"; };
 		0842A89919588DA5003229A9 /* InviteFriendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteFriendViewController.m; sourceTree = "<group>"; };
 		084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDetailViewController.h; sourceTree = "<group>"; };
@@ -1113,6 +1116,23 @@
 			path = THProgressView;
 			sourceTree = "<group>";
 		};
+		083FF69E19D06021001BB61E /* photo */ = {
+			isa = PBXGroup;
+			children = (
+				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
+				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
+				084EC7271966446500E9B48F /* PhotoUploadViewController.h */,
+				084EC7281966446500E9B48F /* PhotoUploadViewController.m */,
+				080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */,
+				080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */,
+				084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */,
+				084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */,
+				083FF6A119D06048001BB61E /* photoRankingViewController.h */,
+				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
+			);
+			name = photo;
+			sourceTree = "<group>";
+		};
 		085A5D4119C7FF85005FEEF9 /* square */ = {
 			isa = PBXGroup;
 			children = (
@@ -1642,6 +1662,7 @@
 				04B63B4C1963A1600015357B /* Notifications */,
 				483E01EF1935C6E400418A58 /* Friends */,
 				08E92DD819B2CCDE002499BF /* Video */,
+				083FF69E19D06021001BB61E /* photo */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
 				51A01D141934EB270043963F /* MTEvent.h */,
@@ -1660,14 +1681,6 @@
 				08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */,
 				086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */,
 				086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */,
-				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
-				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
-				084EC7271966446500E9B48F /* PhotoUploadViewController.h */,
-				084EC7281966446500E9B48F /* PhotoUploadViewController.m */,
-				080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */,
-				080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */,
-				084EC7241965B5C300E9B48F /* PhotoDetailViewController.h */,
-				084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */,
 				0842A89819588DA5003229A9 /* InviteFriendViewController.h */,
 				0842A89919588DA5003229A9 /* InviteFriendViewController.m */,
 				51581D6019335A8700943606 /* ProfileDetailViewController.h */,
@@ -2125,6 +2138,7 @@
 				04BAF6571993644F00BF00E1 /* Reachability.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
+				083FF6A319D06048001BB61E /* photoRankingViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
 				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
 				086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */,

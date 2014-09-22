@@ -20,6 +20,7 @@
 #import "MySqlite.h"
 #import "AppDelegate.h"
 #import "../Utils/CloudOperation.h"
+#import "../Cell/MTTableView.h"
 
 
 
@@ -31,6 +32,7 @@
 @property (strong, nonatomic) IBOutlet UIView *updateInfoView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *ArrangementView;
+@property (strong, nonatomic) IBOutlet MTTableView *tableView;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *arrangementButtons;
 
 @property (strong,nonatomic) MJRefreshHeaderView *header;

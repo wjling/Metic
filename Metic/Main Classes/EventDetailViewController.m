@@ -334,9 +334,17 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            self.event = [response1 valueForKey:@"event_list"][0];
-            if(_event)[self updateEventToDB:_event];
-            [_tableView reloadData];
+            NSLog(@"%@", response1);
+            if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                self.event = [response1 valueForKey:@"event_list"][0];
+                if(_event)[self updateEventToDB:_event];
+                [_tableView reloadData];
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
+                [self removeEventFromDB];
+                [self renewHomeArray];
+            }
+            
         }
         
     }];
@@ -353,6 +361,27 @@
     
     [self.sql insertToTable:@"event" withColumns:columns andValues:values];
     [self.sql closeMyDB];
+}
+
+- (void)removeEventFromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
+    [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+    [sql closeMyDB];
+}
+
+-(void)renewHomeArray
+{
+    int index = self.navigationController.viewControllers.count - 2;
+    HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
+    
+    if ([controller isKindOfClass:[HomeViewController class]]) {
+        [controller.events removeObject:_event];
+        [controller.tableView reloadData];
+    }
 }
 
 - (void)addComment
@@ -1213,6 +1242,16 @@
     }
 }
 
-
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+            
+        default:
+            break;
+    }
+}
 
 @end
