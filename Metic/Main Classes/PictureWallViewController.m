@@ -636,6 +636,8 @@
         }
         if ([segue.destinationViewController isKindOfClass:[photoRankingViewController class]]) {
             photoRankingViewController *nextViewController = segue.destinationViewController;
+            nextViewController.pictureWallController = self;
+            nextViewController.eventName = self.eventName;
             nextViewController.eventId = self.eventId;
         }
     }

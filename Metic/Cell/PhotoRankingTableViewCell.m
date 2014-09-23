@@ -7,8 +7,11 @@
 //
 
 #import "PhotoRankingTableViewCell.h"
+#import "PhotoDetailViewController.h"
 #import "PhotoGetter.h"
 #import "UIImageView+WebCache.h"
+#import "../Main Classes/UserInfo/UserInfoViewController.h"
+#import "../Main Classes/Friends/FriendInfoViewController.h"
 
 @implementation PhotoRankingTableViewCell
 #define widthspace 10
@@ -50,7 +53,6 @@
     [self setGood_buttonNum:[_photoInfo valueForKey:@"good"]];
 
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[_photoInfo valueForKey:@"photo_name"]]];
-    NSLog(@"%@",url);
     [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     
 }
@@ -127,6 +129,38 @@
             }
         }
     }];
+    
+}
+
+- (IBAction)toUserInfo:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [_controller.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = self.authorId;
+        [_controller.navigationController pushViewController:friendView animated:YES];
+    }
+}
+
+- (void)toPhotoDetail
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"]; ;
+    
+    viewcontroller.photoId = [self.photoInfo valueForKey:@"photo_id"];
+    viewcontroller.photo = self.photo.image;
+    viewcontroller.eventId = self.eventId;
+    viewcontroller.photoInfo = self.photoInfo;
+    viewcontroller.eventName = _controller.eventName;
+    viewcontroller.controller = self.controller.pictureWallController;
+    viewcontroller.type = 2;
+    [self.controller.navigationController pushViewController:viewcontroller animated:YES];
     
 }
 

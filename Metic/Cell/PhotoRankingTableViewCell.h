@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "../Main Classes/photoRankingViewController.h"
+#import "PictureWallViewController.h"
+
 
 @interface PhotoRankingTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *photo;
@@ -18,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *good_Img;
 @property (strong, nonatomic) IBOutlet UILabel *good_Num;
 - (IBAction)addGood:(id)sender;
+- (IBAction)toUserInfo:(id)sender;
 
 @property (strong, nonatomic) NSNumber* eventId;
 @property (strong, nonatomic) photoRankingViewController* controller;
@@ -26,4 +29,5 @@
 @property BOOL isZan;
 -(void)refresh;
 -(void)animationBegin;
+-(void)toPhotoDetail;
 @end

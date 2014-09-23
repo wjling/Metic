@@ -8,6 +8,8 @@
 
 #import "PhotoDetailViewController.h"
 #import "PhotoDisplayViewController.h"
+#import "Friends/FriendInfoViewController.h"
+#import "UserInfoViewController.h"
 #import "BannerViewController.h"
 #import "../Cell/PcommentTableViewCell.h"
 #import "HomeViewController.h"
@@ -457,15 +459,21 @@
 }
 
 
-//#pragma mark - UIScrollViewDelegate
-//-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    if (!_isKeyBoard) {
-//        [self.commentView setHidden:YES];
-//        //[self.view sendSubviewToBack:self.commentView];
-//    }
-//}
-
+- (void)pushToFriendView:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+															 bundle: nil];
+    if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [self.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = [self.photoInfo valueForKey:@"author_id"];
+        [self.navigationController pushViewController:friendView animated:YES];
+    }
+	
+}
 
 
 #pragma mark - HttpSenderDelegate
@@ -576,6 +584,14 @@
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
         [getter getAvatar];
         [cell addSubview:avatar];
+        
+        UIButton* avatarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [avatarBtn setFrame:CGRectMake(0, height+13, 50, 50)];
+        [avatarBtn setBackgroundColor:[UIColor clearColor]];
+        [avatarBtn addTarget:self action:@selector(pushToFriendView:) forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:avatarBtn];
+        
+        
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];

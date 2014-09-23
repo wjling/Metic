@@ -160,7 +160,9 @@
                 [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
                 _controller.shouldFlash = NO;
                 [_controller.tableView reloadData];
-                _controller.shouldFlash = YES;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _controller.shouldFlash = YES;
+                });
             }
         }
     }];
