@@ -50,5 +50,6 @@ typedef void (^FinishBlock)(NSData* rData);
 -(void)sendVideoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block;
 
 -(void)sendFeedBackMessage:(NSDictionary*)json;
+-(void)sendGetPosterMessage:(FinishBlock)block;
 
 @end

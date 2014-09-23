@@ -32,7 +32,6 @@
     _webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     NSLog(@"%f",self.view.frame.size.height);
     [self.view addSubview:_webView];
-    //_AdUrl = @"http://w.m.taobao.com/api/wap?app_key=53f2af05fd98c59abf001eb8&device_id=9aea6466f93a8ace1b0d6392402e1739950c720a&aid=B1C67A00-A23B-4EA6-9809-366989A7BC92&mac=02:00:00:00:00:00";
     NSURL *url =[NSURL URLWithString:_AdUrl];
     NSLog(@"打开广告页面  url：%@",_AdUrl);
     NSURLRequest *request =[NSURLRequest requestWithURL:url];
@@ -43,14 +42,14 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [MobClick beginEvent:@"广告"];
-    [_webView setFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
+    [MobClick beginEvent:@"外链"];
+    [_webView setFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [MobClick beginEvent:@"广告"];
+    [MobClick beginEvent:@"外链"];
 }
 - (void)didReceiveMemoryWarning
 {

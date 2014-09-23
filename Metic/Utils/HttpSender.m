@@ -326,4 +326,16 @@
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
+-(void)sendGetPosterMessage:(FinishBlock)block
+{
+    self.finishBlock = block;
+    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,@"get_poster"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+}
+
 @end
