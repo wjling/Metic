@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface photoRankingViewController : UIViewController
-
+@interface photoRankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic,strong) UITableView* tableView;
+@property(nonatomic,strong) NSNumber* eventId;
+@property BOOL shouldFlash;
 @end

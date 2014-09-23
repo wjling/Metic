@@ -5480,17 +5480,17 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="c1O-Ly-Hfg"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="Ntp-rU-rWO"/>
         <segue reference="eBE-9B-Hp2"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="0y8-RS-ijM"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="L2M-th-cr6"/>
+        <segue reference="0y8-RS-ijM"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="a7Z-Ie-XBp"/>
         <segue reference="IZC-tt-cO3"/>
+        <segue reference="c1O-Ly-Hfg"/>
         <segue reference="hOW-ww-bKW"/>
+        <segue reference="L2M-th-cr6"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,6 +9,7 @@
 #import "PictureWallViewController.h"
 #import "PhotoDisplayViewController.h"
 #import "PhotoUploadViewController.h"
+#import "photoRankingViewController.h"
 #import "../Cell/PhotoTableViewCell.h"
 #import "../Utils/CommonUtils.h"
 #import "../Utils/HttpSender.h"
@@ -142,10 +143,10 @@
     
     // Dispose of any resources that can be recreated.
 }
--(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [cell removeFromSuperview];
-}
+//-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [cell removeFromSuperview];
+//}
 
 //返回上一层
 -(void)MTpopViewController{
@@ -223,7 +224,11 @@
 }
 
 - (IBAction)toUploadPhoto:(id)sender {
-    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
+    [self performSegueWithIdentifier:@"toPhotoRanking" sender:self];
+    
+    
+    
+    //[self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
 }
 
 -(void)showAlert
@@ -628,6 +633,10 @@
             PhotoUploadViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.photoWallController = self;
+        }
+        if ([segue.destinationViewController isKindOfClass:[photoRankingViewController class]]) {
+            photoRankingViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = self.eventId;
         }
     }
 }

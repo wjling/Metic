@@ -201,6 +201,9 @@
         case 41:
             resultCode = @"complain";
             break;
+        case 42:
+            resultCode = @"get_good_photos";
+            break;
         default:
             resultCode = @"json";
             break;
