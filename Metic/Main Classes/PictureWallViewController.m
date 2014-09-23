@@ -31,6 +31,8 @@
 @property (nonatomic,strong)SDWebImageManager *manager;
 @property int currentPhotoNum;
 @property (nonatomic,strong) NSString* urlFormat;
+@property (nonatomic,strong) UIButton* add;
+@property (nonatomic,strong) UILabel* addLabel;
 
 @property BOOL isLoading;
 @property BOOL shouldStop;
@@ -77,7 +79,7 @@
     self.cellHeight = [[NSMutableDictionary alloc]init];
     self.sql = [[MySqlite alloc]init];
     
-    
+    [self initUI];
     
 //    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
     _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
@@ -107,7 +109,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     if (_shouldReloadPhoto) {
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
             [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
@@ -120,6 +121,7 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
+    [self adjustUI];
 }
 
 
@@ -152,6 +154,35 @@
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(void)initUI
+{
+    _add = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0]] forState:UIControlStateNormal];
+    [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:170/255.0 blue:166/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
+    _add.layer.masksToBounds = YES;
+    _add.layer.cornerRadius = CGRectGetWidth(self.view.frame)*0.1;
+    [_add addTarget:self action:@selector(toUploadPhoto:) forControlEvents:UIControlEventTouchUpInside];
+    _addLabel = [[UILabel alloc]initWithFrame:CGRectZero];
+    [_addLabel setBackgroundColor:[UIColor clearColor]];
+    [_addLabel setFont:[UIFont systemFontOfSize:50]];
+    [_addLabel setTextAlignment:NSTextAlignmentCenter];
+    [_addLabel setText:@"+"];
+    [_addLabel setTextColor:[UIColor whiteColor]];
+    [_add addSubview:_addLabel];
+    [_add setFrame:CGRectZero];
+    [self.view addSubview:_add];
+}
+
+-(void)adjustUI
+{
+    CGRect frame = self.view.frame;
+    NSLog(@"%f  %f",CGRectGetWidth(frame),CGRectGetHeight(frame));
+    [_add setFrame:CGRectMake(CGRectGetWidth(frame)*0.7, CGRectGetHeight(frame) - CGRectGetWidth(frame)*0.3 , CGRectGetWidth(frame)*0.2, CGRectGetWidth(frame)*0.2)];
+    [_addLabel setFrame:CGRectMake(0, 0, CGRectGetWidth(frame)*0.2, CGRectGetWidth(frame)*0.17)];
+}
+
 
 -(void)getPhotolist
 {
@@ -223,12 +254,11 @@
     
 }
 
-- (IBAction)toUploadPhoto:(id)sender {
+- (void)toUploadPhoto:(id)sender {
+    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
+}
+- (IBAction)toBestPhotos:(id)sender{
     [self performSegueWithIdentifier:@"toPhotoRanking" sender:self];
-    
-    
-    
-    //[self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
 }
 
 -(void)showAlert

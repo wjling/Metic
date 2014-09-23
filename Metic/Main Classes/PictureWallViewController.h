@@ -31,7 +31,7 @@
 @property(nonatomic,strong)NSMutableDictionary *photos;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 @property BOOL shouldReloadPhoto;
-- (IBAction)toUploadPhoto:(id)sender;
+- (IBAction)toBestPhotos:(id)sender;
 
 
 @end
