@@ -47,6 +47,7 @@
 {
     [super viewDidLoad];
     _shouldReload = YES;
+    _shouldFlash = YES;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     //init tableView

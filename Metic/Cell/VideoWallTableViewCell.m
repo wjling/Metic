@@ -95,6 +95,7 @@
     cframe.origin.y = frame.origin.y + frame.size.height;
     self.controlContainer.frame = cframe;
     
+    [self.good_button setEnabled:YES];
     [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
     [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
     [self setComment_buttonNum:[_videoInfo valueForKey:@"comment_num"]];
@@ -113,6 +114,9 @@
 
 -(void)animationBegin
 {
+    if (!_controller.shouldFlash) {
+        return;
+    }
     [self setAlpha:0.5];
     [UIView beginAnimations:@"shadowViewDisappear" context:nil];
     [UIView setAnimationDuration:0.5];
@@ -154,7 +158,11 @@
                     zan_num ++;
                 }
                 [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+                _controller.shouldFlash = NO;
                 [_controller.tableView reloadData];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _controller.shouldFlash = YES;
+                });
             }
         }
     }];

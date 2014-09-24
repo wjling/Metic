@@ -57,6 +57,7 @@ enum Operation_Code
     QUIT_EVENT = 39,
     UPDATE_AVATAR = 40,
     COMPLAIN = 41,
+    GET_GOOD_PHOTOS = 42,
 };
 
 enum CloudOperation_Code

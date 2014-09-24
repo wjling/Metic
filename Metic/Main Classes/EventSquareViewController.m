@@ -9,7 +9,12 @@
 #import "EventSquareViewController.h"
 #import "NearbyEventViewController.h"
 #import "EventSearchViewController.h"
+#import "EventDetailViewController.h"
+#import "AdViewController.h"
 #import "MobClick.h"
+#import "AppConstants.h"
+#import "HttpSender.h"
+#import "UIButton+WebCache.h"
 
 
 #define bannerWidth self.view.bounds.size.width
@@ -19,25 +24,18 @@
 @interface EventSquareViewController ()
 @property (nonatomic,strong) UIScrollView* scrollView;
 @property (nonatomic,strong) UIPageControl* pagecontrol;
-@property (nonatomic,strong) NSMutableArray* images;
-@property (nonatomic,strong) NSMutableArray* imageViews;
-@property (nonatomic,strong) UIImageView* imageView1;
-@property (nonatomic,strong) UIImageView* imageView2;
-@property (nonatomic,strong) UIImageView* imageView3;
 @property (nonatomic,strong) NSTimer* timer;
+@property (nonatomic,strong) NSMutableArray* posterList;
 
 @property int firstIndex;
 @property int type;
-@property BOOL shouldDo;
-@property BOOL canDo;
+@property BOOL isAuto;
 
 @end
 
 
 @implementation EventSquareViewController
-@synthesize imageView1;
-@synthesize imageView2;
-@synthesize imageView3;
+
 
 
 
@@ -87,13 +85,15 @@
 
 -(void)initData
 {
-    UIImage *image1 = [UIImage imageNamed:@"square_3.jpg"];
-    UIImage *image2 = [UIImage imageNamed:@"square_1.jpg"];
-    UIImage *image3 = [UIImage imageNamed:@"square_2.jpg"];
-    //UIImage *image4 = [UIImage imageNamed:@"3兜风.jpg"];
-    _images = [[NSMutableArray alloc]initWithObjects:image1,image2,image3,nil];
-    _shouldDo = NO;
-    _canDo = YES;
+    _isAuto = YES;
+    [self getPoster];
+//    UIImage *image1 = [UIImage imageNamed:@"square_3.jpg"];
+//    UIImage *image2 = [UIImage imageNamed:@"square_1.jpg"];
+//    UIImage *image3 = [UIImage imageNamed:@"square_2.jpg"];
+//    //UIImage *image4 = [UIImage imageNamed:@"3兜风.jpg"];
+//    _images = [[NSMutableArray alloc]initWithObjects:image1,image2,image3,nil];
+//    _shouldDo = NO;
+//    _canDo = YES;
 }
 
 -(void)initUI
@@ -101,37 +101,14 @@
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
     
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, bannerWidth, bannerHeight)];
-    [_scrollView setContentSize:CGSizeMake(bannerWidth*3, bannerHeight)];
+    [_scrollView setContentSize:CGSizeMake(bannerWidth, bannerHeight)];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setBounces:YES];
     [_scrollView setPagingEnabled:YES];
     [_scrollView setContentOffset:CGPointMake(bannerWidth * 1, 0)];
     _scrollView.delegate = self;
-    
-    imageView1 = [[UIImageView alloc]initWithFrame:CGRectMake(bannerWidth * 0, 0, bannerWidth, bannerHeight)];
-    imageView1.image = _images[0];
-    [_scrollView addSubview:imageView1];
-    
-    imageView2 = [[UIImageView alloc]initWithFrame:CGRectMake(bannerWidth * 1, 0, bannerWidth, bannerHeight)];
-    imageView2.image = _images[1];
-    [_scrollView addSubview:imageView2];
-    
-    imageView3 = [[UIImageView alloc]initWithFrame:CGRectMake(bannerWidth * 2, 0, bannerWidth, bannerHeight)];
-    imageView3.image = _images[2];
-    [_scrollView addSubview:imageView3];
-    
-    _imageViews = [[NSMutableArray alloc]initWithObjects:imageView1,imageView2,imageView3, nil];
-    
+
     [self.view addSubview:_scrollView];
-    
-    _pagecontrol = [[UIPageControl alloc] initWithFrame:CGRectMake(bannerWidth*0.3,bannerHeight*0.8, bannerWidth*0.4, bannerHeight*0.2)];
-    _pagecontrol.backgroundColor = [UIColor clearColor];
-    _pagecontrol.hidesForSinglePage = YES;
-    _pagecontrol.userInteractionEnabled = NO;
-    _pagecontrol.numberOfPages = _images.count;
-    [self.view addSubview:_pagecontrol];
-    
-    _timer = [NSTimer scheduledTimerWithTimeInterval:2.5f target:self selector:@selector(showBanner) userInfo:nil repeats:YES];
     
     CGRect frame = self.view.frame;
     float originY = CGRectGetHeight(_scrollView.frame) + 20;
@@ -203,22 +180,133 @@
     [self.view addSubview:_shadowView];
 }
 
+-(void)initScrollView
+{
+    if (_posterList && _posterList.count>0) {
+
+        [_scrollView setBackgroundColor:[UIColor clearColor]];
+        [_scrollView setContentSize:CGSizeMake(bannerWidth*(_posterList.count+1), bannerHeight)];
+        int i = 0;
+        for (NSDictionary* dict in _posterList) {
+            if (i == _posterList.count-1) {
+                UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+                [button setFrame:CGRectMake(bannerWidth*0, 0, bannerWidth, bannerHeight)];
+                
+                [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                [button setTag:i];
+                [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
+                NSString* url = [dict valueForKey:@"image_url"];
+                NSLog(@"%@",url);
+                [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+                [_scrollView addSubview:button];
+            }
+            
+            
+            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setFrame:CGRectMake(bannerWidth*(i+1), 0, bannerWidth, bannerHeight)];
+            
+            [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
+            [button setTag:i];
+            [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
+            NSString* url = [dict valueForKey:@"image_url"];
+            NSLog(@"%@",url);
+            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+            [_scrollView addSubview:button];
+            i++;
+        }
+        
+        if (_posterList.count == 1) return;
+        _pagecontrol = [[UIPageControl alloc] initWithFrame:CGRectMake(bannerWidth*0.3,bannerHeight*0.8, bannerWidth*0.4, bannerHeight*0.2)];
+        _pagecontrol.backgroundColor = [UIColor clearColor];
+        _pagecontrol.hidesForSinglePage = YES;
+        _pagecontrol.userInteractionEnabled = NO;
+        _pagecontrol.numberOfPages = _posterList.count;
+        [self.view addSubview:_pagecontrol];
+        
+        _timer = [NSTimer scheduledTimerWithTimeInterval:2.5f target:self selector:@selector(showBanner) userInfo:nil repeats:YES];
+
+         
+    }else{
+        [_scrollView setBackgroundColor:[UIColor colorWithWhite:204/255.0 alpha:1.0]];
+        UIImageView* tmp = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame))];
+        [tmp setContentMode:UIViewContentModeCenter];
+        tmp.image = [UIImage imageNamed:@"活动图片的默认图片"];
+        [self.view addSubview:tmp];
+    }
+}
+
+
+
+
+
+-(void)tapEvent:(UIButton*)button
+{
+    int index = [button tag];
+    NSDictionary* dict = _posterList[index];
+    if ([[dict valueForKey:@"type"] isEqualToString:@"event"]) {
+        NSNumber* eventId = [dict valueForKey:@"content"];
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
+        
+        
+        
+    }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
+        NSString* url = [dict valueForKey:@"content"];
+
+        AdViewController* adViewController = [[AdViewController alloc]init];
+        adViewController.AdUrl = url;
+        [self.navigationController pushViewController:adViewController animated:YES];
+
+    }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
+        return;
+    }
+}
+
+
+
+
+-(void)getPoster
+{
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendGetPosterMessage:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    _posterList = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"poster_list"]];
+                    NSLog(@"%@",_posterList);
+                    for (int i = 0; i < _posterList.count; i++) {
+                        NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:_posterList[i]];
+                        _posterList[i] = dictionary;
+                    }
+                    [self initScrollView];
+                    
+                }
+                    break;
+                default:
+                    [self initScrollView];
+                    break;
+                    
+            }
+
+        }else{
+             [self initScrollView];
+        }
+    }];
+}
+
 -(void)showBanner
 {
-    _canDo = YES;
-    _shouldDo = NO;
     CGPoint curPoint = _scrollView.contentOffset;
-    if (curPoint.x >= bannerWidth*2) {
-        UIImage* tmp = _images[0];
-        [_images removeObject:tmp];
-        [_images addObject:tmp];
-        _firstIndex --;
-        if (_firstIndex < 0) _firstIndex = _images.count - 1;
-        curPoint.x = bannerWidth;
-        [_scrollView setContentOffset:curPoint];
-        imageView1.image = _images[0];
-        imageView2.image = _images[1];
-        imageView3.image = _images[2];
+    if (curPoint.x == bannerWidth*_posterList.count) {
+        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+        curPoint.x = 0;
     }
     curPoint.x += bannerWidth;
     [UIView beginAnimations:@"slideBanner" context:nil];
@@ -226,8 +314,6 @@
     [UIView setAnimationDelegate:self];
     _scrollView.contentOffset = curPoint;
     [UIView commitAnimations];
-    
-    
     [_scrollView setContentOffset:curPoint animated:YES];
 }
 
@@ -250,84 +336,48 @@
 
 
 
-
 #pragma mark - UIScrollView Delegate -
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    int index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;   //当前是第几个视图
-    int photoIndex = [_images indexOfObject:((UIImageView*)_imageViews[index]).image];
-    int realIndex = photoIndex - _firstIndex;
-    if (realIndex < 0) realIndex += _images.count;
-    NSLog(@"%d %d %d %d",index,photoIndex,realIndex,_firstIndex);
-    _pagecontrol.currentPage = realIndex;
-}
 
-
--(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
-{
-    NSLog(@"aaaaa");
-}
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView.contentOffset.x < 0) {
-        UIImage* tmp = [_images lastObject];
-        [_images removeObject:tmp];
-        [_images insertObject:tmp atIndex:0];
-        _firstIndex ++;
-        if (_firstIndex >= _images.count) _firstIndex = 0;
-        CGPoint curPoint = _scrollView.contentOffset;
-        curPoint.x += bannerWidth;
-        [scrollView setContentOffset:curPoint];
-    }else if (scrollView.contentOffset.x > bannerWidth*2){
-        UIImage* tmp = _images[0];
-        [_images removeObject:tmp];
-        [_images addObject:tmp];
-        _firstIndex --;
-        if (_firstIndex < 0) _firstIndex = _images.count - 1;
-        CGPoint curPoint = _scrollView.contentOffset;
-        curPoint.x -= bannerWidth;
-        [scrollView setContentOffset:curPoint];
-    }else{
-        if (_canDo) {
-            if (_shouldDo) {
-                int index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;   //当前是第几个视图
-                int photoIndex = [_images indexOfObject:((UIImageView*)_imageViews[index]).image];
-                int realIndex = photoIndex - _firstIndex;
-                if (realIndex < 0) realIndex += _images.count;
-                NSLog(@"%d %d %d %d",index,photoIndex,realIndex,_firstIndex);
-                _pagecontrol.currentPage = realIndex;
-            }
-            _shouldDo = !_shouldDo;
-        }
-        return;
-    };
-    
-    imageView1.image = _images[0];
-    imageView2.image = _images[1];
-    imageView3.image = _images[2];
-    
-    
-    
-}
-
-#pragma mark - UIScrollView Delegate -
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    _isAuto = NO;
     [_timer setFireDate:[NSDate distantFuture]];
-    _canDo = NO;
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    _isAuto = YES;
     [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-    int index = fabs(scrollView.contentOffset.x) / scrollView.frame.size.width;   //当前是第几个视图
-    int photoIndex = [_images indexOfObject:((UIImageView*)_imageViews[index]).image];
-    int realIndex = photoIndex - _firstIndex;
-    if (realIndex < 0) realIndex += _images.count;
-    NSLog(@"%d %d %d %d",index,photoIndex,realIndex,_firstIndex);
-    _pagecontrol.currentPage = realIndex;
+    float x = scrollView.contentOffset.x;
+    int page = x/bannerWidth - 1;
+    if (page < 0) page += _posterList.count;
+    NSLog(@"page:%d",page);
+    if (page < _posterList.count && page != _pagecontrol.currentPage) {
+        [_pagecontrol setCurrentPage:page];
+    }
 }
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    float x = scrollView.contentOffset.x;
+    if (x > bannerWidth* _posterList.count) {
+        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+    }else if(x < 0){
+        [_scrollView setContentOffset:CGPointMake(bannerWidth*_posterList.count, 0) animated:NO];
+    }
+    if (_isAuto) {
+        float x = scrollView.contentOffset.x;
+        int page = x/bannerWidth - 1;
+        if (page < 0) page += _posterList.count;
+        NSLog(@"page:%d",page);
+        if (page < _posterList.count && page != _pagecontrol.currentPage) {
+            [_pagecontrol setCurrentPage:page];
+        }
+    }
+}
+
+
 
 #pragma mark - SlideNavigationController Methods -
 

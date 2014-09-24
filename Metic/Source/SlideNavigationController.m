@@ -97,10 +97,10 @@ static SlideNavigationController *singletonInstance;
      if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
          [self.navigationBar setTintColor:[UIColor colorWithRed:86/255.0f green:202/255.0f  blue:171/255.0f alpha:1.0f]];
      }else [self.navigationBar setTintColor:[UIColor whiteColor]];
-	//self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-	//self.view.layer.shadowRadius = 10;
-	//self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
-	//self.view.layer.shadowOpacity = 1;
+	self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+	self.view.layer.shadowRadius = 5;
+	self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
+	self.view.layer.shadowOpacity = 1;
 	self.view.layer.shouldRasterize = YES;
 	self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
 	

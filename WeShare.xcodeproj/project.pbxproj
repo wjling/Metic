@@ -116,6 +116,8 @@
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
+		08921E5819D116D800A2BAF8 /* PhotoRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */; };
+		08921E5919D116D800A2BAF8 /* PhotoRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */; };
 		089337A5197579CE00AD940B /* PECropRectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379B197579CE00AD940B /* PECropRectView.m */; };
 		089337A6197579CE00AD940B /* PECropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379D197579CE00AD940B /* PECropView.m */; };
 		089337A7197579CE00AD940B /* PECropViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0893379F197579CE00AD940B /* PECropViewController.m */; };
@@ -525,6 +527,9 @@
 		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
+		08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoRankingTableViewCell.h; sourceTree = "<group>"; };
+		08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoRankingTableViewCell.m; sourceTree = "<group>"; };
+		08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoRankingTableViewCell.xib; sourceTree = "<group>"; };
 		0893379A197579CE00AD940B /* PECropRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropRectView.h; sourceTree = "<group>"; };
 		0893379B197579CE00AD940B /* PECropRectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PECropRectView.m; sourceTree = "<group>"; };
 		0893379C197579CE00AD940B /* PECropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PECropView.h; sourceTree = "<group>"; };
@@ -1270,6 +1275,9 @@
 				08E92DD919B2D354002499BF /* VideoWallTableViewCell.h */,
 				08E92DDA19B2D354002499BF /* VideoWallTableViewCell.m */,
 				08E92DDB19B2D354002499BF /* VideoWallTableViewCell.xib */,
+				08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */,
+				08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */,
+				08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1984,6 +1992,7 @@
 				5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */,
 				04D61296197BD40000159190 /* FlatDatePicker-Icon-Check.png in Resources */,
 				04B6F89919A25D5C00229393 /* face10.png in Resources */,
+				08921E5919D116D800A2BAF8 /* PhotoRankingTableViewCell.xib in Resources */,
 				04B6F89419A25D5C00229393 /* face05.png in Resources */,
 				51581D3A1933575300943606 /* Main_iPad.storyboard in Resources */,
 				5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */,
@@ -2107,6 +2116,7 @@
 				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
 				04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
+				08921E5819D116D800A2BAF8 /* PhotoRankingTableViewCell.m in Sources */,
 				08DB69B119541F3A00F80F3F /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
 				519100F019651388005DF607 /* MRZoomScrollView.m in Sources */,
