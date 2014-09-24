@@ -244,8 +244,7 @@
     int index = [button tag];
     NSDictionary* dict = _posterList[index];
     if ([[dict valueForKey:@"type"] isEqualToString:@"event"]) {
-        NSNumber* eventId = [dict valueForKey:@"content"];
-        
+        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"content"]];
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
 
         EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
