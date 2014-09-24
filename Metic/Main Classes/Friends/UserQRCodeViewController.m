@@ -113,7 +113,7 @@
                                          appKey:@"53bb542e56240ba6e80a4bfb"
                                       shareText:@"WeShare"
                                      shareImage:friendQRcode
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToSina,UMShareToTencent,UMShareToRenren,nil]
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
                                        delegate:self];
 }
 
