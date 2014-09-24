@@ -62,6 +62,7 @@
         self.uploadImage = aImage;
         self.type = type;
         updateAvatarViewController = vc;
+        updateAvatarFlag = NO;
     }
     return self;
 }
@@ -497,7 +498,7 @@
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd integerValue] == NORMAL_REPLY) {
                         if (updateAvatarFlag) {
-                            
+                        
                             if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[FillinInfoViewController class]]) {
 //                                [(UserInfoViewController*)updateAvatarViewController refresh];
                                 [[(FillinInfoViewController*)updateAvatarViewController info_tableview] reloadData];

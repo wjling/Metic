@@ -243,12 +243,13 @@
             }
             else if(indexPath.row == 1)
             {
-                NSArray* arr = [[NSArray alloc]initWithObjects:@"女",@"男", nil];
-//                SingleSelectionAlertView* alert = [[SingleSelectionAlertView alloc]initWithFrame:CGRectMake(100, 100, 120, 300) withOptionTitles:arr];
-                alert =  [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改性别" withOptions:arr];
-                alert.kDelegate = self;
-                alert.tag = 0;
-                [alert show];
+//                NSArray* arr = [[NSArray alloc]initWithObjects:@"女",@"男", nil];
+////                SingleSelectionAlertView* alert = [[SingleSelectionAlertView alloc]initWithFrame:CGRectMake(100, 100, 120, 300) withOptionTitles:arr];
+//                alert =  [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改性别" withOptions:arr];
+//                alert.kDelegate = self;
+//                alert.tag = 0;
+//                [alert show];
+                [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"性别无法随意更改" WithDelegate:self WithCancelTitle:@"确定"];
             }
             else if (indexPath.row == 2)
             {

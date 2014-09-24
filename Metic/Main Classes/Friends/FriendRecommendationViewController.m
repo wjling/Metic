@@ -461,6 +461,10 @@
 {
     selectedFriendID = [NSNumber numberWithInteger:sender.tag];
     [self performSegueWithIdentifier:@"friendRecommend_addFriend" sender:self];
+//    UIStoryboard* main_storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+//    AddFriendConfirmViewController* vc = [main_storyboard instantiateViewControllerWithIdentifier:@"AddFriendConfirmViewController"];
+//    vc.fid = selectedFriendID;
+//    [self.navigationController pushViewController:vc animated:YES];
     
 }
 

@@ -159,15 +159,16 @@
 //    confirmAlert.tag = 0;
 //    friendPosition = indexPath.row;
 //    [confirmAlert show];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     if (section == 0) {
         if (row == 0) {
-            
+            [self performSegueWithIdentifier:@"addFriend_friendRecommend" sender:self];
         }
         else if (row == 1)
         {
-            
+            [self performSegueWithIdentifier:@"addfriend_sao" sender:self];
         }
     }
 }

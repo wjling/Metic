@@ -48,8 +48,9 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self getMsgArray];
+//    [self getMsgArray];
 //    [_tableView reloadData];
+    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -80,18 +81,20 @@
     for (NSMutableDictionary* msg in [MTUser sharedInstance].eventRequestMsg) {
         NSInteger cmd = [[msg objectForKey:@"cmd"] integerValue];
         if (cmd != REQUEST_EVENT) {
-            BOOL flag = true;
-            for (NSMutableDictionary* temp_msg in msg_arr) {
-                NSNumber* eventId1 = [temp_msg objectForKey:@"event_id"];
-                NSNumber* eventId2 = [msg objectForKey:@"event_id"];
-                if ([eventId1 integerValue] == [eventId2 integerValue]) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
-                [msg_arr addObject:msg];
-            }
+//            BOOL flag = true;
+//            for (NSMutableDictionary* temp_msg in msg_arr) {
+//                NSNumber* eventId1 = [temp_msg objectForKey:@"event_id"];
+//                NSNumber* eventId2 = [msg objectForKey:@"event_id"];
+//                if ([eventId1 integerValue] == [eventId2 integerValue]) {
+//                    flag = false;
+//                    break;
+//                }
+//            }
+//            if (flag) {
+//                [msg_arr addObject:msg];
+//            }
+            [msg_arr addObject:msg];
+            
         }
     }
     NSLog(@"活动邀请列表: %@",msg_arr);

@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/CommonUtils.m"
-            timestampString = "426355471.92655"
+            timestampString = "433005779.749815"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "+NSNumberWithNSString:"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/CommonUtils.m"
-            timestampString = "426432407.035973"
+            timestampString = "433005458.227151"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "+packParamsInDictionary:"
             landmarkType = "5">
          </BreakpointContent>
@@ -458,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -474,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
+            startingLineNumber = "297"
+            endingLineNumber = "297"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "368"
-            endingLineNumber = "368"
+            startingLineNumber = "369"
+            endingLineNumber = "369"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -506,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "410"
+            endingLineNumber = "410"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -522,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "342"
-            endingLineNumber = "342"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -538,23 +538,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "347"
-            endingLineNumber = "347"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "348"
@@ -570,11 +554,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
-            timestampString = "431254629.008593"
+            timestampString = "432914448.729587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/UserInfo/UserInfoViewController.m"
+            timestampString = "432914448.729587"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -648,11 +648,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/PhotoGetter.m"
-            timestampString = "431164414.591185"
+            timestampString = "433242063.316906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
             landmarkName = "-getBanner:"
             landmarkType = "5">
          </BreakpointContent>
@@ -664,11 +664,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/PhotoGetter.m"
-            timestampString = "431164414.591185"
+            timestampString = "433242063.316906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "-getBanner:"
             landmarkType = "5">
          </BreakpointContent>
@@ -680,12 +680,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/PhotoGetter.m"
-            timestampString = "431164414.591185"
+            timestampString = "433242063.316906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
-            landmarkName = "-uploadPhoto"
+            startingLineNumber = "204"
+            endingLineNumber = "204"
+            landmarkName = "-updatePhoto"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -696,11 +696,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/PhotoGetter.m"
-            timestampString = "431164414.591185"
+            timestampString = "433242063.316906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "-uploadPhoto"
             landmarkType = "5">
          </BreakpointContent>
@@ -743,22 +743,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Metic/Main Classes/Friends/FriendRecommendationViewController.m"
-            timestampString = "430496999.403871"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
-            landmarkName = "-getKanKan"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Metic/Utils/HttpSender.m"
             timestampString = "431362605.541402"
             startingColumnNumber = "9223372036854775807"
@@ -792,11 +776,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendRecommendationViewController.m"
-            timestampString = "431433146.793323"
+            timestampString = "433008298.741148"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "613"
-            endingLineNumber = "613"
+            startingLineNumber = "617"
+            endingLineNumber = "617"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -861,7 +845,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1095"
             endingLineNumber = "1095"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-keyboardWillHide:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -877,7 +861,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1096"
             endingLineNumber = "1096"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-keyboardWillHide:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

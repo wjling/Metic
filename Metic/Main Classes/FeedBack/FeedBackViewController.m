@@ -33,7 +33,7 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:YES];
     // Do any additional setup after loading the view.
-    self.content_textView.font = [UIFont systemFontOfSize:14];
+    self.content_textView.font = [UIFont systemFontOfSize:15];
     self.content_textView.delegate = self.rootView;
     UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
     self.content_textView.layer.borderColor = color.CGColor;
@@ -88,7 +88,7 @@
 
 
 - (IBAction)confrim_button:(id)sender {
-    
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
     NSString* content = self.content_textView.text;
     if ([content isEqualToString:@""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请输入你的宝贵意见" WithDelegate:self WithCancelTitle:@"OK"];
@@ -97,7 +97,8 @@
     NSString* contact_qq = self.contact1_textField.text;
     NSString* contact_mail = self.contact2_textField.text;
     
-    NSString* message = [NSString stringWithFormat:@"%@\nQQ:%@\nE-mail:%@",content,contact_qq,contact_mail];
+    NSString* message = [NSString stringWithFormat:@"%@\n\nQQ: %@\nE-mail: %@\nUID: %@\nUser Name: %@",
+                         content,contact_qq,contact_mail,[MTUser sharedInstance].userid,[MTUser sharedInstance].name];
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           [MTUser sharedInstance].userid,@"id",
                           message,@"content",
@@ -166,6 +167,7 @@
 -(void)sendDistance:(float)distance
 {
     if (distance > 0) {
+        [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];

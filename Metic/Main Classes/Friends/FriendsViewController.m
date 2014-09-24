@@ -150,7 +150,7 @@
             }
             NSLog(@"好友列表初始化：同步之后，friendlist count: %d",[MTUser sharedInstance].friendList.count);
             if ([MTUser sharedInstance].friendList.count > 0) {
-                if ([MTUser sharedInstance].sortedFriendDic.count == 0) {
+                if ([MTUser sharedInstance].sortedFriendDic.count == 1) {  //1是必定有个“好友推荐”
                     NSLog(@"好友列表初始化：如果好友排序列表为空，说明没有收到服务器返回的消息");
                     dispatch_async(dispatch_get_global_queue(0, 0), ^
                                    {
@@ -172,6 +172,14 @@
                     self.sectionArray = [[MTUser sharedInstance] sectionArray];
                     [self.friendTableView reloadData];
                 }
+            }
+            else
+            {
+                NSLog(@"好友列表初始化：该用户暂时没有好友");
+                self.friendList = [[MTUser sharedInstance] friendList];
+                self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
+                self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                [self.friendTableView reloadData];
             }
         }
         else //网络不连通，直接从数据库取
