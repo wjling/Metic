@@ -3358,7 +3358,7 @@
         <!--Event Detail View Controller - 活动详情-->
         <scene sceneID="N7k-Vs-EaJ">
             <objects>
-                <viewController id="cGW-AM-0QH" customClass="EventDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventDetailViewController" id="cGW-AM-0QH" customClass="EventDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="R69-RB-EZ5"/>
                         <viewControllerLayoutGuide type="bottom" id="PLs-O3-Ixn"/>
@@ -4388,10 +4388,10 @@
                     <navigationItem key="navigationItem" title="图片墙" id="emD-kW-msS">
                         <barButtonItem key="backBarButtonItem" title=" " id="LTR-Mb-3jG"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="VIt-Hw-29u">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oTp-Ua-5ge">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oTp-Ua-5ge">
                                 <rect key="frame" x="278" y="9" width="26" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="上传按钮"/>
+                                <state key="normal" image="头部右上角图标-排行榜"/>
                                 <state key="selected" backgroundImage="上传按钮按下效果"/>
                                 <connections>
                                     <action selector="toBestPhotos:" destination="EfS-Jw-ePs" eventType="touchUpInside" id="fuZ-rY-CSa"/>
@@ -5447,6 +5447,7 @@
         <image name="图片评论_评论图标" width="29" height="29"/>
         <image name="地图定位icon" width="17" height="17"/>
         <image name="头像-116（白色底）" width="59" height="59"/>
+        <image name="头部右上角图标-排行榜" width="26" height="26"/>
         <image name="头部右上角图标-更多" width="52" height="52"/>
         <image name="头部小按钮" width="41" height="21"/>
         <image name="头部小按钮按下效果" width="41" height="21"/>

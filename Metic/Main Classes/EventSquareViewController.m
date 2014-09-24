@@ -9,6 +9,8 @@
 #import "EventSquareViewController.h"
 #import "NearbyEventViewController.h"
 #import "EventSearchViewController.h"
+#import "EventDetailViewController.h"
+#import "AdViewController.h"
 #import "MobClick.h"
 #import "AppConstants.h"
 #import "HttpSender.h"
@@ -242,11 +244,25 @@
     int index = [button tag];
     NSDictionary* dict = _posterList[index];
     if ([[dict valueForKey:@"type"] isEqualToString:@"event"]) {
-        NSLog(@"event");
+        NSNumber* eventId = [dict valueForKey:@"content"];
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
+        
+        
+        
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
-        NSLog(@"url");
+        NSString* url = [dict valueForKey:@"content"];
+
+        AdViewController* adViewController = [[AdViewController alloc]init];
+        adViewController.AdUrl = url;
+        [self.navigationController pushViewController:adViewController animated:YES];
+
     }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
-        NSLog(@"None");
+        return;
     }
 }
 
