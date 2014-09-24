@@ -23,6 +23,10 @@
     CGFloat lastX;
     BOOL clickTab;
     UIView* tabIndicator;
+    UILabel *label1,*label2,*label3;
+    
+    UIView* waitingView;
+    UIActivityIndicatorView* actIndicator;
 }
 
 enum Response_Type
@@ -99,17 +103,42 @@ enum Response_Type
     self.eventRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].eventRequestMsg];
     self.friendRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].friendRequestMsg];
     self.systemMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].systemMsg];
+    
     if (tab_index == 0) {
         [self.eventRequest_tableView reloadData];
+        if (self.eventRequestMsg.count == 0) {
+            label1.hidden = NO;
+        }
+        else
+        {
+            label1.hidden = YES;
+        }
     }
     else if (tab_index == 1)
     {
         [self.friendRequest_tableView reloadData];
+        if (self.friendRequestMsg.count == 0) {
+            label2.hidden = NO;
+        }
+        else
+        {
+            label2.hidden = YES;
+        }
     }
     else if (tab_index == 2)
     {
         [self.systemMessage_tableView reloadData];
+        if (self.systemMsg.count == 0) {
+            label3.hidden = NO;
+        }
+        else
+        {
+            label3.hidden = YES;
+        }
     }
+    
+    
+//    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
 //    if ([temp isKindOfClass:[NSMutableDictionary class]]) {
 //        NSLog(@"temp is mutable_dic");
@@ -125,6 +154,7 @@ enum Response_Type
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"消息中心"];
+//    label1.frame = self.content_scrollView.frame;
 //    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
@@ -258,12 +288,55 @@ enum Response_Type
     
     tab_index = 0;
     clickTab = NO;
+    
+    label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    [label1 setBackgroundColor:[UIColor clearColor]];
+    label1.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
+    label1.numberOfLines = 2;
+    label1.textColor = [UIColor grayColor];
+    label1.textAlignment = NSTextAlignmentCenter;
+    label1.font = [UIFont systemFontOfSize:13];
+    
+    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    [label2 setBackgroundColor:[UIColor clearColor]];
+    label2.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
+    label2.numberOfLines = 2;
+    label2.textColor = [UIColor grayColor];
+    label2.textAlignment = NSTextAlignmentCenter;
+    label2.font = [UIFont systemFontOfSize:13];
+    
+    label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    [label3 setBackgroundColor:[UIColor clearColor]];
+    label3.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
+    label3.numberOfLines = 2;
+    label3.textColor = [UIColor grayColor];
+    label3.textAlignment = NSTextAlignmentCenter;
+    label3.font = [UIFont systemFontOfSize:13];
+    
+    [self.eventRequest_tableView addSubview:label1];
+    [self.friendRequest_tableView addSubview:label2];
+    [self.systemMessage_tableView addSubview:label3];
+    // waiting view
+//    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
+//    waitingView = [[UIView alloc]init];
+//    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
+//    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
+//    [waitingView setBackgroundColor:waitingBgColor];
+//    [waitingView setAlpha:0.5];
+//    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
+//    [waitingView addSubview:actIndicator];
+//    [actIndicator startAnimating];
 }
 
 - (void)tabBtnClicked:(id)sender
 
 {
-    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollView.contentSize.width,self.content_scrollView.contentSize.height);
+//    if ([waitingView superview]) {
+//        [waitingView removeFromSuperview];
+//    }
+//    [self.view addSubview:waitingView];
+    
+//    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollView.contentSize.width,self.content_scrollView.contentSize.height);
     clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
@@ -287,17 +360,37 @@ enum Response_Type
     CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
     [self.content_scrollView setContentOffset:point animated:YES];
     [self.content_scrollView setScrollEnabled:YES];
-//    if (index == 0) {
-//        [self.eventRequest_tableView reloadData];
-//    }
-//    else if (index == 1)
-//    {
-//        [self.friendRequest_tableView reloadData];
-//    }
-//    else if (index == 2)
-//    {
-//        [self.systemMessage_tableView reloadData];
-//    }
+    
+    
+    if (index == 0) {
+        if (self.eventRequestMsg.count == 0) {
+            label1.hidden = NO;
+        }
+        else
+        {
+            label1.hidden = YES;
+        }
+    }
+    else if (index == 1)
+    {
+        if (self.friendRequestMsg.count == 0) {
+            label2.hidden = NO;
+        }
+        else
+        {
+            label2.hidden = YES;
+        }
+    }
+    else if (index == 2)
+    {
+        if (self.systemMsg.count == 0) {
+            label3.hidden = NO;
+        }
+        else
+        {
+            label3.hidden = YES;
+        }
+    }
 
     
 }
@@ -549,11 +642,17 @@ enum Response_Type
             case ADD_FRIEND_NOTIFICATION:
             {
                 [friendRequestMsg insertObject:msg_dic atIndex:0];
+                if (!label2.hidden) {
+                    label2.hidden = YES;
+                }
             }
                 break;
             case ADD_FRIEND_RESULT:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
+                if (!label3.hidden) {
+                    label3.hidden = YES;
+                }
 //                [[MTUser sharedInstance] synchronizeFriends];
             }
                 break;
@@ -561,12 +660,37 @@ enum Response_Type
             case REQUEST_EVENT_RESPONSE:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
+                if (!label3.hidden) {
+                    label3.hidden = YES;
+                }
             }
                 break;
             case NEW_EVENT_NOTIFICATION:
             case REQUEST_EVENT:
             {
+                NSInteger cmd2;
+                NSInteger eventid1, eventid2;
+                eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
+                NSInteger count = self.eventRequestMsg.count;
+                for (NSInteger i = 0; i < count; i++) {
+                    NSMutableDictionary* aMsg = self.eventRequestMsg[i];
+                    cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
+                    NSLog(@"cmd1: %d, cmd2: %d",cmd,cmd2);
+                    if (cmd == cmd2) {
+                        eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
+                        NSLog(@"event_id: %d, event_id: %d",eventid1,eventid2);
+                        if (eventid1 == eventid2) {
+                            [self.eventRequestMsg removeObjectAtIndex:i];
+                            break;
+                        }
+                        
+                    }
+                }
+//                [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
                 [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+                if (!label1.hidden) {
+                    label1.hidden = YES;
+                }
             }
                 break;
                 
@@ -599,11 +723,14 @@ enum Response_Type
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-//    NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
-//    NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
-    if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
-        [self eventBtnClicked:self];
+    if (tableView == self.eventRequest_tableView) {
+        NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+//        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
+//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+        if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
+            [self eventBtnClicked:self];
+        }
+
     }
     
 }
@@ -611,7 +738,8 @@ enum Response_Type
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.friendRequest_tableView) {
+    if (tableView == self.friendRequest_tableView)
+    {
         return friendRequestMsg.count;
     }
     else if (tableView == self.eventRequest_tableView)
@@ -670,6 +798,7 @@ enum Response_Type
 //                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
                 if (!cell.event_name_label) {
                     cell.event_name_label = [[UILabel alloc]init];
+                    [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
                     [cell.contentView addSubview:cell.event_name_label];
                     cell.event_name_label.font = [UIFont systemFontOfSize:11];
                     cell.event_name_label.textColor = eventNameColor;
@@ -679,6 +808,7 @@ enum Response_Type
 //                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
                 if (!cell.label1) {
                     cell.label1 = [[UILabel alloc]init];
+                    [cell.label1 setBackgroundColor:[UIColor clearColor]];
                     [cell.contentView addSubview:cell.label1];
                     cell.label1.font = [UIFont systemFontOfSize:11];
                     cell.label1.textColor = label1Color;
@@ -719,6 +849,7 @@ enum Response_Type
 //                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
                 if (!cell.event_name_label) {
                     cell.event_name_label = [[UILabel alloc]init];
+                    [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
                     [cell.contentView addSubview:cell.event_name_label];
                     cell.event_name_label.font = [UIFont systemFontOfSize:11];
                     cell.event_name_label.textColor = eventNameColor;
@@ -728,6 +859,7 @@ enum Response_Type
 //                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
                 if (!cell.label1) {
                     cell.label1 = [[UILabel alloc]init];
+                    [cell.label1 setBackgroundColor:[UIColor clearColor]];
                     [cell.contentView addSubview:cell.label1];
                     cell.label1.font = [UIFont systemFontOfSize:11];
                     cell.label1.textColor = label1Color;
@@ -1292,8 +1424,8 @@ enum Response_Type
         NSInteger last_tab_index = tab_index;
         tab_index = floor((scrollView.contentOffset.x - page_width/2) / page_width) +1;
 
-        UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
-        UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
+//        UIColor* bColor_normal = [UIColor colorWithRed:0.93 green:0.93 blue:0.93 alpha:1];
+//        UIColor* bColor_selected = [UIColor colorWithRed:0.577 green:0.577 blue:0.577 alpha:1];
         UIButton* lastBtn = (UIButton*)[tabs objectAtIndex:last_tab_index];
         UIButton* currentBtn = (UIButton*)[tabs objectAtIndex:tab_index];
         
@@ -1326,16 +1458,37 @@ enum Response_Type
     if (scrollView == self.content_scrollView) {
         if (tab_index == 0) {
             [self.eventRequest_tableView reloadData];
+            if (self.eventRequestMsg.count == 0) {
+                label1.hidden = NO;
+            }
+            else
+            {
+                label1.hidden = YES;
+            }
             NSLog(@"reload event_table");
         }
         else if (tab_index == 1)
         {
             [self.friendRequest_tableView reloadData];
+            if (self.friendRequestMsg.count == 0) {
+                label2.hidden = NO;
+            }
+            else
+            {
+                label2.hidden = YES;
+            }
             NSLog(@"reload friend_table");
         }
         else if (tab_index == 2)
         {
             [self.systemMessage_tableView reloadData];
+            if (self.systemMsg.count == 0) {
+                label3.hidden = NO;
+            }
+            else
+            {
+                label3.hidden = YES;
+            }
             NSLog(@"reload system_table");
         }
 

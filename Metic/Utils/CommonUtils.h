@@ -29,6 +29,9 @@
 //生成简单alertView
 +(UIAlertView*)showSimpleAlertViewWithTitle:(NSString*)title WithMessage:(NSString*)message WithDelegate:(id)delegate WithCancelTitle:(NSString*)cancelTitle;
 
+//生成简单的类似android的toast的消息
++(UIAlertView*)showToastWithTitle:(NSString*)title withMessage:(NSString*)message withDelegate:(id)delegate withDuaration:(double)duaration;
+
 //NSString转换成NSNumber
 + (NSNumber*)NSNumberWithNSString:(NSString*)string;
 

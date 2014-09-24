@@ -102,14 +102,24 @@
 #pragma mark - UITextViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-//    textViewFrame = [textView convertRect:textView.frame toView:self];
-    textViewFrame = [textView frame];
-    UIFont *font = [UIFont systemFontOfSize:14.0];
-    CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(textViewFrame.size.width-16, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-    textHeight = size.height+16;
+    selfOriginFrame = self.frame;
+    if ([textView superview] == self) {
+        textViewFrame = textView.frame;
+    }
+    else
+    {
+        textViewFrame = [textView convertRect:textView.frame toView:self];
+    }
     
-    CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
-    int offset = textView.frame.origin.y + textHeight- (self.frame.size.height - 216.0);//键盘高度216
+//    textViewFrame = [self frame];
+//    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UIFont *font = textView.font;
+    CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(textViewFrame.size.width-15, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    textHeight = size.height * 0.7;
+    
+//    CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
+    CGRect frame = self.frame;
+    int offset = self.frame.origin.y + textViewFrame.origin.y + textHeight- (self.frame.size.height - 216.0 - 30);//键盘高度216
     NSLog(@"offset: %d", offset);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
@@ -119,53 +129,96 @@
     {
         //        self.frame = CGRectMake(0.0f, -offset, self.frame.size.width, self.frame.size.height);
         frame.origin.y -= offset;
-        [textView setFrame:frame];
+        [self setFrame:frame];
     }
     [UIView commitAnimations];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    UIFont *font = [UIFont systemFontOfSize:14.0];
-    CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(textViewFrame.size.width-16, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-    if (textHeight < textViewFrame.size.height) {
+//    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UIFont *font = textView.font;
+    CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(textView.contentSize.width - 15, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGFloat windowHeight = textViewFrame.size.height * 0.7;
+    textHeight = size.height * 0.7; //经过多次测试，在当前字体下文本的高度要0.7倍调整
+    if (textHeight < windowHeight) {
 
-        textHeight = size.height+16;
         
-        CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
-        int offset = textView.frame.origin.y + textHeight- (self.frame.size.height - 216.0);//键盘高度216
-//        NSLog(@"offset: %d", offset);
-        NSTimeInterval animationDuration = 0.30f;
-        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
-        //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
-        if(offset > 0)
-        {
+        NSLog(@"Feedback, text Height: %f, text view height: %f, text view y: %f",textHeight, textViewFrame.size.height, textViewFrame.origin.y);
+//        CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
+        CGRect frame = self.frame;
+        CGFloat offset = self.frame.origin.y + textViewFrame.origin.y + textHeight - (self.frame.size.height - 216.0 - 30);//键盘高度216
+        NSLog(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
+        if (offset > 0) {
+            NSTimeInterval animationDuration = 0.30f;
+            [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+            [UIView setAnimationDuration:animationDuration];
+            //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
             //        self.frame = CGRectMake(0.0f, -offset, self.frame.size.width, self.frame.size.height);
             frame.origin.y -= offset;
-            [textView setFrame:frame];
+            [self setFrame:frame];
+            [UIView commitAnimations];
         }
-        [UIView commitAnimations];
+        else
+        {
+            if (self.frame.origin.y < selfOriginFrame.origin.y) {
+//                CGFloat offset2 = (self.frame.size.height - 216) - (self.frame.origin.y + textViewFrame.origin.y + textHeight);
+                frame.origin.y += offset;
+                if (frame.origin.y > selfOriginFrame.origin.y) {
+                    frame.origin.y = selfOriginFrame.origin.y;
+                   
+                }
+                NSTimeInterval animationDuration = 0.30f;
+                [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+                [UIView setAnimationDuration:animationDuration];
+                //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+                [self setFrame:frame];
+                [UIView commitAnimations];
+            }
+        }
+        
     }
     else
     {
         
-        CGRect frame = CGRectMake(textViewFrame.origin.x, textViewFrame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
-        int offset = textView.frame.origin.y + textView.frame.size.height- (self.frame.size.height - 216.0);//键盘高度216
+        CGRect frame = self.frame;
+        int offset = textViewFrame.origin.y + textViewFrame.size.height- (self.frame.size.height - 216.0 - 30);//键盘高度216
         
-        NSTimeInterval animationDuration = 0.30f;
-        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
+        if (offset > 0) {
+            NSTimeInterval animationDuration = 0.30f;
+            [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+            [UIView setAnimationDuration:animationDuration];
+            
+            //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
         
-        //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
-        if(offset > 0)
-        {
-            //        self.frame = CGRectMake(0.0f, -offset, self.frame.size.width, self.frame.size.height);
             frame.origin.y -= offset;
             [textView setFrame:frame];
+            
+            
+            [UIView commitAnimations];
         }
+//        CGRect frame = self.frame;
+//        CGFloat offset = self.frame.origin.y + textViewFrame.origin.y + textHeight - (self.frame.size.height - 216.0);//键盘高度216
+//        NSLog(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
+//
+//        if (offset < 0) {
+//            if (self.frame.origin.y < selfOriginFrame.origin.y) {
+//                CGFloat offset2 = (self.frame.size.height - 216) - (self.frame.origin.y + textViewFrame.origin.y + textHeight);
+//                frame.origin.y += offset2;
+//                if (frame.origin.y > selfOriginFrame.origin.y) {
+//                    frame.origin.y = selfOriginFrame.origin.y;
+//                    
+//                }
+//                NSTimeInterval animationDuration = 0.30f;
+//                [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+//                [UIView setAnimationDuration:animationDuration];
+//                //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+//                [self setFrame:frame];
+//                [UIView commitAnimations];
+//            }
+//        }
+
         
-        [UIView commitAnimations];
     }
 
     return YES;
@@ -174,7 +227,8 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
 //    NSLog(@"textView did end editing");
-    [textView setFrame:textViewFrame];
+//    [textView setFrame:textViewFrame];
+    [self setFrame:selfOriginFrame];
     [textView setContentOffset:CGPointMake(0, 0) animated:YES];
     [textView setContentOffset:CGPointMake(0, 0) animated:YES];
 }

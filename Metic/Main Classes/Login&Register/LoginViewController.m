@@ -18,6 +18,9 @@
         Tag_password
     };
     UIViewController* launchV;
+    CGRect originFrame;
+    CGFloat viewOffet;
+    UITapGestureRecognizer* tapRecognizer;
     
 }
 @property (strong, nonatomic) UIView* waitingView;
@@ -73,7 +76,7 @@
     }
     
     //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-    self.rootView.myDelegate = self;
+//    self.rootView.myDelegate = self;
     UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
     [self.view setBackgroundColor:backgroundColor];
     
@@ -84,7 +87,7 @@
     self.textField_userName.tag = Tag_userName;
     self.textField_userName.returnKeyType = UIReturnKeyDone;
     self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_userName.delegate = self.rootView;
+    self.textField_userName.delegate = self;
     self.textField_userName.placeholder = @"请输入您的邮箱";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
     self.textField_userName.text = text_userName? text_userName:@"";
@@ -92,14 +95,15 @@
     self.textField_password.tag = Tag_password;
     self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_password.delegate = self.rootView;
+    self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
 //    self.textField_password.text = @"";
     //[self checkPreUP];
     self.textField_password.text = text_password? text_password:@"";
    
-    
+    tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
+    [self.view addGestureRecognizer:tapRecognizer];
     
 
 
@@ -156,6 +160,19 @@
         NSLog(@"register gender: %@",vc.gender);
     }
     
+}
+
+-(void)backgroundBtn:(id)sender
+{
+    if (viewOffet != 0) {
+        viewOffet = 0;
+        [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+        NSTimeInterval animationDuration = 0.30f;
+        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+        [UIView setAnimationDuration:animationDuration];
+        self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        [UIView commitAnimations];
+    }
 }
 
 
@@ -352,6 +369,7 @@
 }
 
 -(void)login{
+    [self backgroundBtn:self];
     [self showWaitingView];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:self.logInEmail forKey:@"email"];
@@ -482,41 +500,54 @@
     }
 }
 
-#pragma mark - InputHandleViewDelegate
+#pragma mark - UITextFieldDelegate
 
-- (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
+//开始编辑输入框的时候，软键盘出现，执行此事件
+-(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-//    switch (textField.tag) {
-//            
-//        case Tag_userName:
-//        {
-//            if ([textField text] != nil && [[textField text] length]!= 0) {
-//                
-//                if (![CommonUtils isEmailValid: textField.text]) {
-//                    
-//                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The format of email is invalid" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-//                    [alert show];
-//                }
-//            }
-//        }
-//            break;
-//        case Tag_password:
-//        {
-//            if ([textField text] != nil && [[textField text] length]!= 0) {
-//                
-//                if ([[textField text] length] < 5) {
-//                    
-//                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"The length of the password should't less than 5" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-//                    [alert show];
-//                }
-//            }
-//        }
-//            break;
-//        default:
-//            break;
+    if (viewOffet > 0) {
+        return;
+    }
+    originFrame = self.view.frame;
+    CGRect frame;
+//    if ([textField superview] == self) {
+//        frame = textField.frame;
 //    }
+//    else
+//    {
+//        frame = [textField convertRect:textField.frame toView:self];
+//    }
+//    frame = [button_login convertRect:button_login.frame toView:self.view];
+    frame = button_login.frame;
+    NSLog(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0);//键盘高度216
+    NSLog(@"textField offset: %f",viewOffet);
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
     
+    //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+    if(viewOffet > 0)
+        self.view.frame = CGRectMake(0.0f, self.view.frame.origin.y - viewOffet, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [UIView commitAnimations];
+}
+
+//当用户按下return键或者按回车键，keyboard消失
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
+    return YES;
+}
+
+//输入框编辑完成以后，将视图恢复到原始状态
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+//    NSTimeInterval animationDuration = 0.30f;
+//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+//    [UIView setAnimationDuration:animationDuration];
+//    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+//    [UIView commitAnimations];
     
 }
 

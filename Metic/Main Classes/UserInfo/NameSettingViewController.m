@@ -65,10 +65,12 @@
     }
     else
     {
+        [[UIApplication sharedApplication]sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
         NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",newName,@"name",nil  ];
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
         [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
+        
     }
     
 }
@@ -85,15 +87,24 @@
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].name = newName;
+            [AppDelegate refreshMenu];	
             NSLog(@"昵称修改成功");
+            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        case USER_NAME_EXIST:  //120
+        {
+            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"该昵称已存在，请重试" withDelegate:self withDuaration:1.5];
         }
             break;
             
         default:
             NSLog(@"昵称修改失败");
+            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
             break;
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    
     
 }
 @end

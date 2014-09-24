@@ -222,6 +222,7 @@
 //        NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
         if (!cell.event_name_label) {
             cell.event_name_label = [[UILabel alloc]init];
+            [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
             [cell.contentView addSubview:cell.event_name_label];
             cell.event_name_label.font = [UIFont systemFontOfSize:11];
             cell.event_name_label.textColor = eventNameColor;
@@ -232,6 +233,7 @@
         if (!cell.label1) {
             cell.label1 = [[UILabel alloc]init];
             [cell.contentView addSubview:cell.label1];
+            [cell.label1 setBackgroundColor:[UIColor clearColor]];
             cell.label1.font = [UIFont systemFontOfSize:11];
             cell.label1.textColor = label1Color;
             cell.label1.text = @"活动";
@@ -285,6 +287,7 @@
         //                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
         if (!cell.event_name_label) {
             cell.event_name_label = [[UILabel alloc]init];
+            [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
             [cell.contentView addSubview:cell.event_name_label];
             cell.event_name_label.font = [UIFont systemFontOfSize:11];
             cell.event_name_label.textColor = eventNameColor;
@@ -294,6 +297,7 @@
         //                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
         if (!cell.label1) {
             cell.label1 = [[UILabel alloc]init];
+            [cell.label1 setBackgroundColor:[UIColor clearColor]];
             [cell.contentView addSubview:cell.label1];
             cell.label1.font = [UIFont systemFontOfSize:11];
             cell.label1.textColor = label1Color;

@@ -713,7 +713,7 @@
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="恭喜你获得“喜当爹”成就" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="srN-2p-hKf">
-                                                            <rect key="frame" x="54" y="28" width="163" height="15"/>
+                                                            <rect key="frame" x="54" y="28" width="260" height="15"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -1413,7 +1413,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlz-LR-0tl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2842" y="3032"/>
+            <point key="canvasLocation" x="2855" y="3184"/>
         </scene>
         <!--Modify Password View Controller - 修改密码-->
         <scene sceneID="7wi-dF-M57">
@@ -1518,7 +1518,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l6W-Oo-eYd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2837" y="2466"/>
+            <point key="canvasLocation" x="2849" y="2598"/>
         </scene>
         <!--Sign Settting View Controller - 修改个人描述-->
         <scene sceneID="mKG-st-eSk">
@@ -1637,7 +1637,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6iW-Id-Ehx">
                                 <rect key="frame" x="15" y="10" width="290" height="200"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ja9-sk-Pw7">
@@ -1933,7 +1933,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1l6-KE-ZGK">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1l6-KE-ZGK">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -1956,12 +1956,18 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NS2-Dp-gff" firstAttribute="top" secondItem="1l6-KE-ZGK" secondAttribute="bottom" id="O1M-LV-gya"/>
+                            <constraint firstItem="1l6-KE-ZGK" firstAttribute="top" secondItem="7Fq-Jd-jPo" secondAttribute="bottom" id="aDs-cI-ORc"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="添加好友" id="DPg-4m-rod"/>
                     <connections>
                         <outlet property="friendSearchBar" destination="egC-rh-eUW" id="lD3-pr-i0D"/>
                         <outlet property="searchedFriendsTableView" destination="1l6-KE-ZGK" id="nuI-y2-ESC"/>
                         <segue destination="WF6-jR-veZ" kind="push" identifier="addfriend_searchfriend" id="k2L-1j-JtJ"/>
+                        <segue destination="SWe-qF-jqe" kind="push" identifier="addFriend_friendRecommend" id="O0b-r8-l4C"/>
+                        <segue destination="VkY-lH-zTs" kind="push" identifier="addfriend_sao" id="mca-PE-dzm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jfj-ji-YPc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2162,8 +2168,8 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="xw4-HI-ZnZ" firstAttribute="top" secondItem="4LY-4K-OPW" secondAttribute="top" id="MoG-Ek-EAi"/>
-                                            <constraint firstAttribute="bottom" secondItem="xw4-HI-ZnZ" secondAttribute="bottom" id="Ys0-uW-tsl"/>
+                                            <constraint firstItem="xw4-HI-ZnZ" firstAttribute="top" secondItem="4LY-4K-OPW" secondAttribute="top" id="Grz-Wx-OTd"/>
+                                            <constraint firstAttribute="bottom" secondItem="xw4-HI-ZnZ" secondAttribute="bottom" id="RxT-ej-TyU"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2HH-Sy-W1c">
@@ -2237,11 +2243,11 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="2HH-Sy-W1c" secondAttribute="trailing" id="0H0-kl-1IX"/>
-                                    <constraint firstItem="4LY-4K-OPW" firstAttribute="leading" secondItem="szJ-BA-ort" secondAttribute="trailing" id="9hw-eL-w1F"/>
-                                    <constraint firstItem="2HH-Sy-W1c" firstAttribute="leading" secondItem="4LY-4K-OPW" secondAttribute="trailing" id="Dqy-5h-76Z"/>
+                                    <constraint firstItem="4LY-4K-OPW" firstAttribute="leading" secondItem="szJ-BA-ort" secondAttribute="trailing" id="25m-cc-juj"/>
                                     <constraint firstAttribute="bottom" secondItem="szJ-BA-ort" secondAttribute="bottom" id="Png-gd-pts"/>
+                                    <constraint firstItem="2HH-Sy-W1c" firstAttribute="leading" secondItem="4LY-4K-OPW" secondAttribute="trailing" id="TcA-Bf-2QB"/>
                                     <constraint firstItem="szJ-BA-ort" firstAttribute="top" secondItem="5Ii-Ec-mVD" secondAttribute="top" id="bD9-wg-mkx"/>
+                                    <constraint firstAttribute="trailing" secondItem="2HH-Sy-W1c" secondAttribute="trailing" id="eSq-8m-Mii"/>
                                     <constraint firstItem="szJ-BA-ort" firstAttribute="leading" secondItem="5Ii-Ec-mVD" secondAttribute="leading" id="tgf-ht-sXM"/>
                                 </constraints>
                             </scrollView>
@@ -2288,7 +2294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6gI-Zq-Otd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2846" y="1735"/>
+            <point key="canvasLocation" x="2842" y="1430"/>
         </scene>
         <!--UserQR Code View Controller - 用户二维码-->
         <scene sceneID="2wn-kM-mf8">
@@ -2407,12 +2413,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H0m-3Q-6Mo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2830" y="1855"/>
+            <point key="canvasLocation" x="2842" y="2023"/>
         </scene>
         <!--Search Friend View Controller - 搜索好友-->
         <scene sceneID="LrU-wg-rMN">
             <objects>
-                <viewController id="WF6-jR-veZ" customClass="SearchFriendViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchFriendViewController" id="WF6-jR-veZ" customClass="SearchFriendViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="syh-bI-Sii"/>
                         <viewControllerLayoutGuide type="bottom" id="Pmt-Ca-632"/>
@@ -2525,7 +2531,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qsH-IM-vsI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2846" y="1156"/>
+            <point key="canvasLocation" x="2842" y="854"/>
         </scene>
         <!--Report View Controller - 举报-->
         <scene sceneID="2Rq-eV-AMQ">
@@ -2629,7 +2635,7 @@
         <!--Add Friend Confirm View Controller - 添加好友-->
         <scene sceneID="qtL-q5-EMi">
             <objects>
-                <viewController id="kY6-mG-9ve" customClass="AddFriendConfirmViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddFriendConfirmViewController" id="kY6-mG-9ve" customClass="AddFriendConfirmViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="utP-v1-8o3"/>
                         <viewControllerLayoutGuide type="bottom" id="Kix-dL-92r"/>
@@ -2827,7 +2833,7 @@
                         <viewControllerLayoutGuide type="top" id="PGv-6k-UuT"/>
                         <viewControllerLayoutGuide type="bottom" id="od8-4V-RI7"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3yY-CU-vOh" customClass="InputHandleView">
+                    <view key="view" contentMode="scaleToFill" id="3yY-CU-vOh">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -5480,17 +5486,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="c1O-Ly-Hfg"/>
-        <segue reference="EEO-gR-a4J"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="fLJ-gw-aSw"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="Ntp-rU-rWO"/>
+        <segue reference="YnG-LV-8dG"/>
         <segue reference="eBE-9B-Hp2"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="0y8-RS-ijM"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="L2M-th-cr6"/>
-        <segue reference="IZC-tt-cO3"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="mca-PE-dzm"/>
+        <segue reference="O0b-r8-l4C"/>
+        <segue reference="KQw-JA-BHy"/>
         <segue reference="hOW-ww-bKW"/>
+        <segue reference="kIc-uU-eUg"/>
+        <segue reference="L2M-th-cr6"/>
     </inferredMetricsTieBreakers>
 </document>

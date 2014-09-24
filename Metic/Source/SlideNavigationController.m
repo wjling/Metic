@@ -348,6 +348,7 @@ static SlideNavigationController *singletonInstance;
 
 - (void)leftMenuSelected:(id)sender
 {
+    [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 	if ([self isMenuOpen])
 		[self closeMenuWithCompletion:nil];
 	else

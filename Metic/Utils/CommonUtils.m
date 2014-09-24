@@ -9,6 +9,14 @@
 #import "CommonUtils.h"
 #import <CoreLocation/CLLocation.h>
 
+UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
+
+@interface CommonUtils ()
+{
+    
+}
+@end
+
 @implementation CommonUtils
 
 //传入参数格式: number of value_key,value,key,value,key...
@@ -106,6 +114,26 @@
     [alert show];
     return alert;
 
+}
+
++(UIAlertView*)showToastWithTitle:(NSString*)title withMessage:(NSString*)message withDelegate:(id)delegate withDuaration:(double)duaration
+{
+    toast = [[UIAlertView alloc]initWithTitle:title message:message delegate:delegate cancelButtonTitle:nil otherButtonTitles:nil, nil];
+    [toast show];
+    
+    [NSTimer scheduledTimerWithTimeInterval:duaration target:self selector:@selector(dismissToast:) userInfo:nil repeats:NO];
+    return toast;
+}
++(void)dismissToast:(NSTimer*)timer
+{
+    if (toast) {
+        [toast dismissWithClickedButtonIndex:0 animated:YES];
+        toast = nil;
+    }
+    else
+    {
+        NSLog(@"toast不存在");
+    }
 }
 
 + (NSNumber*)NSNumberWithNSString:(NSString *)string
