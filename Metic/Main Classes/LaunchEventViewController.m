@@ -325,6 +325,7 @@
             NSDateFormatter *formate = [[NSDateFormatter alloc]init];
             [formate setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
             beg_Time = [formate stringFromDate:[NSDate date]];
+            end_Time = beg_Time;
         }
     } else if ([end_Time isEqualToString:@""]){
         end_Time = beg_Time;

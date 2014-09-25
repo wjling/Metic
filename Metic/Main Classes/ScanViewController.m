@@ -226,9 +226,23 @@
     }
     NSString* validInfo = [_result substringFromIndex:24];
     NSRange range = [validInfo rangeOfString:@"/"];
+    if (range.location >= validInfo.length) {
+        UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
+        [alertView setTag:10];
+        return;
+    }
     NSString* type = [validInfo substringToIndex:range.location];
     _type = type;
+    if (![type isEqualToString:@"event"] && ![type isEqualToString:@"user"]) {
+        UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
+        [alertView setTag:10];
+    }
     NSString* ID_STRING = [validInfo substringFromIndex:range.location+1];
+    if (ID_STRING.length <= 3) {
+        UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
+        [alertView setTag:10];
+        return;
+    }
     NSString* text = [CommonUtils stringByReversed:[ID_STRING substringToIndex:ID_STRING.length-3]];
     text = [text stringByAppendingString:[ID_STRING substringWithRange:NSMakeRange(ID_STRING.length-3, 3)]];
     text = [CommonUtils TextFrombase64String:text];

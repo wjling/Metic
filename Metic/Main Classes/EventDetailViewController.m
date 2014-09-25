@@ -813,8 +813,8 @@
         NSString* endT = [_event valueForKey:@"endTime"];
         cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        if (endT.length > 9)cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        if (endT.length > 15)cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
         cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[_event valueForKey:@"launch_time"]];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
@@ -828,6 +828,9 @@
         NSString* text = [_event valueForKey:@"remark"];
         float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
+        if (text && [text isEqualToString:@""]) {
+            commentHeight = 10;
+        }else if(text) commentHeight += 5;
         cell.eventDetail.text = text;
         CGRect frame = cell.eventDetail.frame;
         frame.size.height = commentHeight;
@@ -1040,6 +1043,9 @@
         NSString* text = [_event valueForKey:@"remark"];
         float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
+        if (text && [text isEqualToString:@""]) {
+            commentHeight = 10;
+        }else if(text) commentHeight += 5;
         return 248.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
