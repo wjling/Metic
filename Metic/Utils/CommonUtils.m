@@ -116,6 +116,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
 }
 
+/////////////////////////////////////////
 +(UIAlertView*)showToastWithTitle:(NSString*)title withMessage:(NSString*)message withDelegate:(id)delegate withDuaration:(double)duaration
 {
     toast = [[UIAlertView alloc]initWithTitle:title message:message delegate:delegate cancelButtonTitle:nil otherButtonTitles:nil, nil];
@@ -135,6 +136,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         NSLog(@"toast不存在");
     }
 }
+//////////////////////////////////////
 
 + (NSNumber*)NSNumberWithNSString:(NSString *)string
 {

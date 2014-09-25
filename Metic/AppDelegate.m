@@ -439,6 +439,7 @@
     }
     [self.sql closeMyDB];
     
+    //通知铃声
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     AudioServicesPlayAlertSound(1106);
     
@@ -491,11 +492,12 @@
     mySocket.delegate = nil;
     [mySocket close];
     
-//    NSString* str = @"ws://203.195.174.128:10088/";
-    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
+//    NSString* str = @"ws://203.195.174.128:10088/"; //腾讯
 //    NSString* str = @"ws://115.29.103.9:10088/";
-    //    NSString* str = @"ws://localhost:9000/chat";
-//    NSString* str = @"ws://203.195.174.128:10088/";//腾讯 正式服
+//    NSString* str = @"ws://localhost:9000/chat";
+    
+    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
+//    NSString* str = @"ws://www.whatsact.com:10088/";//腾讯 正式服
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     
@@ -558,7 +560,7 @@
 //    NSString* temp2 = [[NSString alloc]initWithData:temp encoding:NSUTF8StringEncoding];
 //    NSLog(@"Transformed message(string): %@",temp2);
 
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:temp options:NSJSONReadingMutableLeaves error:nil];
+    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:temp options:NSJSONReadingMutableLeaves error:nil];
     NSString* cmd = [response1 objectForKey:@"cmd"];
     
     //处理推送消息
@@ -590,6 +592,37 @@
         NSMutableDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
         [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
         NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
+        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+        NSNumber* fid1 = [response1 objectForKey:@"id"];
+        
+        for (NSDictionary* response2 in syncMessages) {
+            NSString* msg_str2 = [response2 objectForKey:@"msg"];
+            NSMutableDictionary* msg_dic2 = [CommonUtils NSDictionaryWithNSString:msg_str2];
+            NSInteger msg_cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
+            if (msg_cmd == msg_cmd2) {
+                if (event_id1) {
+                    NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
+                    if (event_id2) {
+                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                            [self.syncMessages removeObject:response2];
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    NSNumber* fid2 = [response2 objectForKey:@"id"];
+                    if (fid2) {
+                        if (fid1 == fid2) {
+                            [self.syncMessages removeObject:response2];
+                        }
+                        
+                    }
+                }
+            }
+            
+        }
+
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
