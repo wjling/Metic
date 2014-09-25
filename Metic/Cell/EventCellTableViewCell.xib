@@ -216,7 +216,7 @@
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WaL-N2-884">
-                        <rect key="frame" x="10" y="243" width="145" height="25"/>
+                        <rect key="frame" x="10" y="248" width="145" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="       图片墙" backgroundImage="中按钮-默认">
@@ -228,7 +228,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iDx-Vs-ivA">
-                        <rect key="frame" x="165" y="243" width="145" height="25"/>
+                        <rect key="frame" x="165" y="248" width="145" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="     视频墙" backgroundImage="中按钮-默认">
@@ -240,11 +240,11 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-白色" id="bvB-py-yVi">
-                        <rect key="frame" x="50" y="245" width="21" height="21"/>
+                        <rect key="frame" x="50" y="250" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-白色" id="5dg-IF-isa">
-                        <rect key="frame" x="200" y="245" width="21" height="21"/>
+                        <rect key="frame" x="200" y="250" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                 </subviews>

@@ -57,8 +57,8 @@
         NSString* endT = [a valueForKey:@"endTime"];
         cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
         cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        if (endT.length > 9) cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        if (endT.length > 15)cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
         cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
         int participator_count = [[a valueForKey:@"member_count"] intValue];
