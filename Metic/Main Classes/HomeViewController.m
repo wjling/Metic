@@ -155,7 +155,7 @@
                     NSDate* saveTime = [[NSUserDefaults standardUserDefaults] objectForKey:@"ADTime"];
                     NSDate* curTime =[NSDate date];
                     
-                    if ([expiry_date timeIntervalSinceDate:curTime] < 0) {
+                    if (!expiry_date || [expiry_date timeIntervalSinceDate:curTime] < 0) {
                         return;
                     }
                     if (saveTime && ((long)[curTime timeIntervalSince1970])/86400 <= ((long)[saveTime timeIntervalSince1970])/86400) {
@@ -183,7 +183,7 @@
                         if (i != args.count - 1) url = [url stringByAppendingString:@"&"];
                     }
                     NSLog(url);
-                    if (url && ![url isEqualToString:@""]) {
+                    if (url && ![url isEqualToString:@""] && ![title isEqual:[NSNull null]]) {
                         AdViewController* adViewController = [[AdViewController alloc]init];
                         adViewController.AdUrl = url;
                         if (title && ![title isEqual:[NSNull null]]){
