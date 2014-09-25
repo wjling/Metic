@@ -137,13 +137,63 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            //NSLog(@"received Data: %@",temp);
+            NSLog(@"received Data: %@",temp);
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
+                    NSString* title = [response1 valueForKey:@"title"];
+                    NSString* url = [response1 valueForKey:@"url"];
+                    NSString* args_string = [response1 valueForKey:@"args"];
+                    NSString* expiry_time = [response1 valueForKey:@"expiry_time"];
+                    
+                    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+                    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+                    [dateFormatter setLocale:[NSLocale currentLocale]];
+                    NSDate* expiry_date = [dateFormatter dateFromString:expiry_time];
+                    NSDate* saveTime = [[NSUserDefaults standardUserDefaults] objectForKey:@"ADTime"];
+                    NSDate* curTime =[NSDate date];
+                    
+                    if ([expiry_date timeIntervalSinceDate:curTime] < 0) {
+                        return;
+                    }
+                    if (saveTime && ((long)[curTime timeIntervalSince1970])/86400 <= ((long)[saveTime timeIntervalSince1970])/86400) {
+                        return;
+                    }
+                    
+                    [[NSUserDefaults standardUserDefaults]setObject:curTime forKey:@"ADTime"];
                     
                     
+                    
+                    NSArray* args;
+                    if (args_string.length > 2) {
+                        args_string = [args_string substringWithRange:NSMakeRange(1, args_string.length - 2)];
+                        args = [args_string componentsSeparatedByString:NSLocalizedString(@",", nil)];
+                    }
+
+                    for (int i = 0; i < args.count; i++) {
+                        NSString* arg = args[i];
+                        if (i == 0) url = [url stringByAppendingString:@"?"];
+                        if ([arg isEqualToString:@"account"]) {
+                            url = [url stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].email]];
+                        }else if ([arg isEqualToString:@"id"]){
+                            url = [url stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].userid]];
+                        }
+                        if (i != args.count - 1) url = [url stringByAppendingString:@"&"];
+                    }
+                    NSLog(url);
+                    if (url && ![url isEqualToString:@""]) {
+                        AdViewController* adViewController = [[AdViewController alloc]init];
+                        adViewController.AdUrl = url;
+                        if (title && ![title isEqual:[NSNull null]]){
+                            NSLog(@"%@",title);
+                            adViewController.URLtitle = title;
+                        }
+                        
+                        [self.navigationController pushViewController:adViewController animated:YES];
+                    }
+ 
                 }
                     break;
                 default:

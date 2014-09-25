@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *inButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
+@property BOOL needPopBack;
 - (IBAction)back:(id)sender;
 - (IBAction)wantIn:(id)sender;
 

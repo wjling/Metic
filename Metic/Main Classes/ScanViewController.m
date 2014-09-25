@@ -35,7 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self isFirstPage:YES];
+    [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
     readerView.readerDelegate = self;
     _isScaning = NO;
 }
@@ -333,7 +333,7 @@
 
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
 {
-	return YES;
+	return !_needPopBack;
 }
 
 - (BOOL)slideNavigationControllerShouldDisplayRightMenu
