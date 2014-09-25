@@ -255,9 +255,14 @@
         
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
         NSString* url = [dict valueForKey:@"content"];
-
+        NSString* title = [dict valueForKey:@"title"];
         AdViewController* adViewController = [[AdViewController alloc]init];
         adViewController.AdUrl = url;
+        if (title && ![title isEqual:[NSNull null]]){
+            NSLog(@"%@",title);
+            adViewController.URLtitle = title;
+        }
+        
         [self.navigationController pushViewController:adViewController animated:YES];
 
     }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
@@ -271,7 +276,7 @@
 -(void)getPoster
 {
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendGetPosterMessage:^(NSData *rData) {
+    [httpSender sendGetPosterMessage:GET_POSTER finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];

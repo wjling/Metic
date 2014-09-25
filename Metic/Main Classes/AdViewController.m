@@ -29,6 +29,7 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    if (_URLtitle) [self.navigationItem setTitle:_URLtitle];
     _webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     NSLog(@"%f",self.view.frame.size.height);
     [self.view addSubview:_webView];

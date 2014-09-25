@@ -93,6 +93,7 @@
 
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
+    [self initWelcomePage];
     
 }
 
@@ -127,6 +128,34 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)initWelcomePage
+{
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendGetPosterMessage:GET_WELCOME_PAGE finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            //NSLog(@"received Data: %@",temp);
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    
+                    
+                }
+                    break;
+                default:
+                    
+                    break;
+                    
+            }
+            
+        }else{
+            
+        }
+    }];
 }
 
 -(void)initAdvertisementView

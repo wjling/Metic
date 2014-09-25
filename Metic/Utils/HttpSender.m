@@ -204,6 +204,12 @@
         case 42:
             resultCode = @"get_good_photos";
             break;
+        case 43:
+            resultCode = @"get_welcome_page";
+            break;
+        case 44:
+            resultCode = @"get_poster";
+            break;
         default:
             resultCode = @"json";
             break;
@@ -326,10 +332,12 @@
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
--(void)sendGetPosterMessage:(FinishBlock)block
+-(void)sendGetPosterMessage:(int)operation_Code finshedBlock:(FinishBlock)block
 {
     self.finishBlock = block;
-    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,@"get_poster"];
+    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
+    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,parsingOperationCode];
+    NSLog(@"%@",httpURL);
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     
     [request setHTTPMethod:@"POST"];
