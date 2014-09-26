@@ -347,6 +347,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)modifyProgress:(id)sender
 {
     float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
+    progress*=0.8;
     if (_progressView) {
         [_progressView setProgress:progress animated:YES];
     }
@@ -395,11 +396,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
 //                        [alert setTag:100];
 //
-                        [self removeWaitingView];
-                        int index = self.navigationController.viewControllers.count - 2;
-                        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
-                        controller.shouldReload = YES;
-                        [self.navigationController popViewControllerAnimated:YES];
+                        [_progressView setProgress:1.0f animated:YES];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self removeWaitingView];
+                            int index = self.navigationController.viewControllers.count - 2;
+                            VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+                            controller.shouldReload = YES;
+                            [self.navigationController popViewControllerAnimated:YES];
+                        });
+                        
                         
                     }
                         break;
@@ -483,7 +488,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
             controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
-        }else if([alertView tag] == 100){
+        }else if([alertView tag] == 102){
             [_confirmBtn setEnabled:YES];
         }
         
