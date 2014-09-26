@@ -279,8 +279,8 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
 + (NSString*)getUrl:(NSString*) path
 {
-//    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path];//正式服
-    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];//测试服
+    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path];//正式服
+//    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];//测试服
     NSString* key = @"VWWE6aPlh4uUAhhrXytxvIXUCR27OShi";
     NSString* sign = [self hmac_sha1:key text:content];
     NSString* signencoded = [self URLEncodedString:sign];

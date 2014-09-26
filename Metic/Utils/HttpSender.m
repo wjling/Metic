@@ -33,17 +33,17 @@
 //    URL_mainServer = @"http://222.200.182.183:10087/";
 //    URL_mainServer = @"http://115.29.103.9:10087/";
     
-    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云//测试服
-//    URL_mainServer = @"http://www.whatsact.com:10087/";//腾讯//正式服
+//    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云//测试服
+    URL_mainServer = @"http://www.whatsact.com:10087/";//腾讯//正式服
     
-    PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
-//    PHOTO_mainServer = @"http://www.whatsact.com:20000/";//正式服
+//    PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
+    PHOTO_mainServer = @"http://www.whatsact.com:20000/";//正式服
     
-    VIDEO_mainServer = @"http://42.96.203.86:20001/";//测试服
-//    VIDEO_mainServer = @"http://www.whatsact.com:20001/";//正式服
+//    VIDEO_mainServer = @"http://42.96.203.86:20001/";//测试服
+    VIDEO_mainServer = @"http://www.whatsact.com:20001/";//正式服
     
-    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
-//    feedBack_mainServer = @"http://www.whatsact.com:10089/";//正式服
+//    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
+    feedBack_mainServer = @"http://www.whatsact.com:10089/";//正式服
     
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
