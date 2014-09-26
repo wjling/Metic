@@ -254,10 +254,28 @@
         
         
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
-        NSString* url = [dict valueForKey:@"content"];
 
+        NSString*extra = [dict valueForKey:@"extra"];
+        NSLog(@"%@",extra);
+        NSData* rData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+         NSLog(@"%@",rData);
+        NSDictionary *extraDict = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+         NSLog(@"%@",extraDict);
+        
+        NSString* url = [dict valueForKey:@"content"];
+        NSString* title = [extraDict valueForKey:@"title"];
+        NSString* method =[extraDict valueForKey:@"method"];
+        NSArray* args = [extraDict valueForKey:@"args"];
+        
         AdViewController* adViewController = [[AdViewController alloc]init];
+        adViewController.args = args;
         adViewController.AdUrl = url;
+        adViewController.method = method;
+        if (title && ![title isEqual:[NSNull null]]){
+            NSLog(@"%@",title);
+            adViewController.URLtitle = title;
+        }
+        
         [self.navigationController pushViewController:adViewController animated:YES];
 
     }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
@@ -271,7 +289,7 @@
 -(void)getPoster
 {
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendGetPosterMessage:^(NSData *rData) {
+    [httpSender sendGetPosterMessage:GET_POSTER finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];

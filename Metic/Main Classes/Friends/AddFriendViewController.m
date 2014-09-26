@@ -7,6 +7,7 @@
 //
 
 #import "AddFriendViewController.h"
+#import "../ScanViewController.h"
 
 @interface AddFriendViewController () <UIAlertViewDelegate>
 
@@ -77,6 +78,11 @@
         }
 
     }
+    if ([segue.destinationViewController isKindOfClass:[ScanViewController class]]) {
+        ScanViewController *nextViewController = segue.destinationViewController;
+        nextViewController.needPopBack = YES;
+    }
+    
 }
 
 

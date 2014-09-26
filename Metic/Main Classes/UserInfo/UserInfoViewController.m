@@ -43,7 +43,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [CommonUtils addLeftButton:self isFirstPage:_needPopBack];
+    [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
     [self initParams];
 }
 

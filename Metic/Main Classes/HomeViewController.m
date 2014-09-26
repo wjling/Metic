@@ -93,6 +93,7 @@
 
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
+    [self initWelcomePage];
     
 }
 
@@ -127,6 +128,73 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)initWelcomePage
+{
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendGetPosterMessage:GET_WELCOME_PAGE finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    NSString* title = [response1 valueForKey:@"title"];
+                    NSString* url = [response1 valueForKey:@"url"];
+                    NSString* method = [response1 valueForKey:@"method"];
+                    NSString* expiry_time = [response1 valueForKey:@"expiry_time"];
+                    
+                    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+                    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+                    [dateFormatter setLocale:[NSLocale currentLocale]];
+                    NSDate* expiry_date = [dateFormatter dateFromString:expiry_time];
+                    NSDate* saveTime = [[NSUserDefaults standardUserDefaults] objectForKey:@"ADTime"];
+                    NSDate* curTime =[NSDate date];
+                    
+                    if (!expiry_date || [expiry_date timeIntervalSinceDate:curTime] < 0) {
+                        return;
+                    }
+                    if (saveTime && ((long)[curTime timeIntervalSince1970])/86400 <= ((long)[saveTime timeIntervalSince1970])/86400) {
+                        return;
+                    }
+                    
+                    [[NSUserDefaults standardUserDefaults]setObject:curTime forKey:@"ADTime"];
+                    
+                    NSArray*args = [response1 valueForKey:@"args"];
+                    NSLog(@"%@",args);
+
+                    
+                    
+                    NSLog(url);
+                    if (url && ![url isEqualToString:@""]) {
+                        AdViewController* adViewController = [[AdViewController alloc]init];
+                        adViewController.args = args;
+                        adViewController.AdUrl = url;
+                        adViewController.method = method;
+                        if (title && ![title isEqual:[NSNull null]]){
+                            NSLog(@"%@",title);
+                            adViewController.URLtitle = title;
+                        }
+                        
+                        [self.navigationController pushViewController:adViewController animated:YES];
+                    }
+ 
+                }
+                    break;
+                default:
+                    
+                    break;
+                    
+            }
+            
+        }else{
+            
+        }
+    }];
 }
 
 -(void)initAdvertisementView

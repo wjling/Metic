@@ -58,6 +58,8 @@ enum Operation_Code
     UPDATE_AVATAR = 40,
     COMPLAIN = 41,
     GET_GOOD_PHOTOS = 42,
+    GET_WELCOME_PAGE = 43,
+    GET_POSTER = 44,
 };
 
 enum CloudOperation_Code
