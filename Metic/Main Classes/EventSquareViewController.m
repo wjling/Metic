@@ -254,29 +254,29 @@
         
         
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
-//        NSString* url = [dict valueForKey:@"content"];
-//        
-//        NSData *tmpb = [extra dataUsingEncoding:NSUTF8StringEncoding];
-//        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
-//        
-//        NSLog(@"%@",event);
-////        NSData* extraData = [extra dataUsingEncoding:NSUTF8StringEncoding];
-////        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:extraData options:NSJSONReadingMutableLeaves error:nil];
-////        
-////        
-////        NSLog(@"%@",extraData);
-////        NSLog(@"%@",response1);
-//        
-//        NSString* title = [extra valueForKey:@"title"];
-//        NSLog(@"%@",title);
-//        AdViewController* adViewController = [[AdViewController alloc]init];
-//        adViewController.AdUrl = url;
-//        if (title && ![title isEqual:[NSNull null]]){
-//            NSLog(@"%@",title);
-//            adViewController.URLtitle = title;
-//        }
-//        
-//        [self.navigationController pushViewController:adViewController animated:YES];
+
+        NSString*extra = [dict valueForKey:@"extra"];
+        NSLog(@"%@",extra);
+        NSData* rData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+         NSLog(@"%@",rData);
+        NSDictionary *extraDict = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+         NSLog(@"%@",extraDict);
+        
+        NSString* url = [dict valueForKey:@"content"];
+        NSString* title = [extraDict valueForKey:@"title"];
+        NSString* method =[extraDict valueForKey:@"method"];
+        NSArray* args = [extraDict valueForKey:@"args"];
+        
+        AdViewController* adViewController = [[AdViewController alloc]init];
+        adViewController.args = args;
+        adViewController.AdUrl = url;
+        adViewController.method = method;
+        if (title && ![title isEqual:[NSNull null]]){
+            NSLog(@"%@",title);
+            adViewController.URLtitle = title;
+        }
+        
+        [self.navigationController pushViewController:adViewController animated:YES];
 
     }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
         return;

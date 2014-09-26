@@ -165,6 +165,7 @@
                     [[NSUserDefaults standardUserDefaults]setObject:curTime forKey:@"ADTime"];
                     
                     NSArray*args = [response1 valueForKey:@"args"];
+                    NSLog(@"%@",args);
 
                     
                     
