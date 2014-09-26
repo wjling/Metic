@@ -144,7 +144,7 @@
                 {
                     NSString* title = [response1 valueForKey:@"title"];
                     NSString* url = [response1 valueForKey:@"url"];
-                    NSString* args_string = [response1 valueForKey:@"args"];
+                    NSString* method = [response1 valueForKey:@"method"];
                     NSString* expiry_time = [response1 valueForKey:@"expiry_time"];
                     
                     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
@@ -164,28 +164,16 @@
                     
                     [[NSUserDefaults standardUserDefaults]setObject:curTime forKey:@"ADTime"];
                     
-                    
-                    
-                    NSArray* args;
-                    if (args_string.length > 2) {
-                        args_string = [args_string substringWithRange:NSMakeRange(1, args_string.length - 2)];
-                        args = [args_string componentsSeparatedByString:NSLocalizedString(@",", nil)];
-                    }
+                    NSArray*args = [response1 valueForKey:@"args"];
 
-                    for (int i = 0; i < args.count; i++) {
-                        NSString* arg = args[i];
-                        if (i == 0) url = [url stringByAppendingString:@"?"];
-                        if ([arg isEqualToString:@"account"]) {
-                            url = [url stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].email]];
-                        }else if ([arg isEqualToString:@"id"]){
-                            url = [url stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].userid]];
-                        }
-                        if (i != args.count - 1) url = [url stringByAppendingString:@"&"];
-                    }
+                    
+                    
                     NSLog(url);
-                    if (url && ![url isEqualToString:@""] && ![title isEqual:[NSNull null]]) {
+                    if (url && ![url isEqualToString:@""]) {
                         AdViewController* adViewController = [[AdViewController alloc]init];
+                        adViewController.args = args;
                         adViewController.AdUrl = url;
+                        adViewController.method = method;
                         if (title && ![title isEqual:[NSNull null]]){
                             NSLog(@"%@",title);
                             adViewController.URLtitle = title;

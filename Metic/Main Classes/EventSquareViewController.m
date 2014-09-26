@@ -254,16 +254,29 @@
         
         
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
-        NSString* url = [dict valueForKey:@"content"];
-        NSString* title = [dict valueForKey:@"title"];
-        AdViewController* adViewController = [[AdViewController alloc]init];
-        adViewController.AdUrl = url;
-        if (title && ![title isEqual:[NSNull null]]){
-            NSLog(@"%@",title);
-            adViewController.URLtitle = title;
-        }
-        
-        [self.navigationController pushViewController:adViewController animated:YES];
+//        NSString* url = [dict valueForKey:@"content"];
+//        
+//        NSData *tmpb = [extra dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+//        
+//        NSLog(@"%@",event);
+////        NSData* extraData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+////        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:extraData options:NSJSONReadingMutableLeaves error:nil];
+////        
+////        
+////        NSLog(@"%@",extraData);
+////        NSLog(@"%@",response1);
+//        
+//        NSString* title = [extra valueForKey:@"title"];
+//        NSLog(@"%@",title);
+//        AdViewController* adViewController = [[AdViewController alloc]init];
+//        adViewController.AdUrl = url;
+//        if (title && ![title isEqual:[NSNull null]]){
+//            NSLog(@"%@",title);
+//            adViewController.URLtitle = title;
+//        }
+//        
+//        [self.navigationController pushViewController:adViewController animated:YES];
 
     }else if([[dict valueForKey:@"type"] isEqualToString:@"None"]){
         return;

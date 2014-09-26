@@ -9,6 +9,7 @@
 #import "AdViewController.h"
 #import "../Utils/CommonUtils.h"
 #import "MobClick.h"
+#import "MTUser.h"
 
 @interface AdViewController ()
 @property (nonatomic,strong) UIWebView* webView;
@@ -33,10 +34,8 @@
     _webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     NSLog(@"%f",self.view.frame.size.height);
     [self.view addSubview:_webView];
-    NSURL *url =[NSURL URLWithString:_AdUrl];
-    NSLog(@"打开广告页面  url：%@",_AdUrl);
-    NSURLRequest *request =[NSURLRequest requestWithURL:url];
-    [_webView loadRequest:request];
+    NSURLRequest* request = [self MTUrlRequest];
+    if (request) [_webView loadRequest:request];
     // Do any additional setup after loading the view.
 }
 
@@ -63,15 +62,59 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(NSURLRequest*) MTUrlRequest
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+    if ([_method isEqualToString:@"GET"]) {
+        for (int i = 0; i < _args.count; i++) {
+            NSString* arg = _args[i];
+            if (i == 0) _AdUrl = [_AdUrl stringByAppendingString:@"?"];
+            if ([arg isEqualToString:@"account"]) {
+                _AdUrl = [_AdUrl stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].email]];
+            }else if ([arg isEqualToString:@"id"]){
+                _AdUrl = [_AdUrl stringByAppendingString:[NSString stringWithFormat:@"%@=%@",arg,[MTUser sharedInstance].userid]];
+            }else continue;
+            if (i != _args.count - 1) _AdUrl = [_AdUrl stringByAppendingString:@"&"];
+        }
+        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:_AdUrl]];
+        return request;
 
+
+    }if ([_method isEqualToString:@"POST"]) {
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:_AdUrl]];
+        [request setHTTPMethod:@"POST"];
+
+        
+        NSString *body=@"";
+        BOOL need = NO;
+        for (int i = 0; i < _args.count; i++) {
+            NSString* arg = _args[i];
+            if ([arg isEqualToString:@"account"]) {
+                if (need) {
+                    body = [body stringByAppendingString:@"&"];
+                }
+                body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"account",[MTUser sharedInstance].email]];
+                need = YES;
+            }else if ([arg isEqualToString:@"id"]){
+                if (need) {
+                    body = [body stringByAppendingString:@"&"];
+                }
+                body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"id",[MTUser sharedInstance].userid]];
+                need = YES;
+            }
+        }
+
+        NSData* jsonData = [body dataUsingEncoding:NSUTF8StringEncoding];
+        
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:jsonData];
+        NSString *postLength = [NSString stringWithFormat:@"%d",[jsonData length]];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        
+        return request;
+    }else{
+        return nil;
+    }
+}
 @end

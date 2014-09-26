@@ -11,4 +11,6 @@
 @interface AdViewController : UIViewController
 @property (nonatomic,strong) NSString* AdUrl;
 @property (nonatomic,strong) NSString* URLtitle;
+@property (nonatomic,strong) NSArray* args;
+@property (nonatomic,strong) NSString* method;
 @end
