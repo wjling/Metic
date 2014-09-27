@@ -4241,7 +4241,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ovw-7j-mrG">
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ovw-7j-mrG">
                                 <rect key="frame" x="10" y="0.0" width="300" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4287,6 +4287,12 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ovw-7j-mrG" firstAttribute="top" secondItem="7JN-ii-RPt" secondAttribute="bottom" id="A5t-1a-Y3t"/>
+                            <constraint firstItem="ovw-7j-mrG" firstAttribute="leading" secondItem="ObB-6G-vYB" secondAttribute="leading" constant="10" id="YxP-zy-yp1"/>
+                            <constraint firstAttribute="trailing" secondItem="ovw-7j-mrG" secondAttribute="trailing" constant="10" id="r7S-Iz-EAr"/>
+                            <constraint firstItem="85x-xA-aLb" firstAttribute="top" secondItem="ovw-7j-mrG" secondAttribute="bottom" id="vTv-Pk-zzC"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动参与者" id="nhd-Ty-h8e">
                         <barButtonItem key="backBarButtonItem" title=" " id="G3x-R7-dXz"/>
@@ -5487,18 +5493,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="EEO-gR-a4J"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="UXj-VV-omZ"/>
         <segue reference="O0b-r8-l4C"/>
         <segue reference="mca-PE-dzm"/>
-        <segue reference="c1O-Ly-Hfg"/>
         <segue reference="hOW-ww-bKW"/>
+        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="06u-oh-4gy"/>
         <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="kIc-uU-eUg"/>
-        <segue reference="06u-oh-4gy"/>
+        <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>
