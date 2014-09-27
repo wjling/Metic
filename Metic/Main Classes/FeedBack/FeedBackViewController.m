@@ -97,7 +97,7 @@
     NSString* contact_qq = self.contact1_textField.text;
     NSString* contact_mail = self.contact2_textField.text;
     
-    NSString* message = [NSString stringWithFormat:@"%@\n\nQQ: %@\nE-mail: %@\nUID: %@\nUser Name: %@",
+    NSString* message = [NSString stringWithFormat:@"%@\n\nQQ: %@\nE-mail: %@\nUID: %@\nUser Name: %@\n(FROM IOS CLIENT)",
                          content,contact_qq,contact_mail,[MTUser sharedInstance].userid,[MTUser sharedInstance].name];
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           [MTUser sharedInstance].userid,@"id",

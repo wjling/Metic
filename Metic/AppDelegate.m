@@ -497,7 +497,7 @@
 //    NSString* str = @"ws://localhost:9000/chat";
     
 //    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
-    NSString* str = @"ws://www.whatsact.com:10088/";//腾讯 正式服
+    NSString* str = @"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/";//腾讯 正式服
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     

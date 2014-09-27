@@ -284,8 +284,8 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSString* key = @"VWWE6aPlh4uUAhhrXytxvIXUCR27OShi";
     NSString* sign = [self hmac_sha1:key text:content];
     NSString* signencoded = [self URLEncodedString:sign];
-//    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//正式服
-    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//测试服
+    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//正式服
+//    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//测试服
     return url;
 }
 
