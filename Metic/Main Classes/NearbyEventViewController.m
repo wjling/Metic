@@ -101,7 +101,7 @@
     _nearbyTableView.dataSource = self;
     
     //百度定位
-    _locService = [[BMKLocationService alloc]init];
+    //_locService = [[BMKLocationService alloc]init];
     
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
@@ -124,7 +124,7 @@
     [_emptyAlert setTextAlignment:NSTextAlignmentCenter];
     [_emptyAlert setTextColor:[UIColor colorWithRed:145.0/255.0 green:145.0/255.0 blue:145.0/255.0 alpha:1]];
     
-
+    
     if (_type == 0)
     {
         [self.navigationItem setTitle:@"周边活动"];
@@ -152,12 +152,16 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithDouble:_coordinate.latitude] forKey:@"latitude"];
-    [dictionary setValue:[NSNumber numberWithDouble:_coordinate.longitude] forKey:@"longitude"];
+    if (_type == 0) {
+        [dictionary setValue:[NSNumber numberWithDouble:_coordinate.latitude] forKey:@"latitude"];
+        [dictionary setValue:[NSNumber numberWithDouble:_coordinate.longitude] forKey:@"longitude"];
+    }
+    
+    NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND];
-
+    
 }
 
 - (void) getEvents: (NSArray *)eventids
@@ -206,7 +210,14 @@
         NSLog(@"header Begin");
         _Headeropen = YES;
         _clearIds = YES;
-        [_locService startUserLocationService];
+        if (_type == 0) {
+            _locService = [[BMKLocationService alloc]init];
+            _locService.delegate = self;
+            [_locService startUserLocationService];
+        }else{
+            [self getNearbyEventIdsFromAir];
+        }
+        
         [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
     }else{
         _Footeropen = YES;
@@ -262,6 +273,7 @@
     _coordinate = userLocation.location.coordinate;
     NSLog(@"%f   %f",_coordinate.latitude,_coordinate.longitude);
     [_locService stopUserLocationService];
+    _locService = nil;
     [self getNearbyEventIdsFromAir];
 }
 
@@ -315,7 +327,7 @@
             [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             [bannerGetter getBanner:[a valueForKey:@"code"]];
-
+            
             if ([[a valueForKey:@"visibility"] boolValue]) {
                 [cell.statusLabel setHidden:YES];
                 [cell.wantInBtn setHidden:NO];
@@ -356,7 +368,7 @@
         case 111:{
             return 258;
         }
-            break;  
+            break;
         default:return 0;
             break;
     }
