@@ -27,6 +27,7 @@
     
     UIView* waitingView;
     UIActivityIndicatorView* actIndicator;
+    NSTimer* waitingTimer;
 }
 
 enum Response_Type
@@ -103,40 +104,33 @@ enum Response_Type
     self.eventRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].eventRequestMsg];
     self.friendRequestMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].friendRequestMsg];
     self.systemMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].systemMsg];
+    [self.eventRequest_tableView reloadData];
+    [self.friendRequest_tableView reloadData];
+    [self.systemMessage_tableView reloadData];
     
-    if (tab_index == 0) {
-        [self.eventRequest_tableView reloadData];
-        if (self.eventRequestMsg.count == 0) {
-            label1.hidden = NO;
-        }
-        else
-        {
-            label1.hidden = YES;
-        }
+    if (eventRequestMsg.count == 0) {
+        label1.hidden = NO;
     }
-    else if (tab_index == 1)
+    else
     {
-        [self.friendRequest_tableView reloadData];
-        if (self.friendRequestMsg.count == 0) {
-            label2.hidden = NO;
-        }
-        else
-        {
-            label2.hidden = YES;
-        }
+        label1.hidden = YES;
     }
-    else if (tab_index == 2)
+
+    if (friendRequestMsg.count == 0) {
+        label2.hidden = NO;
+    }
+    else
     {
-        [self.systemMessage_tableView reloadData];
-        if (self.systemMsg.count == 0) {
-            label3.hidden = NO;
-        }
-        else
-        {
-            label3.hidden = YES;
-        }
+        label2.hidden = YES;
     }
     
+    if (systemMsg.count == 0) {
+        label3.hidden = NO;
+    }
+    else
+    {
+        label3.hidden = YES;
+    }
     
 //    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
@@ -316,16 +310,40 @@ enum Response_Type
     [self.eventRequest_tableView addSubview:label1];
     [self.friendRequest_tableView addSubview:label2];
     [self.systemMessage_tableView addSubview:label3];
+    
     // waiting view
-//    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
-//    waitingView = [[UIView alloc]init];
-//    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
-//    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
-//    [waitingView setBackgroundColor:waitingBgColor];
-//    [waitingView setAlpha:0.5];
-//    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
-//    [waitingView addSubview:actIndicator];
-//    [actIndicator startAnimating];
+    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
+    waitingView = [[UIView alloc]init];
+    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
+    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
+    [waitingView setBackgroundColor:waitingBgColor];
+    [waitingView setAlpha:0.5];
+    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
+    [waitingView addSubview:actIndicator];
+    [actIndicator startAnimating];
+    
+    waitingTimer = [NSTimer timerWithTimeInterval:6.0 target:self selector:@selector(waitingTimerDone:) userInfo:nil repeats:NO];
+}
+
+-(void)waitingTimerDone:(NSTimer*)timer
+{
+    [waitingView removeFromSuperview];
+}
+
+-(void)waitingViewShow:(UIView*)view
+{
+    if ([waitingView superview]) {
+        [waitingView removeFromSuperview];
+        [waitingTimer invalidate];
+    }
+    [view addSubview:waitingView];
+    [waitingTimer fire];
+}
+
+-(void)waitingViewHide
+{
+    [waitingView removeFromSuperview];
+    [waitingTimer invalidate];
 }
 
 - (void)tabBtnClicked:(id)sender
@@ -341,7 +359,7 @@ enum Response_Type
     NSInteger index = [self.tabs indexOfObject:sender];
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
     UIButton* currentBtn = (UIButton*)sender;
-    NSLog(@"selected button: %d",index);
+//    NSLog(@"selected button: %d",index);
     lastBtn.selected = NO;
     currentBtn.selected = YES;
     
@@ -370,6 +388,7 @@ enum Response_Type
         {
             label1.hidden = YES;
         }
+        NSLog(@"活动邀请：\neventRequest: %@\n============\nMT_eventRequest: %@",eventRequestMsg,MTUser_eventRequestMsg);
     }
     else if (index == 1)
     {
@@ -380,6 +399,7 @@ enum Response_Type
         {
             label2.hidden = YES;
         }
+        NSLog(@"好友请求：\nfriendRequest: %@\n============\nMT_friendRequest: %@",friendRequestMsg,MTUser_friendRequestMsg);
     }
     else if (index == 2)
     {
@@ -390,6 +410,7 @@ enum Response_Type
         {
             label3.hidden = YES;
         }
+        NSLog(@"系统消息：\nsystemRequest: %@\n============\nMT_systemRequest: %@",systemMsg,MTUser_systemMsg);
     }
 
     
@@ -768,7 +789,7 @@ enum Response_Type
             cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
         }
         NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
-        NSLog(@"event %d request: %@",indexPath.row, msg_dic);
+//        NSLog(@"event %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
 //        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
@@ -913,7 +934,7 @@ enum Response_Type
             cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
         }
         NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:indexPath.row];
-        NSLog(@"friend %d request: %@",indexPath.row, msg_dic);
+//        NSLog(@"friend %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
         NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
@@ -966,7 +987,7 @@ enum Response_Type
             cell = [[NotificationsSystemMessageTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsSystemMessageTableViewCell"];
         }
         NSMutableDictionary* msg_dic = [systemMsg objectAtIndex:indexPath.row];
-        NSLog(@"system %d message: %@",indexPath.row, msg_dic);
+//        NSLog(@"system %d message: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
         switch (cmd) {
             case ADD_FRIEND_RESULT: //cmd 998
@@ -1035,8 +1056,11 @@ enum Response_Type
     return temp_cell;
 }
 
+
 - (IBAction)friend_request_okBtnClicked:(id)sender
 {
+    [self waitingViewShow:self.friendRequest_tableView];
+    
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1079,6 +1103,8 @@ enum Response_Type
 
 - (IBAction)friend_request_noBtnClicked:(id)sender
 {
+    [self waitingViewShow:self.friendRequest_tableView];
+    
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1140,6 +1166,8 @@ enum Response_Type
 
 - (IBAction)event_request_okBtnClicked:(id)sender
 {
+    [self waitingViewShow:self.eventRequest_tableView];
+    
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1174,6 +1202,8 @@ enum Response_Type
 
 - (IBAction)event_request_noBtnClicked:(id)sender
 {
+    [self waitingViewShow:self.eventRequest_tableView];
+    
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1278,6 +1308,7 @@ enum Response_Type
                     [[MTUser sharedInstance] friendListDidChanged];
                     
                     [MTUser_friendRequestMsg removeObject:msg_dic];
+                    NSLog(@"（同意）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
                     [msg_dic setValue:result forKey:@"ishandled"];
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
@@ -1299,6 +1330,7 @@ enum Response_Type
                     [mySql closeMyDB];
 
                     [MTUser_friendRequestMsg removeObject:msg_dic];
+                    NSLog(@"（拒绝）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
                     [msg_dic setValue:result forKey:@"ishandled"];
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
@@ -1350,7 +1382,25 @@ enum Response_Type
         {
             
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
+            NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:row];
+            NSNumber* seq = [msg_dic objectForKey:@"seq"];
+            NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
+            NSLog(@"response event, seq: %@",seq);
+            
+            //!已经是好友的情况下修改数据库的用户操作字段ishandled，有可能会造成数据错误。当然，只是有可能。我需要修改ishandled的值使这条消息标记为已处理!
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",seq],@"seq",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
+                                           nil]];
+            [mySql closeMyDB];
+
+            [MTUser_friendRequestMsg removeObject:msg_dic];
             [friendRequestMsg removeObjectAtIndex:row];
             [self.friendRequest_tableView reloadData];
 //            int count = self.msgFromDB.count;
@@ -1374,7 +1424,23 @@ enum Response_Type
         case ALREADY_IN_EVENT:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
+            NSMutableDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:row];
+            NSNumber* event_id = [msg_dic objectForKey:@"event_id"];
+            NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
+            
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",event_id],@"event_id",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
+                                           nil]];
+            [mySql closeMyDB];
+
+            [MTUser_eventRequestMsg removeObject:msg_dic];
             [eventRequestMsg removeObjectAtIndex:row];
             [self.eventRequest_tableView reloadData];
 //            int count = self.msgFromDB.count;
@@ -1392,12 +1458,14 @@ enum Response_Type
         default:
             break;
     }
+    [self waitingViewHide];
 
 }
 
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    NSLog(@"scroll view did begin scroll");
     if (!functions_uiview.hidden) {
         [UIView beginAnimations:@"View shows" context:nil];
         [UIView setAnimationDuration:0.5];
@@ -1412,6 +1480,7 @@ enum Response_Type
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView    // any offset changes
 {
+    
     if (scrollView == self.tabbar_scrollview) {
         ;
     }
@@ -1451,10 +1520,56 @@ enum Response_Type
 
         
     }
+//    NSLog(@"scroll view did scroll");
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
+    NSLog(@"scroll did end scroll animation");
+//    if (scrollView == self.content_scrollView) {
+//        if (tab_index == 0) {
+//            [self.eventRequest_tableView reloadData];
+//            if (self.eventRequestMsg.count == 0) {
+//                label1.hidden = NO;
+//            }
+//            else
+//            {
+//                label1.hidden = YES;
+//            }
+//            NSLog(@"reload event_table");
+//        }
+//        else if (tab_index == 1)
+//        {
+//            [self.friendRequest_tableView reloadData];
+//            if (self.friendRequestMsg.count == 0) {
+//                label2.hidden = NO;
+//            }
+//            else
+//            {
+//                label2.hidden = YES;
+//            }
+//            NSLog(@"reload friend_table");
+//        }
+//        else if (tab_index == 2)
+//        {
+//            [self.systemMessage_tableView reloadData];
+//            if (self.systemMsg.count == 0) {
+//                label3.hidden = NO;
+//            }
+//            else
+//            {
+//                label3.hidden = YES;
+//            }
+//            NSLog(@"reload system_table");
+//        }
+//
+//    }
+    clickTab = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSLog(@"scrollview did end decelerating");
     if (scrollView == self.content_scrollView) {
         if (tab_index == 0) {
             [self.eventRequest_tableView reloadData];
@@ -1491,9 +1606,8 @@ enum Response_Type
             }
             NSLog(@"reload system_table");
         }
-
+        
     }
-    clickTab = NO;
 }
 
 

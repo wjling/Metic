@@ -496,8 +496,8 @@
 //    NSString* str = @"ws://115.29.103.9:10088/";
 //    NSString* str = @"ws://localhost:9000/chat";
     
-//    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
-    NSString* str = @"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/";//腾讯 正式服
+    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
+//    NSString* str = @"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/";//腾讯 正式服
     
     NSURL* url = [[NSURL alloc]initWithString:str];
     
@@ -607,7 +607,6 @@
                             [self.syncMessages removeObject:response2];
                         }
                     }
-                    
                 }
                 else
                 {
@@ -686,7 +685,7 @@
                 NSLog(@"cmd1: %d, cmd2: %d",msg_cmd,cmd2);
                 if (msg_cmd == cmd2) {
                     eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
-                    NSLog(@"event_id: %d, event_id: %d",eventid1,eventid2);
+                    NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
                     if (eventid1 == eventid2) {
                         [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
                         break;
