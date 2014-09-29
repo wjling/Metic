@@ -93,14 +93,17 @@
     self.email_label.text = [MTUser sharedInstance].email;
     
     NSNumber* gender = [MTUser sharedInstance].gender;
+    NSLog(@"性别： %@",gender);
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
     self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
-    if (gender == 0) {
+    if ([gender integerValue] == 0) {
+        NSLog(@"性别女");
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
     else
     {
+        NSLog(@"性别男");
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
     [self.banner_UIview addSubview:self.gender_imageView];
@@ -173,7 +176,7 @@
     {
         self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     }
-    if (gender == 0) {
+    if ([gender integerValue] == 0) {
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
     else
