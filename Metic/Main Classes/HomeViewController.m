@@ -51,7 +51,7 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
-
+    
     [self createMenuButton];
     
     [_morefuctions.layer setCornerRadius:6];
@@ -74,14 +74,14 @@
     
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
-
+    
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
     _shouldRefresh = NO;
-
+    
     //初始化上拉加载更多
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
@@ -90,10 +90,10 @@
     
     self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [self.listenerDelegate connect];
-
+    
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
-    [self initWelcomePage];
+    
     
 }
 
@@ -103,6 +103,7 @@
     [self.shadowView setAlpha:0];
     
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -117,6 +118,7 @@
         [_header beginRefreshing];
     }
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
+    [self initWelcomePage];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -166,7 +168,7 @@
                     
                     NSArray*args = [response1 valueForKey:@"args"];
                     NSLog(@"%@",args);
-
+                    
                     
                     
                     NSLog(url);
@@ -182,7 +184,7 @@
                         
                         [self.navigationController pushViewController:adViewController animated:YES];
                     }
- 
+                    
                 }
                     break;
                 default:
@@ -360,7 +362,7 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
-
+    
     self.events = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
@@ -448,9 +450,9 @@
         nextViewController.eventId = self.selete_Eventid;
     }
     if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
-            PictureWallViewController *nextViewController = segue.destinationViewController;
-            nextViewController.eventId = self.selete_Eventid;
-            nextViewController.eventName = self.selete_EventName;
+        PictureWallViewController *nextViewController = segue.destinationViewController;
+        nextViewController.eventId = self.selete_Eventid;
+        nextViewController.eventName = self.selete_EventName;
     }
     if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
         VideoWallViewController *nextViewController = segue.destinationViewController;
