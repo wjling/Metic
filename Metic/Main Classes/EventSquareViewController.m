@@ -87,13 +87,6 @@
 {
     _isAuto = YES;
     [self getPoster];
-//    UIImage *image1 = [UIImage imageNamed:@"square_3.jpg"];
-//    UIImage *image2 = [UIImage imageNamed:@"square_1.jpg"];
-//    UIImage *image3 = [UIImage imageNamed:@"square_2.jpg"];
-//    //UIImage *image4 = [UIImage imageNamed:@"3兜风.jpg"];
-//    _images = [[NSMutableArray alloc]initWithObjects:image1,image2,image3,nil];
-//    _shouldDo = NO;
-//    _canDo = YES;
 }
 
 -(void)initUI
@@ -413,6 +406,7 @@
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
+        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

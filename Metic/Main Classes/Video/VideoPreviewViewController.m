@@ -11,6 +11,7 @@
 #import "CommonUtils.h"
 #import "../../UIView/MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "MTMPMoviePlayerViewController.h"
 #import "MobClick.h"
 #import "THProgressView.h"
 #import "../../Source/SDAVAssetExportSession.h"
@@ -239,6 +240,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //
 //    }];
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
+    encoder.shouldOptimizeForNetworkUse = YES;
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     encoder.videoSettings = @
@@ -290,7 +292,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [_textView resignFirstResponder];
         return;
     }
-    MPMoviePlayerViewController *movie = [[MPMoviePlayerViewController alloc]initWithContentURL:_videoURL];
+    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:_videoURL];
     
     [movie.moviePlayer prepareToPlay];
     [self presentMoviePlayerViewControllerAnimated:movie];

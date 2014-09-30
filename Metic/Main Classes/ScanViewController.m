@@ -35,6 +35,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    readerView = [[ZBarReaderView alloc]init];
+    readerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    [self.view addSubview:readerView];
+    [self.view sendSubviewToBack:readerView];
     [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
     readerView.readerDelegate = self;
     _isScaning = NO;
@@ -347,6 +351,7 @@
         _shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];
         [self.shadowView setAlpha:distance/400.0];
+        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

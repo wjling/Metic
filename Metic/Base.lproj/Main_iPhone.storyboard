@@ -4930,11 +4930,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RI0-Cs-sfd" customClass="ZBarReaderView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b3l-AQ-ESg">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -5061,13 +5056,11 @@
                             <constraint firstItem="B1d-D9-g3b" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="4du-lA-FCx"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="b3l-AQ-ESg" secondAttribute="bottom" id="K8C-5l-3pK"/>
                             <constraint firstItem="b3l-AQ-ESg" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="MbZ-4T-Fm6"/>
-                            <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="RI0-Cs-sfd" secondAttribute="bottom" id="W9z-3Y-S9T"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="B1d-D9-g3b" secondAttribute="bottom" id="ad0-7O-3Cm"/>
                             <constraint firstItem="zDJ-Z9-TTX" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="eoV-IT-t0X"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="u8a-Yr-5Ae" secondAttribute="bottom" id="kM4-nB-V9s"/>
                             <constraint firstItem="u8a-Yr-5Ae" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="uQ6-nx-2eJ"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="OVh-H6-CrH" secondAttribute="bottom" id="wZr-sA-jhb"/>
-                            <constraint firstItem="RI0-Cs-sfd" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="zJN-Xc-CA7"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k">
@@ -5077,7 +5070,6 @@
                         <outlet property="backButton" destination="nsZ-uf-Vg2" id="OCS-7a-zMk"/>
                         <outlet property="controlView" destination="Qp1-rE-p61" id="zjM-aO-b9N"/>
                         <outlet property="inButton" destination="GFn-Gn-JH8" id="w45-Ud-JPt"/>
-                        <outlet property="readerView" destination="RI0-Cs-sfd" id="YZ9-FB-0Gl"/>
                         <outlet property="resultView" destination="ci3-t9-ayB" id="wWC-9J-PTn"/>
                         <outlet property="shadowView" destination="u8a-Yr-5Ae" id="MmD-Yd-85D"/>
                         <outlet property="showView" destination="B1d-D9-g3b" id="m0D-Zp-z0u"/>
@@ -5098,11 +5090,25 @@
                     <view key="view" contentMode="scaleToFill" id="lKi-kZ-AUV">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="erU-Pg-mFe">
+                                <rect key="frame" x="0.0" y="-76" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="erU-Pg-mFe" secondAttribute="trailing" id="C9h-72-5Il"/>
+                            <constraint firstItem="erU-Pg-mFe" firstAttribute="leading" secondItem="lKi-kZ-AUV" secondAttribute="leading" id="GCp-ax-gIQ"/>
+                            <constraint firstItem="erU-Pg-mFe" firstAttribute="top" secondItem="3aE-W8-woV" secondAttribute="bottom" constant="-76" id="oLA-mO-SSL"/>
+                            <constraint firstItem="dkF-kr-onV" firstAttribute="top" secondItem="erU-Pg-mFe" secondAttribute="bottom" constant="-76" id="vLt-h8-imw"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="系统设置" id="HiN-LQ-Kft">
                         <barButtonItem key="backBarButtonItem" title=" " id="m4o-1v-lAd"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="shadowView" destination="erU-Pg-mFe" id="W0w-6I-Eed"/>
                         <segue destination="WJJ-zP-TBE" kind="push" identifier="systemsettings_about" id="fcP-nP-KNe"/>
                     </connections>
                 </viewController>
@@ -5414,11 +5420,25 @@
                     </view>
                     <navigationItem key="navigationItem" title="视频详情" id="7hk-aB-QWt">
                         <barButtonItem key="backBarButtonItem" title=" " id="EVw-mz-KlH"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="rW1-Ui-qC8">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QIa-21-CeF">
+                                <rect key="frame" x="274" y="7" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="头部右上角图标-更多">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="more:" destination="YxX-6b-tde" eventType="touchUpInside" id="cf7-YR-5bA"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="commentView" destination="f5m-Uj-lOG" id="hcL-Ca-qvT"/>
                         <outlet property="emotionKeyboard" destination="FsU-VY-D2s" id="j6f-RF-g1N"/>
+                        <outlet property="moreBtn" destination="QIa-21-CeF" id="GU1-HY-rS1"/>
                         <outlet property="tableView" destination="AjO-Mk-bh2" id="sqS-8T-BHg"/>
+                        <segue destination="RNm-zE-pmQ" kind="push" identifier="VideoToReport" id="fwI-VG-d1n"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IkT-GQ-sH8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -5496,15 +5516,15 @@
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="O0b-r8-l4C"/>
-        <segue reference="mca-PE-dzm"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="c1O-Ly-Hfg"/>
-        <segue reference="06u-oh-4gy"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="QDz-81-eMP"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="eBE-9B-Hp2"/>
+        <segue reference="fwI-VG-d1n"/>
+        <segue reference="O0b-r8-l4C"/>
+        <segue reference="mca-PE-dzm"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="hOW-ww-bKW"/>
     </inferredMetricsTieBreakers>
 </document>

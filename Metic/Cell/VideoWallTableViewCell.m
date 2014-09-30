@@ -8,6 +8,7 @@
 
 #import "VideoWallTableViewCell.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "../Main Classes/MTMPMoviePlayerViewController.h"
 #import "../Utils/PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImageView+WebCache.h"
@@ -195,7 +196,7 @@
 
 -(void)openmovie:(NSString*)url
 {
-    MPMoviePlayerViewController *movie = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
     
     [movie.moviePlayer prepareToPlay];
     [self.controller presentMoviePlayerViewControllerAnimated:movie];

@@ -14,6 +14,7 @@
 #import "MobClick.h"
 
 @interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,UIAlertViewDelegate>
+@property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) UITableView *settings_tableview;
 
 @end

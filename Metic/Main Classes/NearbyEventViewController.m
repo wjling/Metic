@@ -152,6 +152,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:[NSNumber numberWithBool:YES] forKey:@"all"];
     if (_type == 0) {
         [dictionary setValue:[NSNumber numberWithDouble:_coordinate.latitude] forKey:@"latitude"];
         [dictionary setValue:[NSNumber numberWithDouble:_coordinate.longitude] forKey:@"longitude"];
@@ -168,7 +169,7 @@
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventids forKey:@"sequence"];
-    
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
@@ -327,12 +328,16 @@
             [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             [bannerGetter getBanner:[a valueForKey:@"code"]];
-            
-            if ([[a valueForKey:@"visibility"] boolValue]) {
+            if ([[a valueForKey:@"isIn"] boolValue]) {
+                [cell.statusLabel setHidden:NO];
+                cell.statusLabel.text = @"已加入活动";
+                [cell.wantInBtn setHidden:YES];
+            }else if ([[a valueForKey:@"visibility"] boolValue]) {
                 [cell.statusLabel setHidden:YES];
                 [cell.wantInBtn setHidden:NO];
             }else{
                 [cell.statusLabel setHidden:NO];
+                cell.statusLabel.text = @"非公开活动";
                 [cell.wantInBtn setHidden:YES];
             }
             

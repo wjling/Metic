@@ -12,9 +12,6 @@
 #import "HttpSender.h"
 
 @interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
-{
-    IBOutlet ZBarReaderView *readerView;
-}
 
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *showView;

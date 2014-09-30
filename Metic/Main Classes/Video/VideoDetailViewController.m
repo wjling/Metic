@@ -16,9 +16,11 @@
 #import "../../Custom Wedgets/emotion_Keyboard.h"
 #import "UIImageView+WebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "MTMPMoviePlayerViewController.h"
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
 
+#define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
@@ -27,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
+@property (nonatomic,strong) UIView* moreView;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
@@ -85,6 +88,7 @@
     [MobClick endLogPageView:@"视频详情"];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [self closeMoreview];
 }
 
 - (void)didReceiveMemoryWarning
@@ -127,6 +131,7 @@
     _inputTextView.layer.cornerRadius = 6.0f;
     
     [_emotionKeyboard initCollectionView];
+    
 }
 
 - (void)play:(id)sender {
@@ -141,7 +146,7 @@
 
 -(void)openmovie:(NSString*)url
 {
-    MPMoviePlayerViewController *movie = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
     
     [movie.moviePlayer prepareToPlay];
     [self presentMoviePlayerViewControllerAnimated:movie];
@@ -159,6 +164,55 @@
     
 }
 
+- (IBAction)more:(id)sender {
+    if (_moreView) {
+        //删除
+        [_moreView removeFromSuperview];
+        _moreView = nil;
+    }else{
+        //创建
+        _moreView = [[UIView alloc]initWithFrame:self.view.bounds];
+        [_moreView setBackgroundColor:[UIColor clearColor]];
+        UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeMoreview)];
+        [self.view addSubview:_moreView];
+        [self.view addGestureRecognizer:tap];
+        
+        CGRect frame = _moreView.frame;
+        UIButton* moreItem = [UIButton buttonWithType:UIButtonTypeCustom];
+        moreItem.frame = CGRectMake(CGRectGetWidth(frame)*0.6,5, CGRectGetWidth(frame)*0.35 , 45);
+        
+        [moreItem setBackgroundColor:[UIColor whiteColor]];
+        
+        [moreItem.titleLabel setFont:[UIFont systemFontOfSize:16]];
+        [moreItem setTitle:@"举报视频" forState:UIControlStateNormal];
+        [moreItem addTarget:self action:@selector(report:) forControlEvents:UIControlEventTouchUpInside];
+        [moreItem setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [moreItem setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] forState:UIControlStateHighlighted];
+        moreItem.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+        moreItem.layer.shadowRadius = 5;
+        moreItem.layer.shadowPath = [UIBezierPath bezierPathWithRect:moreItem.bounds].CGPath;
+        moreItem.layer.shadowOpacity = 1;
+        
+        [_moreView addSubview:moreItem];
+        
+        
+        
+        
+        
+    }
+}
+
+- (void)closeMoreview{
+    if (_moreView) {
+        [self more:nil];
+    }
+}
+
+- (void)report:(id)sender {
+    
+    [self performSegueWithIdentifier:@"VideoToReport" sender:self];
+    
+}
 
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
@@ -417,7 +471,6 @@
     }
 	
 }
-
 
 
 #pragma mark - HttpSenderDelegate
@@ -862,4 +915,19 @@
     }
     return YES;
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //这里我很谨慎的对sender和目标视图控制器作了判断
+    if ([sender isKindOfClass:[VideoDetailViewController class]]) {
+        if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
+            ReportViewController *nextViewController = segue.destinationViewController;
+            nextViewController.eventId = _eventId;
+            nextViewController.videoId = _videoId;
+            nextViewController.event = self.eventName;
+            nextViewController.type = 5;
+        }
+    }
+}
+
 @end
