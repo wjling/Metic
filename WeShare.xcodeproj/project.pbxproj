@@ -129,6 +129,7 @@
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B8D63B19B87FB100552663 /* AssetsLibrary.framework */; };
 		08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B8D64019B89C9400552663 /* VideoPreviewViewController.m */; };
+		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -551,6 +552,8 @@
 		08B8D63B19B87FB100552663 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPreviewViewController.h; path = Video/VideoPreviewViewController.h; sourceTree = "<group>"; };
 		08B8D64019B89C9400552663 /* VideoPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPreviewViewController.m; path = Video/VideoPreviewViewController.m; sourceTree = "<group>"; };
+		08C7EE0219DABAA400FF54C2 /* MTMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMPMoviePlayerViewController.h; sourceTree = "<group>"; };
+		08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMPMoviePlayerViewController.m; sourceTree = "<group>"; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -1328,6 +1331,8 @@
 				086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */,
 				08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */,
 				08B8D64019B89C9400552663 /* VideoPreviewViewController.m */,
+				08C7EE0219DABAA400FF54C2 /* MTMPMoviePlayerViewController.h */,
+				08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -2141,6 +2146,7 @@
 				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */,
+				08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */,
 				510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */,
 				08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */,
 				04B6F8AF19A25D5C00229393 /* TTTAttributedLabel.m in Sources */,

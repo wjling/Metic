@@ -16,6 +16,7 @@
 #import "../../Custom Wedgets/emotion_Keyboard.h"
 #import "UIImageView+WebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "MTMPMoviePlayerViewController.h"
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
 
@@ -145,7 +146,7 @@
 
 -(void)openmovie:(NSString*)url
 {
-    MPMoviePlayerViewController *movie = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
     
     [movie.moviePlayer prepareToPlay];
     [self presentMoviePlayerViewControllerAnimated:movie];
