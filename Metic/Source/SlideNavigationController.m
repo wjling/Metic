@@ -25,6 +25,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+@interface UINavigationController (SlideNavigationController)
+
+- (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
+
+@end
+
 #import "SlideNavigationController.h"
 
 @interface SlideNavigationController()
@@ -32,6 +38,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
+@property (nonatomic, assign) BOOL shouldIgnorePushingViewControllers;
 
 @end
 
@@ -173,32 +180,57 @@ static SlideNavigationController *singletonInstance;
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	if ([self isMenuOpen])
-	{
-		[self closeMenuWithCompletion:^{
-			[super pushViewController:viewController animated:animated];
-		}];
-	}
-	else
-	{
-		[super pushViewController:viewController animated:animated];
-	}
+    if (!self.shouldIgnorePushingViewControllers)
+    {
+        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+        if ([self isMenuOpen])
+        {
+            [self closeMenuWithCompletion:^{
+                [super pushViewController:viewController animated:animated];
+            }];
+        }
+        else
+        {
+            [super pushViewController:viewController animated:animated];
+        }
+    }else NSLog(@"nononononononononononononononononon");
+    
+    self.shouldIgnorePushingViewControllers = YES;
+    
+	
 }
 
 - (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-	if ([self isMenuOpen])
-	{
-		[self closeMenuWithCompletion:^{
-			[super popToViewController:viewController animated:animated];
-		}];
-	}
-	else
-	{
-		return [super popToViewController:viewController animated:animated];
-	}
-	
-	return nil;
+    if (!self.shouldIgnorePushingViewControllers)
+    {
+        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+        if ([self isMenuOpen])
+        {
+            [self closeMenuWithCompletion:^{
+                [super popToViewController:viewController animated:animated];
+            }];
+        }
+        else
+        {
+            return [super popToViewController:viewController animated:animated];
+        }
+        
+        return nil;
+    }else NSLog(@"nononononononononononononononononon");
+    self.shouldIgnorePushingViewControllers = YES;
+    return nil;
+}
+
+-(UIViewController *)popViewControllerAnimated:(BOOL)animated
+{
+    if (!self.shouldIgnorePushingViewControllers)
+    {
+        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+        return [super popViewControllerAnimated:animated];
+    }else NSLog(@"nononononononononononononononononon");
+    self.shouldIgnorePushingViewControllers = YES;
+    return nil;
 }
 
 #pragma mark - Private Methods -
@@ -547,6 +579,15 @@ static SlideNavigationController *singletonInstance;
 //    NSLog(@"Websocket Connected");
 //}
 
+#pragma mark - Private API
+
+// This is confirmed to be App Store safe.
+// If you feel uncomfortable to use Private API, you could also use the delegate method navigationController:didShowViewController:animated:.
+- (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [super didShowViewController:viewController animated:animated];
+    self.shouldIgnorePushingViewControllers = NO;
+}
 @end
 
 
