@@ -239,6 +239,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //
 //    }];
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
+    encoder.shouldOptimizeForNetworkUse = YES;
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     encoder.videoSettings = @
