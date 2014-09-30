@@ -103,7 +103,7 @@ static SlideNavigationController *singletonInstance;
 	self.view.layer.shadowOpacity = 1;
 	self.view.layer.shouldRasterize = YES;
 	self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
-	
+	self.navigationBar.backgroundColor = [UIColor blackColor];
 	[self setEnableSwipeGesture:YES];
     
     //    [self reconnect];
@@ -289,6 +289,7 @@ static SlideNavigationController *singletonInstance;
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut animations:^(void){
                             [self.vc.view viewWithTag:101 ].alpha = 260.0/400.0;
+                            self.navigationBar.alpha = 1 - 260/400.0;
                         }completion:^(BOOL finished){
                             
                         }];
@@ -319,6 +320,7 @@ static SlideNavigationController *singletonInstance;
                           delay:0
                         options:UIViewAnimationOptionCurveEaseOut animations:^(void){
                             [self.vc.view viewWithTag:101 ].alpha = 0.0;
+                            self.navigationBar.alpha = 1;
                         }completion:^(BOOL finished){
                             
                         }];
