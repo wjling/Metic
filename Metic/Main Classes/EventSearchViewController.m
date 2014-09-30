@@ -172,6 +172,7 @@
     NSArray* tmp = [_eventIds subarrayWithRange:NSMakeRange(_events.count, restNum)];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:tmp forKey:@"sequence"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -278,7 +279,6 @@
     nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *a = _events[indexPath.row];
-    NSLog(@"%@",a);
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
@@ -299,11 +299,16 @@
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
     [bannerGetter getBanner:[a valueForKey:@"code"]];
     
-    if ([[a valueForKey:@"visibility"] boolValue]) {
+    if ([[a valueForKey:@"isIn"] boolValue]) {
+        [cell.statusLabel setHidden:NO];
+        cell.statusLabel.text = @"已加入活动";
+        [cell.wantInBtn setHidden:YES];
+    }else if ([[a valueForKey:@"visibility"] boolValue]) {
         [cell.statusLabel setHidden:YES];
         [cell.wantInBtn setHidden:NO];
     }else{
         [cell.statusLabel setHidden:NO];
+        cell.statusLabel.text = @"非公开活动";
         [cell.wantInBtn setHidden:YES];
     }
     
