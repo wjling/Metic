@@ -700,11 +700,12 @@
     int count = self.photo_list.count;
     if (photo_rest_num >= PhotoNum || [_sequence intValue] == -1) {//加载剩余的，然后再拉
         int num = MIN(PhotoNum, _photo_list_all.count - count);
-        for (int i = count; i < count + num; i++) {
-            [self.photo_list addObject:self.photo_list_all[i]];
-        }
+//        for (int i = count; i < count + num; i++) {
+//            [self.photo_list addObject:self.photo_list_all[i]];
+//        }
         [refreshView endRefreshing];
-        [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list subarrayWithRange:NSMakeRange(count, num)]];
+        self.isOpen = NO;
+        [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
         //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
     }else{
         [self getPhotolist];
