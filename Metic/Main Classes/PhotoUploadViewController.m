@@ -65,7 +65,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [self.preLabel setBackgroundColor:[UIColor clearColor]];
     [self.preLabel setEnabled:NO];
     self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [self.preLabel setFont:[UIFont systemFontOfSize:20]];
+    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
     [_textView addSubview:self.preLabel];
 
     self.imgView =  [[UIView alloc] initWithFrame:CGRectMake(15, 66, 290, 78)];
@@ -172,8 +172,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     [self showWaitingView];
     self.upLoad = sender;
-    [self.upLoad setEnabled:NO];
-    [self.getPhoto setEnabled:NO];
+//    [self.upLoad setEnabled:NO];
+//    [self.getPhoto setEnabled:NO];
     PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
     getter.mDelegate = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
