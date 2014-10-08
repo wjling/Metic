@@ -156,9 +156,10 @@
                                         long long totalBytesExpectedToWrite) {
         if (_shouldRecordProgress) {
             float progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite;
+            NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:progress],@"progress",[NSNumber numberWithFloat:0.6],@"weight",[NSNumber numberWithFloat:0.2],@"finished",nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadFile"
                                                                 object:nil
-                                                              userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:progress] forKey:@"progress"]];
+                                                              userInfo:dictionary];
         }
         
     }];
