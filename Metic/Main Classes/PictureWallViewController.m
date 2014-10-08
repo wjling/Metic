@@ -299,7 +299,7 @@
     //[UIView setAnimationTransition:UIViewAnimationTransitionNone forView:_indicatorView cache:YES];
     _indicatorView.frame = CGRectMake(60, 10, 200, 50);
     [UIView commitAnimations];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self indicatorDisappear];
     });
 }
@@ -405,6 +405,9 @@
  
         return;
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self indicatorDisappear];
+    });
     _isLoading = NO;
 }
 
@@ -628,7 +631,7 @@
             
             
             //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-            [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
+            //[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
             if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
