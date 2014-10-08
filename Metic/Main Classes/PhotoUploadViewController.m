@@ -124,13 +124,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [sheet showInView:self.view];
 }
 
-- (IBAction)openEditor:(id)sender
+- (IBAction)openEditor:(UIImage*)image
 {
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
-    controller.image = self.uploadImage;
+    controller.image = image;
 
-    UIImage *image = self.uploadImage;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
     controller.imageCropRect = CGRectMake(0, 0, width, height);
@@ -261,9 +260,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
+    self.uploadImage = croppedImage;
     [self.getPhoto setBackgroundImage:croppedImage forState:UIControlStateNormal];
     self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.uploadImage = croppedImage;
 }
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
@@ -315,11 +314,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    self.uploadImage = image;
-    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
-    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
+//    self.uploadImage = image;
+//    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+//    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [picker dismissViewControllerAnimated:NO completion:^{
-        [self openEditor:nil];
+        [self openEditor:image];
     }];
 
 }

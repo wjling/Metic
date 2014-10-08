@@ -161,6 +161,8 @@
 		08E92DDD19B2D354002499BF /* VideoWallTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08E92DDB19B2D354002499BF /* VideoWallTableViewCell.xib */; };
 		08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E92DDE19B37E1C002499BF /* MediaPlayer.framework */; };
 		08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F7989F19AE449D002BA684 /* MTMessageTextView.m */; };
+		08FC57F919E4377100D1BC66 /* EventPhotosTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FC57F719E4377100D1BC66 /* EventPhotosTableViewCell.m */; };
+		08FC57FA19E4377100D1BC66 /* EventPhotosTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08FC57F819E4377100D1BC66 /* EventPhotosTableViewCell.xib */; };
 		08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */; };
 		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
 		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
@@ -612,6 +614,9 @@
 		08E92DDE19B37E1C002499BF /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		08F7989E19AE449D002BA684 /* MTMessageTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMessageTextView.h; sourceTree = "<group>"; };
 		08F7989F19AE449D002BA684 /* MTMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMessageTextView.m; sourceTree = "<group>"; };
+		08FC57F619E4377100D1BC66 /* EventPhotosTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventPhotosTableViewCell.h; sourceTree = "<group>"; };
+		08FC57F719E4377100D1BC66 /* EventPhotosTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventPhotosTableViewCell.m; sourceTree = "<group>"; };
+		08FC57F819E4377100D1BC66 /* EventPhotosTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPhotosTableViewCell.xib; sourceTree = "<group>"; };
 		08FE3F64197A7F21009EA7C7 /* Event2DcodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event2DcodeViewController.h; sourceTree = "<group>"; };
 		08FE3F65197A7F21009EA7C7 /* Event2DcodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event2DcodeViewController.m; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1281,6 +1286,9 @@
 				08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */,
 				08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */,
 				08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */,
+				08FC57F619E4377100D1BC66 /* EventPhotosTableViewCell.h */,
+				08FC57F719E4377100D1BC66 /* EventPhotosTableViewCell.m */,
+				08FC57F819E4377100D1BC66 /* EventPhotosTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -2002,6 +2010,7 @@
 				51581D3A1933575300943606 /* Main_iPad.storyboard in Resources */,
 				5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */,
 				04B6F89219A25D5C00229393 /* face03.png in Resources */,
+				08FC57FA19E4377100D1BC66 /* EventPhotosTableViewCell.xib in Resources */,
 				04B6F8A419A25D5C00229393 /* face21.png in Resources */,
 				04B6F8A919A25D5C00229393 /* face26.png in Resources */,
 				04B6F89319A25D5C00229393 /* face04.png in Resources */,
@@ -2167,6 +2176,7 @@
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				510D4597196E8A960081672A /* MKAnnotationView+WebCache.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
+				08FC57F919E4377100D1BC66 /* EventPhotosTableViewCell.m in Sources */,
 				04B6F8B219A25FCC00229393 /* BannerViewController.m in Sources */,
 				04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */,
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,

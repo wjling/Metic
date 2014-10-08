@@ -807,7 +807,7 @@
             nibsRegistered = YES;
         }
         EventCellTableViewCell *cell = (EventCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventCellIdentifier];
-        
+//        NSLog(@"%@",_event);
         cell.eventName.text = [_event valueForKey:@"subject"];
         NSString* beginT = [_event valueForKey:@"time"];
         NSString* endT = [_event valueForKey:@"endTime"];
