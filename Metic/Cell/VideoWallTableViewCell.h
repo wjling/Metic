@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "../Main Classes/Video/VideoWallViewController.h"
+#import "../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
 
-@interface VideoWallTableViewCell : UITableViewCell
+@interface VideoWallTableViewCell : UITableViewCell{
+    ASIHTTPRequest *videoRequest;
+    unsigned long long Recordull;
+    BOOL isReady;
+}
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet UILabel *time;

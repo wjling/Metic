@@ -294,7 +294,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    
+    [request setTimeoutInterval:5];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     //NSLog(@"request sent");
     
@@ -309,7 +309,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    
+    [request setTimeoutInterval:5];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     NSLog(@"URL: %@ ",httpURL);
     

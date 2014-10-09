@@ -55,6 +55,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[SDImageCache sharedImageCache]setMaxCacheSize:1024*1024*100];
+    
     [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
@@ -132,6 +135,7 @@
     if (_isLoading) {
         _isLoading = NO;
         _shouldStop = YES;
+        [self indicatorDisappear];
     }
 }
 
@@ -711,6 +715,12 @@
         [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
         //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
     }else{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (self.isOpen) {
+                _isOpen = NO;
+                [refreshView endRefreshing];
+            }
+        });
         [self getPhotolist];
     }
 
