@@ -400,7 +400,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         case NORMAL_REPLY:
         {
             NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
-            [[SDImageCache sharedImageCache] storeImageToDisk:_uploadImage forKey:url];
+            NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+            NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.png"];
+            [[SDImageCache sharedImageCache] storeImageToDisk:filePath forKey:url];
             if (_progressView) {
                 [_progressView setProgress:1.0 animated:YES];
             }
