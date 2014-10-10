@@ -138,6 +138,11 @@
 @property (nonatomic, assign, readonly) AVAssetExportSessionStatus status;
 
 /**
+if YES do some CGAffineTransform works;
+ */
+@property BOOL isVerticalVideo;
+
+/**
  * Returns an asset export session configured with a specified asset.
  *
  * @param asset The asset you want to export
@@ -176,6 +181,7 @@
  * You can invoke this method when the export is running.
  */
 - (void)cancelExport;
+
 
 @end
 
