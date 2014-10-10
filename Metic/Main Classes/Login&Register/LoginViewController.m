@@ -69,8 +69,8 @@
         else
         {
             NSLog(@"login: it is not the first launch");
-            [self showLaunchView];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+//            [self showLaunchView];
+//            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
         }
 
     }
@@ -261,14 +261,26 @@
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         //处理登录状态下，直接跳转 需要读取默认信息。
+        NSLog(@"用户 %@ 在线", userName);
         [self removeWaitingView];
         [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self jumpToMainView];
-        });
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self jumpToMainView];
+//        });
         [button_login setEnabled:YES];
+        [self jumpToMainView];
         return;
+    }
+    else if ([userStatus isEqualToString:@"change"])
+    {
+        [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else
+    {
+        [self showLaunchView];
+        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
     if (userName && password) {
         self.textField_userName.text = userName;

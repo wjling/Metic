@@ -5513,18 +5513,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="mCC-Hp-8GT"/>
         <segue reference="EEO-gR-a4J"/>
+        <segue reference="O0b-r8-l4C"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="hOW-ww-bKW"/>
         <segue reference="823-Eq-eYh"/>
-        <segue reference="QDz-81-eMP"/>
         <segue reference="hB7-KS-rrK"/>
+        <segue reference="QDz-81-eMP"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="eBE-9B-Hp2"/>
         <segue reference="fwI-VG-d1n"/>
-        <segue reference="O0b-r8-l4C"/>
-        <segue reference="mca-PE-dzm"/>
-        <segue reference="KQw-JA-BHy"/>
-        <segue reference="hOW-ww-bKW"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -283,7 +283,7 @@
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
             [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
             [[MTUser alloc]init];
-            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
