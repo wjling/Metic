@@ -242,6 +242,14 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     [encoder exportAsynchronouslyWithCompletionHandler:^
      {
+         NSString *path = [[_videoURL absoluteString] substringFromIndex:16];
+         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+             [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+         }
+         _videoURL = nil;
+         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+         NSString* outputPath = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+         _videoURL = [NSURL fileURLWithPath:outputPath];
          if (encoder.status == AVAssetExportSessionStatusCompleted)
          {
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
