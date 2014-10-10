@@ -124,6 +124,7 @@
 		089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 089337A0197579CE00AD940B /* PEPhotoCropEditor.bundle */; };
 		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
 		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
+		0896AACB19E7914A00A93A1B /* MTUIImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */; };
 		08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
@@ -575,6 +576,8 @@
 		089337A2197579CE00AD940B /* PEResizeControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEResizeControl.m; sourceTree = "<group>"; };
 		089337A3197579CE00AD940B /* UIImage+PECrop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+PECrop.h"; sourceTree = "<group>"; };
 		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
+		0896AAC919E7914A00A93A1B /* MTUIImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUIImagePickerController.h; sourceTree = "<group>"; };
+		0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUIImagePickerController.m; sourceTree = "<group>"; };
 		08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
 		08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -1440,6 +1443,8 @@
 				08B8D64019B89C9400552663 /* VideoPreviewViewController.m */,
 				08C7EE0219DABAA400FF54C2 /* MTMPMoviePlayerViewController.h */,
 				08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */,
+				0896AAC919E7914A00A93A1B /* MTUIImagePickerController.h */,
+				0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -2355,6 +2360,7 @@
 				04B6F8AF19A25D5C00229393 /* TTTAttributedLabel.m in Sources */,
 				08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */,
 				04BAF6571993644F00BF00E1 /* Reachability.m in Sources */,
+				0896AACB19E7914A00A93A1B /* MTUIImagePickerController.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
 				51F4CB0C19E6307500E487F1 /* ASIDownloadCache.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
@@ -2562,7 +2568,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2606,7 +2612,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2635,7 +2641,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2681,7 +2687,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

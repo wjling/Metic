@@ -16,6 +16,7 @@
 #import "MobClick.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "VideoPreviewViewController.h"
+#import "MTUIImagePickerController.h"
 #import "../../Utils/NSString+JSON.h"
 #import "../../Utils/Reachability.h"
 
