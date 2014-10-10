@@ -10,6 +10,7 @@
 #import "PhotoGetter.h"
 #import "MTUser.h"
 #import "MJRefreshFooterView.h"
+#import "MJRefreshHeaderView.h"
 #import "UIImageView+WebCache.h"
 
 @interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
@@ -29,6 +30,7 @@
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property(nonatomic,strong)NSMutableArray *photoPath_list;
 @property(nonatomic,strong)NSMutableDictionary *photos;
+@property(nonatomic,strong)MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 @property BOOL shouldReloadPhoto;
 - (IBAction)toBestPhotos:(id)sender;
