@@ -73,7 +73,41 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL];
+    [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+        if (rData) {
+            _shouldExit = YES;
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    httpURL = (NSString*)[response1 valueForKey:@"url"];
+                    switch (COtype) {
+                        case 1:
+                            //[self performSelectorOnMainThread:@selector(downloadfile:) withObject:httpURL waitUntilDone:YES];
+                            [self downloadfile:httpURL];
+                            break;
+                        case 2:
+                            [self uploadfile:httpURL path:uploadFilePath];
+                            break;
+                        case 3:
+                            [self deletefile:httpURL];
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }
+                    break;
+            }
+
+        }else if(COtype == 2){
+            [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
+        }
+       
+    }];
     //[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
 
 
@@ -156,9 +190,10 @@
                                         long long totalBytesExpectedToWrite) {
         if (_shouldRecordProgress) {
             float progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite;
+            NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:progress],@"progress",[NSNumber numberWithFloat:0.6],@"weight",[NSNumber numberWithFloat:0.2],@"finished",nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadFile"
                                                                 object:nil
-                                                              userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:progress] forKey:@"progress"]];
+                                                              userInfo:dictionary];
         }
         
     }];

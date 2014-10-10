@@ -349,7 +349,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)modifyProgress:(id)sender
 {
     float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
-    progress*=0.8;
+    float finished = [[[sender userInfo] objectForKey:@"finished"] floatValue];
+    float weight = [[[sender userInfo] objectForKey:@"weight"] floatValue];
+    progress*=(weight+finished);
     if (_progressView) {
         [_progressView setProgress:progress animated:YES];
     }

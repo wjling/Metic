@@ -234,8 +234,14 @@
     }
     
 
+    NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.0f],@"progress",[NSNumber numberWithFloat:0.2],@"weight",[NSNumber numberWithFloat:0],@"finished",nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadFile"
+                                                            object:nil
+                                                          userInfo:dictionary];
+    });
     
-    
+
     NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
     [formatter setDateFormat:[NSString stringWithFormat:@"%@YYYYMMddHHmmssSSSSS",[MTUser sharedInstance].userid]];
     NSString *date =  [formatter stringFromDate:[NSDate date]];
@@ -243,7 +249,9 @@
     
     self.path = [NSString stringWithFormat:@"/images/%@.png",timeLocal];
     self.imgName =[NSString stringWithFormat:@"%@.png",timeLocal];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
+    
+    NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.png"];
     [imageData writeToFile:filePath atomically:YES];
 
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
@@ -253,8 +261,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
     });
-    
-    
 }
 
 -(void)uploadAvatar  //type 21
@@ -367,7 +373,8 @@
 
     self.path = [NSString stringWithFormat:@"/banner/%@.jpg",eventId];
     self.imgName =[NSString stringWithFormat:@"%@.jpg",eventId];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Documents/media%@", NSHomeDirectory(),_path];
+    NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
     [imageData writeToFile:filePath atomically:YES];
     
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];

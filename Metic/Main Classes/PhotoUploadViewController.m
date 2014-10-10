@@ -65,7 +65,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [self.preLabel setBackgroundColor:[UIColor clearColor]];
     [self.preLabel setEnabled:NO];
     self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [self.preLabel setFont:[UIFont systemFontOfSize:20]];
+    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
     [_textView addSubview:self.preLabel];
 
     self.imgView =  [[UIView alloc] initWithFrame:CGRectMake(15, 66, 290, 78)];
@@ -124,13 +124,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [sheet showInView:self.view];
 }
 
-- (IBAction)openEditor:(id)sender
+- (IBAction)openEditor:(UIImage*)image
 {
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
-    controller.image = self.uploadImage;
+    controller.image = image;
 
-    UIImage *image = self.uploadImage;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
     controller.imageCropRect = CGRectMake(0, 0, width, height);
@@ -173,8 +172,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     [self showWaitingView];
     self.upLoad = sender;
-    [self.upLoad setEnabled:NO];
-    [self.getPhoto setEnabled:NO];
+//    [self.upLoad setEnabled:NO];
+//    [self.getPhoto setEnabled:NO];
     PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
     getter.mDelegate = self;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -222,10 +221,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)modifyProgress:(id)sender
 {
     float progress = [[[sender userInfo] objectForKey:@"progress"] floatValue];
-    progress*=0.6;
-    NSLog(@"%f",progress);
+    float finished = [[[sender userInfo] objectForKey:@"finished"] floatValue];
+    float weight = [[[sender userInfo] objectForKey:@"weight"] floatValue];
+    progress*=weight;
     if (_progressView) {
-        [_progressView setProgress:progress animated:YES];
+        [_progressView setProgress:progress+finished animated:YES];
     }
 }
 //
@@ -261,9 +261,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
+    self.uploadImage = croppedImage;
     [self.getPhoto setBackgroundImage:croppedImage forState:UIControlStateNormal];
     self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.uploadImage = croppedImage;
 }
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
@@ -315,11 +315,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    self.uploadImage = image;
-    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
-    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
+//    self.uploadImage = image;
+//    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+//    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [picker dismissViewControllerAnimated:NO completion:^{
-        [self openEditor:nil];
+        [self openEditor:image];
     }];
 
 }
