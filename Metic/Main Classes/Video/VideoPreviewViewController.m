@@ -202,52 +202,28 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     // input file
     //AVAsset* asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:_videoURL options:nil];
-//    AVMutableComposition *composition = [AVMutableComposition composition];
-//    [composition  addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-//    
-//    // input clip
-//    AVAssetTrack *clipVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-//    
-//    // make it square
-//    AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoComposition];
-//    videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.width, clipVideoTrack.naturalSize.height);
-//    videoComposition.frameDuration = CMTimeMake(1, 10);
-//    
-//    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-//    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(20, 15) );
-//    
-//    // rotate to portrait
-//    AVMutableVideoCompositionLayerInstruction* transformer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:clipVideoTrack];
-////        CGAffineTransform t1 = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) /2 );
-////        CGAffineTransform t2 = CGAffineTransformRotate(t1, M_PI_2);
-////        
-////        CGAffineTransform finalTransform = t2;
-////        [transformer setTransform:finalTransform atTime:kCMTimeZero];
-//    instruction.layerInstructions = [NSArray arrayWithObject:transformer];
-//    videoComposition.instructions = [NSArray arrayWithObject: instruction];
-//    
-//    // export
-//    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset640x480] ;
-//    exporter.videoComposition = videoComposition;
-//    exporter.outputURL=[NSURL fileURLWithPath:outputPath];
-//    exporter.outputFileType=AVFileTypeMPEG4;
-//    
-//    [exporter exportAsynchronouslyWithCompletionHandler:^(void){
-//        NSLog(@"Exporting done!");
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [_alert dismissWithClickedButtonIndex:0 animated:YES];
-//        });
-//
-//    }];
+    
     SDAVAssetExportSession *encoder = [SDAVAssetExportSession.alloc initWithAsset:asset];
     encoder.shouldOptimizeForNetworkUse = YES;
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
+    NSNumber* width,*height;
+    if (_preViewImage.size.height > _preViewImage.size.width){
+        encoder.isVerticalVideo = YES;
+        width = [NSNumber numberWithFloat:480];
+        height = [NSNumber numberWithFloat:640];
+    }
+    else{
+        encoder.isVerticalVideo = NO;
+        width = [NSNumber numberWithFloat:640];
+        height = [NSNumber numberWithFloat:480];
+    }
     encoder.videoSettings = @
     {
+        
     AVVideoCodecKey: AVVideoCodecH264,
-    AVVideoWidthKey: @640,
-    AVVideoHeightKey: @480,
+    AVVideoWidthKey: width,
+    AVVideoHeightKey: height,
     AVVideoCompressionPropertiesKey: @
         {
         AVVideoAverageNonDroppableFrameRateKey:@15,
@@ -255,6 +231,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline30,
         },
     };
+    
     encoder.audioSettings = @
     {
     AVFormatIDKey: @(kAudioFormatMPEG4AAC),
@@ -262,28 +239,34 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     AVSampleRateKey: @44100,
     AVEncoderBitRateKey: @128000,
     };
-
+    
     [encoder exportAsynchronouslyWithCompletionHandler:^
-    {
-        if (encoder.status == AVAssetExportSessionStatusCompleted)
-        {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [_alert dismissWithClickedButtonIndex:0 animated:YES];
-            });
-            NSLog(@"Video export succeeded");
-        }
-        else if (encoder.status == AVAssetExportSessionStatusCancelled)
-        {
-            NSLog(@"Video export cancelled");
-        }
-        else
-        {
-            NSLog(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
-        }
-    }];
-    
-    
-    
+     {
+         NSString *path = [[_videoURL absoluteString] substringFromIndex:16];
+         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+             [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+         }
+         _videoURL = nil;
+         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+         NSString* outputPath = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+         _videoURL = [NSURL fileURLWithPath:outputPath];
+         if (encoder.status == AVAssetExportSessionStatusCompleted)
+         {
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [_alert dismissWithClickedButtonIndex:0 animated:YES];
+             });
+             NSLog(@"Video export succeeded");
+         }
+         else if (encoder.status == AVAssetExportSessionStatusCancelled)
+         {
+             NSLog(@"Video export cancelled");
+         }
+         else
+         {
+             NSLog(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
+         }
+     }];
+  
 }
 
 -(void)play:(id)sender
@@ -378,7 +361,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         imageView.image = image;
     }
     else if (type == 100){
-        
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
         [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -400,6 +382,19 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
 //                        [alert setTag:100];
 //
+                        //复制tmp.mp4到videocache文件夹
+                        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+                        NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+                        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+                        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+                        NSFileManager *fileManager=[NSFileManager defaultManager];
+                        if(![fileManager fileExistsAtPath:cachePath])
+                        {
+                            [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+                        }
+                        NSString* filepath = [cachePath stringByAppendingPathComponent:container];
+                        [fileManager copyItemAtPath:mp4path toPath:filepath error:nil];
+                        
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self removeWaitingView];

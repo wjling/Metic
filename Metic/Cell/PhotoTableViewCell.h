@@ -21,6 +21,7 @@
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (strong, nonatomic) PictureWallViewController* PhotoWall;
 @property BOOL isloading;
+@property BOOL isLeft;
 - (IBAction)button_DetailPressed:(id)sender;
 -(void)animationBegin;
 @end

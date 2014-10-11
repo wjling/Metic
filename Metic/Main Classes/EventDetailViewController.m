@@ -149,6 +149,9 @@
 
 -(void)initUI
 {
+    float var = 242/255.0;
+    [_tableView setBackgroundColor:[UIColor colorWithRed:var green:var blue:var alpha:1]];
+    
     _moreView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
 	_moreView.layer.shadowRadius = 10;
 	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;

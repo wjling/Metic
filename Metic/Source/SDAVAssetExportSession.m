@@ -314,8 +314,14 @@
 	passThroughInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, self.asset.duration);
 
 	AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
-
-    [passThroughLayer setTransform:videoTrack.preferredTransform atTime:kCMTimeZero];
+    
+    if (_isVerticalVideo) {
+        CGAffineTransform t1 = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0);
+        CGAffineTransform t2 = CGAffineTransformRotate(t1, M_PI_2);
+        videoComposition.renderSize = CGSizeMake(videoTrack.naturalSize.height, videoTrack.naturalSize.width);
+        [passThroughLayer setTransform:t2 atTime:kCMTimeZero];
+        
+    }else [passThroughLayer setTransform:videoTrack.preferredTransform atTime:kCMTimeZero];
 
 	passThroughInstruction.layerInstructions = @[passThroughLayer];
 	videoComposition.instructions = @[passThroughInstruction];

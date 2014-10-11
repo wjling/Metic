@@ -199,46 +199,18 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self storeImage:image recalculateFromImage:YES imageData:nil forKey:key toDisk:toDisk];
 }
 
-- (void)storeImageToDisk:(UIImage *)image forKey:(NSString *)key {
-    if (!image || !key) {
+- (void)storeImageToDisk:(NSString *)filePath forKey:(NSString *)key {
+    if (!filePath || !key) {
         return;
     }
-    
-    if (YES) {
-
-            NSData *data = nil;
-            
-            if (image && (YES || !data)) {
-#if TARGET_OS_IPHONE
-                // We need to determine if the image is a PNG or a JPEG
-                // PNGs are easier to detect because they have a unique signature (http://www.w3.org/TR/PNG-Structure.html)
-                // The first eight bytes of a PNG file always contain the following (decimal) values:
-                // 137 80 78 71 13 10 26 10
-                
-                // We assume the image is PNG, in case the imageData is nil (i.e. if trying to save a UIImage directly),
-                // we will consider it PNG to avoid loosing the transparency
-                BOOL imageIsPng = YES;
-                
-                if (imageIsPng) {
-                    data = UIImagePNGRepresentation(image);
-                }
-                else {
-                    data = UIImageJPEGRepresentation(image, (CGFloat)1.0);
-                }
-#else
-                data = [NSBitmapImageRep representationOfImageRepsInArray:image.representations usingType: NSJPEGFileType properties:nil];
-#endif
-            }
-            
-            if (data) {
-                if (![_fileManager fileExistsAtPath:_diskCachePath]) {
-                    [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-                }
-                
-                [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
-            }
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    if (data) {
+        if (![_fileManager fileExistsAtPath:_diskCachePath]) {
+            [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+        
+        [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
     }
-
 }
 
 - (BOOL)diskImageExistsWithKey:(NSString *)key {

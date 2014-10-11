@@ -24,7 +24,8 @@
 
 @interface PictureWallViewController ()
 @property(nonatomic,strong)MySqlite *sql;
-@property BOOL isOpen;
+@property BOOL isHeaderOpen;
+@property BOOL isFooterOpen;
 @property long seletedPhotoIndex;
 @property (nonatomic,strong) UIAlertView *Alert;
 @property (nonatomic,strong) NSMutableDictionary *cellHeight;
@@ -36,6 +37,7 @@
 
 @property BOOL isLoading;
 @property BOOL shouldStop;
+@property NSString* outSVState;
 
 
 @end
@@ -55,6 +57,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[SDImageCache sharedImageCache]setMaxCacheSize:1024*1024*100];
+    
     [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
@@ -69,8 +74,10 @@
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
+    [_scrollView setDelegate:self];
     self.seletedPhotoIndex = 0;
-    self.isOpen = NO;
+    self.isFooterOpen = NO;
+    self.isHeaderOpen = NO;
     self.shouldReloadPhoto = YES;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
@@ -81,8 +88,9 @@
     
     [self initUI];
     
+//    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
 //    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
-    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
+    _urlFormat = @[@"http://bcs.duapp.com/metis201415/images/%@?sign=%@",@"http://bcs.duapp.com/whatsact/images/%@?sign=%@"][Server];
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
     
@@ -91,7 +99,11 @@
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = self.scrollView;
-    //[_footer beginRefreshing];
+    
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.scrollView;
     
     //等待圈圈
     
@@ -132,6 +144,7 @@
     if (_isLoading) {
         _isLoading = NO;
         _shouldStop = YES;
+        [self indicatorDisappear];
     }
 }
 
@@ -244,8 +257,12 @@
 
 -(void)reloadPhoto
 {
-    if (self.isOpen) {
-        self.isOpen = NO;
+    if (self.isHeaderOpen) {
+        self.isHeaderOpen = NO;
+        [_header endRefreshing];
+    }
+    if (self.isFooterOpen) {
+        self.isFooterOpen = NO;
         [_footer endRefreshing];
     }
     [self.tableView1 reloadData];
@@ -265,7 +282,7 @@
 {
     _Alert = [[UIAlertView alloc] initWithTitle:@"" message:@"没有更多了" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
     [_Alert show];
-    self.isOpen = NO;
+    self.isFooterOpen = NO;
     [_footer endRefreshing];
 }
 -(void)performDismiss
@@ -417,21 +434,58 @@
 {
     if (scrollView == _tableView1) {
         [_tableView2 setContentOffset:_tableView1.contentOffset];
-    }else [_tableView1 setContentOffset:_tableView2.contentOffset];
-}
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    _footer.scrollView = _scrollView;
+    }else if(scrollView == _tableView2)
+        [_tableView1 setContentOffset:_tableView2.contentOffset];
+    
+    if (scrollView == _scrollView) {
+        if (scrollView.contentOffset.y < 0 ) {
+            if ([_outSVState isEqualToString:@"DOWNOVER"]) {
+                [scrollView setScrollEnabled:NO];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [_scrollView setScrollEnabled:YES];
+                    
+                });
+            }
+            _outSVState = @"UPOVER";
+        }else if(scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height)){
+            if ([_outSVState isEqualToString:@"UPOVER"]) {
+                [scrollView setScrollEnabled:NO];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [_scrollView setScrollEnabled:YES];
+                });
+            }
+            _outSVState = @"DOWNOVER";
+        }
+        
+    }else{
+        [_scrollView setScrollEnabled:YES];
+        _outSVState = nil;
+    }
+    
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         CGSize size = _tableView2.contentSize;
         size.height = _tableView1.contentSize.height;
         [_tableView2 setContentSize:size];
-    }else{
+    }else if(_tableView1.contentSize.height < _tableView2.contentSize.height){
         CGSize size = _tableView1.contentSize;
         size.height = _tableView2.contentSize.height;
         [_tableView1 setContentSize:size];
     }
+}
+
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_scrollView setScrollEnabled:YES];
+//    if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
+//        CGSize size = _tableView2.contentSize;
+//        size.height = _tableView1.contentSize.height;
+//        [_tableView2 setContentSize:size];
+//    }else if(_tableView1.contentSize.height < _tableView2.contentSize.height){
+//        CGSize size = _tableView1.contentSize;
+//        size.height = _tableView2.contentSize.height;
+//        [_tableView1 setContentSize:size];
+//    }
 }
 
 #pragma mark 代理方法-UITableView
@@ -635,7 +689,7 @@
             if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1 && self.isOpen == YES) {
+            if ([_sequence intValue] == -1 && self.isFooterOpen == YES) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
             }else [self reloadPhoto];
@@ -688,33 +742,51 @@
         [refreshView endRefreshing];
         return;
     }
-    if (_isOpen) {
+    if (_isHeaderOpen || _isFooterOpen) {
         [refreshView endRefreshing];
-        return;
-    }
-    self.isOpen = YES;
-    int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
-    if ([self.sequence intValue] == -1 && photo_rest_num == 0) {
-        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-        [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
         return;
     }
     
-    int count = self.photo_list.count;
-    if (photo_rest_num >= PhotoNum || [_sequence intValue] == -1) {//加载剩余的，然后再拉
-        int num = MIN(PhotoNum, _photo_list_all.count - count);
-//        for (int i = count; i < count + num; i++) {
-//            [self.photo_list addObject:self.photo_list_all[i]];
-//        }
-        [refreshView endRefreshing];
-        self.isOpen = NO;
-        [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
-        //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-    }else{
+    if (refreshView == _footer) {
+        self.isFooterOpen = YES;
+        int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
+        if ([self.sequence intValue] == -1 && photo_rest_num == 0) {
+            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+            [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+            return;
+        }
+        
+        int count = self.photo_list.count;
+        if (photo_rest_num >= PhotoNum || [_sequence intValue] == -1) {//加载剩余的，然后再拉
+            int num = MIN(PhotoNum, _photo_list_all.count - count);
+            //        for (int i = count; i < count + num; i++) {
+            //            [self.photo_list addObject:self.photo_list_all[i]];
+            //        }
+            [refreshView endRefreshing];
+            self.isFooterOpen = NO;
+            [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
+            //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
+        }else{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                if (self.isFooterOpen) {
+                    self.isFooterOpen = NO;
+                    [refreshView endRefreshing];
+                }
+            });
+            [self getPhotolist];
+        }
+
+    }else if (refreshView == _header){
+        _isHeaderOpen = YES;
+        _shouldReloadPhoto = YES;
+        self.sequence = [[NSNumber alloc]initWithInt:0];
         [self getPhotolist];
     }
-
+    
+    
 }
+
+
 
 -(void)dealloc
 {

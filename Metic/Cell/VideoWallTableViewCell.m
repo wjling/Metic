@@ -17,6 +17,11 @@
 #define widthspace 10
 #define deepspace 4
 
+@interface VideoWallTableViewCell ()
+@property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
+@property BOOL isReady;
+@end
+
 @implementation VideoWallTableViewCell
 
 - (void)awakeFromNib
@@ -52,9 +57,11 @@
 }
 
 - (IBAction)play:(id)sender {
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
+    NSString *videoName = [_videoInfo valueForKey:@"video_name"];
+    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",videoName]];
     NSLog(@"%@",url);
-    [self openmovie:url];
+//    [self openmovie:url];
+    [self videoPlay:videoName url:url];
 }
 
 -(void)setISZan:(BOOL)isZan
@@ -194,27 +201,104 @@
 	
 }
 
--(void)openmovie:(NSString*)url
-{
-    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+
+- (void)videoPlay:(NSString*)videoName url:(NSString*)url{
     
-    [movie.moviePlayer prepareToPlay];
-    [self.controller presentMoviePlayerViewControllerAnimated:movie];
-    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
-    [movie.view setBackgroundColor:[UIColor clearColor]];
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
-    [movie.view setFrame:self.controller.navigationController.view.bounds];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:cachePath])
+    {
+        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self
+         
+                                                selector:@selector(movieFinishedCallback:)
+         
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification
+         
+                                                  object:playerViewController.moviePlayer];
+        
+        videoRequest = nil;
+    }else if ([fileManager fileExistsAtPath:[webPath stringByAppendingPathComponent:videoName]]){
+        if (_isReady) {
+            [self playVideo:videoName];
+        }
+        
+    }
+    else{
+        _isReady = NO;
+        ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
+        //下载完存储目录
+        [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
+        //临时存储目录
+        [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
+        __block BOOL isPlay = NO;
+        [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            [userDefaults setDouble:total forKey:@"file_length"];
+            if (size/total > 0.3) {
+                [_movie.moviePlayer play];
+            }
+            if (!isPlay) {
+                isPlay = YES;
+                _isReady = YES;
+                
+                [self playVideo:videoName];
+                //if(_movie) [_movie.moviePlayer play];
+            }
+        }];
+        //断点续载
+        [request setAllowResumeForFileDownloads:YES];
+        [request startAsynchronous];
+        videoRequest = request;
+        
+        
+    }
+}
+
+- (void)playVideo:(NSString*)videoName{
+    MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
+    _movie = playerViewController;
+    [playerViewController.moviePlayer pause];
+    [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
     [[NSNotificationCenter defaultCenter]addObserver:self
      
-                                           selector:@selector(movieFinishedCallback:)
+                                            selector:@selector(movieFinishedCallback:)
      
-                                               name:MPMoviePlayerPlaybackDidFinishNotification
+                                                name:MPMoviePlayerPlaybackDidFinishNotification
      
-                                             object:movie.moviePlayer];
-    
+                                              object:playerViewController.moviePlayer];
 }
+
+//-(void)openmovie:(NSString*)url
+//{
+//
+//    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+//    
+//    [movie.moviePlayer prepareToPlay];
+//    [self.controller presentMoviePlayerViewControllerAnimated:movie];
+//    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
+//    [movie.view setBackgroundColor:[UIColor clearColor]];
+//    
+//    [movie.view setFrame:self.controller.navigationController.view.bounds];
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//     
+//                                           selector:@selector(movieFinishedCallback:)
+//     
+//                                               name:MPMoviePlayerPlaybackDidFinishNotification
+//     
+//                                             object:movie.moviePlayer];
+//    
+//}
 -(void)movieFinishedCallback:(NSNotification*)notify{
-    
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     
     MPMoviePlayerController* theMovie = [notify object];

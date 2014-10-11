@@ -11,8 +11,13 @@
 #import "PhotoGetter.h"
 #import "../../MJRefresh/MJRefreshFooterView.h"
 #import "../../UIView/MTMessageTextView.h"
+#import "../../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
 
-@interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>
+@interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>{
+    ASIHTTPRequest *videoRequest;
+    unsigned long long Recordull;
+    BOOL isReady;
+}
 @property (nonatomic,strong) UIImage* video_thumb;
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* eventId;

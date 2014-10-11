@@ -4366,7 +4366,7 @@
                                 <rect key="frame" x="10" y="10" width="300" height="406"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2jD-tS-9IS">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2jD-tS-9IS">
                                         <rect key="frame" x="0.0" y="0.0" width="155" height="406"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4374,7 +4374,7 @@
                                             <constraint firstAttribute="width" constant="155" id="8Bh-V0-uTD"/>
                                         </constraints>
                                     </tableView>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="1" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="snf-8S-WRM">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="1" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="snf-8S-WRM">
                                         <rect key="frame" x="155" y="0.0" width="145" height="406"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5513,18 +5513,20 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="823-Eq-eYh"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="mCC-Hp-8GT"/>
         <segue reference="EEO-gR-a4J"/>
         <segue reference="O0b-r8-l4C"/>
-        <segue reference="KQw-JA-BHy"/>
+        <segue reference="mca-PE-dzm"/>
         <segue reference="hOW-ww-bKW"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="Bdm-ot-CYp"/>
+        <segue reference="KQw-JA-BHy"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="eBE-9B-Hp2"/>
-        <segue reference="fwI-VG-d1n"/>
     </inferredMetricsTieBreakers>
 </document>
