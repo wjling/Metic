@@ -8,6 +8,7 @@
 
 #import "PhotoUploadViewController.h"
 #import "PictureWallViewController.h"
+#import "../Category/UINavigationController+Vertical.h"
 #import "../Utils/CommonUtils.h"
 #import "THProgressView.h"
 #import "MobClick.h"

@@ -125,6 +125,7 @@
 		089337A9197579CE00AD940B /* PEResizeControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A2197579CE00AD940B /* PEResizeControl.m */; };
 		089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */ = {isa = PBXBuildFile; fileRef = 089337A4197579CE00AD940B /* UIImage+PECrop.m */; };
 		0896AACB19E7914A00A93A1B /* MTUIImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */; };
+		0896AAD719E90C2200A93A1B /* UINavigationController+Vertical.m in Sources */ = {isa = PBXBuildFile; fileRef = 0896AAD619E90C2200A93A1B /* UINavigationController+Vertical.m */; };
 		08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */; };
 		08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F7041957013F003B32B7 /* GTMBase64.m */; };
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
@@ -578,6 +579,8 @@
 		089337A4197579CE00AD940B /* UIImage+PECrop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PECrop.m"; sourceTree = "<group>"; };
 		0896AAC919E7914A00A93A1B /* MTUIImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUIImagePickerController.h; sourceTree = "<group>"; };
 		0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUIImagePickerController.m; sourceTree = "<group>"; };
+		0896AAD519E90C2200A93A1B /* UINavigationController+Vertical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Vertical.h"; sourceTree = "<group>"; };
+		0896AAD619E90C2200A93A1B /* UINavigationController+Vertical.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Vertical.m"; sourceTree = "<group>"; };
 		08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showParticipatorsViewController.h; sourceTree = "<group>"; };
 		08AB903E197BFA7E006E54CE /* showParticipatorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showParticipatorsViewController.m; sourceTree = "<group>"; };
 		08B3F7031957013F003B32B7 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -1270,6 +1273,8 @@
 		087759BB19A81B670034BB58 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				0896AAD519E90C2200A93A1B /* UINavigationController+Vertical.h */,
+				0896AAD619E90C2200A93A1B /* UINavigationController+Vertical.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2411,6 +2416,7 @@
 				08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */,
 				0435EF2019B3585B003BB2F6 /* AboutPageViewController.m in Sources */,
 				510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */,
+				0896AAD719E90C2200A93A1B /* UINavigationController+Vertical.m in Sources */,
 				089337A7197579CE00AD940B /* PECropViewController.m in Sources */,
 				0435EF1C19AF702F003BB2F6 /* RegisterViewController.m in Sources */,
 				51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */,

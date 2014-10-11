@@ -18,7 +18,7 @@
 #define deepspace 4
 
 @interface VideoWallTableViewCell ()
-@property (nonatomic,strong) MPMoviePlayerViewController* movie;
+@property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
 @property BOOL isReady;
 @end
 
@@ -215,7 +215,7 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        MPMoviePlayerViewController *playerViewController = [[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
         
         [[NSNotificationCenter defaultCenter]addObserver:self
@@ -244,7 +244,7 @@
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setDouble:total forKey:@"file_length"];
-            if (size/total > 0.2) {
+            if (size/total > 0.3) {
                 [_movie.moviePlayer play];
             }
             if (!isPlay) {
@@ -265,7 +265,7 @@
 }
 
 - (void)playVideo:(NSString*)videoName{
-    MPMoviePlayerViewController *playerViewController =[[MPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
+    MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
     _movie = playerViewController;
     [playerViewController.moviePlayer pause];
     [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
@@ -278,28 +278,27 @@
                                               object:playerViewController.moviePlayer];
 }
 
--(void)openmovie:(NSString*)url
-{
-
-    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
-    
-    [movie.moviePlayer prepareToPlay];
-    [self.controller presentMoviePlayerViewControllerAnimated:movie];
-    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
-    [movie.view setBackgroundColor:[UIColor clearColor]];
-    
-    [movie.view setFrame:self.controller.navigationController.view.bounds];
-    [[NSNotificationCenter defaultCenter]addObserver:self
-     
-                                           selector:@selector(movieFinishedCallback:)
-     
-                                               name:MPMoviePlayerPlaybackDidFinishNotification
-     
-                                             object:movie.moviePlayer];
-    
-}
+//-(void)openmovie:(NSString*)url
+//{
+//
+//    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+//    
+//    [movie.moviePlayer prepareToPlay];
+//    [self.controller presentMoviePlayerViewControllerAnimated:movie];
+//    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
+//    [movie.view setBackgroundColor:[UIColor clearColor]];
+//    
+//    [movie.view setFrame:self.controller.navigationController.view.bounds];
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//     
+//                                           selector:@selector(movieFinishedCallback:)
+//     
+//                                               name:MPMoviePlayerPlaybackDidFinishNotification
+//     
+//                                             object:movie.moviePlayer];
+//    
+//}
 -(void)movieFinishedCallback:(NSNotification*)notify{
-    return;
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     
     MPMoviePlayerController* theMovie = [notify object];

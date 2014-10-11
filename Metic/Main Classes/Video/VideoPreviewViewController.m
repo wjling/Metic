@@ -361,7 +361,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         imageView.image = image;
     }
     else if (type == 100){
-        
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
         [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -383,6 +382,19 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
 //                        [alert setTag:100];
 //
+                        //复制tmp.mp4到videocache文件夹
+                        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+                        NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+                        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+                        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+                        NSFileManager *fileManager=[NSFileManager defaultManager];
+                        if(![fileManager fileExistsAtPath:cachePath])
+                        {
+                            [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+                        }
+                        NSString* filepath = [cachePath stringByAppendingPathComponent:container];
+                        [fileManager copyItemAtPath:mp4path toPath:filepath error:nil];
+                        
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self removeWaitingView];
