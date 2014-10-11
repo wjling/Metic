@@ -88,8 +88,9 @@
     
     [self initUI];
     
+//    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
 //    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
-    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
+    _urlFormat = @[@"http://bcs.duapp.com/metis201415/images/%@?sign=%@",@"http://bcs.duapp.com/whatsact/images/%@?sign=%@"][Server];
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
     

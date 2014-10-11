@@ -59,8 +59,10 @@
     _tableView.dataSource = self;
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
+
+//    _urlFormat = @"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@";//测试服
 //    _urlFormat = @"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@";//正式服
-    _urlFormat = @"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@";//测试服
+    _urlFormat = @[@"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@",@"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@"][Server];
     
     _videoInfos = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];

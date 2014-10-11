@@ -7,6 +7,7 @@
 //
 
 #import "CommonUtils.h"
+#import "AppConstants.h"
 #import <CoreLocation/CLLocation.h>
 
 UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
@@ -279,13 +280,17 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
 + (NSString*)getUrl:(NSString*) path
 {
+//    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];//测试服
 //    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path];//正式服
-    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];//测试服
+    NSString* content = @[[NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path],[NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path]][Server];
     NSString* key = @"VWWE6aPlh4uUAhhrXytxvIXUCR27OShi";
     NSString* sign = [self hmac_sha1:key text:content];
     NSString* signencoded = [self URLEncodedString:sign];
+    
+//    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//测试服
 //    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//正式服
-    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//测试服
+
+    NSString* url = @[[NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded],[NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded]][Server];
     return url;
 }
 
