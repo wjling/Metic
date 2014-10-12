@@ -396,6 +396,7 @@
             }
             if(image){
                 int H = image.size.height * 145 / image.size.width;
+                [_cellHeight setValue:[NSNumber numberWithFloat:H] forKey:url];
                 [_photo_list addObject:photo];
                 if (_leftH <= _rightH) {
                     [_lefPhotos addObject:photo];
@@ -630,16 +631,27 @@
     
 //    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
-    UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
-    if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
     float height = 0;
-    if(img){
-        height = img.size.height *145.0/img.size.width;
-        [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
-        return height+43;
+    NSNumber *H = [_cellHeight valueForKey:url];
+    if (H) {
+        height = [H floatValue];
+        NSLog(@"%f",height+43);
+        return height + 43;
     }else{
-        [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
-        return 178;
+        UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
+        if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
+        
+        if(img){
+            height = img.size.height *145.0/img.size.width;
+            [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
+            NSLog(@"%f",height+43);
+            return height+43;
+        }else{
+            [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
+            NSLog(@"%d",178);
+            return 178;
+        }
+
     }
 }
 #pragma mark - HttpSenderDelegate
