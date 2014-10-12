@@ -385,6 +385,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         //复制tmp.mp4到videocache文件夹
                         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+                        NSString* mp4Thumbpath = [docFolder stringByAppendingPathComponent:@"tmp.mp4.thumb"];
                         NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
                         NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -393,7 +394,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                             [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
                         }
                         NSString* filepath = [cachePath stringByAppendingPathComponent:container];
+                        
                         [fileManager copyItemAtPath:mp4path toPath:filepath error:nil];
+                        if ([fileManager fileExistsAtPath:mp4path])
+                            [fileManager removeItemAtPath:mp4path error:nil];
+                        if ([fileManager fileExistsAtPath:mp4Thumbpath])
+                            [fileManager removeItemAtPath:mp4Thumbpath error:nil];
                         
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

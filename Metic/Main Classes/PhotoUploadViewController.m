@@ -404,6 +404,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
             NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.png"];
             [[SDImageCache sharedImageCache] storeImageToDisk:filePath forKey:url];
+            NSFileManager* fileManager = [NSFileManager defaultManager];
+            if ([fileManager fileExistsAtPath:filePath]) {
+                [fileManager removeItemAtPath:filePath error:nil];
+            }
+            
             if (_progressView) {
                 [_progressView setProgress:1.0 animated:YES];
             }
