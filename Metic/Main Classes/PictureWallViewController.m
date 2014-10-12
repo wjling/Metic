@@ -667,7 +667,7 @@
             if ([_sequence intValue] == -1 && self.isFooterOpen == YES) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-            }else [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
+            }else [self reloadPhoto];
 
         }
             break;

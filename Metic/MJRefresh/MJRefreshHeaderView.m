@@ -99,6 +99,7 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }
@@ -113,6 +114,7 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
             
             // 刷新完毕
@@ -134,6 +136,7 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top + MJRefreshViewHeight;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
                 // 2.设置滚动位置
                 _scrollView.contentOffset = CGPointMake(0, - _scrollViewInitInset.top - MJRefreshViewHeight);
             }];

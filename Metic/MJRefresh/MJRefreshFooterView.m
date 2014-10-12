@@ -107,6 +107,7 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.bottom = _scrollViewInitInset.bottom;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }
@@ -131,6 +132,7 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.bottom = _scrollViewInitInset.bottom;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
             
             if (animDuration == 0) {
@@ -155,6 +157,7 @@
                 }
                 inset.bottom = bottom;
                 _scrollView.contentInset = inset;
+                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }
