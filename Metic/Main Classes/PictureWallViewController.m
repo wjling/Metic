@@ -399,14 +399,12 @@
                 [_cellHeight setValue:[NSNumber numberWithFloat:H] forKey:url];
                 [_photo_list addObject:photo];
                 if (_leftH <= _rightH) {
-                    NSLog(@"left:%f, right:%f  left",_leftH,_rightH);
                     [_lefPhotos addObject:photo];
                     _leftH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [_tableView1 reloadData];
                     });
                 }else{
-                    NSLog(@"left:%f, right:%f  right",_leftH,_rightH);
                     [_rigPhotos addObject:photo];
                     _rightH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -637,7 +635,6 @@
     NSNumber *H = [_cellHeight valueForKey:url];
     if (H) {
         height = [H floatValue];
-        NSLog(@"%f",height+43);
         return height + 43;
     }else{
         UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
@@ -646,11 +643,9 @@
         if(img){
             height = img.size.height *145.0/img.size.width;
             [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
-            NSLog(@"%f",height+43);
             return height+43;
         }else{
             [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
-            NSLog(@"%d",178);
             return 178;
         }
 
