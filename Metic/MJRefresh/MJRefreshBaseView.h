@@ -58,7 +58,7 @@ typedef void (^RefreshStateChangeBlock)(MJRefreshBaseView *refreshView, MJRefres
     UIEdgeInsets _scrollViewInitInset;
     // 父控件
     __weak UIScrollView *_scrollView;
-    
+    __weak UIScrollView *_SscrollView;
     // 子控件
     __weak UILabel *_lastUpdateTimeLabel;
 	__weak UILabel *_statusLabel;
@@ -73,6 +73,7 @@ typedef void (^RefreshStateChangeBlock)(MJRefreshBaseView *refreshView, MJRefres
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView;
 // 设置要显示的父控件
 @property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) UIScrollView *SscrollView;
 
 // 内部的控件
 @property (nonatomic, weak, readonly) UILabel *lastUpdateTimeLabel;

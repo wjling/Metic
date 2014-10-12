@@ -9,5 +9,6 @@
 #import "MJRefreshBaseView.h"
 
 @interface MJRefreshHeaderView : MJRefreshBaseView
+@property BOOL isPhotoWall;
 + (instancetype)header;
 @end

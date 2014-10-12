@@ -74,7 +74,7 @@
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
-    [_scrollView setDelegate:self];
+//    [_scrollView setDelegate:self];
     self.seletedPhotoIndex = 0;
     self.isFooterOpen = NO;
     self.isHeaderOpen = NO;
@@ -98,12 +98,16 @@
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
-    _footer.scrollView = self.scrollView;
+    _footer.isPhotoWall = YES;
+    _footer.SscrollView = self.tableView2;
+    _footer.scrollView = self.tableView1;
     
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
-    _header.scrollView = self.scrollView;
+    _header.isPhotoWall = YES;
+    _header.SscrollView = self.tableView2;
+    _header.scrollView = self.tableView1;
     
     //等待圈圈
     
@@ -171,7 +175,6 @@
 -(void)initUI
 {
     _add = [UIButton buttonWithType:UIButtonTypeCustom];
-    
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0]] forState:UIControlStateNormal];
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:170/255.0 blue:166/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     _add.layer.masksToBounds = YES;
@@ -438,30 +441,7 @@
     }else if(scrollView == _tableView2)
         [_tableView1 setContentOffset:_tableView2.contentOffset];
     
-    if (scrollView == _scrollView) {
-        if (scrollView.contentOffset.y < 0 ) {
-            if ([_outSVState isEqualToString:@"DOWNOVER"]) {
-                [scrollView setScrollEnabled:NO];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_scrollView setScrollEnabled:YES];
-                    
-                });
-            }
-            _outSVState = @"UPOVER";
-        }else if(scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height)){
-            if ([_outSVState isEqualToString:@"UPOVER"]) {
-                [scrollView setScrollEnabled:NO];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_scrollView setScrollEnabled:YES];
-                });
-            }
-            _outSVState = @"DOWNOVER";
-        }
-        
-    }else{
-        [_scrollView setScrollEnabled:YES];
-        _outSVState = nil;
-    }
+
     
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         CGSize size = _tableView2.contentSize;
@@ -474,20 +454,6 @@
     }
 }
 
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    [_scrollView setScrollEnabled:YES];
-//    if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
-//        CGSize size = _tableView2.contentSize;
-//        size.height = _tableView1.contentSize.height;
-//        [_tableView2 setContentSize:size];
-//    }else if(_tableView1.contentSize.height < _tableView2.contentSize.height){
-//        CGSize size = _tableView1.contentSize;
-//        size.height = _tableView2.contentSize.height;
-//        [_tableView1 setContentSize:size];
-//    }
-}
 
 #pragma mark 代理方法-UITableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -701,7 +667,7 @@
             if ([_sequence intValue] == -1 && self.isFooterOpen == YES) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-            }else [self reloadPhoto];
+            }else [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
 
         }
             break;
