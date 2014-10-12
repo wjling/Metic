@@ -395,18 +395,20 @@
                 NSLog(@"from local %d",index);
             }
             if(image){
-                int H = image.size.height * 145 / image.size.width;
+                float H = image.size.height * 145.0 / image.size.width;
                 [_cellHeight setValue:[NSNumber numberWithFloat:H] forKey:url];
                 [_photo_list addObject:photo];
                 if (_leftH <= _rightH) {
+                    NSLog(@"left:%f, right:%f  left",_leftH,_rightH);
                     [_lefPhotos addObject:photo];
-                    _leftH += H;
+                    _leftH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [_tableView1 reloadData];
                     });
                 }else{
+                    NSLog(@"left:%f, right:%f  right",_leftH,_rightH);
                     [_rigPhotos addObject:photo];
-                    _rightH += H;
+                    _rightH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [_tableView2 reloadData];
                     });
@@ -415,7 +417,7 @@
                 [_photo_list removeObject:photo];
                 [_photo_list_all removeObject:photo];
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                 [self classifyPhotos:photos index:index+1];
             });
 
