@@ -99,6 +99,7 @@
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.isPhotoWall = YES;
+    _footer.isRight = NO;
     _footer.SscrollView = self.tableView2;
     _footer.scrollView = self.tableView1;
     
@@ -106,6 +107,7 @@
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
     _header.isPhotoWall = YES;
+    _header.isRight = NO;
     _header.SscrollView = self.tableView2;
     _header.scrollView = self.tableView1;
     
@@ -454,6 +456,22 @@
     }
 }
 
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (scrollView == _tableView1) {
+        _footer.isRight = NO;
+        _footer.scrollView = _tableView1;
+        _header.isRight = NO;
+        _header.scrollView = _tableView1;
+        
+    }else if (scrollView == _tableView2){
+        _footer.isRight = YES;
+        _footer.scrollView = _tableView2;
+        _header.isRight = YES;
+        _header.scrollView = _tableView2;
+        
+    }
+}
 
 #pragma mark 代理方法-UITableView
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

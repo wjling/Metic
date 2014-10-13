@@ -84,7 +84,7 @@
     CGFloat y = MAX(contentHeight, scrollHeight);
     // 设置边框
     CGFloat width = _isPhotoWall? 300:_scrollView.frame.size.width;
-    self.frame = CGRectMake(0, y, width, MJRefreshViewHeight);
+    self.frame =(_isPhotoWall && _isRight)? CGRectMake(-155, y, width, MJRefreshViewHeight):CGRectMake(0, y, width, MJRefreshViewHeight);
 }
 
 #pragma mark - 状态相关
@@ -107,7 +107,6 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.bottom = _scrollViewInitInset.bottom;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }
@@ -132,7 +131,6 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.bottom = _scrollViewInitInset.bottom;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
             
             if (animDuration == 0) {
@@ -157,7 +155,6 @@
                 }
                 inset.bottom = bottom;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }

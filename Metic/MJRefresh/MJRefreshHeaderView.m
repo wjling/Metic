@@ -29,7 +29,7 @@
     
     // 1.设置边框
     CGFloat width = _isPhotoWall? 300:_scrollView.frame.size.width;
-    self.frame = CGRectMake(0, - MJRefreshViewHeight, width, MJRefreshViewHeight);
+    self.frame =(_isPhotoWall && _isRight)? CGRectMake(-155, - MJRefreshViewHeight, width, MJRefreshViewHeight):CGRectMake(0, - MJRefreshViewHeight, width, MJRefreshViewHeight);
     
     // 2.加载时间
     self.lastUpdateTime = [[NSUserDefaults standardUserDefaults] objectForKey:MJRefreshHeaderTimeKey];
@@ -99,7 +99,6 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
 			break;
         }
@@ -114,7 +113,6 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
             }];
             
             // 刷新完毕
@@ -136,7 +134,6 @@
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _scrollViewInitInset.top + MJRefreshViewHeight;
                 _scrollView.contentInset = inset;
-                if(_SscrollView)_SscrollView.contentInset = inset;
                 // 2.设置滚动位置
                 _scrollView.contentOffset = CGPointMake(0, - _scrollViewInitInset.top - MJRefreshViewHeight);
             }];
