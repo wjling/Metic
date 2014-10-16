@@ -4396,13 +4396,16 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="B1d-D9-g3b" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="4du-lA-FCx"/>
+                            <constraint firstItem="b3l-AQ-ESg" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="AjS-UX-ZOg"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="b3l-AQ-ESg" secondAttribute="bottom" id="K8C-5l-3pK"/>
                             <constraint firstItem="b3l-AQ-ESg" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="MbZ-4T-Fm6"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="B1d-D9-g3b" secondAttribute="bottom" id="ad0-7O-3Cm"/>
                             <constraint firstItem="zDJ-Z9-TTX" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="eoV-IT-t0X"/>
+                            <constraint firstItem="u8a-Yr-5Ae" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="i9J-br-A0s"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="u8a-Yr-5Ae" secondAttribute="bottom" id="kM4-nB-V9s"/>
                             <constraint firstItem="u8a-Yr-5Ae" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="uQ6-nx-2eJ"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="OVh-H6-CrH" secondAttribute="bottom" id="wZr-sA-jhb"/>
+                            <constraint firstItem="B1d-D9-g3b" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="ymH-lc-VAh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k">
