@@ -3005,8 +3005,12 @@
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="fYQ-xD-AuW"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hlA-Jo-zTD">
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hlA-Jo-zTD">
                                         <rect key="frame" x="10" y="213" width="300" height="115"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="PHU-ka-XaT"/>
+                                            <constraint firstAttribute="height" constant="115" id="ztw-1V-qeD"/>
+                                        </constraints>
                                         <state key="normal" image="2聚餐.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3014,8 +3018,12 @@
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="wXv-LT-ocE"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-az-reg">
+                                    <button opaque="NO" tag="3" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-az-reg">
                                         <rect key="frame" x="10" y="338" width="300" height="115"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="115" id="n9s-O0-Bq4"/>
+                                            <constraint firstAttribute="width" constant="300" id="ulb-mL-bSO"/>
+                                        </constraints>
                                         <state key="normal" image="3兜风.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3023,8 +3031,12 @@
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="sO4-j2-WaR"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="4" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-5p-JFd">
+                                    <button opaque="NO" tag="4" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QTc-5p-JFd">
                                         <rect key="frame" x="10" y="463" width="300" height="115"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="115" id="fG4-27-rub"/>
+                                            <constraint firstAttribute="width" constant="300" id="htx-lc-lFJ"/>
+                                        </constraints>
                                         <state key="normal" image="4喝酒.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3032,8 +3044,12 @@
                                             <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="ddd-Kk-bky"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="5" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czb-gJ-8X2">
+                                    <button opaque="NO" tag="5" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="czb-gJ-8X2">
                                         <rect key="frame" x="10" y="588" width="300" height="115"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="274-gs-ioG"/>
+                                            <constraint firstAttribute="height" constant="115" id="DEY-6K-Yrb"/>
+                                        </constraints>
                                         <state key="normal" image="5健身.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3099,6 +3115,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="TYE-6F-F8Y" firstAttribute="leading" secondItem="VMM-1v-gas" secondAttribute="leadingMargin" constant="-8" id="1hN-cS-qH2"/>
                             <constraint firstItem="7Bx-uh-sig" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="bottom" id="FJa-Ot-wfg"/>
                             <constraint firstItem="TYE-6F-F8Y" firstAttribute="top" secondItem="tgW-1e-WDW" secondAttribute="bottom" id="Mio-Zt-Dt4"/>
                         </constraints>
@@ -3345,6 +3362,10 @@
                                 <subviews>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="150" id="CIR-RA-4Nl"/>
+                                            <constraint firstAttribute="width" constant="320" id="vuy-V2-21Q"/>
+                                        </constraints>
                                         <state key="normal" backgroundImage="上传活动封面">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3353,7 +3374,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r6D-ac-rMX">
-                                        <rect key="frame" x="0.0" y="150" width="320" height="5"/>
+                                        <rect key="frame" x="0.0" y="150" width="320" height="2"/>
                                         <color key="backgroundColor" red="0.94117647058823528" green="0.44705882352941173" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

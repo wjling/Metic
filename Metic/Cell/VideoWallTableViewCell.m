@@ -208,6 +208,7 @@
     NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
+    __block unsigned long long totalBytes = 0;
     
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:cachePath])
@@ -242,6 +243,7 @@
         [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
         __block BOOL isPlay = NO;
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
+            totalBytes = total;
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setDouble:total forKey:@"file_length"];
             if (size/total > 0.3) {
@@ -254,6 +256,12 @@
                 [self playVideo:videoName];
                 //if(_movie) [_movie.moviePlayer play];
             }
+        }];
+
+        [request setCompletionBlock:^{
+            
+            [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
+            if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
         }];
         //断点续载
         [request setAllowResumeForFileDownloads:YES];
@@ -310,6 +318,14 @@
                                                 object:theMovie];
     
     [self.controller dismissMoviePlayerViewControllerAnimated];
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
+    NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        [fileManager removeItemAtPath:filePath error:nil];
+    }
+    
     
 }
 @end

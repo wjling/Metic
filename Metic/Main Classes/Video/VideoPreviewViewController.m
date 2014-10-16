@@ -208,15 +208,20 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     NSNumber* width,*height;
+    AVAssetTrack* videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     if (_preViewImage.size.height > _preViewImage.size.width){
         encoder.isVerticalVideo = YES;
-        width = [NSNumber numberWithFloat:480];
-        height = [NSNumber numberWithFloat:640];
+//        width = [NSNumber numberWithFloat:480];
+//        height = [NSNumber numberWithFloat:640];
+        width = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
+        height = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
     }
     else{
         encoder.isVerticalVideo = NO;
-        width = [NSNumber numberWithFloat:640];
-        height = [NSNumber numberWithFloat:480];
+//        width = [NSNumber numberWithFloat:640];
+//        height = [NSNumber numberWithFloat:480];
+        width = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
+        height = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
     }
     encoder.videoSettings = @
     {
