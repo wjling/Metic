@@ -2503,6 +2503,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ao0-ve-MK9">
+                                <rect key="frame" x="80" y="-1" width="160" height="1"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AV3-h6-yac">
                                         <rect key="frame" x="0.0" y="0.0" width="160" height="40"/>
@@ -2627,7 +2628,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Tr-aS-eLs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1466" y="-379"/>
+            <point key="canvasLocation" x="1466" y="-396"/>
         </scene>
         <!--动态列表-->
         <scene sceneID="koA-8j-QB5">

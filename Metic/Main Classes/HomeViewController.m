@@ -587,21 +587,21 @@
         self.shadowView.alpha = 0;
         [UIView commitAnimations];
     }
-    if (_ArrangementView.frame.size.height != 0) {
+    if (_ArrangementView.frame.size.height != 1) {
         [self chooseArrangement:nil];
     }
     
 }
 
 - (IBAction)CloseMenu:(id)sender {
-    if (self.morefuctions.isHidden && _ArrangementView.frame.size.height == 0) {
+    if (self.morefuctions.isHidden && _ArrangementView.frame.size.height == 1) {
         [((SlideNavigationController*)self.navigationController) closeMenuWithCompletion:nil];
     }
 }
 
 - (IBAction)chooseArrangement:(id)sender {
     [_morefuctions setHidden:YES];
-    if (_ArrangementView.frame.size.height == 0) {
+    if (_ArrangementView.frame.size.height == 1) {
         [UIView beginAnimations:@"shadowViewAppear" context:nil];
         [UIView setAnimationDuration:0.5];
         [UIView setAnimationDelegate:self];
@@ -621,7 +621,7 @@
     [UIView setAnimationDuration:0.5];
     [UIView setAnimationDelegate:self];
     CGRect frame = _ArrangementView.frame;
-    frame.size.height = (frame.size.height == 0)? 81:0;
+    frame.size.height = (frame.size.height == 1)? 81:1;
     self.ArrangementView.frame = frame;
     [UIView commitAnimations];
     
@@ -654,12 +654,12 @@
 -(void)option
 {
     if (self.morefuctions.isHidden) {
-        if (_ArrangementView.frame.size.height != 0) {
+        if (_ArrangementView.frame.size.height != 1) {
             [UIView beginAnimations:@"ArrangementAppear" context:nil];
             [UIView setAnimationDuration:0.5];
             [UIView setAnimationDelegate:self];
             CGRect frame = _ArrangementView.frame;
-            frame.size.height = (frame.size.height == 0)? 81:0;
+            frame.size.height = (frame.size.height == 1)? 81:1;
             self.ArrangementView.frame = frame;
             [UIView commitAnimations];
         }
