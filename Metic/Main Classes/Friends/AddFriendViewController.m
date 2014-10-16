@@ -170,7 +170,7 @@
     NSInteger row = indexPath.row;
     if (section == 0) {
         if (row == 0) {
-            [self performSegueWithIdentifier:@"addFriend_friendRecommend" sender:self];
+            //[self performSegueWithIdentifier:@"addFriend_friendRecommend" sender:self];
         }
         else if (row == 1)
         {
