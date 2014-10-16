@@ -34,7 +34,7 @@
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 @property int visibility;
-
+@property BOOL isKeyBoard;
 @property (nonatomic,strong) UIView* InviteFriendsView;
 @property (nonatomic,strong) UIView* isAllowStrangerView;
 @property (nonatomic,strong) UIButton *isAllowStrangerButton;
@@ -71,6 +71,7 @@
     [self initInviteFriendsView];
     _visibility = 0;
     _code = 1;
+    _isKeyBoard = NO;
     self.FriendsIds = [[NSMutableSet alloc]init];
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     
@@ -78,12 +79,19 @@
     self.positionInfo = @"";
     self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
     self.flatDatePicker.delegate = self;
+    
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+    
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     //_locService.delegate = self;
 }
 
@@ -102,6 +110,8 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     _geocodesearch.delegate = nil;
     _locService.delegate = nil;
     _flatDatePicker.delegate = nil;
@@ -127,6 +137,15 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)MTdismissKeyboard
+{
+    if (![_scrollView isUserInteractionEnabled]) {
+        return;
+    }
+    [_subject_text becomeFirstResponder];
+    [_subject_text resignFirstResponder];
 }
 
 -(void)initInviteFriendsView
@@ -253,6 +272,7 @@
 {
     
     if (textField.tag == 11) {
+        [self MTdismissKeyboard];
         [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         [self.scrollView setUserInteractionEnabled:NO];
         self.flatDatePicker.title = @"请选择活动日期";
@@ -383,6 +403,10 @@
 }
 
 - (IBAction)getBanner:(id)sender {
+    if (_isKeyBoard) {
+        [self MTdismissKeyboard];
+        return;
+    }
     [self performSegueWithIdentifier:@"toBannerSelector" sender:self];
 }
 
@@ -655,6 +679,15 @@
     });
     
 }
+
+-(void) keyboardWillShow:(NSNotification *)note{
+    self.isKeyBoard = YES;
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyBoard = NO;
+}
+
 
 
 @end

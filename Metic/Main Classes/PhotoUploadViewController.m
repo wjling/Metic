@@ -80,6 +80,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [self.getPhoto setBackgroundImage:[UIImage imageNamed:@"加图片的加号"] forState:UIControlStateNormal];
     [self.getPhoto addTarget:self action:@selector(UesrImageClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.imgView addSubview:self.getPhoto];
+    
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
 
 }
 
@@ -125,7 +129,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [sheet showInView:self.view];
 }
 
-- (IBAction)openEditor:(UIImage*)image
+-(void)MTdismissKeyboard
+{
+    [_textInput becomeFirstResponder];
+    [_textInput resignFirstResponder];
+}
+
+- (void)openEditor:(UIImage*)image
 {
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
