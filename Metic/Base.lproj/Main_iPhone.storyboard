@@ -4206,7 +4206,7 @@
                                     <outlet property="delegate" destination="pBX-Qt-eFZ" id="DDb-KC-EZ7"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uSL-v3-BGM">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uSL-v3-BGM">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                 <subviews>
                                     <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iH7-Uy-xwg">
@@ -4227,6 +4227,9 @@
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.16862745098039217" green="0.16862745098039217" blue="0.16862745098039217" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="320" id="D7f-RV-AFz"/>
+                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="7UU-hd-4Kc" appends="YES" id="Vsd-qc-XdT"/>
                                 </connections>
@@ -4248,6 +4251,7 @@
                             <constraint firstItem="uSL-v3-BGM" firstAttribute="top" secondItem="ig4-X6-pnF" secondAttribute="bottom" id="Dhb-V4-dbx"/>
                             <constraint firstItem="1Ky-me-be0" firstAttribute="top" secondItem="PHU-df-EYx" secondAttribute="bottom" id="Fd0-p1-ai6"/>
                             <constraint firstItem="4Ne-e7-GOl" firstAttribute="top" secondItem="1Ky-me-be0" secondAttribute="bottom" id="Hxm-dk-wJO"/>
+                            <constraint firstItem="uSL-v3-BGM" firstAttribute="leading" secondItem="mzw-Hq-xvi" secondAttribute="leadingMargin" constant="-8" id="WcB-ew-Drf"/>
                             <constraint firstItem="PHU-df-EYx" firstAttribute="leading" secondItem="mzw-Hq-xvi" secondAttribute="leading" id="f4m-4T-cYA"/>
                             <constraint firstItem="PHU-df-EYx" firstAttribute="top" secondItem="ig4-X6-pnF" secondAttribute="bottom" constant="80" id="x1I-PD-dtx"/>
                             <constraint firstAttribute="trailing" secondItem="PHU-df-EYx" secondAttribute="trailing" id="zgy-Jh-KIx"/>
