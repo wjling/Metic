@@ -141,7 +141,7 @@
 
 -(void)MTdismissKeyboard
 {
-    if (![_scrollView isUserInteractionEnabled]) {
+    if (![_scrollView isUserInteractionEnabled] || !self.isKeyBoard) {
         return;
     }
     [_subject_text becomeFirstResponder];

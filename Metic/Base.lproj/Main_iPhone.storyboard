@@ -1103,10 +1103,11 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Qh2-07-FOQ" firstAttribute="top" secondItem="iaO-1k-CTl" secondAttribute="bottom" id="6TU-dg-BKg"/>
-                            <constraint firstItem="caP-i2-TqL" firstAttribute="leading" secondItem="bAf-ra-52k" secondAttribute="leadingMargin" constant="-8" id="6hp-7c-fsu"/>
                             <constraint firstItem="Qh2-07-FOQ" firstAttribute="top" secondItem="ku9-N0-IKm" secondAttribute="bottom" id="FAo-YD-eYL"/>
                             <constraint firstItem="ku9-N0-IKm" firstAttribute="top" secondItem="caP-i2-TqL" secondAttribute="bottom" id="WiP-Vh-DI8"/>
                             <constraint firstItem="caP-i2-TqL" firstAttribute="top" secondItem="7Eo-S4-Zwh" secondAttribute="bottom" id="b8w-oe-n6d"/>
+                            <constraint firstAttribute="trailing" secondItem="caP-i2-TqL" secondAttribute="trailing" id="h2S-ns-ho6"/>
+                            <constraint firstItem="caP-i2-TqL" firstAttribute="leading" secondItem="bAf-ra-52k" secondAttribute="leading" id="qGJ-6Z-9DX"/>
                             <constraint firstItem="iaO-1k-CTl" firstAttribute="top" secondItem="7Eo-S4-Zwh" secondAttribute="bottom" id="smk-LQ-8mv"/>
                         </constraints>
                     </view>
@@ -1921,9 +1922,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="REr-dr-0l9" firstAttribute="leading" secondItem="Lmo-xR-qOR" secondAttribute="leadingMargin" constant="-16" id="G6B-cu-FhC"/>
                             <constraint firstItem="dSv-X1-GNS" firstAttribute="top" secondItem="REr-dr-0l9" secondAttribute="bottom" id="QJK-vu-mSR"/>
                             <constraint firstItem="REr-dr-0l9" firstAttribute="top" secondItem="Mch-74-eRh" secondAttribute="bottom" id="eR8-yU-pRf"/>
+                            <constraint firstAttribute="trailing" secondItem="REr-dr-0l9" secondAttribute="trailing" id="pTq-Lp-JNg"/>
+                            <constraint firstItem="REr-dr-0l9" firstAttribute="leading" secondItem="Lmo-xR-qOR" secondAttribute="leading" id="siT-8U-hI7"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="用户二维码" id="YEf-3W-68h"/>
@@ -2240,6 +2242,7 @@
                                 <rect key="frame" x="10" y="15" width="300" height="356"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFF-qU-MsW">
+                                        <rect key="frame" x="15" y="15" width="40" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="38F-Tb-5YG"/>
                                             <constraint firstAttribute="width" constant="40" id="CvX-ZV-hQJ"/>
@@ -2917,10 +2920,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="c5U-Ih-F1e" firstAttribute="leading" secondItem="ARj-Z4-ISz" secondAttribute="leadingMargin" constant="-8" id="6zM-Pq-p02"/>
                             <constraint firstItem="08Q-Er-FO7" firstAttribute="top" secondItem="PLs-O3-Ixn" secondAttribute="bottom" id="G0m-vH-PPt"/>
+                            <constraint firstAttribute="trailing" secondItem="c5U-Ih-F1e" secondAttribute="trailing" id="IIf-PJ-aj0"/>
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="c5U-Ih-F1e" secondAttribute="bottom" id="Nv1-GW-LUg"/>
                             <constraint firstItem="sad-WS-38C" firstAttribute="top" secondItem="R69-RB-EZ5" secondAttribute="bottom" id="QQq-Xe-gnu"/>
+                            <constraint firstItem="c5U-Ih-F1e" firstAttribute="leading" secondItem="ARj-Z4-ISz" secondAttribute="leading" id="lG9-OI-gwU"/>
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="45" id="uxe-yV-kTm"/>
                         </constraints>
                     </view>
@@ -3119,9 +3123,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="TYE-6F-F8Y" firstAttribute="leading" secondItem="VMM-1v-gas" secondAttribute="leadingMargin" constant="-8" id="1hN-cS-qH2"/>
                             <constraint firstItem="7Bx-uh-sig" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="bottom" id="FJa-Ot-wfg"/>
+                            <constraint firstAttribute="trailing" secondItem="TYE-6F-F8Y" secondAttribute="trailing" id="JPz-FA-ET0"/>
                             <constraint firstItem="TYE-6F-F8Y" firstAttribute="top" secondItem="tgW-1e-WDW" secondAttribute="bottom" id="Mio-Zt-Dt4"/>
+                            <constraint firstItem="TYE-6F-F8Y" firstAttribute="leading" secondItem="VMM-1v-gas" secondAttribute="leading" id="WnH-oT-q5c"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="封面选择" id="ggF-sM-F4G">
@@ -3519,8 +3524,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4HA-Nt-bx8" firstAttribute="top" secondItem="eYA-7C-1UR" secondAttribute="bottom" id="5PQ-QB-HtT"/>
+                            <constraint firstAttribute="trailing" secondItem="eYA-7C-1UR" secondAttribute="trailing" id="K7b-Jj-2Br"/>
+                            <constraint firstItem="eYA-7C-1UR" firstAttribute="leading" secondItem="dLv-RX-F8Q" secondAttribute="leading" id="Wq2-N8-4dU"/>
                             <constraint firstItem="eYA-7C-1UR" firstAttribute="top" secondItem="03o-3f-Fgl" secondAttribute="bottom" id="qbD-bE-Dqf"/>
-                            <constraint firstItem="eYA-7C-1UR" firstAttribute="leading" secondItem="dLv-RX-F8Q" secondAttribute="leadingMargin" constant="-8" id="zxS-75-I8P"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -4108,10 +4114,12 @@
                             <constraint firstItem="cXw-gB-Z6b" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" id="I8i-SW-s32"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" constant="45" id="Rxr-hx-8zA"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="aPi-JA-uwa"/>
+                            <constraint firstAttribute="trailing" secondItem="cXw-gB-Z6b" secondAttribute="trailing" id="glW-qb-hTx"/>
                             <constraint firstItem="DBC-PM-woG" firstAttribute="leading" secondItem="Lcc-RR-XGm" secondAttribute="leading" id="mth-uX-K6x"/>
                             <constraint firstItem="wJW-xi-MsO" firstAttribute="top" secondItem="FjB-eN-NGH" secondAttribute="bottom" id="pJk-ro-FQ3"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="sys-sr-MW7"/>
                             <constraint firstAttribute="trailing" secondItem="DBC-PM-woG" secondAttribute="trailing" id="xoj-0t-MtE"/>
+                            <constraint firstItem="cXw-gB-Z6b" firstAttribute="leading" secondItem="Lcc-RR-XGm" secondAttribute="leading" id="yAK-An-Arf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="图片评论" id="Rpt-us-etF">
@@ -4231,9 +4239,6 @@
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.16862745098039217" green="0.16862745098039217" blue="0.16862745098039217" alpha="1" colorSpace="deviceRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="D7f-RV-AFz"/>
-                                </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="7UU-hd-4Kc" appends="YES" id="Vsd-qc-XdT"/>
                                 </connections>
@@ -4255,8 +4260,9 @@
                             <constraint firstItem="uSL-v3-BGM" firstAttribute="top" secondItem="ig4-X6-pnF" secondAttribute="bottom" id="Dhb-V4-dbx"/>
                             <constraint firstItem="1Ky-me-be0" firstAttribute="top" secondItem="PHU-df-EYx" secondAttribute="bottom" id="Fd0-p1-ai6"/>
                             <constraint firstItem="4Ne-e7-GOl" firstAttribute="top" secondItem="1Ky-me-be0" secondAttribute="bottom" id="Hxm-dk-wJO"/>
-                            <constraint firstItem="uSL-v3-BGM" firstAttribute="leading" secondItem="mzw-Hq-xvi" secondAttribute="leadingMargin" constant="-8" id="WcB-ew-Drf"/>
+                            <constraint firstAttribute="trailing" secondItem="uSL-v3-BGM" secondAttribute="trailing" id="XKo-ob-7ck"/>
                             <constraint firstItem="PHU-df-EYx" firstAttribute="leading" secondItem="mzw-Hq-xvi" secondAttribute="leading" id="f4m-4T-cYA"/>
+                            <constraint firstItem="uSL-v3-BGM" firstAttribute="leading" secondItem="mzw-Hq-xvi" secondAttribute="leading" id="pGM-nt-k99"/>
                             <constraint firstItem="PHU-df-EYx" firstAttribute="top" secondItem="ig4-X6-pnF" secondAttribute="bottom" constant="80" id="x1I-PD-dtx"/>
                             <constraint firstAttribute="trailing" secondItem="PHU-df-EYx" secondAttribute="trailing" id="zgy-Jh-KIx"/>
                         </constraints>
@@ -4400,16 +4406,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="B1d-D9-g3b" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="4du-lA-FCx"/>
-                            <constraint firstItem="b3l-AQ-ESg" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="AjS-UX-ZOg"/>
+                            <constraint firstAttribute="trailing" secondItem="b3l-AQ-ESg" secondAttribute="trailing" id="4xy-Tt-92E"/>
+                            <constraint firstAttribute="trailing" secondItem="u8a-Yr-5Ae" secondAttribute="trailing" id="BhU-ux-1y0"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="b3l-AQ-ESg" secondAttribute="bottom" id="K8C-5l-3pK"/>
                             <constraint firstItem="b3l-AQ-ESg" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="MbZ-4T-Fm6"/>
+                            <constraint firstItem="b3l-AQ-ESg" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leading" id="UKC-hy-NFo"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="B1d-D9-g3b" secondAttribute="bottom" id="ad0-7O-3Cm"/>
+                            <constraint firstItem="u8a-Yr-5Ae" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leading" id="arR-o4-AKp"/>
+                            <constraint firstItem="B1d-D9-g3b" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leading" id="c8y-K1-9ja"/>
                             <constraint firstItem="zDJ-Z9-TTX" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="eoV-IT-t0X"/>
-                            <constraint firstItem="u8a-Yr-5Ae" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="i9J-br-A0s"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="u8a-Yr-5Ae" secondAttribute="bottom" id="kM4-nB-V9s"/>
+                            <constraint firstAttribute="trailing" secondItem="B1d-D9-g3b" secondAttribute="trailing" id="sn0-UF-adV"/>
                             <constraint firstItem="u8a-Yr-5Ae" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="uQ6-nx-2eJ"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="OVh-H6-CrH" secondAttribute="bottom" id="wZr-sA-jhb"/>
-                            <constraint firstItem="B1d-D9-g3b" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leadingMargin" constant="-8" id="ymH-lc-VAh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k">
@@ -4744,7 +4753,8 @@
                             <constraint firstItem="e5r-ZA-mvX" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" constant="45" id="00c-ZQ-MBN"/>
                             <constraint firstItem="f5m-Uj-lOG" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" id="Cbo-Qs-HdX"/>
                             <constraint firstItem="AjO-Mk-bh2" firstAttribute="top" secondItem="uu5-HW-k6z" secondAttribute="bottom" id="PFc-PP-QgR"/>
-                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leadingMargin" constant="-8" id="jYn-vh-ioL"/>
+                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leadingMargin" constant="-16" id="eKx-eH-uKy"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="f5m-Uj-lOG" secondAttribute="trailing" constant="-16" id="vhn-z9-VXg"/>
                             <constraint firstItem="FsU-VY-D2s" firstAttribute="top" secondItem="e5r-ZA-mvX" secondAttribute="bottom" id="zZj-dg-uFq"/>
                         </constraints>
                     </view>
@@ -4843,16 +4853,16 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="fLJ-gw-aSw"/>
         <segue reference="mca-PE-dzm"/>
         <segue reference="hOW-ww-bKW"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="QDz-81-eMP"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="hB7-KS-rrK"/>
-        <segue reference="fwI-VG-d1n"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="06u-oh-4gy"/>
     </inferredMetricsTieBreakers>
 </document>
