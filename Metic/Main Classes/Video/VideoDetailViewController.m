@@ -164,6 +164,7 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self presentMoviePlayerViewControllerAnimated:playerViewController];
         
         [[NSNotificationCenter defaultCenter]addObserver:self
@@ -221,6 +222,7 @@
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
     _movie = playerViewController;
+    playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
     [playerViewController.moviePlayer pause];
     [self presentMoviePlayerViewControllerAnimated:playerViewController];
     [[NSNotificationCenter defaultCenter]addObserver:self

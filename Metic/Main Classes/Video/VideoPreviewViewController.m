@@ -286,7 +286,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [self presentMoviePlayerViewControllerAnimated:movie];
     [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
     [movie.view setBackgroundColor:[UIColor clearColor]];
-    
     [movie.view setFrame:self.navigationController.view.bounds];
     [[NSNotificationCenter defaultCenter]addObserver:self
      
