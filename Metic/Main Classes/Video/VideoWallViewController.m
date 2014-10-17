@@ -375,7 +375,7 @@
     VideoPreviewViewController* controller = [[VideoPreviewViewController alloc]init];
     controller.videoURL = videoURL;
     controller.eventId = _eventId;
-    [self.navigationController pushViewController:controller animated:NO];
+    [self.navigationController pushViewController:controller animated:YES];
     
     
 }
