@@ -80,8 +80,8 @@
     self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
     self.flatDatePicker.delegate = self;
     
-    UITapGestureRecognizer *tap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
     // Do any additional setup after loading the view.
@@ -688,6 +688,18 @@
     self.isKeyBoard = NO;
 }
 
+#pragma mark - UIGestureRecognizer Delegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+    
+
+    if([touch.view.superview isKindOfClass:[UICollectionView class]]){
+        return NO;
+    }
+    else
+        
+        return YES;
+    
+}
 
 
 @end
