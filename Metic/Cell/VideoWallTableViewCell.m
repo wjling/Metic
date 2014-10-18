@@ -57,6 +57,9 @@
 }
 
 - (IBAction)play:(id)sender {
+    if (!_controller.canPlay) {
+        return;
+    }else _controller.canPlay = NO;
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",videoName]];
     NSLog(@"%@",url);
@@ -346,6 +349,7 @@
     if ([fileManager fileExistsAtPath:filePath]) {
         [fileManager removeItemAtPath:filePath error:nil];
     }
+    _controller.canPlay = YES;
 }
 
 

@@ -49,6 +49,7 @@
     [super viewDidLoad];
     _shouldReload = YES;
     _shouldFlash = YES;
+    _canPlay = YES;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     //init tableView
