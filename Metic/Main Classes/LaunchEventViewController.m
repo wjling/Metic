@@ -39,7 +39,7 @@
 @property (nonatomic,strong) UIView* isAllowStrangerView;
 @property (nonatomic,strong) UIButton *isAllowStrangerButton;
 @property (strong,nonatomic) UICollectionView *collectionView;
-
+@property (nonatomic, strong) CLLocationManager  *locationManager;
 
 @end
 
@@ -396,6 +396,13 @@
     self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
     self.positionInfo = @"";
 
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+        //由于IOS8中定位的授权机制改变 需要进行手动授权
+        _locationManager = [[CLLocationManager alloc] init];
+        //获取授权认证
+        [_locationManager requestAlwaysAuthorization];
+        [_locationManager requestWhenInUseAuthorization];
+    }
     _locService = [[BMKLocationService alloc]init];
     _locService.delegate = self;
     [_locService startUserLocationService];
