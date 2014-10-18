@@ -697,14 +697,11 @@
 
 #pragma mark - UIGestureRecognizer Delegate
 -(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
-    
 
-    if([touch.view.superview isKindOfClass:[UICollectionView class]]){
+    if([touch.view.superview isKindOfClass:[UICollectionViewCell class]]){
         return NO;
     }
-    else
-        
-        return YES;
+    else return YES;
     
 }
 
