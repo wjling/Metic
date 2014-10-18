@@ -171,7 +171,7 @@
                     
                     
                     
-                    NSLog(url);
+                    NSLog(@"%@",url);
                     if (url && ![url isEqualToString:@""]) {
                         AdViewController* adViewController = [[AdViewController alloc]init];
                         adViewController.args = args;
