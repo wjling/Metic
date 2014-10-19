@@ -203,7 +203,7 @@
     [page4 addSubview:imgV4_2];
     [launchV.view addSubview:page4];
     launchV.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:launchV animated:NO completion:nil];
+    [self.view.window.rootViewController.navigationController presentViewController:launchV animated:NO completion:nil];
 }
 
 -(void)dismissLaunchView
