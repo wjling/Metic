@@ -208,15 +208,20 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     encoder.outputFileType = AVFileTypeMPEG4;
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     NSNumber* width,*height;
+    AVAssetTrack* videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     if (_preViewImage.size.height > _preViewImage.size.width){
         encoder.isVerticalVideo = YES;
-        width = [NSNumber numberWithFloat:480];
-        height = [NSNumber numberWithFloat:640];
+//        width = [NSNumber numberWithFloat:480];
+//        height = [NSNumber numberWithFloat:640];
+        width = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
+        height = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
     }
     else{
         encoder.isVerticalVideo = NO;
-        width = [NSNumber numberWithFloat:640];
-        height = [NSNumber numberWithFloat:480];
+//        width = [NSNumber numberWithFloat:640];
+//        height = [NSNumber numberWithFloat:480];
+        width = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
+        height = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
     }
     encoder.videoSettings = @
     {
@@ -281,7 +286,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [self presentMoviePlayerViewControllerAnimated:movie];
     [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
     [movie.view setBackgroundColor:[UIColor clearColor]];
-    
     [movie.view setFrame:self.navigationController.view.bounds];
     [[NSNotificationCenter defaultCenter]addObserver:self
      
@@ -385,6 +389,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         //复制tmp.mp4到videocache文件夹
                         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
+                        NSString* mp4Thumbpath = [docFolder stringByAppendingPathComponent:@"tmp.mp4.thumb"];
                         NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
                         NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -393,7 +398,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                             [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
                         }
                         NSString* filepath = [cachePath stringByAppendingPathComponent:container];
+                        
                         [fileManager copyItemAtPath:mp4path toPath:filepath error:nil];
+                        if ([fileManager fileExistsAtPath:mp4path])
+                            [fileManager removeItemAtPath:mp4path error:nil];
+                        if ([fileManager fileExistsAtPath:mp4Thumbpath])
+                            [fileManager removeItemAtPath:mp4Thumbpath error:nil];
                         
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

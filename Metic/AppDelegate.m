@@ -10,6 +10,7 @@
 #import "UMSocialWechatHandler.h"
 #import "UMSocialSinaHandler.h"
 #import "Source/security/SFHFKeychainUtils.h"
+#import "Main Classes/MTMPMoviePlayerViewController.h"
 #import "Main Classes/MTUser.h"
 #import "MobClick.h"
 #import "HttpSender.h"
@@ -845,5 +846,34 @@
 	[httpServer setDocumentRoot:webPath];
     
     [self startServer];
+}
+
+- (NSUInteger)application:(UIApplication *)application
+supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    
+    if ([[self.window.rootViewController presentedViewController]
+         isKindOfClass:[MTMPMoviePlayerViewController class]]) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    } else {
+        return UIInterfaceOrientationMaskPortrait;
+        if ([[self.window.rootViewController presentedViewController]
+             isKindOfClass:[UINavigationController class]]) {
+            return UIInterfaceOrientationMaskPortrait;
+            // look for it inside UINavigationController
+            UINavigationController *nc = (UINavigationController *)[self.window.rootViewController presentedViewController];
+            
+            // is at the top?
+            if ([nc.topViewController isKindOfClass:[MPMoviePlayerViewController class]]) {
+                return UIInterfaceOrientationMaskAllButUpsideDown;
+                
+                // or it's presented from the top?
+            } else if ([[nc.topViewController presentedViewController]
+                        isKindOfClass:[MPMoviePlayerViewController class]]) {
+                return UIInterfaceOrientationMaskAllButUpsideDown;
+            }
+        }
+    }
+    
+    return UIInterfaceOrientationMaskPortrait;
 }
 @end

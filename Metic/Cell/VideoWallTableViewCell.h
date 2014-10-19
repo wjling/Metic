@@ -10,7 +10,7 @@
 #import "../Main Classes/Video/VideoWallViewController.h"
 #import "../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
 
-@interface VideoWallTableViewCell : UITableViewCell{
+@interface VideoWallTableViewCell : UITableViewCell<ASIHTTPRequestDelegate>{
     ASIHTTPRequest *videoRequest;
     unsigned long long Recordull;
     BOOL isReady;

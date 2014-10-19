@@ -15,6 +15,7 @@
 @property (nonatomic,strong) BMKPointAnnotation *panPoint;
 @property (nonatomic,strong) BMKGeoCodeSearch *geoCodeSearch;
 @property (nonatomic,strong) BMKLocationService* locService;
+@property (nonatomic, strong) CLLocationManager  *locationManager;
 @end
 
 
@@ -130,6 +131,13 @@
 }
 
 - (IBAction)getLocation:(id)sender {
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+        //由于IOS8中定位的授权机制改变 需要进行手动授权
+        _locationManager = [[CLLocationManager alloc] init];
+        //获取授权认证
+        [_locationManager requestAlwaysAuthorization];
+        [_locationManager requestWhenInUseAuthorization];
+    }
     _locService = [[BMKLocationService alloc]init];
     _locService.delegate = self;
     [_locService startUserLocationService];

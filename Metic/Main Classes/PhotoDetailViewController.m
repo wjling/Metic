@@ -884,13 +884,13 @@
                                 int H = _photo.size.height * 145 / _photo.size.width;
                                 if ([_controller.lefPhotos containsObject:_photoInfo]) {
                                     [_controller.lefPhotos removeObject:_photoInfo];
-                                    _controller.leftH -= H;
+                                    _controller.leftH -= (H+43);
                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                         [_controller.tableView1 reloadData];
                                     });
                                 }else if ([_controller.rigPhotos containsObject:_photoInfo]){
                                     [_controller.rigPhotos removeObject:_photoInfo];
-                                    _controller.rightH -= H;
+                                    _controller.rightH -= (H+43);
                                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                         [_controller.tableView2 reloadData];
                                     });

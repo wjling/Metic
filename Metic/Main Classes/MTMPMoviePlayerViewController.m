@@ -35,16 +35,16 @@
     // Dispose of any resources that can be recreated.
 }
 
-
--(NSUInteger)supportedInterfaceOrientations
-{
-    return UIInterfaceOrientationMaskLandscapeRight;
-}
-
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
+//强制横屏
+//-(NSUInteger)supportedInterfaceOrientations
+//{
+//    return UIInterfaceOrientationMaskLandscapeRight;
+//}
+//
+//-(BOOL)shouldAutorotate
+//{
+//    return YES;
+//}
 /*
 #pragma mark - Navigation
 

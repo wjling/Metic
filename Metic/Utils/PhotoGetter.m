@@ -224,7 +224,7 @@
             imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
             compressedImage = [UIImage imageWithData:imageData];
             if (!restOp--) {
-                adjustWidth *= 2/3;
+                adjustWidth *= 7/8.0;
                 break;
             }
         }
@@ -240,7 +240,6 @@
                                                             object:nil
                                                           userInfo:dictionary];
     });
-    
 
     NSDateFormatter * formatter = [[NSDateFormatter alloc ] init];
     [formatter setDateFormat:[NSString stringWithFormat:@"%@YYYYMMddHHmmssSSSSS",[MTUser sharedInstance].userid]];
@@ -361,7 +360,7 @@
             imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
             compressedImage = [UIImage imageWithData:imageData];
             if (!restOp--) {
-                adjustWidth *= 2/3;
+                adjustWidth *= 7/8.0;
                 break;
             }
         }

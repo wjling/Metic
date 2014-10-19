@@ -121,6 +121,10 @@ static SlideNavigationController *singletonInstance;
     return NO;
 }
 
+-(NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
 #pragma mark - Public Methods -
 
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion

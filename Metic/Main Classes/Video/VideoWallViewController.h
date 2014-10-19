@@ -22,5 +22,6 @@
 @property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property BOOL shouldReload;
 @property BOOL shouldFlash;
+@property BOOL canPlay;
 - (IBAction)uploadVideo:(id)sender;
 @end

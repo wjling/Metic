@@ -83,7 +83,8 @@
     CGFloat scrollHeight = _scrollView.frame.size.height - _scrollViewInitInset.top - _scrollViewInitInset.bottom;
     CGFloat y = MAX(contentHeight, scrollHeight);
     // 设置边框
-    self.frame = CGRectMake(0, y, _scrollView.frame.size.width, MJRefreshViewHeight);
+    CGFloat width = _isPhotoWall? 300:_scrollView.frame.size.width;
+    self.frame =(_isPhotoWall && _isRight)? CGRectMake(-155, y, width, MJRefreshViewHeight):CGRectMake(0, y, width, MJRefreshViewHeight);
 }
 
 #pragma mark - 状态相关

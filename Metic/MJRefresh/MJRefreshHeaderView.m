@@ -28,7 +28,8 @@
     [super setScrollView:scrollView];
     
     // 1.设置边框
-    self.frame = CGRectMake(0, - MJRefreshViewHeight, scrollView.frame.size.width, MJRefreshViewHeight);
+    CGFloat width = _isPhotoWall? 300:_scrollView.frame.size.width;
+    self.frame =(_isPhotoWall && _isRight)? CGRectMake(-155, - MJRefreshViewHeight, width, MJRefreshViewHeight):CGRectMake(0, - MJRefreshViewHeight, width, MJRefreshViewHeight);
     
     // 2.加载时间
     self.lastUpdateTime = [[NSUserDefaults standardUserDefaults] objectForKey:MJRefreshHeaderTimeKey];

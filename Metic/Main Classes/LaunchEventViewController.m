@@ -34,12 +34,12 @@
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 @property int visibility;
-
+@property BOOL isKeyBoard;
 @property (nonatomic,strong) UIView* InviteFriendsView;
 @property (nonatomic,strong) UIView* isAllowStrangerView;
 @property (nonatomic,strong) UIButton *isAllowStrangerButton;
 @property (strong,nonatomic) UICollectionView *collectionView;
-
+@property (nonatomic, strong) CLLocationManager  *locationManager;
 
 @end
 
@@ -71,6 +71,7 @@
     [self initInviteFriendsView];
     _visibility = 0;
     _code = 1;
+    _isKeyBoard = NO;
     self.FriendsIds = [[NSMutableSet alloc]init];
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     
@@ -78,12 +79,19 @@
     self.positionInfo = @"";
     self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
     self.flatDatePicker.delegate = self;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+    
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     //_locService.delegate = self;
 }
 
@@ -102,6 +110,8 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     _geocodesearch.delegate = nil;
     _locService.delegate = nil;
     _flatDatePicker.delegate = nil;
@@ -127,6 +137,15 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)MTdismissKeyboard
+{
+    if (![_scrollView isUserInteractionEnabled] || !self.isKeyBoard) {
+        return;
+    }
+    [_subject_text becomeFirstResponder];
+    [_subject_text resignFirstResponder];
 }
 
 -(void)initInviteFriendsView
@@ -253,6 +272,7 @@
 {
     
     if (textField.tag == 11) {
+        [self MTdismissKeyboard];
         [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         [self.scrollView setUserInteractionEnabled:NO];
         self.flatDatePicker.title = @"请选择活动日期";
@@ -376,6 +396,13 @@
     self.pt = (CLLocationCoordinate2D){23.114155, 113.318977};
     self.positionInfo = @"";
 
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+        //由于IOS8中定位的授权机制改变 需要进行手动授权
+        _locationManager = [[CLLocationManager alloc] init];
+        //获取授权认证
+        [_locationManager requestAlwaysAuthorization];
+        [_locationManager requestWhenInUseAuthorization];
+    }
     _locService = [[BMKLocationService alloc]init];
     _locService.delegate = self;
     [_locService startUserLocationService];
@@ -383,6 +410,10 @@
 }
 
 - (IBAction)getBanner:(id)sender {
+    if (_isKeyBoard) {
+        [self MTdismissKeyboard];
+        return;
+    }
     [self performSegueWithIdentifier:@"toBannerSelector" sender:self];
 }
 
@@ -562,6 +593,11 @@
 -(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
 {
     if (type == 100){
+        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:bannerPath])
+            [fileManager removeItemAtPath:bannerPath error:nil];
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
     }else if (type == 106){
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功，图片上传失败" WithDelegate:self WithCancelTitle:@"确定"];
@@ -648,6 +684,24 @@
         _locService.delegate = nil;
         _locService = nil;
     });
+    
+}
+
+-(void) keyboardWillShow:(NSNotification *)note{
+    self.isKeyBoard = YES;
+}
+
+-(void) keyboardWillHide:(NSNotification *)note{
+    self.isKeyBoard = NO;
+}
+
+#pragma mark - UIGestureRecognizer Delegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+
+    if([touch.view.superview isKindOfClass:[UICollectionViewCell class]]){
+        return NO;
+    }
+    else return YES;
     
 }
 

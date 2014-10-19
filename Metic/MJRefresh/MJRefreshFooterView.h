@@ -9,5 +9,7 @@
 #import "MJRefreshBaseView.h"
 
 @interface MJRefreshFooterView : MJRefreshBaseView
+@property BOOL isPhotoWall;
+@property BOOL isRight;
 + (instancetype)footer;
 @end

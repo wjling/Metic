@@ -74,7 +74,7 @@
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
-    [_scrollView setDelegate:self];
+//    [_scrollView setDelegate:self];
     self.seletedPhotoIndex = 0;
     self.isFooterOpen = NO;
     self.isHeaderOpen = NO;
@@ -98,12 +98,18 @@
     //初始化下拉刷新功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
-    _footer.scrollView = self.scrollView;
+    _footer.isPhotoWall = YES;
+    _footer.isRight = NO;
+    _footer.SscrollView = self.tableView2;
+    _footer.scrollView = self.tableView1;
     
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
-    _header.scrollView = self.scrollView;
+    _header.isPhotoWall = YES;
+    _header.isRight = NO;
+    _header.SscrollView = self.tableView2;
+    _header.scrollView = self.tableView1;
     
     //等待圈圈
     
@@ -171,7 +177,6 @@
 -(void)initUI
 {
     _add = [UIButton buttonWithType:UIButtonTypeCustom];
-    
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0]] forState:UIControlStateNormal];
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:170/255.0 blue:166/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     _add.layer.masksToBounds = YES;
@@ -395,17 +400,18 @@
                 NSLog(@"from local %d",index);
             }
             if(image){
-                int H = image.size.height * 145 / image.size.width;
+                float H = image.size.height * 145.0 / image.size.width;
+                [_cellHeight setValue:[NSNumber numberWithFloat:H] forKey:url];
                 [_photo_list addObject:photo];
                 if (_leftH <= _rightH) {
                     [_lefPhotos addObject:photo];
-                    _leftH += H;
+                    _leftH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [_tableView1 reloadData];
                     });
                 }else{
                     [_rigPhotos addObject:photo];
-                    _rightH += H;
+                    _rightH += (H + 43);
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [_tableView2 reloadData];
                     });
@@ -414,7 +420,7 @@
                 [_photo_list removeObject:photo];
                 [_photo_list_all removeObject:photo];
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                 [self classifyPhotos:photos index:index+1];
             });
 
@@ -437,30 +443,7 @@
     }else if(scrollView == _tableView2)
         [_tableView1 setContentOffset:_tableView2.contentOffset];
     
-    if (scrollView == _scrollView) {
-        if (scrollView.contentOffset.y < 0 ) {
-            if ([_outSVState isEqualToString:@"DOWNOVER"]) {
-                [scrollView setScrollEnabled:NO];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_scrollView setScrollEnabled:YES];
-                    
-                });
-            }
-            _outSVState = @"UPOVER";
-        }else if(scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height)){
-            if ([_outSVState isEqualToString:@"UPOVER"]) {
-                [scrollView setScrollEnabled:NO];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_scrollView setScrollEnabled:YES];
-                });
-            }
-            _outSVState = @"DOWNOVER";
-        }
-        
-    }else{
-        [_scrollView setScrollEnabled:YES];
-        _outSVState = nil;
-    }
+
     
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         CGSize size = _tableView2.contentSize;
@@ -473,19 +456,21 @@
     }
 }
 
-
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    [_scrollView setScrollEnabled:YES];
-//    if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
-//        CGSize size = _tableView2.contentSize;
-//        size.height = _tableView1.contentSize.height;
-//        [_tableView2 setContentSize:size];
-//    }else if(_tableView1.contentSize.height < _tableView2.contentSize.height){
-//        CGSize size = _tableView1.contentSize;
-//        size.height = _tableView2.contentSize.height;
-//        [_tableView1 setContentSize:size];
-//    }
+    if (scrollView == _tableView1) {
+        _footer.isRight = NO;
+        _footer.scrollView = _tableView1;
+        _header.isRight = NO;
+        _header.scrollView = _tableView1;
+        
+    }else if (scrollView == _tableView2){
+        _footer.isRight = YES;
+        _footer.scrollView = _tableView2;
+        _header.isRight = YES;
+        _header.scrollView = _tableView2;
+        
+    }
 }
 
 #pragma mark 代理方法-UITableView
@@ -630,16 +615,24 @@
     
 //    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
-    UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
-    if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
     float height = 0;
-    if(img){
-        height = img.size.height *145.0/img.size.width;
-        [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
-        return height+43;
+    NSNumber *H = [_cellHeight valueForKey:url];
+    if (H) {
+        height = [H floatValue];
+        return height + 43;
     }else{
-        [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
-        return 178;
+        UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
+        if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
+        
+        if(img){
+            height = img.size.height *145.0/img.size.width;
+            [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
+            return height+43;
+        }else{
+            [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
+            return 178;
+        }
+
     }
 }
 #pragma mark - HttpSenderDelegate
@@ -689,7 +682,7 @@
             if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1 && self.isFooterOpen == YES) {
+            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
             }else [self reloadPhoto];
