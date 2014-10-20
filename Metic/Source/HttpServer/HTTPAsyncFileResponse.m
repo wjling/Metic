@@ -164,6 +164,21 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 		
 		unsigned long long _bytesAvailableOnFD = dispatch_source_get_data(readSource);
 
+        NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:NULL];
+        UInt64 RealfileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
+        if (_bytesAvailableOnFD + readOffset > RealfileLength) {
+            _bytesAvailableOnFD = RealfileLength - readOffset;
+            
+            if (_bytesAvailableOnFD > 1400) {
+                _bytesAvailableOnFD = 1400;
+            }
+            NSLog(@"返回");
+            return;
+        }
+        
+        
+        
+        
         UInt64 _bytesLeftInFile = fileLength - readOffset;
 		
 		NSUInteger bytesAvailableOnFD;

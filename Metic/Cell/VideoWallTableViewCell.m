@@ -222,7 +222,73 @@
     __block BOOL canReplay = YES;
     
     
+//    //plan a 在线播放 同时下载视频
+//    NSFileManager *fileManager=[NSFileManager defaultManager];
+//    if(![fileManager fileExistsAtPath:cachePath])
+//    {
+//        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+//    }
+//    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+//        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+//        _movie = playerViewController;
+//        [[NSNotificationCenter defaultCenter]addObserver:self
+//         
+//                                                selector:@selector(movieFinishedCallback:)
+//         
+//                                                    name:MPMoviePlayerPlaybackDidFinishNotification
+//         
+//                                                  object:playerViewController.moviePlayer];
+//
+//        
+//        //        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
+//        
+//        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+//        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
+//        return;
+//    }
+//    MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//     
+//                                            selector:@selector(movieFinishedCallback:)
+//     
+//                                                name:MPMoviePlayerPlaybackDidFinishNotification
+//     
+//                                              object:playerViewController.moviePlayer];
+//
+//    playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+//    _movie = playerViewController;
+//    _movie.moviePlayer.shouldAutoplay = YES;
+//
+//    [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
+//    [_movie.moviePlayer prepareToPlay];
+//    [_movie.moviePlayer play];
+//    if (!videoRequest) {
+//        ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
+//        //下载完存储目录
+//        [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
+//        //临时存储目录
+//        [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
+//        //断点续载
+//        [request setAllowResumeForFileDownloads:YES];
+//        [request startAsynchronous];
+//        videoRequest = request;
+//    }
+
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //plan b 缓存视频
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:cachePath])
     {
@@ -243,7 +309,7 @@
                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
                                                   object:playerViewController.moviePlayer];
-        
+
         videoRequest = nil;
     }else if (videoRequest){
         if (_isVideoReady) {
@@ -302,7 +368,7 @@
             
         }];
         //断点续载
-        [request setAllowResumeForFileDownloads:YES];
+//        [request setAllowResumeForFileDownloads:YES];
         [request startAsynchronous];
         videoRequest = request;
         
@@ -317,6 +383,7 @@
     playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
     _movie = playerViewController;
     [_movie.moviePlayer prepareToPlay];
+    _movie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
     _movie.moviePlayer.shouldAutoplay = YES;
     //[_movie.moviePlayer play];
     //[playerViewController.moviePlayer pause];
@@ -361,8 +428,8 @@
      
                                                 object:theMovie];
     
-    //[self.controller dismissMoviePlayerViewControllerAnimated];
-    
+
+//    planb
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
     NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
