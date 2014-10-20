@@ -19,7 +19,7 @@
 
 @interface VideoWallTableViewCell ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
-@property BOOL isVideoReady;
+@property __block unsigned long long receivedBytes;
 @end
 
 @implementation VideoWallTableViewCell
@@ -89,6 +89,12 @@
 
 -(void)refresh
 {
+    _isVideoReady = NO;
+    if (videoRequest) {
+        [videoRequest clearDelegatesAndCancel];
+        videoRequest = nil;
+    }
+    
     self.author.text = [_videoInfo valueForKey:@"author"];
     self.time.text = [[_videoInfo valueForKey:@"time"] substringToIndex:10];
     self.authorId = [_videoInfo valueForKey:@"author_id"];
@@ -212,8 +218,10 @@
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
     __block unsigned long long totalBytes = 0;
-    __block unsigned long long receivedBytes = 0;
+    _receivedBytes = 0;
     __block BOOL canReplay = YES;
+    
+    
     
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:cachePath])
@@ -222,6 +230,9 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        
+//        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
+        
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
         
@@ -236,6 +247,7 @@
         videoRequest = nil;
     }else if (videoRequest){
         if (_isVideoReady) {
+            NSLog(@"trytrytrytry");
             [self playVideo:videoName];
         }
         
@@ -250,24 +262,25 @@
         __block BOOL isPlay = NO;
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
             totalBytes = total;
-            receivedBytes += size;
-            NSLog(@"%lld   %lld   %f",receivedBytes,total,receivedBytes*1.0f/total);
+            _receivedBytes += size;
+            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             if (_movie) [_movie.moviePlayer prepareToPlay];
             [userDefaults setDouble:total forKey:@"file_length"];
+//            [userDefaults setDouble:_receivedBytes forKey:@"existedfile_length"];
             
-            float duration = _movie.moviePlayer.duration;
-            float cur = _movie.moviePlayer.currentPlaybackTime;
+//            float duration = _movie.moviePlayer.duration;
+//            float cur = _movie.moviePlayer.currentPlaybackTime;
+//            
+//            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
+////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
+////                NSLog(@"play");
+////                canReplay = NO;
+////                [_movie.moviePlayer prepareToPlay];
+////                [_movie.moviePlayer play];
+////            }else [_movie.moviePlayer pause];
             
-            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
-            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
-                NSLog(@"play");
-                canReplay = NO;
-                [_movie.moviePlayer prepareToPlay];
-                [_movie.moviePlayer play];
-            }else [_movie.moviePlayer pause];
-            
-            if (!isPlay) {
+            if (!isPlay && _receivedBytes > 30000) {
                 isPlay = YES;
                 _isVideoReady = YES;
                 
@@ -280,7 +293,13 @@
             
             [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
             if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
-            if (_movie) [_movie.moviePlayer prepareToPlay];
+            [[NSUserDefaults standardUserDefaults] setDouble:_receivedBytes forKey:@"existedfile_length"];
+            if(!isPlay){
+                isPlay = YES;
+                _isVideoReady = YES;
+                [self playVideo:videoName];
+            }
+            
         }];
         //断点续载
         [request setAllowResumeForFileDownloads:YES];
@@ -291,11 +310,15 @@
     }
 }
 
+
+
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
     playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
     _movie = playerViewController;
     [_movie.moviePlayer prepareToPlay];
+    _movie.moviePlayer.shouldAutoplay = YES;
+    //[_movie.moviePlayer play];
     //[playerViewController.moviePlayer pause];
     [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
     [[NSNotificationCenter defaultCenter]addObserver:self

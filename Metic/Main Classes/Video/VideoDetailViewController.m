@@ -32,6 +32,7 @@
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property (nonatomic,strong) UIView* moreView;
+@property __block unsigned long long receivedBytes;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
@@ -149,7 +150,6 @@
 }
 
 
-
 - (void)videoPlay:(NSString*)videoName url:(NSString*)url{
     
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
@@ -157,8 +157,10 @@
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
     __block unsigned long long totalBytes = 0;
-    __block unsigned long long receivedBytes = 0;
+    _receivedBytes = 0;
     __block BOOL canReplay = YES;
+    
+    
     
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:cachePath])
@@ -167,6 +169,9 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        
+        //        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
+        
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self presentMoviePlayerViewControllerAnimated:playerViewController];
         
@@ -195,24 +200,25 @@
         __block BOOL isPlay = NO;
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
             totalBytes = total;
-            receivedBytes += size;
-            NSLog(@"%lld   %lld   %f",receivedBytes,total,receivedBytes*1.0f/total);
+            _receivedBytes += size;
+            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             if (_movie) [_movie.moviePlayer prepareToPlay];
             [userDefaults setDouble:total forKey:@"file_length"];
+            //            [userDefaults setDouble:_receivedBytes forKey:@"existedfile_length"];
             
-            float duration = _movie.moviePlayer.duration;
-            float cur = _movie.moviePlayer.currentPlaybackTime;
+            //            float duration = _movie.moviePlayer.duration;
+            //            float cur = _movie.moviePlayer.currentPlaybackTime;
+            //
+            //            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
+            ////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
+            ////                NSLog(@"play");
+            ////                canReplay = NO;
+            ////                [_movie.moviePlayer prepareToPlay];
+            ////                [_movie.moviePlayer play];
+            ////            }else [_movie.moviePlayer pause];
             
-            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
-            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
-                NSLog(@"play");
-                canReplay = NO;
-                [_movie.moviePlayer prepareToPlay];
-                [_movie.moviePlayer play];
-            }else [_movie.moviePlayer pause];
-            
-            if (!isPlay) {
+            if (!isPlay && _receivedBytes > 30000) {
                 isPlay = YES;
                 _isVideoReady = YES;
                 
@@ -225,7 +231,13 @@
             
             [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
             if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
-            if (_movie) [_movie.moviePlayer prepareToPlay];
+            [[NSUserDefaults standardUserDefaults] setDouble:_receivedBytes forKey:@"existedfile_length"];
+            if(!isPlay){
+                isPlay = YES;
+                _isVideoReady = YES;
+                [self playVideo:videoName];
+            }
+            
         }];
         //断点续载
         [request setAllowResumeForFileDownloads:YES];

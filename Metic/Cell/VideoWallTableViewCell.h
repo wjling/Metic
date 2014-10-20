@@ -36,6 +36,7 @@
 @property (strong, nonatomic) VideoWallViewController* controller;
 
 @property (nonatomic) BOOL isZan;
+@property BOOL isVideoReady;
 @property (nonatomic) float height;
 - (IBAction)play:(id)sender;
 -(void)setISZan:(BOOL)isZan;
