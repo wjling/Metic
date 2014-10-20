@@ -148,6 +148,7 @@
     [self videoPlay:videoName url:url];
     //[self openmovie:url];
 }
+
 - (void)videoPlay:(NSString*)videoName url:(NSString*)url{
     
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
@@ -158,7 +159,9 @@
     _receivedBytes = 0;
     
     
+    
     //    //plan a 在线播放 同时下载视频
+    //__block BOOL canReplay = YES;
     //    NSFileManager *fileManager=[NSFileManager defaultManager];
     //    if(![fileManager fileExistsAtPath:cachePath])
     //    {
@@ -318,7 +321,7 @@
     playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
     _movie = playerViewController;
     [_movie.moviePlayer prepareToPlay];
-    _movie.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
+    _movie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
     _movie.moviePlayer.shouldAutoplay = YES;
     //[_movie.moviePlayer play];
     //[playerViewController.moviePlayer pause];
@@ -331,6 +334,7 @@
      
                                               object:playerViewController.moviePlayer];
 }
+
 
 
 
