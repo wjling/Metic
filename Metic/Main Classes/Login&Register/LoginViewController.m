@@ -105,23 +105,27 @@
     tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
     [self.view addGestureRecognizer:tapRecognizer];
     
-
+    
 
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     NSLog(@"login will apear");
     if (fromRegister) {
+        [self.view setHidden:NO];
         fromRegister = NO;
         text_password = nil;
         text_userName = nil;
     }
     else{
+        [self.view setHidden:YES];
         [self checkPreUP];
     }
 //    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
+//    [super viewWillAppear:animated];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -269,11 +273,13 @@
 //            [self jumpToMainView];
 //        });
         [button_login setEnabled:YES];
-        [self jumpToMainView];
+        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+//        [self jumpToMainView];
         return;
     }
     else if ([userStatus isEqualToString:@"change"])
     {
+        [self.view setHidden:NO];
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }

@@ -62,7 +62,7 @@
 	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	leftMenu.cellIdentifier = @"leftMenuCell";
-	
+
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
     [self initApp];
