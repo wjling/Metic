@@ -329,7 +329,7 @@
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
             totalBytes = total;
             _receivedBytes += size;
-            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
+//            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             if (_movie) [_movie.moviePlayer prepareToPlay];
             [userDefaults setDouble:total forKey:@"file_length"];
@@ -368,11 +368,10 @@
             
         }];
         //断点续载
-//        [request setAllowResumeForFileDownloads:YES];
+        [request setAllowResumeForFileDownloads:YES];
         [request startAsynchronous];
         videoRequest = request;
-        
-        
+
     }
 }
 

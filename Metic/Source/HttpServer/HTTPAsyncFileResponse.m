@@ -172,7 +172,7 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
             if (_bytesAvailableOnFD > 1400) {
                 _bytesAvailableOnFD = 1400;
             }
-            NSLog(@"返回");
+//            NSLog(@"返回");
             return;
         }
         
