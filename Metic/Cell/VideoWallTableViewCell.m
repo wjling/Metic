@@ -124,6 +124,11 @@
             [self.video_button setImage:image forState:UIControlStateNormal];
             self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;
+        }else{
+            [_video_button setImage:nil forState:UIControlStateNormal];
+            [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
+            [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
+            self.videoThumb = nil;
         }
     }];
 

@@ -712,11 +712,17 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-        float height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
+
+        float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
+        
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
         UIButton* video = [UIButton buttonWithType:UIButtonTypeCustom];
         [video setFrame:CGRectMake(0, 0, 320,height)];
         [video addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
+        if (!_video_thumb) {
+            [video setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
+            [video setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
+        }
         
         UIImageView* videoIc = [[UIImageView alloc]initWithFrame:CGRectMake((320-75)/2, (height-75)/2, 75,75)];
         [videoIc setUserInteractionEnabled:NO];
@@ -867,7 +873,7 @@
     float height = 0;
     if (indexPath.row == 0) {
         self.specificationHeight = [CommonUtils calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0 isEmotion:NO];
-        height = self.video_thumb.size.height *320.0/self.video_thumb.size.width;
+        height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
         height += 3;
         height += 50;
         height += 30;//delete button
