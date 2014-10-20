@@ -57,9 +57,7 @@
 }
 
 - (IBAction)play:(id)sender {
-    if (!_controller.canPlay) {
-        return;
-    }else _controller.canPlay = NO;
+    
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",videoName]];
     NSLog(@"%@",url);
@@ -300,6 +298,9 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+        if (!_controller.canPlay) return;
+        else _controller.canPlay = NO;
+            
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
 //        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
@@ -316,66 +317,75 @@
                                                   object:playerViewController.moviePlayer];
 
         videoRequest = nil;
-    }else if (videoRequest){
-        if (_isVideoReady) {
-            NSLog(@"trytrytrytry");
-            [self playVideo:videoName];
+    }else{
+        if (!_controller.canPlay) return;
+        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"没有网络");
+            return;
         }
-        
-    }
-    else{
-        _isVideoReady = NO;
-        ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
-        //下载完存储目录
-        [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
-        //临时存储目录
-        [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
-        __block BOOL isPlay = NO;
-        [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
-            totalBytes = total;
-            _receivedBytes += size;
-//            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            if (_movie) [_movie.moviePlayer prepareToPlay];
-            [userDefaults setDouble:total forKey:@"file_length"];
-//            [userDefaults setDouble:_receivedBytes forKey:@"existedfile_length"];
+        _controller.canPlay = NO;
+        if (videoRequest){
+            if (_isVideoReady) {
+                NSLog(@"trytrytrytry");
+                [self playVideo:videoName];
+            }
             
-//            float duration = _movie.moviePlayer.duration;
-//            float cur = _movie.moviePlayer.currentPlaybackTime;
-//            
-//            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
-////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
-////                NSLog(@"play");
-////                canReplay = NO;
-////                [_movie.moviePlayer prepareToPlay];
-////                [_movie.moviePlayer play];
-////            }else [_movie.moviePlayer pause];
-            
-            if (!isPlay && _receivedBytes > 30000) {
-                isPlay = YES;
-                _isVideoReady = YES;
+        }
+        else{
+            _isVideoReady = NO;
+            ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
+            //下载完存储目录
+            [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
+            //临时存储目录
+            [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
+            __block BOOL isPlay = NO;
+            [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
+                totalBytes = total;
+                _receivedBytes += size;
+                //            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                if (_movie) [_movie.moviePlayer prepareToPlay];
+                [userDefaults setDouble:total forKey:@"file_length"];
+                //            [userDefaults setDouble:_receivedBytes forKey:@"existedfile_length"];
                 
-                [self playVideo:videoName];
-                //if(_movie) [_movie.moviePlayer play];
-            }
-        }];
-
-        [request setCompletionBlock:^{
+                //            float duration = _movie.moviePlayer.duration;
+                //            float cur = _movie.moviePlayer.currentPlaybackTime;
+                //
+                //            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
+                ////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
+                ////                NSLog(@"play");
+                ////                canReplay = NO;
+                ////                [_movie.moviePlayer prepareToPlay];
+                ////                [_movie.moviePlayer play];
+                ////            }else [_movie.moviePlayer pause];
+                
+                if (!isPlay && _receivedBytes > 30000) {
+                    isPlay = YES;
+                    _isVideoReady = YES;
+                    
+                    [self playVideo:videoName];
+                    //if(_movie) [_movie.moviePlayer play];
+                }
+            }];
             
-            [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
-            if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
-            [[NSUserDefaults standardUserDefaults] setDouble:_receivedBytes forKey:@"existedfile_length"];
-            if(!isPlay){
-                isPlay = YES;
-                _isVideoReady = YES;
-                [self playVideo:videoName];
-            }
+            [request setCompletionBlock:^{
+                
+                [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
+                if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
+                [[NSUserDefaults standardUserDefaults] setDouble:_receivedBytes forKey:@"existedfile_length"];
+                if(!isPlay){
+                    isPlay = YES;
+                    _isVideoReady = YES;
+                    [self playVideo:videoName];
+                }
+                
+            }];
+            //断点续载
+            [request setAllowResumeForFileDownloads:YES];
+            [request startAsynchronous];
+            videoRequest = request;
             
-        }];
-        //断点续载
-        [request setAllowResumeForFileDownloads:YES];
-        [request startAsynchronous];
-        videoRequest = request;
+        }
 
     }
 }
