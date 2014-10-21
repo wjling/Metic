@@ -20,6 +20,9 @@
 - (IBAction)launch:(id)sender;
 - (IBAction)getLoc:(id)sender;
 - (IBAction)getBanner:(id)sender;
+- (BOOL)shouldDraft;
+- (void)alertMakingDraft;
+- (void)makeDraft;
 @property (strong, nonatomic) IBOutlet UITextField *subject_text;
 @property (strong, nonatomic) IBOutlet UITextField *location_text;
 @property (strong, nonatomic) IBOutlet UITextView *detail_text;
@@ -30,6 +33,7 @@
 @property (nonatomic,strong) NSString *positionInfo;
 @property (strong, nonatomic) UIViewController* controller;
 @property (strong, nonatomic) UIImage* uploadImage;
+@property BOOL canLeave;
 @property int code;
 
 
