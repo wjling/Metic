@@ -17,10 +17,12 @@
 #import "FriendTableViewCell.h"
 #import "UserQRCodeViewController.h"
 #import "ReportViewController.h"
+#import "ChangeAliasViewController.h"
 
 
 @interface FriendInfoViewController : UIViewController <UIScrollViewDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (strong, nonatomic) UIButton *del_friend_Button;
+@property (strong, nonatomic) UIButton *friend_alias_button;
 @property (strong, nonatomic) UIView* contentView;
 @property (strong, nonatomic) UIScrollView* sView;
 @property (strong, nonatomic) UIPageControl* pControl;

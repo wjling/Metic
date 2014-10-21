@@ -202,6 +202,7 @@
 		510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4596196E8A960081672A /* UIView+WebCacheOperation.m */; };
 		510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */; };
 		5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */; };
+		512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 512C010019F4FF2D003E19A1 /* ChangeAliasViewController.m */; };
 		5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5144D980196B880300C953FB /* UMSocialLocalizable.strings */; };
 		5144D99B196B880300C953FB /* libUMSocial_Sdk_4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5144D98E196B880300C953FB /* libUMSocial_Sdk_4.0.a */; };
 		5144D99C196B880300C953FB /* UMSCommentDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5144D990196B880300C953FB /* UMSCommentDetailController.xib */; };
@@ -726,6 +727,8 @@
 		510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIImageExtras.m"; sourceTree = "<group>"; };
 		5127DED9198F21A100FB5A41 /* NearbyEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyEventViewController.h; sourceTree = "<group>"; };
 		5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyEventViewController.m; sourceTree = "<group>"; };
+		512C00FF19F4FF2D003E19A1 /* ChangeAliasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangeAliasViewController.h; path = Friends/ChangeAliasViewController.h; sourceTree = "<group>"; };
+		512C010019F4FF2D003E19A1 /* ChangeAliasViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChangeAliasViewController.m; path = Friends/ChangeAliasViewController.m; sourceTree = "<group>"; };
 		5144D981196B880300C953FB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UMSocialLocalizable.strings; sourceTree = "<group>"; };
 		5144D983196B880300C953FB /* UMSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocial.h; sourceTree = "<group>"; };
 		5144D984196B880300C953FB /* UMSocialAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialAccountManager.h; sourceTree = "<group>"; };
@@ -1517,6 +1520,8 @@
 				04B6F8BB19A2F98A00229393 /* ContactsRecommendTableViewCell.m */,
 				0435EF4019B471AB003BB2F6 /* UserQRCodeViewController.h */,
 				0435EF4119B471AB003BB2F6 /* UserQRCodeViewController.m */,
+				512C00FF19F4FF2D003E19A1 /* ChangeAliasViewController.h */,
+				512C010019F4FF2D003E19A1 /* ChangeAliasViewController.m */,
 			);
 			name = Friends;
 			sourceTree = "<group>";
@@ -2132,7 +2137,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = dishcool;
+				ORGANIZATIONNAME = WeShare;
 				TargetAttributes = {
 					51581D1F1933575300943606 = {
 						DevelopmentTeam = BQWKD37TRB;
@@ -2427,6 +2432,7 @@
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
+				512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */,
 				08E92DD519B2CCD0002499BF /* VideoWallViewController.m in Sources */,
 				51F4CB1419E6307500E487F1 /* DDASLLogger.m in Sources */,
 				51F4CB2219E6307500E487F1 /* HTTPErrorResponse.m in Sources */,

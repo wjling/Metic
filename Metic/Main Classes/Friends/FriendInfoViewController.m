@@ -20,6 +20,7 @@
 
 @implementation FriendInfoViewController
 @synthesize del_friend_Button;
+@synthesize friend_alias_button;
 @synthesize sView;
 @synthesize contentView;
 @synthesize pControl;
@@ -127,7 +128,6 @@
     UIColor* indicatorTintColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
     pControl.pageIndicatorTintColor = indicatorTintColor;
     [pControl addTarget:self action:@selector(pageControlClicked:) forControlEvents:UIControlEventValueChanged];
-//    [pControl setBackgroundColor:[UIColor redColor]];
     
     
     self.fInfoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
@@ -162,30 +162,39 @@
 //    gender_imageView.image = [UIImage imageNamed:@"女icon"];
     [gender_imageView setTag:3];
     
-    self.del_friend_Button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width-70, self.fInfoView.frame.size.height/2, 78, 25)];
-//    [self.del_friend_Button setTag:4];
-    UIColor* del_btn_color = [UIColor colorWithRed:0.75 green:0.75 blue:0.75 alpha:0.6];
-    [self.del_friend_Button setBackgroundColor:del_btn_color];
-    self.del_friend_Button.layer.cornerRadius = 5;
-    self.del_friend_Button.layer.masksToBounds = YES;
-    UIImageView* icon = [[UIImageView alloc]initWithFrame:CGRectMake(8, 7, 10, 10)];
-    icon.image = [UIImage imageNamed:@"删除好友叉"];
-    UILabel* del_btn_label = [[UILabel alloc]initWithFrame:CGRectMake(23, 0, 45, 25)];
-    del_btn_label.text = @"删除好友";
-    [del_btn_label setBackgroundColor:[UIColor clearColor]];
-    del_btn_label.textColor = [UIColor whiteColor];
-    [del_btn_label setFont:[UIFont fontWithName:@"ArialRoundedMTBold" size:9]];
+    UIColor* btn_color = [UIColor colorWithRed:0.75 green:0.75 blue:0.75 alpha:0.6];
+//    self.del_friend_Button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width-70, self.fInfoView.frame.size.height/2, 78, 25)];
+////    [self.del_friend_Button setTag:4];
+//    [self.del_friend_Button setBackgroundColor:btn_color];
+//    self.del_friend_Button.layer.cornerRadius = 5;
+//    self.del_friend_Button.layer.masksToBounds = YES;
+//    UIImageView* icon = [[UIImageView alloc]initWithFrame:CGRectMake(8, 7, 10, 10)];
+//    icon.image = [UIImage imageNamed:@"删除好友叉"];
+//    UILabel* del_btn_label = [[UILabel alloc]initWithFrame:CGRectMake(23, 0, 45, 25)];
+//    del_btn_label.text = @"删除好友";
+//    [del_btn_label setBackgroundColor:[UIColor clearColor]];
+//    del_btn_label.textColor = [UIColor whiteColor];
+//    [del_btn_label setFont:[UIFont fontWithName:@"ArialRoundedMTBold" size:9]];
 //    del_button.titleLabel.text = @"删除好友";
     
-    [self.del_friend_Button addSubview:icon];
-    [self.del_friend_Button addSubview:del_btn_label];
-    [self.del_friend_Button setHidden:YES];
+//    [self.del_friend_Button addSubview:icon];
+//    [self.del_friend_Button addSubview:del_btn_label];
+//    [self.del_friend_Button setHidden:YES];
+    
+    self.friend_alias_button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width - 65, self.fInfoView.frame.size.height/3, 70, 25)];
+    [friend_alias_button setBackgroundColor:btn_color];
+    friend_alias_button.layer.cornerRadius = 5;
+    friend_alias_button.layer.masksToBounds = YES;
+    [friend_alias_button setTitle:@"修改备注名" forState:UIControlStateNormal];
+    [friend_alias_button.titleLabel setFont:[UIFont systemFontOfSize:11]];
+    [friend_alias_button addTarget:self action:@selector(changeAlias:) forControlEvents:UIControlEventTouchUpInside];
     
 //    self.fInfoView.layer.borderColor
     [self.fInfoView addSubview:photo];
     [self.fInfoView addSubview:name_label];
     [self.fInfoView addSubview:location_label];
     [self.fInfoView addSubview:gender_imageView];
+//    [self.fInfoView addSubview:friend_alias_button];
 //    [self.fInfoView addSubview:del_button];
     
     
@@ -226,9 +235,17 @@
     [contentView addSubview:pControl];
     
     [root addSubview:contentView];
-    [root addSubview:self.del_friend_Button];
+    [root addSubview:self.friend_alias_button];
+//    [root addSubview:self.del_friend_Button];
 //    [root addSubview:friendInfoEvents_tableView];
     
+}
+
+-(IBAction)changeAlias:(id)sender
+{
+    NSLog(@"change alias");
+    ChangeAliasViewController *aliasVC = [[ChangeAliasViewController alloc]init];
+    [self.navigationController pushViewController:aliasVC animated:YES];
 }
 
 - (IBAction)pageControlClicked:(id)sender
