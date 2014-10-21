@@ -25,6 +25,7 @@
 @property (strong, nonatomic)  UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
+@property (strong, nonatomic) UIView *inputView;
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
 @property (strong, nonatomic) IBOutlet UIView *moreView;

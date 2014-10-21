@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -2825,39 +2826,11 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sad-WS-38C">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="1056"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="sad-WS-38C">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="371"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5U-Ih-F1e">
-                                <rect key="frame" x="0.0" y="524" width="320" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uux-SG-p2U">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
-                                        <state key="normal" image="button_emotion">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted" image="button_emotion_pressed"/>
-                                        <connections>
-                                            <action selector="button_Emotionpress:" destination="cGW-AM-0QH" eventType="touchUpInside" id="12U-1R-mrc"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qs8-jC-KCY">
-                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
-                                        <state key="normal" image="输入框">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="publishComment:" destination="cGW-AM-0QH" eventType="touchUpInside" id="tnh-6A-pIa"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="ieU-wN-f0B"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="08Q-Er-FO7" customClass="emotion_Keyboard">
                                 <rect key="frame" x="0.0" y="416" width="320" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -2918,11 +2891,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="sad-WS-38C" secondAttribute="trailing" id="3kI-nV-cxi"/>
+                            <constraint firstItem="sad-WS-38C" firstAttribute="leading" secondItem="ARj-Z4-ISz" secondAttribute="leading" id="A7D-ZC-wES"/>
                             <constraint firstItem="08Q-Er-FO7" firstAttribute="top" secondItem="PLs-O3-Ixn" secondAttribute="bottom" id="G0m-vH-PPt"/>
-                            <constraint firstAttribute="trailing" secondItem="c5U-Ih-F1e" secondAttribute="trailing" id="IIf-PJ-aj0"/>
-                            <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="c5U-Ih-F1e" secondAttribute="bottom" id="Nv1-GW-LUg"/>
                             <constraint firstItem="sad-WS-38C" firstAttribute="top" secondItem="R69-RB-EZ5" secondAttribute="bottom" id="QQq-Xe-gnu"/>
-                            <constraint firstItem="c5U-Ih-F1e" firstAttribute="leading" secondItem="ARj-Z4-ISz" secondAttribute="leading" id="lG9-OI-gwU"/>
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="45" id="uxe-yV-kTm"/>
                         </constraints>
                     </view>
@@ -2941,8 +2913,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="button_Emotion" destination="uux-SG-p2U" id="1gm-sF-n8p"/>
-                        <outlet property="commentView" destination="c5U-Ih-F1e" id="FBR-ZQ-EkW"/>
                         <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
                         <outlet property="moreView" destination="goc-b1-4sh" id="LdL-1t-jHa"/>
                         <outlet property="optionView" destination="zec-bo-Dqj" id="VGI-PA-Hj1"/>
@@ -3991,35 +3961,6 @@
                                 <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXw-gB-Z6b">
-                                <rect key="frame" x="0.0" y="449" width="320" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfT-Pi-FEW">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
-                                        <state key="normal" image="button_emotion">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="button_Emotionpress:" destination="vtf-A0-qgM" eventType="touchUpInside" id="H5U-bx-5NB"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xha-s1-rDN">
-                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
-                                        <state key="normal" image="输入框">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="publishComment:" destination="vtf-A0-qgM" eventType="touchUpInside" id="3Pa-la-Eqx"/>
-                                            <action selector="publishComment:" destination="cGW-AM-0QH" eventType="touchUpInside" id="IV1-TZ-r5v"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="fYq-1d-eXf"/>
-                                    <constraint firstAttribute="width" constant="320" id="gAJ-VE-pLL"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DBC-PM-woG">
                                 <rect key="frame" x="0.0" y="371" width="320" height="45"/>
                                 <subviews>
@@ -4109,22 +4050,18 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="oGJ-mZ-er7" firstAttribute="top" secondItem="yL4-QP-KUp" secondAttribute="bottom" id="8YK-DG-lot"/>
-                            <constraint firstItem="cXw-gB-Z6b" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" id="I8i-SW-s32"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" constant="45" id="Rxr-hx-8zA"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="aPi-JA-uwa"/>
-                            <constraint firstAttribute="trailing" secondItem="cXw-gB-Z6b" secondAttribute="trailing" id="glW-qb-hTx"/>
                             <constraint firstItem="DBC-PM-woG" firstAttribute="leading" secondItem="Lcc-RR-XGm" secondAttribute="leading" id="mth-uX-K6x"/>
                             <constraint firstItem="wJW-xi-MsO" firstAttribute="top" secondItem="FjB-eN-NGH" secondAttribute="bottom" id="pJk-ro-FQ3"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="sys-sr-MW7"/>
                             <constraint firstAttribute="trailing" secondItem="DBC-PM-woG" secondAttribute="trailing" id="xoj-0t-MtE"/>
-                            <constraint firstItem="cXw-gB-Z6b" firstAttribute="leading" secondItem="Lcc-RR-XGm" secondAttribute="leading" id="yAK-An-Arf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="图片评论" id="Rpt-us-etF">
                         <barButtonItem key="backBarButtonItem" title=" " id="bPU-ud-f91"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="commentView" destination="cXw-gB-Z6b" id="QT8-Ce-A4n"/>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
                         <outlet property="download_button" destination="CLr-x0-Y7a" id="vrd-CL-xYV"/>
                         <outlet property="emotionKeyboard" destination="oGJ-mZ-er7" id="4az-Id-TBV"/>
@@ -4703,40 +4640,11 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="114" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AjO-Mk-bh2">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="114" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="AjO-Mk-bh2">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="371"/>
                                 <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-Uj-lOG">
-                                <rect key="frame" x="0.0" y="371" width="320" height="45"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CcP-Ho-o6v">
-                                        <rect key="frame" x="0.0" y="0.0" width="35" height="45"/>
-                                        <state key="normal" image="button_emotion">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="button_Emotionpress:" destination="YxX-6b-tde" eventType="touchUpInside" id="KrK-mk-mGj"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gbM-oD-LKC">
-                                        <rect key="frame" x="282" y="5" width="35" height="35"/>
-                                        <state key="normal" image="输入框">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="publishComment:" destination="cGW-AM-0QH" eventType="touchUpInside" id="bwL-nf-bBg"/>
-                                            <action selector="publishComment:" destination="YxX-6b-tde" eventType="touchUpInside" id="dND-Iv-JA3"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="FUb-2E-ENi"/>
-                                    <constraint firstAttribute="width" constant="320" id="a4v-TO-AZX"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FsU-VY-D2s" customClass="emotion_Keyboard">
                                 <rect key="frame" x="0.0" y="416" width="320" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -4749,10 +4657,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="e5r-ZA-mvX" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" constant="45" id="00c-ZQ-MBN"/>
-                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="top" secondItem="AjO-Mk-bh2" secondAttribute="bottom" id="Cbo-Qs-HdX"/>
+                            <constraint firstItem="AjO-Mk-bh2" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leading" id="Fz7-9m-e0R"/>
                             <constraint firstItem="AjO-Mk-bh2" firstAttribute="top" secondItem="uu5-HW-k6z" secondAttribute="bottom" id="PFc-PP-QgR"/>
-                            <constraint firstAttribute="trailing" secondItem="f5m-Uj-lOG" secondAttribute="trailing" id="X46-y5-pP8"/>
-                            <constraint firstItem="f5m-Uj-lOG" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leading" id="X5V-QG-cav"/>
+                            <constraint firstAttribute="trailing" secondItem="AjO-Mk-bh2" secondAttribute="trailing" id="yRw-vY-Guk"/>
                             <constraint firstItem="FsU-VY-D2s" firstAttribute="top" secondItem="e5r-ZA-mvX" secondAttribute="bottom" id="zZj-dg-uFq"/>
                         </constraints>
                     </view>
@@ -4772,7 +4679,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="commentView" destination="f5m-Uj-lOG" id="hcL-Ca-qvT"/>
                         <outlet property="emotionKeyboard" destination="FsU-VY-D2s" id="j6f-RF-g1N"/>
                         <outlet property="moreBtn" destination="QIa-21-CeF" id="GU1-HY-rS1"/>
                         <outlet property="tableView" destination="AjO-Mk-bh2" id="sqS-8T-BHg"/>
@@ -4792,8 +4698,6 @@
         <image name="5健身.jpg" width="640" height="245"/>
         <image name="6听课.jpg" width="640" height="245"/>
         <image name="7夜店.jpg" width="640" height="245"/>
-        <image name="button_emotion" width="24" height="24"/>
-        <image name="button_emotion_pressed" width="24" height="24"/>
         <image name="dian" width="32" height="44"/>
         <image name="ic_remove" width="31" height="31"/>
         <image name="img_about_logo" width="234" height="144"/>
@@ -4841,7 +4745,6 @@
         <image name="登录界面按钮按下效果" width="580" height="76"/>
         <image name="白色箭头" width="17" height="17"/>
         <image name="系统消息图标" width="45" height="45"/>
-        <image name="输入框" width="35" height="35"/>
         <image name="输入框-1" width="295" height="43"/>
         <image name="默认用户头像" width="125" height="125"/>
     </resources>
@@ -4857,9 +4760,9 @@
         <segue reference="ib8-0I-OZA"/>
         <segue reference="mca-PE-dzm"/>
         <segue reference="823-Eq-eYh"/>
-        <segue reference="QDz-81-eMP"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="hB7-KS-rrK"/>
+        <segue reference="QDz-81-eMP"/>
         <segue reference="fwI-VG-d1n"/>
         <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>

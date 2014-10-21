@@ -94,6 +94,19 @@
     [self closeMoreview];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (self.isKeyBoard) {
+        [self.inputTextView resignFirstResponder];
+        return;
+    }
+    if (self.isEmotionOpen) {
+        [self button_Emotionpress:nil];
+        return;
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -114,6 +127,25 @@
 
 -(void)initUI
 {
+    //初始化评论框
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
+    [commentV setBackgroundColor:[UIColor whiteColor]];
+    _commentView = commentV;
+    
+    UIButton *emotionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [emotionBtn setFrame:CGRectMake(0, 0, 35, 45)];
+    [emotionBtn setImage:[UIImage imageNamed:@"button_emotion"] forState:UIControlStateNormal];
+    [emotionBtn addTarget:self action:@selector(button_Emotionpress:) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:emotionBtn];
+    
+    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
+    [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
+    [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:sendBtn];
+    
+    [self.view addSubview:commentV];
+    
     // 初始化输入框
     MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
     
@@ -140,6 +172,10 @@
 - (void)play:(id)sender {
     if (_isKeyBoard) {
         [_inputTextView resignFirstResponder];
+        return;
+    }
+    if (_isEmotionOpen) {
+        [self button_Emotionpress:nil];
         return;
     }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
@@ -359,6 +395,12 @@
 //}
 
 - (IBAction)more:(id)sender {
+    if (_isKeyBoard) {
+        [_inputTextView resignFirstResponder];
+    }
+    if (_isEmotionOpen) {
+        [self button_Emotionpress:nil];
+    }
     if (_moreView) {
         //删除
         [_moreView removeFromSuperview];
@@ -388,11 +430,7 @@
         moreItem.layer.shadowOpacity = 1;
         
         [_moreView addSubview:moreItem];
-        
-        
-        
-        
-        
+
     }
 }
 
