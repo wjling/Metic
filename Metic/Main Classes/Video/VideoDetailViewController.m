@@ -91,12 +91,13 @@
     [MobClick endLogPageView:@"视频详情"];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [self closeMoreview];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self closeMoreview];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
         return;
@@ -411,7 +412,7 @@
         [_moreView setBackgroundColor:[UIColor clearColor]];
         UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeMoreview)];
         [self.view addSubview:_moreView];
-        [self.view addGestureRecognizer:tap];
+        [self.moreView addGestureRecognizer:tap];
         
         CGRect frame = _moreView.frame;
         UIButton* moreItem = [UIButton buttonWithType:UIButtonTypeCustom];
