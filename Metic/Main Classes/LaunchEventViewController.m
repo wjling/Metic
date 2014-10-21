@@ -71,7 +71,9 @@
     [self initInviteFriendsView];
     _visibility = 0;
     _code = 1;
+    _canLeave = NO;
     _isKeyBoard = NO;
+    _canLeave = NO;
     self.FriendsIds = [[NSMutableSet alloc]init];
     _geocodesearch = [[BMKGeoCodeSearch alloc]init];
     
@@ -84,6 +86,10 @@
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
+    [self loadDraft];
+
+    
+    
     // Do any additional setup after loading the view.
 }
 
@@ -95,12 +101,19 @@
     //_locService.delegate = self;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     _geocodesearch.delegate = self;
     _flatDatePicker.delegate = self;
-    self.location_text.text = self.positionInfo;
+    if (![self.positionInfo isEqualToString:@""]) {
+        self.location_text.text = self.positionInfo;
+    }
     [self copyFriendsId];
     [self adjustCollectionView];
     [_collectionView reloadData];
@@ -137,6 +150,7 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+    return;
 }
 
 -(void)MTdismissKeyboard
@@ -146,6 +160,74 @@
     }
     [_subject_text becomeFirstResponder];
     [_subject_text resignFirstResponder];
+}
+
+- (BOOL)shouldDraft
+{
+    if (![_subject_text.text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if (![_begin_time_text.text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if (![_end_time_text.text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if (![_location_text.text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    if (![_detail_text.text isEqualToString:@""]) {
+        return YES;
+    }
+    
+    return NO;
+    
+}
+- (void)alertMakingDraft{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否保存草稿" delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+    alert.tag = 120;
+    [alert show];
+}
+
+- (void)loadDraft{
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* LaunchDf = [userDf objectForKey:[NSString stringWithFormat:@"LAUNCH%@",[MTUser sharedInstance].userid]];
+    if (LaunchDf) {
+        _subject_text.text = [LaunchDf valueForKey:@"subject_text"];
+        _begin_time_text.text = [LaunchDf valueForKey:@"begin_time_text"];
+        _end_time_text.text = [LaunchDf valueForKey:@"end_time_text"];
+        _location_text.text = [LaunchDf valueForKey:@"location_text"];
+        _detail_text.text = [LaunchDf valueForKey:@"detail_text"];
+        _pt.longitude = [[LaunchDf valueForKey:@"longitude"] doubleValue];
+        _pt.latitude = [[LaunchDf valueForKey:@"latitude"] doubleValue];
+        
+        [userDf removeObjectForKey:[NSString stringWithFormat:@"LAUNCH%@",[MTUser sharedInstance].userid]];
+        [userDf synchronize];
+    }
+}
+
+- (void)makeDraft{
+    //取
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",uid]];
+    
+    //存
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* LaunchDf = [[NSMutableDictionary alloc]init];
+    [LaunchDf setValue:_subject_text.text forKey:@"subject_text"];
+    [LaunchDf setValue:_begin_time_text.text forKey:@"begin_time_text"];
+    [LaunchDf setValue:_end_time_text.text forKey:@"end_time_text"];
+    [LaunchDf setValue:_location_text.text forKey:@"location_text"];
+    [LaunchDf setValue:_detail_text.text forKey:@"detail_text"];
+    [LaunchDf setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
+    [LaunchDf setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
+    
+    [userDf setObject:LaunchDf forKey:[NSString stringWithFormat:@"LAUNCH%@",[MTUser sharedInstance].userid]];
+    [userDf synchronize];
 }
 
 -(void)initInviteFriendsView
@@ -629,11 +711,21 @@
 #pragma mark - Alert Delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
     // the user clicked OK
+    if ([alertView tag] == 120) {
+        if (buttonIndex == 1)
+        {
+            [self makeDraft];
+        }
+        self.canLeave = YES;
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
     if (buttonIndex == 0)
     {
         [self removeWaitingView];
         ((HomeViewController*)self.controller).shouldRefresh = YES;
-        [self.navigationController popToViewController:self.controller animated:YES];
+        self.canLeave = YES;
+        [self.navigationController popViewControllerAnimated:YES];
         
     }
 }

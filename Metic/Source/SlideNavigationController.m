@@ -32,6 +32,7 @@
 @end
 
 #import "SlideNavigationController.h"
+#import "../Main Classes/LaunchEventViewController.h"
 
 @interface SlideNavigationController()
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
@@ -228,6 +229,13 @@ static SlideNavigationController *singletonInstance;
 
 -(UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
+    if ([self.viewControllers.lastObject isKindOfClass:[LaunchEventViewController class]]) {
+        LaunchEventViewController* controller = self.viewControllers.lastObject;
+        if (!controller.canLeave && [controller shouldDraft]) {
+            [controller alertMakingDraft];
+            return nil;
+        }
+    }
     if (!self.shouldIgnorePushingViewControllers)
     {
         NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");

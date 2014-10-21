@@ -630,6 +630,11 @@
 
 - (IBAction)arrangebyAddTime:(id)sender {
     [self chooseArrangement:nil];
+    [UIView beginAnimations:@"shadowViewAppear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    self.shadowView.alpha = 0;
+    [UIView commitAnimations];
     if (_type == 4) {
         [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
         [_arrangementButtons[1] setBackgroundImage:nil forState:UIControlStateNormal];
@@ -640,6 +645,11 @@
 
 - (IBAction)arrangebyStartTime:(id)sender {
     [self chooseArrangement:nil];
+    [UIView beginAnimations:@"shadowViewAppear" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDelegate:self];
+    self.shadowView.alpha = 0;
+    [UIView commitAnimations];
     if (_type == 0) {
         [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
         [_arrangementButtons[0] setBackgroundImage:nil forState:UIControlStateNormal];
