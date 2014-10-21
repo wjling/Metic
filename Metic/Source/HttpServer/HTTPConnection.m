@@ -1673,12 +1673,12 @@ static NSMutableArray *recentNonces;
 	
 	if (filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir] && !isDir)
 	{
-		return [[HTTPFileResponse alloc] initWithFilePath:filePath forConnection:self];
+//		return [[HTTPFileResponse alloc] initWithFilePath:filePath forConnection:self];
 	
 		// Use me instead for asynchronous file IO.
 		// Generally better for larger files.
 		
-	//	return [[[HTTPAsyncFileResponse alloc] initWithFilePath:filePath forConnection:self] autorelease];
+		return [[HTTPAsyncFileResponse alloc] initWithFilePath:filePath forConnection:self];
 	}
 	
 	return nil;

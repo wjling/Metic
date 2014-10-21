@@ -129,7 +129,14 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_inputTextView resignFirstResponder];
+    if (self.isKeyBoard) {
+        [self.inputTextView resignFirstResponder];
+        return;
+    }
+    if (self.isEmotionOpen) {
+        [self button_Emotionpress:nil];
+        return;
+    }
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -157,6 +164,26 @@
 	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;
 	_moreView.layer.shadowOpacity = 1;
 
+    //初始化评论框
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
+    [commentV setBackgroundColor:[UIColor whiteColor]];
+    _commentView = commentV;
+    
+    UIButton *emotionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [emotionBtn setFrame:CGRectMake(0, 0, 35, 45)];
+    [emotionBtn setImage:[UIImage imageNamed:@"button_emotion"] forState:UIControlStateNormal];
+    [emotionBtn addTarget:self action:@selector(button_Emotionpress:) forControlEvents:UIControlEventTouchUpInside];
+    _button_Emotion = emotionBtn;
+    [commentV addSubview:emotionBtn];
+    
+    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
+    [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
+    [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:sendBtn];
+    
+    [self.view addSubview:commentV];
+    
     // 初始化输入框
     MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
     
@@ -406,7 +433,12 @@
 - (IBAction)more:(id)sender {
     if (_optionView.isHidden) {
         [_optionView setHidden:NO];
-        [self.inputTextView resignFirstResponder];
+        if (self.isKeyBoard) {
+            [self.inputTextView resignFirstResponder];
+        }
+        if (self.isEmotionOpen) {
+            [self button_Emotionpress:nil];
+        }
         CGRect frame = self.view.frame;
         frame.origin = CGPointMake(0, 0);
         _shadowView = [[UIView alloc]initWithFrame:frame];
@@ -1099,6 +1131,14 @@
     return YES;
 }
 
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if (_isEmotionOpen) {
+        [self button_Emotionpress:nil];
+    }
+    return YES;
+}
+
 #pragma mark - keyboard observer method
 //Code from Brett Schumann
 -(void) keyboardWillShow:(NSNotification *)note{
@@ -1129,6 +1169,7 @@
     
     // commit animations
     [UIView commitAnimations];
+
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
@@ -1136,10 +1177,11 @@
     //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
+    
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-    
+
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];

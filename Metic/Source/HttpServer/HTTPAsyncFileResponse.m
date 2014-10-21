@@ -58,8 +58,9 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 			
 			return nil;
 		}
-		
-		fileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        fileLength = (UInt64)[userDefaults doubleForKey:@"file_length"];
+//		fileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
 		fileOffset = 0;
 		
 		aborted = NO;
@@ -146,7 +147,6 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 		
 		return NO;
 	}
-	
 	HTTPLogVerbose(@"%@[%p]: Open fd[%i] -> %@", THIS_FILE, self, fileFD, filePath);
 	
 	readQueue = dispatch_queue_create("HTTPAsyncFileResponse", NULL);
@@ -163,8 +163,23 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 		// It is NOT OK to over-allocate the buffer.
 		
 		unsigned long long _bytesAvailableOnFD = dispatch_source_get_data(readSource);
-		
-		UInt64 _bytesLeftInFile = fileLength - readOffset;
+
+        NSDictionary *fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:NULL];
+        UInt64 RealfileLength = (UInt64)[[fileAttributes objectForKey:NSFileSize] unsignedLongLongValue];
+        if (_bytesAvailableOnFD + readOffset > RealfileLength) {
+            _bytesAvailableOnFD = RealfileLength - readOffset;
+            
+            if (_bytesAvailableOnFD > 1400) {
+                _bytesAvailableOnFD = 1400;
+            }
+//            NSLog(@"返回");
+            return;
+        }
+        
+        
+        
+        
+        UInt64 _bytesLeftInFile = fileLength - readOffset;
 		
 		NSUInteger bytesAvailableOnFD;
 		NSUInteger bytesLeftInFile;
@@ -183,9 +198,8 @@ static const int httpLogLevel = HTTP_LOG_LEVEL_WARN; // | HTTP_LOG_FLAG_TRACE;
 		
 		if (readBuffer == NULL || bytesToRead > (readBufferSize - readBufferOffset))
 		{
-			readBufferSize = bytesToRead;
-			readBuffer = reallocf(readBuffer, (size_t)bytesToRead);
-			
+			readBufferSize = 10000000;
+			readBuffer = reallocf(readBuffer, 10000000);
 			if (readBuffer == NULL)
 			{
 				HTTPLogError(@"%@[%p]: Unable to allocate buffer", THIS_FILE, self);
