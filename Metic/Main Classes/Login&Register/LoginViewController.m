@@ -18,6 +18,7 @@
         Tag_password
     };
     UIViewController* launchV;
+    UIView *blackView;
     CGRect originFrame;
     CGFloat viewOffet;
     UITapGestureRecognizer* tapRecognizer;
@@ -115,13 +116,15 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     NSLog(@"login will apear");
     if (fromRegister) {
-        [self.view setHidden:NO];
+//        [self.view setHidden:NO];
+        [self dismissBlackView];
         fromRegister = NO;
-        text_password = nil;
-        text_userName = nil;
+//        text_password = nil;
+//        text_userName = nil;
     }
     else{
-        [self.view setHidden:YES];
+//        [self.view setHidden:YES];
+        [self showBlackView];
         [self checkPreUP];
     }
 //    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
@@ -245,6 +248,22 @@
     }
 }
 
+-(void)showBlackView
+{
+    if (!blackView) {
+        CGRect screen = [UIScreen mainScreen].bounds;
+        blackView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
+        [blackView setBackgroundColor:[UIColor blackColor]];
+    }
+    [self.view addSubview:blackView];
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissBlackView) userInfo:nil repeats:NO];
+}
+
+-(void)dismissBlackView
+{
+    [blackView removeFromSuperview];
+}
+
 -(void)loginFail
 {
     [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:self WithCancelTitle:@"确定"];
@@ -279,12 +298,14 @@
     }
     else if ([userStatus isEqualToString:@"change"])
     {
-        [self.view setHidden:NO];
+//        [self.view setHidden:NO];
+        [self dismissBlackView];
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     else
     {
+        [self dismissBlackView];
         [self showLaunchView];
         [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
@@ -555,6 +576,12 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    [UIView commitAnimations];
+
     return YES;
 }
 
