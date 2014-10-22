@@ -101,8 +101,8 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    registerSucceeded = NO;
     [super viewDidAppear:animated];
+    registerSucceeded = NO;
     [MobClick beginLogPageView:@"注册首页"];
 }
 
@@ -143,7 +143,17 @@
 
 - (void)jumpToLogin
 {
-    [self performSegueWithIdentifier:@"RegisterToLogin" sender:self];
+//    [self performSegueWithIdentifier:@"RegisterToLogin" sender:self];
+//    [self.navigationController popViewControllerAnimated:YES];
+    UIViewController* login;
+    NSArray *VCs = [self.navigationController viewControllers];
+    for (UIViewController* vc in VCs) {
+        if ([vc isKindOfClass:[LoginViewController class]]) {
+            login = vc;
+            break;
+        }
+    }
+    [self.navigationController popToViewController:login animated:YES];
 }
 
 - (void)jumpToMain
