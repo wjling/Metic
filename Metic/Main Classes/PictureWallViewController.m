@@ -118,7 +118,7 @@
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         NSLog(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
+            _sequence = [NSNumber numberWithInt:-1];
             [self pullPhotoInfosFromDB];
         });
         
@@ -130,10 +130,11 @@
 {
     [super viewWillAppear:animated];
     if (_shouldReloadPhoto) {
-        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
+        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
             [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
-        self.sequence = [[NSNumber alloc]initWithInt:0];
-        [self getPhotolist];
+            self.sequence = [[NSNumber alloc]initWithInt:0];
+            [self getPhotolist];
+        }
     }
 }
 
@@ -832,7 +833,7 @@
         [refreshView endRefreshing];
         return;
     }
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0 && refreshView == _header) {
         NSLog(@"没有网络");
         [refreshView endRefreshing];
         return;
