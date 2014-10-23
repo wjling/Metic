@@ -450,7 +450,7 @@
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"ready auto loading");
-    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (100.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
+    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (200.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
         NSLog(@"ready auto loading");
         _isAutoLoading = YES;
         [_footer beginRefreshing];
@@ -701,16 +701,17 @@
             if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count && !_isAutoLoading) {
-                [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-                [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
+                if(!_isAutoLoading){
+                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                    [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+                }else _isAutoLoading = NO;
             }else [self reloadPhoto];
             
 
         }
             break;
     }
-    _isAutoLoading = NO;
 }
 
 
