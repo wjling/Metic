@@ -35,6 +35,7 @@
 @property (nonatomic,strong) UIButton* add;
 @property (nonatomic,strong) UILabel* addLabel;
 
+@property BOOL isAutoLoading;
 @property BOOL isLoading;
 @property BOOL shouldStop;
 @property NSString* outSVState;
@@ -64,6 +65,7 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
     
+    _isAutoLoading = NO;
     _isLoading = NO;
     _shouldStop = NO;
     _leftH = _rightH = 0;
@@ -442,9 +444,28 @@
         [_tableView2 setContentOffset:_tableView1.contentOffset];
     }else if(scrollView == _tableView2)
         [_tableView1 setContentOffset:_tableView2.contentOffset];
-    
 
-    
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSLog(@"ready auto loading");
+    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (100.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
+        NSLog(@"ready auto loading");
+        _isAutoLoading = YES;
+        [_footer beginRefreshing];
+    }
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    _isAutoLoading = NO;
+}
+
+
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
     if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
         CGSize size = _tableView2.contentSize;
         size.height = _tableView1.contentSize.height;
@@ -454,30 +475,7 @@
         size.height = _tableView2.contentSize.height;
         [_tableView1 setContentSize:size];
     }
-}
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSLog(@"ready auto loading");
-    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (100.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
-        NSLog(@"ready auto loading");
-        [_footer beginRefreshing];
-    }
-}
-
-//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//{
-//    if (scrollView == _tableView1) {
-//        if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < 100.0f && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
-//            [_footer beginRefreshing];
-//        }
-//    }
-//}
-
-
-
--(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
+    
     if (scrollView == _tableView1) {
         _footer.isRight = NO;
         _footer.scrollView = _tableView1;
@@ -489,8 +487,9 @@
         _footer.scrollView = _tableView2;
         _header.isRight = YES;
         _header.scrollView = _tableView2;
-        
     }
+    
+
 }
 
 #pragma mark 代理方法-UITableView
@@ -702,14 +701,16 @@
             if (!_photo_list_all || _photo_list_all.count == 0) {
                 [_promt setHidden:NO];
             }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
+            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count && !_isAutoLoading) {
                 [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                 [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
             }else [self reloadPhoto];
+            
 
         }
             break;
     }
+    _isAutoLoading = NO;
 }
 
 
@@ -770,13 +771,14 @@
         }
         
         int count = self.photo_list.count;
-        if (photo_rest_num >= PhotoNum || [_sequence intValue] == -1) {//加载剩余的，然后再拉
+        if (photo_rest_num > 0 ) {//加载剩余的，然后再拉
             int num = MIN(PhotoNum, _photo_list_all.count - count);
             //        for (int i = count; i < count + num; i++) {
             //            [self.photo_list addObject:self.photo_list_all[i]];
             //        }
-            [refreshView endRefreshing];
             self.isFooterOpen = NO;
+            [refreshView endRefreshing];
+            
             [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
             //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
         }else{
