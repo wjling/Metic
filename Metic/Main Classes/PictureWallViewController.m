@@ -213,9 +213,85 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST];
-    
-    
+    [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
+                    for (int i = 0; i < newphoto_list.count; i++) {
+                        NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list[i]];
+                        newphoto_list[i] = dictionary;
+                    }
+                    [self updatePhotoInfoToDB:newphoto_list];
+                    self.sequence = [response1 valueForKey:@"sequence"];
+
+                    [self.photo_list_all addObjectsFromArray:newphoto_list];
+                    
+                    if ([_sequence intValue] != -1) {
+                        [self getPhotolist];
+                        return;
+                    }else{
+                        int Acount = self.photo_list_all.count;
+                        if (Acount == 0) {
+                            [_promt setHidden:NO];
+                        }else [_promt setHidden:YES];
+                        [self.photo_list removeAllObjects];
+                        [_lefPhotos removeAllObjects];
+                        [_rigPhotos removeAllObjects];
+                        _leftH = 0;
+                        _rightH = 0;
+                        _shouldReloadPhoto = NO;
+                        [_tableView1 reloadData];
+                        [_tableView2 reloadData];
+                        
+                        
+                        int count = self.photo_list.count;
+                        int num = MIN(PhotoNum, _photo_list_all.count - count);
+                        
+                        NSArray* addPhotos = [_photo_list_all subarrayWithRange:NSMakeRange(count, num)];
+                        
+                        
+                        //分图
+                        [self performSelectorInBackground:@selector(classifyPhotos:) withObject:addPhotos];
+                        
+                        if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
+                            if(!_isAutoLoading){
+                                [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                                [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+                            }else{
+                                self.isFooterOpen = NO;
+                                [_footer endRefreshing];
+                                _isAutoLoading = NO;
+                            }
+                        }else {
+                            if (self.isHeaderOpen) {
+                                self.isHeaderOpen = NO;
+                                [_header endRefreshing];
+                            }
+                            if (self.isFooterOpen) {
+                                self.isFooterOpen = NO;
+                                [_footer endRefreshing];
+                            }
+                        }
+
+                        
+                        
+                    }
+                    
+                }
+                    break;
+            }
+            
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+        }
+        
+    }];
 }
 
 -(void)getPhotoPathlist
@@ -705,7 +781,11 @@
                 if(!_isAutoLoading){
                     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                     [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-                }else _isAutoLoading = NO;
+                }else{
+                    self.isFooterOpen = NO;
+                    [_footer endRefreshing];
+                    _isAutoLoading = NO;
+                }
             }else [self reloadPhoto];
             
 
@@ -789,6 +869,7 @@
                     [refreshView endRefreshing];
                 }
             });
+            [_photo_list_all removeAllObjects];
             [self getPhotolist];
         }
 
@@ -796,6 +877,7 @@
         _isHeaderOpen = YES;
         _shouldReloadPhoto = YES;
         self.sequence = [[NSNumber alloc]initWithInt:0];
+        [_photo_list_all removeAllObjects];
         [self getPhotolist];
     }
     
