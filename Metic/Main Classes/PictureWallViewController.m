@@ -420,7 +420,7 @@
                 [_photo_list removeObject:photo];
                 [_photo_list_all removeObject:photo];
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                 [self classifyPhotos:photos index:index+1];
             });
 
@@ -428,7 +428,7 @@
  
         return;
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self indicatorDisappear];
     });
     _isLoading = NO;
@@ -455,6 +455,26 @@
         [_tableView1 setContentSize:size];
     }
 }
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    NSLog(@"ready auto loading");
+    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (100.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
+        NSLog(@"ready auto loading");
+        [_footer beginRefreshing];
+    }
+}
+
+//-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//{
+//    if (scrollView == _tableView1) {
+//        if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < 100.0f && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
+//            [_footer beginRefreshing];
+//        }
+//    }
+//}
+
+
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
