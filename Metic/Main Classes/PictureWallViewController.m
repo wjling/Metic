@@ -131,6 +131,8 @@
     [super viewWillAppear:animated];
     if (_shouldReloadPhoto) {
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+            [self.photo_list_all removeAllObjects];
+            
             [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
             self.sequence = [[NSNumber alloc]initWithInt:0];
             [self getPhotolist];
