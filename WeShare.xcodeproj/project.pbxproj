@@ -108,6 +108,7 @@
 		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
 		085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */; };
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
+		085EAF3A19FBC24D00BFDA10 /* DAProgressOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085EAF3919FBC24D00BFDA10 /* DAProgressOverlayView.m */; };
 		086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */; };
 		086A5AB2193D6E7500880F2F /* MainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 086A5AB1193D6E7500880F2F /* MainView.m */; };
 		086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */; };
@@ -550,6 +551,8 @@
 		085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		085E7A0B19828AAA001E99E4 /* DynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicViewController.h; sourceTree = "<group>"; };
 		085E7A0C19828AAA001E99E4 /* DynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicViewController.m; sourceTree = "<group>"; };
+		085EAF3819FBC24D00BFDA10 /* DAProgressOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAProgressOverlayView.h; sourceTree = "<group>"; };
+		085EAF3919FBC24D00BFDA10 /* DAProgressOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAProgressOverlayView.m; sourceTree = "<group>"; };
 		086A5AAD193D5B2500880F2F /* LaunchEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchEventViewController.h; sourceTree = "<group>"; };
 		086A5AAE193D5B2500880F2F /* LaunchEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchEventViewController.m; sourceTree = "<group>"; };
 		086A5AB0193D6E7500880F2F /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
@@ -1273,6 +1276,15 @@
 			name = SDAVAssetExportSession;
 			sourceTree = "<group>";
 		};
+		085EAF3719FBC24D00BFDA10 /* DAProgressOverlayView */ = {
+			isa = PBXGroup;
+			children = (
+				085EAF3819FBC24D00BFDA10 /* DAProgressOverlayView.h */,
+				085EAF3919FBC24D00BFDA10 /* DAProgressOverlayView.m */,
+			);
+			path = DAProgressOverlayView;
+			sourceTree = "<group>";
+		};
 		087759BB19A81B670034BB58 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -1843,6 +1855,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				085EAF3719FBC24D00BFDA10 /* DAProgressOverlayView */,
 				51F4CAC319E6307500E487F1 /* ASIHTTPRequest2 */,
 				51F4CADA19E6307500E487F1 /* HttpServer */,
 				085D9A0219C996DD004362B8 /* SDAVAssetExportSession */,
@@ -2306,6 +2319,7 @@
 				0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
 				0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */,
+				085EAF3A19FBC24D00BFDA10 /* DAProgressOverlayView.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */,
 				51F4CB2319E6307500E487F1 /* HTTPFileResponse.m in Sources */,
