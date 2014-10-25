@@ -52,8 +52,8 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
 {
     self.backgroundColor = [UIColor clearColor];
     self.progress = 0.;
-    self.outerRadiusRatio = 0.7;
-    self.innerRadiusRatio = 0.6;
+    self.outerRadiusRatio = 0.5;
+    self.innerRadiusRatio = 0.45;
     self.overlayColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.5];
     self.animationProggress = 0.;
     self.stateChangeAnimationDuration = 0.25;

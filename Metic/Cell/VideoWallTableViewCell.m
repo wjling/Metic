@@ -554,10 +554,10 @@
     NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
     [videoRequest clearDelegatesAndCancel];
     videoRequest = nil;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:filePath]) {
-        [fileManager removeItemAtPath:filePath error:nil];
-    }
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    if ([fileManager fileExistsAtPath:filePath]) {
+//        [fileManager removeItemAtPath:filePath error:nil];
+//    }
     _controller.canPlay = YES;
 }
 
