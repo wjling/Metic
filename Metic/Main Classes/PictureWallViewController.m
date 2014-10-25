@@ -37,6 +37,8 @@
 
 @property BOOL isAutoLoading;
 @property BOOL isLoading;
+@property BOOL ignoreLeft;
+@property BOOL isLeft;
 @property BOOL shouldStop;
 @property NSString* outSVState;
 
@@ -252,6 +254,9 @@
                         [_tableView1 reloadData];
                         [_tableView2 reloadData];
                         
+                        [self photoDistribution];
+                        
+                        return;
                         
                         int count = self.photo_list.count;
                         int num = MIN(PhotoNum, _photo_list_all.count - count);
@@ -343,16 +348,21 @@
 
 -(void)reloadPhoto
 {
-    if (self.isHeaderOpen) {
-        self.isHeaderOpen = NO;
-        [_header endRefreshing];
-    }
-    if (self.isFooterOpen) {
-        self.isFooterOpen = NO;
-        [_footer endRefreshing];
-    }
     [self.tableView1 reloadData];
     [self.tableView2 reloadData];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.isHeaderOpen) {
+            self.isHeaderOpen = NO;
+            [_header endRefreshing];
+        }
+        if (self.isFooterOpen) {
+            self.isFooterOpen = NO;
+            [_footer endRefreshing];
+        }
+
+    });
+    
 
     
 }
@@ -458,6 +468,36 @@
     [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(0, count)]];
 }
 
+
+-(void)photoDistribution
+{
+    _leftH = 0;
+    _rightH = 0;
+    NSArray *tmp = [NSArray arrayWithArray:_photo_list_all];
+    for (NSDictionary* photo in tmp) {
+        int width = [[photo valueForKey:@"width"] intValue];
+        int height = [[photo valueForKey:@"height"] intValue];
+        if(width == 0 || height == 0){
+            NSLog(@"图片 %@ 宽高不正确",[photo valueForKey:@"photo_name"]);
+            [_photo_list_all removeObject:photo];
+            continue;
+        }
+        double RealHeight = height * 150.0f / width;
+        
+        if (_leftH <= _rightH) {
+            _leftH += (RealHeight + 43);
+            [_lefPhotos addObject:photo];
+        }else{
+            _rightH += (RealHeight + 43);
+            [_rigPhotos addObject:photo];
+        }
+        [_photo_list addObject:photo];
+    }
+
+    [self reloadPhoto];
+    
+}
+
 -(void)classifyPhotos:(NSArray*)photos
 {
     [self classifyPhotos:photos index:0];
@@ -519,22 +559,25 @@
 #pragma mark 代理方法-UIScrollView
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView == _tableView1) {
+    if (scrollView == _tableView1 && (_ignoreLeft || _isLeft)) {
+        NSLog(@"111");
         [_tableView2 setContentOffset:_tableView1.contentOffset];
-    }else if(scrollView == _tableView2)
+    }else if(scrollView == _tableView2 && (_ignoreLeft || !_isLeft)){
         [_tableView1 setContentOffset:_tableView2.contentOffset];
-
-}
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    NSLog(@"ready auto loading");
-    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (200.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
-        NSLog(@"ready auto loading");
-        _isAutoLoading = YES;
-        [_footer beginRefreshing];
+        NSLog(@"222");
     }
+
 }
+
+//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+//{
+//    NSLog(@"ready auto loading");
+//    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (200.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
+//        NSLog(@"ready auto loading");
+//        _isAutoLoading = YES;
+//        [_footer beginRefreshing];
+//    }
+//}
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
@@ -542,26 +585,18 @@
 }
 
 
-
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (_tableView1.contentSize.height > _tableView2.contentSize.height) {
-        CGSize size = _tableView2.contentSize;
-        size.height = _tableView1.contentSize.height;
-        [_tableView2 setContentSize:size];
-    }else if(_tableView1.contentSize.height < _tableView2.contentSize.height){
-        CGSize size = _tableView1.contentSize;
-        size.height = _tableView2.contentSize.height;
-        [_tableView1 setContentSize:size];
-    }
-    
+    _ignoreLeft = NO;
     if (scrollView == _tableView1) {
+        _isLeft = YES;
         _footer.isRight = NO;
         _footer.scrollView = _tableView1;
         _header.isRight = NO;
         _header.scrollView = _tableView1;
         
     }else if (scrollView == _tableView2){
+        _isLeft = NO;
         _footer.isRight = YES;
         _footer.scrollView = _tableView2;
         _header.isRight = YES;
@@ -591,13 +626,27 @@
     long max = 0;
     if (tableView == self.tableView1) {
         max = _lefPhotos.count;
-    }else max = _rigPhotos.count;
+        if (_leftH < _rightH) max = max + 1;
+    }else{
+        max = _rigPhotos.count;
+        if (_leftH > _rightH) max = max + 1;
+    }
+    NSLog(@"%ld",max);
     return max;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ((tableView == _tableView1 && indexPath.row == _lefPhotos.count) || (tableView == _tableView2 && indexPath.row == _rigPhotos.count)) {
+        UITableViewCell *cell = [[UITableViewCell alloc]init];
+        cell.layer.borderColor = [UIColor greenColor].CGColor;
+        cell.layer.borderWidth = 2;
+        return cell;
+    }
+    
+    
+    
     static NSString *CellIdentifier = @"photocell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -613,7 +662,7 @@
     [cell.imgView setFrame:CGRectZero];
     [cell.infoView setFrame:CGRectZero];
     
-    NSDictionary *a;
+    NSMutableDictionary *a;
     if (tableView == _tableView1) {
         a = _lefPhotos[indexPath.row];
     }else a = _rigPhotos[indexPath.row];
@@ -632,74 +681,35 @@
     [cell.infoView removeFromSuperview];
         
     //NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
+    //NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
+    NSString* url = [a valueForKey:@"url"];
     //NSLog(@"%@",url);
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
     }];
-    //服务器获取url准备
-//    __block NSString* url = [[MTUser sharedInstance].photoURL valueForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"photo_id"]]];
-//    if (!url) {
-//        [photo setImage:[UIImage imageNamed:@"活动图片的默认图片"]];
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        [dictionary setValue:@"GET" forKey:@"method"];
-//        [dictionary setValue:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]] forKey:@"object"];
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-//            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//            switch ([cmd intValue]) {
-//                case NORMAL_REPLY:
-//                {
-//                    url = (NSString*)[response1 valueForKey:@"url"];
-//                    NSLog(@"%@",url);
-//                    [[MTUser sharedInstance].photoURL setValue:url forKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"photo_id"]]];
-//                    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                        if (self && image && cacheType == SDImageCacheTypeNone) {
-//                            [tableView reloadData];
-//                            NSLog(@"reloadData %@",imageURL);
-//                        }
-//                    }];
-//                }
-//                    break;
-//            }
-//        }];
-//    }else{
-//        [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//            if (self && image && cacheType == SDImageCacheTypeNone) {
-//                [tableView reloadData];
-//                NSLog(@"reloadData %@",imageURL);
-//            }
-//        }];
-//    }
-    
-    
-    
-    //[photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
-    NSNumber* Cellheight = [_cellHeight valueForKey:url];
-    if (Cellheight) {
-        float height = [Cellheight floatValue];
-        if (height == 0) {
-            [cell.activityIndicator startAnimating];
-            [cell.activityIndicator setHidden:NO];
-            [cell.imageView setHidden:YES];
-        }else{
-            [cell setHidden:NO];
-            [cell.imageView setHidden:NO];
-            [cell.activityIndicator stopAnimating];
-            [cell.activityIndicator setHidden:YES];
-            [photo setFrame:CGRectMake(0, 0, 145, height)];
-            [cell.infoView setFrame:CGRectMake(0, height, 145, 33)];
-            if (tableView == _tableView1) [cell setFrame:CGRectMake(0, 0, 155, height+43)];
-            else [cell setFrame:CGRectMake(0, 0, 145, height+43)];
-            [cell addSubview:cell.infoView];
-        }
 
-    }else [cell setHidden:YES];
+    int width = [[a valueForKey:@"width"] intValue];
+    int height = [[a valueForKey:@"height"] intValue];
+    float RealHeight = height * 150.0f / width;
+
+    if (height == 0) {
+        [cell.activityIndicator startAnimating];
+        [cell.activityIndicator setHidden:NO];
+        [cell.imageView setHidden:YES];
+    }else{
+        [cell setHidden:NO];
+        [cell.imageView setHidden:NO];
+        [cell.activityIndicator stopAnimating];
+        [cell.activityIndicator setHidden:YES];
+        [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
+        [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
+        if (tableView == _tableView1) [cell setFrame:CGRectMake(0, 0, 155, RealHeight+43)];
+        else [cell setFrame:CGRectMake(0, 0, 145, RealHeight+43)];
+        [cell addSubview:cell.infoView];
+    }
     cell.isloading = _isLoading;
     [cell animationBegin];
+    cell.layer.borderColor = [UIColor redColor].CGColor;
+    cell.layer.borderWidth = 2;
     return cell;
 }
 
@@ -708,30 +718,24 @@
 {
     NSDictionary *a;
     if (tableView == _tableView1) {
-        a = _lefPhotos[indexPath.row];
-    }else a = _rigPhotos[indexPath.row];
-    
-//    NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
-    float height = 0;
-    NSNumber *H = [_cellHeight valueForKey:url];
-    if (H) {
-        height = [H floatValue];
-        return height + 43;
-    }else{
-        UIImage * img = [[_manager imageCache] imageFromMemoryCacheForKey:url];
-        if (!img) img = [[_manager imageCache] imageFromDiskCacheForKey:url];
-        
-        if(img){
-            height = img.size.height *145.0/img.size.width;
-            [_cellHeight setValue:[NSNumber numberWithFloat:height] forKey:url];
-            return height+43;
-        }else{
-            [_cellHeight setValue:[NSNumber numberWithFloat:0] forKey:url];
-            return 178;
+        if (indexPath.row >= _lefPhotos.count) {
+            return abs(_leftH - _rightH);
         }
-
+        a = _lefPhotos[indexPath.row];
+    }else{
+        if (indexPath.row >= _rigPhotos.count) {
+            return abs(_rightH - _leftH);
+        }
+        a = _rigPhotos[indexPath.row];
     }
+    
+    int width = [[a valueForKey:@"width"] intValue];
+    int height = [[a valueForKey:@"height"] intValue];
+    float RealHeight = height * 150.0f / width;
+    
+    return RealHeight + 43;
+    
+
 }
 #pragma mark - HttpSenderDelegate
 
@@ -845,6 +849,7 @@
         return;
     }
     
+    _ignoreLeft = YES;
     if (refreshView == _footer) {
         self.isFooterOpen = YES;
         int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
