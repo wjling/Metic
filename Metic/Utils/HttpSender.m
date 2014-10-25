@@ -237,6 +237,10 @@
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
     //upload
+    if ([dictionary valueForKey:@"width"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"width",[dictionary valueForKey:@"width"]]];
+    if ([dictionary valueForKey:@"height"])
+        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"height",[dictionary valueForKey:@"height"]]];
     if ([dictionary valueForKey:@"photos"])
         body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
     if ([dictionary valueForKey:@"specification"])

@@ -381,7 +381,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
         [dictionary setValue:self.eventId forKey:@"event_id"];
         [dictionary setValue:@"upload" forKey:@"cmd"];
-        [dictionary setValue:container forKey:@"photos"];
+        [dictionary setValue:container[0] forKey:@"photos"];
+        [dictionary setValue:container[1]  forKey:@"width"];
+        [dictionary setValue:container[2] forKey:@"height"];
         [dictionary setValue:self.textInput.text forKey:@"specification"];
         
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];

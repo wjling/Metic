@@ -22,6 +22,7 @@
 @property(nonatomic,strong) NSString* imgName;
 @property(nonatomic,strong) NSString* videoName;
 @property(nonatomic,strong) NSString* videoFilePath;
+@property CGSize uploadPhotoSize;
 @property BOOL isUpload;
 
 @end
@@ -233,6 +234,7 @@
         }
     }
     
+    _uploadPhotoSize = compressedImage.size;
 
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.0f],@"progress",[NSNumber numberWithFloat:0.2],@"weight",[NSNumber numberWithFloat:0],@"finished",nil];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -524,7 +526,7 @@
             }
             if (!_imgName) {
                 [self uploadVideo];
-            }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
+            }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:@[self.imgName,[NSNumber numberWithInt:_uploadPhotoSize.width],[NSNumber numberWithInt:_uploadPhotoSize.height]]];
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
         }
