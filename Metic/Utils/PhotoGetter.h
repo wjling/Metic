@@ -39,7 +39,7 @@
 - (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;
 - (instancetype)initUploadAvatarMethod:(UIImage*)aImage type:(int)type viewController:(UIViewController*)vc;
 -(void)getAvatar;
--(void)getBanner:(NSNumber*)code;
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL;
 -(void)updatePhoto;
 -(void)uploadPhoto;
 -(void)uploadAvatar;

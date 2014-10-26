@@ -113,7 +113,7 @@
 //}
 
 
--(void)getBanner:(NSNumber*)code
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL
 {
     if ([code intValue] > 0) {
         [_imageView sd_cancelCurrentImageLoad];
@@ -121,40 +121,10 @@
     switch ([code intValue]) {
         case 0:
         {
-            NSString *url = [self getLocalBannerUrl];
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
+            //NSString *url = [self getLocalBannerUrl];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
-//        case 0:
-//        {
-//            __block NSString* url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//            if (!url) {
-//                [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
-//                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//                [dictionary setValue:@"GET" forKey:@"method"];
-//                [dictionary setValue:[NSString stringWithFormat:@"/banner/%@.jpg",self.avatarId] forKey:@"object"];
-//                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//                NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-//                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//                [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-//                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//                    switch ([cmd intValue]) {
-//                        case NORMAL_REPLY:
-//                        {
-//                            url = (NSString*)[response1 valueForKey:@"url"];
-//                            NSLog(@"%@",url);
-//                            [[MTUser sharedInstance].bannerURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//                            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
-//                        }
-//                            break;
-//                    }
-//                }];   
-//            }else{
-//                [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
-//            }
-//        }
-//            break;
         case 1:
         {
             [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];

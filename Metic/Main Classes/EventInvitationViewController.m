@@ -144,7 +144,8 @@
     [avatarGetter getAvatar];
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-    [bannerGetter getBanner:[a valueForKey:@"code"]];
+    NSString* bannerURL = [a valueForKey:@"banner"];
+    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
 
     
     NSArray *memberids = [a valueForKey:@"member"];

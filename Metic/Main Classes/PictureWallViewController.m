@@ -77,11 +77,6 @@
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
     
-    _tableView1.layer.borderColor = [UIColor greenColor].CGColor;
-    _tableView1.layer.borderWidth = 2;
-    
-    _tableView2.layer.borderColor = [UIColor greenColor].CGColor;
-    _tableView2.layer.borderWidth = 2;
     self.seletedPhotoIndex = 0;
     self.isFooterOpen = NO;
     self.isHeaderOpen = NO;
@@ -609,11 +604,11 @@
         [refreshView endRefreshing];
         return;
     }
-//    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-//        NSLog(@"没有网络");
-//        [refreshView endRefreshing];
-//        return;
-//    }
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        NSLog(@"没有网络");
+        [refreshView endRefreshing];
+        return;
+    }
     if (_header1.refreshing || _header2.refreshing) {
         return;
     }

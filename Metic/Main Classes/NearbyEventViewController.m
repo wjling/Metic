@@ -329,7 +329,8 @@
             [avatarGetter getAvatar];
             [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-            [bannerGetter getBanner:[a valueForKey:@"code"]];
+            NSString* bannerURL = [a valueForKey:@"banner"];
+            [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
             if ([[a valueForKey:@"isIn"] boolValue]) {
                 [cell.statusLabel setHidden:NO];
                 cell.statusLabel.text = @"已加入活动";

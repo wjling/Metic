@@ -3927,8 +3927,6 @@
                             <constraint firstItem="2jD-tS-9IS" firstAttribute="top" secondItem="aZO-Rz-Mw7" secondAttribute="bottom" constant="10" id="StU-VB-Nd9"/>
                             <constraint firstItem="yxv-Y7-moU" firstAttribute="top" secondItem="2jD-tS-9IS" secondAttribute="bottom" id="WlE-pa-HHv"/>
                             <constraint firstItem="snf-8S-WRM" firstAttribute="top" secondItem="aZO-Rz-Mw7" secondAttribute="bottom" constant="10" id="dkU-X3-CvU"/>
-                            <constraint firstItem="2jD-tS-9IS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Xaj-L2-zKu" secondAttribute="leading" constant="10" id="fcY-Ry-X26"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2jD-tS-9IS" secondAttribute="trailing" constant="10" id="pjI-L7-UkP"/>
                             <constraint firstItem="yxv-Y7-moU" firstAttribute="top" secondItem="snf-8S-WRM" secondAttribute="bottom" id="yRs-oP-Eq2"/>
                         </constraints>
                     </view>
