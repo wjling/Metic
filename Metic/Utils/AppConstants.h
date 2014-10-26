@@ -14,8 +14,14 @@
 HttpSender* httpSender;
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
+};
+
+enum Alias_code
+{
+    ALIAS_GET = 0,
+    ALIAS_SET = 1,
 };
 
 enum Operation_Code
@@ -65,6 +71,7 @@ enum Operation_Code
     GET_GOOD_PHOTOS = 42,
     GET_WELCOME_PAGE = 43,
     GET_POSTER = 44,
+    ALIAS_OPERATION = 45,
 };
 
 enum CloudOperation_Code
@@ -117,8 +124,6 @@ enum Return_Code
     NEW_SHARE_NOTIFICATION=990,
     NEW_LIKE_NOTIFICATION=989,
     NEW_COMMENT_REPLY=988,
-
-
 };
 
 #endif

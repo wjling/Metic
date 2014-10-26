@@ -180,7 +180,6 @@
 		48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDED194FE42D0066BF8D /* PinyinFormatter.m */; };
 		48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */; };
 		48A4DDF7194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */; };
-		510A2F2919F23D03000B677A /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 510A2F2819F23D03000B677A /* libbaidumapapi.a */; };
 		510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A2195BED3A00084014 /* PhotoGetter.m */; };
 		510BE1A6195C32FE00084014 /* MTTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 510BE1A5195C32FE00084014 /* MTTableView.m */; };
 		510D4574196E87A70081672A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 510D4573196E87A70081672A /* ImageIO.framework */; };
@@ -243,6 +242,7 @@
 		516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */; };
 		5172E2E1197D05240050F446 /* libQREncoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5172E2E0197D05240050F446 /* libQREncoder.a */; };
 		519100F019651388005DF607 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 519100EF19651388005DF607 /* MRZoomScrollView.m */; };
+		5192530519FA2BBF00CF6BB3 /* myInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5192530419FA2BBF00CF6BB3 /* myInputView.m */; };
 		519C65941989F61B00710B26 /* 2聚餐.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C658E1989F61B00710B26 /* 2聚餐.jpg */; };
 		519C65951989F61B00710B26 /* 3兜风.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C658F1989F61B00710B26 /* 3兜风.jpg */; };
 		519C65961989F61B00710B26 /* 4喝酒.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C65901989F61B00710B26 /* 4喝酒.jpg */; };
@@ -310,6 +310,7 @@
 		51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0319E6307500E487F1 /* HTTPRedirectResponse.m */; };
 		51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0619E6307500E487F1 /* HTTPServer.m */; };
 		51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0819E6307500E487F1 /* WebSocket.m */; };
+		51F5A21619FD3BF500C1D369 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F5A21519FD3BF500C1D369 /* libbaidumapapi.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -683,7 +684,6 @@
 		48A4DDEE194FE42D0066BF8D /* PinyinHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinyinHelper.h; sourceTree = "<group>"; };
 		48A4DDEF194FE42D0066BF8D /* PinyinHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinyinHelper.m; sourceTree = "<group>"; };
 		48A4DDF1194FE42D0066BF8D /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
-		510A2F2819F23D03000B677A /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		510BE1A1195BED3A00084014 /* PhotoGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGetter.h; sourceTree = "<group>"; };
 		510BE1A2195BED3A00084014 /* PhotoGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoGetter.m; sourceTree = "<group>"; };
 		510BE1A4195C32FE00084014 /* MTTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableView.h; sourceTree = "<group>"; };
@@ -799,6 +799,8 @@
 		5172E2E0197D05240050F446 /* libQREncoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQREncoder.a; sourceTree = "<group>"; };
 		519100EE19651388005DF607 /* MRZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRZoomScrollView.h; sourceTree = "<group>"; };
 		519100EF19651388005DF607 /* MRZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRZoomScrollView.m; sourceTree = "<group>"; };
+		5192530319FA2BBF00CF6BB3 /* myInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myInputView.h; path = "Custom Wedgets/myInputView.h"; sourceTree = "<group>"; };
+		5192530419FA2BBF00CF6BB3 /* myInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = myInputView.m; path = "Custom Wedgets/myInputView.m"; sourceTree = "<group>"; };
 		519C658E1989F61B00710B26 /* 2聚餐.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2聚餐.jpg"; sourceTree = "<group>"; };
 		519C658F1989F61B00710B26 /* 3兜风.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "3兜风.jpg"; sourceTree = "<group>"; };
 		519C65901989F61B00710B26 /* 4喝酒.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "4喝酒.jpg"; sourceTree = "<group>"; };
@@ -937,6 +939,7 @@
 		51F4CB0619E6307500E487F1 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		51F4CB0719E6307500E487F1 /* WebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket.h; sourceTree = "<group>"; };
 		51F4CB0819E6307500E487F1 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
+		51F5A21519FD3BF500C1D369 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -957,7 +960,7 @@
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
-				510A2F2919F23D03000B677A /* libbaidumapapi.a in Frameworks */,
+				51F5A21619FD3BF500C1D369 /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -1120,6 +1123,8 @@
 				04E657C6197A4EA20091524F /* InputHandleView.m */,
 				04BAF69F199BCF7500BF00E1 /* myScrollView.h */,
 				04BAF6A0199BCF7500BF00E1 /* myScrollView.m */,
+				5192530319FA2BBF00CF6BB3 /* myInputView.h */,
+				5192530419FA2BBF00CF6BB3 /* myInputView.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -1693,7 +1698,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				510A2F2819F23D03000B677A /* libbaidumapapi.a */,
+				51F5A21519FD3BF500C1D369 /* libbaidumapapi.a */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
@@ -2407,6 +2412,7 @@
 				080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */,
 				0435EF4F19B49DA2003BB2F6 /* NotificationsFriendRequestTableViewCell.m in Sources */,
 				510D459B196E8A960081672A /* SDWebImageDecoder.m in Sources */,
+				5192530519FA2BBF00CF6BB3 /* myInputView.m in Sources */,
 				04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */,
 				04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */,
 				51F4CB1219E6307500E487F1 /* ContextFilterLogFormatter.m in Sources */,

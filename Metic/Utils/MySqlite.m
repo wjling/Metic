@@ -300,7 +300,9 @@
         for (int i = 0; i < columnCount; i++) {
             char* columnName = (char*)sqlite3_column_name(sql_stmt, i);
             char* columnContent = (char*)sqlite3_column_text(sql_stmt, i);
-            [result setValue:[NSString stringWithCString:columnContent encoding:NSUTF8StringEncoding] forKey:[NSString stringWithCString:columnName encoding:NSUTF8StringEncoding]];
+            [result
+             setValue: (columnContent? [NSString stringWithCString:columnContent encoding:NSUTF8StringEncoding] : [NSNull null])
+             forKey:[NSString stringWithCString:columnName encoding:NSUTF8StringEncoding]];
         }
         [results addObject:result];
     }
@@ -366,6 +368,42 @@
     }
     
 }
+
+-(BOOL)table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue
+{
+    char *errMsg;
+    int result = 1;
+    NSLog(@"表: %@ 增加字段", tableName);
+    NSString* searchSql = [NSString stringWithFormat:@"select sql from sqlite_master where tbl_name = ? and type = 'table'"];
+    sqlite3_stmt *statement;
+    if (sqlite3_prepare_v2(self.myDB, [searchSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        sqlite3_bind_text(statement, 1, [tableName UTF8String], -1, nil);
+    }
+    
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        char *text_chr = (char*)sqlite3_column_text(statement, 0);
+        NSLog(@"获取创建表%@的SQL语句: %s",tableName,text_chr);
+        NSString* sqlStr = [[NSString alloc]initWithUTF8String:text_chr];
+        
+        if ([sqlStr rangeOfString: column].length <= 0) {
+            NSLog(@"没有字段: %@", column);
+            const char *sql_add = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ DEFAULT %@", tableName, column, defaultValue] UTF8String];
+            NSLog(@"插入字段sql: %s",sql_add);
+            if (sqlite3_exec(self.myDB, sql_add, nil, nil, &errMsg) == SQLITE_OK) {
+                NSLog(@"表 %@ 成功插入字段 %@ ", tableName, column);
+            }
+            else
+            {
+                NSLog(@"表 %@ 插入字段 %@ 不成功，错误信息: %s", tableName, column, errMsg);
+                result = 0;
+            }
+        }
+        
+    }
+    sqlite3_finalize(statement);
+    return result;
+}
+
 
 
 @end

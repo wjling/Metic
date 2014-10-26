@@ -18,6 +18,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
+        [self addGestureRecognizer:tapRecognizer];
     }
     return self;
 }

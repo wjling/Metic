@@ -256,12 +256,22 @@ static MTUser *singletonInstance;
         NSLog(@"init user DB");
         [self performSelectorOnMainThread:@selector(initUserDB) withObject:nil waitUntilDone:YES];
     }
+    else
+    {
+//        MySqlite * sql = [[MySqlite alloc]init];
+//        NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+//        [sql openMyDB:path];
+//        [sql table:@"friend" addsColumn:@"alias" withDefault:@"gg"];
+//        [sql closeMyDB];
+
+    }
     
     
 }
 
 - (void)initUserDB
 {
+    NSLog(@"初始化数据库");
     MySqlite * sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
@@ -271,6 +281,7 @@ static MTUser *singletonInstance;
     [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
     [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
     [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
+    
     [sql closeMyDB];
     //self.logined = YES;
 }

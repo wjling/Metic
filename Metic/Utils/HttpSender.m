@@ -216,6 +216,9 @@
         case 44:
             resultCode = @"get_poster";
             break;
+        case 45:
+            resultCode = @"alias";
+            break;
         default:
             resultCode = @"json";
             break;

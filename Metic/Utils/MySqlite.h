@@ -54,6 +54,7 @@ static BOOL isLocked = false;
 //   值的类型如果是字符串，则要加单引号，形如：@"'2011-1-12'", @"'John'"
 //3. 如果没有where语句，可以用nil。
 //4. 如果要查询所有列，可以将select的数组设成{"*"};
+//5. 如果表中字段的值为空（NULL），则查询的结果的值是[NSNull null];
 
 - (NSMutableArray*)queryTable:(NSString*)tableName withSelect:(NSArray*)selects andWhere:(NSDictionary*)wheres;
 
@@ -63,5 +64,11 @@ static BOOL isLocked = false;
 
 //判断数据库中一个表是否存在
 - (BOOL)isExistTable:(NSString*)tableName;
+
+//在已有的表中增加字段。tableName是表名，column是新增字段名，defaultValue是新增字段的默认值
+//说明：
+//1. column可以是单纯的字段名，如：@"name"，也可以是带有额外属性的字符串，如：@"item_id INTEGER"等。
+//2. defaultValue为nil时，表中等字段默认值为空（NULL）
+-(BOOL)table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue;
 
 @end

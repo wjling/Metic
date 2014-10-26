@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HttpSender.h"
+#import "CommonUtils.h"
+#import "MTUser.h"
+#import "AppConstants.h"
+#import "InputHandleView.h"
+#import "myInputView.h"
 
 @interface ChangeAliasViewController : UIViewController
+@property (strong, nonatomic) myInputView *alias_view;
+@property (strong, nonatomic) UIBarButtonItem *ok_btn;
+@property (strong, nonatomic) InputHandleView *rootView;
+
+@property (strong, nonatomic) NSNumber *fid;   //需要传入数据
 
 @end
