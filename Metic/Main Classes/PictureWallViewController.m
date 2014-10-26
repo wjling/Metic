@@ -60,9 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [[SDImageCache sharedImageCache]setMaxCacheSize:1024*1024*100];
-    
+
     [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
@@ -78,11 +76,16 @@
     [self.tableView1 setDataSource:self];
     [self.tableView2 setDelegate:self];
     [self.tableView2 setDataSource:self];
-//    [_scrollView setDelegate:self];
+    
+    _tableView1.layer.borderColor = [UIColor greenColor].CGColor;
+    _tableView1.layer.borderWidth = 2;
+    
+    _tableView2.layer.borderColor = [UIColor greenColor].CGColor;
+    _tableView2.layer.borderWidth = 2;
     self.seletedPhotoIndex = 0;
     self.isFooterOpen = NO;
     self.isHeaderOpen = NO;
-    self.shouldReloadPhoto = YES;
+    self.shouldReloadPhoto = NO;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
@@ -98,48 +101,29 @@
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
     
-
     //初始化下拉刷新功能
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.isPhotoWall = YES;
-    _footer.isRight = NO;
-    _footer.SscrollView = self.tableView2;
-    _footer.scrollView = self.tableView1;
+    _header1 = [[MJRefreshHeaderView alloc]init];
+    _header1.delegate = self;
+    _header1.isPhotoWall = YES;
+    _header1.isRight = NO;
+    _header1.scrollView = self.tableView1;
     
     //初始化下拉刷新功能
-    _header = [[MJRefreshHeaderView alloc]init];
-    _header.delegate = self;
-    _header.isPhotoWall = YES;
-    _header.isRight = NO;
-    _header.SscrollView = self.tableView2;
-    _header.scrollView = self.tableView1;
-    
+    _header2 = [[MJRefreshHeaderView alloc]init];
+    _header2.delegate = self;
+    _header2.isPhotoWall = YES;
+    _header2.isRight = YES;
+    _header2.scrollView = self.tableView2;
+    _header2.hidden = YES;
     //等待圈圈
     
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            _sequence = [NSNumber numberWithInt:-1];
-            [self pullPhotoInfosFromDB];
-        });
-        
-    }
-    
+    _sequence = [NSNumber numberWithInt:-1];
+    [self pullPhotoInfosFromDB];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_shouldReloadPhoto) {
-        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
-            [self.photo_list_all removeAllObjects];
-            
-            [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(indicatorAppear) userInfo:nil repeats:NO];
-            self.sequence = [[NSNumber alloc]initWithInt:0];
-            [self getPhotolist];
-        }
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -147,6 +131,11 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [self adjustUI];
+    if (_shouldReloadPhoto) {
+        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+            [self.header1 beginRefreshing];
+        }
+    }
 }
 
 
@@ -171,10 +160,7 @@
     
     // Dispose of any resources that can be recreated.
 }
-//-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    [cell removeFromSuperview];
-//}
+
 
 //返回上一层
 -(void)MTpopViewController{
@@ -241,53 +227,26 @@
                         [self getPhotolist];
                         return;
                     }else{
-                        int Acount = self.photo_list_all.count;
-                        if (Acount == 0) {
-                            [_promt setHidden:NO];
-                        }else [_promt setHidden:YES];
-                        [self.photo_list removeAllObjects];
-                        [_lefPhotos removeAllObjects];
-                        [_rigPhotos removeAllObjects];
-                        _leftH = 0;
-                        _rightH = 0;
-                        _shouldReloadPhoto = NO;
-                        [_tableView1 reloadData];
-                        [_tableView2 reloadData];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            int Acount = self.photo_list_all.count;
+                            if (Acount == 0) {
+//                                [_promt removeFromSuperview];
+//                                [_tableView1 addSubview:_promt];
+                                [_promt setHidden:NO];
+                            }else [_promt setHidden:YES];
+                            [self.photo_list removeAllObjects];
+                            [_lefPhotos removeAllObjects];
+                            [_rigPhotos removeAllObjects];
+                            _leftH = 0;
+                            _rightH = 0;
+                            _shouldReloadPhoto = NO;
+                            [_tableView1 reloadData];
+                            [_tableView2 reloadData];
+                            
+                            [self photoDistribution];
+                        });
                         
-                        [self photoDistribution];
-                        
-                        return;
-                        
-                        int count = self.photo_list.count;
-                        int num = MIN(PhotoNum, _photo_list_all.count - count);
-                        
-                        NSArray* addPhotos = [_photo_list_all subarrayWithRange:NSMakeRange(count, num)];
-                        
-                        
-                        //分图
-                        [self performSelectorInBackground:@selector(classifyPhotos:) withObject:addPhotos];
-                        
-                        if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
-                            if(!_isAutoLoading){
-                                [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-                                [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-                            }else{
-                                self.isFooterOpen = NO;
-                                [_footer endRefreshing];
-                                _isAutoLoading = NO;
-                            }
-                        }else {
-                            if (self.isHeaderOpen) {
-                                self.isHeaderOpen = NO;
-                                [_header endRefreshing];
-                            }
-                            if (self.isFooterOpen) {
-                                self.isFooterOpen = NO;
-                                [_footer endRefreshing];
-                            }
-                        }
-
-                        
+                      
                         
                     }
                     
@@ -311,61 +270,8 @@
         NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]]];
         [self.photoPath_list addObject:url];
     }
-    
-//    [self.photoPath_list removeAllObjects];
-//    for(int i = 0; i < self.photo_list.count ; i++ )
-//    {
-//        NSDictionary* dict = self.photo_list[i];
-//        [self.photoPath_list addObject:@""];
-//        __block NSString* url = [[MTUser sharedInstance].photoURL valueForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"photo_id"]]];
-//        if (!url) {
-//            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//            [dictionary setValue:@"GET" forKey:@"method"];
-//            [dictionary setValue:[NSString stringWithFormat:@"/images/%@",[dict valueForKey:@"photo_name"]] forKey:@"object"];
-//            
-//            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//            NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-//            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//            [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-//                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//                switch ([cmd intValue]) {
-//                    case NORMAL_REPLY:
-//                    {
-//                        url = (NSString*)[response1 valueForKey:@"url"];
-//                        NSLog(@"%@",url);
-//                        [[MTUser sharedInstance].photoURL setValue:url forKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"photo_id"]]];
-//                        self.photoPath_list[i] = url;
-//                        break;
-//                    }
-//                }
-//            }];
-//        }else self.photoPath_list[i] = url;
-//
-//    }
 }
 
-
--(void)reloadPhoto
-{
-    [self.tableView1 reloadData];
-    [self.tableView2 reloadData];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.isHeaderOpen) {
-            self.isHeaderOpen = NO;
-            [_header endRefreshing];
-        }
-        if (self.isFooterOpen) {
-            self.isFooterOpen = NO;
-            [_footer endRefreshing];
-        }
-
-    });
-    
-
-    
-}
 
 - (void)toUploadPhoto:(id)sender {
     [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
@@ -373,19 +279,6 @@
 - (IBAction)toBestPhotos:(id)sender{
     [self performSegueWithIdentifier:@"toPhotoRanking" sender:self];
 }
-
--(void)showAlert
-{
-    _Alert = [[UIAlertView alloc] initWithTitle:@"" message:@"没有更多了" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-    [_Alert show];
-    self.isFooterOpen = NO;
-    [_footer endRefreshing];
-}
--(void)performDismiss
-{
-    [_Alert dismissWithClickedButtonIndex:0 animated:NO];
-}
-
 
 -(void)initIndicator
 {
@@ -425,6 +318,8 @@
     _indicatorView.frame = CGRectMake(60, -50, 200, 50);
     [UIView commitAnimations];
     if (!_photo_list_all || _photo_list_all.count == 0) {
+//        [_promt removeFromSuperview];
+//        [_tableView1 addSubview:_promt];
         [_promt setHidden:NO];
     }else {
         [_promt setHidden:YES];
@@ -464,146 +359,83 @@
         //[self.photo_list addObject:photoInfo];
     }
     [self.sql closeMyDB];
-    int count = MIN(PhotoNum, _photo_list_all.count);
-    [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(0, count)]];
+    if (_photo_list_all && _photo_list_all.count > 0) {
+        [self photoDistribution];
+    }else [_header2 beginRefreshing];
 }
 
 
 -(void)photoDistribution
 {
-    _leftH = 0;
-    _rightH = 0;
-    NSArray *tmp = [NSArray arrayWithArray:_photo_list_all];
-    for (NSDictionary* photo in tmp) {
-        int width = [[photo valueForKey:@"width"] intValue];
-        int height = [[photo valueForKey:@"height"] intValue];
-        if(width == 0 || height == 0){
-            NSLog(@"图片 %@ 宽高不正确",[photo valueForKey:@"photo_name"]);
-            [_photo_list_all removeObject:photo];
-            continue;
-        }
-        double RealHeight = height * 150.0f / width;
-        
-        if (_leftH <= _rightH) {
-            _leftH += (RealHeight + 43);
-            [_lefPhotos addObject:photo];
-        }else{
-            _rightH += (RealHeight + 43);
-            [_rigPhotos addObject:photo];
-        }
-        [_photo_list addObject:photo];
+    if (self.isHeaderOpen) {
+        self.isHeaderOpen = NO;
+        [_header1 endRefreshing];
+        [_header2 endRefreshing];
     }
-
-    [self reloadPhoto];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _leftH = 0;
+        _rightH = 0;
+        NSArray *tmp = [NSArray arrayWithArray:_photo_list_all];
+        for (NSDictionary* photo in tmp) {
+            int width = [[photo valueForKey:@"width"] intValue];
+            int height = [[photo valueForKey:@"height"] intValue];
+            if(width == 0 || height == 0){
+                NSLog(@"图片 %@ 宽高不正确",[photo valueForKey:@"photo_name"]);
+                [_photo_list_all removeObject:photo];
+                continue;
+            }
+            double RealHeight = height * 150.0f / width;
+            
+            if (_leftH <= _rightH) {
+                _leftH += (RealHeight + 43);
+                [_lefPhotos addObject:photo];
+            }else{
+                _rightH += (RealHeight + 43);
+                [_rigPhotos addObject:photo];
+            }
+            [_photo_list addObject:photo];
+        }
+        [self.tableView1 reloadData];
+        [self.tableView2 reloadData];
+    });
+    
+    
+    
+    
     
 }
-
--(void)classifyPhotos:(NSArray*)photos
-{
-    [self classifyPhotos:photos index:0];
-}
-
--(void)classifyPhotos:(NSArray*)photos index:(int)index
-{
-    if (_shouldStop) {
-        _shouldStop = NO;
-        return;
-    }
-    _isLoading = YES;
-    if (index < photos.count) {
-        NSDictionary* photo = photos[index];
-        NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[photo valueForKey:@"photo_name"]]];
-        SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        [manager downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            if (cacheType == SDImageCacheTypeNone) {
-                NSLog(@"from air %d",index);
-            }else{
-                NSLog(@"from local %d",index);
-            }
-            if(image){
-                float H = image.size.height * 145.0 / image.size.width;
-                [_cellHeight setValue:[NSNumber numberWithFloat:H] forKey:url];
-                [_photo_list addObject:photo];
-                if (_leftH <= _rightH) {
-                    [_lefPhotos addObject:photo];
-                    _leftH += (H + 43);
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [_tableView1 reloadData];
-                    });
-                }else{
-                    [_rigPhotos addObject:photo];
-                    _rightH += (H + 43);
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [_tableView2 reloadData];
-                    });
-                }
-            }else{
-                [_photo_list removeObject:photo];
-                [_photo_list_all removeObject:photo];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                [self classifyPhotos:photos index:index+1];
-            });
-
-        }];
- 
-        return;
-    }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self indicatorDisappear];
-    });
-    _isLoading = NO;
-}
-
 
 #pragma mark 代理方法-UIScrollView
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView == _tableView1 && (_ignoreLeft || _isLeft)) {
-        NSLog(@"111");
+    if (scrollView == _tableView1) {
         [_tableView2 setContentOffset:_tableView1.contentOffset];
-    }else if(scrollView == _tableView2 && (_ignoreLeft || !_isLeft)){
+        if (!_promt.hidden) {
+            CGRect frame = _promt.frame;
+            frame.origin.y = -_tableView1.contentOffset.y + 20;
+            _promt.frame = frame;
+        }
+    }else if(scrollView == _tableView2){
         [_tableView1 setContentOffset:_tableView2.contentOffset];
-        NSLog(@"222");
+        if (!_promt.hidden) {
+            CGRect frame = _promt.frame;
+            frame.origin.y = -_tableView2.contentOffset.y + 20;
+            _promt.frame = frame;
+        }
     }
-
 }
 
-//-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-//{
-//    NSLog(@"ready auto loading");
-//    if (!self.isLoading && !_isFooterOpen && (scrollView.contentSize.height - scrollView.contentOffset.y) < (200.0f + scrollView.frame.size.height) && !([_sequence intValue] == -1 && _photo_list_all.count == _photo_list.count) ) {
-//        NSLog(@"ready auto loading");
-//        _isAutoLoading = YES;
-//        [_footer beginRefreshing];
-//    }
-//}
-
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    _isAutoLoading = NO;
-}
 
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _ignoreLeft = NO;
-    if (scrollView == _tableView1) {
-        _isLeft = YES;
-        _footer.isRight = NO;
-        _footer.scrollView = _tableView1;
-        _header.isRight = NO;
-        _header.scrollView = _tableView1;
-        
-    }else if (scrollView == _tableView2){
-        _isLeft = NO;
-        _footer.isRight = YES;
-        _footer.scrollView = _tableView2;
-        _header.isRight = YES;
-        _header.scrollView = _tableView2;
+    if (scrollView == _tableView1 && !_header2.refreshing) {
+        _header1.hidden = NO;
+        _header2.hidden = YES;
+    }else if (scrollView == _tableView2 && !_header1.refreshing){
+        _header1.hidden = YES;
+        _header2.hidden = NO;
     }
-    
-
 }
 
 #pragma mark 代理方法-UITableView
@@ -640,8 +472,7 @@
 {
     if ((tableView == _tableView1 && indexPath.row == _lefPhotos.count) || (tableView == _tableView2 && indexPath.row == _rigPhotos.count)) {
         UITableViewCell *cell = [[UITableViewCell alloc]init];
-        cell.layer.borderColor = [UIColor greenColor].CGColor;
-        cell.layer.borderWidth = 2;
+        cell.backgroundColor = [UIColor clearColor];
         return cell;
     }
     
@@ -679,12 +510,14 @@
     [avatarGetter getAvatar];
     UIImageView* photo = cell.imgView;
     [cell.infoView removeFromSuperview];
-        
-    //NSString *url = [NSString stringWithFormat:_urlFormat,[a valueForKey:@"photo_name"] ,[a valueForKey:@"url"]];
-    //NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[a valueForKey:@"photo_name"]]];
+    
     NSString* url = [a valueForKey:@"url"];
-    //NSLog(@"%@",url);
+
+    [photo setContentMode:UIViewContentModeScaleAspectFit];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            [photo setContentMode:UIViewContentModeScaleToFill];
+        }
     }];
 
     int width = [[a valueForKey:@"width"] intValue];
@@ -708,8 +541,6 @@
     }
     cell.isloading = _isLoading;
     [cell animationBegin];
-    cell.layer.borderColor = [UIColor redColor].CGColor;
-    cell.layer.borderWidth = 2;
     return cell;
 }
 
@@ -737,69 +568,8 @@
     
 
 }
-#pragma mark - HttpSenderDelegate
 
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
-            for (int i = 0; i < newphoto_list.count; i++) {
-                NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list[i]];
-                newphoto_list[i] = dictionary;
-            }
-            [self updatePhotoInfoToDB:newphoto_list];
-            self.sequence = [response1 valueForKey:@"sequence"];
-            if (_shouldReloadPhoto) {
-                [self.photo_list_all removeAllObjects];
-                [self.photo_list removeAllObjects];
-                [_lefPhotos removeAllObjects];
-                [_rigPhotos removeAllObjects];
-                _leftH = 0;
-                _rightH = 0;
-                _shouldReloadPhoto = NO;
-                [_tableView1 reloadData];
-                [_tableView2 reloadData];
-            }
-            [self.photo_list_all addObjectsFromArray:newphoto_list];
-            int count = self.photo_list.count;
-            int num = MIN(PhotoNum, _photo_list_all.count - count);
-            
-            NSArray* addPhotos = [_photo_list_all subarrayWithRange:NSMakeRange(count, num)];
-            
-            
-            //分图
-            [self performSelectorInBackground:@selector(classifyPhotos:) withObject:addPhotos];
-            
-            
-            
-            
-            //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-            //[NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(indicatorDisappear) userInfo:nil repeats:NO];
-            if (!_photo_list_all || _photo_list_all.count == 0) {
-                [_promt setHidden:NO];
-            }else [_promt setHidden:YES];
-            if ([_sequence intValue] == -1 && self.isFooterOpen == YES && _photo_list_all.count == _photo_list.count) {
-                if(!_isAutoLoading){
-                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-                    [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-                }else{
-                    self.isFooterOpen = NO;
-                    [_footer endRefreshing];
-                    _isAutoLoading = NO;
-                }
-            }else [self reloadPhoto];
-            
 
-        }
-            break;
-    }
-}
 
 
 
@@ -839,55 +609,21 @@
         [refreshView endRefreshing];
         return;
     }
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0 && refreshView == _header) {
-        NSLog(@"没有网络");
-        [refreshView endRefreshing];
+//    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+//        NSLog(@"没有网络");
+//        [refreshView endRefreshing];
+//        return;
+//    }
+    if (_header1.refreshing || _header2.refreshing) {
         return;
     }
-    if (_isHeaderOpen || _isFooterOpen) {
-        [refreshView endRefreshing];
-        return;
-    }
-    
-    _ignoreLeft = YES;
-    if (refreshView == _footer) {
-        self.isFooterOpen = YES;
-        int photo_rest_num = self.photo_list_all.count - self.photo_list.count;
-        if ([self.sequence intValue] == -1 && photo_rest_num == 0) {
-            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-            [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-            return;
-        }
-        
-        int count = self.photo_list.count;
-        if (photo_rest_num > 0 ) {//加载剩余的，然后再拉
-            int num = MIN(PhotoNum, _photo_list_all.count - count);
-            //        for (int i = count; i < count + num; i++) {
-            //            [self.photo_list addObject:self.photo_list_all[i]];
-            //        }
-            self.isFooterOpen = NO;
-            [refreshView endRefreshing];
-            
-            [self performSelectorInBackground:@selector(classifyPhotos:) withObject:[_photo_list_all subarrayWithRange:NSMakeRange(count, num)]];
-            //[NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(reloadPhoto) userInfo:nil repeats:NO];
-        }else{
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (self.isFooterOpen) {
-                    self.isFooterOpen = NO;
-                    [refreshView endRefreshing];
-                }
-            });
-            [_photo_list_all removeAllObjects];
-            [self getPhotolist];
-        }
 
-    }else if (refreshView == _header){
-        _isHeaderOpen = YES;
-        _shouldReloadPhoto = YES;
-        self.sequence = [[NSNumber alloc]initWithInt:0];
-        [_photo_list_all removeAllObjects];
-        [self getPhotolist];
-    }
+    _isHeaderOpen = YES;
+    _shouldReloadPhoto = YES;
+    self.sequence = [[NSNumber alloc]initWithInt:0];
+    [_photo_list_all removeAllObjects];
+    [self getPhotolist];
+
     
     
 }
@@ -896,12 +632,12 @@
 
 -(void)dealloc
 {
-    [_footer free];
+    [_header1 free];
+    [_header2 free];
 }
 
-
-
 @end
+
 
 
 
