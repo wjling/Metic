@@ -251,6 +251,9 @@
             
         }else{
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+            self.isHeaderOpen= NO;
+            if(_header1.refreshing) [_header1 endRefreshing];
+            if(_header2.refreshing) [_header2 endRefreshing];
         }
         
     }];
@@ -364,8 +367,8 @@
 {
     if (self.isHeaderOpen) {
         self.isHeaderOpen = NO;
-        [_header1 endRefreshing];
-        [_header2 endRefreshing];
+        if(_header1.refreshing) [_header1 endRefreshing];
+        if(_header2.refreshing) [_header2 endRefreshing];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         _leftH = 0;
@@ -509,6 +512,7 @@
     NSString* url = [a valueForKey:@"url"];
 
     [photo setContentMode:UIViewContentModeScaleAspectFit];
+    [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [photo setContentMode:UIViewContentModeScaleToFill];
