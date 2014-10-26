@@ -13,6 +13,7 @@
 #import "PhotoGetter.h"
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "MobClick.h"
+#import "EventDetailViewController.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -279,6 +280,7 @@
     nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     NSDictionary *a = _events[indexPath.row];
+    cell.dict = a;
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
@@ -331,7 +333,19 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"a");
+    nearbyEventTableViewCell* cell = (nearbyEventTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    NSDictionary* dict = cell.dict;
+    
+    if (![[dict valueForKey:@"isIn"] boolValue]) {
+        return;
+    }
+    
+    NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    
+    EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+    eventDetailView.eventId = eventId;
+    [self.navigationController pushViewController:eventDetailView animated:YES];
 }
 
 #pragma mark - 跳转前数据准备 Methods -
