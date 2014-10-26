@@ -45,6 +45,7 @@
 @property(nonatomic,strong) UILabel* statusLabel;
 @property(nonatomic,strong) UIButton* wantInBtn;
 @property(nonatomic,strong) UIImageView* officialFlag;
+@property(nonatomic,strong) NSDictionary* dict;
 
 
 @end

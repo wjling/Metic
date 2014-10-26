@@ -366,9 +366,21 @@
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"%@", response1);
             if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
-                self.event = [response1 valueForKey:@"event_list"][0];
-                if(_event)[self updateEventToDB:_event];
+                NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                if (_event) {
+                    NSString* updatetime1 = [_event valueForKey:@"updatetime"];
+                    NSString* updatetime2 = [dist valueForKey:@"updatetime"];
+                    
+                    if (![updatetime1 isEqualToString:updatetime2]) {
+                        [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
+                    }
+                }
+
+                [_tableView endUpdates];
+                self.event = dist;
+                
                 [_tableView reloadData];
+                if(_event)[self updateEventToDB:_event];
             }else{
                 [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
                 [self removeEventFromDB];
@@ -878,7 +890,8 @@
         [cell drawOfficialFlag:[[_event valueForKey:@"verify"] boolValue]];
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
-        [bannerGetter getBanner:[_event valueForKey:@"code"]];
+        NSString* bannerURL = [_event valueForKey:@"banner"];
+        [bannerGetter getBanner:[_event valueForKey:@"code"] url:bannerURL];
 
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {

@@ -22,6 +22,7 @@
 @property(nonatomic,strong) NSString* imgName;
 @property(nonatomic,strong) NSString* videoName;
 @property(nonatomic,strong) NSString* videoFilePath;
+@property CGSize uploadPhotoSize;
 @property BOOL isUpload;
 
 @end
@@ -112,7 +113,7 @@
 //}
 
 
--(void)getBanner:(NSNumber*)code
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL
 {
     if ([code intValue] > 0) {
         [_imageView sd_cancelCurrentImageLoad];
@@ -120,40 +121,10 @@
     switch ([code intValue]) {
         case 0:
         {
-            NSString *url = [self getLocalBannerUrl];
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
+            //NSString *url = [self getLocalBannerUrl];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
-//        case 0:
-//        {
-//            __block NSString* url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//            if (!url) {
-//                [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
-//                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//                [dictionary setValue:@"GET" forKey:@"method"];
-//                [dictionary setValue:[NSString stringWithFormat:@"/banner/%@.jpg",self.avatarId] forKey:@"object"];
-//                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//                NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-//                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//                [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-//                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//                    switch ([cmd intValue]) {
-//                        case NORMAL_REPLY:
-//                        {
-//                            url = (NSString*)[response1 valueForKey:@"url"];
-//                            NSLog(@"%@",url);
-//                            [[MTUser sharedInstance].bannerURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//                            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
-//                        }
-//                            break;
-//                    }
-//                }];   
-//            }else{
-//                [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
-//            }
-//        }
-//            break;
         case 1:
         {
             [self.imageView setImage:[UIImage imageNamed:@"1星空.jpg"]];
@@ -233,6 +204,7 @@
         }
     }
     
+    _uploadPhotoSize = compressedImage.size;
 
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:1.0f],@"progress",[NSNumber numberWithFloat:0.2],@"weight",[NSNumber numberWithFloat:0],@"finished",nil];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -524,7 +496,7 @@
             }
             if (!_imgName) {
                 [self uploadVideo];
-            }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:self.imgName];
+            }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:@[self.imgName,[NSNumber numberWithInt:_uploadPhotoSize.width],[NSNumber numberWithInt:_uploadPhotoSize.height]]];
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
         }

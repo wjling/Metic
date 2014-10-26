@@ -154,7 +154,7 @@
     CGFloat validY = self.validY;
     if (offsetY <= validY) return;
     
-    if (_scrollView.isDragging || (_SscrollView && _SscrollView.isDragging)) {
+    if (_scrollView.isDragging) {
         CGFloat validOffsetY = validY + MJRefreshViewHeight;
         if (_state == MJRefreshStatePulling && offsetY <= validOffsetY) {
             // 转为普通状态

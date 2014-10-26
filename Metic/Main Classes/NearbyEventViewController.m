@@ -14,6 +14,7 @@
 #import "MobClick.h"
 #import "../Utils/Reachability.h"
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
+#import "EventDetailViewController.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -309,6 +310,7 @@
             nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
             NSDictionary *a = _nearbyEvents[indexPath.row];
+            cell.dict = a;
             cell.eventName.text = [a valueForKey:@"subject"];
             NSString* beginT = [a valueForKey:@"time"];
             NSString* endT = [a valueForKey:@"endTime"];
@@ -327,7 +329,8 @@
             [avatarGetter getAvatar];
             [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-            [bannerGetter getBanner:[a valueForKey:@"code"]];
+            NSString* bannerURL = [a valueForKey:@"banner"];
+            [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
             if ([[a valueForKey:@"isIn"] boolValue]) {
                 [cell.statusLabel setHidden:NO];
                 cell.statusLabel.text = @"已加入活动";
@@ -366,6 +369,22 @@
     return useless_cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    nearbyEventTableViewCell* cell = (nearbyEventTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    NSDictionary* dict = cell.dict;
+    
+    if (![[dict valueForKey:@"isIn"] boolValue]) {
+        return;
+    }
+    
+    NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    
+    EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+    eventDetailView.eventId = eventId;
+    [self.navigationController pushViewController:eventDetailView animated:YES];
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int tag = [tableView tag];

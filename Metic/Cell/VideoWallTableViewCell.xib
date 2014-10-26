@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -122,7 +121,6 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     </view>
                 </subviews>
             </tableViewCellContentView>
@@ -137,6 +135,7 @@
                 <outlet property="time" destination="w0j-wN-3Bj" id="8Dt-Lw-XKH"/>
                 <outlet property="title" destination="ZBF-qj-boh" id="kmC-5h-hSP"/>
                 <outlet property="videoContainer" destination="WLv-Jr-h4B" id="7Ia-Tq-iEk"/>
+                <outlet property="videoPlayImg" destination="bnY-ob-KKM" id="kz9-Bk-e62"/>
                 <outlet property="video_button" destination="9rh-BY-Zg2" id="r8V-Vc-NyK"/>
             </connections>
         </tableViewCell>
@@ -148,4 +147,9 @@
         <image name="视频按钮" width="112" height="112"/>
         <image name="评论按下按钮icon" width="28" height="28"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

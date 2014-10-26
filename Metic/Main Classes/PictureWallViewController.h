@@ -23,14 +23,15 @@
 @property(nonatomic,strong)NSNumber *sequence;
 @property (nonatomic,strong) NSMutableArray* lefPhotos;
 @property (nonatomic,strong) NSMutableArray* rigPhotos;
-@property float leftH;
-@property float rightH;
+@property double leftH;
+@property double rightH;
 @property(nonatomic,strong)NSMutableArray *photo_list;//部分
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property(nonatomic,strong)NSMutableArray *photoPath_list;
 @property(nonatomic,strong)NSMutableDictionary *photos;
-@property(nonatomic,strong)MJRefreshHeaderView *header;
-@property (strong,nonatomic) MJRefreshFooterView *footer;
+@property(nonatomic,strong)MJRefreshHeaderView *header1;
+@property(nonatomic,strong)MJRefreshHeaderView *header2;
+//@property (strong,nonatomic) MJRefreshFooterView *footer;
 @property BOOL shouldReloadPhoto;
 - (IBAction)toBestPhotos:(id)sender;
 

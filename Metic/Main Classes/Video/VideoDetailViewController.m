@@ -19,6 +19,8 @@
 #import "MTMPMoviePlayerViewController.h"
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
+#import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+
 
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
@@ -32,6 +34,9 @@
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property (nonatomic,strong) UIView* moreView;
+@property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
+@property (strong, nonatomic) UIButton *video_button;
+@property (strong, nonatomic) UIImageView *videoPlayImg;
 @property __block unsigned long long receivedBytes;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
@@ -182,8 +187,9 @@
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
     NSLog(@"%@",url);
-    [self videoPlay:videoName url:url];
-    //[self openmovie:url];
+    [self downloadVideo:videoName url:url];
+//    [self videoPlay:videoName url:url];
+//    [self openmovie:url];
 }
 
 - (void)videoPlay:(NSString*)videoName url:(NSString*)url{
@@ -352,6 +358,82 @@
 }
 
 
+- (void)downloadVideo:(NSString*)videoName url:(NSString*)url{
+    
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    __block unsigned long long totalBytes = 0;
+    _receivedBytes = 0;
+    __block BOOL canReplay = YES;
+    
+    
+    //plan b 缓存视频
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if(![fileManager fileExistsAtPath:cachePath])
+    {
+        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        
+        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [self presentMoviePlayerViewControllerAnimated:playerViewController];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self
+         
+                                                selector:@selector(movieFinishedCallback:)
+         
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification
+         
+                                                  object:playerViewController.moviePlayer];
+        
+        videoRequest = nil;
+    }else{
+        if (videoRequest){
+            return;
+        }
+        
+        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"没有网络");
+            return;
+        }
+        
+        
+        else{
+            
+            [self readyProgressOverlayView];
+            
+            ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
+            //下载完存储目录
+            [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
+            //临时存储目录
+            [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
+            
+            [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
+                totalBytes = total;
+                _receivedBytes += size;
+                CGFloat progress = _receivedBytes*1.0f / total;
+                self.progressOverlayView.progress = progress;
+                
+            }];
+            
+            [request setCompletionBlock:^{
+                [self closeProgressOverlayView];
+                
+            }];
+            //断点续载
+            [request setAllowResumeForFileDownloads:YES];
+            [request startAsynchronous];
+            videoRequest = request;
+            
+        }
+        
+    }
+}
+
+
 
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
@@ -373,7 +455,31 @@
 }
 
 
+-(void)readyProgressOverlayView
+{
+    [self.videoPlayImg setHidden:YES];
+    if (!self.progressOverlayView)
+        self.progressOverlayView = [[DAProgressOverlayView alloc] initWithFrame:self.video_button.bounds];
+    [self.progressOverlayView setHidden:NO];
+    self.progressOverlayView.progress = 0;
+    [self.video_button addSubview:self.progressOverlayView];
+    [self.progressOverlayView displayOperationWillTriggerAnimation];
+}
 
+-(void)closeProgressOverlayView
+{
+    if (self.progressOverlayView) {
+        [self.progressOverlayView displayOperationDidFinishAnimation];
+        double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            self.progressOverlayView.progress = 0.;
+            self.progressOverlayView.hidden = YES;
+            self.videoPlayImg.hidden = NO;
+        });
+    }
+    
+}
 
 //-(void)openmovie:(NSString*)url
 //{
@@ -753,9 +859,15 @@
     if (indexPath.row == 0) {
 
         float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
-        
+        if (videoRequest) {
+            self.progressOverlayView.hidden = YES;
+            [self closeProgressOverlayView];
+            [videoRequest clearDelegatesAndCancel];
+            videoRequest = nil;
+        }
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
         UIButton* video = [UIButton buttonWithType:UIButtonTypeCustom];
+        _video_button = video;
         [video setFrame:CGRectMake(0, 0, 320,height)];
         [video addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
         if (!_video_thumb) {
@@ -766,6 +878,7 @@
         UIImageView* videoIc = [[UIImageView alloc]initWithFrame:CGRectMake((320-75)/2, (height-75)/2, 75,75)];
         [videoIc setUserInteractionEnabled:NO];
         videoIc.image = [UIImage imageNamed:@"视频按钮"];
+        _videoPlayImg = videoIc;
         
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];

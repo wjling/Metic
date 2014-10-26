@@ -22,6 +22,7 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *video_button;
 @property (strong, nonatomic) UIImage* videoThumb;
+@property (strong, nonatomic) IBOutlet UIImageView *videoPlayImg;
 @property (strong, nonatomic) IBOutlet UILabel *title;
 @property (strong, nonatomic) IBOutlet UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
