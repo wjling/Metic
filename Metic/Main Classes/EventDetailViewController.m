@@ -22,6 +22,7 @@
 #import "NSString+JSON.h"
 #import "emotion_Keyboard.h"
 #import "MobClick.h"
+#import "KxMenu.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -112,7 +113,6 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [_optionView setHidden:YES];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -158,11 +158,6 @@
 {
     float var = 242/255.0;
     [_tableView setBackgroundColor:[UIColor colorWithRed:var green:var blue:var alpha:1]];
-    
-    _moreView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-	_moreView.layer.shadowRadius = 10;
-	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;
-	_moreView.layer.shadowOpacity = 1;
 
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
@@ -205,13 +200,62 @@
    
 }
 
-//-(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-//{
-//    UIFont *font = [UIFont systemFontOfSize:fsize];
-//    CGSize size = CGSizeMake(width,2000);
-//    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-//    return ceil(labelRect.size.height)*1.25;
-//}
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    if (_event) {
+        if (_eventId && [_eventId intValue]!=0) {
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"二维码"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(show2Dcode:)],
+                                             
+                                             [KxMenuItem menuItem:@"举报活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(report:)],
+                                             ]];
+        }
+        
+        if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"更换封面"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(changeBanner)],
+                                             
+                                             [KxMenuItem menuItem:@"解散活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(dismissEvent)],
+                                             ]];
+        }else{
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"退出活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(quitEvent)]]];
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+                 menuItems:menuItems];
+}
 
 
 -(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
@@ -443,28 +487,9 @@
 }
 
 - (IBAction)more:(id)sender {
-    if (_optionView.isHidden) {
-        [_optionView setHidden:NO];
-        if (self.isKeyBoard) {
-            [self.inputTextView resignFirstResponder];
-        }
-        if (self.isEmotionOpen) {
-            [self button_Emotionpress:nil];
-        }
-        CGRect frame = self.view.frame;
-        frame.origin = CGPointMake(0, 0);
-        _shadowView = [[UIView alloc]initWithFrame:frame];
-        [self.view addSubview:_shadowView];
-        [self.view bringSubviewToFront:_optionView];
-        UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(more:)];
-        [_shadowView addGestureRecognizer:tapRecognizer];
-    }else{
-        [_optionView setHidden:YES];
-        if (_shadowView) {
-            [_shadowView removeFromSuperview];
-            _shadowView = nil;
-        }
-    }
+    [self showMenu];
+    return;
+
 }
 
 
@@ -707,16 +732,32 @@
     
 }
 
-- (IBAction)show2Dcode:(id)sender {
+- (void)show2Dcode:(id)sender {
 
     [self performSegueWithIdentifier:@"2Dcode" sender:self];
 }
 
-- (IBAction)report:(id)sender {
+- (void)report:(id)sender {
 
     [self performSegueWithIdentifier:@"EventToReport" sender:self];
 
 }
+
+-(void)changeBanner
+{
+    
+}
+
+-(void)quitEvent
+{
+    
+}
+
+-(void)dismissEvent
+{
+    
+}
+
 
 -(void)closeRJ
 {
