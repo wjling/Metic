@@ -9,6 +9,7 @@
 
 #import "EventDetailViewController.h"
 #import "Event2DcodeViewController.h"
+#import "BannerSelectorViewController.h"
 #import "MTUser.h"
 #import "PictureWallViewController.h"
 #import "VideoWallViewController.h"
@@ -23,6 +24,7 @@
 #import "emotion_Keyboard.h"
 #import "MobClick.h"
 #import "KxMenu.h"
+#import "SVProgressHUD.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -74,10 +76,11 @@
 {
     [super viewDidLoad];
     [self initUI];
-
+    
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
+    self.Bannercode = -1;
     self.mainCommentId = 0;
     self.Headeropen = NO;
     self.Footeropen = NO;
@@ -118,13 +121,56 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
-
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"活动详情"];
+    if (_Bannercode>-1) {
+        [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
+        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"没有网络");
+            _Bannercode = -1;
+            _uploadImage = nil;
+            [SVProgressHUD dismissWithError:@"网络无连接，更改封面失败" afterDelay:1];
+            return;
+        }
+        if (_Bannercode > 0 && _eventId) {
+            
+            //上报封面修改信息
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
+            _Bannercode = -1;
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSLog(@"%@",response1);
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY) {
+                        [self pullEventFromAir];
+                        [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }];
+
+        }else if (_Bannercode == 0){
+            PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+            getter.mDelegate = self;
+            [getter uploadBanner:_eventId];
+        }
+        
+    }
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -745,7 +791,12 @@
 
 -(void)changeBanner
 {
-    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
+
+    BanSelector.Econtroller = self;
+    [self.navigationController pushViewController:BanSelector animated:YES];
 }
 
 -(void)quitEvent
@@ -1347,6 +1398,7 @@
     }
 }
 
+#pragma mark - AlertViewDelegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     switch (buttonIndex) {
@@ -1356,6 +1408,47 @@
             
         default:
             break;
+    }
+}
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    if (type == 100){
+        //上传封面后 删除临时文件
+        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:bannerPath])
+            [fileManager removeItemAtPath:bannerPath error:nil];
+        [[SDImageCache sharedImageCache] removeImageForKey:[_event valueForKey:@"banner"]];
+        
+        //上报封面修改信息
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:_eventId forKey:@"event_id"];
+        [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
+        _Bannercode = -1;
+        [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        NSLog(@"%@",dictionary);
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY) {
+                    [self pullEventFromAir];
+                    [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }else{
+                [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+            }
+        }];
+        
+    }else if (type == 106){
+        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
     }
 }
 

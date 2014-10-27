@@ -216,6 +216,9 @@
         case 44:
             resultCode = @"get_poster";
             break;
+        case 45:
+            resultCode = @"set_event_banner";
+            break;
         default:
             resultCode = @"json";
             break;

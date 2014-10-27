@@ -65,6 +65,7 @@ enum Operation_Code
     GET_GOOD_PHOTOS = 42,
     GET_WELCOME_PAGE = 43,
     GET_POSTER = 44,
+    SET_EVENT_BANNER = 45,
 };
 
 enum CloudOperation_Code

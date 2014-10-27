@@ -15,8 +15,9 @@
 #import "../Utils/PhotoGetter.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
 #import "../UIView/MTMessageTextView.h"
+#import "../Utils/PhotoGetter.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate,PhotoGetterDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;
@@ -32,6 +33,8 @@
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (nonatomic,strong) NSDictionary *event;
+@property (nonatomic,strong) UIImage* uploadImage;
+@property int Bannercode;
 
 @property BOOL isPublish;
 @property BOOL isKeyBoard;

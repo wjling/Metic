@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -3052,7 +3051,7 @@
         <!--封面选择-->
         <scene sceneID="uMZ-ij-H19">
             <objects>
-                <viewController id="Si5-o4-IJN" customClass="BannerSelectorViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BannerSelectorViewController" id="Si5-o4-IJN" customClass="BannerSelectorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tgW-1e-WDW"/>
                         <viewControllerLayoutGuide type="bottom" id="7Bx-uh-sig"/>
