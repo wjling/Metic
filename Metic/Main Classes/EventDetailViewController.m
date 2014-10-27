@@ -155,6 +155,7 @@
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY) {
                         [self pullEventFromAir];
+                        
                         [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
                     }else{
                         [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
@@ -465,7 +466,7 @@
                         [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
                     }
                 }
-
+                [self reloadHomeArray:_event newArr:dist];
                 [_tableView endUpdates];
                 self.event = dist;
                 
@@ -512,6 +513,17 @@
     
     if ([controller isKindOfClass:[HomeViewController class]]) {
         [controller.events removeObject:_event];
+        [controller.tableView reloadData];
+    }
+}
+
+-(void)reloadHomeArray:(NSDictionary*)oldArr newArr:(NSDictionary*)newArr
+{
+    int index = self.navigationController.viewControllers.count - 2;
+    HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
+    
+    if ([controller isKindOfClass:[HomeViewController class]]) {
+        [controller.events replaceObjectAtIndex:[controller.events indexOfObject:oldArr] withObject:newArr];
         [controller.tableView reloadData];
     }
 }
@@ -801,12 +813,16 @@
 
 -(void)quitEvent
 {
-    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要退出此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setTag:130];
+    [alert show];
 }
 
 -(void)dismissEvent
 {
-    
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要退出此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setTag:140];
+    [alert show];
 }
 
 
@@ -1401,6 +1417,74 @@
 #pragma mark - AlertViewDelegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if ([alertView tag] == 130) {
+        if (buttonIndex == 1) {
+            //退出活动
+            [SVProgressHUD showWithStatus:@"正在退出活动" maskType:SVProgressHUDMaskTypeClear];
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == QUIT_EVENT_SUC) {
+                        [self removeEventFromDB];
+                        [self renewHomeArray];
+                        
+                        [SVProgressHUD dismissWithSuccess:@"退出活动成功" afterDelay:0.2];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popViewControllerAnimated:YES];
+                        });
+                        
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                }
+            }];
+        }
+        
+        return;
+    }else if([alertView tag] == 140){
+        if(buttonIndex == 1){
+            //解散活动
+            [SVProgressHUD showWithStatus:@"正在解散活动" maskType:SVProgressHUDMaskTypeClear];
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == QUIT_EVENT_SUC) {
+                        [self removeEventFromDB];
+                        [self renewHomeArray];
+                        
+                        [SVProgressHUD dismissWithSuccess:@"解散活动成功" afterDelay:0.2];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popViewControllerAnimated:YES];
+                        });
+                        
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                }
+            }];
+        }
+        return;
+    }
+    
+    
     switch (buttonIndex) {
         case 0:
             [self.navigationController popViewControllerAnimated:YES];
