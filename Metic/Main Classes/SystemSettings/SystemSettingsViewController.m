@@ -147,6 +147,7 @@
     [acView startAnimating];
     [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(operationTimeOut:) userInfo:acView repeats:NO];
     
+    //删除图片缓存
     SDImageCache* cache = [SDImageCache sharedImageCache];
     [cache clearDisk];
     [cache clearMemory];
@@ -154,6 +155,19 @@
     NSFileManager* fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:documentPath error:nil];
     [fileManager createDirectoryAtPath:documentPath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    //删除视频缓存
+    NSString* CacheDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString* webPath = [CacheDir stringByAppendingPathComponent:@"VideoTemp"];
+    NSString* cachePath = [CacheDir stringByAppendingPathComponent:@"VideoCache"];
+    
+    [fileManager removeItemAtPath:webPath error:nil];
+    [fileManager removeItemAtPath:cachePath error:nil];
+    [fileManager createDirectoryAtPath:webPath withIntermediateDirectories:YES attributes:nil error:nil];
+    [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    
+    
     [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"清理缓存完成" WithDelegate:self WithCancelTitle:@"确定"];
     [acView stopAnimating];
 }
