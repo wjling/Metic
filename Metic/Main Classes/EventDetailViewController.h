@@ -15,25 +15,26 @@
 #import "../Utils/PhotoGetter.h"
 #import "../Source/MLEmoji/MLEmojiLabel.h"
 #import "../UIView/MTMessageTextView.h"
+#import "../Utils/PhotoGetter.h"
 
-@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate>
+@interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate,PhotoGetterDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)MySqlite *sql;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
-@property (strong, nonatomic)  UIButton *comment_button;
+@property (strong, nonatomic) UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIView *commentView;
+@property (strong, nonatomic) UIView *commentView;
 @property (strong, nonatomic) UIView *inputView;
-@property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
-@property (strong, nonatomic) IBOutlet UIButton *button_Emotion;
-@property (strong, nonatomic) IBOutlet UIView *moreView;
-@property (strong, nonatomic) IBOutlet UIView *optionView;
+@property (strong, nonatomic) MTMessageTextView *inputTextView;
+@property (strong, nonatomic) UIButton *button_Emotion;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (nonatomic,strong) NSDictionary *event;
+@property (nonatomic,strong) UIImage* uploadImage;
+@property int Bannercode;
 
 @property BOOL isPublish;
 @property BOOL isKeyBoard;

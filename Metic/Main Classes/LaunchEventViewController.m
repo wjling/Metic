@@ -704,7 +704,7 @@
     }
     if ([segue.destinationViewController isKindOfClass:[BannerSelectorViewController class]]) {
         BannerSelectorViewController *nextViewController = segue.destinationViewController;
-        nextViewController.controller = self;
+        nextViewController.Lcontroller = self;
     }
 }
 

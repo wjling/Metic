@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -3011,55 +3010,6 @@
                                     <constraint firstAttribute="width" constant="320" id="qgz-CA-AMI"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zec-bo-Dqj">
-                                <rect key="frame" x="170" y="0.0" width="145" height="85"/>
-                                <subviews>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="三角" translatesAutoresizingMaskIntoConstraints="NO" id="OOQ-B5-zm7">
-                                        <rect key="frame" x="105" y="0.0" width="20" height="20"/>
-                                    </imageView>
-                                    <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="goc-b1-4sh">
-                                        <rect key="frame" x="5" y="0.0" width="135" height="80"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7J8-Yu-7G5">
-                                                <rect key="frame" x="30" y="0.0" width="72" height="40"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <state key="normal" title="二维码">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted" title="二维码">
-                                                    <color key="titleColor" red="0.89019614459999996" green="0.89019614459999996" blue="0.89019614459999996" alpha="1" colorSpace="deviceRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="show2Dcode:" destination="cGW-AM-0QH" eventType="touchUpInside" id="awe-jc-FKK"/>
-                                                </connections>
-                                            </button>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LI7-Fj-vGQ">
-                                                <rect key="frame" x="5" y="40" width="125" height="1"/>
-                                                <color key="backgroundColor" red="0.88235300780000003" green="0.88235300780000003" blue="0.88235300780000003" alpha="1" colorSpace="deviceRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrB-Qe-prQ">
-                                                <rect key="frame" x="30" y="40" width="72" height="40"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <state key="normal" title="匿名举报">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="highlighted" title="匿名举报">
-                                                    <color key="titleColor" red="0.89019614459999996" green="0.89019614459999996" blue="0.89019614459999996" alpha="1" colorSpace="deviceRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="report:" destination="cGW-AM-0QH" eventType="touchUpInside" id="WYl-Fo-vbP"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -3086,8 +3036,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
-                        <outlet property="moreView" destination="goc-b1-4sh" id="LdL-1t-jHa"/>
-                        <outlet property="optionView" destination="zec-bo-Dqj" id="VGI-PA-Hj1"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
@@ -3103,7 +3051,7 @@
         <!--封面选择-->
         <scene sceneID="uMZ-ij-H19">
             <objects>
-                <viewController id="Si5-o4-IJN" customClass="BannerSelectorViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BannerSelectorViewController" id="Si5-o4-IJN" customClass="BannerSelectorViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tgW-1e-WDW"/>
                         <viewControllerLayoutGuide type="bottom" id="7Bx-uh-sig"/>
@@ -4872,7 +4820,6 @@
         <image name="ic_remove" width="31" height="31"/>
         <image name="img_about_logo" width="234" height="144"/>
         <image name="img_about_slogon" width="230" height="32"/>
-        <image name="三角" width="17" height="9"/>
         <image name="上传按钮" width="26" height="26"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
@@ -4926,15 +4873,15 @@
     <inferredMetricsTieBreakers>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="DsC-hh-HTw"/>
         <segue reference="ib8-0I-OZA"/>
+        <segue reference="DsC-hh-HTw"/>
         <segue reference="KQw-JA-BHy"/>
         <segue reference="8Lk-Kp-pHu"/>
-        <segue reference="Ntp-rU-rWO"/>
         <segue reference="823-Eq-eYh"/>
-        <segue reference="hB7-KS-rrK"/>
         <segue reference="kIc-uU-eUg"/>
-        <segue reference="fwI-VG-d1n"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="06u-oh-4gy"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>
 </document>

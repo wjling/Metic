@@ -28,6 +28,7 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     _code = 1;
+    [((UIImageView*)_selectorIndictors[0]) setHighlighted:YES];
     // Do any additional setup after loading the view.
 }
 
@@ -70,12 +71,22 @@
 
 
 - (IBAction)confirmBanner:(id)sender {
-    if(self.controller.code!=0){
-        self.controller.code = _code;
-        [self.controller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-1]).imageView.image forState:UIControlStateNormal];
+    if (_Econtroller) {
+        self.Econtroller.uploadImage = nil;
+        self.Econtroller.Bannercode = _code;
+        [self.navigationController popToViewController:self.Econtroller animated:YES];
+        return;
     }
-    [self.navigationController popToViewController:self.controller animated:YES];
-    self.controller = nil;
+    if (_Lcontroller) {
+        if(self.Lcontroller.code!=0){
+            self.Lcontroller.code = _code;
+            [self.Lcontroller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-1]).imageView.image forState:UIControlStateNormal];
+        }
+        [self.navigationController popToViewController:self.Lcontroller animated:YES];
+        self.Lcontroller = nil;
+    }
+    
+    
 }
 
 - (void)openEditor
@@ -159,13 +170,25 @@
 
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
-    [controller dismissViewControllerAnimated:YES completion:NULL];
-    self.controller.uploadImage =croppedImage;
-    [self.controller.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
-    self.controller.code = 0;
-    self.uploadImage = nil;
-    [self.navigationController popToViewController:self.controller animated:YES];
-    self.controller = nil;
+    if (_Econtroller) {
+        [controller dismissViewControllerAnimated:YES completion:NULL];
+        self.Econtroller.uploadImage = croppedImage;
+        self.Econtroller.Bannercode = 0;
+        [self.navigationController popToViewController:self.Econtroller animated:YES];
+        return;
+    }
+    
+    if (_Lcontroller) {
+        [controller dismissViewControllerAnimated:YES completion:NULL];
+        self.Lcontroller.uploadImage =croppedImage;
+        [self.Lcontroller.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
+        self.Lcontroller.code = 0;
+        self.uploadImage = nil;
+        [self.navigationController popToViewController:self.Lcontroller animated:YES];
+        self.Lcontroller = nil;
+    }
+    
+    
 }
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller

@@ -9,6 +9,7 @@
 
 #import "EventDetailViewController.h"
 #import "Event2DcodeViewController.h"
+#import "BannerSelectorViewController.h"
 #import "MTUser.h"
 #import "PictureWallViewController.h"
 #import "VideoWallViewController.h"
@@ -22,6 +23,8 @@
 #import "NSString+JSON.h"
 #import "emotion_Keyboard.h"
 #import "MobClick.h"
+#import "KxMenu.h"
+#import "SVProgressHUD.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -73,10 +76,11 @@
 {
     [super viewDidLoad];
     [self initUI];
-
+    
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
+    self.Bannercode = -1;
     self.mainCommentId = 0;
     self.Headeropen = NO;
     self.Footeropen = NO;
@@ -112,19 +116,62 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [_optionView setHidden:YES];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
-
+    
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"活动详情"];
+    if (_Bannercode>-1) {
+        [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
+        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"没有网络");
+            _Bannercode = -1;
+            _uploadImage = nil;
+            [SVProgressHUD dismissWithError:@"网络无连接，更改封面失败" afterDelay:1];
+            return;
+        }
+        if (_Bannercode > 0 && _eventId) {
+            
+            //上报封面修改信息
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
+            _Bannercode = -1;
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSLog(@"%@",response1);
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY) {
+                        [self pullEventFromAir];
+                        
+                        [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }];
+
+        }else if (_Bannercode == 0){
+            PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+            getter.mDelegate = self;
+            [getter uploadBanner:_eventId];
+        }
+        
+    }
 }
 -(void)viewWillDisappear:(BOOL)animated
 {
@@ -158,11 +205,6 @@
 {
     float var = 242/255.0;
     [_tableView setBackgroundColor:[UIColor colorWithRed:var green:var blue:var alpha:1]];
-    
-    _moreView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-	_moreView.layer.shadowRadius = 10;
-	_moreView.layer.shadowPath = [UIBezierPath bezierPathWithRect:_moreView.bounds].CGPath;
-	_moreView.layer.shadowOpacity = 1;
 
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
@@ -205,13 +247,62 @@
    
 }
 
-//-(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize
-//{
-//    UIFont *font = [UIFont systemFontOfSize:fsize];
-//    CGSize size = CGSizeMake(width,2000);
-//    CGRect labelRect = [text boundingRectWithSize:size options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)  attributes:[NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName] context:nil];
-//    return ceil(labelRect.size.height)*1.25;
-//}
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    if (_event) {
+        if (_eventId && [_eventId intValue]!=0) {
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"二维码"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(show2Dcode:)],
+                                             
+                                             [KxMenuItem menuItem:@"举报活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(report:)],
+                                             ]];
+        }
+        
+        if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"更换封面"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(changeBanner)],
+                                             
+                                             [KxMenuItem menuItem:@"解散活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(dismissEvent)],
+                                             ]];
+        }else{
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"退出活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(quitEvent)]]];
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+                 menuItems:menuItems];
+}
 
 
 -(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
@@ -375,10 +466,9 @@
                         [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
                     }
                 }
-
+                [self reloadHomeArray:_event newArr:dist];
                 [_tableView endUpdates];
                 self.event = dist;
-                
                 [_tableView reloadData];
                 if(_event)[self updateEventToDB:_event];
             }else{
@@ -426,6 +516,17 @@
     }
 }
 
+-(void)reloadHomeArray:(NSDictionary*)oldArr newArr:(NSDictionary*)newArr
+{
+    int index = self.navigationController.viewControllers.count - 2;
+    HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
+    
+    if ([controller isKindOfClass:[HomeViewController class]]) {
+        [controller.events replaceObjectAtIndex:[controller.events indexOfObject:oldArr] withObject:newArr];
+        [controller.tableView reloadData];
+    }
+}
+
 - (void)addComment
 {
     self.mainCommentId = 0;
@@ -443,28 +544,9 @@
 }
 
 - (IBAction)more:(id)sender {
-    if (_optionView.isHidden) {
-        [_optionView setHidden:NO];
-        if (self.isKeyBoard) {
-            [self.inputTextView resignFirstResponder];
-        }
-        if (self.isEmotionOpen) {
-            [self button_Emotionpress:nil];
-        }
-        CGRect frame = self.view.frame;
-        frame.origin = CGPointMake(0, 0);
-        _shadowView = [[UIView alloc]initWithFrame:frame];
-        [self.view addSubview:_shadowView];
-        [self.view bringSubviewToFront:_optionView];
-        UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(more:)];
-        [_shadowView addGestureRecognizer:tapRecognizer];
-    }else{
-        [_optionView setHidden:YES];
-        if (_shadowView) {
-            [_shadowView removeFromSuperview];
-            _shadowView = nil;
-        }
-    }
+    [self showMenu];
+    return;
+
 }
 
 
@@ -707,16 +789,41 @@
     
 }
 
-- (IBAction)show2Dcode:(id)sender {
+- (void)show2Dcode:(id)sender {
 
     [self performSegueWithIdentifier:@"2Dcode" sender:self];
 }
 
-- (IBAction)report:(id)sender {
+- (void)report:(id)sender {
 
     [self performSegueWithIdentifier:@"EventToReport" sender:self];
 
 }
+
+-(void)changeBanner
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
+
+    BanSelector.Econtroller = self;
+    [self.navigationController pushViewController:BanSelector animated:YES];
+}
+
+-(void)quitEvent
+{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要退出此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setTag:130];
+    [alert show];
+}
+
+-(void)dismissEvent
+{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要退出此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert setTag:140];
+    [alert show];
+}
+
 
 -(void)closeRJ
 {
@@ -1306,8 +1413,77 @@
     }
 }
 
+#pragma mark - AlertViewDelegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if ([alertView tag] == 130) {
+        if (buttonIndex == 1) {
+            //退出活动
+            [SVProgressHUD showWithStatus:@"正在退出活动" maskType:SVProgressHUDMaskTypeClear];
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == QUIT_EVENT_SUC) {
+                        [self removeEventFromDB];
+                        [self renewHomeArray];
+                        
+                        [SVProgressHUD dismissWithSuccess:@"退出活动成功" afterDelay:0.2];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popViewControllerAnimated:YES];
+                        });
+                        
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                }
+            }];
+        }
+        
+        return;
+    }else if([alertView tag] == 140){
+        if(buttonIndex == 1){
+            //解散活动
+            [SVProgressHUD showWithStatus:@"正在解散活动" maskType:SVProgressHUDMaskTypeClear];
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == QUIT_EVENT_SUC) {
+                        [self removeEventFromDB];
+                        [self renewHomeArray];
+                        
+                        [SVProgressHUD dismissWithSuccess:@"解散活动成功" afterDelay:0.2];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popViewControllerAnimated:YES];
+                        });
+                        
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，操作失败"];
+                }
+            }];
+        }
+        return;
+    }
+    
+    
     switch (buttonIndex) {
         case 0:
             [self.navigationController popViewControllerAnimated:YES];
@@ -1315,6 +1491,47 @@
             
         default:
             break;
+    }
+}
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    if (type == 100){
+        //上传封面后 删除临时文件
+        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:bannerPath])
+            [fileManager removeItemAtPath:bannerPath error:nil];
+        [[SDImageCache sharedImageCache] removeImageForKey:[_event valueForKey:@"banner"]];
+        
+        //上报封面修改信息
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:_eventId forKey:@"event_id"];
+        [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
+        _Bannercode = -1;
+        [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        NSLog(@"%@",dictionary);
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY) {
+                    [self pullEventFromAir];
+                    [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }else{
+                [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+            }
+        }];
+        
+    }else if (type == 106){
+        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
     }
 }
 

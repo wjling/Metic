@@ -219,6 +219,9 @@
         case 45:
             resultCode = @"alias";
             break;
+        case 46:
+            resultCode = @"set_event_banner";
+            break;
         default:
             resultCode = @"json";
             break;

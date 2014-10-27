@@ -72,6 +72,7 @@ enum Operation_Code
     GET_WELCOME_PAGE = 43,
     GET_POSTER = 44,
     ALIAS_OPERATION = 45,
+    SET_EVENT_BANNER = 46,
 };
 
 enum CloudOperation_Code

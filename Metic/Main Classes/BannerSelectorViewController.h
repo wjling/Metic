@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "PECropViewController.h"
 #import "LaunchEventViewController.h"
+#import "EventDetailViewController.h"
 
 @interface BannerSelectorViewController : UIViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,PECropViewControllerDelegate>
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *defaultBanners;
 @property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *selectorIndictors;
 @property (strong, nonatomic) UIImage* uploadImage;
-@property (strong, nonatomic) LaunchEventViewController* controller;
+@property (strong, nonatomic) LaunchEventViewController* Lcontroller;
+@property (strong, nonatomic) EventDetailViewController* Econtroller;
 - (IBAction)selectBanner:(id)sender;
 - (IBAction)getMyBanner:(id)sender;
 - (IBAction)confirmBanner:(id)sender;
