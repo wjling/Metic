@@ -218,9 +218,6 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_VIDEO_LIST finshedBlock:^(NSData *rData) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self showPromt];
-        });
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
@@ -252,6 +249,7 @@
 
         }else{
         }
+        [self showPromt];
     }];
     
     
