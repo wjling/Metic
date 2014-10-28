@@ -15,12 +15,15 @@
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+#import "VideoPlayerViewController.h"
+
 #define widthspace 10
 #define deepspace 4
 
 @interface VideoWallTableViewCell ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
+@property (nonatomic, retain) VideoPlayerViewController *myPlayerViewController;
 @property __block unsigned long long receivedBytes;
 @end
 
@@ -38,6 +41,8 @@
     [self.comment_button addTarget:self action:@selector(toDetail:) forControlEvents:UIControlEventTouchUpInside];
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
+    
+    
     // Initialization code
 }
 
@@ -97,6 +102,10 @@
         [videoRequest clearDelegatesAndCancel];
         videoRequest = nil;
     }
+    if (_myPlayerViewController) {
+        [_myPlayerViewController.view removeFromSuperview];
+        _myPlayerViewController = nil;
+    }
     self.videoPlayImg.hidden = NO;
     self.author.text = [_videoInfo valueForKey:@"author"];
     self.time.text = [[_videoInfo valueForKey:@"time"] substringToIndex:10];
@@ -104,6 +113,8 @@
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:self.authorId];
     [avatarGetter getAvatar];
     
+    _videoName = [_videoInfo valueForKey:@"video_name"];
+    [self PlayingVideoAtOnce];
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -459,6 +470,10 @@
             
             [request setCompletionBlock:^{
                 [self closeProgressOverlayView];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    // my video player
+                    [self PlayingVideoAtOnce];
+                });
                 
             }];
             //断点续载
@@ -496,6 +511,33 @@
     }
     
 }
+
+-(void)PlayingVideoAtOnce
+{
+    return;
+    // my video player
+    
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+    {
+        if (!_myPlayerViewController) {
+            VideoPlayerViewController *player = [[VideoPlayerViewController alloc] init];
+            _myPlayerViewController = player;
+            _myPlayerViewController.view.frame = _video_button.frame;
+            [self.videoContainer addSubview:_myPlayerViewController.view];
+        }
+        
+        NSURL *url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
+        _myPlayerViewController.URL = url;
+        _myPlayerViewController.view.hidden = NO;
+    }
+    
+    
+}
+
 
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];

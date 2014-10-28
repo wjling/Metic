@@ -32,7 +32,7 @@
 @property (strong, nonatomic) NSNumber *authorId;
 @property (strong, nonatomic) NSNumber *eventId;
 @property (strong, nonatomic) NSNumber *videoId;
-@property (strong, nonatomic) NSNumber *videoName;
+@property (strong, nonatomic) NSString *videoName;
 @property (strong, nonatomic) NSMutableDictionary *videoInfo;
 @property (strong, nonatomic) VideoWallViewController* controller;
 

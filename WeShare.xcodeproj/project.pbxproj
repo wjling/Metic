@@ -115,6 +115,8 @@
 		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
+		088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */; };
+		088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		08921E5819D116D800A2BAF8 /* PhotoRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */; };
 		08921E5919D116D800A2BAF8 /* PhotoRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */; };
@@ -567,6 +569,10 @@
 		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
 		08775A0419A8F7840034BB58 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportViewController.h; path = Report/ReportViewController.h; sourceTree = "<group>"; };
 		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
+		088DCEAC19FF97D70036BE82 /* VideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerView.h; sourceTree = "<group>"; };
+		088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerView.m; sourceTree = "<group>"; };
+		088DCEAE19FF97D70036BE82 /* VideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerViewController.h; sourceTree = "<group>"; };
+		088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerViewController.m; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoRankingTableViewCell.h; sourceTree = "<group>"; };
@@ -1313,6 +1319,17 @@
 			name = Report;
 			sourceTree = "<group>";
 		};
+		088DCEAB19FF97D70036BE82 /* Multi-Player */ = {
+			isa = PBXGroup;
+			children = (
+				088DCEAC19FF97D70036BE82 /* VideoPlayerView.h */,
+				088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */,
+				088DCEAE19FF97D70036BE82 /* VideoPlayerViewController.h */,
+				088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */,
+			);
+			path = "Multi-Player";
+			sourceTree = "<group>";
+		};
 		0892072E197224C30076D2BC /* security */ = {
 			isa = PBXGroup;
 			children = (
@@ -1882,6 +1899,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				088DCEAB19FF97D70036BE82 /* Multi-Player */,
 				08CAB30D19FE9701009DAFA9 /* SVProgressHUD */,
 				08A68E2119FE62D000A9EB76 /* KxMenu */,
 				085EAF3719FBC24D00BFDA10 /* DAProgressOverlayView */,
@@ -2363,6 +2381,7 @@
 				08293F8219C5DC3A009B637A /* THProgressView.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				51F4CB1A19E6307500E487F1 /* DDTTYLogger.m in Sources */,
+				088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				04B6F8AE19A25D5C00229393 /* MLEmojiLabel.m in Sources */,
@@ -2423,6 +2442,7 @@
 				089337AA197579CE00AD940B /* UIImage+PECrop.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
+				088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */,
 				0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */,
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,

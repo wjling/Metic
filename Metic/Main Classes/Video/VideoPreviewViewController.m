@@ -369,7 +369,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
         [dictionary setValue:self.eventId forKey:@"event_id"];
         [dictionary setValue:@"upload" forKey:@"cmd"];
-        [dictionary setValue:container forKey:@"video_name"];
+        [dictionary setValue:container[0] forKey:@"video_name"];
         [dictionary setValue:self.textView.text forKey:@"title"];
         NSLog(@"%@",dictionary);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -397,7 +397,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         {
                             [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
                         }
-                        NSString* filepath = [cachePath stringByAppendingPathComponent:container];
+                        NSString* filepath = [cachePath stringByAppendingPathComponent:container[0]];
                         
                         [fileManager copyItemAtPath:mp4path toPath:filepath error:nil];
                         if ([fileManager fileExistsAtPath:mp4path])

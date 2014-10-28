@@ -291,7 +291,6 @@
     }
     VideoWallTableViewCell *cell = (VideoWallTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    
     if (self.videoInfos) {
         NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
         cell.videoInfo = dictionary;
