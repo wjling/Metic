@@ -151,6 +151,7 @@
     [commentV addSubview:sendBtn];
     
     [self.view addSubview:commentV];
+    [self.view bringSubviewToFront:_controlView];
     
     // 初始化输入框
     MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];

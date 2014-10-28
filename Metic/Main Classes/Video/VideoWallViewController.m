@@ -29,6 +29,7 @@
 @property(nonatomic,strong) UIImage* preViewImage;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
+@property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
 @end
@@ -129,6 +130,24 @@
     }
 }
 
+-(void)showPromt
+{
+    if (_videoInfos.count == 0 && _promt == nil) {
+        _promt = [[UILabel alloc]initWithFrame:CGRectMake(50, 20, 200, 21)];
+        _promt.text = @"还没有视频哦，快去上传吧";
+        _promt.textAlignment= NSTextAlignmentCenter;
+        _promt.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1];
+        _promt.font = [UIFont systemFontOfSize:15];
+        
+        [_tableView addSubview:_promt];
+    }
+    
+    if (_videoInfos.count != 0 && _promt) {
+        [_promt removeFromSuperview];
+        _promt = nil;
+    }
+}
+
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
@@ -187,6 +206,7 @@
     }
     
     [sql closeMyDB];
+    [self showPromt];
 }
 -(void)getVideolist
 {
@@ -198,6 +218,9 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_VIDEO_LIST finshedBlock:^(NSData *rData) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self showPromt];
+        });
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);

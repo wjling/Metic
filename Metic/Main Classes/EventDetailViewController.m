@@ -819,7 +819,7 @@
 
 -(void)dismissEvent
 {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要退出此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要解散此活动 ？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setTag:140];
     [alert show];
 }
