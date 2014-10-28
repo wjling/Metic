@@ -66,7 +66,7 @@
 - (IBAction)play:(id)sender {
     
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",videoName]];
+    NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
 //    [self openmovie:url];
 //    [self videoPlay:videoName url:url];
@@ -131,7 +131,7 @@
     [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
     [self setComment_buttonNum:[_videoInfo valueForKey:@"comment_num"]];
     
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@.thumb",[_videoInfo valueForKey:@"video_name"]]];
+    NSString *url = [_videoInfo valueForKey:@"thumb"];
     
     [_video_button setImage:nil forState:UIControlStateNormal];
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
@@ -558,26 +558,7 @@
                                               object:playerViewController.moviePlayer];
 }
 
-//-(void)openmovie:(NSString*)url
-//{
-//
-//    MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
-//    
-//    [movie.moviePlayer prepareToPlay];
-//    [self.controller presentMoviePlayerViewControllerAnimated:movie];
-//    [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
-//    [movie.view setBackgroundColor:[UIColor clearColor]];
-//    
-//    [movie.view setFrame:self.controller.navigationController.view.bounds];
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//     
-//                                           selector:@selector(movieFinishedCallback:)
-//     
-//                                               name:MPMoviePlayerPlaybackDidFinishNotification
-//     
-//                                             object:movie.moviePlayer];
-//    
-//}
+
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     

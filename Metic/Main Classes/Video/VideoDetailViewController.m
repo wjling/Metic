@@ -185,7 +185,7 @@
         return;
     }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
-    NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/video/%@",[_videoInfo valueForKey:@"video_name"]]];
+    NSString *url = [_videoInfo valueForKey:@"thumb"];
     NSLog(@"%@",url);
     [self downloadVideo:videoName url:url];
 //    [self videoPlay:videoName url:url];
