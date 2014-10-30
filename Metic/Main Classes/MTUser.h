@@ -35,6 +35,7 @@
 @property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong,nonatomic) NSMutableSet* friendsIdSet;
 @property (strong,nonatomic) NSMutableDictionary* nameFromID_dic;
+@property (strong,nonatomic) NSMutableDictionary* alias_dic;    //fid(NSString)-alias(NSString)
 
 //For HomeViewController
 @property (nonatomic,strong) NSMutableSet* updateEventIds;
@@ -70,7 +71,8 @@
 - (void)updateAvatarList;
 - (void)initWithData:(NSDictionary *)mdictionary;
 - (void)setUid:(NSNumber *)user_id;
--(void)friendListDidChanged;
+- (void)friendListDidChanged;
+- (void)aliasDicDidChangedwithId:(NSNumber*)fid andAlias:(NSString*)alias;
 
 @end
 

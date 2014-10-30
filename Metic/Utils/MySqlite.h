@@ -41,7 +41,7 @@ static BOOL isLocked = false;
 //1. 键（key）的类型是NSString
 //2. 如果值是数字，则形如：@"3"，@"3.5"
 //3. 如果值是字符串，则需加单引号，形如：@"'2011-1-12'", @"'John'"
-
+//4. 键值对形如：name = 'Jhon', number = 1
 //表名（tableName）可以不用加单引号,如：@"TESTTABLE"。加了也没问题
 - (BOOL)updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary*)wheres andSet:(NSDictionary*)sets;
 

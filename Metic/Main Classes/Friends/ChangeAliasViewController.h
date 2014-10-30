@@ -20,5 +20,6 @@
 @property (strong, nonatomic) InputHandleView *rootView;
 
 @property (strong, nonatomic) NSNumber *fid;   //需要传入数据
+@property (strong, nonatomic) NSString* alias_new;
 
 @end

@@ -27,6 +27,7 @@
 @synthesize sectionArray;
 @synthesize friendsIdSet;
 @synthesize nameFromID_dic;
+@synthesize alias_dic;
 
 @synthesize updateEventIds;
 @synthesize updateEvents;
@@ -65,6 +66,7 @@ static MTUser *singletonInstance;
         self.friendList = [[NSMutableArray alloc]initWithCapacity:0];
         self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
+        self.alias_dic = [[NSMutableDictionary alloc]init];
         self.friendsIdSet = [[NSMutableSet alloc]init];
         self.updateEventIds = [[NSMutableSet alloc]init];
         self.updateEvents = [[NSMutableArray alloc]init];
@@ -93,6 +95,7 @@ static MTUser *singletonInstance;
         friendList = [aDecoder decodeObjectForKey:@"friendList"];
         sortedFriendDic = [aDecoder decodeObjectForKey:@"sortedFriendDic"];
         sectionArray = [aDecoder decodeObjectForKey:@"sectionArray"];
+        alias_dic = [aDecoder decodeObjectForKey:@"alias_dic"];
         friendsIdSet = [aDecoder decodeObjectForKey:@"friendsIdSet"];
         updateEventIds = [aDecoder decodeObjectForKey:@"updateEventIds"];
         updateEvents = [aDecoder decodeObjectForKey:@"updateEvents"];
@@ -123,6 +126,7 @@ static MTUser *singletonInstance;
     [aCoder encodeObject:self.friendList forKey:@"friendList"];
     [aCoder encodeObject:self.sortedFriendDic forKey:@"sortedFriendDic"];
     [aCoder encodeObject:self.sectionArray forKey:@"sectionArray"];
+    [aCoder encodeObject:self.alias_dic forKey:@"alias_dic"];
     [aCoder encodeObject:self.friendsIdSet forKey:@"friendsIdSet"];
     [aCoder encodeObject:self.updateEventIds forKey:@"updateEventIds"];
     [aCoder encodeObject:self.updateEvents forKey:@"updateEvents"];
@@ -228,7 +232,9 @@ static MTUser *singletonInstance;
 //    [self.friendList removeAllObjects];
 //    [self.sortedFriendDic removeAllObjects];
     [self.sectionArray removeAllObjects];
-    [self synchronizeFriends];
+//    [self synchronizeFriends];
+    [self getAliasFromDB];
+    [self getAliasFromServer];
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
     [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
 }
@@ -258,12 +264,24 @@ static MTUser *singletonInstance;
     }
     else
     {
-//        MySqlite * sql = [[MySqlite alloc]init];
-//        NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-//        [sql openMyDB:path];
-//        [sql table:@"friend" addsColumn:@"alias" withDefault:@"gg"];
-//        [sql closeMyDB];
-
+        
+        NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+        NSString* version = [userDfs objectForKey:@"DB_version"];
+        if (!version) {
+            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            [userDfs setValue:version forKey:@"DB_version"];
+            [userDfs synchronize];
+        }
+        
+        int result = [CommonUtils compareVersion1:version andVersion2:@"0.1.16"];
+        if (result == -1) {
+            NSLog(@"升级数据库，原数据库版本：%@",version);
+            MySqlite * sql = [[MySqlite alloc]init];
+            NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+            [sql openMyDB:path];
+            [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
+            [sql closeMyDB];
+        }
     }
     
     
@@ -272,12 +290,16 @@ static MTUser *singletonInstance;
 - (void)initUserDB
 {
     NSLog(@"初始化数据库");
+    NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [userDfs setValue:version forKey:@"DB_version"];
+    [userDfs synchronize];
     MySqlite * sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
     [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
     [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
-    [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",nil];
+    [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias",nil];
     [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
     [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
     [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
@@ -328,6 +350,7 @@ static MTUser *singletonInstance;
     for (NSDictionary* friend in friendList) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
         NSString* fname = [friend objectForKey:@"name"];
+        [friend setValue:fid forKey:@"id"];
         [friendsIdSet addObject:fid];
         [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
@@ -363,8 +386,23 @@ static MTUser *singletonInstance;
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
     //    NSLog(@"friendlist count: %d",friendList.count);
     for (NSMutableDictionary* aFriend in self.friendList) {
-        NSString* fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
-        //        NSLog(@"friend name: %@",fname_py);
+        NSString* fAlias = [aFriend objectForKey:@"alias"];
+        NSString* fname_py;
+        if (fAlias) {
+            if (![fAlias isEqual:[NSNull null]]) {
+                fname_py = [CommonUtils pinyinFromNSString:fAlias];
+            }
+            else
+            {
+                fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
+            }
+        }
+        else
+        {
+            fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
+
+        }
+//        NSLog(@"friend name: %@",fname_py);
         NSString *regex = @"[a-zA-Z]";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
@@ -418,8 +456,38 @@ static MTUser *singletonInstance;
 {
     NSComparator cmptor = ^(id obj1, id obj2)
     {
-        NSString* obj1_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]] uppercaseString];
-        NSString* obj2_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]] uppercaseString];
+        NSString* alias1 = [obj1 objectForKey:@"alias"];
+        NSString* alias2 = [obj2 objectForKey:@"alias"];
+        NSString* obj1_py;
+        NSString* obj2_py;
+        if (alias1) {
+            if (![alias1 isEqual:[NSNull null]]) {
+                obj1_py = [[CommonUtils pinyinFromNSString:alias1] uppercaseString];
+            }
+            else
+            {
+                obj1_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]] uppercaseString];
+            }
+        }
+        else
+        {
+            obj1_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj1 objectForKey:@"name"]] uppercaseString];
+        }
+        
+        if (alias2) {
+            if (![alias2 isEqual:[NSNull null]]) {
+                obj2_py = [[CommonUtils pinyinFromNSString:alias2] uppercaseString];
+            }
+            else
+            {
+                obj2_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]] uppercaseString];
+            }
+        }
+        else
+        {
+            obj2_py = [[CommonUtils pinyinFromNSString:(NSString*)[obj2 objectForKey:@"name"]] uppercaseString];
+        }
+
         NSInteger result = [obj1_py compare:obj2_py];
         return result;
     };
@@ -436,15 +504,17 @@ static MTUser *singletonInstance;
         NSNumber* friendID = [friend objectForKey:@"id"];
         NSNumber* friendGender = [friend objectForKey:@"gender"];
         NSString* friendName = [friend objectForKey:@"name"];
+        NSString* friendAlias = [friend objectForKey:@"alias"];
         
-        //        NSLog(@"email: %@, id: %@, gender: %@, name: %@",friendEmail,friendID,friendGender,friendName);
+//        NSLog(@"insert friends to database.\n email: %@, id: %@, gender: %@, name: %@, alias: %@",friendEmail,friendID,friendGender,friendName, friendAlias);
         
-        NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'", nil];
+        NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'",@"'alias'", nil];
         NSArray* values = [[NSArray alloc]initWithObjects:
                            [NSString stringWithFormat:@"%@",friendID],
                            [NSString stringWithFormat:@"'%@'",friendName],
                            [NSString stringWithFormat:@"'%@'",friendEmail],
-                           [NSString stringWithFormat:@"%@",friendGender], nil];
+                           [NSString stringWithFormat:@"%@",friendGender],
+                           [NSString stringWithFormat:@"'%@'",friendAlias], nil];
         [sql insertToTable:@"friend" withColumns:columns andValues:values];
     }
     [sql closeMyDB];
@@ -466,6 +536,119 @@ static MTUser *singletonInstance;
         [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
     NSLog(@"friend id set: %@",friendsIdSet);
+}
+
+
+-(void)getAliasFromServer
+{
+    
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                              [MTUser sharedInstance].userid, @"id",
+                              [NSNumber numberWithInt:ALIAS_GET], @"operation",nil];
+    NSLog(@"get alias json: %@",json_dic);
+    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    
+    void(^getAliasDone)(NSData*) = ^(NSData* rData)
+    {
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"received alias: %@",temp);
+        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSInteger cmd = [[response1 valueForKey:@"cmd"]integerValue];
+        switch (cmd) {
+            case NORMAL_REPLY:
+            {
+                if (!self.alias_dic) {
+                    self.alias_dic = [[NSMutableDictionary alloc]init];
+                }
+                [self.alias_dic removeAllObjects];
+                NSMutableArray* alias_list = [response1 objectForKey:@"list"];
+                for (NSDictionary* temp in alias_list) {
+                    NSString* fid = [NSString stringWithFormat:@"%@",[temp objectForKey:@"id"]];
+                    NSString* alias = [temp objectForKey:@"alias"];
+                    [self.alias_dic setValue:alias forKey:fid];
+                }
+            }
+                break;
+                
+            default:
+                break;
+        }
+        NSLog(@"get alias from server, alias_dic: %@",self.alias_dic);
+        [self synchronizeFriends];
+    };
+    
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:json_data withOperationCode:ALIAS_OPERATION finshedBlock:getAliasDone];
+}
+
+-(void)getAliasFromDB
+{
+    [self.alias_dic removeAllObjects];
+    NSMutableArray* friends = [self getFriendsFromDB];
+    for (NSDictionary* friend in friends) {
+        NSString* fid = [friend objectForKey:@"id"];
+        NSString* alias = [friend objectForKey:@"alias"];
+        [self.alias_dic setValue:alias forKey:fid];
+    }
+    NSLog(@"get alias from db: %@",alias_dic);
+}
+
+-(void)updateAliasInDB
+{
+    NSArray* keys = [self.alias_dic allKeys];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:DB_path];
+    for (int i = 0; i < keys.count; i++) {
+        NSNumber* fid = [CommonUtils NSNumberWithNSString:keys[i]];
+        NSString* alias = [self.alias_dic objectForKey:keys[i]];
+        NSDictionary* wheres = [CommonUtils packParamsInDictionary:
+                                fid, @"id",nil];
+        NSDictionary* sets = [CommonUtils packParamsInDictionary:
+                              [NSString stringWithFormat:@"'%@'", alias],@"alias",nil];
+        [sql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
+    }
+    [sql closeMyDB];
+    NSLog(@"更新好友备注名完成");
+}
+
+-(void)insertAliasToFriendList
+{
+    NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
+    for (NSMutableDictionary* friend in self.friendList) {
+        NSNumber* fid = [friend objectForKey:@"id"];
+        NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+        NSLog(@"fid: %@, alias: %@",fid, alias);
+        if (alias) {
+            [friend setValue:alias forKey:@"alias"];
+        }
+        else
+        {
+            [friend setValue:[NSNull null] forKey:@"alias"];
+        }
+    }
+    NSLog(@"after insert alias to friendlist: %@",self.friendList);
+}
+
+-(void)aliasDicDidChangedwithId:(NSNumber*)fid andAlias:(NSString*)alias
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^
+                   {
+                       [self updateAliasInDB];
+                   });
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^
+                   {
+                       for (NSMutableDictionary* aFriend in self.friendList) {
+                           NSNumber* friend_id = [aFriend objectForKey:@"id"];
+                           if ([friend_id isEqualToNumber:fid]) {
+                               [aFriend setValue:alias forKey:@"alias"];
+                               break;
+                           }
+                       }
+                       [self friendListDidChanged];
+                       
+                   });
+
 }
 
 
@@ -567,29 +750,40 @@ static MTUser *singletonInstance;
             if (tempFriends) {
                 if (tempFriends.count) {
                     self.friendList = tempFriends;
-                    
-                    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:tempFriends];
+                    [self insertAliasToFriendList];
+                    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:self.friendList];
                     [thread start];
                 }
                 else
                 {
                     NSLog(@"好友列表已经是最新的啦～");
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^
+                                   {
+                                       [self insertAliasToFriendList];
+                                       [self updateAliasInDB];
+                                   });
+                    
 //                    self.friendList = [self getFriendsFromDB];
 //                    self.sortedFriendDic = [self sortFriendList];
                 }
                 NSLog(@"synchronize friends: %@",friendList);
-                
+                dispatch_async(dispatch_get_global_queue(0, 0), ^
+                               {
+                                   [self friendListDidChanged];
+                                   dispatch_async(dispatch_get_main_queue(), ^
+                                                  {
+                                                      doingSynchronizeFriend = NO;
+                                                      synchronizeFriendDone = YES;
+                                                  });
+                               });
             }
-            dispatch_async(dispatch_get_global_queue(0, 0), ^
-                           {
-                               [self friendListDidChanged];
-                               dispatch_async(dispatch_get_main_queue(), ^
-                                              {
-                                                  doingSynchronizeFriend = NO;
-                                                  synchronizeFriendDone = YES;
-                                              });
-                           });
-                    
+            else
+            {
+                NSLog(@"不是同步好友的操作");
+            }
+            
+            
+            
         }
             break;
         default:

@@ -107,4 +107,11 @@
 
 //计算label动态高度
 +(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize isEmotion:(BOOL)isEmotion;
+
+//比较app版本号大小，
+//返回－1， version1 小于 version2
+//返回0， version1 等于 version2
+//返回1， version1 大于 version2
+//version 形如："0.1.21","12.21.14"等
++(int)compareVersion1:(NSString*)version1 andVersion2:(NSString*)version2;
 @end

@@ -20,6 +20,7 @@
 @synthesize alias_view;
 @synthesize ok_btn;
 @synthesize fid;
+@synthesize alias_new;
 @synthesize rootView;
 
 - (void)viewDidLoad {
@@ -51,7 +52,7 @@
     self.navigationItem.title = @"修改好友备注";
     
     alias_view = [[myInputView alloc]init];
-    [alias_view setFrame:CGRectMake(20, 60, 280, 25)];
+    [alias_view setFrame:CGRectMake(20, 60, 280, 40)];
     alias_view.prefix_label.text = @"备注名";
     alias_view.textField.delegate = rootView;
     
@@ -64,12 +65,13 @@
 
 -(void)okBtnClick
 {
-    NSString* newAlias = alias_view.textField.text? alias_view.textField.text:@"";
+    alias_new = alias_view.textField.text? alias_view.textField.text:@"";
     NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                      [MTUser sharedInstance].userid, @"id",
                                      fid, @"friend_id",
-                                     ALIAS_SET, @"operation",
-                                     newAlias, @"alias", nil];
+                                     [NSNumber numberWithInt:ALIAS_SET], @"operation",
+                                     alias_new, @"alias", nil];
+    NSLog(@"alias json: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     
     void(^setAliasDone)(NSData *rData) = ^(NSData *rData)
@@ -82,16 +84,36 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
+                dispatch_async(dispatch_get_global_queue(0, 0), ^
+                               {
+                                   [[MTUser sharedInstance].alias_dic setValue:alias_new forKey:[NSString stringWithFormat:@"%@",fid]];
+                                   [[MTUser sharedInstance] aliasDicDidChangedwithId:fid andAlias:alias_new];
+                               });
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"备注名修改成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                [alert show];
+                [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissAlertView:) userInfo:alert repeats:NO];
                 
             }
                 break;
                 
             default:
+            {
+                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"备注名修改失败" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                [alert show];
+                [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissAlertView:) userInfo:alert repeats:NO];
+            }
                 break;
         }
     };
     HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:ALIAS_OPERATION finshedBlock:setAliasDone];
+}
+
+-(void)dismissAlertView:(NSTimer*)timer
+{
+    UIAlertView* alertview = [timer userInfo];
+    [alertview dismissWithClickedButtonIndex:0 animated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
