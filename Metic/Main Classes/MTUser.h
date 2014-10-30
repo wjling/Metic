@@ -72,7 +72,7 @@
 - (void)initWithData:(NSDictionary *)mdictionary;
 - (void)setUid:(NSNumber *)user_id;
 - (void)friendListDidChanged;
-- (void)aliasDicDidChangedwithId:(NSNumber*)fid andAlias:(NSString*)alias;
+- (void)aliasDicDidChanged;
 
 @end
 

@@ -267,7 +267,7 @@
 		51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */; };
 		51E546B3199896E5003FA551 /* nearbyEventTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51E546B1199896E5003FA551 /* nearbyEventTableViewCell.xib */; };
 		51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E55C731987389000D62C36 /* BannerSelectorViewController.m */; };
-		51E676291A026AB7002E6384 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E676281A026AB7002E6384 /* libbaidumapapi.a */; };
+		51E676321A026D52002E6384 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E676311A026D52002E6384 /* libbaidumapapi.a */; };
 		51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857BF196B951300812F7D /* libSocialSina.a */; };
 		51E857C8196B951300812F7D /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C2196B951300812F7D /* libSocialWechat.a */; };
 		51E857C9196B951300812F7D /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E857C3196B951300812F7D /* libWeChatSDK.a */; };
@@ -845,7 +845,7 @@
 		51E546B1199896E5003FA551 /* nearbyEventTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = nearbyEventTableViewCell.xib; sourceTree = "<group>"; };
 		51E55C721987389000D62C36 /* BannerSelectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BannerSelectorViewController.h; sourceTree = "<group>"; };
 		51E55C731987389000D62C36 /* BannerSelectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerSelectorViewController.m; sourceTree = "<group>"; };
-		51E676281A026AB7002E6384 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		51E676311A026D52002E6384 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		51E857BF196B951300812F7D /* libSocialSina.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialSina.a; sourceTree = "<group>"; };
 		51E857C0196B951300812F7D /* UMSocialSinaHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialSinaHandler.h; sourceTree = "<group>"; };
 		51E857C2196B951300812F7D /* libSocialWechat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialWechat.a; sourceTree = "<group>"; };
@@ -977,7 +977,7 @@
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
-				51E676291A026AB7002E6384 /* libbaidumapapi.a in Frameworks */,
+				51E676321A026D52002E6384 /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -1754,7 +1754,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				51E676281A026AB7002E6384 /* libbaidumapapi.a */,
+				51E676311A026D52002E6384 /* libbaidumapapi.a */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,

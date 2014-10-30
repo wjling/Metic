@@ -615,7 +615,9 @@ static MTUser *singletonInstance;
 {
     NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
     for (NSMutableDictionary* friend in self.friendList) {
+//        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
         NSNumber* fid = [friend objectForKey:@"id"];
+       
         NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
         NSLog(@"fid: %@, alias: %@",fid, alias);
         if (alias) {
@@ -625,11 +627,12 @@ static MTUser *singletonInstance;
         {
             [friend setValue:[NSNull null] forKey:@"alias"];
         }
+        NSLog(@"fid: %@",fid);
     }
     NSLog(@"after insert alias to friendlist: %@",self.friendList);
 }
 
--(void)aliasDicDidChangedwithId:(NSNumber*)fid andAlias:(NSString*)alias
+-(void)aliasDicDidChanged
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^
                    {
@@ -638,13 +641,14 @@ static MTUser *singletonInstance;
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^
                    {
-                       for (NSMutableDictionary* aFriend in self.friendList) {
-                           NSNumber* friend_id = [aFriend objectForKey:@"id"];
-                           if ([friend_id isEqualToNumber:fid]) {
-                               [aFriend setValue:alias forKey:@"alias"];
-                               break;
-                           }
-                       }
+//                       for (NSMutableDictionary* aFriend in self.friendList) {
+//                           NSNumber* friend_id = [aFriend objectForKey:@"id"];
+//                           if ([friend_id isEqualToNumber:fid1]) {
+//                               [aFriend setValue:alias1 forKey:@"alias"];
+//                               break;
+//                           }
+//                       }
+                       [self insertAliasToFriendList];
                        [self friendListDidChanged];
                        
                    });
@@ -749,7 +753,10 @@ static MTUser *singletonInstance;
             NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             if (tempFriends) {
                 if (tempFriends.count) {
-                    self.friendList = tempFriends;
+                    for (NSMutableDictionary* friend in tempFriends) {
+                        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
+                        [self.friendList addObject:friend1];
+                    }
                     [self insertAliasToFriendList];
                     NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:self.friendList];
                     [thread start];
