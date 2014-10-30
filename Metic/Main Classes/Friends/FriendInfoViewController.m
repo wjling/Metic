@@ -245,7 +245,13 @@
 {
     NSLog(@"change alias");
     ChangeAliasViewController *aliasVC = [[ChangeAliasViewController alloc]init];
+    aliasVC.fid = fid;
+    NSLog(@"alias change, fid = %@",aliasVC.fid);
     [self.navigationController pushViewController:aliasVC animated:YES];
+    NSString* version1 = @"0.1.6";
+    NSString* version2 = @"0.1.15";
+    [CommonUtils compareVersion1:version1 andVersion2:version2];
+
 }
 
 - (IBAction)pageControlClicked:(id)sender

@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Utils/MySqlite.m"
-            timestampString = "436024487.045671"
+            timestampString = "436354984.796748"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
             landmarkName = "-queryTable:withSelect:andWhere:"
             landmarkType = "5">
          </BreakpointContent>

@@ -481,4 +481,56 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     }
     return height;
 }
+
++(int)compareVersion1:(NSString*)version1 andVersion2:(NSString*)version2
+{
+    int isCountEqual = 0;
+    NSArray* version1_arr = [version1 componentsSeparatedByString:@"."];
+    NSArray* version2_arr = [version2 componentsSeparatedByString:@"."];
+    NSLog(@"version1 parts arr: %@",version1_arr);
+    NSLog(@"version2 parts arr: %@",version2_arr);
+    int count;
+    if (version1_arr.count < version2_arr.count) {
+        count = version1_arr.count;
+        isCountEqual = 2;
+    }
+    else if (version1_arr.count > version2_arr.count)
+    {
+        count = version2_arr.count;
+        isCountEqual = 1;
+    }
+    else
+    {
+        count = version1_arr.count;
+    }
+    
+    for (int i = 0; i < count; i++) {
+        NSNumber* ver1 = [CommonUtils NSNumberWithNSString:version1_arr[i]];
+        NSNumber* ver2 = [CommonUtils NSNumberWithNSString:version2_arr[i]];
+        int rs = [ver1 compare:ver2];
+        if (rs == -1) {
+            NSLog(@"version1 小于 version2");
+            return -1;
+        }
+        else if (rs == 1)
+        {
+            NSLog(@"version1 大于 version2");
+            return 1;
+        }
+    }
+    if (isCountEqual == 0) {
+        NSLog(@"version1 等于 version2");
+        return 0;
+    }
+    else if (isCountEqual == 1)
+    {
+        NSLog(@"version1 大于 version2");
+        return 1;
+    }
+    else
+    {
+        NSLog(@"version1 小于 version2");
+        return -1;
+    }
+}
 @end

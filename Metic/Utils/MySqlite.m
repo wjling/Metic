@@ -27,6 +27,7 @@
 //    }
     while (isLocked) {
         NSLog(@"loop: isLocked");
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
     
     if (sqlite3_open([DB_path UTF8String], &myDB) != SQLITE_OK) {
