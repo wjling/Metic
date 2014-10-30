@@ -185,7 +185,7 @@
         return;
     }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
-    NSString *url = [_videoInfo valueForKey:@"thumb"];
+    NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
     [self downloadVideo:videoName url:url];
 //    [self videoPlay:videoName url:url];
@@ -416,11 +416,20 @@
                 _receivedBytes += size;
                 CGFloat progress = _receivedBytes*1.0f / total;
                 self.progressOverlayView.progress = progress;
-                
+                if (!(self.navigationController.viewControllers.lastObject == self)) {
+                    [self clearVideoRequest];
+                }
             }];
             
             [request setCompletionBlock:^{
                 [self closeProgressOverlayView];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    // my video player
+
+                    if (self && self.navigationController.viewControllers.lastObject == self ) {
+                        [self downloadVideo:videoName url:url];
+                    }
+                });
                 
             }];
             //断点续载
@@ -433,7 +442,15 @@
     }
 }
 
-
+- (void)clearVideoRequest
+{
+    if (videoRequest) {
+        self.progressOverlayView.hidden = YES;
+        [self closeProgressOverlayView];
+        [videoRequest clearDelegatesAndCancel];
+        videoRequest = nil;
+    }
+}
 
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];

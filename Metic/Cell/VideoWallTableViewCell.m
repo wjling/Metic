@@ -46,6 +46,12 @@
     // Initialization code
 }
 
+
+-(void)dealloc
+{
+    [self clearVideoRequest];
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
@@ -96,12 +102,7 @@
 -(void)refresh
 {
     _isVideoReady = NO;
-    if (videoRequest) {
-        self.progressOverlayView.hidden = YES;
-        [self closeProgressOverlayView];
-        [videoRequest clearDelegatesAndCancel];
-        videoRequest = nil;
-    }
+    [self clearVideoRequest];
     if (_myPlayerViewController) {
         [_myPlayerViewController.view removeFromSuperview];
         _myPlayerViewController = nil;
@@ -146,6 +147,16 @@
         }
     }];
 
+}
+
+- (void)clearVideoRequest
+{
+    if (videoRequest) {
+        self.progressOverlayView.hidden = YES;
+        [self closeProgressOverlayView];
+        [videoRequest clearDelegatesAndCancel];
+        videoRequest = nil;
+    }
 }
 
 -(void)animationBegin
@@ -465,7 +476,9 @@
                 _receivedBytes += size;
                 CGFloat progress = _receivedBytes*1.0f / total;
                 self.progressOverlayView.progress = progress;
-                
+                if (!(_controller.navigationController.viewControllers.lastObject == _controller)) {
+                    [self clearVideoRequest];
+                }
             }];
             
             [request setCompletionBlock:^{
@@ -474,7 +487,7 @@
                     // my video player
                     float tableY = _controller.tableView.contentOffset.y;
                     float cellY = self.frame.origin.y;
-                    if (tableY <= cellY + 57 && tableY + _controller.tableView.frame.size.height >=cellY + 57 + 225) {
+                    if (tableY <= cellY + 57 && tableY + _controller.tableView.frame.size.height >=cellY + 57 + 225 && _controller &&_controller.navigationController.viewControllers.lastObject == _controller ) {
                         [self downloadVideo:videoName url:url];
                     }
                     [self PlayingVideoAtOnce];
