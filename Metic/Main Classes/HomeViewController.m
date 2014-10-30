@@ -32,6 +32,7 @@
 @property BOOL clearIds;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
+@property BOOL hasTurntoSquare;
 @end
 
 
@@ -48,6 +49,7 @@
     _clearIds = NO;
     _Headeropen = NO;
     _Footeropen = NO;
+    _hasTurntoSquare = NO;
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
@@ -118,7 +120,11 @@
         [_header beginRefreshing];
     }
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
-    [self initWelcomePage];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    if (!_hasTurntoSquare && [userDf boolForKey:@"firstLaunched"]) {
+        _hasTurntoSquare = YES;
+        [self ToSquare];
+    }else [self initWelcomePage];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -130,6 +136,15 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)ToSquare
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventSquareViewController"];
+
+    [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
 }
 
 -(void)initWelcomePage
@@ -319,7 +334,7 @@
                 [_tableView reloadData];
                 [self closeRJ];
                 [self updateEventToDB:[response1 valueForKey:@"event_list"]];
-                
+   
                 
             }
             else{//获取event id 号

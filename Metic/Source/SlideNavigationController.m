@@ -563,6 +563,12 @@ static SlideNavigationController *singletonInstance;
 	}
 }
 
+- (void)openMenuAndSwitchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion
+{
+    [self openMenu:MenuLeft withCompletion:^{
+        [self switchToViewController:viewController withCompletion:completion];
+    }];
+}
 
 //- (void)reconnect
 //{
