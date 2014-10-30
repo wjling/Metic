@@ -118,7 +118,12 @@
     self.goodImg.image = zanImage;
     self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
     self.pictureDescription.text = [dict valueForKey:@"specification"];
-    self.pictureAuthor.text = [dict valueForKey:@"author"];
+    //显示备注名
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]]];
+    if (alias == nil || alias == [NSNull null]) {
+        alias = [dict valueForKey:@"author"];
+    }
+    self.pictureAuthor.text = alias;
     self.publishTime.text = [[dict valueForKey:@"time"] substringToIndex:10];
     self.photoId = [dict valueForKey:@"photo_id"];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[dict valueForKey:@"author_id"]];
