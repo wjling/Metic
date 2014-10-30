@@ -30,6 +30,7 @@
 @synthesize fInfoView;
 @synthesize photo;
 @synthesize name_label;
+@synthesize alias_label;
 @synthesize location_label;
 @synthesize gender_imageView;
 
@@ -150,7 +151,15 @@
     [name_label setBackgroundColor:[UIColor clearColor]];
     [name_label setTag:1];
     
-    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 20)];
+    alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 25)];
+    alias_label.text = @"备注名";
+    [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+    alias_label.textColor = [UIColor whiteColor];
+    [alias_label setBackgroundColor:[UIColor clearColor]];
+    [alias_label setTag:5];
+
+    
+    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 100, 200, 20)];
     location_label.text = @"地址";
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
@@ -243,15 +252,10 @@
 
 -(IBAction)changeAlias:(id)sender
 {
-    NSLog(@"change alias");
     ChangeAliasViewController *aliasVC = [[ChangeAliasViewController alloc]init];
     aliasVC.fid = fid;
     NSLog(@"alias change, fid = %@",aliasVC.fid);
     [self.navigationController pushViewController:aliasVC animated:YES];
-    NSString* version1 = @"0.1.6";
-    NSString* version2 = @"0.1.15";
-    [CommonUtils compareVersion1:version1 andVersion2:version2];
-
 }
 
 - (IBAction)pageControlClicked:(id)sender

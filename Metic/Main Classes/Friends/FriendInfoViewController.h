@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UIImageView* fInfoView;
 @property (strong, nonatomic) UIImageView* photo;
 @property (strong, nonatomic) UILabel* name_label;
+@property (strong, nonatomic) UILabel* alias_label;
 @property (strong, nonatomic) UILabel* location_label;
 @property (strong, nonatomic) UIImageView* gender_imageView;
 
