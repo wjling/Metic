@@ -40,9 +40,10 @@
 @property BOOL isVideoReady;
 @property (nonatomic) float height;
 - (IBAction)play:(id)sender;
--(void)setISZan:(BOOL)isZan;
--(void)setGood_buttonNum:(NSNumber *)num;
--(void)setComment_buttonNum:(NSNumber *)num;
--(void)refresh;
--(void)animationBegin;
+- (void)setISZan:(BOOL)isZan;
+- (void)setGood_buttonNum:(NSNumber *)num;
+- (void)setComment_buttonNum:(NSNumber *)num;
+- (void)refresh;
+- (void)animationBegin;
+- (void)clearVideoRequest;
 @end

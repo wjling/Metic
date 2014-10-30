@@ -326,6 +326,7 @@
     NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
     _seleted_videoInfo = dictionary;
     _seleted_videoThumb = cell.videoThumb;
+    [cell clearVideoRequest];
     [self performSegueWithIdentifier:@"toVideoDetail" sender:self];
 }
 
