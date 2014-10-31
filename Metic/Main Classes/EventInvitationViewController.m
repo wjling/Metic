@@ -134,8 +134,13 @@
     cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
     int participator_count = [[a valueForKey:@"member_count"] intValue];
     cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-    cell.inviteInfo.text = [[NSString alloc]initWithFormat:@"%@ 邀请你加入活动",[a valueForKey:@"launcher"] ];
+    //显示备注名
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
+    if (alias == nil || [alias isEqual:[NSNull null]]) {
+        alias = [a valueForKey:@"launcher"];
+    }
+    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
+    cell.inviteInfo.text = [[NSString alloc]initWithFormat:@"%@ 邀请你加入活动",alias];
     cell.eventId = [a valueForKey:@"event_id"];
     //cell.avatar.layer.masksToBounds = YES;
     [cell.avatar.layer setCornerRadius:15];

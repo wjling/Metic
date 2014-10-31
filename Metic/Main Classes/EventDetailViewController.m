@@ -118,16 +118,14 @@
 {
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
-    
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
     [MobClick beginLogPageView:@"活动详情"];
     if (_Bannercode>-1) {
         [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
@@ -974,7 +972,7 @@
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_event valueForKey:@"launcher_id"]]];
-        if (launcher == nil || launcher == [NSNull null]) {
+        if (launcher == nil || [launcher isEqual:[NSNull null]]) {
             launcher = [_event valueForKey:@"launcher"];
         }
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
@@ -1029,7 +1027,7 @@
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
-        if (author == nil || author == [NSNull null]) {
+        if (author == nil || [author isEqual:[NSNull null]]) {
             author = [mainCom valueForKey:@"author"];
         }
         ((UILabel*)[cell viewWithTag:2]).text = author;
@@ -1133,7 +1131,7 @@
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-        if (author == nil || author == [NSNull null]) {
+        if (author == nil || [author isEqual:[NSNull null]]) {
             author = [subCom valueForKey:@"author"];
         }
         NSString* text = [NSString stringWithFormat:@"%@ :%@",author,[subCom valueForKey:@"content"]];

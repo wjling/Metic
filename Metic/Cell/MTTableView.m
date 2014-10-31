@@ -65,7 +65,7 @@
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
 
         NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
-        if (launcher == nil || launcher == [NSNull null]) {
+        if (launcher == nil || [launcher isEqual:[NSNull null]]) {
             launcher = [a valueForKey:@"launcher"];
         }
         
