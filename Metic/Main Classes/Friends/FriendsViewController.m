@@ -51,9 +51,6 @@
     
     [self initParams];
     [CommonUtils addLeftButton:self isFirstPage:YES];
-//    [self initTableData];
-//    NSLog(@"did reload friends");
-//    [self.friendTableView reloadData];
 }
 
 //返回上一层
@@ -110,7 +107,7 @@
 {
     self.friendList = [[MTUser sharedInstance] friendList];
     if (self.friendList.count > 0) {
-        NSLog(@"好友列表初始化：friendlist count: %d",friendList.count);
+        NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
         if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
             NSLog(@"好友列表初始化：好友排序未完成且不在进行好友排序");
             dispatch_async(dispatch_get_global_queue(0, 0), ^
@@ -125,7 +122,7 @@
                            });
             
         }
-        else //如果这时在进行好友排序
+        else //如果这时在进行好友排序或已经完成排序
         {
             NSLog(@"好友列表初始化：正在进行好友排序或已经完成排序");
             while([MTUser sharedInstance].doingSynchronizeFriend) {
@@ -139,7 +136,7 @@
     }
     else //如果好友列表为空，可能是同步好友失败，也有可能真为空
     {
-        NSLog(@"好友列表初始化：friendlist count: %d",friendList.count);
+        NSLog(@"好友列表初始不存在好友：friendlist count: %d",friendList.count);
         AppDelegate* app = (AppDelegate*)[UIApplication sharedApplication].delegate;
         
         if (app.isNetworkConnected) { //为防万一，再进行一次好友同步，前提是网络已连接
