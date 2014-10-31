@@ -591,7 +591,7 @@ static MTUser *singletonInstance;
         NSString* fid = [friend objectForKey:@"id"];
         NSString* alias = [friend objectForKey:@"alias"];
         [self.alias_dic setValue:alias forKey:fid];
-        NSLog(@"alias from db: %@ --- %@ (%@)", fid, alias, [alias class]);
+        NSLog(@"alias from db: %@ (%@) --- %@ (%@)", fid, [fid class], alias, [alias class]);
     }
 //    NSLog(@"get alias from db: %@",alias_dic);
 }

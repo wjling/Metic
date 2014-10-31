@@ -84,6 +84,7 @@
     {
         [self.navigationItem setTitle:@"用户信息"];
     }
+    [self refreshFriendInfo];
 
 }
 
@@ -108,6 +109,7 @@
 
 - (void)initViews
 {
+    [self getfriendInfoFromDB];
     CGRect screen = [UIScreen mainScreen].bounds;
     contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 135)];
     [contentView setBackgroundColor:[UIColor orangeColor]];
@@ -136,7 +138,7 @@
     self.fInfoView.image = [UIImage imageNamed:@"1星空.jpg"];
     
     photo = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"default_avatar.jpg"]];
-    photo.frame = CGRectMake(20, 40, 50, 50);
+    photo.frame = CGRectMake(20, 30, 50, 50);
     photo.layer.cornerRadius = 25;
     photo.layer.masksToBounds = YES;
     [photo setTag:0];
@@ -144,30 +146,37 @@
     photo.layer.borderWidth = 2;
     
     
-    name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 40, 200, 25)];
-    name_label.text = @"用户名";
+    name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 30, 200, 25)];
+    name_label.text = self.friendInfo_dic? [self.friendInfo_dic objectForKey:@"name"] : @"用户名";
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
     [name_label setBackgroundColor:[UIColor clearColor]];
     
-    alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 25)];
-    alias_label.text = @"备注名";
+    alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 60, 200, 25)];
+    alias_label.text = [MTUser sharedInstance].alias_dic? [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]] : @"备注名";
     [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:12]];
     alias_label.textColor = [UIColor whiteColor];
     [alias_label setBackgroundColor:[UIColor clearColor]];
 
     
-    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 100, 200, 20)];
-    location_label.text = @"地址";
+    location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 90, 200, 20)];
+    location_label.text = self.friendInfo_dic? [self.friendInfo_dic objectForKey:@"location"] : @"地址";
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
     [location_label setBackgroundColor:[UIColor clearColor]];
     
     
-    gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
-//    gender_imageView.image = [UIImage imageNamed:@"女icon"];
+    gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 35, 17, 17)];
+    NSNumber* gender = self.friendInfo_dic? [self.friendInfo_dic objectForKey:@"gender"] : [NSNumber numberWithInt:-1];
+    if ([gender integerValue] == 0) {
+        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+    }
+    else if ([gender integerValue] == 1)
+    {
+        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+    }
     
-    UIColor* btn_color = [UIColor colorWithRed:0.75 green:0.75 blue:0.75 alpha:0.6];
+    
 //    self.del_friend_Button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width-70, self.fInfoView.frame.size.height/2, 78, 25)];
 ////    [self.del_friend_Button setTag:4];
 //    [self.del_friend_Button setBackgroundColor:btn_color];
@@ -186,6 +195,7 @@
 //    [self.del_friend_Button addSubview:del_btn_label];
 //    [self.del_friend_Button setHidden:YES];
     
+    UIColor* btn_color = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.6];
     self.friend_alias_button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width - 65, self.fInfoView.frame.size.height/3, 70, 25)];
     [friend_alias_button setBackgroundColor:btn_color];
     friend_alias_button.layer.cornerRadius = 5;
@@ -248,12 +258,70 @@
 
 -(void)refreshFriendInfo
 {
+    NSString* name = [friendInfo_dic objectForKey:@"name"];
+    NSString* location = [friendInfo_dic objectForKey:@"location"];
+    NSNumber* gender = [friendInfo_dic objectForKey:@"gender"];
+//    NSString* email = [friendInfo_dic objectForKey:@"email"];
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     
+    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
+    [getter getAvatar];
+    name_label.text = name;
+    if (alias && ![alias isEqual:[NSNull null]]) {
+        alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
+    }
+    else
+    {
+        alias_label.text = @"备注名: 无";
+    }
+    
+    UIFont* font = [UIFont systemFontOfSize:15];
+    CGSize sizeOfName = [name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, 30) lineBreakMode:NSLineBreakByCharWrapping];
+    CGRect frame = CGRectMake(name_label.frame.origin.x + sizeOfName.width + 5, name_label.frame.origin.y + 1, 17, 17);
+    if (gender_imageView) {
+        gender_imageView.frame = frame;
+    }
+    else
+    {
+        gender_imageView = [[UIImageView alloc]initWithFrame:frame];
+    }
+    
+    if (0 == [gender intValue]) {
+        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+    }
+    else
+    {
+        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+    }
+    
+    if (![location isEqual:[NSNull null]]) {
+        location_label.text = location;
+        
+    }
+    else
+    {
+        location_label.text = @"暂无地址信息";
+    }
+    
+
 }
 
 -(void)getfriendInfoFromDB
 {
-    
+    NSArray* alias_arr;
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:DB_path];
+    alias_arr = [sql queryTable:@"friend" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@",fid], @"id", nil]];
+    [sql closeMyDB];
+    NSLog(@"get alias from DB: %@",alias_arr);
+//    for (NSDictionary* temp in alias_arr) {
+//        NSString* fid = [temp objectForKey:@"id"];
+//        NSString* email = [temp objectForKey:@"email"];
+//        NSString* location = [temp objectForKey:@"location"];
+//        NSNumber* gender = [temp objectForKey:@"gender"];
+//        
+//    }
+    self.friendInfo_dic = alias_arr[0];
 }
 
 -(IBAction)changeAlias:(id)sender
@@ -385,7 +453,7 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    NSLog(@"从服务器获得好友信息: %@",temp);
     NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
     NSLog(@"cmd: %@",cmd);
