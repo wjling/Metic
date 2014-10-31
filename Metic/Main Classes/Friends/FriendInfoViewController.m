@@ -153,7 +153,7 @@
     
     alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 25)];
     alias_label.text = @"备注名";
-    [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:14]];
+    [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:12]];
     alias_label.textColor = [UIColor whiteColor];
     [alias_label setBackgroundColor:[UIColor clearColor]];
     [alias_label setTag:5];
@@ -201,6 +201,7 @@
 //    self.fInfoView.layer.borderColor
     [self.fInfoView addSubview:photo];
     [self.fInfoView addSubview:name_label];
+    [self.fInfoView addSubview:alias_label];
     [self.fInfoView addSubview:location_label];
     [self.fInfoView addSubview:gender_imageView];
 //    [self.fInfoView addSubview:friend_alias_button];
@@ -288,6 +289,7 @@
     NSString* location = [response objectForKey:@"location"];
     NSNumber* gender = [response objectForKey:@"gender"];
     NSString* email = [response objectForKey:@"email"];
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     NSDictionary* wheres = [CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",fid],@"id",nil];
     NSDictionary* sets = [CommonUtils packParamsInDictionary:
                           [NSString stringWithFormat:@"'%@'",name],@"name",
@@ -351,6 +353,13 @@
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatar];
     name_label.text = name;
+    if (alias && ![alias isEqual:[NSNull null]]) {
+        alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
+    }
+    else
+    {
+        alias_label.text = @"备注名: 无";
+    }
     
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, 30) lineBreakMode:NSLineBreakByCharWrapping];

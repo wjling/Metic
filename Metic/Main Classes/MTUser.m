@@ -384,10 +384,11 @@ static MTUser *singletonInstance;
     BOOL hasSpecialChar = NO;
     [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
-    //    NSLog(@"friendlist count: %d",friendList.count);
+    NSLog(@"before sort, friendlist: %@",friendList);
     for (NSMutableDictionary* aFriend in self.friendList) {
         NSString* fAlias = [aFriend objectForKey:@"alias"];
         NSString* fname_py;
+        NSLog(@"alias: %@----%@",fAlias,[fAlias class]);
         if (fAlias) {
             if (![fAlias isEqual:[NSNull null]]) {
                 fname_py = [CommonUtils pinyinFromNSString:fAlias];
@@ -402,7 +403,7 @@ static MTUser *singletonInstance;
             fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
 
         }
-//        NSLog(@"friend name: %@",fname_py);
+        NSLog(@"friend name: %@",fname_py);
         NSString *regex = @"[a-zA-Z]";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
@@ -514,7 +515,7 @@ static MTUser *singletonInstance;
                            [NSString stringWithFormat:@"'%@'",friendName],
                            [NSString stringWithFormat:@"'%@'",friendEmail],
                            [NSString stringWithFormat:@"%@",friendGender],
-                           [NSString stringWithFormat:@"'%@'",friendAlias], nil];
+                           [NSString stringWithFormat:@"%@",friendAlias], nil];
         [sql insertToTable:@"friend" withColumns:columns andValues:values];
     }
     [sql closeMyDB];
@@ -589,8 +590,9 @@ static MTUser *singletonInstance;
         NSString* fid = [friend objectForKey:@"id"];
         NSString* alias = [friend objectForKey:@"alias"];
         [self.alias_dic setValue:alias forKey:fid];
+        NSLog(@"alias from db: %@ --- %@ (%@)", fid, alias, [alias class]);
     }
-    NSLog(@"get alias from db: %@",alias_dic);
+//    NSLog(@"get alias from db: %@",alias_dic);
 }
 
 -(void)updateAliasInDB
