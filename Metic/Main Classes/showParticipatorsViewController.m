@@ -151,7 +151,12 @@
         avatar.image = nil;
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
         [getter getAvatar];
-        name.text = [participant valueForKey:@"name"];
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[participant valueForKey:@"id"]]];
+        if (alias == nil || [alias isEqual:[NSNull null]]) {
+            alias = [participant valueForKey:@"name"];
+        }
+        name.text = alias;
         [[cell viewWithTag:3] setHidden:NO];
         BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
         if (_isRemoving && !isMe) {

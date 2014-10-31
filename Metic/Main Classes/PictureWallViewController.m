@@ -497,7 +497,7 @@
     }else a = _rigPhotos[indexPath.row];
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"author_id"]]];
-    if (alias == nil || alias == [NSNull null]) {
+    if (alias == nil || [alias isEqual:[NSNull null]]) {
         alias = [a valueForKey:@"author"];
     }
     cell.author.text = alias;

@@ -548,8 +548,12 @@
         [avatar.layer setCornerRadius:5];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:_FriendsIds_array[indexPath.row] ];
         [getter getAvatar];
-        //name.text = [MTUser sharedInstance].
-        name.text = [[MTUser sharedInstance].nameFromID_dic valueForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
+        if (alias == nil || [alias isEqual:[NSNull null]]) {
+            alias = [[MTUser sharedInstance].nameFromID_dic valueForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
+        }
+        name.text = alias;
         
     }else{
         UIImageView* add = (UIImageView*)[cell viewWithTag:1];

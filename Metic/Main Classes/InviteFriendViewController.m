@@ -259,7 +259,11 @@
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getAvatar];
         
-        if (label) {
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+        if (alias && ![alias isEqual:[NSNull null]]) {
+            cell.title.text = alias;
+        }
+        else if (label) {
             cell.title.text = label;
         }
         else
