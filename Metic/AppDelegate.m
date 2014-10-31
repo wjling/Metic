@@ -286,6 +286,7 @@
     Reachability* curReach = [note object];
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
     NetworkStatus status = [curReach currentReachabilityStatus];
+    NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     
     if (status == NotReachable) {
         if (isNetworkConnected) {
@@ -314,6 +315,7 @@
 
         }
         isNetworkConnected = YES;
+//        while (![userStatus isEqualToString:@"in"]) {
         while (!isLogined) {
             [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }

@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *location_label;
 @property (strong, nonatomic) IBOutlet UILabel *launcher_label;
 @property (strong, nonatomic) IBOutlet UITextView *remark_textView;
+@property (strong, nonatomic) IBOutlet UILabel *isIn_label;
 @property (strong, nonatomic) IBOutlet UIButton *add_button;
 @property (strong, nonatomic) IBOutlet UILabel *numOfMember_label;
 @property (strong, nonatomic,readonly) IBOutlet UIView *contentView;
