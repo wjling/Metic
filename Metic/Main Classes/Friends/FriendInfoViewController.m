@@ -526,17 +526,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"tableview x: %f, width: %f",friendInfoEvents_tableView.frame.origin.x, friendInfoEvents_tableView.frame.size.width);
     NSDictionary* event = [events objectAtIndex:indexPath.section];
     NSArray* member_ids = [event objectForKey:@"member"];
-//    NSLog(@"section index: %d",indexPath.section);
     FriendInfoEventsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (nil == cell) {
         NSLog(@"friendinfoeventstableviewcell");
         cell = [[FriendInfoEventsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"eventCell"];
         
     }
+    BOOL isIn = [[event objectForKey:@"isIn"]boolValue];
+    if (isIn) {
+        cell.isIn_label.hidden = NO;
+        cell.add_button.hidden = YES;
+    }
+    else
+    {
+        cell.isIn_label.hidden = YES;
+        cell.add_button.hidden = NO;
+    }
     cell.subject_label.text = [event objectForKey:@"subject"];
+    cell.subject_label.lineBreakMode = NSLineBreakByTruncatingTail;
     cell.time_label.text = [NSString stringWithFormat:@"%@ ~ %@",[event objectForKey:@"time"],[event objectForKey:@"endTime"]];
     cell.location_label.text = [event objectForKey:@"location"];
     cell.launcher_label.text = [event objectForKey:@"launcher"];
@@ -611,8 +620,6 @@
     BOOL temp = cell.isExpanded;
     NSLog(@"clicked row: %d, if expanded: %d",indexP.section,temp);
     if (!cell.isExpanded) {
-        
-
         [rowHeights replaceObjectAtIndex:indexP.section withObject:[NSNumber numberWithFloat:215]];
         
 //        [cell.stretch_button removeFromSuperview];
@@ -694,7 +701,7 @@
         NSLog(@"addEventID is number");
 
     }
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入验证信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     confirmAlert.tag = 0;
     [confirmAlert show];

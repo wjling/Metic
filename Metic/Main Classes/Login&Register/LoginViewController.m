@@ -22,6 +22,7 @@
     CGRect originFrame;
     CGFloat viewOffet;
     UITapGestureRecognizer* tapRecognizer;
+    AppDelegate* appDelegate;
     
 }
 @property (strong, nonatomic) UIView* waitingView;
@@ -56,6 +57,7 @@
     [super viewDidLoad];
     NSLog(@"login did load, fromRegister: %d",fromRegister);
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    appDelegate = [UIApplication sharedApplication].delegate;
     if (!fromRegister) {
         if ([userDf boolForKey:@"firstLaunched"]) {
             NSLog(@"login: it is the first launch");
@@ -285,6 +287,7 @@
     if ([userStatus isEqualToString:@"in"]) {
         //处理登录状态下，直接跳转 需要读取默认信息。
         NSLog(@"用户 %@ 在线", userName);
+        appDelegate.isLogined = YES;
         [self removeWaitingView];
         [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];

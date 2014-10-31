@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Slide Navigation Controller-->
@@ -1565,8 +1567,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="215"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="我是要成为海贼王的男人！" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NMI-3m-xzi">
-                                                    <rect key="frame" x="10" y="7" width="200" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="我是要成为海贼王的男人！" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="NMI-3m-xzi">
+                                                    <rect key="frame" x="10" y="7" width="220" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1608,8 +1610,8 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zEm-7Q-Kv3">
-                                                    <rect key="frame" x="215" y="0.0" width="80" height="32"/>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zEm-7Q-Kv3">
+                                                    <rect key="frame" x="235" y="0.0" width="80" height="32"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <inset key="titleEdgeInsets" minX="-5" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="7" maxX="64" maxY="9"/>
@@ -1618,6 +1620,12 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已经加入活动" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LkO-b7-kaE">
+                                                    <rect key="frame" x="235" y="0.0" width="80" height="32"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="deviceRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="人参加" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LiP-NC-5Jg">
                                                     <rect key="frame" x="251" y="69" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -1631,14 +1639,16 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="NMI-3m-xzi" secondAttribute="trailing" constant="82" id="6lM-2b-5V7"/>
+                                                <constraint firstItem="NMI-3m-xzi" firstAttribute="leading" secondItem="hSR-e8-Nvz" secondAttribute="leadingMargin" constant="2" id="Zw3-7N-NiF"/>
                                                 <constraint firstItem="17Q-VS-zHB" firstAttribute="leading" secondItem="hSR-e8-Nvz" secondAttribute="leading" id="jPo-0N-mLu"/>
                                                 <constraint firstAttribute="trailing" secondItem="17Q-VS-zHB" secondAttribute="trailing" id="v2O-iY-z1J"/>
-                                                <constraint firstAttribute="trailing" secondItem="zEm-7Q-Kv3" secondAttribute="trailing" constant="5" id="vsT-c2-KKy"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="add_button" destination="zEm-7Q-Kv3" id="JOd-EN-8D8"/>
                                             <outlet property="contentView" destination="hSR-e8-Nvz" id="vhC-Tk-BpM"/>
+                                            <outlet property="isIn_label" destination="LkO-b7-kaE" id="tNf-w4-j0h"/>
                                             <outlet property="launcher_label" destination="VRv-PR-7eT" id="oCm-N6-yhb"/>
                                             <outlet property="location_label" destination="BsC-M6-PdJ" id="ycS-7o-2hX"/>
                                             <outlet property="numOfMember_label" destination="dKB-8h-AHe" id="bPa-Nd-bcQ"/>
@@ -4865,18 +4875,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ItJ-aD-aY9"/>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="823-Eq-eYh"/>
         <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="06u-oh-4gy"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="DsC-hh-HTw"/>
         <segue reference="ib8-0I-OZA"/>
-        <segue reference="KQw-JA-BHy"/>
+        <segue reference="ItJ-aD-aY9"/>
+        <segue reference="DsC-hh-HTw"/>
         <segue reference="8Lk-Kp-pHu"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="Bdm-ot-CYp"/>
     </inferredMetricsTieBreakers>
 </document>
