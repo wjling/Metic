@@ -708,7 +708,7 @@
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
         [newComment setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
+        //comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
     }
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
     [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
@@ -1039,6 +1039,21 @@
         MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
         NSString* text = [mainCom valueForKey:@"content"];
         cell.origincomment = text;
+        NSString*alias1,*alias2;
+
+        if ([[mainCom valueForKey:@"replied"] intValue] != 0) {
+            //显示备注名
+            alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+                alias1 = [mainCom valueForKey:@"author"];
+            }
+            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"replied"]]];
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+                alias2 = [mainCom valueForKey:@"replier"];
+            }
+            text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
+        }
+        
         float commentHeight = [CommonUtils calculateTextHeight:text width:280.0 fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         [textView setDisableThreeCommon:YES];
@@ -1134,11 +1149,31 @@
         if (author == nil || [author isEqual:[NSNull null]]) {
             author = [subCom valueForKey:@"author"];
         }
-        NSString* text = [NSString stringWithFormat:@"%@ :%@",author,[subCom valueForKey:@"content"]];
+        NSString* text = [subCom valueForKey:@"content"];
+        NSString* alias1,*alias2;
+        if ([[subCom valueForKey:@"replied"] intValue] != 0) {
+            //显示备注名
+            alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+                alias1 = [subCom valueForKey:@"author"];
+            }
+            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"replied"]]];
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+                alias2 = [subCom valueForKey:@"replier"];
+            }
+            text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
+        }else{
+            alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+                alias1 = [subCom valueForKey:@"author"];
+            }
+            text = [NSString stringWithFormat:@"%@: %@",alias1,text];
+        }
         cell.originComment = [subCom valueForKey:@"content"];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
-        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,author.length)];
-        cell.comment.authorLength = author.length;
+        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,alias1.length)];
+        cell.comment.author1Length = alias1.length;
+        cell.comment.author2Length = alias2.length;
         cell.comment.font = [UIFont systemFontOfSize:SubCFontSize];
         [cell.comment setNumberOfLines:0];
         [cell.comment setLineBreakMode:NSLineBreakByCharWrapping];

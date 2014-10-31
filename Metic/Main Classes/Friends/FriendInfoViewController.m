@@ -321,7 +321,7 @@
 //        NSNumber* gender = [temp objectForKey:@"gender"];
 //        
 //    }
-    self.friendInfo_dic = alias_arr[0];
+    if(alias_arr.count > 0) self.friendInfo_dic = alias_arr[0];
 }
 
 -(IBAction)changeAlias:(id)sender
