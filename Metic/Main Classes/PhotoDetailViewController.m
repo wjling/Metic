@@ -581,12 +581,18 @@
         [back setFrame:imageView.frame];
         [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:back];
+
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_photoInfo valueForKey:@"author_id"]]];
+        if (alias == nil || alias == [NSNull null]) {
+            alias = [_photoInfo valueForKey:@"author"];
+        }
         
         UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 150, 12)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];
-        author.text = [self.photoInfo valueForKey:@"author"];
+        author.text = alias;
         [cell addSubview:author];
         
         UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
@@ -645,9 +651,14 @@
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
         NSString* commentText = [Pcomment valueForKey:@"content"];
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
+        if (alias == nil || alias == [NSNull null]) {
+            alias = [Pcomment valueForKey:@"author"];
+        }
         
-        ((PcommentTableViewCell *)cell).author.text = [Pcomment valueForKey:@"author"];
-        ((PcommentTableViewCell *)cell).authorName = [Pcomment valueForKey:@"author"];
+        ((PcommentTableViewCell *)cell).author.text = alias;
+        ((PcommentTableViewCell *)cell).authorName = alias;
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
         ((PcommentTableViewCell *)cell).origincomment = [Pcomment valueForKey:@"content"];
         ((PcommentTableViewCell *)cell).controller = self;

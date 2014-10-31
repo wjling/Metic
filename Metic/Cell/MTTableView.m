@@ -63,7 +63,14 @@
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
         int participator_count = [[a valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
+
+        NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
+        if (launcher == nil || launcher == [NSNull null]) {
+            launcher = [a valueForKey:@"launcher"];
+        }
+        
+        
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
         cell.eventId = [a valueForKey:@"event_id"];
         //cell.avatar.layer.masksToBounds = YES;
         [cell.avatar.layer setCornerRadius:15];

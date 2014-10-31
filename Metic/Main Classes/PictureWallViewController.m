@@ -495,7 +495,12 @@
     if (tableView == _tableView1) {
         a = _lefPhotos[indexPath.row];
     }else a = _rigPhotos[indexPath.row];
-    cell.author.text = [a valueForKey:@"author"];
+    //显示备注名
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"author_id"]]];
+    if (alias == nil || alias == [NSNull null]) {
+        alias = [a valueForKey:@"author"];
+    }
+    cell.author.text = alias;
     cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
     
     cell.avatar.layer.masksToBounds = YES;

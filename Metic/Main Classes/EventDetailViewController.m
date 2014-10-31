@@ -973,7 +973,11 @@
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[_event valueForKey:@"location"] ];
         int participator_count = [[_event valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[_event valueForKey:@"launcher"]];
+        NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_event valueForKey:@"launcher_id"]]];
+        if (launcher == nil || launcher == [NSNull null]) {
+            launcher = [_event valueForKey:@"launcher"];
+        }
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
         _isMine = [[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
         _visibility = [[_event valueForKey:@"visibility"] boolValue] || _isMine;
         if (_visibility) {
@@ -1023,8 +1027,12 @@
         }
         MCommentTableViewCell *cell = (MCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:mCellIdentifier];
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
-        
-        ((UILabel*)[cell viewWithTag:2]).text = [mainCom valueForKey:@"author"];
+        //显示备注名
+        NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
+        if (author == nil || author == [NSNull null]) {
+            author = [mainCom valueForKey:@"author"];
+        }
+        ((UILabel*)[cell viewWithTag:2]).text = author;
         ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
         if([[mainCom valueForKey:@"comment_num"]intValue]==0) [cell.subCommentBG setHidden:YES];
         else [cell.subCommentBG setHidden:NO];
@@ -1055,7 +1063,7 @@
         
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.eventId = _eventId;
-        cell.author = [mainCom valueForKey:@"author"];
+        cell.author = author;
         cell.authorId = [mainCom valueForKey:@"author_id"];
         cell.controller = self;
         cell.good_num.text = [NSString stringWithFormat:@"(%d)",[[mainCom valueForKey:@"good"]intValue]];
@@ -1123,12 +1131,16 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
-        
-        NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
+        //显示备注名
+        NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
+        if (author == nil || author == [NSNull null]) {
+            author = [subCom valueForKey:@"author"];
+        }
+        NSString* text = [NSString stringWithFormat:@"%@ :%@",author,[subCom valueForKey:@"content"]];
         cell.originComment = [subCom valueForKey:@"content"];
         NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
-        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[subCom valueForKey:@"author"]).length)];
-        cell.comment.authorLength = ((NSString*)[subCom valueForKey:@"author"]).length;
+        [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,author.length)];
+        cell.comment.authorLength = author.length;
         cell.comment.font = [UIFont systemFontOfSize:SubCFontSize];
         [cell.comment setNumberOfLines:0];
         [cell.comment setLineBreakMode:NSLineBreakByCharWrapping];
@@ -1162,7 +1174,7 @@
         [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
-        cell.author = [subCom valueForKey:@"author"];
+        cell.author = author;
         cell.controller = self;
 
         return cell;

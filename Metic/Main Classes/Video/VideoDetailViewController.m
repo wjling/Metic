@@ -903,12 +903,17 @@
         [cell addSubview:video];
         [cell addSubview:videoIc];
         [cell addSubview:label];
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
+        if (alias == nil || alias == [NSNull null]) {
+            alias = [_videoInfo valueForKey:@"author"];
+        }
         
         UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 200, 12)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];
-        author.text = [self.videoInfo valueForKey:@"author"];
+        author.text = alias;
         [cell addSubview:author];
         
         UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
@@ -967,9 +972,12 @@
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
         NSString* commentText = [Vcomment valueForKey:@"content"];
-        
-        ((VcommentTableViewCell *)cell).author.text = [Vcomment valueForKey:@"author"];
-        ((VcommentTableViewCell *)cell).authorName = [Vcomment valueForKey:@"author"];
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
+        if (alias == nil || alias == [NSNull null]) {
+            alias = [_videoInfo valueForKey:@"author"];
+        }
+        ((VcommentTableViewCell *)cell).author.text = alias;
+        ((VcommentTableViewCell *)cell).authorName = alias;
         ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
         ((VcommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
         ((VcommentTableViewCell *)cell).controller = self;
