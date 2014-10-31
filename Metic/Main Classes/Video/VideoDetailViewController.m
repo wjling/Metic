@@ -720,9 +720,11 @@
     });
     NSLog(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
-        comment = [[NSString stringWithFormat:@"回复 %@ : ",_herName] stringByAppendingString:comment];
+        [newComment setValue:_repliedId forKey:@"replied"];
+        [newComment setValue:_herName forKey:@"replier"];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.videoId forKey:@"video_id"];
@@ -732,7 +734,7 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     NSString*time = [dateFormatter stringFromDate:[NSDate date]];
-    NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
+    
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
     [newComment setValue:_videoId forKey:@"video_id"];
     [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
@@ -741,7 +743,6 @@
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
-    [newComment setValue:[dictionary valueForKey:@"replied"] forKey:@"replied"];
 
     if ([_vcomment_list isKindOfClass:[NSArray class]]) {
         _vcomment_list = [[NSMutableArray alloc]initWithArray:_vcomment_list];
@@ -1017,8 +1018,17 @@
         comment.backgroundColor = [UIColor clearColor];
         comment.lineBreakMode = NSLineBreakByCharWrapping;
         
-        
-        comment.emojiText = [Vcomment valueForKey:@"content"];
+        NSString* text = [Vcomment valueForKey:@"content"];
+        NSString*alias2;
+        if ([[Vcomment valueForKey:@"replied"] intValue] != 0) {
+            //显示备注名
+            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"replied"]]];
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+                alias2 = [Vcomment valueForKey:@"replier"];
+            }
+            text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
+        }
+        comment.emojiText = text;
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
