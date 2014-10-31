@@ -149,14 +149,12 @@
     [name_label setFont:[UIFont fontWithName:@"Helvetica" size:15]];
     name_label.textColor = [UIColor whiteColor];
     [name_label setBackgroundColor:[UIColor clearColor]];
-    [name_label setTag:1];
     
     alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 70, 200, 25)];
     alias_label.text = @"备注名";
     [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:12]];
     alias_label.textColor = [UIColor whiteColor];
     [alias_label setBackgroundColor:[UIColor clearColor]];
-    [alias_label setTag:5];
 
     
     location_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 100, 200, 20)];
@@ -164,12 +162,10 @@
     location_label.textColor = [UIColor whiteColor];
     [location_label setFont:[UIFont fontWithName:@"Helvetica" size:11]];
     [location_label setBackgroundColor:[UIColor clearColor]];
-    [location_label setTag:2];
     
     
     gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 45, 17, 17)];
 //    gender_imageView.image = [UIImage imageNamed:@"女icon"];
-    [gender_imageView setTag:3];
     
     UIColor* btn_color = [UIColor colorWithRed:0.75 green:0.75 blue:0.75 alpha:0.6];
 //    self.del_friend_Button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width-70, self.fInfoView.frame.size.height/2, 78, 25)];
@@ -223,7 +219,6 @@
     [description_label setBackgroundColor:[UIColor clearColor]];
     [description_label setFont:[UIFont fontWithName:@"Helvetica" size:10]];
     description_label.textColor = [UIColor whiteColor];
-    [description_label setTag:4];
     
 //    friendInfoEvents_tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 150, screen.size.width, 330)];
 //    friendInfoEvents_tableView.delegate = self;
@@ -248,6 +243,16 @@
     [root addSubview:self.friend_alias_button];
 //    [root addSubview:self.del_friend_Button];
 //    [root addSubview:friendInfoEvents_tableView];
+    
+}
+
+-(void)refreshFriendInfo
+{
+    
+}
+
+-(void)getfriendInfoFromDB
+{
     
 }
 
@@ -304,51 +309,6 @@
     [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
     [[MTUser sharedInstance] friendListDidChanged];
     NSLog(@"event_list: %@",events);
-//    for (UIView* v in self.fInfoView.subviews) {
-//        if (v.tag == 0) {
-//            PhotoGetter* getter = [[PhotoGetter alloc]initWithData:(UIImageView*)v authorId:fid];
-//            [getter getPhoto];
-//        }
-//        else if (v.tag == 1)
-//        {
-//            
-//            ((UILabel*)v).text = name;
-//        }
-//        else if (v.tag == 2)
-//        {
-//        
-//            if (![location isEqual:[NSNull null]]) {
-//                ((UILabel*)v).text = location;
-//                
-//            }
-//            else
-//            {
-//                ((UILabel*)v).text = @"暂无地址信息";
-//            }
-//            
-//        }
-//        else if( v.tag == 3)
-//        {
-//            
-//            if (0 == [gender intValue]) {
-//                ((UIImageView*)v).image = [UIImage imageNamed:@"女icon"];
-//            }
-//            else
-//            {
-//                ((UIImageView*)v).image = [UIImage imageNamed:@"男icon"];
-//            }
-//        }
-//    }
-//   
-//    for (UIView* v in self.fDescriptionView.subviews) {
-//        if (v.tag == 4) {
-//            NSString* sign = [response objectForKey:@"sign"];
-//            if (![sign isEqual:[NSNull null]]) {
-//                ((UILabel*)v).text = sign;
-//            }
-//
-//        }
-//    }
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatar];

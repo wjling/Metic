@@ -381,6 +381,8 @@ static MTUser *singletonInstance;
 
 - (NSMutableDictionary*)sortFriendList
 {
+    doingSortingFriends = YES;
+    sortingFriendsDone = NO;
     BOOL hasSpecialChar = NO;
     [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
@@ -450,6 +452,8 @@ static MTUser *singletonInstance;
     }
     NSLog(@"sorted friends dictionary: %@",sorted);
     NSLog(@"section array: %@",self.sectionArray);
+    sortingFriendsDone = YES;
+    doingSortingFriends = NO;
     return sorted;
 }
 
@@ -505,7 +509,7 @@ static MTUser *singletonInstance;
         NSNumber* friendID = [friend objectForKey:@"id"];
         NSNumber* friendGender = [friend objectForKey:@"gender"];
         NSString* friendName = [friend objectForKey:@"name"];
-        NSString* friendAlias = [friend objectForKey:@"alias"];
+        NSString* friendAlias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",friendID]];
         
 //        NSLog(@"insert friends to database.\n email: %@, id: %@, gender: %@, name: %@, alias: %@",friendEmail,friendID,friendGender,friendName, friendAlias);
         
@@ -525,11 +529,8 @@ static MTUser *singletonInstance;
 
 -(void)friendListDidChanged
 {
-    doingSortingFriends = YES;
-    sortingFriendsDone = NO;
     self.sortedFriendDic = [self sortFriendList];
-    sortingFriendsDone = YES;
-    doingSortingFriends = NO;
+    
     for (NSDictionary* friend in friendList) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
         NSString* fname = [friend valueForKey:@"name"];
@@ -629,7 +630,6 @@ static MTUser *singletonInstance;
         {
             [friend setValue:[NSNull null] forKey:@"alias"];
         }
-        NSLog(@"fid: %@",fid);
     }
     NSLog(@"after insert alias to friendlist: %@",self.friendList);
 }
