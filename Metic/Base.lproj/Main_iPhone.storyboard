@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -414,6 +413,7 @@
                         <outlet property="friendTableView" destination="9Rr-XN-lhg" id="39e-RR-rsg"/>
                         <outlet property="searchDisplayController" destination="qXK-mQ-xDc" id="g0o-R3-FLK"/>
                         <outlet property="shadowView" destination="Hc6-Qr-xXh" id="lw6-jE-o1c"/>
+                        <segue destination="SWe-qF-jqe" kind="push" identifier="friendCenter_friendRecommendation" id="ItJ-aD-aY9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BMT-X0-7Cy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4865,17 +4865,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
+        <segue reference="ItJ-aD-aY9"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="DsC-hh-HTw"/>
-        <segue reference="KQw-JA-BHy"/>
-        <segue reference="8Lk-Kp-pHu"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="823-Eq-eYh"/>
-        <segue reference="kIc-uU-eUg"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="06u-oh-4gy"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="kIc-uU-eUg"/>
         <segue reference="UXj-VV-omZ"/>
+        <segue reference="DsC-hh-HTw"/>
+        <segue reference="ib8-0I-OZA"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="8Lk-Kp-pHu"/>
     </inferredMetricsTieBreakers>
 </document>
