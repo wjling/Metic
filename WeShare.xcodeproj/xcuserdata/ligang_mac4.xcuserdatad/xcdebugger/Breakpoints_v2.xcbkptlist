@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/MTUser.m"
-            timestampString = "436416311.494099"
+            timestampString = "436423002.227566"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "623"
-            endingLineNumber = "623"
+            startingLineNumber = "635"
+            endingLineNumber = "635"
             landmarkName = "-insertAliasToFriendList"
             landmarkType = "5">
          </BreakpointContent>

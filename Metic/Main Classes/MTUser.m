@@ -514,12 +514,24 @@ static MTUser *singletonInstance;
 //        NSLog(@"insert friends to database.\n email: %@, id: %@, gender: %@, name: %@, alias: %@",friendEmail,friendID,friendGender,friendName, friendAlias);
         
         NSArray* columns = [[NSArray alloc]initWithObjects:@"'id'",@"'name'",@"'email'",@"'gender'",@"'alias'", nil];
-        NSArray* values = [[NSArray alloc]initWithObjects:
-                           [NSString stringWithFormat:@"%@",friendID],
-                           [NSString stringWithFormat:@"'%@'",friendName],
-                           [NSString stringWithFormat:@"'%@'",friendEmail],
-                           [NSString stringWithFormat:@"%@",friendGender],
-                           [NSString stringWithFormat:@"%@",friendAlias], nil];
+        NSArray* values;
+        if (friendAlias == nil || [friendAlias isEqual:[NSNull null]]) {
+            values = [[NSArray alloc]initWithObjects:
+                      [NSString stringWithFormat:@"%@",friendID],
+                      [NSString stringWithFormat:@"'%@'",friendName],
+                      [NSString stringWithFormat:@"'%@'",friendEmail],
+                      [NSString stringWithFormat:@"%@",friendGender],
+                      [NSString stringWithFormat:@"%@",friendAlias], nil];
+        }
+        else
+        {
+            values = [[NSArray alloc]initWithObjects:
+                      [NSString stringWithFormat:@"%@",friendID],
+                      [NSString stringWithFormat:@"'%@'",friendName],
+                      [NSString stringWithFormat:@"'%@'",friendEmail],
+                      [NSString stringWithFormat:@"%@",friendGender],
+                      [NSString stringWithFormat:@"'%@'",friendAlias], nil];
+        }
         [sql insertToTable:@"friend" withColumns:columns andValues:values];
     }
     [sql closeMyDB];
@@ -606,8 +618,16 @@ static MTUser *singletonInstance;
         NSString* alias = [self.alias_dic objectForKey:keys[i]];
         NSDictionary* wheres = [CommonUtils packParamsInDictionary:
                                 fid, @"id",nil];
-        NSDictionary* sets = [CommonUtils packParamsInDictionary:
-                              [NSString stringWithFormat:@"'%@'", alias],@"alias",nil];
+        NSDictionary* sets;
+        if (alias == nil || [alias isEqual:[NSNull null]]) {
+            sets = [CommonUtils packParamsInDictionary:
+                    [NSString stringWithFormat:@"%@", alias],@"alias",nil];
+        }
+        else
+        {
+            sets = [CommonUtils packParamsInDictionary:
+               [NSString stringWithFormat:@"'%@'", alias],@"alias",nil];
+        }
         [sql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
     }
     [sql closeMyDB];
@@ -755,6 +775,7 @@ static MTUser *singletonInstance;
             NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             if (tempFriends) {
                 if (tempFriends.count) {
+                    [self.friendList removeAllObjects];
                     for (NSMutableDictionary* friend in tempFriends) {
                         NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
                         [self.friendList addObject:friend1];
