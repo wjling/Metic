@@ -30,7 +30,7 @@ return _##regularExpression;\
 REGULAREXPRESSION(URLRegularExpression,@"")
 
 //REGULAREXPRESSION(PhoneNumerRegularExpression, @"\\d{3}-\\d{8}|\\d{3}-\\d{7}|\\d{4}-\\d{8}|\\d{4}-\\d{7}|1+[358]+\\d{9}|\\d{8}|\\d{7}")
-REGULAREXPRESSION(PhoneNumerRegularExpression, @"^([\\s\\w:~!@$&*()|+<>',?-]{1,15}[\\s:]{1})")
+REGULAREXPRESSION(PhoneNumerRegularExpression, @"^([\\s\\w:~!@$&*()|+<>',?-]{1,15}?[\\s:]{1}?)")
 
 //REGULAREXPRESSION(EmailRegularExpression, @"[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}")
 REGULAREXPRESSION(EmailRegularExpression, @"")

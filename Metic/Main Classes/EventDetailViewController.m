@@ -708,6 +708,7 @@
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
         [newComment setValue:_repliedId forKey:@"replied"];
+        [newComment setValue:_herName forKey:@"replier"];
         //comment = [[NSString stringWithFormat:@" 回复 %@ : ",_herName] stringByAppendingString:comment];
     }
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
