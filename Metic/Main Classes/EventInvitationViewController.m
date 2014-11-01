@@ -269,6 +269,8 @@
             
             [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
             [self.tableView reloadData];
+            NSLog(@"本次处理的消息: %@",msg_dic);
+            NSLog(@"处理之后的消息列表: \n MTUser.eventRequestMsg: %@ \nself.msg_arr: %@", [MTUser sharedInstance].eventRequestMsg, self.msg_arr);
         }
             break;
             case REQUEST_FAIL:
@@ -283,6 +285,7 @@
             NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
             [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
             [msg_arr removeObjectAtIndex:selectedPath.row];
+            [self.tableView reloadData];
             //            int count = self.msgFromDB.count;
             //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
             //            NSNumber* seq = [dataMsg objectForKey:@"seq"];

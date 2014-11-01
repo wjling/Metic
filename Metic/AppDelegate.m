@@ -602,32 +602,32 @@
         NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
         NSNumber* fid1 = [response1 objectForKey:@"id"];
         
-        for (NSDictionary* response2 in syncMessages) {
-            NSString* msg_str2 = [response2 objectForKey:@"msg"];
-            NSMutableDictionary* msg_dic2 = [CommonUtils NSDictionaryWithNSString:msg_str2];
-            NSInteger msg_cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
-            if (msg_cmd == msg_cmd2) {
-                if (event_id1) {
-                    NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
-                    if (event_id2) {
-                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                            [self.syncMessages removeObject:response2];
-                        }
-                    }
-                }
-                else
-                {
-                    NSNumber* fid2 = [response2 objectForKey:@"id"];
-                    if (fid2) {
-                        if (fid1 == fid2) {
-                            [self.syncMessages removeObject:response2];
-                        }
-                        
-                    }
-                }
-            }
-            
-        }
+//        for (NSDictionary* response2 in syncMessages) {
+//            NSString* msg_str2 = [response2 objectForKey:@"msg"];
+//            NSMutableDictionary* msg_dic2 = [CommonUtils NSDictionaryWithNSString:msg_str2];
+//            NSInteger msg_cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
+//            if (msg_cmd == msg_cmd2) {
+//                if (event_id1) {
+//                    NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
+//                    if (event_id2) {
+//                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
+//                            [self.syncMessages removeObject:response2];
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    NSNumber* fid2 = [response2 objectForKey:@"id"];
+//                    if (fid2) {
+//                        if (fid1 == fid2) {
+//                            [self.syncMessages removeObject:response2];
+//                        }
+//                        
+//                    }
+//                }
+//            }
+//            
+//        }
 
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {

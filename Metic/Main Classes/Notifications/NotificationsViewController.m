@@ -1056,8 +1056,8 @@ enum Response_Type
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
                 NSString* launcher;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
-                NSNumber* fid = [msg_dic objectForKey:@"id"];
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+                NSNumber* launcher_id = [msg_dic objectForKey:@"launcher_id"];
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
                 
                 if (alias && ![alias isEqual:[NSNull null]]) {
                     launcher = alias;
