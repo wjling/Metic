@@ -48,9 +48,9 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-//    [self getMsgArray];
-//    [_tableView reloadData];
-    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;
+    [self getMsgArray];
+    [_tableView reloadData];
+//    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -123,6 +123,17 @@
     
     
     NSDictionary *a = msg_arr[indexPath.row];
+    NSNumber* launcher_id = [a valueForKey:@"launcher_id"];
+    NSString* launcher_alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
+    NSString* launcher;
+    if (launcher_alias && ![launcher_alias isEqual:[NSNull null]]) {
+        launcher = launcher_alias;
+    }
+    else
+    {
+        launcher = [a objectForKey:@"launcher"];
+    }
+    
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
@@ -134,8 +145,8 @@
     cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
     int participator_count = [[a valueForKey:@"member_count"] intValue];
     cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",[a valueForKey:@"launcher"] ];
-    cell.inviteInfo.text = [[NSString alloc]initWithFormat:@"%@ 邀请你加入活动",[a valueForKey:@"launcher"] ];
+    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
+    cell.inviteInfo.text = [[NSString alloc]initWithFormat:@"%@ 邀请你加入活动",launcher];
     cell.eventId = [a valueForKey:@"event_id"];
     //cell.avatar.layer.masksToBounds = YES;
     [cell.avatar.layer setCornerRadius:15];
@@ -275,6 +286,9 @@
         case ALREADY_IN_EVENT:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
+            [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
+            [msg_arr removeObjectAtIndex:selectedPath.row];
             //            int count = self.msgFromDB.count;
             //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
             //            NSNumber* seq = [dataMsg objectForKey:@"seq"];
