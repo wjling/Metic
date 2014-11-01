@@ -798,8 +798,15 @@ enum Response_Type
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* launcher = [msg_dic objectForKey:@"launcher"];
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
-                cell.name_label.text = launcher;
+                if (alias && ![alias isEqual:[NSNull null]]) {
+                    cell.name_label.text = alias;
+                }
+                else
+                {
+                    cell.name_label.text = launcher;
+                }
                 cell.text_label.text = @"邀请你加入";
 //                cell.text_label.text = [NSString stringWithFormat:@"邀请你加入%d",indexPath.row];
 //                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
@@ -853,8 +860,16 @@ enum Response_Type
                 NSNumber* uid = [msg_dic valueForKey:@"id"];
                 NSString* fname = [msg_dic valueForKey:@"name"];
                 NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
-                cell.name_label.text = fname;
+                if (alias && ![alias isEqual:[NSNull null]]) {
+                    cell.name_label.text = alias;
+                }
+                else
+                {
+                    cell.name_label.text = fname;
+                }
+
                 cell.text_label.text = @"请求加入";
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
@@ -1010,8 +1025,19 @@ enum Response_Type
             case EVENT_INVITE_RESPONSE: //996
             {
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
-                NSString* name = [msg_dic objectForKey:@"name"];
                 NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSNumber* fid = [msg_dic objectForKey:@"id"];
+                NSString* name;
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+                
+                if (alias && ![alias isEqual:[NSNull null]]) {
+                    name = alias;
+                }
+                else
+                {
+                    name = [msg_dic objectForKey:@"name"];
+                }
+
                 NSString* text = @"";
                 if (result) {
                     text = [NSString stringWithFormat:@"%@ 同意加入你的活动: %@ ",name,subject];
@@ -1028,8 +1054,19 @@ enum Response_Type
             case REQUEST_EVENT_RESPONSE:  //994
             {
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
-                NSString* launcher = [msg_dic objectForKey:@"launcher"];
+                NSString* launcher;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSNumber* fid = [msg_dic objectForKey:@"id"];
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+                
+                if (alias && ![alias isEqual:[NSNull null]]) {
+                    launcher = alias;
+                }
+                else
+                {
+                    launcher = [msg_dic objectForKey:@"launcher"];
+                }
+
                 NSString* text = @"";
                 if (result) {
                     text = [NSString stringWithFormat:@"%@ 同意你加入活动: %@ ",launcher,subject];
