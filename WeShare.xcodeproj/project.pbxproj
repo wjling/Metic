@@ -259,7 +259,6 @@
 		519C6603198B8E8000710B26 /* EventInvitationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 519C6601198B8E8000710B26 /* EventInvitationTableViewCell.xib */; };
 		51A01D131933A1FF0043963F /* MTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D121933A1FF0043963F /* MTUser.m */; };
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
-		51BCCB681A0327FD0033E6B0 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51BCCB671A0327FD0033E6B0 /* libbaidumapapi.a */; };
 		51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DDBF7419A319B20051B88C /* libz.dylib */; };
 		51DDBF7A19A328010051B88C /* AdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DDBF7919A328010051B88C /* AdViewController.m */; };
 		51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DDBF8019A344510051B88C /* libMobClickLibrary.a */; };
@@ -286,6 +285,7 @@
 		51F06C27197E017F000E8428 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F06C26197E017F000E8428 /* CoreVideo.framework */; };
 		51F06C29197E0193000E8428 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F06C28197E0193000E8428 /* libiconv.dylib */; };
 		51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F06C87197FA2F3000E8428 /* ScanViewController.m */; };
+		51F346E31A04AC260022C679 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F346E21A04AC260022C679 /* libbaidumapapi.a */; };
 		51F4CB0919E6307500E487F1 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CAC519E6307500E487F1 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		51F4CB0A19E6307500E487F1 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CAC819E6307500E487F1 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		51F4CB0B19E6307500E487F1 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CACA19E6307500E487F1 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -831,7 +831,6 @@
 		51A01D121933A1FF0043963F /* MTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUser.m; sourceTree = "<group>"; };
 		51A01D141934EB270043963F /* MTEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTEvent.h; sourceTree = "<group>"; };
 		51A01D151934EB270043963F /* MTEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTEvent.m; sourceTree = "<group>"; };
-		51BCCB671A0327FD0033E6B0 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		51DDBF7419A319B20051B88C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		51DDBF7819A328010051B88C /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		51DDBF7919A328010051B88C /* AdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdViewController.m; sourceTree = "<group>"; };
@@ -889,6 +888,7 @@
 		51F06C28197E0193000E8428 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		51F06C86197FA2F3000E8428 /* ScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanViewController.h; sourceTree = "<group>"; };
 		51F06C87197FA2F3000E8428 /* ScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanViewController.m; sourceTree = "<group>"; };
+		51F346E21A04AC260022C679 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		51F4CAC419E6307500E487F1 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIAuthenticationDialog.h; sourceTree = "<group>"; };
 		51F4CAC519E6307500E487F1 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIAuthenticationDialog.m; sourceTree = "<group>"; };
 		51F4CAC619E6307500E487F1 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASICacheDelegate.h; sourceTree = "<group>"; };
@@ -977,7 +977,7 @@
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
-				51BCCB681A0327FD0033E6B0 /* libbaidumapapi.a in Frameworks */,
+				51F346E31A04AC260022C679 /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -1754,7 +1754,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				51BCCB671A0327FD0033E6B0 /* libbaidumapapi.a */,
+				51F346E21A04AC260022C679 /* libbaidumapapi.a */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,

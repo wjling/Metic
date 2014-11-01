@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *add_button;
 @property (strong, nonatomic) IBOutlet UILabel *theLabel;
 @property (strong, nonatomic) UIView* cellSeperator;
+//@property (strong, nonatomic) UILabel *alreadyFriend_label;
 
 
 @end
