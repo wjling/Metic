@@ -130,11 +130,6 @@
 -(void)addFriendBtnClicked:(UIButton*)sender
 {
     friendPosition = sender.tag;
-//    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-//    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//    confirmAlert.tag = 0;
-//    confirmAlert.delegate = self;
-//    [confirmAlert show];
     [self performSegueWithIdentifier:@"searchfriend_comfirmMsg" sender:sender];
 }
 
@@ -162,11 +157,17 @@
     NSString* location = [aFriend objectForKey:@"location"];
     NSInteger gender = [[aFriend objectForKey:@"gender"] integerValue];
     NSNumber* fid = [aFriend objectForKey:@"id"];
-    NSNumber* isFriend = [aFriend objectForKey:@"isFriend"];
-    NSLog(@"is friend ?: %@",isFriend);
-    //    NSData* name = [aFriend objectForKey:@"name"];
-    //    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
-    //    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
+    BOOL isFriend = [[aFriend objectForKey:@"isFriend"]boolValue];
+    NSLog(@"is friend ?: %@",isFriend? @"YES":@"NO");
+    if (isFriend) {
+        cell.theLabel.hidden = NO;
+        cell.add_button.hidden = YES;
+    }
+    else
+    {
+        cell.theLabel.hidden = YES;
+        cell.add_button.hidden = NO;
+    }
     if (![name isEqual:[NSNull null]]) {
         cell.friendNameLabel.text = name;
     }
@@ -207,7 +208,6 @@
     cell.add_button.tag = indexPath.row;
     [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
-    cell.theLabel.hidden = YES;
     return cell;
 }
 
@@ -217,6 +217,10 @@
 }
 //==============================================================================
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self performSegueWithIdentifier:@"searchfriend_friendinfo" sender:indexPath];

@@ -48,9 +48,9 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-//    [self getMsgArray];
-//    [_tableView reloadData];
-    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;
+    [self getMsgArray];
+    [_tableView reloadData];
+//    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -280,6 +280,9 @@
         case ALREADY_IN_EVENT:
         {
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
+            [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
+            [msg_arr removeObjectAtIndex:selectedPath.row];
             //            int count = self.msgFromDB.count;
             //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
             //            NSNumber* seq = [dataMsg objectForKey:@"seq"];

@@ -2165,7 +2165,7 @@
                                     <textInputTraits key="textInputTraits"/>
                                 </searchBar>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="searchedfriendcell" id="TAB-vE-lnE" customClass="SearchedFriendTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="searchedfriendcell" rowHeight="44" id="TAB-vE-lnE" customClass="SearchedFriendTableViewCell">
                                         <rect key="frame" x="0.0" y="99" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TAB-vE-lnE" id="P8H-rW-isD">
@@ -2202,6 +2202,12 @@
                                                         <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已经是好友" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pYR-yK-TVP">
+                                                    <rect key="frame" x="250" y="11" width="60" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="deviceRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="PYC-IX-Wkl" secondAttribute="trailing" constant="10" id="0fN-gs-Nwx"/>
@@ -2224,6 +2230,7 @@
                                             <outlet property="avatar_imageview" destination="nob-xV-MOE" id="Vf7-3Q-47T"/>
                                             <outlet property="friendNameLabel" destination="Oci-E9-HOw" id="DyC-OX-1s1"/>
                                             <outlet property="location_label" destination="yzp-J0-hB9" id="KZN-HJ-AEd"/>
+                                            <outlet property="theLabel" destination="pYR-yK-TVP" id="5Bj-pr-yXS"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -4875,18 +4882,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="ib8-0I-OZA"/>
+        <segue reference="ItJ-aD-aY9"/>
+        <segue reference="hOW-ww-bKW"/>
+        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="Bdm-ot-CYp"/>
+        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="823-Eq-eYh"/>
         <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="kIc-uU-eUg"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="ItJ-aD-aY9"/>
-        <segue reference="DsC-hh-HTw"/>
-        <segue reference="8Lk-Kp-pHu"/>
-        <segue reference="KQw-JA-BHy"/>
-        <segue reference="Bdm-ot-CYp"/>
     </inferredMetricsTieBreakers>
 </document>
