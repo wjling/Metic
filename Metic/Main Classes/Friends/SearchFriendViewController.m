@@ -130,11 +130,6 @@
 -(void)addFriendBtnClicked:(UIButton*)sender
 {
     friendPosition = sender.tag;
-//    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-//    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//    confirmAlert.tag = 0;
-//    confirmAlert.delegate = self;
-//    [confirmAlert show];
     [self performSegueWithIdentifier:@"searchfriend_comfirmMsg" sender:sender];
 }
 
@@ -224,7 +219,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    return 44;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
