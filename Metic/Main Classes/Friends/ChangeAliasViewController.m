@@ -74,10 +74,22 @@
     NSLog(@"alias json: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     
-    void(^setAliasDone)(NSData *rData) = ^(NSData *rData)
+    void(^setAliasDone)(NSData *rData) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        NSLog(@"Received Data: %@",temp);
+        NSString* temp;
+        if (rData)
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"修改备注名，收到的rData为空");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            return;
+        }
+        NSLog(@"修改备注名,Received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
         NSLog(@"cmd: %d",cmd);
@@ -107,6 +119,12 @@
     };
     HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:ALIAS_OPERATION finshedBlock:setAliasDone];
+}
+
+-(void)dismissAlert:(NSTimer*)timer
+{
+    UIAlertView* alert = [timer userInfo];
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 -(void)dismissAlertView:(NSTimer*)timer

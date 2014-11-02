@@ -461,7 +461,7 @@
         notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
         notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
         notification.timeZone=[NSTimeZone defaultTimeZone];
-        notification.applicationIconBadgeNumber += numOfSyncMessages; //应用的红色数字
+        notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + numOfSyncMessages; //应用的红色数字
         notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
         if (flag) {
             //去掉下面2行就不会弹出提示框
@@ -474,9 +474,9 @@
         //notification.userInfo = infoDict; //添加额外的信息
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-        [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+        
     }
-    
+    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
@@ -599,8 +599,8 @@
         NSMutableDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
         [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
         NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
-        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
-        NSNumber* fid1 = [response1 objectForKey:@"id"];
+//        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+//        NSNumber* fid1 = [response1 objectForKey:@"id"];
         
 //        for (NSDictionary* response2 in syncMessages) {
 //            NSString* msg_str2 = [response2 objectForKey:@"msg"];

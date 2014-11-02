@@ -117,8 +117,8 @@ enum Return_Code
     ADD_FRIEND_RESULT=998,      //收到好友请求结果，对方同意或拒绝
     NEW_EVENT_NOTIFICATION=997, //发起活动的邀请
     EVENT_INVITE_RESPONSE=996,  //活动邀请的结果，对方同意或拒绝
-    REQUEST_EVENT=995,
-    REQUEST_EVENT_RESPONSE=994,
+    REQUEST_EVENT=995,          //主动请求加入活动
+    REQUEST_EVENT_RESPONSE=994, //主动请求加入活动的结果
     NEW_COMMENT_NOTIFICATION=993, //有评论更新
     NEW_PHOTO_NOTIFICATION=992,     //有照片更新
     NEW_VIDEO_NOTIFICATION=991,

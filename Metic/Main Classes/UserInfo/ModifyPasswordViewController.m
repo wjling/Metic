@@ -138,9 +138,20 @@
     }
     
     [self showWaitingView];
-    void (^modifyPasswordDone)(NSData* rData) = ^(NSData* rData)
+    void (^modifyPasswordDone)(NSData*) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"修改密码，收到的rData为空");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            return;
+        }
         NSLog(@"Received Data: %@",temp);
         NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
@@ -172,5 +183,11 @@
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:CHANGE_PW finshedBlock:modifyPasswordDone];
     
+}
+
+-(void)dismissAlert:(NSTimer*)timer
+{
+    UIAlertView* alert = [timer userInfo];
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 @end

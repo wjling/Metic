@@ -153,7 +153,8 @@
     [name_label setBackgroundColor:[UIColor clearColor]];
     
     alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 60, 200, 25)];
-    alias_label.text = [MTUser sharedInstance].alias_dic? [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]] : @"备注名";
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+    alias_label.text = (alias && ![alias isEqual:[NSNull null]])?  alias : @"备注名";
     [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:12]];
     alias_label.textColor = [UIColor whiteColor];
     [alias_label setBackgroundColor:[UIColor clearColor]];
@@ -689,16 +690,20 @@
 
 - (IBAction)participate_event:(id)sender
 {
-    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[[[sender superview]superview]superview];
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[sender superview];
+    while (![cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
+        cell = (FriendInfoEventsTableViewCell*)[cell superview];
+    }
     NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
-    NSDictionary* event = [events objectAtIndex:indexP.row];
+    NSLog(@"index.section: %d", indexP.section);
+    NSDictionary* event = [events objectAtIndex:indexP.section];
     addEventID = [event objectForKey:@"event_id"];
     if ([addEventID isKindOfClass:[NSString class]]) {
-        NSLog(@"addEventID is string");
+        NSLog(@"addEventID is string, id: %@",addEventID);
     }
     else if([addEventID isKindOfClass:[NSNumber class]])
     {
-        NSLog(@"addEventID is number");
+        NSLog(@"addEventID is number, id: %@",addEventID);
 
     }
     UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入验证信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];

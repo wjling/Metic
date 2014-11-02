@@ -368,7 +368,18 @@
     NSLog(@"phone numbers: %@", phoneNumbers);
     void (^getContactFriendsDone)(NSData*) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"获取通讯录好友，收到的rData为空");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            return;
+        }
         NSLog(@"get contactfriends done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
@@ -401,7 +412,18 @@
 {
     void (^getNearbyFriendsDone)(NSData*) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"获取附近好友，收到的rData为空");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            return;
+        }
         NSLog(@"get nearbyfriends done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
@@ -427,7 +449,18 @@
 {
     void (^getKanKanDone)(NSData*) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"获取随便看看，收到的rData为空");
+            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
+            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            return;
+        }
         NSLog(@"get kankan done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
@@ -444,6 +477,12 @@
     NSLog(@"doing getKanKan, json: %@",jsonDic);
     [waitingView removeFromSuperview];
     [tabPage3_view addSubview:waitingView];
+}
+
+-(void)dismissAlert:(NSTimer*)timer
+{
+    UIAlertView* alert = [timer userInfo];
+    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 //返回两个坐标（coordinateA和coordinateB)之间的距离(单位：m)
@@ -787,9 +826,21 @@
                 [userDf synchronize];
                 NSLog(@"user settings : %@",userSettings);
                 
-                void (^uploadContactsDone)(NSData*) = ^(NSData *rData)
+                void (^uploadContactsDone)(NSData*) = ^(NSData* rData)
                 {
-                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSString* temp;
+                    if (rData)
+                    {
+                        temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    }
+                    else
+                    {
+                        NSLog(@"上传通讯录，收到的rData为空");
+                        UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                        [alertView show];
+                        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+                        return;
+                    }
                     NSLog(@"upload contact done, received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber* cmd = [response1 objectForKey:@"cmd"];

@@ -325,6 +325,16 @@ enum Response_Type
     waitingTimer = [NSTimer timerWithTimeInterval:6.0 target:self selector:@selector(waitingTimerDone:) userInfo:nil repeats:NO];
 }
 
+-(void)duplicate_msgRemoval
+{
+    for (NSMutableDictionary* event in self.eventRequestMsg) {
+        NSMutableDictionary* msg_dic = [event objectForKey:@"msg"];
+        NSNumber* cmd = [msg_dic objectForKey:@"cmd"];
+        NSNumber* event_id = [msg_dic objectForKey:@"event_id"];
+        
+    }
+}
+
 -(void)waitingTimerDone:(NSTimer*)timer
 {
     [waitingView removeFromSuperview];
@@ -1674,22 +1684,4 @@ enum Response_Type
     }
 }
 @end
-
-//@implementation UIScrollView (UITouchEvent)
-//
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    [[self nextResponder] touchesBegan:touches withEvent:event];
-//    [super touchesBegan:touches withEvent:event];
-//}
-//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-//    [[self nextResponder] touchesMoved:touches withEvent:event];
-//    [super touchesMoved:touches withEvent:event];
-//}
-//
-//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//    [[self nextResponder] touchesEnded:touches withEvent:event];
-//    [super touchesEnded:touches withEvent:event];
-//}
-
-//@end
 

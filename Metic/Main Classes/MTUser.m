@@ -267,13 +267,19 @@ static MTUser *singletonInstance;
         
         NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
         NSString* version = [userDfs objectForKey:@"DB_version"];
+        int result;
         if (!version) {
             version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
             [userDfs setValue:version forKey:@"DB_version"];
             [userDfs synchronize];
+            result = -1;
+        }
+        else
+        {
+            result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
         }
         
-        int result = [CommonUtils compareVersion1:version andVersion2:@"0.1.16"];
+        
         if (result == -1) {
             NSLog(@"升级数据库，原数据库版本：%@",version);
             MySqlite * sql = [[MySqlite alloc]init];
@@ -564,7 +570,16 @@ static MTUser *singletonInstance;
     
     void(^getAliasDone)(NSData*) = ^(NSData* rData)
     {
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        else
+        {
+            NSLog(@"获取备注名，收到的rData为空");
+            return;
+        }
         NSLog(@"received alias: %@",temp);
         NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSInteger cmd = [[response1 valueForKey:@"cmd"]integerValue];
