@@ -1263,8 +1263,26 @@
             return 30;
         }
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][ [self.comment_list[indexPath.section - 1] count] - indexPath.row];
-        NSString* text = [NSString stringWithFormat:@"%@ :%@",[subCom valueForKey:@"author"],[subCom valueForKey:@"content"]];
-        
+        NSString* text = [subCom valueForKey:@"content"];
+        NSString* alias1,*alias2;
+        if ([[subCom valueForKey:@"replied"] intValue] != 0) {
+            //显示备注名
+            alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+                alias1 = [subCom valueForKey:@"author"];
+            }
+            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"replied"]]];
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+                alias2 = [subCom valueForKey:@"replier"];
+            }
+            text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
+        }else{
+            alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+                alias1 = [subCom valueForKey:@"author"];
+            }
+            text = [NSString stringWithFormat:@"%@: %@",alias1,text];
+        }
         float commentHeight = [CommonUtils calculateTextHeight:text width:265.0 fontSize:SubCFontSize isEmotion:YES] + 0.5;
         if (commentHeight < 25) commentHeight = 25;
         return commentHeight;

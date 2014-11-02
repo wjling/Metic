@@ -652,7 +652,7 @@
         }
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
-        NSString* commentText = [Pcomment valueForKey:@"content"];
+        //NSString* commentText = [Pcomment valueForKey:@"content"];
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -686,21 +686,6 @@
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((PcommentTableViewCell *)cell).avatar authorId:[Pcomment valueForKey:@"author_id"]];
         [getter getAvatar];
         
-        
-        int height = [CommonUtils calculateTextHeight:commentText width:255.0 fontSize:12.0 isEmotion:YES];
-        
-        MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
-        if (!comment){
-            comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, 255, height)];
-            ((PcommentTableViewCell *)cell).comment = comment;
-        }
-        else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
-        [comment setDisableThreeCommon:YES];
-        comment.numberOfLines = 0;
-        comment.font = [UIFont systemFontOfSize:12.0f];
-        comment.backgroundColor = [UIColor clearColor];
-        comment.lineBreakMode = NSLineBreakByCharWrapping;
-        
         NSString* text = [Pcomment valueForKey:@"content"];
         NSString*alias2;
         if ([[Pcomment valueForKey:@"replied"] intValue] != 0) {
@@ -711,6 +696,22 @@
             }
             text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
         }
+        
+        int height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
+        
+        MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
+        if (!comment){
+            comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, commentWidth, height)];
+            ((PcommentTableViewCell *)cell).comment = comment;
+        }
+        else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
+        [comment setDisableThreeCommon:YES];
+        comment.numberOfLines = 0;
+        comment.font = [UIFont systemFontOfSize:12.0f];
+        comment.backgroundColor = [UIColor clearColor];
+        comment.lineBreakMode = NSLineBreakByCharWrapping;
+        
+        
 
         comment.emojiText = text;
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
@@ -755,6 +756,18 @@
         NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
         float commentWidth = 0;
         NSString* commentText = [Pcomment valueForKey:@"content"];
+        
+        NSString*alias2;
+        if ([[Pcomment valueForKey:@"replied"] intValue] != 0) {
+            //显示备注名
+            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"replied"]]];
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+                alias2 = [Pcomment valueForKey:@"replier"];
+            }
+            commentText = [NSString stringWithFormat:@"回复%@ : %@",alias2,commentText];
+        }
+        
+        
         if ([[Pcomment valueForKey:@"pcomment_id"] intValue] > 0) {
             commentWidth = 255;
         }else commentWidth = 230;
