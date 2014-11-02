@@ -231,7 +231,7 @@ static MTUser *singletonInstance;
     
 //    [self.friendList removeAllObjects];
 //    [self.sortedFriendDic removeAllObjects];
-    [self.sectionArray removeAllObjects];
+//    [self.sectionArray removeAllObjects];
 //    [self synchronizeFriends];
     [self getAliasFromDB];
     [self getAliasFromServer];
