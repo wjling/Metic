@@ -716,14 +716,15 @@ static MTUser *singletonInstance;
         NSString* msg_str = [msg objectForKey:@"msg"];
         NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
         NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
-        //        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
-        //            NSLog(@"seq is string");
-        //        }
-        //        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
-        //        {
-        //            NSLog(@"seq is number");
-        //        }
         NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
+//        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
+//            NSLog(@"seq is string");
+//        }
+//        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+//        {
+//            NSLog(@"seq is number");
+//        }
+
         
         [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
         [msg_dic setValue:ishandled forKey:@"ishandled"];
@@ -745,6 +746,24 @@ static MTUser *singletonInstance;
                 case NEW_EVENT_NOTIFICATION:
                 case REQUEST_EVENT:
                 {
+                    NSInteger cmd2;
+                    NSInteger eventid1, eventid2;
+                    eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
+                    NSInteger count = self.eventRequestMsg.count;
+                    for (NSInteger i = 0; i < count; i++) {
+                        NSMutableDictionary* aMsg = self.eventRequestMsg[i];
+                        cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
+                        NSLog(@"cmd1: %d, cmd2: %d",cmd,cmd2);
+                        if (cmd == cmd2) {
+                            eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
+                            NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
+                            if (eventid1 == eventid2) {
+                                [self.eventRequestMsg removeObject:aMsg];
+                                break;
+                            }
+                            
+                        }
+                    }
                     [self.eventRequestMsg addObject:msg_dic];
                 }
                     break;

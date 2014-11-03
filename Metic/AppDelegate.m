@@ -596,8 +596,9 @@
         
         [self.syncMessages addObject:response1];
         NSString* msg_str = [response1 objectForKey:@"msg"];
-        NSMutableDictionary* msg_dic = [CommonUtils NSDictionaryWithNSString:msg_str];
+        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
         [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
+        [msg_dic setValue:[response1 objectForKey:@"seq"] forKey:@"seq"];
         NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
 //        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
 //        NSNumber* fid1 = [response1 objectForKey:@"id"];
