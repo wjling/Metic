@@ -34,7 +34,7 @@
 @property (strong, nonatomic) NSNumber *videoId;
 @property (strong, nonatomic) NSString *videoName;
 @property (strong, nonatomic) NSMutableDictionary *videoInfo;
-@property (strong, nonatomic) VideoWallViewController* controller;
+@property (weak, nonatomic) VideoWallViewController* controller;
 
 @property (nonatomic) BOOL isZan;
 @property BOOL isVideoReady;

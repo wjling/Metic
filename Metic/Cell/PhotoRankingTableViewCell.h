@@ -23,7 +23,7 @@
 - (IBAction)toUserInfo:(id)sender;
 
 @property (strong, nonatomic) NSNumber* eventId;
-@property (strong, nonatomic) photoRankingViewController* controller;
+@property (weak, nonatomic) photoRankingViewController* controller;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (strong, nonatomic) NSNumber* authorId;
 @property BOOL isZan;

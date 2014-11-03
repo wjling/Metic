@@ -36,7 +36,7 @@
 
 
 
-@property(nonatomic,strong) HomeViewController* homeController;
+@property(nonatomic,weak) HomeViewController* homeController;
 @property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UIImageView *themePhoto;

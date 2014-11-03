@@ -91,7 +91,6 @@
     self.isKeyBoard = NO;
     _inputTextView.delegate = self;
     _emotionKeyboard.textView = _inputTextView;
-    [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];

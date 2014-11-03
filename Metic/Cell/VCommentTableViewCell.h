@@ -22,7 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @property (strong, nonatomic) UIView* background;
-@property (strong, nonatomic) VideoDetailViewController* controller;
+@property (weak, nonatomic) VideoDetailViewController* controller;
 - (IBAction)resend:(id)sender;
 
 

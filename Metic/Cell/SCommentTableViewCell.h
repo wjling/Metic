@@ -21,6 +21,6 @@
 @property(strong,nonatomic) NSString* originComment;
 @property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
-@property(nonatomic,strong) EventDetailViewController *controller;
+@property(nonatomic,weak) EventDetailViewController *controller;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @end
