@@ -71,6 +71,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     NSLog(@"fillin did appear, email: %@",email);
     self.navigationController.navigationItem.leftBarButtonItem = nil;
     [self.info_tableview reloadData];
@@ -126,7 +127,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
+    //UIColor* borderColor = [UIColor colorWithRed:0.937 green:0.937 blue:0.957 alpha:1];
     UIColor* textColor1 = [CommonUtils colorWithValue:0xbfbfbf];
     UIColor* textColor2 = [CommonUtils colorWithValue:0x444444];
     NSInteger section = indexPath.section;

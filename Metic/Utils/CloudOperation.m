@@ -37,7 +37,7 @@
 
 -(NSString*)parseOperationCode:(int)operationCode
 {
-    NSString* resultCode = [NSString alloc];
+    NSString* resultCode;
     switch (operationCode) {
         case 1:
             resultCode = @"GET";

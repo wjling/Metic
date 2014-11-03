@@ -41,6 +41,7 @@
 
 -(void)viewDidLoad
 {
+    [super viewDidLoad];
     if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
         CGRect frame = self.view.frame;
         frame.origin.y = 20;
@@ -80,11 +81,12 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-
+    [super viewWillAppear:animated];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
     

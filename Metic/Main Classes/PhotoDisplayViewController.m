@@ -81,6 +81,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     self.commentImg.image = [UIImage imageNamed:@"评论icon"];
     [self refreshGood];
     

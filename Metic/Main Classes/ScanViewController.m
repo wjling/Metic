@@ -46,6 +46,7 @@
 
 -(void) viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     [readerView.scanner setSymbology:ZBAR_I25 config:ZBAR_CFG_ENABLE to:0];
     readerView.torchMode=0;
     
@@ -58,6 +59,7 @@
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     if (_isScaning) {
         _isScaning = NO;
         [readerView stop];

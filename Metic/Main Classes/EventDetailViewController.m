@@ -116,6 +116,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
 }

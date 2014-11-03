@@ -102,6 +102,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.shadowView setAlpha:0];
     
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
