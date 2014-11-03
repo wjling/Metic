@@ -11,6 +11,7 @@
 #import "PhotoGetter.h"
 #import "MTUser.h"
 #import "MobClick.h"
+#import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @interface EventInvitationViewController ()
 {
@@ -173,6 +174,7 @@
 
 - (IBAction)participate_event_okBtnClicked:(id)sender
 {
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
         cell = [cell superview];
@@ -199,11 +201,17 @@
     NSLog(@"participate event okBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+        if(rData)[self finishWithReceivedData:rData];
+        else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
 }
 
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
         cell = [cell superview];
@@ -230,7 +238,13 @@
     NSLog(@"participate event noBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+        if(rData)[self finishWithReceivedData:rData];
+        else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+            
+        }
+    }];
 }
 
 
@@ -268,6 +282,7 @@
             [msg_dic setValue:result forKey:@"ishandled"];
             
             [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
+            [SVProgressHUD dismissWithSuccess:@"处理成功" afterDelay:0.5];
             [self.tableView reloadData];
             NSLog(@"本次处理的消息: %@",msg_dic);
             NSLog(@"处理之后的消息列表: \n MTUser.eventRequestMsg: %@ \nself.msg_arr: %@", [MTUser sharedInstance].eventRequestMsg, self.msg_arr);
@@ -275,13 +290,15 @@
             break;
             case REQUEST_FAIL:
         {
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"发送请求错误" WithDelegate:self WithCancelTitle:@"确定"];
+            [SVProgressHUD dismissWithError:@"发送请求错误"];
+            //[CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"发送请求错误" WithDelegate:self WithCancelTitle:@"确定"];
             
         }
             break;
         case ALREADY_IN_EVENT:
         {
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
+            [SVProgressHUD dismissWithError:@"你已经在此活动中"];
+            //[CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
             NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
             [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
             [msg_arr removeObjectAtIndex:selectedPath.row];
