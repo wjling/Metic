@@ -195,8 +195,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
--(void)dealloc
+- (void)dealloc
 {
+    [_header free];
+    [_footer free];
     
 }
 
