@@ -277,6 +277,10 @@ static MTUser *singletonInstance;
         else
         {
             result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
+            
+            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            [userDfs setValue:version forKey:@"DB_version"];
+            [userDfs synchronize];
         }
         
         
@@ -708,7 +712,7 @@ static MTUser *singletonInstance;
     [mySql openMyDB:DB_path];
     self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
     [mySql closeMyDB];
-    NSLog(@"msg from db: %@",msgFromDB);
+    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
     //    [self.notificationsTable reloadData];
     NSInteger count = self.msgFromDB.count;
     for (NSInteger i = count - 1; i >= 0; i--) {
@@ -746,24 +750,6 @@ static MTUser *singletonInstance;
                 case NEW_EVENT_NOTIFICATION:
                 case REQUEST_EVENT:
                 {
-                    NSInteger cmd2;
-                    NSInteger eventid1, eventid2;
-                    eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
-                    NSInteger count = self.eventRequestMsg.count;
-                    for (NSInteger i = 0; i < count; i++) {
-                        NSMutableDictionary* aMsg = self.eventRequestMsg[i];
-                        cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
-                        NSLog(@"cmd1: %d, cmd2: %d",cmd,cmd2);
-                        if (cmd == cmd2) {
-                            eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
-                            NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
-                            if (eventid1 == eventid2) {
-                                [self.eventRequestMsg removeObject:aMsg];
-                                break;
-                            }
-                            
-                        }
-                    }
                     [self.eventRequestMsg addObject:msg_dic];
                 }
                     break;

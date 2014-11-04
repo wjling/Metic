@@ -19,6 +19,7 @@
 #import "PhotoGetter.h"
 #import "HistoricalNotificationViewController.h"
 #import "myScrollView.h"
+#import "SVProgressHUD.h"
 
 
 @interface NotificationsViewController : UIViewController <HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,SlideNavigationControllerDelegate,UIScrollViewDelegate,NotificationDelegate>

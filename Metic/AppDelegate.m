@@ -683,24 +683,24 @@
         }
         else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
         {
-            NSInteger cmd2;
-            NSInteger eventid1, eventid2;
-            eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
-            NSInteger count = [MTUser sharedInstance].eventRequestMsg.count;
-            for (NSInteger i = 0; i < count; i++) {
-                NSMutableDictionary* aMsg = [MTUser sharedInstance].eventRequestMsg[i];
-                cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
-                NSLog(@"cmd1: %d, cmd2: %d",msg_cmd,cmd2);
-                if (msg_cmd == cmd2) {
-                    eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
-                    NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
-                    if (eventid1 == eventid2) {
-                        [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
-                        break;
-                    }
-                    
-                }
-            }
+//            NSInteger cmd2;
+//            NSInteger eventid1, eventid2;
+//            eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
+//            NSInteger count = [MTUser sharedInstance].eventRequestMsg.count;
+//            for (NSInteger i = 0; i < count; i++) {
+//                NSMutableDictionary* aMsg = [MTUser sharedInstance].eventRequestMsg[i];
+//                cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
+//                NSLog(@"cmd1: %d, cmd2: %d",msg_cmd,cmd2);
+//                if (msg_cmd == cmd2) {
+//                    eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
+//                    NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
+//                    if (eventid1 == eventid2) {
+//                        [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
+//                        break;
+//                    }
+//                    
+//                }
+//            }
             [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
         }
 
