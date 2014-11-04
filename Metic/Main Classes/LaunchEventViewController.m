@@ -61,6 +61,7 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [self drawLeftButton];
     [self turnRoundCorner];
     self.scrollView.delegate = self;
     self.begin_time_text.delegate = self;
@@ -149,9 +150,22 @@
 
 //返回上一层
 -(void)MTpopViewController{
-    [self.navigationController popViewControllerAnimated:YES];
-    return;
+    if ([self shouldDraft]) {
+        [self alertMakingDraft];
+    }else [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (void)drawLeftButton{
+    UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+    [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
+    [leftButton setTitle:@"        " forState:UIControlStateNormal];
+    [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+    [leftButton addTarget:self action:@selector(MTpopViewController) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+    self.navigationItem.leftBarButtonItem = leftButtonItem;
+}
+
 
 -(void)MTdismissKeyboard
 {
