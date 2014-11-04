@@ -25,8 +25,8 @@ typedef NS_ENUM(NSInteger, FlatDatePickerMode) {
 
 @interface FlatDatePicker : UIControl <UIScrollViewDelegate> {
     
-    // Parent View :
-    UIView *_parentView;
+//    // Parent View :
+//    UIView *_parentView;
     
     // Header :
     UILabel *_labelTitle;
@@ -104,6 +104,9 @@ typedef NS_ENUM(NSInteger, FlatDatePickerMode) {
     // First init flag :
     BOOL _isInitialized;
 }
+
+// Parent View :
+@property(nonatomic,weak) UIView *parentView;
 
 @property (nonatomic, strong) NSObject<FlatDatePickerDelegate> *delegate;
 

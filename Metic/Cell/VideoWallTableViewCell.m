@@ -595,9 +595,9 @@
     
 
 //    planb
-    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
-    NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
+//    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+//    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
+//    NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
     [videoRequest clearDelegatesAndCancel];
     videoRequest = nil;
 //    NSFileManager *fileManager = [NSFileManager defaultManager];

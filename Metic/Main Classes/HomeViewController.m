@@ -102,6 +102,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self.shadowView setAlpha:0];
     
     ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
@@ -586,6 +587,7 @@
 - (void)dealloc
 {
     [_header free];
+    [_footer free];
     
 }
 

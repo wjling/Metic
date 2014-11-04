@@ -54,6 +54,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     NSLog(@"UserInfoViewController viewWillAppear");
     UIColor* bgColor = [UIColor colorWithRed:0.82 green:0.85 blue:0.88 alpha:1];
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0)

@@ -47,6 +47,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     _isManaging = NO;
     [self.manage_Button setTitle:@"       管理" forState:UIControlStateNormal];
     _isRemoving = NO;

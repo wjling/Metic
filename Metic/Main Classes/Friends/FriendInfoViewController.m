@@ -75,6 +75,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     NSLog(@"view will appear");
     if ([[MTUser sharedInstance].friendsIdSet containsObject:fid])
     {
@@ -90,6 +91,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     NSLog(@"view did appear");
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);

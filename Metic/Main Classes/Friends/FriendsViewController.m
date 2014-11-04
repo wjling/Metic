@@ -60,6 +60,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self initTableData];
 }
 -(void)viewDidAppear:(BOOL)animated

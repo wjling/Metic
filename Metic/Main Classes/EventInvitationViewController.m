@@ -49,6 +49,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self getMsgArray];
     [_tableView reloadData];
 //    self.msg_arr = [MTUser sharedInstance].eventRequestMsg;

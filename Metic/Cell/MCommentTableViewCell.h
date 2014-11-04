@@ -21,7 +21,7 @@
 @property(strong,nonatomic) NSNumber* authorId;
 @property (strong, nonatomic) NSString *origincomment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
-@property(nonatomic,strong) EventDetailViewController *controller;
+@property(nonatomic,weak) EventDetailViewController *controller;
 @property BOOL isZan;
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 - (IBAction)appreciate:(id)sender;

@@ -91,7 +91,6 @@
     self.isKeyBoard = NO;
     _inputTextView.delegate = self;
     _emotionKeyboard.textView = _inputTextView;
-    [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -116,6 +115,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     if (_shadowView) [_shadowView removeFromSuperview];
     [self pullEventFromAir];
 }
@@ -194,8 +194,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
--(void)dealloc
+- (void)dealloc
 {
+    [_header free];
+    [_footer free];
     
 }
 
