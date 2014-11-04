@@ -43,7 +43,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate,BMKGeneralDelegate>
 {
-//    HTTPServer *httpServer;
+    HTTPServer *httpServer;
 }
 
 @property (strong, nonatomic) UIWindow *window;
