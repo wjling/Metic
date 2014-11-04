@@ -45,7 +45,7 @@
 //For NotificationViewController
 @property (strong,nonatomic) NSMutableArray* msgFromDB;
 @property (strong,nonatomic) NSMutableArray* friendRequestMsg;
-@property (strong,nonatomic) NSMutableArray* eventRequestMsg; //活动邀请message
+@property (strong,nonatomic) NSMutableArray* eventRequestMsg; //客户端为里面每个msg加入了seq和ishandled字段
 @property (strong,nonatomic) NSMutableArray* systemMsg;
 @property (strong,nonatomic) NSMutableArray* historicalMsg;
 
