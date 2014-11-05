@@ -471,6 +471,7 @@
     if ((tableView == _tableView1 && indexPath.row == _lefPhotos.count) || (tableView == _tableView2 && indexPath.row == _rigPhotos.count)) {
         UITableViewCell *cell = [[UITableViewCell alloc]init];
         cell.backgroundColor = [UIColor clearColor];
+        cell.userInteractionEnabled = NO;
         return cell;
     }
     
