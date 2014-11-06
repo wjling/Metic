@@ -18,6 +18,7 @@
 #import "MLEmojiLabel.h"
 #import "../Custom Wedgets/emotion_Keyboard.h"
 #import "UIImageView+WebCache.h"
+#import "NSString+JSON.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -248,6 +249,18 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS];
 }
 
+- (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
+    
+    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    [sql closeMyDB];
+}
 
 - (IBAction)good:(id)sender {
     [self.good_button setEnabled:NO];
@@ -539,6 +552,7 @@
                 }else good ++;
                 [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
                 [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+                [self updatePhotoInfoToDB:_photoInfo];
                 [self setGoodButton];
                 [self.good_button setEnabled:YES];
                 

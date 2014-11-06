@@ -12,6 +12,7 @@
 #import "../Source/MRZoomScrollView.h"
 #import "../Utils/PhotoGetter.h"
 #import "../Utils/CommonUtils.h"
+#import "NSString+JSON.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -96,6 +97,19 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
+    
+    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    [sql closeMyDB];
 }
 
 -(void)refreshGood
@@ -320,6 +334,7 @@
             self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
             [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
             [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
+            [self updatePhotoInfoToDB:dict];
             //self.photo_list[self.goodindex] = dict;
             
             [self.goodButton setEnabled:YES];
