@@ -973,9 +973,9 @@
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
 //        NSString* commentText = [Vcomment valueForKey:@"content"];
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]]) {
-            alias = [_videoInfo valueForKey:@"author"];
+            alias = [Vcomment valueForKey:@"author"];
         }
         ((VcommentTableViewCell *)cell).author.text = alias;
         ((VcommentTableViewCell *)cell).authorName = alias;
