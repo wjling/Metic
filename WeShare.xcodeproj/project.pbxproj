@@ -2717,7 +2717,7 @@
 					src/Classes/,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",
@@ -2763,7 +2763,7 @@
 					src/Classes/,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",
