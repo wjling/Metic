@@ -441,6 +441,9 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+//        [self extractFrames:[cachePath stringByAppendingPathComponent:videoName]];
+//        return;
+        
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -537,15 +540,26 @@
 
 -(void)PlayingVideoAtOnce
 {
-    return;
     // my video player
-    
+    return;
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
     {
+        
+        
+        
+        
+        
+        [self extractFrames:[cachePath stringByAppendingPathComponent:_videoName]];
+        return;
+        
+        
+        
+        
+        
         if (!_myPlayerViewController) {
             VideoPlayerViewController *player = [[VideoPlayerViewController alloc] init];
             _myPlayerViewController = player;
@@ -607,5 +621,89 @@
     _controller.canPlay = YES;
 }
 
+
+- (void)extractFrames:(NSString*)filePath
+{
+    NSMutableArray* frames = [[NSMutableArray alloc]init];
+
+    AVAsset *asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
+    
+    //setting up generator & compositor
+    AVAssetImageGenerator* generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
+    
+    //    self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:myAsset];
+    generator.requestedTimeToleranceBefore = kCMTimeZero;
+    generator.requestedTimeToleranceAfter = kCMTimeZero;
+    
+    generator.appliesPreferredTrackTransform = YES;
+    AVVideoComposition* composition = [AVVideoComposition videoCompositionWithPropertiesOfAsset:asset];
+    
+    NSTimeInterval duration = CMTimeGetSeconds(asset.duration);
+    NSTimeInterval frameDuration = CMTimeGetSeconds(composition.frameDuration);
+    CGFloat totalFrames = round(duration/frameDuration);
+
+    
+    NSMutableArray * times = [[NSMutableArray alloc] init];
+    // *** Fetch First 200 frames only ***
+    for (int i=0; i<20; i++) {
+        NSValue * time = [NSValue valueWithCMTime:CMTimeMakeWithSeconds(i*frameDuration, composition.frameDuration.timescale)];
+        [times addObject:time];
+    }
+
+    __block NSInteger count = 0;
+    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
+        // If actualTime is not equal to requestedTime image is ignored
+        NSLog(@"%d",count);
+        if(CMTimeCompare(actualTime, requestedTime) == 0)
+        {
+            if (result == AVAssetImageGeneratorSucceeded) {
+                //                NSLog(@"%.02f     %.02f", CMTimeGetSeconds(requestedTime), CMTimeGetSeconds(actualTime));
+                // Each log have differents actualTimes.
+                // frame extraction is here...
+                NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+                NSString *filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.jpg",CMTimeGetSeconds(requestedTime)]];
+                
+                UIImage* image = [UIImage imageWithData:UIImageJPEGRepresentation([UIImage imageWithCGImage:im], 0.5f)];
+                [frames addObject:image];
+                count++;
+                if (count == times.count) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self playLittleVideo:frames];
+                    });
+                }
+            }
+        }
+    };
+    
+    generator.requestedTimeToleranceBefore = kCMTimeZero;
+    generator.requestedTimeToleranceAfter = kCMTimeZero;
+    [generator generateCGImagesAsynchronouslyForTimes:times completionHandler:handler];
+}
+
+-(void)playLittleVideo:(NSMutableArray*)images{
+    NSLog(@"begin");
+    
+    _video_button.imageView.animationImages=images;
+    
+    //设置动画总时间
+    _video_button.imageView.animationDuration=1.0;
+    
+    //设置重复次数，0表示不重复
+    _video_button.imageView.animationRepeatCount=100;
+    
+    //开始动画
+    [_video_button.imageView startAnimating];
+    
+    
+//    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+//    
+//    [animation setValues:images];
+//    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
+//    animation.duration = 5;
+//    animation.delegate = self;
+//    animation.repeatCount = 5;
+//    [self.video_button.imageView.layer addAnimation:animation forKey:@"gifAnimation"];
+    NSLog(@"end");
+}
 
 @end
