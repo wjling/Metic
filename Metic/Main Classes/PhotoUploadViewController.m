@@ -48,6 +48,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [self drawLeftButton];
     self.scrollView.delegate = self;
     _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
     [_textView setBackgroundColor:[UIColor whiteColor]];
@@ -108,8 +109,30 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 //返回上一层
 -(void)MTpopViewController{
-    [self.navigationController popViewControllerAnimated:YES];
+    if(_uploadImage){
+        [self alertConfirmQuit];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
+
+- (void)alertConfirmQuit{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要放弃上传？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    alert.tag = 120;
+    [alert show];
+}
+
+- (void)drawLeftButton{
+    UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
+    [leftButton setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
+    [leftButton setTitle:@"        " forState:UIControlStateNormal];
+    [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+    [leftButton addTarget:self action:@selector(MTpopViewController) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+    self.navigationItem.leftBarButtonItem = leftButtonItem;
+}
+
 
 - (void)UesrImageClicked
 {
@@ -442,9 +465,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     }
 }
 
-
-
-
+#pragma mark - Alert Delegate
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
+    // the user clicked OK
+    if ([alertView tag] == 120) {
+        if (buttonIndex == 1)
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        return;
+    }
+}
 
 
 @end

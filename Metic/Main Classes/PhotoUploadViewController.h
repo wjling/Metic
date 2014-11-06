@@ -11,7 +11,7 @@
 #import "PECropViewController.h"
 
 
-@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,HttpSenderDelegate,PhotoGetterDelegate,PECropViewControllerDelegate>
+@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,HttpSenderDelegate,PhotoGetterDelegate,PECropViewControllerDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIViewController* photoWallController;
 @property (strong, nonatomic) NSNumber* eventId;
