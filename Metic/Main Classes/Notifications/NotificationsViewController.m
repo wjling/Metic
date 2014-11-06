@@ -313,17 +313,17 @@ enum Response_Type
     [self.systemMessage_tableView addSubview:label3];
     
     // waiting view
-    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
-    waitingView = [[UIView alloc]init];
-    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
-    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
-    [waitingView setBackgroundColor:waitingBgColor];
-    [waitingView setAlpha:0.5];
-    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
-    [waitingView addSubview:actIndicator];
-    [actIndicator startAnimating];
-    
-    waitingTimer = [NSTimer timerWithTimeInterval:6.0 target:self selector:@selector(waitingTimerDone:) userInfo:nil repeats:NO];
+//    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
+//    waitingView = [[UIView alloc]init];
+//    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
+//    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
+//    [waitingView setBackgroundColor:waitingBgColor];
+//    [waitingView setAlpha:0.5];
+//    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
+//    [waitingView addSubview:actIndicator];
+//    [actIndicator startAnimating];
+//    
+//    waitingTimer = [NSTimer timerWithTimeInterval:6.0 target:self selector:@selector(waitingTimerDone:) userInfo:nil repeats:NO];
 }
 
 -(void)removeDuplicate_msgFromDatabase
@@ -420,25 +420,30 @@ enum Response_Type
 
 }
 
--(void)waitingTimerDone:(NSTimer*)timer
-{
-    [waitingView removeFromSuperview];
-}
+//-(void)waitingTimerDone:(NSTimer*)timer
+//{
+//    [waitingView removeFromSuperview];
+//}
+//
+//-(void)waitingViewShow:(UIView*)view
+//{
+//    if ([waitingView superview]) {
+//        [waitingView removeFromSuperview];
+//        [waitingTimer invalidate];
+//    }
+//    [view addSubview:waitingView];
+//    [waitingTimer fire];
+//}
+//
+//-(void)waitingViewHide
+//{
+//    [waitingView removeFromSuperview];
+//    [waitingTimer invalidate];
+//}
 
--(void)waitingViewShow:(UIView*)view
+-(void)dismissHud:(NSTimer*)timer
 {
-    if ([waitingView superview]) {
-        [waitingView removeFromSuperview];
-        [waitingTimer invalidate];
-    }
-    [view addSubview:waitingView];
-    [waitingTimer fire];
-}
-
--(void)waitingViewHide
-{
-    [waitingView removeFromSuperview];
-    [waitingTimer invalidate];
+    [SVProgressHUD dismissWithError:@"网络异常" afterDelay:2.0];
 }
 
 - (void)tabBtnClicked:(id)sender
@@ -717,7 +722,6 @@ enum Response_Type
                 if (!label3.hidden) {
                     label3.hidden = YES;
                 }
-//                [[MTUser sharedInstance] synchronizeFriends];
             }
                 break;
             case EVENT_INVITE_RESPONSE:
@@ -749,7 +753,7 @@ enum Response_Type
                         
                     }
                 }
-//                [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
+                
                 [self.eventRequestMsg insertObject:msg_dic atIndex:0];
                 if (!label1.hidden) {
                     label1.hidden = YES;
@@ -1139,7 +1143,8 @@ enum Response_Type
 - (IBAction)friend_request_okBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1183,8 +1188,8 @@ enum Response_Type
 - (IBAction)friend_request_noBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
-    
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1247,7 +1252,8 @@ enum Response_Type
 - (IBAction)event_request_okBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1283,7 +1289,8 @@ enum Response_Type
 - (IBAction)event_request_noBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1402,7 +1409,7 @@ enum Response_Type
                     [msg_dic setValue:result forKey:@"ishandled"];
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
-                    [SVProgressHUD dismissWithSuccess:@"操作成功" afterDelay:2];
+                    [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功添加%@为好友",fname] afterDelay:2];
                 }
                 else
                 {
@@ -1410,6 +1417,7 @@ enum Response_Type
                     NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
                     NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
                     NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+                    NSString* fname = [msg_dic objectForKey:@"name"];
                     NSLog(@"response friend, seq: %d, fid: %d",seq1,fid1);
                     [mySql openMyDB:DB_path];
                     [mySql updateDataWitTableName:@"notification"
@@ -1437,7 +1445,7 @@ enum Response_Type
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
                     
-                    [SVProgressHUD dismissWithSuccess:@"操作成功" afterDelay:2];
+                    [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功拒绝%@为好友",fname] afterDelay:2];
                     
 //                    NSString* fname = [msg_dic objectForKey:@"name"];
 //                    NSString* femail = [msg_dic objectForKey:@"email"];
@@ -1500,7 +1508,7 @@ enum Response_Type
         case ALREADY_FRIENDS:
         {
             
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
+//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
             NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:row];
