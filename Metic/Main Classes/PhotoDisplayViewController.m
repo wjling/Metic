@@ -306,7 +306,7 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            NSMutableDictionary* dict = [[NSMutableDictionary alloc] initWithDictionary:self.photo_list[self.goodindex]];
+            NSMutableDictionary* dict = self.photo_list[self.goodindex];
             BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
             int zan_number = [[dict valueForKey:@"good"]intValue];
             if (iszan) {
@@ -320,7 +320,8 @@
             self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
             [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
             [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
-            self.photo_list[self.goodindex] = dict;
+            //self.photo_list[self.goodindex] = dict;
+            
             [self.goodButton setEnabled:YES];
 
         }
@@ -346,11 +347,9 @@
             int index = self.scrollView.contentOffset.x/320;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:self.photo_list[index]];
-            self.photo_list[index] = dict;
             nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:_photoPath_list[index]];
             nextViewController.eventId = _eventId;
-            nextViewController.photoInfo = dict;
+            nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;
             nextViewController.eventName = _eventName;
             nextViewController.controller = self.controller;
