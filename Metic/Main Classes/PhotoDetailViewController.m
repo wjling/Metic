@@ -365,6 +365,7 @@
                     [_pcomment_list removeObject:waitingComment];
                     [_pcomment_list insertObject:waitingComment atIndex:0];
                     [_tableView reloadData];
+                    [self commentNumPlus];
                 }
             }else{
                 [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];

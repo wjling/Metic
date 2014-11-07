@@ -211,7 +211,7 @@
                 }
                 [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
                 VideoWallViewController* wall = _controller;
-                [wall updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil]];
+                [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
                 _controller.shouldFlash = NO;
                 [_controller.tableView reloadData];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

@@ -12,6 +12,7 @@
 #import "../../MJRefresh/MJRefreshFooterView.h"
 #import "../../UIView/MTMessageTextView.h"
 #import "../../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
+#import "../../Cell/VideoWallTableViewCell.h"
 
 @interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>{
     ASIHTTPRequest *videoRequest;
@@ -24,6 +25,7 @@
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSDictionary * videoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong,nonatomic) VideoWallTableViewCell *SeleVcell;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;

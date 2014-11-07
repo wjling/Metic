@@ -23,6 +23,6 @@
 @property BOOL shouldReload;
 @property BOOL shouldFlash;
 @property BOOL canPlay;
-- (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos;
++ (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId;
 - (IBAction)uploadVideo:(id)sender;
 @end

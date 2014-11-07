@@ -692,6 +692,7 @@
                     [_vcomment_list removeObject:waitingComment];
                     [_vcomment_list insertObject:waitingComment atIndex:0];
                     [_tableView reloadData];
+                    [self commentNumPlus];
                 }
             }else{
                 [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
@@ -774,6 +775,7 @@
                     [_vcomment_list removeObject:newComment];
                     [_vcomment_list insertObject:newComment atIndex:0];
                     [_tableView reloadData];
+                    [self commentNumPlus];
                 }
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
@@ -787,6 +789,14 @@
     }];
 }
 
+- (void)commentNumPlus
+{
+    int comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
+    comN ++;
+    [self.videoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [_SeleVcell.comment_button setTitle:[NSString stringWithFormat:@"%d",comN] forState:UIControlStateNormal];
+    [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
+}
 
 
 -(void)closeRJ

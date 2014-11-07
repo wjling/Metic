@@ -29,6 +29,7 @@
 @property(nonatomic,strong) UIImage* preViewImage;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
+@property (strong,nonatomic) VideoWallTableViewCell *SeleVcell;
 @property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
@@ -171,7 +172,7 @@
     [self getVideolist];
 }
 
-- (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos
++ (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
@@ -180,7 +181,7 @@
         NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
         videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
         
         [sql insertToTable:@"eventVideo" withColumns:columns andValues:values];
     }
@@ -230,7 +231,7 @@
                         NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newvideo_list[i]];
                         newvideo_list[i] = dictionary;
                     }
-                    [self updateVideoInfoToDB:newvideo_list];
+                    [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
                     if ([_sequence intValue] == 0) [_videoInfos removeAllObjects];
                     _sequence = [response1 valueForKey:@"sequence"];
                     for (NSMutableDictionary *dictionary in newvideo_list) {
@@ -323,6 +324,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     VideoWallTableViewCell* cell = (VideoWallTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    _SeleVcell = cell;
     NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
     _seleted_videoInfo = dictionary;
     _seleted_videoThumb = cell.videoThumb;
@@ -337,6 +339,7 @@
     if ([sender isKindOfClass:[VideoWallViewController class]]) {
         if ([segue.destinationViewController isKindOfClass:[VideoDetailViewController class]]) {
             VideoDetailViewController *nextViewController = segue.destinationViewController;
+            nextViewController.SeleVcell = _SeleVcell;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
