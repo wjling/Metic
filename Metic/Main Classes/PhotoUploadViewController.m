@@ -262,33 +262,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [_progressView setProgress:progress+finished animated:YES];
     }
 }
-//
-//-(void)showWaitingView
-//{
-//    if (!_waitingView) {
-//        CGRect frame = self.view.bounds;
-//        _waitingView = [[UIView alloc]initWithFrame:frame];
-//        [_waitingView setBackgroundColor:[UIColor blackColor]];
-//        [_waitingView setAlpha:0.5f];
-//        frame.origin.x = (frame.size.width - 100)/2.0;
-//        frame.origin.y = (frame.size.height - 100)/2.0;
-//        frame.size = CGSizeMake(100, 100);
-//        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]initWithFrame:frame];
-//        [indicator setTag:101];
-//        [_waitingView addSubview:indicator];
-//    }
-//    [_textInput endEditing:YES];
-//    [self.view addSubview:_waitingView];
-//    [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) startAnimating];
-//}
-//
-//-(void)removeWaitingView
-//{
-//    if (_waitingView) {
-//        [((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
-//        [_waitingView removeFromSuperview];
-//    }
-//}
 
 #pragma mark - PECropViewControllerDelegate methods
 
@@ -353,7 +326,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
 //    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [picker dismissViewControllerAnimated:NO completion:^{
-        [self openEditor:image];
+        //1.裁剪图片
+//        [self openEditor:image];
+        
+        //2.返回图片
+        self.uploadImage = image;
+        [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+        self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
     }];
 
 }

@@ -126,8 +126,12 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [self adjustUI];
+    if (_photo_list.count>0) {
+        _promt.hidden = YES;
+    }else _promt.hidden = NO;
     if (_shouldReloadPhoto) {
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+            _promt.hidden = YES;
             [self.header1 beginRefreshing];
         }
     }
