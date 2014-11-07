@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -4884,16 +4883,16 @@
     <inferredMetricsTieBreakers>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="0y8-RS-ijM"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="c1O-Ly-Hfg"/>
-        <segue reference="Bdm-ot-CYp"/>
-        <segue reference="UXj-VV-omZ"/>
-        <segue reference="QDz-81-eMP"/>
         <segue reference="ItJ-aD-aY9"/>
         <segue reference="8Lk-Kp-pHu"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="0y8-RS-ijM"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="UXj-VV-omZ"/>
+        <segue reference="823-Eq-eYh"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="hOW-ww-bKW"/>
+        <segue reference="Bdm-ot-CYp"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -285,6 +285,14 @@
     [sheet showInView:self.view];
 }
 
+#pragma scrollview Delegate
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                        object:nil
+                                                      userInfo:nil];
+}
+
 #pragma tableView DataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
