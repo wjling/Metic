@@ -226,26 +226,8 @@
                         [self getPhotolist];
                         return;
                     }else{
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            int Acount = self.photo_list_all.count;
-                            if (Acount == 0) {
-//                                [_promt removeFromSuperview];
-//                                [_tableView1 addSubview:_promt];
-                                [_promt setHidden:NO];
-                            }else [_promt setHidden:YES];
-                            [self.photo_list removeAllObjects];
-                            [_lefPhotos removeAllObjects];
-                            [_rigPhotos removeAllObjects];
-                            _leftH = 0;
-                            _rightH = 0;
-                            _shouldReloadPhoto = NO;
-                            [_tableView1 reloadData];
-                            [_tableView2 reloadData];
-                            
-                            [self photoDistribution];
-                        });
-                        
-                      
+                        [self photoDistribution];
+                  
                         
                     }
                     
@@ -369,39 +351,56 @@
 
 -(void)photoDistribution
 {
-    if (self.isHeaderOpen) {
-        self.isHeaderOpen = NO;
-        if(_header1.refreshing) [_header1 endRefreshing];
-        if(_header2.refreshing) [_header2 endRefreshing];
-    }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _leftH = 0;
-        _rightH = 0;
-        NSArray *tmp = [NSArray arrayWithArray:_photo_list_all];
-        for (NSDictionary* photo in tmp) {
-            int width = [[photo valueForKey:@"width"] intValue];
-            int height = [[photo valueForKey:@"height"] intValue];
-            if(width == 0 || height == 0){
-                NSLog(@"图片 %@ 宽高不正确",[photo valueForKey:@"photo_name"]);
-                [_photo_list_all removeObject:photo];
-                continue;
-            }
-            double RealHeight = height * 150.0f / width;
-            
-            if (_leftH <= _rightH) {
-                _leftH += (RealHeight + 43);
-                [_lefPhotos addObject:photo];
-            }else{
-                _rightH += (RealHeight + 43);
-                [_rigPhotos addObject:photo];
-            }
-            [_photo_list addObject:photo];
+    double left = 0;
+    double right = 0;
+    NSArray *tmp = [NSArray arrayWithArray:_photo_list_all];
+    NSMutableArray *list = [[NSMutableArray alloc]init];
+    NSMutableArray *leftL = [[NSMutableArray alloc]init];
+    NSMutableArray *rightL = [[NSMutableArray alloc]init];
+    
+    for (NSDictionary* photo in tmp) {
+        int width = [[photo valueForKey:@"width"] intValue];
+        int height = [[photo valueForKey:@"height"] intValue];
+        if(width == 0 || height == 0){
+            NSLog(@"图片 %@ 宽高不正确",[photo valueForKey:@"photo_name"]);
+            [_photo_list_all removeObject:photo];
+            continue;
         }
+        double RealHeight = height * 150.0f / width;
+        
+        if (left <= right) {
+            left += (RealHeight + 43);
+            [leftL addObject:photo];
+        }else{
+            right += (RealHeight + 43);
+            [rightL addObject:photo];
+        }
+        [list addObject:photo];
+    }
+    
+    float delay = 0;
+    if (_header1.refreshing || _header2.refreshing) delay = 0.5;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _isLoading = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            _isLoading = NO;
+        });
+        _leftH = left;
+        _rightH = right;
+        _photo_list = list;
+        _lefPhotos = leftL;
+        _rigPhotos = rightL;
         [self.tableView1 reloadData];
         [self.tableView2 reloadData];
+        
+        if (self.isHeaderOpen) {
+            self.isHeaderOpen = NO;
+            if(_header1.refreshing) [_header1 endRefreshing];
+            if(_header2.refreshing) [_header2 endRefreshing];
+        }
     });
-    
-    
+
     
     
     
@@ -466,6 +465,11 @@
         if (_leftH > _rightH) max = max + 1;
     }
     NSLog(@"%ld",max);
+    
+    if (_leftH == 0 && _rightH == 0) {
+        return 1;
+    }
+    
     return max;
 }
 
@@ -559,10 +563,16 @@
     NSDictionary *a;
     if (tableView == _tableView1) {
         if (indexPath.row >= _lefPhotos.count) {
+            if (_leftH == 0 && _rightH == 0) {
+                return 30;
+            }
             return abs(_leftH - _rightH);
         }
         a = _lefPhotos[indexPath.row];
     }else{
+        if (_leftH == 0 && _rightH == 0) {
+            return 30;
+        }
         if (indexPath.row >= _rigPhotos.count) {
             return abs(_rightH - _leftH);
         }
@@ -628,7 +638,7 @@
     }
 
     _isHeaderOpen = YES;
-    _shouldReloadPhoto = YES;
+//    _shouldReloadPhoto = YES;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     [_photo_list_all removeAllObjects];
     [self getPhotolist];
