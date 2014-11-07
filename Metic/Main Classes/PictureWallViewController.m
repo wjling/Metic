@@ -60,7 +60,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
@@ -90,8 +90,8 @@
     
     [self initUI];
     
-//    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
-//    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
+    //    _urlFormat = @"http://bcs.duapp.com/metis201415/images/%@?sign=%@";//测试服
+    //    _urlFormat = @"http://bcs.duapp.com/whatsact/images/%@?sign=%@";//正式服
     _urlFormat = @[@"http://bcs.duapp.com/metis201415/images/%@?sign=%@",@"http://bcs.duapp.com/whatsact/images/%@?sign=%@"][Server];
     _manager = [SDWebImageManager sharedManager];
     [self initIndicator];
@@ -126,10 +126,18 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [self adjustUI];
+    _isLeft = YES;
+    _header1.hidden = NO;
+    _header2.hidden = YES;
     if (_photo_list.count>0) {
         _promt.hidden = YES;
-    }else _promt.hidden = NO;
+    }else if(!(_header1.refreshing || _header2.refreshing)) {
+        _promt.hidden = NO;
+    }
+    
+    
     if (_shouldReloadPhoto) {
+        _shouldReloadPhoto = NO;
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
             _promt.hidden = YES;
             [self.header1 beginRefreshing];
@@ -219,15 +227,18 @@
                     }
                     [self updatePhotoInfoToDB:newphoto_list];
                     self.sequence = [response1 valueForKey:@"sequence"];
-
+                    
                     [self.photo_list_all addObjectsFromArray:newphoto_list];
                     
                     if ([_sequence intValue] != -1) {
                         [self getPhotolist];
                         return;
                     }else{
-                        [self photoDistribution];
-                  
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self photoDistribution];
+                        });
+                        
+                        
                         
                     }
                     
@@ -302,8 +313,8 @@
     _indicatorView.frame = CGRectMake(60, -50, 200, 50);
     [UIView commitAnimations];
     if (!_photo_list_all || _photo_list_all.count == 0) {
-//        [_promt removeFromSuperview];
-//        [_tableView1 addSubview:_promt];
+        //        [_promt removeFromSuperview];
+        //        [_tableView1 addSubview:_promt];
         [_promt setHidden:NO];
     }else {
         [_promt setHidden:YES];
@@ -345,7 +356,7 @@
     [self.sql closeMyDB];
     if (_photo_list_all && _photo_list_all.count > 0) {
         [self photoDistribution];
-    }else [_header2 beginRefreshing];
+    }else [_header1 beginRefreshing];
 }
 
 
@@ -399,8 +410,18 @@
             if(_header1.refreshing) [_header1 endRefreshing];
             if(_header2.refreshing) [_header2 endRefreshing];
         }
+        
+        int Acount = self.photo_list_all.count;
+        if (Acount == 0) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_promt setHidden:NO];
+            });
+        }else {
+            [_promt setHidden:YES];
+        }
     });
-
+    
+    
     
     
     
@@ -409,6 +430,7 @@
 #pragma mark 代理方法-UIScrollView
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
     if (scrollView == _tableView1) {
         [_tableView2 setContentOffset:_tableView1.contentOffset];
         if (!_promt.hidden) {
@@ -456,6 +478,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_leftH == 0 && _rightH == 0) {
+        return 1;
+    }
+    
     long max = 0;
     if (tableView == self.tableView1) {
         max = _lefPhotos.count;
@@ -465,11 +491,6 @@
         if (_leftH > _rightH) max = max + 1;
     }
     NSLog(@"%ld",max);
-    
-    if (_leftH == 0 && _rightH == 0) {
-        return 1;
-    }
-    
     return max;
 }
 
@@ -524,7 +545,7 @@
     [cell.infoView removeFromSuperview];
     
     NSString* url = [a valueForKey:@"url"];
-
+    
     [photo setContentMode:UIViewContentModeScaleAspectFit];
     [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
     [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -532,11 +553,11 @@
             [photo setContentMode:UIViewContentModeScaleToFill];
         }
     }];
-
+    
     int width = [[a valueForKey:@"width"] intValue];
     int height = [[a valueForKey:@"height"] intValue];
     float RealHeight = height * 150.0f / width;
-
+    
     if (height == 0) {
         [cell.activityIndicator startAnimating];
         [cell.activityIndicator setHidden:NO];
@@ -561,18 +582,16 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *a;
+    if (_leftH == 0 && _rightH == 0) {
+        return 30;
+    }
+    
     if (tableView == _tableView1) {
         if (indexPath.row >= _lefPhotos.count) {
-            if (_leftH == 0 && _rightH == 0) {
-                return 30;
-            }
             return abs(_leftH - _rightH);
         }
         a = _lefPhotos[indexPath.row];
     }else{
-        if (_leftH == 0 && _rightH == 0) {
-            return 30;
-        }
         if (indexPath.row >= _rigPhotos.count) {
             return abs(_rightH - _leftH);
         }
@@ -585,7 +604,7 @@
     
     return RealHeight + 43;
     
-
+    
 }
 
 
@@ -634,15 +653,16 @@
         return;
     }
     if (_header1.refreshing || _header2.refreshing) {
+        [refreshView endRefreshing];
         return;
     }
-
+    
     _isHeaderOpen = YES;
 //    _shouldReloadPhoto = YES;
     self.sequence = [[NSNumber alloc]initWithInt:0];
     [_photo_list_all removeAllObjects];
     [self getPhotolist];
-
+    
     
     
 }
