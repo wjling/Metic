@@ -33,6 +33,7 @@
 @property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
+@property BOOL shouldPlay;
 @end
 
 @implementation VideoWallViewController
@@ -52,6 +53,7 @@
     _shouldReload = YES;
     _shouldFlash = YES;
     _canPlay = YES;
+    _shouldPlay = NO;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     //init tableView
@@ -76,6 +78,11 @@
         }
     });
     [_tableView reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    });
     
     _Headeropen = NO;
     _Footeropen = NO;
@@ -251,6 +258,11 @@
                     });
                     [self.tableView reloadData];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                            object:nil
+                                                                          userInfo:nil];
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self closeRJ];
                     });
                     
@@ -292,6 +304,28 @@
                                                         object:nil
                                                       userInfo:nil];
 }
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    _shouldPlay = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_shouldPlay == YES) {
+            _shouldPlay = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                object:nil
+                                                              userInfo:nil];
+            
+        }
+        
+    });
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    _shouldPlay = NO;
+}
+
 
 #pragma tableView DataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

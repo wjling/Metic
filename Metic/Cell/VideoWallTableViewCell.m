@@ -31,7 +31,6 @@
 @property (strong, nonatomic) AVPlayer* videoPlayer;
 @property (strong, nonatomic) AVPlayerLayer* avLayer;
 @property BOOL isPlaying;
-@property BOOL isFirst;
 
 @end
 
@@ -53,7 +52,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
-    _isFirst = YES;
     // Initialization code
 }
 
@@ -122,11 +120,6 @@
     _isPlaying = NO;
     [ self.videoPlayer pause];
     [self.avLayer removeFromSuperlayer];
-    
-    if (_isFirst) {
-        _isFirst = NO;
-        [self PlayingVideoAtOnce];
-    }
     
     self.videoPlayImg.hidden = NO;
     //显示备注名
@@ -414,10 +407,8 @@
                 self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
                 self.avLayer.frame = _video_button.frame;
                 [self.videoContainer.layer addSublayer:self.avLayer];
+                self.videoPlayer.volume = 0;
                 [ self.videoPlayer play];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [_video_button setImage:nil forState:UIControlStateNormal];
-                });
             });
         });
     }
