@@ -69,6 +69,12 @@
     
     _videoInfos = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
+    _shouldFlash = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self) {
+            _shouldFlash = YES;
+        }
+    });
     [_tableView reloadData];
     
     _Headeropen = NO;
@@ -237,6 +243,12 @@
                     for (NSMutableDictionary *dictionary in newvideo_list) {
                         [_videoInfos addObject:dictionary];
                     }
+                    _shouldFlash = NO;
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        if (self) {
+                            _shouldFlash = YES;
+                        }
+                    });
                     [self.tableView reloadData];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self closeRJ];
