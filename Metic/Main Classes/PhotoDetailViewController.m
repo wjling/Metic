@@ -249,6 +249,14 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS];
 }
 
+- (void)commentNumPlus
+{
+    int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+    comN ++;
+    [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [self updatePhotoInfoToDB:_photoInfo];
+}
+
 - (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -440,6 +448,7 @@
                     [_pcomment_list removeObject:newComment];
                     [_pcomment_list insertObject:newComment atIndex:0];
                     [_tableView reloadData];
+                    [self commentNumPlus];
                 }
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
