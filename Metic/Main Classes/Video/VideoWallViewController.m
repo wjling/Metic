@@ -108,12 +108,18 @@
     }
     
     [MobClick beginLogPageView:@"视频墙"];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    });
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频墙"];
+    
 }
 
 - (void)didReceiveMemoryWarning

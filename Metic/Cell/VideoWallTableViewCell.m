@@ -410,8 +410,9 @@
                 self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
                 CGRect Bframe = _video_button.frame;
                 CGRect frame = Bframe;
-                CGFloat width = _videoThumb.size.width;
-                CGFloat height = _videoThumb.size.height;
+                AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+                CGFloat width = videoTrack.naturalSize.width;
+                CGFloat height = videoTrack.naturalSize.height;
                 if (width/height > Bframe.size.width/Bframe.size.height) {
                     frame.origin.y = 0;
                     frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
@@ -435,8 +436,14 @@
 
 - (void)repeatPlaying:(NSNotification *)n
 {
+    NSLog(@"repeat");
     AVPlayerItem* item = [n valueForKey:@"object"];
     if (item != _videoItem) return;
+    if (!(_controller.navigationController.viewControllers.lastObject == _controller)) {
+        _isPlaying = NO;
+        [self.avLayer removeFromSuperlayer];
+        return;
+    }
     [self.videoItem seekToTime:kCMTimeZero];
     [self.videoPlayer play];
     
