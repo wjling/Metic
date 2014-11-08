@@ -59,6 +59,9 @@
 -(void)dealloc
 {
     [self clearVideoRequest];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -405,7 +408,22 @@
                 self.videoPlayer = [AVPlayer playerWithPlayerItem:self.videoItem];
                 self.avLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
                 self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-                self.avLayer.frame = _video_button.frame;
+                CGRect Bframe = _video_button.frame;
+                CGRect frame = Bframe;
+                CGFloat width = _videoThumb.size.width;
+                CGFloat height = _videoThumb.size.height;
+                if (width/height > Bframe.size.width/Bframe.size.height) {
+                    frame.origin.y = 0;
+                    frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
+                    frame.size.width = width*Bframe.size.height/height;
+                }else{
+                    frame.origin.x = 0;
+                    frame.origin.y = 0.5*(Bframe.size.height - height*Bframe.size.width/width);
+                    frame.size.height = height*Bframe.size.width/width;
+                }
+     
+                
+                self.avLayer.frame = frame;
                 [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [ self.videoPlayer play];
