@@ -124,7 +124,8 @@
     [ self.videoPlayer pause];
     [self.avLayer removeFromSuperlayer];
     
-    self.videoPlayImg.hidden = NO;
+    
+    
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -168,7 +169,17 @@
             self.videoThumb = image;
         }
     }];
-
+    
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+    {
+        self.videoPlayImg.hidden = YES;
+    }else{
+        self.videoPlayImg.hidden = NO;
+    }
 }
 
 - (void)clearVideoRequest
@@ -332,6 +343,19 @@
             
             [request setCompletionBlock:^{
                 [self closeProgressOverlayView];
+                _controller.shouldPlay = YES;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (_controller.shouldPlay == YES) {
+                        _controller.shouldPlay = NO;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                            object:nil
+                                                                          userInfo:nil];
+                        
+                    }
+                    
+                });
+                
+                return;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     // my video player
                     float tableY = _controller.tableView.contentOffset.y;
@@ -373,7 +397,7 @@
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             self.progressOverlayView.progress = 0.;
             self.progressOverlayView.hidden = YES;
-            self.videoPlayImg.hidden = NO;
+            //self.videoPlayImg.hidden = NO;
         });
     }
     
@@ -385,7 +409,7 @@
     
     if(_isPlaying) return;
     NSLog(@"play");
-    _isPlaying = YES;
+    
     
     
     
@@ -395,7 +419,7 @@
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
     {
-    
+        _isPlaying = YES;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
         

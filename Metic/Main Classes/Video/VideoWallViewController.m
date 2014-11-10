@@ -33,7 +33,6 @@
 @property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
-@property BOOL shouldPlay;
 @end
 
 @implementation VideoWallViewController
@@ -314,7 +313,7 @@
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     _shouldPlay = YES;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (_shouldPlay == YES) {
             _shouldPlay = NO;
             [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
