@@ -45,5 +45,6 @@
 - (void)setComment_buttonNum:(NSNumber *)num;
 - (void)refresh;
 - (void)animationBegin;
+- (void)PlayingVideoAtOnce;
 - (void)clearVideoRequest;
 @end

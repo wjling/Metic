@@ -15,6 +15,7 @@
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+#import "../Main Classes/Video/VideoDetailViewController.h"
 #import "VideoPlayerViewController.h"
 
 #define widthspace 10
@@ -470,7 +471,8 @@
     NSLog(@"repeat");
     AVPlayerItem* item = [n valueForKey:@"object"];
     if (item != _videoItem) return;
-    if (!(_controller.navigationController.viewControllers.lastObject == _controller)) {
+    UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
+    if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
         _isPlaying = NO;
         [self.avLayer removeFromSuperlayer];
         return;

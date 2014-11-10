@@ -428,6 +428,7 @@
         if ([segue.destinationViewController isKindOfClass:[VideoDetailViewController class]]) {
             VideoDetailViewController *nextViewController = segue.destinationViewController;
             nextViewController.SeleVcell = _SeleVcell;
+            nextViewController.controller = self;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;

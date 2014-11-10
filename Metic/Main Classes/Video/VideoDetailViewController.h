@@ -13,6 +13,7 @@
 #import "../../UIView/MTMessageTextView.h"
 #import "../../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
 #import "../../Cell/VideoWallTableViewCell.h"
+#import "VideoWallViewController.h"
 
 @interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>{
     ASIHTTPRequest *videoRequest;
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) VideoWallTableViewCell *SeleVcell;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
+@property (weak, nonatomic) VideoWallViewController* controller;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
