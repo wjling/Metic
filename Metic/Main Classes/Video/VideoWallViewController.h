@@ -24,6 +24,9 @@
 @property BOOL shouldFlash;
 @property BOOL canPlay;
 @property BOOL shouldPlay;
+@property(nonatomic,strong) NSMutableDictionary* AVPlayers;
+@property(nonatomic,strong) NSMutableDictionary* AVPlayerItems;
+@property(nonatomic,strong) NSMutableDictionary* AVPlayerLayers;
 + (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId;
 - (IBAction)uploadVideo:(id)sender;
 @end

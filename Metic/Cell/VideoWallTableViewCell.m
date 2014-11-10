@@ -49,7 +49,7 @@
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
@@ -140,7 +140,7 @@
     [avatarGetter getAvatar];
     
     _videoName = [_videoInfo valueForKey:@"video_name"];
-    //[self PlayingVideoAtOnce];
+    [self PlayingVideoAtOnce];
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -342,20 +342,25 @@
                     [self clearVideoRequest];
                 }
             }];
-            
+            NSString*VideoName = [NSString stringWithString:_videoName];
             [request setCompletionBlock:^{
-                [self closeProgressOverlayView];
-                _controller.shouldPlay = YES;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    if (_controller.shouldPlay == YES) {
-                        _controller.shouldPlay = NO;
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-                                                                            object:nil
-                                                                          userInfo:nil];
-                        
+                if ([_videoName isEqualToString:VideoName]) {
+                    [self closeProgressOverlayView];
+                    if (_controller) {
+                        NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
+                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+                        [self PlayingVideoAtOnce];
                     }
-                    
-                });
+                }
+            
+                
+                
+                
                 
                 return;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -423,17 +428,17 @@
     {
         _isPlaying = YES;
         
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0ul);
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
         
         dispatch_async(queue, ^{
-            
-            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
-            self.videoItem = [AVPlayerItem playerItemWithURL:url];
-            
+
+            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
+            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
+            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
+            self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+
             dispatch_sync(dispatch_get_main_queue(), ^{
-                self.videoPlayer = [AVPlayer playerWithPlayerItem:self.videoItem];
-                self.avLayer = [AVPlayerLayer playerLayerWithPlayer:self.videoPlayer];
-                self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+                
                 CGRect Bframe = _video_button.frame;
                 CGRect frame = Bframe;
                 AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -453,7 +458,7 @@
                 self.avLayer.frame = frame;
                 [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
-                [ self.videoPlayer play];
+                [self.videoPlayer play];
             });
         });
     }

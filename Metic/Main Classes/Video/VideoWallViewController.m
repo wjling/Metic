@@ -226,7 +226,35 @@
     
     [sql closeMyDB];
     [self showPromt];
+    
+    [self initAVPlayers];
 }
+
+-(void)initAVPlayers
+{
+    if (!_AVPlayers) _AVPlayers = [[NSMutableDictionary alloc]init];
+    if (!_AVPlayerLayers) _AVPlayerLayers = [[NSMutableDictionary alloc]init];
+    if (!_AVPlayerItems) _AVPlayerItems = [[NSMutableDictionary alloc]init];
+    for (NSDictionary* info in _videoInfos) {
+        NSString *videoName = [info valueForKey:@"video_name"];
+        if ([_AVPlayers objectForKey:videoName]) continue;
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]])
+        {
+            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
+            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+            [_AVPlayerItems setObject:videoItem forKey:videoName];
+            [_AVPlayers setObject:videoPlayer forKey:videoName];
+            [_AVPlayerLayers setObject:playerLayer forKey:videoName];
+        }
+    }
+}
+
 -(void)getVideolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -255,6 +283,7 @@
                     for (NSMutableDictionary *dictionary in newvideo_list) {
                         [_videoInfos addObject:dictionary];
                     }
+                    [self initAVPlayers];
                     _shouldFlash = NO;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         if (self) {
