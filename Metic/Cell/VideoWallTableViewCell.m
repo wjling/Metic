@@ -50,6 +50,7 @@
     [self.avatar addGestureRecognizer:tapRecognizer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
     // Initialization code
@@ -61,6 +62,7 @@
     [self clearVideoRequest];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"Playfrompause" object:nil];
     
 }
 
@@ -471,6 +473,13 @@
     [self.videoItem seekToTime:kCMTimeZero];
     [self.videoPlayer play];
     
+}
+
+- (void)Playfrompause
+{
+    if (_videoPlayer) {
+        [_videoPlayer play];
+    }
 }
 
 - (void)playVideo:(NSString*)videoName{
