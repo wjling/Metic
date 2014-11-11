@@ -436,9 +436,9 @@
                             [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
                             [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
                             [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
-                            NSIndexPath* indexPath = [_controller.tableView indexPathForCell:_SeleVcell];
-                            [_controller.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                            //[_SeleVcell PlayingVideoAtOnce];
+//                            NSIndexPath* indexPath = [_controller.tableView indexPathForCell:_SeleVcell];
+//                            [_controller.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//                            [_SeleVcell PlayingVideoAtOnce];
                         }
                     }
                 });
@@ -1356,3 +1356,4 @@
 }
 
 @end
+

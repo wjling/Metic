@@ -141,7 +141,6 @@
     [avatarGetter getAvatar];
     
     _videoName = [_videoInfo valueForKey:@"video_name"];
-    [self PlayingVideoAtOnce];
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -183,6 +182,7 @@
     }else{
         self.videoPlayImg.hidden = NO;
     }
+    [self PlayingVideoAtOnce];
 }
 
 - (void)clearVideoRequest
@@ -534,3 +534,4 @@
 
 
 @end
+
