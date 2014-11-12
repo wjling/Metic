@@ -52,6 +52,7 @@
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
     // Initialization code
@@ -489,6 +490,13 @@
     }
 }
 
+- (void)pauseVideo
+{
+    if (_videoPlayer) {
+        [_videoPlayer pause];
+    }
+}
+
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
     playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -509,7 +517,7 @@
 
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause" object:nil userInfo:nil];
     MPMoviePlayerController* theMovie = [notify object];
     
     [[NSNotificationCenter defaultCenter]removeObserver:self
