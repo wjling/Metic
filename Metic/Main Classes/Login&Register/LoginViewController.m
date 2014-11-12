@@ -66,7 +66,14 @@
             WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
             {
-                [self presentViewController:vc animated:NO completion:nil];
+//                __block BOOL flag = YES;
+//                [self presentViewController:vc animated:NO completion:^
+//                 {
+//                     flag = NO;
+//                 }];
+//                while (flag) {
+//                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//                }
             }
         }
         else
@@ -147,6 +154,7 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"登录"];
+    NSLog(@"login view did disappear");
 }
 - (void)didReceiveMemoryWarning
 {
@@ -289,7 +297,7 @@
         NSLog(@"用户 %@ 在线", userName);
         appDelegate.isLogined = YES;
         [self removeWaitingView];
-        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+//        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [self jumpToMainView];

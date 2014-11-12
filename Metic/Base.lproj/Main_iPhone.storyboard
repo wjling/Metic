@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -19,7 +18,7 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="uCG-Jb-AtQ" kind="relationship" relationship="rootViewController" id="rIK-Ci-sAS"/>
+                        <segue destination="cSJ-rk-7tA" kind="relationship" relationship="rootViewController" id="Rg4-nf-j8g"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlT-x6-IJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -35,11 +34,11 @@
                         <viewControllerLayoutGuide type="bottom" id="jJx-F6-S4z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nxG-89-q4T">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7D-8a-Njr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -50,6 +49,7 @@
                             <constraint firstItem="T7D-8a-Njr" firstAttribute="leading" secondItem="nxG-89-q4T" secondAttribute="leading" id="yGh-Zp-PBq"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="6GW-vN-TxP"/>
                     <connections>
                         <outlet property="page_scrollview" destination="T7D-8a-Njr" id="nXu-Vz-xZg"/>
                     </connections>
@@ -2518,7 +2518,7 @@
         <!--登录-->
         <scene sceneID="c37-aP-6j7">
             <objects>
-                <viewController id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PGv-6k-UuT"/>
                         <viewControllerLayoutGuide type="bottom" id="od8-4V-RI7"/>
@@ -3697,7 +3697,7 @@
                         <viewControllerLayoutGuide type="bottom" id="4Gl-Fe-oyc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3ZT-9j-Wbx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqB-KE-UOQ">
@@ -4882,18 +4882,17 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
+        <segue reference="mCC-Hp-8GT"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="ItJ-aD-aY9"/>
         <segue reference="0y8-RS-ijM"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="EEO-gR-a4J"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="hOW-ww-bKW"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="QDz-81-eMP"/>
         <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="hOW-ww-bKW"/>
         <segue reference="Bdm-ot-CYp"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="ItJ-aD-aY9"/>
-        <segue reference="8Lk-Kp-pHu"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,6 +8,7 @@
 
 #import "NotificationsViewController.h"
 #import "MobClick.h"
+#import "MenuViewController.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
 #define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
@@ -19,7 +20,7 @@
     MySqlite* mySql;
     NSString* DB_path;
     NSIndexPath* selectedPath;
-    NSInteger tab_index;
+    
     CGFloat lastX;
     BOOL clickTab;
     UIView* tabIndicator;
@@ -52,6 +53,7 @@ enum Response_Type
 @synthesize functions_uiview;
 @synthesize function1_button;
 @synthesize function2_button;
+@synthesize tab_index;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -132,6 +134,18 @@ enum Response_Type
     {
         label3.hidden = YES;
     }
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [userDfs objectForKey:key];
+    NSInteger index = [[userSettings valueForKey:@"hasUnreadNotification"]integerValue];
+    if (index != -1) {
+        tab_index = index;
+        [self tabBtnClicked:self.tabs[tab_index]];
+    }
+    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
+    
     
 //    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
@@ -356,6 +370,7 @@ enum Response_Type
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
+                           NSLog(@"消息中心：eventRequestMsg去重已经完成");
                            [self.eventRequest_tableView reloadData];
                            if (eventRequestMsg.count == 0) {
                                label1.hidden = NO;
@@ -396,6 +411,7 @@ enum Response_Type
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
+                           NSLog(@"消息中心：friendRequestMsg去重已经完成");
                            [self.friendRequest_tableView reloadData];
                            if (friendRequestMsg.count == 0) {
                                label2.hidden = NO;
@@ -705,7 +721,7 @@ enum Response_Type
             {
                 NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
                 for (NSMutableDictionary* msg in self.friendRequestMsg) {
-                    NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
+                    NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                     if (fid1 == fid2) {
                         [self.friendRequestMsg removeObject:msg];
                     }
@@ -739,15 +755,13 @@ enum Response_Type
                 NSInteger cmd2;
                 NSInteger eventid1, eventid2;
                 eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
-                NSInteger count = self.eventRequestMsg.count;
-                for (NSInteger i = 0; i < count; i++) {
-                    NSMutableDictionary* aMsg = self.eventRequestMsg[i];
+                for (NSMutableDictionary* aMsg in self.eventRequestMsg) {
                     cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
                     if (cmd == cmd2) {
                         eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                         if (eventid1 == eventid2) {
-                            NSLog(@"找到相同的活动消息, cmd: %d, event_id: %d",cmd, eventid1);
-                            [self.eventRequestMsg removeObjectAtIndex:i];
+                            NSLog(@"找到相同的活动消息, cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d",cmd, cmd2, eventid1, eventid2);
+                            [self.eventRequestMsg removeObject:aMsg];
                             break;
                         }
                         

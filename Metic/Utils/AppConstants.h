@@ -6,6 +6,17 @@
 //  Copyright (c) 2014年 mac. All rights reserved.
 //
 
+/* UserDefaults里面的一些数据参考：
+ 
+ * hasUnreadNotification: 0-2为消息中心tab的标号，－1为不出现在tab中的信息或者没有未读的新信息
+ * USER[userid], 如USER10: 是一个字典，记录了ID为userid的用户的一些信息及设置
+   当前该字典键值对介绍：
+    * systemSetting1:(bool) 系统设置里“通知栏提醒”的开关，开：YES， 关：NO
+    * systemSetting2:(bool) 系统设置里“版本更新提醒”的开关，开：YES， 关：NO
+ 
+ 
+ */
+
 #ifndef Metis_AppConstants_h
 #define Metis_AppConstants_h
 
@@ -14,8 +25,8 @@
 HttpSender* httpSender;
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
 };
 
 enum Alias_code
