@@ -61,7 +61,7 @@
 -(void)dealloc
 {
     [self clearVideoRequest];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initLVideo" object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"Playfrompause" object:nil];
     
