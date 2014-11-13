@@ -54,7 +54,7 @@
     _canPlay = YES;
     _shouldPlay = NO;
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
+    _loadingVideo = [[NSMutableSet alloc]init];
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     [_tableView setShowsVerticalScrollIndicator:NO];

@@ -180,10 +180,14 @@
     if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
     {
         self.videoPlayImg.hidden = YES;
+        [self PlayingVideoAtOnce];
+    }else if([_controller.loadingVideo containsObject:_videoName]){
+        //self.videoPlayImg.hidden = YES;
+        [self play:nil];
     }else{
         self.videoPlayImg.hidden = NO;
     }
-    [self PlayingVideoAtOnce];
+
 }
 
 - (void)clearVideoRequest
@@ -344,10 +348,14 @@
                     [self clearVideoRequest];
                 }
             }];
+            [_controller.loadingVideo addObject:_videoName];
             NSString*VideoName = [NSString stringWithString:_videoName];
             [request setCompletionBlock:^{
                 if ([_videoName isEqualToString:VideoName]) {
                     [self closeProgressOverlayView];
+                    if ([_controller.loadingVideo containsObject:_videoName]) {
+                        [_controller.loadingVideo removeObject:_videoName];
+                    }
                     if (_controller) {
                         NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
                         AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
