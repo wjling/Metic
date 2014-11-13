@@ -304,7 +304,7 @@
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self
          
                                                 selector:@selector(movieFinishedCallback:)

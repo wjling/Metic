@@ -119,7 +119,6 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频墙"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
 }
 
 - (void)didReceiveMemoryWarning
