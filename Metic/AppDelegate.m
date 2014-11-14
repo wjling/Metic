@@ -46,13 +46,14 @@
 //                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
+    
+    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
         [userDf setBool:YES forKey:@"firstLaunched"];
         NSLog(@"The first launch");
         [userDf synchronize];
-        
     }
     else
     {
@@ -470,7 +471,7 @@
 {
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [userDf objectForKey:key];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
     NSLog(@"system setting1 flag: %d",flag);
 

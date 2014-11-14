@@ -41,26 +41,31 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.navigationController setNavigationBarHidden:YES];
-    NSUserDefaults *userDf = [NSUserDefaults standardUserDefaults];
-    if ([userDf boolForKey:@"firstLaunched"]) {
-        NSLog(@"welcomeviewcontroller: it is the first launch");
-        
-    }
-    else
-    {
-        NSLog(@"welcomeviewcontroller: it is not the first launch");
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                             bundle: nil];
-        UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-        {
-            self.navigationController.view.window.rootViewController = vc;
-        }
-
-        //            [self showLaunchView];
-        //            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
-    }
+//    [self.navigationController setNavigationBarHidden:YES];
+//    NSUserDefaults *userDf = [NSUserDefaults standardUserDefaults];
+//    if ([userDf boolForKey:@"firstLaunched"]) {
+//        NSLog(@"welcomeviewcontroller: it is the first launch");
+//        
+//    }
+//    else
+//    {
+//        NSLog(@"welcomeviewcontroller: it is not the first launch");
+//        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//                                                             bundle: nil];
+//        UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//        UINavigationController* nav = [storyboard instantiateViewControllerWithIdentifier:@"SlideNavigationController"];
+//        
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+//        {
+////            [self.navigationController showViewController:vc sender:self];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            
+//            
+//        }
+//
+//        //            [self showLaunchView];
+//        //            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+//    }
 
     
     
@@ -206,13 +211,13 @@
 
 -(void)dismissWelcome
 {
-//    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"dismiss welcome");
-    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                         bundle: nil];
-    UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
+//    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//                                                         bundle: nil];
+//    UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//    [self.navigationController pushViewController:vc animated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
 
 }
 - (IBAction)pageControlClicked:(id)sender
