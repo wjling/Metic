@@ -92,6 +92,8 @@
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
 		08293F6119C487D9009B637A /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08293F6019C487D9009B637A /* mapapi.bundle */; };
 		08293F8219C5DC3A009B637A /* THProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08293F8119C5DC3A009B637A /* THProgressView.m */; };
+		082EC6291A147EE000A43072 /* EventDetail2.m in Sources */ = {isa = PBXBuildFile; fileRef = 082EC6271A147EE000A43072 /* EventDetail2.m */; };
+		082EC62A1A147EE000A43072 /* EventDetail2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 082EC6281A147EE000A43072 /* EventDetail2.xib */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF69219CF003A001BB61E /* EventSearchViewController.m */; };
@@ -530,6 +532,9 @@
 		08293F6019C487D9009B637A /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		08293F8019C5DC3A009B637A /* THProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THProgressView.h; sourceTree = "<group>"; };
 		08293F8119C5DC3A009B637A /* THProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THProgressView.m; sourceTree = "<group>"; };
+		082EC6261A147EE000A43072 /* EventDetail2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetail2.h; sourceTree = "<group>"; };
+		082EC6271A147EE000A43072 /* EventDetail2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetail2.m; sourceTree = "<group>"; };
+		082EC6281A147EE000A43072 /* EventDetail2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventDetail2.xib; sourceTree = "<group>"; };
 		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
 		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1357,6 +1362,16 @@
 			path = PEPCELib;
 			sourceTree = "<group>";
 		};
+		089511111A1479C6005CED85 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				082EC6261A147EE000A43072 /* EventDetail2.h */,
+				082EC6271A147EE000A43072 /* EventDetail2.m */,
+				082EC6281A147EE000A43072 /* EventDetail2.xib */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
 		08A68E2119FE62D000A9EB76 /* KxMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1892,6 +1907,7 @@
 				04B6F8B119A25FCC00229393 /* BannerViewController.m */,
 				51DDBF7819A328010051B88C /* AdViewController.h */,
 				51DDBF7919A328010051B88C /* AdViewController.m */,
+				089511111A1479C6005CED85 /* Event */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -2307,6 +2323,7 @@
 				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
 				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
+				082EC62A1A147EE000A43072 /* EventDetail2.xib in Resources */,
 				519C65951989F61B00710B26 /* 3兜风.jpg in Resources */,
 				519C6603198B8E8000710B26 /* EventInvitationTableViewCell.xib in Resources */,
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
@@ -2404,6 +2421,7 @@
 				51F4CB1819E6307500E487F1 /* DDNumber.m in Sources */,
 				08DB69B119541F3A00F80F3F /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
+				082EC6291A147EE000A43072 /* EventDetail2.m in Sources */,
 				519100F019651388005DF607 /* MRZoomScrollView.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
 				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
