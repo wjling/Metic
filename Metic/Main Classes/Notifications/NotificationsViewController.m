@@ -1636,7 +1636,8 @@ enum Response_Type
         }
             break;
         default:
-            [SVProgressHUD dismissWithError:@"呵呵" afterDelay:1];
+//            [SVProgressHUD dismissWithError:@"呵呵" afterDelay:1];
+            NSLog(@"消息中心未对该cmd做处理, cmd: %@",cmd);
             break;
     }
 //    [self waitingViewHide];
