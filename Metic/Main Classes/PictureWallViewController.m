@@ -61,7 +61,6 @@
 {
     [super viewDidLoad];
     
-    [_promt setHidden:YES];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
     
@@ -129,17 +128,10 @@
     _isLeft = YES;
     _header1.hidden = NO;
     _header2.hidden = YES;
-    if (_photo_list.count>0) {
-        _promt.hidden = YES;
-    }else if(!(_header1.refreshing || _header2.refreshing)) {
-        _promt.hidden = NO;
-    }
-    
     
     if (_shouldReloadPhoto) {
         _shouldReloadPhoto = NO;
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
-            _promt.hidden = YES;
             [self.header1 beginRefreshing];
         }
     }
@@ -312,13 +304,6 @@
     [UIView setAnimationDelegate:self];
     _indicatorView.frame = CGRectMake(60, -50, 200, 50);
     [UIView commitAnimations];
-    if (!_photo_list_all || _photo_list_all.count == 0) {
-        //        [_promt removeFromSuperview];
-        //        [_tableView1 addSubview:_promt];
-        [_promt setHidden:NO];
-    }else {
-        [_promt setHidden:YES];
-    }
 }
 
 - (void)updatePhotoInfoToDB:(NSMutableArray*)photoInfos
@@ -410,15 +395,6 @@
             if(_header1.refreshing) [_header1 endRefreshing];
             if(_header2.refreshing) [_header2 endRefreshing];
         }
-        
-        int Acount = self.photo_list_all.count;
-        if (Acount == 0) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [_promt setHidden:NO];
-            });
-        }else {
-            [_promt setHidden:YES];
-        }
     });
     
     
@@ -433,18 +409,8 @@
     
     if (scrollView == _tableView1) {
         [_tableView2 setContentOffset:_tableView1.contentOffset];
-        if (!_promt.hidden) {
-            CGRect frame = _promt.frame;
-            frame.origin.y = -_tableView1.contentOffset.y + 20;
-            _promt.frame = frame;
-        }
     }else if(scrollView == _tableView2){
         [_tableView1 setContentOffset:_tableView2.contentOffset];
-        if (!_promt.hidden) {
-            CGRect frame = _promt.frame;
-            frame.origin.y = -_tableView2.contentOffset.y + 20;
-            _promt.frame = frame;
-        }
     }
 }
 
@@ -478,27 +444,32 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_leftH == 0 && _rightH == 0) {
-        return 1;
-    }
-    
     long max = 0;
     if (tableView == self.tableView1) {
         max = _lefPhotos.count;
-        if (_leftH < _rightH) max = max + 1;
     }else{
         max = _rigPhotos.count;
-        if (_leftH > _rightH) max = max + 1;
     }
-    NSLog(@"%ld",max);
-    return max;
+    NSLog(@"%ld",max+1);
+    return max+1;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((tableView == _tableView1 && indexPath.row == _lefPhotos.count) || (tableView == _tableView2 && indexPath.row == _rigPhotos.count)) {
+    if ((tableView == _tableView1 && indexPath.row >= _lefPhotos.count) || (tableView == _tableView2 && indexPath.row >= _rigPhotos.count)) {
         UITableViewCell *cell = [[UITableViewCell alloc]init];
+        if (tableView == _tableView1) {
+            float h = _rightH - _leftH;
+            h = h<0? 50:h+50;
+            float width = CGRectGetMaxX(_tableView2.frame) - CGRectGetMinX(_tableView1.frame);
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, h-50, width*4/6, 40)];
+            label.text = @"没有更多了哦，去上传吧~";
+            label.font = [UIFont systemFontOfSize:15];
+            label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+            label.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:label];
+        }
         cell.backgroundColor = [UIColor clearColor];
         cell.userInteractionEnabled = NO;
         return cell;
@@ -582,18 +553,16 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *a;
-    if (_leftH == 0 && _rightH == 0) {
-        return 30;
-    }
-    
     if (tableView == _tableView1) {
         if (indexPath.row >= _lefPhotos.count) {
-            return abs(_leftH - _rightH);
+            float h = _rightH - _leftH;
+            return h<0? 50:h+50;
         }
         a = _lefPhotos[indexPath.row];
     }else{
         if (indexPath.row >= _rigPhotos.count) {
-            return abs(_rightH - _leftH);
+            float h = _leftH - _rightH;
+            return h<0? 50:h+50;
         }
         a = _rigPhotos[indexPath.row];
     }

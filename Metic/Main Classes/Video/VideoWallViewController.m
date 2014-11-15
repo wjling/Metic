@@ -52,8 +52,9 @@
     _shouldReload = YES;
     _shouldFlash = YES;
     _canPlay = YES;
+    _shouldPlay = NO;
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
+    _loadingVideo = [[NSMutableSet alloc]init];
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     [_tableView setShowsVerticalScrollIndicator:NO];
@@ -76,6 +77,11 @@
         }
     });
     [_tableView reloadData];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+//                                                            object:nil
+//                                                          userInfo:nil];
+//    });
     
     _Headeropen = NO;
     _Footeropen = NO;
@@ -101,6 +107,12 @@
     }
     
     [MobClick beginLogPageView:@"视频墙"];
+    
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+//                                                            object:nil
+//                                                          userInfo:nil];
+//    });
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -214,7 +226,35 @@
     
     [sql closeMyDB];
     [self showPromt];
+    
+    [self initAVPlayers];
 }
+
+-(void)initAVPlayers
+{
+    if (!_AVPlayers) _AVPlayers = [[NSMutableDictionary alloc]init];
+    if (!_AVPlayerLayers) _AVPlayerLayers = [[NSMutableDictionary alloc]init];
+    if (!_AVPlayerItems) _AVPlayerItems = [[NSMutableDictionary alloc]init];
+    for (NSDictionary* info in _videoInfos) {
+        NSString *videoName = [info valueForKey:@"video_name"];
+        if ([_AVPlayers objectForKey:videoName]) continue;
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]])
+        {
+            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
+            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+            [_AVPlayerItems setObject:videoItem forKey:videoName];
+            [_AVPlayers setObject:videoPlayer forKey:videoName];
+            [_AVPlayerLayers setObject:playerLayer forKey:videoName];
+        }
+    }
+}
+
 -(void)getVideolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -243,6 +283,7 @@
                     for (NSMutableDictionary *dictionary in newvideo_list) {
                         [_videoInfos addObject:dictionary];
                     }
+                    [self initAVPlayers];
                     _shouldFlash = NO;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         if (self) {
@@ -250,6 +291,11 @@
                         }
                     });
                     [self.tableView reloadData];
+//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+//                                                                            object:nil
+//                                                                          userInfo:nil];
+//                    });
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self closeRJ];
                     });
@@ -284,6 +330,36 @@
     
     [sheet showInView:self.view];
 }
+
+#pragma scrollview Delegate
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+//                                                        object:nil
+//                                                      userInfo:nil];
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+//    _shouldPlay = YES;
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        if (_shouldPlay == YES) {
+//            _shouldPlay = NO;
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+//                                                                object:nil
+//                                                              userInfo:nil];
+//            
+//        }
+//        
+//    });
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+//    _shouldPlay = NO;
+}
+
 
 #pragma tableView DataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -352,6 +428,7 @@
         if ([segue.destinationViewController isKindOfClass:[VideoDetailViewController class]]) {
             VideoDetailViewController *nextViewController = segue.destinationViewController;
             nextViewController.SeleVcell = _SeleVcell;
+            nextViewController.controller = self;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;

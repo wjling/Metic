@@ -15,6 +15,7 @@
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+#import "../Main Classes/Video/VideoDetailViewController.h"
 #import "VideoPlayerViewController.h"
 
 #define widthspace 10
@@ -25,6 +26,13 @@
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
 @property (nonatomic, retain) VideoPlayerViewController *myPlayerViewController;
 @property __block unsigned long long receivedBytes;
+
+//test
+@property (strong, nonatomic) AVPlayerItem* videoItem;
+@property (strong, nonatomic) AVPlayer* videoPlayer;
+@property (strong, nonatomic) AVPlayerLayer* avLayer;
+@property BOOL isPlaying;
+
 @end
 
 @implementation VideoWallTableViewCell
@@ -42,7 +50,11 @@
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
-    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    _isPlaying = NO;
     // Initialization code
 }
 
@@ -50,6 +62,10 @@
 -(void)dealloc
 {
     [self clearVideoRequest];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"Playfrompause" object:nil];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -107,7 +123,13 @@
         [_myPlayerViewController.view removeFromSuperview];
         _myPlayerViewController = nil;
     }
-    self.videoPlayImg.hidden = NO;
+    
+    _isPlaying = NO;
+    [ self.videoPlayer pause];
+    [self.avLayer removeFromSuperlayer];
+    
+    
+    
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -120,7 +142,6 @@
     [avatarGetter getAvatar];
     
     _videoName = [_videoInfo valueForKey:@"video_name"];
-    [self PlayingVideoAtOnce];
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -151,6 +172,21 @@
             self.videoThumb = image;
         }
     }];
+    
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+    {
+        self.videoPlayImg.hidden = YES;
+        [self PlayingVideoAtOnce];
+    }else if([_controller.loadingVideo containsObject:_videoName]){
+        //self.videoPlayImg.hidden = YES;
+        [self play:nil];
+    }else{
+        self.videoPlayImg.hidden = NO;
+    }
 
 }
 
@@ -248,182 +284,6 @@
 }
 
 
-- (void)videoPlay:(NSString*)videoName url:(NSString*)url{
-    
-    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
-    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
-    
-    __block unsigned long long totalBytes = 0;
-    _receivedBytes = 0;
-    __block BOOL canReplay = YES;
-    
-    
-    //    //plan a 在线播放 同时下载视频
-    //    NSFileManager *fileManager=[NSFileManager defaultManager];
-    //    if(![fileManager fileExistsAtPath:cachePath])
-    //    {
-    //        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
-    //    }
-    //    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-    //        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
-    //        _movie = playerViewController;
-    //        [[NSNotificationCenter defaultCenter]addObserver:self
-    //
-    //                                                selector:@selector(movieFinishedCallback:)
-    //
-    //                                                    name:MPMoviePlayerPlaybackDidFinishNotification
-    //
-    //                                                  object:playerViewController.moviePlayer];
-    //
-    //
-    //        //        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
-    //
-    //        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    //        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-    //        return;
-    //    }
-    //    MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:url]];
-    //    [[NSNotificationCenter defaultCenter]addObserver:self
-    //
-    //                                            selector:@selector(movieFinishedCallback:)
-    //
-    //                                                name:MPMoviePlayerPlaybackDidFinishNotification
-    //
-    //                                              object:playerViewController.moviePlayer];
-    //
-    //    playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    //    _movie = playerViewController;
-    //    _movie.moviePlayer.shouldAutoplay = YES;
-    //
-    //    [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-    //    [_movie.moviePlayer prepareToPlay];
-    //    [_movie.moviePlayer play];
-    //    if (!videoRequest) {
-    //        ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
-    //        //下载完存储目录
-    //        [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
-    //        //临时存储目录
-    //        [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
-    //        //断点续载
-    //        [request setAllowResumeForFileDownloads:YES];
-    //        [request startAsynchronous];
-    //        videoRequest = request;
-    //    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //plan b 缓存视频
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if(![fileManager fileExistsAtPath:cachePath])
-    {
-        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        if (!_controller.canPlay) return;
-        else _controller.canPlay = NO;
-        
-        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
-        
-        //        MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
-        
-        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-        
-        [[NSNotificationCenter defaultCenter]addObserver:self
-         
-                                                selector:@selector(movieFinishedCallback:)
-         
-                                                    name:MPMoviePlayerPlaybackDidFinishNotification
-         
-                                                  object:playerViewController.moviePlayer];
-        
-        videoRequest = nil;
-    }else{
-        if (!_controller.canPlay) return;
-        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"没有网络");
-            return;
-        }
-        _controller.canPlay = NO;
-        if (videoRequest){
-            if (_isVideoReady) {
-                NSLog(@"trytrytrytry");
-                [self playVideo:videoName];
-            }
-            
-        }
-        else{
-            _isVideoReady = NO;
-            ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
-            //下载完存储目录
-            [request setDownloadDestinationPath:[cachePath stringByAppendingPathComponent:videoName]];
-            //临时存储目录
-            [request setTemporaryFileDownloadPath:[webPath stringByAppendingPathComponent:videoName]];
-            __block BOOL isPlay = NO;
-            [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
-                totalBytes = total;
-                _receivedBytes += size;
-                //            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
-                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                if (_movie) [_movie.moviePlayer prepareToPlay];
-                [userDefaults setDouble:total forKey:@"file_length"];
-                //            [userDefaults setDouble:_receivedBytes forKey:@"existedfile_length"];
-                
-                //            float duration = _movie.moviePlayer.duration;
-                //            float cur = _movie.moviePlayer.currentPlaybackTime;
-                //
-                //            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
-                ////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
-                ////                NSLog(@"play");
-                ////                canReplay = NO;
-                ////                [_movie.moviePlayer prepareToPlay];
-                ////                [_movie.moviePlayer play];
-                ////            }else [_movie.moviePlayer pause];
-                
-                if (!isPlay && _receivedBytes > 30000) {
-                    isPlay = YES;
-                    _isVideoReady = YES;
-                    
-                    [self playVideo:videoName];
-                    //if(_movie) [_movie.moviePlayer play];
-                }
-            }];
-            
-            [request setCompletionBlock:^{
-                
-                [fileManager copyItemAtPath:[cachePath stringByAppendingPathComponent:videoName] toPath:[webPath stringByAppendingPathComponent:videoName] error:nil];
-                if (totalBytes != 0) [[NSUserDefaults standardUserDefaults] setDouble:totalBytes forKey:@"file_length"];
-                [[NSUserDefaults standardUserDefaults] setDouble:_receivedBytes forKey:@"existedfile_length"];
-                if(!isPlay){
-                    isPlay = YES;
-                    _isVideoReady = YES;
-                    [self playVideo:videoName];
-                }
-                
-            }];
-            //断点续载
-            [request setAllowResumeForFileDownloads:YES];
-            [request startAsynchronous];
-            videoRequest = request;
-            
-        }
-        
-    }
-}
-
 
 - (void)downloadVideo:(NSString*)videoName url:(NSString*)url{
     
@@ -443,14 +303,12 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-//        [self extractFrames:[cachePath stringByAppendingPathComponent:videoName]];
-//        return;
         
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self
          
                                                 selector:@selector(movieFinishedCallback:)
@@ -490,17 +348,39 @@
                     [self clearVideoRequest];
                 }
             }];
-            
+            [_controller.loadingVideo addObject:_videoName];
+            NSString*VideoName = [NSString stringWithString:_videoName];
             [request setCompletionBlock:^{
-                [self closeProgressOverlayView];
+                if ([_videoName isEqualToString:VideoName]) {
+                    [self closeProgressOverlayView];
+                    if ([_controller.loadingVideo containsObject:_videoName]) {
+                        [_controller.loadingVideo removeObject:_videoName];
+                    }
+                    if (_controller) {
+                        NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
+                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+                        [self PlayingVideoAtOnce];
+                    }
+                }
+            
+                
+                
+                
+                
+                return;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     // my video player
                     float tableY = _controller.tableView.contentOffset.y;
                     float cellY = self.frame.origin.y;
                     if (tableY <= cellY + 57 && tableY + _controller.tableView.frame.size.height >=cellY + 57 + 225 && _controller &&_controller.navigationController.viewControllers.lastObject == _controller ) {
-                        [self downloadVideo:videoName url:url];
+                        //[self downloadVideo:videoName url:url];
                     }
-                    [self PlayingVideoAtOnce];
+                    //[self PlayingVideoAtOnce];
                 });
                 
             }];
@@ -532,9 +412,9 @@
         double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            self.progressOverlayView.progress = 0.;
-            self.progressOverlayView.hidden = YES;
-            self.videoPlayImg.hidden = NO;
+            [_progressOverlayView removeFromSuperview];
+            _progressOverlayView = nil;
+
         });
     }
     
@@ -543,40 +423,87 @@
 -(void)PlayingVideoAtOnce
 {
     // my video player
-    return;
+    
+    if(_isPlaying) return;
+    NSLog(@"play");
+    
+    
+    
+    
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
     {
+        _isPlaying = YES;
         
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
         
-        
-        
-        
-        [self extractFrames:[cachePath stringByAppendingPathComponent:_videoName]];
-        return;
-        
-        
-        
-        
-        
-        if (!_myPlayerViewController) {
-            VideoPlayerViewController *player = [[VideoPlayerViewController alloc] init];
-            _myPlayerViewController = player;
-            _myPlayerViewController.view.frame = _video_button.frame;
-            [self.videoContainer addSubview:_myPlayerViewController.view];
-        }
-        
-        NSURL *url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
-        _myPlayerViewController.URL = url;
-        _myPlayerViewController.view.hidden = NO;
+        dispatch_async(queue, ^{
+
+            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
+            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
+            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
+            self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                
+                CGRect Bframe = _video_button.frame;
+                CGRect frame = Bframe;
+                AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+                CGFloat width = videoTrack.naturalSize.width;
+                CGFloat height = videoTrack.naturalSize.height;
+                if (width/height > Bframe.size.width/Bframe.size.height) {
+                    frame.origin.y = 0;
+                    frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
+                    frame.size.width = width*Bframe.size.height/height;
+                }else{
+                    frame.origin.x = 0;
+                    frame.origin.y = 0.5*(Bframe.size.height - height*Bframe.size.width/width);
+                    frame.size.height = height*Bframe.size.width/width;
+                }
+     
+                
+                self.avLayer.frame = frame;
+                [self.videoContainer.layer addSublayer:self.avLayer];
+                self.videoPlayer.volume = 0;
+                [self.videoPlayer play];
+            });
+        });
     }
-    
     
 }
 
+- (void)repeatPlaying:(NSNotification *)n
+{
+    NSLog(@"repeat");
+    AVPlayerItem* item = [n valueForKey:@"object"];
+    if (item != _videoItem) return;
+    UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
+    if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
+        _isPlaying = NO;
+        [self.avLayer removeFromSuperlayer];
+        return;
+    }
+    [self.videoItem seekToTime:kCMTimeZero];
+    [self.videoPlayer play];
+    
+}
+
+- (void)Playfrompause
+{
+    if (_videoPlayer) {
+        [_videoPlayer play];
+    }
+}
+
+- (void)pauseVideo
+{
+    if (_videoPlayer) {
+        [_videoPlayer pause];
+    }
+}
 
 - (void)playVideo:(NSString*)videoName{
     MTMPMoviePlayerViewController *playerViewController =[[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://127.0.0.1:12345/%@",videoName]]];
@@ -585,8 +512,6 @@
     [_movie.moviePlayer prepareToPlay];
     _movie.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
     _movie.moviePlayer.shouldAutoplay = YES;
-    //[_movie.moviePlayer play];
-    //[playerViewController.moviePlayer pause];
     [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
     [[NSNotificationCenter defaultCenter]addObserver:self
      
@@ -600,7 +525,7 @@
 
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause" object:nil userInfo:nil];
     MPMoviePlayerController* theMovie = [notify object];
     
     [[NSNotificationCenter defaultCenter]removeObserver:self
@@ -624,88 +549,5 @@
 }
 
 
-- (void)extractFrames:(NSString*)filePath
-{
-    NSMutableArray* frames = [[NSMutableArray alloc]init];
-
-    AVAsset *asset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
-    
-    //setting up generator & compositor
-    AVAssetImageGenerator* generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:asset];
-    
-    //    self.imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:myAsset];
-    generator.requestedTimeToleranceBefore = kCMTimeZero;
-    generator.requestedTimeToleranceAfter = kCMTimeZero;
-    
-    generator.appliesPreferredTrackTransform = YES;
-    AVVideoComposition* composition = [AVVideoComposition videoCompositionWithPropertiesOfAsset:asset];
-    
-    NSTimeInterval duration = CMTimeGetSeconds(asset.duration);
-    NSTimeInterval frameDuration = CMTimeGetSeconds(composition.frameDuration);
-    CGFloat totalFrames = round(duration/frameDuration);
-
-    
-    NSMutableArray * times = [[NSMutableArray alloc] init];
-    // *** Fetch First 200 frames only ***
-    for (int i=0; i<20; i++) {
-        NSValue * time = [NSValue valueWithCMTime:CMTimeMakeWithSeconds(i*frameDuration, composition.frameDuration.timescale)];
-        [times addObject:time];
-    }
-
-    __block NSInteger count = 0;
-    AVAssetImageGeneratorCompletionHandler handler = ^(CMTime requestedTime, CGImageRef im, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error){
-        // If actualTime is not equal to requestedTime image is ignored
-        NSLog(@"%d",count);
-        if(CMTimeCompare(actualTime, requestedTime) == 0)
-        {
-            if (result == AVAssetImageGeneratorSucceeded) {
-                //                NSLog(@"%.02f     %.02f", CMTimeGetSeconds(requestedTime), CMTimeGetSeconds(actualTime));
-                // Each log have differents actualTimes.
-                // frame extraction is here...
-                NSString *docDir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-                NSString *filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%f.jpg",CMTimeGetSeconds(requestedTime)]];
-                
-                UIImage* image = [UIImage imageWithData:UIImageJPEGRepresentation([UIImage imageWithCGImage:im], 0.5f)];
-                [frames addObject:image];
-                count++;
-                if (count == times.count) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [self playLittleVideo:frames];
-                    });
-                }
-            }
-        }
-    };
-    
-    generator.requestedTimeToleranceBefore = kCMTimeZero;
-    generator.requestedTimeToleranceAfter = kCMTimeZero;
-    [generator generateCGImagesAsynchronouslyForTimes:times completionHandler:handler];
-}
-
--(void)playLittleVideo:(NSMutableArray*)images{
-    NSLog(@"begin");
-    
-    _video_button.imageView.animationImages=images;
-    
-    //设置动画总时间
-    _video_button.imageView.animationDuration=1.0;
-    
-    //设置重复次数，0表示不重复
-    _video_button.imageView.animationRepeatCount=100;
-    
-    //开始动画
-    [_video_button.imageView startAnimating];
-    
-    
-//    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
-//    
-//    [animation setValues:images];
-//    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear]];
-//    animation.duration = 5;
-//    animation.delegate = self;
-//    animation.repeatCount = 5;
-//    [self.video_button.imageView.layer addAnimation:animation forKey:@"gifAnimation"];
-    NSLog(@"end");
-}
-
 @end
+
