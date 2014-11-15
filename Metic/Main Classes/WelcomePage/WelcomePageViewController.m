@@ -8,6 +8,7 @@
 
 #import "WelcomePageViewController.h"
 #import "MobClick.h"
+#import "AppDelegate.h"
 
 @interface WelcomePageViewController ()
 {
@@ -40,6 +41,34 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+//    [self.navigationController setNavigationBarHidden:YES];
+//    NSUserDefaults *userDf = [NSUserDefaults standardUserDefaults];
+//    if ([userDf boolForKey:@"firstLaunched"]) {
+//        NSLog(@"welcomeviewcontroller: it is the first launch");
+//        
+//    }
+//    else
+//    {
+//        NSLog(@"welcomeviewcontroller: it is not the first launch");
+//        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//                                                             bundle: nil];
+//        UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//        UINavigationController* nav = [storyboard instantiateViewControllerWithIdentifier:@"SlideNavigationController"];
+//        
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+//        {
+////            [self.navigationController showViewController:vc sender:self];
+////            [self.navigationController popViewControllerAnimated:YES];
+//            
+//            
+//        }
+//
+//        //            [self showLaunchView];
+//        //            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+//    }
+
+    
+    
     numberOfPages = 4;
     
 //    self.page_scrollview = [[UIScrollView alloc]init];
@@ -54,11 +83,14 @@
     self.page_scrollview.delegate = self;
     [self.page_scrollview setBackgroundColor:bgColor];
 //    self.page_scrollview.clipsToBounds = YES;
-//    self.page_scrollview.directionalLockEnabled = YES;
+    self.page_scrollview.directionalLockEnabled = YES;
 //    self.page_scrollview.bounces = NO;
+//    self.page_scrollview.alwaysBounceVertical = NO;
+//    self.page_scrollview.alwaysBounceHorizontal = NO;
 //    self.page_scrollview.delaysContentTouches = NO;
     
     CGRect bounds = [UIScreen mainScreen].bounds;
+    NSLog(@"welcome_bounds: width: %f, height: %f",bounds.size.width, bounds.size.height);
     CGFloat y;
     if (bounds.size.height <= 480) {
         y = 40;
@@ -72,8 +104,9 @@
     CGFloat view_width = self.view.frame.size.width;
     CGFloat view_height = self.view.frame.size.height;
     
-    NSLog(@"view with: %f, height: %f",view_width,view_height);
+    NSLog(@"welcome_view: width: %f, height: %f",view_width,view_height);
     scrollContentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,view_width * numberOfPages, view_height)];
+    
     page1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
     UIImageView* imgV1_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
     UIImageView* imgV1_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
@@ -152,15 +185,16 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"启动页"];
-    self.page_scrollview.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, self.view.frame.size.height);
-//    NSLog(@"view did appear");
-//    NSLog(@"content size: width: %f, height: %f",self.page_scrollview.contentSize.width, self.page_scrollview.contentSize.height);
+    self.page_scrollview.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, self.view.frame.size.height - 50);
+    NSLog(@"welcomeviewcontroller did appear");
+    NSLog(@"content size: width: %f, height: %f",self.page_scrollview.contentSize.width, self.page_scrollview.contentSize.height);
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -178,6 +212,13 @@
 -(void)dismissWelcome
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"dismiss welcome");
+//    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+//                                                         bundle: nil];
+//    UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//    [self.navigationController pushViewController:vc animated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
+
 }
 - (IBAction)pageControlClicked:(id)sender
 {

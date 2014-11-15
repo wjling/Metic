@@ -12,6 +12,7 @@
 #import "UIImageView+WebCache.h"
 #import "UserInfoViewController.h"
 #import "FillinInfoViewController.h"
+#import "MenuViewController.h"
 
 @interface PhotoGetter ()
 {

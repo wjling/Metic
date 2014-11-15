@@ -85,7 +85,14 @@
 //    NSLog(@"connectionDidFinishLoading");
     if (self.finishBlock) {
         self.finishBlock(responseData);
-    }else [self.mDelegate finishWithReceivedData:responseData];
+    }else
+    {
+        if ([(UIViewController*)self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)])
+        {
+            [self.mDelegate finishWithReceivedData:responseData];
+        }
+        
+    }
 }
 
 

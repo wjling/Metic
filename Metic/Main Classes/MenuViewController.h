@@ -10,6 +10,7 @@
 #import "SlideNavigationController.h"
 #import "PhotoGetter.h"
 #import "../Utils/CloudOperation.h"
+//#import "Notifications/NotificationsViewController.h"
 
 @interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
 

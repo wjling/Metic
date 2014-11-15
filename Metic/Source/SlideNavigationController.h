@@ -29,6 +29,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SRWebSocket.h"
 
+
 @protocol SlideNavigationControllerDelegate <NSObject>
 @required
 - (void)sendDistance:(float)distance;

@@ -14,6 +14,8 @@
 #import "Main Classes/MTUser.h"
 #import "MobClick.h"
 #import "HttpSender.h"
+#import "MenuViewController.h"
+#import "NotificationsViewController.h"
 
 
 @implementation AppDelegate
@@ -44,13 +46,14 @@
 //                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
+    
+    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
         [userDf setBool:YES forKey:@"firstLaunched"];
         NSLog(@"The first launch");
         [userDf synchronize];
-        
     }
     else
     {
@@ -256,7 +259,7 @@
 +(void)refreshMenu
 {
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
-    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
 
 }
 
@@ -319,8 +322,8 @@
 
         }
         isNetworkConnected = YES;
-//        while (![userStatus isEqualToString:@"in"]) {
-        while (!isLogined) {
+        while (![userStatus isEqualToString:@"in"]) {
+//        while (!isLogined) {
             [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }
         if (!isConnected) {
@@ -454,33 +457,11 @@
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     AudioServicesPlayAlertSound(1106);
     
-    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]];
-    BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
-    NSLog(@"system setting1 flag: %d",flag);
-    //发送通知
-    UILocalNotification *notification=[[UILocalNotification alloc] init];
-    if (notification!=nil) {
-        NSDate *now=[NSDate new];
-        notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
-        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
-        notification.timeZone=[NSTimeZone defaultTimeZone];
-        notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + numOfSyncMessages; //应用的红色数字
-        notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
-        if (flag) {
-            //去掉下面2行就不会弹出提示框
-            notification.alertBody=@"有新的消息来啦╮(╯▽╰)╭ ";//提示信息 弹出提示框
-            notification.alertAction = @"打开";  //提示框按钮
-            notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
-        }
-        
-        // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
-        //notification.userInfo = infoDict; //添加额外的信息
-        
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
-        
+    if (numOfSyncMessages > 1) {
+        [self sendMessageArrivedNotification:@"收到一大堆消息" andNumber:numOfSyncMessages withType:-1];
     }
-    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+
+    
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
@@ -489,12 +470,41 @@
     [self.syncMessages removeAllObjects];
 }
 
-//#pragma mark - NotificationDelegate
-//
-//- (void) notificationDidReceive:(NSArray*) messages
-//{
-//    
-//}
+//参数：text：横幅显示的信息， num：消息数量， type：哪一类消息（与消息中心的tab编号相对应）
+-(void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type
+{
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
+    BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
+    NSLog(@"system setting1 flag: %d",flag);
+
+    //发送通知
+    UILocalNotification *notification=[[UILocalNotification alloc] init];
+    if (notification!=nil) {
+        NSDate *now=[NSDate new];
+        notification.fireDate=[now dateByAddingTimeInterval:0];//0秒后通知
+        notification.repeatInterval=0;//循环次数，kCFCalendarUnitWeekday一周一次
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        notification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + num; //应用的红色数字
+        notification.soundName= UILocalNotificationDefaultSoundName;//声音，可以换成alarm.soundName = @"myMusic.caf"
+        if (flag) {
+            //去掉下面2行就不会弹出提示框
+            notification.alertBody= text;//提示信息 弹出提示框
+            notification.alertAction = @"打开";  //提示框按钮
+            notification.hasAction = NO; //是否显示额外的按钮，为no时alertAction消失
+        }
+        
+        // NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        //notification.userInfo = infoDict; //添加额外的信息
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+    [userSettings setValue:[NSNumber numberWithInt:(type < 3 && type >= 0)? type : -1] forKey:@"hasUnreadNotification"];
+    [userDf setObject:userSettings forKey:key];
+    [userDf synchronize];
+}
 
 
 #pragma mark - WebSocket
@@ -604,35 +614,7 @@
         [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
         [msg_dic setValue:[response1 objectForKey:@"seq"] forKey:@"seq"];
         NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
-//        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
-//        NSNumber* fid1 = [response1 objectForKey:@"id"];
         
-//        for (NSDictionary* response2 in syncMessages) {
-//            NSString* msg_str2 = [response2 objectForKey:@"msg"];
-//            NSMutableDictionary* msg_dic2 = [CommonUtils NSDictionaryWithNSString:msg_str2];
-//            NSInteger msg_cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
-//            if (msg_cmd == msg_cmd2) {
-//                if (event_id1) {
-//                    NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
-//                    if (event_id2) {
-//                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
-//                            [self.syncMessages removeObject:response2];
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    NSNumber* fid2 = [response2 objectForKey:@"id"];
-//                    if (fid2) {
-//                        if (fid1 == fid2) {
-//                            [self.syncMessages removeObject:response2];
-//                        }
-//                        
-//                    }
-//                }
-//            }
-//            
-//        }
 
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {
@@ -665,6 +647,10 @@
                 NSLog(@"friend request is refused");
             }
             
+            if (numOfSyncMessages <= 1) {
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:2];
+            }
+            
         }
         else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
             if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
@@ -672,40 +658,51 @@
                 [[MTUser sharedInstance].updateEvents addObject:msg_dic];
                 NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
             }
-            NSLog(@"%d",[MTUser sharedInstance].updateEventIds.count);
+            NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
+            if (numOfSyncMessages <= 1) {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"\"%@\"活动更新啦",subject] andNumber:numOfSyncMessages withType:-1];
+            }
+
         }
         else if (msg_cmd == 988 || msg_cmd == 989) {
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+            if (numOfSyncMessages <= 1) {
+                [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
+            }
+            NSLog(@"有人@你： %@",msg_dic);
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
         {
             [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
+            if (numOfSyncMessages <= 1) {
+                NSString* name = [msg_dic objectForKey:@"name"];
+                NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 请求加你为好友\n验证信息:%@", name, confirm_msg] andNumber:numOfSyncMessages withType:1];
+            }
         }
         else if (msg_cmd == EVENT_INVITE_RESPONSE || msg_cmd == REQUEST_EVENT_RESPONSE)
         {
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+            if (numOfSyncMessages <= 1) {
+                [self sendMessageArrivedNotification:@"有人回复了活动消息" andNumber:numOfSyncMessages withType:2];
+            }
         }
         else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
         {
-//            NSInteger cmd2;
-//            NSInteger eventid1, eventid2;
-//            eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
-//            NSInteger count = [MTUser sharedInstance].eventRequestMsg.count;
-//            for (NSInteger i = 0; i < count; i++) {
-//                NSMutableDictionary* aMsg = [MTUser sharedInstance].eventRequestMsg[i];
-//                cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
-//                NSLog(@"cmd1: %d, cmd2: %d",msg_cmd,cmd2);
-//                if (msg_cmd == cmd2) {
-//                    eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
-//                    NSLog(@"event_id1: %d, event_id2: %d",eventid1,eventid2);
-//                    if (eventid1 == eventid2) {
-//                        [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
-//                        break;
-//                    }
-//                    
-//                }
-//            }
             [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
+            if (numOfSyncMessages <= 1) {
+                NSString* launcher = [msg_dic objectForKey:@"launcher"];
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                if (msg_cmd == NEW_EVENT_NOTIFICATION) {
+                    [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 邀请你加入活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+                    
+                }
+                else
+                {
+                    [self sendMessageArrivedNotification:[NSString stringWithFormat:@"有人邀请你加入%@的活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+                }
+            }
         }
 
         

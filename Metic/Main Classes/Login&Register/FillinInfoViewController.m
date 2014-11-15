@@ -371,6 +371,31 @@
     }
 }
 
+#pragma mark - HttpSenderDelegate
+-(void)finishWithReceivedData:(NSData*) rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    NSLog(@"Received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+    NSLog(@"cmd: %@",cmd);
+    switch ([cmd integerValue]) {
+        case NORMAL_REPLY:
+        {
+            [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
+            NSLog(@"性别修改成功");
+        }
+            break;
+            
+        default:
+            NSLog(@"性别修改失败");
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因性别修改失败" WithDelegate:self WithCancelTitle:@"OK"];
+            break;
+    }
+    [self.info_tableview reloadData];
+}
+
+
 
 
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝UPLOAD AVATAR＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
