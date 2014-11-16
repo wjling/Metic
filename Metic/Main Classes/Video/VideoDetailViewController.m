@@ -805,6 +805,8 @@
     int comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.videoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    NSIndexPath* index = [_controller.tableView indexPathForCell:_SeleVcell];
+    [_controller.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
     [_SeleVcell.comment_button setTitle:[NSString stringWithFormat:@"%d",comN] forState:UIControlStateNormal];
     [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
 }
