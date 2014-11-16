@@ -438,17 +438,17 @@
     {
         _isPlaying = YES;
         
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
-        
-        dispatch_async(queue, ^{
+//        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
+//        
+//        dispatch_async(queue, ^{
 
             self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
             self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
             self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+        
                 CGRect Bframe = _video_button.frame;
                 CGRect frame = Bframe;
                 AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -469,8 +469,8 @@
                 [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];
-            });
-        });
+//            });
+//        });
     }
     
 }
