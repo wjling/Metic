@@ -141,6 +141,7 @@ enum Response_Type
     if (index != -1) {
         tab_index = index;
         [self tabBtnClicked:self.tabs[tab_index]];
+        clickTab = NO;
     }
     [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
     [userDfs setValue:userSettings forKey:key];
@@ -746,6 +747,7 @@ enum Response_Type
                 break;
             case EVENT_INVITE_RESPONSE:
             case REQUEST_EVENT_RESPONSE:
+            case QUIT_EVENT_NOTIFICATION:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label3.hidden) {
@@ -1140,6 +1142,16 @@ enum Response_Type
                     text = [NSString stringWithFormat:@"%@ 拒绝你加入活动: %@ ",launcher,subject];
                     
                 }
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+                
+            case QUIT_EVENT_NOTIFICATION:
+            {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text;
+                text = [NSString stringWithFormat:@"%@ 活动已经被解散",subject];
                 cell.title_label.text = @"活动消息";
                 cell.sys_msg_label.text = text;
             }
