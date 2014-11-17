@@ -12,6 +12,7 @@
 #import "EventInvitationViewController.h"
 #import "EventSquareViewController.h"
 #import "UserInfo/UserInfoViewController.h"
+#import "ScanViewController.h"
 #import "MTUser.h"
 
 
@@ -57,6 +58,7 @@
     for (NSInteger i = 0; i < numberOfMenus; i++) {
         notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
     }
+    homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
 
@@ -342,6 +344,7 @@
         case 5:
             if (!scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
+                ((ScanViewController*)vc).menu = self;
                 scaningViewController = vc;
             }else vc = scaningViewController;
 			break;
