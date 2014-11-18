@@ -443,9 +443,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    EventDetail2* eventDetail = [[EventDetail2 alloc]init];
-//    [self.navigationController pushViewController:eventDetail animated:YES];
-//    return;
+    EventDetail2* eventDetail = [[EventDetail2 alloc]init];
+    [self.navigationController pushViewController:eventDetail animated:YES];
+    return;
     if (![self.morefuctions isHidden]) {
         [self closeButtonView];
         return;

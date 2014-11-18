@@ -114,4 +114,7 @@
 //返回1， version1 大于 version2
 //version 形如："0.1.21","12.21.14"等
 +(int)compareVersion1:(NSString*)version1 andVersion2:(NSString*)version2;
+
+//缩放图片
++ (UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize;
 @end
