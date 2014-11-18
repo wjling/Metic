@@ -131,20 +131,20 @@
     
     //收藏按钮
     _enshrine = [UIButton buttonWithType:UIButtonTypeCustom];
-    _enshrine.frame = CGRectMake(frame.size.width - 32*3 - 5, 7, 32, 32);
+    _enshrine.frame = CGRectMake(frame.size.width - 32*3 - 15, 7, 32, 32);
     [head addSubview:_enshrine];
     [_enshrine setImage:[UIImage imageNamed:@"detailed_collect"] forState:UIControlStateNormal];
 
     //分享按钮
     _share = [UIButton buttonWithType:UIButtonTypeCustom];
-    _share.frame = CGRectMake(frame.size.width - 32*2 - 5, 7, 32, 32);
+    _share.frame = CGRectMake(frame.size.width - 32*2 - 15, 7, 32, 32);
     [head addSubview:_share];
     [_share setImage:[UIImage imageNamed:@"detailed_share"] forState:UIControlStateNormal];
     [_share setImage:[UIImage imageNamed:@"detailed_share_pressed"] forState:UIControlStateHighlighted];
     
     //点赞按钮
     _favor = [UIButton buttonWithType:UIButtonTypeCustom];
-    _favor.frame = CGRectMake(frame.size.width - 32*1 - 5, 7, 32, 32);
+    _favor.frame = CGRectMake(frame.size.width - 32*1 - 15, 7, 32, 32);
     [head addSubview:_favor];
     [_favor setImage:[UIImage imageNamed:@"detailed_praise"] forState:UIControlStateNormal];
     [_favor setImage:[UIImage imageNamed:@"detailed_praise_pressed"] forState:UIControlStateHighlighted];
@@ -245,6 +245,56 @@
     [phintString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0] range:NSMakeRange(0, pText.length)];
     [participtorLabel setText:phintString];
     [participatorsView addSubview:participtorLabel];
+    
+    //小工具
+    UIView* toolsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(participatorsView.frame)-0.5, frame.size.width, 90)];
+    toolsView.layer.borderColor = [UIColor colorWithWhite:224.0f/255.0 alpha:1.0f].CGColor;
+    toolsView.layer.borderWidth = 0.5;
+    [_details addSubview:toolsView];
+    
+    NSArray*labelText = @[@"活动公告",@"活动事项",@"任务列表"];
+    NSArray* buttonIcon = @[[UIImage imageNamed:@"detailed_announcement_icon"],[UIImage imageNamed:@"detailed_item_icon"],[UIImage imageNamed:@"detailed_item_task_icon"]];
+    
+    for (int i = 0; i < 3; i++) {
+        UIButton* tool = [UIButton buttonWithType:UIButtonTypeCustom];
+        [tool setFrame:CGRectMake(45 + i*90, 10, 50, 50)];
+        [tool setImage:buttonIcon[i] forState:UIControlStateNormal];
+        [toolsView addSubview:tool];
+        
+        UILabel* tLabel = [[UILabel alloc]initWithFrame:CGRectMake(45 + i*90, 63, 50, 20)];
+        tLabel.text = labelText[i];
+        tLabel.font = [UIFont systemFontOfSize:11];
+        tLabel.textAlignment = NSTextAlignmentCenter;
+        tLabel.textColor = [UIColor colorWithWhite:68.0/255 alpha:1.0f];
+        [toolsView addSubview:tLabel];
+    }
+    
+    //活动类型
+    UIView* eventType = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(toolsView.frame), frame.size.width, 105)];
+    [_details addSubview:eventType];
+    
+    UILabel* eventTypeLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 100, 30)];
+    eventTypeLabel.text = @"活动类型";
+    eventTypeLabel.textColor = [UIColor colorWithWhite:68.0/255 alpha:1.0f];
+    eventTypeLabel.textAlignment = NSTextAlignmentLeft;
+    eventTypeLabel.font = [UIFont systemFontOfSize:14];
+    [eventType addSubview:eventTypeLabel];
+    
+    int Tnum = 10;
+    for (int i = 0; i < Tnum; i++) {
+        UIButton* typeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [typeButton setFrame:CGRectMake(10 + (i%4)*80, 30 + (i/4)*40, 60, 25)];
+//        typeButton.layer.borderColor = [UIColor redColor].CGColor;
+//        typeButton.layer.borderWidth = 2;
+        typeButton.layer.cornerRadius = 12;
+        typeButton.layer.masksToBounds = YES;
+        typeButton.titleLabel.font = [UIFont systemFontOfSize:12];
+        [typeButton setTitle:@"生活" forState:UIControlStateNormal];
+        [typeButton setTitleColor:[UIColor colorWithWhite:105.0/255.0 alpha:1.0f] forState:UIControlStateNormal];
+        [typeButton setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xeeeeee]] forState:UIControlStateNormal];
+        [typeButton setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xf8f8f8]] forState:UIControlStateHighlighted];
+        [eventType addSubview:typeButton];
+    }
     
     
     
