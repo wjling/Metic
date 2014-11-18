@@ -246,10 +246,10 @@
                     zan_num ++;
                 }
                 [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-                VideoWallViewController* wall = _controller;
                 [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
                 _controller.shouldFlash = NO;
-                [_controller.tableView reloadData];
+                [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
+                [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     _controller.shouldFlash = YES;
                 });
@@ -438,17 +438,17 @@
     {
         _isPlaying = YES;
         
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
-        
-        dispatch_async(queue, ^{
+//        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
+//        
+//        dispatch_async(queue, ^{
 
             self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
             self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
             self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+        
                 CGRect Bframe = _video_button.frame;
                 CGRect frame = Bframe;
                 AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -469,8 +469,8 @@
                 [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];
-            });
-        });
+//            });
+//        });
     }
     
 }

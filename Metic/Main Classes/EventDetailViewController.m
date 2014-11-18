@@ -871,6 +871,7 @@
     if (refreshView == _header) {
         _Headeropen = YES;
         self.master_sequence = [NSNumber numberWithInt:0];
+        [self pullEventFromAir];
     }else _Footeropen = YES;
     [self pullMainCommentFromAir];
 }

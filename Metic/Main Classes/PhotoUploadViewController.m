@@ -330,9 +330,20 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //        [self openEditor:image];
         
         //2.返回图片
-        self.uploadImage = image;
-        [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
-        self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        float ratio = image.size.width / image.size.height;
+        if(ratio > 3){
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"很抱歉，不支持上传宽度过大的图片，请重新选择" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+        }else if(ratio < 1.0/3.0){
+            UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"很抱歉，不支持上传高度过大的图片，请重新选择" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alert show];
+        }else{
+            self.uploadImage = image;
+            [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+            self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        }
+        
+        
     }];
 
 }
