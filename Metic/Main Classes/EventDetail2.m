@@ -8,6 +8,7 @@
 
 #import "EventDetail2.h"
 #import "../Source/SDWebImage/UIButton+WebCache.h"
+#import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "../Utils/CommonUtils.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 
@@ -189,22 +190,63 @@
     //活动描述
     NSString* text = @"冬日的天，带着些许凄凉往返于街道两旁，吹冷了谁孤寂的心？辗转现实与梦幻的边缘，倾听落雨的故事，繁花四季，开出了谁哭泣的美丽？风儿也在这感动中落下了泪，飘下了雨，牵手的回忆在谁的脑海翻腾出朵朵浪花？";
     text = [text stringByAppendingString:@"[查看更多]"];
-    float descriptionHeight = [CommonUtils calculateTextHeight:text width:frame.size.width -30 fontSize:13 isEmotion:NO];
-    UIView* descriptionContainer = [[UIView alloc]initWithFrame:CGRectMake(10.0, CGRectGetMaxY(eventInfo.frame), frame.size.width - 20, descriptionHeight)];
+    float descriptionHeight = [CommonUtils calculateTextHeight:text width:frame.size.width -30 fontSize:12 isEmotion:NO];
+    UIView* descriptionContainer = [[UIView alloc]initWithFrame:CGRectMake(10.0, CGRectGetMaxY(eventInfo.frame), frame.size.width - 20, descriptionHeight+5)];
     [descriptionContainer setBackgroundColor:[UIColor colorWithWhite:238.0/255.0f alpha:1.0f]];
     
-    TTTAttributedLabel *description = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(5.0f, 5.0f, descriptionContainer.frame.size.width - 10, descriptionContainer.frame.size.height - 10)];
+    TTTAttributedLabel *description = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(5.0f, 5.0f, descriptionContainer.frame.size.width - 10, descriptionContainer.frame.size.height)];
     [description setNumberOfLines:0];
-    [description setFont:[UIFont systemFontOfSize:13.0f]];
-    [description setTextColor:[UIColor colorWithWhite:105.0f/255.0 alpha:1.0f]];
+    [description setFont:[UIFont systemFontOfSize:18.0f]];
     [description setTextAlignment:NSTextAlignmentLeft];
     [description setLineBreakMode:NSLineBreakByWordWrapping];
     NSMutableAttributedString *hintString = [[NSMutableAttributedString alloc] initWithString:text];
     [hintString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:48.0/255.0f green:122.0/255.0f blue:173/255.0f alpha:1.0f] CGColor] range:NSMakeRange(text.length-6,6)];
     [hintString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithWhite:105.0f/255.0 alpha:1.0f] CGColor] range:NSMakeRange(0,text.length-6)];
+    [hintString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue" size:12.0] range:NSMakeRange(0, text.length)];
     [description setText:hintString];
     [descriptionContainer addSubview:description];
     [_details addSubview:descriptionContainer];
+    
+    //活动参与者
+    UIView *participatorsView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(descriptionContainer.frame)+10, frame.size.width, 30)];
+    participatorsView.layer.borderWidth = 0.5;
+    participatorsView.layer.borderColor = [UIColor colorWithWhite:224.0f/255.0 alpha:1.0f].CGColor;
+    [_details addSubview:participatorsView];
+    
+    //参与者头像
+    int num = 4;
+    for (int i = 0; i < num; i++) {
+        UIImageView* Pavatar = [[UIImageView alloc]initWithFrame:CGRectMake(10 + 30*i, 5, 20, 20)];
+        [Pavatar sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
+        [participatorsView addSubview:Pavatar];
+        UIImageView* Pshad = [[UIImageView alloc]initWithFrame:Pavatar.frame];
+        Pshad.image = [UIImage imageNamed:@"头像-116（白色底）"];
+        [participatorsView addSubview:Pshad];
+    }
+    
+    //参与者数目
+    int pnum = 100;
+    NSNumber* pNum = [NSNumber numberWithInt:pnum];
+    UIImageView* pnumJump = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(participatorsView.frame) - 25, 6, 15, 18)];
+    pnumJump.image = [UIImage imageNamed:@"detailed_return"];
+    [participatorsView addSubview:pnumJump];
+    
+    TTTAttributedLabel *participtorLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(participatorsView.frame) - 150, 3.0f, 120, 24)];
+    [participtorLabel setNumberOfLines:0];
+    [participtorLabel setFont:[UIFont systemFontOfSize:14.0f]];
+    [participtorLabel setTextAlignment:NSTextAlignmentRight];
+    [participtorLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    NSString* pText = [NSString stringWithFormat:@"已有%@人参加",pNum];
+    NSMutableAttributedString *phintString = [[NSMutableAttributedString alloc] initWithString:pText];
+    
+    [phintString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:240.0/255.0f green:114.0/255.0f blue:52.0/255.0f alpha:1.0f] CGColor] range:NSMakeRange(2,pText.length - 5)];
+    [phintString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithWhite:149.0f/255.0 alpha:1.0f] CGColor] range:NSMakeRange(pText.length-3,3)];
+    [phintString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithWhite:149.0f/255.0 alpha:1.0f] CGColor] range:NSMakeRange(0,2)];
+    [phintString addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0] range:NSMakeRange(0, pText.length)];
+    [participtorLabel setText:phintString];
+    [participatorsView addSubview:participtorLabel];
+    
+    
     
     
     
