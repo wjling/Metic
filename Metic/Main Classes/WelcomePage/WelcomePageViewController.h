@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "CommonUtils.h"
 
+@class AppDelegate;
+@class LoginViewController;
+
 @interface WelcomePageViewController : UIViewController<UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *page_scrollview;
 @property (strong, nonatomic) UIPageControl* pageControl;

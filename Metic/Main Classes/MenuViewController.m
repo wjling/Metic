@@ -12,6 +12,7 @@
 #import "EventInvitationViewController.h"
 #import "EventSquareViewController.h"
 #import "UserInfo/UserInfoViewController.h"
+#import "ScanViewController.h"
 #import "MTUser.h"
 
 
@@ -55,33 +56,20 @@
     numberOfMenus = 8;
     notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
     for (NSInteger i = 0; i < numberOfMenus; i++) {
-        if (i == 4) {
-            if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
-                [MTUser sharedInstance].friendRequestMsg.count > 0 ||
-                [MTUser sharedInstance].systemMsg.count > 0) {
-//                [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:YES]];
-                notificationSigns_arr[i] = [NSNumber numberWithBool:YES];
-            }
-            else
-            {
-//                [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
-                notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
-            }
-        }
-        else
-        {
-//            [notificationSigns_arr replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:NO]];
-            notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
-        }
-        
+        notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
     }
-//    _homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+    homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    NSLog(@"menuviewcontroller will appear");
+    NSNumber* flag = [[NSUserDefaults standardUserDefaults]valueForKey:@"hasUnreadNotification"];
+    if (flag > 0) {
+        [self showUpdateInRow:4];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -100,7 +88,7 @@
         
     }
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
-    NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
+    NSLog(@"menu did appear,  Uid: %@",[MTUser sharedInstance].userid);
     [getter getAvatar];
     //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
@@ -124,16 +112,16 @@
     [getter getAvatar];
     NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
     
-    if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
-        [MTUser sharedInstance].friendRequestMsg.count > 0 ||
-        [MTUser sharedInstance].systemMsg.count > 0)
-    {
-        notificationSigns_arr[4] = [NSNumber numberWithBool:YES];
-    }
-    else
-    {
-        notificationSigns_arr[4] = [NSNumber numberWithBool:NO];
-    }
+//    if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
+//        [MTUser sharedInstance].friendRequestMsg.count > 0 ||
+//        [MTUser sharedInstance].systemMsg.count > 0)
+//    {
+//        notificationSigns_arr[4] = [NSNumber numberWithBool:YES];
+//    }
+//    else
+//    {
+//        notificationSigns_arr[4] = [NSNumber numberWithBool:NO];
+//    }
 }
 
 -(void)clearVC
@@ -190,29 +178,12 @@
 
 -(void)showUpdateInRow:(NSInteger)row
 {
-//    NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:0];
-//    UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexP];
-//    UIView* dian = [cell viewWithTag:88];
-//    if (!dian) {
-//        UILabel* label = (UILabel*)[cell viewWithTag:2];
-//        NSString* text = label.text;
-//        UIFont* font = label.font;
-//        CGSize sizeOfText = [text sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 25) lineBreakMode:NSLineBreakByWordWrapping];
-//        dian = [[UIView alloc]init];
-//        dian.frame = CGRectMake(label.frame.origin.x + sizeOfText.width + 5, label.frame.origin.y, 20, 20);
-//        [cell addSubview:dian];
-//    }
-//    dian.hidden = NO;
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:YES]];
     [_tableView reloadData];
 }
 
 -(void)hideUpdateInRow:(NSInteger)row
 {
-//    NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:0];
-//    UITableViewCell* cell = [_tableView cellForRowAtIndexPath:indexP];
-//    UIView* dian = [cell viewWithTag:88];
-//    dian.hidden = YES;
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
     [_tableView reloadData];
 }
@@ -366,13 +337,14 @@
         case 4:
             if (!notificationsViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
-                notificationsViewController = vc;
+                notificationsViewController = (NotificationsViewController*)vc;
             }else vc = notificationsViewController;
 			break;
         
         case 5:
             if (!scaningViewController) {
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"ScaningViewController"];
+                ((ScanViewController*)vc).menu = self;
                 scaningViewController = vc;
             }else vc = scaningViewController;
 			break;

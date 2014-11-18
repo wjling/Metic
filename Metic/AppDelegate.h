@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
 #import "CommonUtils.h"
-#import "MenuViewController.h"
+//#import "MenuViewController.h"
 #import "MTUser.h"
 #import "SRWebSocket.h"
 #import "MySqlite.h"
@@ -21,6 +21,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "Source/HttpServer/HTTPServer.h"
 
+@class MenuViewController;
+@class NotificationsViewController;
 //推送消息的通知协议，收到任何消息之后的逻辑可以通过实现notificationDidReceive方法
 //说明：
 //参数：messages 一个消息数组，里面的每个消息是一个字典NSDictionary
@@ -64,6 +66,7 @@
 -(void)initApp;
 +(void)refreshMenu;
 
+
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;
 
@@ -75,6 +78,7 @@
 
 - (void)handleReceivedNotifications;
 - (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath;
+- (void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type;
 
 
 @end

@@ -502,9 +502,8 @@
         double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            self.progressOverlayView.progress = 0.;
-            self.progressOverlayView.hidden = YES;
-            self.videoPlayImg.hidden = NO;
+            [_progressOverlayView removeFromSuperview];
+            _progressOverlayView = nil;
         });
     }
     
@@ -806,6 +805,8 @@
     int comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.videoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    NSIndexPath* index = [_controller.tableView indexPathForCell:_SeleVcell];
+    [_controller.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
     [_SeleVcell.comment_button setTitle:[NSString stringWithFormat:@"%d",comN] forState:UIControlStateNormal];
     [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
 }

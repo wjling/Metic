@@ -82,9 +82,16 @@
 }
 
 - (IBAction)back:(id)sender {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-    UIViewController *vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
-    [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+    UIViewController *vc = _menu.homeViewController;
+    if (vc) {
+        [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+    }else{
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+        UIViewController *vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+        _menu.homeViewController = vc;
+        [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
+    }
+    
 }
 
 - (IBAction)wantIn:(id)sender {

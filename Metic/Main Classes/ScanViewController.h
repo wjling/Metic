@@ -10,6 +10,7 @@
 #import "ZBarSDK.h"
 #import "AppConstants.h"
 #import "HttpSender.h"
+#import "MenuViewController.h"
 
 @interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
 
@@ -20,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *inButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
+@property (weak, nonatomic) MenuViewController *menu;
 @property BOOL needPopBack;
 - (IBAction)back:(id)sender;
 - (IBAction)wantIn:(id)sender;

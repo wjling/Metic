@@ -129,6 +129,9 @@
 
 -(void)dealloc
 {
+    for (AVPlayer*  player in [_AVPlayers objectEnumerator]) {
+        [player replaceCurrentItemWithPlayerItem:nil];
+    }
     [_header free];
     [_footer free];
 }

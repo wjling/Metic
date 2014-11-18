@@ -2621,7 +2621,7 @@
                         <segue destination="cDI-rw-2Dm" kind="push" identifier="LoginToFriends" id="6hY-qj-DR3"/>
                         <segue destination="hMX-YH-n10" kind="push" id="Lay-DH-g1S"/>
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
-                        <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
+                        <segue destination="von-Oa-xrt" kind="push" identifier="loginTohome" id="5EZ-nf-AfT"/>
                         <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="bpL-Ol-9VE"/>
                         <segue destination="sN6-CT-cFg" kind="push" id="YWf-Zs-2Jn"/>

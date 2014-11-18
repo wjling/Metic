@@ -8,6 +8,7 @@
 
 #import "NotificationsViewController.h"
 #import "MobClick.h"
+#import "MenuViewController.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
 #define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
@@ -19,7 +20,7 @@
     MySqlite* mySql;
     NSString* DB_path;
     NSIndexPath* selectedPath;
-    NSInteger tab_index;
+    
     CGFloat lastX;
     BOOL clickTab;
     UIView* tabIndicator;
@@ -52,6 +53,7 @@ enum Response_Type
 @synthesize functions_uiview;
 @synthesize function1_button;
 @synthesize function2_button;
+@synthesize tab_index;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -132,6 +134,19 @@ enum Response_Type
     {
         label3.hidden = YES;
     }
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSInteger index = [[userSettings valueForKey:@"hasUnreadNotification"]integerValue];
+    if (index != -1) {
+        tab_index = index;
+        [self tabBtnClicked:self.tabs[tab_index]];
+        clickTab = NO;
+    }
+    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
+    
     
 //    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
@@ -335,16 +350,17 @@ enum Response_Type
             BOOL flag = YES;
             NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
             NSInteger event_id1 = [[MTUser_msg_dic objectForKey:@"event_id"]integerValue];
+            NSInteger fid1 = [[MTUser_msg_dic objectForKey:@"id"]integerValue];
             
             for (NSMutableDictionary* msg_dic in self.eventRequestMsg) {
                 NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
-                NSLog(@"MT_eve_cmd: %d, NF_eve_cmd: %d",cmd1,cmd2);
-                if (cmd1 == cmd2) {
-                    NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
-                    if (event_id1 == event_id2) {
-                        flag = NO;
-                        break;
-                    }
+                NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
+                
+                if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
+                    NSLog(@"\ncmd1: %d, cmd2: %d\nevent_id1: %d, event_id2: %d\nfid1: %d, fid2: %d",cmd1,cmd2,event_id1,event_id2,fid1,fid2);
+                    flag = NO;
+                    break;
                 }
             }
             if (flag) {
@@ -356,6 +372,7 @@ enum Response_Type
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
+                           NSLog(@"消息中心：eventRequestMsg去重已经完成");
                            [self.eventRequest_tableView reloadData];
                            if (eventRequestMsg.count == 0) {
                                label1.hidden = NO;
@@ -396,6 +413,7 @@ enum Response_Type
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
+                           NSLog(@"消息中心：friendRequestMsg去重已经完成");
                            [self.friendRequest_tableView reloadData];
                            if (friendRequestMsg.count == 0) {
                                label2.hidden = NO;
@@ -443,7 +461,7 @@ enum Response_Type
 
 -(void)dismissHud:(NSTimer*)timer
 {
-    [SVProgressHUD dismissWithError:@"网络异常" afterDelay:2.0];
+    [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:2.0];
 }
 
 - (void)tabBtnClicked:(id)sender
@@ -489,6 +507,7 @@ enum Response_Type
             label1.hidden = YES;
         }
         NSLog(@"活动邀请：\neventRequest: %@\n============\nMT_eventRequest: %@",eventRequestMsg,MTUser_eventRequestMsg);
+        [self.eventRequest_tableView reloadData];
     }
     else if (index == 1)
     {
@@ -500,6 +519,7 @@ enum Response_Type
             label2.hidden = YES;
         }
         NSLog(@"好友请求：\nfriendRequest: %@\n============\nMT_friendRequest: %@",friendRequestMsg,MTUser_friendRequestMsg);
+        [self.friendRequest_tableView reloadData];
     }
     else if (index == 2)
     {
@@ -511,6 +531,7 @@ enum Response_Type
             label3.hidden = YES;
         }
         NSLog(@"系统消息：\nsystemRequest: %@\n============\nMT_systemRequest: %@",systemMsg,MTUser_systemMsg);
+        [self.systemMessage_tableView reloadData];
     }
 
     
@@ -705,7 +726,7 @@ enum Response_Type
             {
                 NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
                 for (NSMutableDictionary* msg in self.friendRequestMsg) {
-                    NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
+                    NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                     if (fid1 == fid2) {
                         [self.friendRequestMsg removeObject:msg];
                     }
@@ -726,6 +747,7 @@ enum Response_Type
                 break;
             case EVENT_INVITE_RESPONSE:
             case REQUEST_EVENT_RESPONSE:
+            case QUIT_EVENT_NOTIFICATION:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label3.hidden) {
@@ -738,19 +760,17 @@ enum Response_Type
             {
                 NSInteger cmd2;
                 NSInteger eventid1, eventid2;
+                NSInteger fid1, fid2;
                 eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
-                NSInteger count = self.eventRequestMsg.count;
-                for (NSInteger i = 0; i < count; i++) {
-                    NSMutableDictionary* aMsg = self.eventRequestMsg[i];
+                fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+                for (NSMutableDictionary* aMsg in self.eventRequestMsg) {
                     cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
-                    if (cmd == cmd2) {
-                        eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
-                        if (eventid1 == eventid2) {
-                            NSLog(@"找到相同的活动消息, cmd: %d, event_id: %d",cmd, eventid1);
-                            [self.eventRequestMsg removeObjectAtIndex:i];
-                            break;
-                        }
-                        
+                    eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
+                    fid2 = [[aMsg objectForKey:@"id"]integerValue];
+                    if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
+                        NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
+                        [self.eventRequestMsg removeObject:aMsg];
+                        break;
                     }
                 }
                 
@@ -1127,6 +1147,16 @@ enum Response_Type
             }
                 break;
                 
+            case QUIT_EVENT_NOTIFICATION:
+            {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text;
+                text = [NSString stringWithFormat:@"%@ 活动已经被解散",subject];
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+                
             default:
                 break;
         }
@@ -1356,7 +1386,7 @@ enum Response_Type
             if ([response_type intValue] == RESPONSE_FRIEND) {
                 
                 if ([result intValue] == 1) {
-                    [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
+//                    [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
                     [self.friendRequest_tableView reloadData];
                     
                     NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
@@ -1383,22 +1413,24 @@ enum Response_Type
                                            andSet:[CommonUtils packParamsInDictionary:
                                                    [NSString stringWithFormat:@"%d",1],@"ishandled",
                                                    nil]];
-                    for (NSMutableDictionary* msg in MTUser_friendRequestMsg) {
+                    for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
+                        NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
                         NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                         NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                         if (fid1 == fid2 && seq1 != seq2) {
                             [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
                             [MTUser_friendRequestMsg removeObject:msg];
+                            i--;
                         }
                     }
                     
                     [mySql closeMyDB];
                     
-                    NSDictionary* friendJson = [CommonUtils packParamsInDictionary:
+                    NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
                                                 fname,@"name",
                                                 femail,@"email",
                                                 fgender,@"gender",
-                                                fid1,@"id",
+                                                [NSNumber numberWithInt:fid1],@"id",
                                                 [NSNull null], @"alias",
                                                 nil];
                     [[MTUser sharedInstance].friendList addObject:friendJson];
@@ -1428,12 +1460,14 @@ enum Response_Type
                                                    [NSString stringWithFormat:@"%d",0],@"ishandled",
                                                    nil]];
                     
-                    for (NSMutableDictionary* msg in MTUser_friendRequestMsg) {
+                    for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
+                        NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
                         NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                         NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                         if (fid1 == fid2 && seq1 != seq2) {
                             [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
                             [MTUser_friendRequestMsg removeObject:msg];
+                            continue;
                         }
                     }
 
@@ -1475,13 +1509,15 @@ enum Response_Type
                                                [NSString stringWithFormat:@"%@",result],@"ishandled",
                                                nil]];
                 
-                for (NSMutableDictionary* msg in MTUser_eventRequestMsg) {
+                for (int i = 0; i < MTUser_eventRequestMsg.count; i++) {
+                    NSMutableDictionary* msg  = MTUser_eventRequestMsg[i];
                     NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
                     NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
                     NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                     if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
                         [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
                         [MTUser_eventRequestMsg removeObject:msg];
+                        continue;
                     }
                 }
                 [mySql closeMyDB];
@@ -1512,23 +1548,48 @@ enum Response_Type
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
             NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:row];
-            NSNumber* seq = [msg_dic objectForKey:@"seq"];
+            NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+            NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
-            NSLog(@"response event, seq: %@",seq);
+            NSLog(@"response event, seq: %d, fid: %d",seq1, fid1);
             
             //!已经是好友的情况下修改数据库的用户操作字段ishandled，有可能会造成数据错误。当然，只是有可能。我需要修改ishandled的值使这条消息标记为已处理!
             [mySql openMyDB:DB_path];
             [mySql updateDataWitTableName:@"notification"
                                  andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",seq],@"seq",
+                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
                                            nil]
                                    andSet:[CommonUtils packParamsInDictionary:
                                            [NSString stringWithFormat:@"%@",response_result],@"ishandled",
                                            nil]];
+            
+            
+            for (int i = 0; i < self.friendRequestMsg.count; i++) {
+                NSMutableDictionary* msg = self.friendRequestMsg[i];
+                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+//                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                if (fid1 == fid2) {
+                    [self.friendRequestMsg removeObject:msg];
+                    continue;
+                }
+            }
+
+
+            for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
+                NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
+                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                if (fid1 == fid2 && seq1 != seq2) {
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                    [MTUser_friendRequestMsg removeObject:msg];
+                    i--;
+                }
+            }
+            
             [mySql closeMyDB];
 
             [MTUser_friendRequestMsg removeObject:msg_dic];
-            [friendRequestMsg removeObjectAtIndex:row];
+//            [friendRequestMsg removeObjectAtIndex:row];
             [self.friendRequest_tableView reloadData];
             
             [SVProgressHUD dismissWithError:@"你们已经是好友" afterDelay:2];
@@ -1587,7 +1648,8 @@ enum Response_Type
         }
             break;
         default:
-            [SVProgressHUD dismissWithError:@"呵呵" afterDelay:1];
+//            [SVProgressHUD dismissWithError:@"呵呵" afterDelay:1];
+            NSLog(@"消息中心未对该cmd做处理, cmd: %@",cmd);
             break;
     }
 //    [self waitingViewHide];

@@ -57,16 +57,21 @@
     [super viewDidLoad];
     NSLog(@"login did load, fromRegister: %d",fromRegister);
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (!fromRegister) {
         if ([userDf boolForKey:@"firstLaunched"]) {
             NSLog(@"login: it is the first launch");
+            [self showBlackView];
+//            [userDf setValue:[NSNumber numberWithBool:NO] forKey:@"firstLaunched"];
+//            [userDf synchronize];
             UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
             WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
             {
+                
                 [self presentViewController:vc animated:NO completion:nil];
+                
             }
         }
         else
@@ -123,6 +128,8 @@
         fromRegister = NO;
 //        text_password = nil;
 //        text_userName = nil;
+        textField_userName.text = text_userName;
+        textField_password.text = text_password;
     }
     else{
 //        [self.view setHidden:YES];
@@ -147,6 +154,7 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"登录"];
+    NSLog(@"login view did disappear");
 }
 - (void)didReceiveMemoryWarning
 {
@@ -289,7 +297,7 @@
         NSLog(@"用户 %@ 在线", userName);
         appDelegate.isLogined = YES;
         [self removeWaitingView];
-        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
+//        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //            [self jumpToMainView];
@@ -350,7 +358,7 @@
 
 - (void)jumpToMainView
 {
-    [self performSegueWithIdentifier:@"LoginToHome" sender:self];
+    [self performSegueWithIdentifier:@"loginTohome" sender:self];
     
 //    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 //															 bundle: nil];

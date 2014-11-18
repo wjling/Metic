@@ -45,6 +45,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *function1_button;
 @property (strong, nonatomic) IBOutlet UIButton *function2_button;
 
+@property (nonatomic) NSInteger tab_index;
 
 
 - (void)initParams;
