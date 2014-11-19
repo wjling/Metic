@@ -16,7 +16,7 @@
 
 @property (nonatomic,strong) UIScrollView* scrollView;
 @property (nonatomic,strong) UIScrollView* SscrollView;
-@property (nonatomic,strong) UIScrollView* details;
+@property (nonatomic,strong) UIView* details;
 @property (nonatomic,strong) UITableView* tableView;
 @property (nonatomic,strong) UIView* indicator;
 
@@ -92,9 +92,9 @@
     _indicator = indicator;
     
     //活动详情
-    UIScrollView* details = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-    details.scrollEnabled = NO;
-    details.delegate = self;
+    UIView* details = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 0)];
+//    details.scrollEnabled = NO;
+//    details.delegate = self;
     _details = details;
     
     //发起者信息
@@ -294,20 +294,13 @@
         [typeButton setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xeeeeee]] forState:UIControlStateNormal];
         [typeButton setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xf8f8f8]] forState:UIControlStateHighlighted];
         [eventType addSubview:typeButton];
+        if (i == Tnum - 1) {
+            [eventType setFrame:CGRectMake(0, CGRectGetMaxY(toolsView.frame), frame.size.width, CGRectGetMaxY(typeButton.frame)+10)];
+        }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    details.contentSize = CGSizeMake(frame.size.width, 1000);
+    details.frame = CGRectMake(0, 0, frame.size.width, CGRectGetMaxY(eventType.frame)+10);
+//    details.contentSize = CGSizeMake(frame.size.width, 1000);
     
     
     
@@ -361,17 +354,17 @@
             if (!_tableView.isScrollEnabled) {
                 _tableView.scrollEnabled = YES;
             }
-            if (!_details.isScrollEnabled) {
-                _details.scrollEnabled = YES;
+            if (_SscrollView.contentOffset.x == 0) {
+                _tableView.frame = CGRectMake(_SscrollView.frame.size.width, _scrollView.contentOffset.y - CGRectGetMinY(_SscrollView.frame), _SscrollView.frame.size.width, _SscrollView.frame.size.height);
             }
+            
+
             
         }else if(_scrollView.contentOffset.y < CGRectGetMinY(_SscrollView.frame)) {
             if (_tableView.isScrollEnabled) {
                 _tableView.scrollEnabled = NO;
             }
-            if (_details.isScrollEnabled) {
-                _details.scrollEnabled = NO;
-            }
+
             
         }
     }
@@ -383,12 +376,20 @@
             _tableView.scrollEnabled = YES;
         }
     }
-    
-    if (scrollView == _details){
-        if (_details.contentOffset.y <= 0 && _details.isScrollEnabled) {
-            _details.scrollEnabled = NO;
-        }else if(_details.contentOffset.y >= CGRectGetMinY(_SscrollView.frame) && !_details.isScrollEnabled){
-            _details.scrollEnabled = YES;
+
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView == _SscrollView) {
+        if (_SscrollView.contentOffset.x == _SscrollView.frame.size.width) {
+            
+            _tableView.frame = CGRectMake(_SscrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+            if (_scrollView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame)) _scrollView.contentOffset = CGPointMake(0, CGRectGetMinY(_SscrollView.frame));
+            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_tableView.frame) + CGRectGetMinY(_SscrollView.frame));
+        }
+        if (_SscrollView.contentOffset.x == 0) {
+            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_details.frame) + CGRectGetMinY(_SscrollView.frame));
         }
     }
 }
