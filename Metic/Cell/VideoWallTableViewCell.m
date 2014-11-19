@@ -118,6 +118,10 @@
 -(void)refresh
 {
     _isVideoReady = NO;
+    if (_progressOverlayView) {
+        [_progressOverlayView removeFromSuperview];
+        _progressOverlayView = nil;
+    }
     [self clearVideoRequest];
     if (_myPlayerViewController) {
         [_myPlayerViewController.view removeFromSuperview];
@@ -183,7 +187,7 @@
         [self PlayingVideoAtOnce];
     }else if([_controller.loadingVideo containsObject:_videoName]){
         //self.videoPlayImg.hidden = YES;
-        [self play:nil];
+        if(!_progressOverlayView) [self play:nil];
     }else{
         self.videoPlayImg.hidden = NO;
     }
@@ -193,8 +197,10 @@
 - (void)clearVideoRequest
 {
     if (videoRequest) {
-        self.progressOverlayView.hidden = YES;
-        [self closeProgressOverlayView];
+        if (_progressOverlayView) {
+            self.progressOverlayView.hidden = YES;
+            [self closeProgressOverlayView];
+        }
         [videoRequest clearDelegatesAndCancel];
         videoRequest = nil;
     }
