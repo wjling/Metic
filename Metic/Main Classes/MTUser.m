@@ -339,6 +339,7 @@ static MTUser *singletonInstance;
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
+        [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];
     }
@@ -348,6 +349,7 @@ static MTUser *singletonInstance;
 
 - (void) synchronizeFriends
 {
+    NSLog(@"synchronizeFriends begin");
     getSynchronizeFriendResponse = NO;
     doingSynchronizeFriend = YES;
     synchronizeFriendDone = NO;
@@ -372,6 +374,7 @@ static MTUser *singletonInstance;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
     NSLog(@"synchronize friend json: %@",json);
+    NSLog(@"synchronizeFriends end");
 }
 
 -(void)synchronizeTimerDoing
@@ -512,6 +515,7 @@ static MTUser *singletonInstance;
 - (void) insertToFriendTable:(NSArray *)friends
 {
     //    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
+    NSLog(@"insertToFriendTable begin");
     MySqlite* sql = [[MySqlite alloc]init];
     [sql openMyDB:DB_path];
     for (NSDictionary* friend in friends) {
@@ -547,6 +551,7 @@ static MTUser *singletonInstance;
     [sql closeMyDB];
     
     NSLog(@"好友列表更新完成！");
+    NSLog(@"insertToFriendTable end");
 }
 
 -(void)friendListDidChanged
@@ -704,6 +709,7 @@ static MTUser *singletonInstance;
 
 - (void) getMsgFromDataBase
 {
+    NSLog(@"getMsgFromDataBase begin");
     [self.eventRequestMsg removeAllObjects];
     [self.friendRequestMsg removeAllObjects];
     [self.systemMsg removeAllObjects];
@@ -765,8 +771,8 @@ static MTUser *singletonInstance;
         }
     }
 //    self.hasInitNotification = YES;
-    [self performSelectorOnMainThread:@selector(getMsgFromDataBaseDone) withObject:nil waitUntilDone:YES];
-    
+//    [self performSelectorOnMainThread:@selector(getMsgFromDataBaseDone) withObject:nil waitUntilDone:YES];
+    NSLog(@"getMsgFromDataBase end");
 }
 
 -(void)getMsgFromDataBaseDone
@@ -781,7 +787,7 @@ static MTUser *singletonInstance;
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
-    
+    NSLog(@"服务器返回了消息");
     [synchronizeFriendTimer invalidate];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
