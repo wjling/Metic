@@ -137,7 +137,7 @@ enum Return_Code
     NEW_LIKE_NOTIFICATION=989,
     NEW_COMMENT_REPLY=988,
     
-    QUIT_EVENT_NOTIFICATION = 985,
+    QUIT_EVENT_NOTIFICATION = 985,   //活动解散
     
 };
 
