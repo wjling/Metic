@@ -28,6 +28,7 @@
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
+		04ADDD811A168D4D0044DF09 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -134,6 +135,7 @@
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B8D63B19B87FB100552663 /* AssetsLibrary.framework */; };
 		08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B8D64019B89C9400552663 /* VideoPreviewViewController.m */; };
+		08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */; };
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
 		08CAB31219FE9701009DAFA9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */; };
@@ -206,7 +208,6 @@
 		510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4594196E8A960081672A /* UIImageView+WebCache.m */; };
 		510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D4596196E8A960081672A /* UIView+WebCacheOperation.m */; };
 		510D45A9196EA5700081672A /* UIImage+UIImageExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */; };
-		511D53B81A130EA600AE2803 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 511D53B71A130EA600AE2803 /* libbaidumapapi.a */; };
 		5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */; };
 		512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 512C010019F4FF2D003E19A1 /* ChangeAliasViewController.m */; };
 		5144D99A196B880300C953FB /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5144D980196B880300C953FB /* UMSocialLocalizable.strings */; };
@@ -262,7 +263,6 @@
 		51A01D161934EB270043963F /* MTEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 51A01D151934EB270043963F /* MTEvent.m */; };
 		51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DDBF7419A319B20051B88C /* libz.dylib */; };
 		51DDBF7A19A328010051B88C /* AdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DDBF7919A328010051B88C /* AdViewController.m */; };
-		51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DDBF8019A344510051B88C /* libMobClickLibrary.a */; };
 		51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51DFF381199A121900BF5FED /* UserTableViewCell.m */; };
 		51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 51DFF382199A121900BF5FED /* UserTableViewCell.xib */; };
 		51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 51E546B0199896E5003FA551 /* nearbyEventTableViewCell.m */; };
@@ -385,6 +385,7 @@
 		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
+		04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -605,6 +606,9 @@
 		08B8D63B19B87FB100552663 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPreviewViewController.h; path = Video/VideoPreviewViewController.h; sourceTree = "<group>"; };
 		08B8D64019B89C9400552663 /* VideoPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPreviewViewController.m; path = Video/VideoPreviewViewController.m; sourceTree = "<group>"; };
+		08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		08C62DD21A177C91001F7C45 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
 		08C7EE0219DABAA400FF54C2 /* MTMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMPMoviePlayerViewController.h; sourceTree = "<group>"; };
 		08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMPMoviePlayerViewController.m; sourceTree = "<group>"; };
 		08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
@@ -741,7 +745,6 @@
 		510D4596196E8A960081672A /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		510D45A7196EA5700081672A /* UIImage+UIImageExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIImageExtras.h"; sourceTree = "<group>"; };
 		510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIImageExtras.m"; sourceTree = "<group>"; };
-		511D53B71A130EA600AE2803 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		5127DED9198F21A100FB5A41 /* NearbyEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NearbyEventViewController.h; sourceTree = "<group>"; };
 		5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearbyEventViewController.m; sourceTree = "<group>"; };
 		512C00FF19F4FF2D003E19A1 /* ChangeAliasViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChangeAliasViewController.h; path = Friends/ChangeAliasViewController.h; sourceTree = "<group>"; };
@@ -835,9 +838,6 @@
 		51DDBF7419A319B20051B88C /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		51DDBF7819A328010051B88C /* AdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdViewController.h; sourceTree = "<group>"; };
 		51DDBF7919A328010051B88C /* AdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdViewController.m; sourceTree = "<group>"; };
-		51DDBF8019A344510051B88C /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
-		51DDBF8119A344510051B88C /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
-		51DDBF8219A344510051B88C /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
 		51DFF380199A121900BF5FED /* UserTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserTableViewCell.h; sourceTree = "<group>"; };
 		51DFF381199A121900BF5FED /* UserTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTableViewCell.m; sourceTree = "<group>"; };
 		51DFF382199A121900BF5FED /* UserTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserTableViewCell.xib; sourceTree = "<group>"; };
@@ -975,9 +975,8 @@
 				51F06C25197E0173000E8428 /* CoreMedia.framework in Frameworks */,
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
-				51DDBF8319A344510051B88C /* libMobClickLibrary.a in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
-				511D53B81A130EA600AE2803 /* libbaidumapapi.a in Frameworks */,
+				04ADDD811A168D4D0044DF09 /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -995,6 +994,7 @@
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
 				51581D241933575300943606 /* Foundation.framework in Frameworks */,
+				08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1377,6 +1377,16 @@
 			path = Metic/GTMBase64;
 			sourceTree = SOURCE_ROOT;
 		};
+		08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */ = {
+			isa = PBXGroup;
+			children = (
+				08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */,
+				08C62DD21A177C91001F7C45 /* MobClick.h */,
+				08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */,
+			);
+			path = UMAnalytics_Sdk_3.1.9;
+			sourceTree = "<group>";
+		};
 		08CAB30D19FE9701009DAFA9 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -1754,7 +1764,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				511D53B71A130EA600AE2803 /* libbaidumapapi.a */,
+				04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
@@ -1899,6 +1909,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */,
 				088DCEAB19FF97D70036BE82 /* Multi-Player */,
 				08CAB30D19FE9701009DAFA9 /* SVProgressHUD */,
 				08A68E2119FE62D000A9EB76 /* KxMenu */,
@@ -1908,7 +1919,6 @@
 				085D9A0219C996DD004362B8 /* SDAVAssetExportSession */,
 				08293F7F19C5DC3A009B637A /* THProgressView */,
 				08293F2619C4858F009B637A /* BMKinc */,
-				51DDBF7F19A344510051B88C /* UMAnalytics_Sdk_3.1.3 */,
 				04B6F86B19A25D5C00229393 /* MLEmoji */,
 				51F06BFD197E0109000E8428 /* ZBarSDK */,
 				04D6128F197BD40000159190 /* FlatDatePicker */,
@@ -1964,16 +1974,6 @@
 				519C65931989F61B00710B26 /* 7夜店.jpg */,
 			);
 			path = banner;
-			sourceTree = "<group>";
-		};
-		51DDBF7F19A344510051B88C /* UMAnalytics_Sdk_3.1.3 */ = {
-			isa = PBXGroup;
-			children = (
-				51DDBF8019A344510051B88C /* libMobClickLibrary.a */,
-				51DDBF8119A344510051B88C /* MobClick.h */,
-				51DDBF8219A344510051B88C /* MobClickSocialAnalytics.h */,
-			);
-			path = UMAnalytics_Sdk_3.1.3;
 			sourceTree = "<group>";
 		};
 		51E857BD196B951300812F7D /* UMSocial_Sdk_Extra_Frameworks */ = {
@@ -2651,6 +2651,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -2731,12 +2732,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.2",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
+					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.9",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e151aafc-10e1-4dea-880c-b51181a4e497";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -2777,6 +2779,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.2",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
+					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.9",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;

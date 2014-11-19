@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -18,7 +19,7 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="cSJ-rk-7tA" kind="relationship" relationship="rootViewController" id="Rg4-nf-j8g"/>
+                        <segue destination="uCG-Jb-AtQ" kind="relationship" relationship="rootViewController" id="rIK-Ci-sAS"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlT-x6-IJP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -34,11 +35,11 @@
                         <viewControllerLayoutGuide type="bottom" id="jJx-F6-S4z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nxG-89-q4T">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T7D-8a-Njr">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -49,7 +50,6 @@
                             <constraint firstItem="T7D-8a-Njr" firstAttribute="leading" secondItem="nxG-89-q4T" secondAttribute="leading" id="yGh-Zp-PBq"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="6GW-vN-TxP"/>
                     <connections>
                         <outlet property="page_scrollview" destination="T7D-8a-Njr" id="nXu-Vz-xZg"/>
                     </connections>
@@ -2518,7 +2518,7 @@
         <!--登录-->
         <scene sceneID="c37-aP-6j7">
             <objects>
-                <viewController storyboardIdentifier="LoginViewController" id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController id="uCG-Jb-AtQ" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PGv-6k-UuT"/>
                         <viewControllerLayoutGuide type="bottom" id="od8-4V-RI7"/>
@@ -2621,7 +2621,7 @@
                         <segue destination="cDI-rw-2Dm" kind="push" identifier="LoginToFriends" id="6hY-qj-DR3"/>
                         <segue destination="hMX-YH-n10" kind="push" id="Lay-DH-g1S"/>
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
-                        <segue destination="von-Oa-xrt" kind="push" identifier="LoginToHome" id="5EZ-nf-AfT"/>
+                        <segue destination="von-Oa-xrt" kind="push" identifier="loginTohome" id="5EZ-nf-AfT"/>
                         <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
                         <segue destination="dAM-f8-mD3" kind="push" id="bpL-Ol-9VE"/>
                         <segue destination="sN6-CT-cFg" kind="push" id="YWf-Zs-2Jn"/>
@@ -3697,7 +3697,7 @@
                         <viewControllerLayoutGuide type="bottom" id="4Gl-Fe-oyc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3ZT-9j-Wbx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqB-KE-UOQ">
@@ -3869,12 +3869,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="没有更多了哦，去上传吧~" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sLV-18-tVG">
-                                <rect key="frame" x="60" y="20" width="200" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="deviceRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2jD-tS-9IS">
                                 <rect key="frame" x="10" y="10" width="145" height="406"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3911,7 +3905,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="promt" destination="sLV-18-tVG" id="YBd-BW-oFH"/>
                         <outlet property="tableView1" destination="2jD-tS-9IS" id="bbz-mj-vpw"/>
                         <outlet property="tableView2" destination="snf-8S-WRM" id="liP-N9-JXX"/>
                         <segue destination="h8r-CT-ILs" kind="push" identifier="photosShow" id="ybG-ek-un6"/>
@@ -4882,17 +4875,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="mCC-Hp-8GT"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="ItJ-aD-aY9"/>
-        <segue reference="0y8-RS-ijM"/>
-        <segue reference="fLJ-gw-aSw"/>
-        <segue reference="EEO-gR-a4J"/>
+        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="0y8-RS-ijM"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="UXj-VV-omZ"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="c1O-Ly-Hfg"/>
         <segue reference="hOW-ww-bKW"/>
         <segue reference="Bdm-ot-CYp"/>
-        <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>
 </document>

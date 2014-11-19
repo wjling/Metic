@@ -57,23 +57,21 @@
     [super viewDidLoad];
     NSLog(@"login did load, fromRegister: %d",fromRegister);
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (!fromRegister) {
         if ([userDf boolForKey:@"firstLaunched"]) {
             NSLog(@"login: it is the first launch");
+            [self showBlackView];
+//            [userDf setValue:[NSNumber numberWithBool:NO] forKey:@"firstLaunched"];
+//            [userDf synchronize];
             UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
             WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
             {
-//                __block BOOL flag = YES;
-//                [self presentViewController:vc animated:NO completion:^
-//                 {
-//                     flag = NO;
-//                 }];
-//                while (flag) {
-//                    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-//                }
+                
+                [self presentViewController:vc animated:NO completion:nil];
+                
             }
         }
         else
@@ -130,6 +128,8 @@
         fromRegister = NO;
 //        text_password = nil;
 //        text_userName = nil;
+        textField_userName.text = text_userName;
+        textField_password.text = text_password;
     }
     else{
 //        [self.view setHidden:YES];
@@ -358,7 +358,7 @@
 
 - (void)jumpToMainView
 {
-    [self performSegueWithIdentifier:@"LoginToHome" sender:self];
+    [self performSegueWithIdentifier:@"loginTohome" sender:self];
     
 //    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 //															 bundle: nil];

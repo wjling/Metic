@@ -83,12 +83,14 @@
     for (NSMutableDictionary* msg in [MTUser sharedInstance].eventRequestMsg) {
         NSInteger cmd = [[msg objectForKey:@"cmd"] integerValue];
         if (cmd != REQUEST_EVENT) {
-            BOOL flag = true;
+            BOOL flag = YES;
             for (NSMutableDictionary* temp_msg in msg_arr) {
-                NSNumber* eventId1 = [temp_msg objectForKey:@"event_id"];
-                NSNumber* eventId2 = [msg objectForKey:@"event_id"];
-                if ([eventId1 integerValue] == [eventId2 integerValue]) {
-                    flag = false;
+                NSInteger eventId1 = [[temp_msg objectForKey:@"event_id"]integerValue];
+                NSInteger eventId2 = [[msg objectForKey:@"event_id"]integerValue];
+                NSInteger fid1 = [[temp_msg objectForKey:@"id"]integerValue];
+                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+                if (eventId1 == eventId2 && fid1 == fid2) {
+                    flag = NO;
                     break;
                 }
             }
@@ -286,13 +288,15 @@
                                            [NSString stringWithFormat:@"%@",result],@"ishandled",
                                            nil]];
             
-            for (NSMutableDictionary* msg in [MTUser sharedInstance].eventRequestMsg) {
+            for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
                 NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
                 NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
                 NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                 if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
                     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
                     [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                    continue;
                 }
             }
             
@@ -320,9 +324,40 @@
         {
             [SVProgressHUD dismissWithError:@"你已经在此活动中"];
             //[CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
-            NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
-            [[MTUser sharedInstance].eventRequestMsg removeObject:aMsg];
-            [msg_arr removeObjectAtIndex:selectedPath.row];
+//            NSMutableDictionary* aMsg = [msg_arr objectAtIndex:selectedPath.row];
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
+            NSInteger row = selectedPath.row;
+            NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:row];
+            NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+            NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+            NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+            NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
+            
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%d",event_id1],@"event_id",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
+                                           nil]];
+            
+            for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                    continue;
+                }
+            }
+
+            [mySql closeMyDB];
+            
+            [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+            [msg_arr removeObjectAtIndex:row];
             [self.tableView reloadData];
             //            int count = self.msgFromDB.count;
             //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];

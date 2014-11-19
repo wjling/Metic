@@ -25,8 +25,8 @@
 HttpSender* httpSender;
 
 enum Server_code{
-    Server = 0,//测试服
-//    Server = 1,//正式服
+//    Server = 0,//测试服
+    Server = 1,//正式服
 };
 
 enum Alias_code
@@ -136,6 +136,9 @@ enum Return_Code
     NEW_SHARE_NOTIFICATION=990,
     NEW_LIKE_NOTIFICATION=989,
     NEW_COMMENT_REPLY=988,
+    
+    QUIT_EVENT_NOTIFICATION = 985,
+    
 };
 
 #endif

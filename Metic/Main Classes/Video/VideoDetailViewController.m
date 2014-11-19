@@ -428,6 +428,18 @@
 
                     if (self && self.navigationController.viewControllers.lastObject == self ) {
                         [self downloadVideo:videoName url:url];
+                        if (_controller) {
+                            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
+                            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+                            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+                            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+                            [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+                            [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+                            [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+//                            NSIndexPath* indexPath = [_controller.tableView indexPathForCell:_SeleVcell];
+//                            [_controller.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//                            [_SeleVcell PlayingVideoAtOnce];
+                        }
                     }
                 });
                 
@@ -490,9 +502,8 @@
         double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            self.progressOverlayView.progress = 0.;
-            self.progressOverlayView.hidden = YES;
-            self.videoPlayImg.hidden = NO;
+            [_progressOverlayView removeFromSuperview];
+            _progressOverlayView = nil;
         });
     }
     
@@ -1344,3 +1355,4 @@
 }
 
 @end
+

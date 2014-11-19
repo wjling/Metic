@@ -74,6 +74,9 @@
     [self.genderRoot_view addSubview:male_button];
     [self.genderRoot_view addSubview:female_button];
     
+    male_button.hidden = YES;
+    female_button.hidden = YES;
+    
     rootView.myDelegate = self;
 //    textField_confromPassword.delegate = rootView;
     textField_email.delegate = rootView;
@@ -145,14 +148,21 @@
 {
 //    [self performSegueWithIdentifier:@"RegisterToLogin" sender:self];
 //    [self.navigationController popViewControllerAnimated:YES];
-    UIViewController* login;
+    LoginViewController* login;
     NSArray *VCs = [self.navigationController viewControllers];
     for (UIViewController* vc in VCs) {
         if ([vc isKindOfClass:[LoginViewController class]]) {
-            login = vc;
+            login = (LoginViewController*)vc;
             break;
         }
     }
+    if (login && registerSucceeded) {
+        login.text_userName = self.textField_email.text;
+        login.text_password = self.textField_password.text;
+        login.gender = gender;
+    }
+    login.fromRegister = YES;
+    NSLog(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,login.fromRegister);
     [self.navigationController popToViewController:login animated:YES];
 }
 

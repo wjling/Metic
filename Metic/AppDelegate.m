@@ -46,13 +46,14 @@
 //                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
+    
+    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
         [userDf setBool:YES forKey:@"firstLaunched"];
         NSLog(@"The first launch");
         [userDf synchronize];
-        
     }
     else
     {
@@ -187,6 +188,9 @@
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
     NSLog(@"enter foreground");
     application.applicationIconBadgeNumber = 0;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
+                                                        object:nil
+                                                      userInfo:nil];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -194,6 +198,7 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
     NSLog(@"did become active");
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
@@ -470,7 +475,7 @@
 {
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [userDf objectForKey:key];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
     NSLog(@"system setting1 flag: %d",flag);
 
@@ -666,6 +671,14 @@
                 [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
             }
             NSLog(@"有人@你： %@",msg_dic);
+        }
+        else if (msg_cmd == 985)
+        {
+            [[MTUser sharedInstance].systemMsg addObject:msg_dic];
+            NSString* subject = [msg_dic objectForKey:@"subject"];
+            if (numOfSyncMessages <= 1) {
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
+            }
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
         {
