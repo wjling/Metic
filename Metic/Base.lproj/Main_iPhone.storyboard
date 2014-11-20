@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -4514,6 +4513,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="GrL-qN-Zy2"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="GUI" destination="b3l-AQ-ESg" id="hdb-I1-HRj"/>
                         <outlet property="backButton" destination="nsZ-uf-Vg2" id="OCS-7a-zMk"/>
                         <outlet property="controlView" destination="Qp1-rE-p61" id="zjM-aO-b9N"/>
                         <outlet property="inButton" destination="GFn-Gn-JH8" id="w45-Ud-JPt"/>
