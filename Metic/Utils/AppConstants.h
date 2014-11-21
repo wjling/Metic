@@ -8,12 +8,12 @@
 
 /* UserDefaults里面的一些数据参考：
  
- * hasUnreadNotification: 0-2为消息中心tab的标号，－1为不出现在tab中的信息或者没有未读的新信息
+ *
  * USER[userid], 如USER10: 是一个字典，记录了ID为userid的用户的一些信息及设置
    当前该字典键值对介绍：
     * systemSetting1:(bool) 系统设置里“通知栏提醒”的开关，开：YES， 关：NO
     * systemSetting2:(bool) 系统设置里“版本更新提醒”的开关，开：YES， 关：NO
- 
+    * hasUnreadNotification(nsnumber): 0-2为消息中心tab的标号，－1为不出现在tab中的信息或者没有未读的新信息
  
  */
 
@@ -137,7 +137,7 @@ enum Return_Code
     NEW_LIKE_NOTIFICATION=989,
     NEW_COMMENT_REPLY=988,
     
-    QUIT_EVENT_NOTIFICATION = 985,
+    QUIT_EVENT_NOTIFICATION = 985,   //活动解散
     
 };
 

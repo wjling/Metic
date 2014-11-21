@@ -1047,7 +1047,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ">
-                        <barButtonItem key="backBarButtonItem" title=" " id="YuC-WP-Ela"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="r60-v5-zt0">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Waw-F2-eNP">
+                                <rect key="frame" x="264" y="7" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="头部右上角图标-更多">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="rightBarBtnClicked:" destination="FRw-iK-B1T" eventType="touchUpInside" id="bnd-In-dVC"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="avatar_imageView" destination="TeT-cC-fCq" id="m8r-OU-Jev"/>
@@ -2035,7 +2046,7 @@
         <!--用户二维码-->
         <scene sceneID="2wn-kM-mf8">
             <objects>
-                <viewController id="FUy-p0-XSb" customClass="UserQRCodeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserQRCodeViewController" id="FUy-p0-XSb" customClass="UserQRCodeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Mch-74-eRh"/>
                         <viewControllerLayoutGuide type="bottom" id="dSv-X1-GNS"/>

@@ -16,6 +16,7 @@
 #import "HttpSender.h"
 #import "MenuViewController.h"
 #import "NotificationsViewController.h"
+#import "HomeViewController.h"
 
 
 @implementation AppDelegate
@@ -38,6 +39,7 @@
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"app did finish launch");
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
@@ -47,7 +49,6 @@
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
     
-    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
@@ -68,6 +69,7 @@
 
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
+//    [leftMenu tableView:leftMenu.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
     [self initApp];
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
@@ -678,6 +680,28 @@
             NSString* subject = [msg_dic objectForKey:@"subject"];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
+            }
+            
+            NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+            [sql openMyDB:path];
+            NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+            NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
+            [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+            [sql closeMyDB];
+            
+            for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
+                if ([vc isKindOfClass:[HomeViewController class]]) {
+                    for (int i = 0; i < vc.events.count; i++) {
+                        NSMutableDictionary* event = vc.events[i];
+                        NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                            [vc.events removeObject:event];
+                            [vc.tableView reloadData];
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
