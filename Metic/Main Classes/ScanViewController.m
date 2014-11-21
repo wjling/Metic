@@ -58,7 +58,9 @@
         _isScaning = YES;
         [readerView start];
     }
-    
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation) userInfo:nil repeats:YES];
+    }
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -71,7 +73,10 @@
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
-    
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -307,6 +312,7 @@
 
 -(void)animation
 {
+    NSLog(@"aaa");
     CGRect frame = _line.frame;
     if (_upOrdown && CGRectGetMaxY(frame) + 2 > 321) {
         _upOrdown = NO;
