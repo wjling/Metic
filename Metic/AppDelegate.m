@@ -39,6 +39,7 @@
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"app did finish launch");
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
@@ -48,7 +49,6 @@
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
     
-    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
@@ -69,6 +69,7 @@
 
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
+//    [leftMenu tableView:leftMenu.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
     [self initApp];
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
