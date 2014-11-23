@@ -341,6 +341,10 @@
 }
 
 #pragma scrollview Delegate
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
+}
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"

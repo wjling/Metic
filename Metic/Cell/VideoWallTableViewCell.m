@@ -169,7 +169,7 @@
     self.videoThumb = nil;
     
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
+        if (image && !([_playingVideoName isEqualToString:_videoName])) {
             [self.video_button setImage:image forState:UIControlStateNormal];
             self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;
@@ -465,8 +465,9 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
-        
+        BOOL need = NO;
         if (!_playingVideoName || !([_playingVideoName isEqualToString:_videoName]) ) {
+            need = YES;
             _playingVideoName = _videoName;
             NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
             _videoItem = [AVPlayerItem playerItemWithURL:url];
@@ -474,7 +475,7 @@
         
         if (!_videoPlayer) {
             _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
-        }else {
+        }else if(need) {
             [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
             [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
         }
@@ -510,7 +511,8 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
         });
-                [self.videoContainer.layer addSublayer:self.avLayer];
+        
+        if (need) [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];
 //            });
@@ -545,6 +547,7 @@
 - (void)pauseVideo
 {
     if (_videoPlayer) {
+        _isPlaying = NO;
         [_videoPlayer pause];
     }
 }
