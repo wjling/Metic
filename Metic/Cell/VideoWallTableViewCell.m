@@ -32,6 +32,7 @@
 @property (strong, nonatomic) AVPlayerItem* videoItem;
 @property (strong, nonatomic) AVPlayer* videoPlayer;
 @property (strong, nonatomic) AVPlayerLayer* avLayer;
+@property (strong, nonatomic) NSString* playingVideoName;
 @property BOOL isPlaying;
 
 @end
@@ -51,7 +52,7 @@
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
@@ -91,8 +92,6 @@
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
-//    [self openmovie:url];
-//    [self videoPlay:videoName url:url];
     [self downloadVideo:videoName url:url];
 }
 
@@ -129,9 +128,8 @@
         _myPlayerViewController = nil;
     }
     
-    _isPlaying = NO;
-    [ self.videoPlayer pause];
-    [self.avLayer removeFromSuperlayer];
+    
+    
     
     
     
@@ -178,6 +176,12 @@
         }
     }];
     
+    if(!_playingVideoName || !([_playingVideoName isEqualToString:_videoName])){
+        _isPlaying = NO;
+        [ self.videoPlayer pause];
+        [self.avLayer removeFromSuperlayer];
+    }
+    
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
@@ -185,7 +189,7 @@
     if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
     {
         self.videoPlayImg.hidden = YES;
-        [self PlayingVideoAtOnce];
+//        [self PlayingVideoAtOnce];
     }else if([_controller.loadingVideo containsObject:_videoName]){
         //self.videoPlayImg.hidden = YES;
         if(!_progressOverlayView) [self play:nil];
@@ -311,18 +315,19 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
 
-        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
-        player.videoName = _videoName;
-        player.wall = _controller;
-        player.cell = self;
-        [self.controller presentViewController:player animated:YES completion:nil];
-        
-        
-        
-        
-        
-        
-        return;
+        //av播放器播放
+//        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
+//        player.videoName = _videoName;
+//        player.wall = _controller;
+//        player.cell = self;
+//        [self.controller presentViewController:player animated:YES completion:nil];
+//        
+//        
+//        
+//        
+//        
+//        
+//        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -377,12 +382,12 @@
                     }
                     if (_controller) {
                         NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
-                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
-                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
-                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
-                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
-                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+//                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+//                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+//                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+//                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+//                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+//                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
                         [self PlayingVideoAtOnce];
                     }
                 }
@@ -460,10 +465,27 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
-
-            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
-            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
-            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
+        
+        if (!_playingVideoName || !([_playingVideoName isEqualToString:_videoName]) ) {
+            _playingVideoName = _videoName;
+            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
+            _videoItem = [AVPlayerItem playerItemWithURL:url];
+        }
+        
+        if (!_videoPlayer) {
+            _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
+        }else {
+            [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
+            [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
+        }
+        if (!_avLayer) {
+            _avLayer = [AVPlayerLayer playerLayerWithPlayer:_videoPlayer];
+        }
+        
+        
+//            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
+//            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
+//            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
 //            dispatch_sync(dispatch_get_main_queue(), ^{
@@ -485,6 +507,9 @@
      
                 
                 self.avLayer.frame = frame;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+        });
                 [self.videoContainer.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];

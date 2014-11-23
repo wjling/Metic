@@ -33,6 +33,7 @@
 @property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
+@property NSTimer* timer;
 @end
 
 @implementation VideoWallViewController
@@ -71,17 +72,13 @@
     _videoInfos = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
     _shouldFlash = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self) {
-            _shouldFlash = YES;
-        }
-    });
+    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
     [_tableView reloadData];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-//                                                            object:nil
-//                                                          userInfo:nil];
-//    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    });
     
     _Headeropen = NO;
     _Footeropen = NO;
@@ -108,17 +105,21 @@
     
     [MobClick beginLogPageView:@"视频墙"];
     
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-//                                                            object:nil
-//                                                          userInfo:nil];
-//    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    });
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
+                                                        object:nil
+                                                      userInfo:nil];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频墙"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -138,6 +139,12 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)reShouldFlash{
+    if (self) {
+        _shouldFlash = YES;
+    }
 }
 
 -(void)closeRJ
@@ -230,11 +237,12 @@
     [sql closeMyDB];
     [self showPromt];
     
-    [self initAVPlayers];
+//    [self initAVPlayers];
 }
 
 -(void)initAVPlayers
 {
+    return;
     if (!_AVPlayers) _AVPlayers = [[NSMutableDictionary alloc]init];
     if (!_AVPlayerLayers) _AVPlayerLayers = [[NSMutableDictionary alloc]init];
     if (!_AVPlayerItems) _AVPlayerItems = [[NSMutableDictionary alloc]init];
@@ -286,19 +294,17 @@
                     for (NSMutableDictionary *dictionary in newvideo_list) {
                         [_videoInfos addObject:dictionary];
                     }
-                    [self initAVPlayers];
+//                    [self initAVPlayers];
                     _shouldFlash = NO;
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        if (self) {
-                            _shouldFlash = YES;
-                        }
-                    });
+                    [_timer invalidate];
+                    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
+                    
                     [self.tableView reloadData];
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-//                                                                            object:nil
-//                                                                          userInfo:nil];
-//                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                            object:nil
+                                                                          userInfo:nil];
+                    });
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self closeRJ];
                     });
@@ -337,30 +343,30 @@
 #pragma scrollview Delegate
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-//                                                        object:nil
-//                                                      userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                        object:nil
+                                                      userInfo:nil];
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-//    _shouldPlay = YES;
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        if (_shouldPlay == YES) {
-//            _shouldPlay = NO;
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
-//                                                                object:nil
-//                                                              userInfo:nil];
-//            
-//        }
-//        
-//    });
+    _shouldPlay = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_shouldPlay == YES) {
+            _shouldPlay = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                object:nil
+                                                              userInfo:nil];
+            
+        }
+        
+    });
     
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    _shouldPlay = NO;
+    _shouldPlay = NO;
 }
 
 
