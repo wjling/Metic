@@ -271,8 +271,8 @@
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.fInfoView setImageToBlur:image blurRadius:2.0 brightness:-0.15 completionBlock:nil];
-            [self.fDescriptionView setImageToBlur:image blurRadius:1.0 brightness:-0.1 completionBlock:nil];
+            [self.fInfoView setImageToBlur:image blurRadius:1.5 brightness:-0.25 completionBlock:nil];
+            [self.fDescriptionView setImageToBlur:image blurRadius:1 brightness:-0.2 completionBlock:nil];
         });
         
     }];
