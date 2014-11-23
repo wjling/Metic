@@ -9,6 +9,7 @@
 #import "UserInfoViewController.h"
 #import "MobClick.h"
 #import "UserQRCodeViewController.h"
+#import "UIImageView+LBBlurredImage.h"
 
 
 @interface UserInfoViewController ()
@@ -205,7 +206,20 @@
     self.name_label.text = [MTUser sharedInstance].name;
     self.email_label.text = [MTUser sharedInstance].email;
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
-    [getter getAvatar];
+    [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.banner_imageView setImageToBlur:image blurRadius:2.5 brightness:-0.2 completionBlock:nil];
+            
+//            UIImage* img1 = [image brightness:0.5];
+//            UIImage* img2 = [img1 gaussianBlur:5];
+//            self.banner_imageView.image = img2;
+//            img = [img brightness:0.5];
+            
+        });
+//        UIImage* img = image;
+//        img = [img gaussianBlur:5];
+//        self.banner_imageView.image = img;
+    }];
     
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];

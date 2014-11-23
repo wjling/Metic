@@ -74,9 +74,21 @@
     NSString *url = [self getLocalAvatarUrl];
     if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+        
     }else{
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
     }
+}
+
+-(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
+{
+    NSString *url = [self getLocalAvatarUrl];
+    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
+        
+    }else{
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly completed:completion];    }
+
 }
 
 //-(void)getAvatar

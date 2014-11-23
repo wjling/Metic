@@ -33,4 +33,10 @@ enum LBBlurredImageError {
             blurRadius: (CGFloat)blurRadius
        completionBlock: (LBBlurredImageCompletionBlock) completion;
 
+- (void)setImageToBlur: (UIImage *)image
+            blurRadius: (CGFloat)blurRadius
+            brightness: (CGFloat)brightness
+       completionBlock: (LBBlurredImageCompletionBlock) completion;
+
+
 @end
