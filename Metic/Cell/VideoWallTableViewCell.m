@@ -17,6 +17,7 @@
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "../Main Classes/Video/VideoDetailViewController.h"
 #import "VideoPlayerViewController.h"
+#import "../Main Classes/Video/MTVideoPlayerViewController.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -309,7 +310,19 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+
+        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
+        player.videoName = _videoName;
+        player.wall = _controller;
+        player.cell = self;
+        [self.controller presentViewController:player animated:YES completion:nil];
         
+        
+        
+        
+        
+        
+        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;

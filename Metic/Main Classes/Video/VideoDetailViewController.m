@@ -20,6 +20,7 @@
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
 #import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+#import "MTVideoPlayerViewController.h"
 
 
 #define chooseArray @[@[@"举报视频"]]
@@ -376,6 +377,16 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
+        player.videoName = videoName;
+        player.wall = _controller;
+        player.cell = _SeleVcell;
+        [self.controller presentViewController:player animated:YES completion:nil];
+        
+        
+        
+        
+        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
