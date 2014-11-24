@@ -268,7 +268,7 @@
     [request setHTTPBody:postData];
     
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 
     
@@ -302,7 +302,7 @@
     [request setHTTPBody:postData];
     
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     
     
@@ -316,7 +316,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:5];
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     //NSLog(@"request sent");
     
@@ -331,7 +331,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:5];
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     NSLog(@"URL: %@ ",httpURL);
     
@@ -352,6 +352,7 @@
     [request setHTTPBody:jsonData];
     NSString *postLength = [NSString stringWithFormat:@"%d",[jsonData length]];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
@@ -365,7 +366,7 @@
     
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-
+    [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 

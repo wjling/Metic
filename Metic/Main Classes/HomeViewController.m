@@ -76,6 +76,7 @@
     
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
+    [_tableView reloadData];
     
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
@@ -94,7 +95,6 @@
     [self.listenerDelegate connect];
     
     self.sql = [[MySqlite alloc]init];
-    [self pullEventsFromDB];
     
     
 }

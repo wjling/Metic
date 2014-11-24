@@ -69,6 +69,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="yJx-Uw-jrr">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="225"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -137,6 +142,7 @@
                 <outlet property="title" destination="ZBF-qj-boh" id="kmC-5h-hSP"/>
                 <outlet property="videoContainer" destination="WLv-Jr-h4B" id="7Ia-Tq-iEk"/>
                 <outlet property="videoPlayImg" destination="bnY-ob-KKM" id="kz9-Bk-e62"/>
+                <outlet property="videoView" destination="yJx-Uw-jrr" id="BMM-sZ-AJs"/>
                 <outlet property="video_button" destination="9rh-BY-Zg2" id="r8V-Vc-NyK"/>
             </connections>
         </tableViewCell>

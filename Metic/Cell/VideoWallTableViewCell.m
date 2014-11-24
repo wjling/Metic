@@ -17,6 +17,7 @@
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "../Main Classes/Video/VideoDetailViewController.h"
 #import "VideoPlayerViewController.h"
+#import "../Main Classes/Video/MTVideoPlayerViewController.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -31,6 +32,7 @@
 @property (strong, nonatomic) AVPlayerItem* videoItem;
 @property (strong, nonatomic) AVPlayer* videoPlayer;
 @property (strong, nonatomic) AVPlayerLayer* avLayer;
+@property (strong, nonatomic) NSString* playingVideoName;
 @property BOOL isPlaying;
 
 @end
@@ -50,7 +52,7 @@
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
@@ -90,8 +92,6 @@
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
-//    [self openmovie:url];
-//    [self videoPlay:videoName url:url];
     [self downloadVideo:videoName url:url];
 }
 
@@ -118,18 +118,16 @@
 -(void)refresh
 {
     _isVideoReady = NO;
+    if (_progressOverlayView) {
+        [_progressOverlayView removeFromSuperview];
+        _progressOverlayView = nil;
+    }
     [self clearVideoRequest];
     if (_myPlayerViewController) {
         [_myPlayerViewController.view removeFromSuperview];
         _myPlayerViewController = nil;
     }
-    
-    _isPlaying = NO;
-    [ self.videoPlayer pause];
-    [self.avLayer removeFromSuperlayer];
-    
-    
-    
+
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -165,6 +163,26 @@
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
     self.videoThumb = nil;
     
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+    {
+        self.videoPlayImg.hidden = YES;
+        //        [self PlayingVideoAtOnce];
+    }else if([_controller.loadingVideo containsObject:_videoName]){
+        //self.videoPlayImg.hidden = YES;
+        
+        _playingVideoName = nil;
+        if(!_progressOverlayView) [self play:nil];
+    }else{
+        _playingVideoName = nil;
+        self.videoPlayImg.hidden = NO;
+    }
+
+    
+    
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [self.video_button setImage:image forState:UIControlStateNormal];
@@ -173,28 +191,22 @@
         }
     }];
     
-    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
-    
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
-    {
-        self.videoPlayImg.hidden = YES;
-        [self PlayingVideoAtOnce];
-    }else if([_controller.loadingVideo containsObject:_videoName]){
-        //self.videoPlayImg.hidden = YES;
-        [self play:nil];
-    }else{
-        self.videoPlayImg.hidden = NO;
+    if(!_playingVideoName || !([_playingVideoName isEqualToString:_videoName])){
+        _isPlaying = NO;
+        [ self.videoPlayer pause];
+        [self.avLayer removeFromSuperlayer];
     }
-
+    
+    
 }
 
 - (void)clearVideoRequest
 {
     if (videoRequest) {
-        self.progressOverlayView.hidden = YES;
-        [self closeProgressOverlayView];
+        if (_progressOverlayView) {
+            self.progressOverlayView.hidden = YES;
+            [self closeProgressOverlayView];
+        }
         [videoRequest clearDelegatesAndCancel];
         videoRequest = nil;
     }
@@ -246,10 +258,10 @@
                     zan_num ++;
                 }
                 [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-                VideoWallViewController* wall = _controller;
                 [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
                 _controller.shouldFlash = NO;
-                [_controller.tableView reloadData];
+                [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
+                [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     _controller.shouldFlash = YES;
                 });
@@ -303,7 +315,20 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        
+
+        //av播放器播放
+//        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
+//        player.videoName = _videoName;
+//        player.wall = _controller;
+//        player.cell = self;
+//        [self.controller presentViewController:player animated:YES completion:nil];
+//        
+//        
+//        
+//        
+//        
+//        
+//        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -358,12 +383,12 @@
                     }
                     if (_controller) {
                         NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
-                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
-                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
-                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
-                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
-                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+//                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+//                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+//                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+//                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+//                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+//                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
                         [self PlayingVideoAtOnce];
                     }
                 }
@@ -438,17 +463,35 @@
     {
         _isPlaying = YES;
         
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
+//        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
+//        
+//        dispatch_async(queue, ^{
+        BOOL need = NO;
+        if (!_playingVideoName || !([_playingVideoName isEqualToString:_videoName]) ) {
+            need = YES;
+            _playingVideoName = _videoName;
+            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
+            _videoItem = [AVPlayerItem playerItemWithURL:url];
+        }
         
-        dispatch_async(queue, ^{
-
-            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
-            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
-            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
+        if (!_videoPlayer) {
+            _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
+        }else if(need) {
+            [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
+            [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
+        }
+        if (!_avLayer) {
+            _avLayer = [AVPlayerLayer playerLayerWithPlayer:_videoPlayer];
+        }
+        
+        
+//            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
+//            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
+//            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+        
                 CGRect Bframe = _video_button.frame;
                 CGRect frame = Bframe;
                 AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -466,11 +509,15 @@
      
                 
                 self.avLayer.frame = frame;
-                [self.videoContainer.layer addSublayer:self.avLayer];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+        });
+        
+        if (need) [self.videoView.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];
-            });
-        });
+//            });
+//        });
     }
     
 }
@@ -501,6 +548,7 @@
 - (void)pauseVideo
 {
     if (_videoPlayer) {
+        _isPlaying = NO;
         [_videoPlayer pause];
     }
 }

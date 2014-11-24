@@ -140,6 +140,8 @@
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
 		08CAB31219FE9701009DAFA9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */; };
+		08D5E8C21A22050800D368D8 /* MTVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */; };
+		08D5E8C31A22050800D368D8 /* MTVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -617,6 +619,9 @@
 		08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		08CAB30F19FE9701009DAFA9 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		08D5E8BF1A22050800D368D8 /* MTVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVideoPlayerViewController.h; path = Video/MTVideoPlayerViewController.h; sourceTree = "<group>"; };
+		08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVideoPlayerViewController.m; path = Video/MTVideoPlayerViewController.m; sourceTree = "<group>"; };
+		08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MTVideoPlayerViewController.xib; path = Video/MTVideoPlayerViewController.xib; sourceTree = "<group>"; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -1533,6 +1538,9 @@
 				08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */,
 				0896AAC919E7914A00A93A1B /* MTUIImagePickerController.h */,
 				0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */,
+				08D5E8BF1A22050800D368D8 /* MTVideoPlayerViewController.h */,
+				08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */,
+				08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -2312,6 +2320,7 @@
 				085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
+				08D5E8C31A22050800D368D8 /* MTVideoPlayerViewController.xib in Resources */,
 				51F06C1F197E0109000E8428 /* zbar-samples.png in Resources */,
 				51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */,
 				51F06C1E197E0109000E8428 /* zbar-helpicons.png in Resources */,
@@ -2494,6 +2503,7 @@
 				5192530519FA2BBF00CF6BB3 /* myInputView.m in Sources */,
 				04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */,
 				04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */,
+				08D5E8C21A22050800D368D8 /* MTVideoPlayerViewController.m in Sources */,
 				51F4CB1219E6307500E487F1 /* ContextFilterLogFormatter.m in Sources */,
 				04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */,
 				510D45A1196E8A960081672A /* UIImage+GIF.m in Sources */,

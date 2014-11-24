@@ -72,7 +72,7 @@
 -(void)getAvatar
 {
     NSString *url = [self getLocalAvatarUrl];
-    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
+    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId] || [[MTUser sharedInstance].userid intValue] == [_avatarId intValue]) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
         
     }else{
