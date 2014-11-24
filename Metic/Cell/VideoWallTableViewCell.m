@@ -12,6 +12,7 @@
 #import "../Utils/PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
@@ -32,7 +33,9 @@
 @property (strong, nonatomic) AVPlayerItem* videoItem;
 @property (strong, nonatomic) AVPlayer* videoPlayer;
 @property (strong, nonatomic) AVPlayerLayer* avLayer;
-@property (strong, nonatomic) NSString* playingVideoName;
+//@property (strong, nonatomic) NSString* playingVideoName;
+@property BOOL same;
+@property BOOL layerOn;
 @property BOOL isPlaying;
 
 @end
@@ -57,6 +60,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
+    _layerOn = NO;
     // Initialization code
 }
 
@@ -89,6 +93,9 @@
 
 - (IBAction)play:(id)sender {
     
+    if (videoRequest) {
+        return;
+    }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
@@ -117,6 +124,7 @@
 
 -(void)refresh
 {
+    _same = NO;
     _isVideoReady = NO;
     if (_progressOverlayView) {
         [_progressOverlayView removeFromSuperview];
@@ -138,8 +146,9 @@
     self.authorId = [_videoInfo valueForKey:@"author_id"];
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:self.authorId];
     [avatarGetter getAvatar];
-    
-    _videoName = [_videoInfo valueForKey:@"video_name"];
+    NSString* vN = [_videoInfo valueForKey:@"video_name"];
+    _same = [_videoName isEqualToString:vN];
+    _videoName = vN;
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -163,6 +172,13 @@
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
     self.videoThumb = nil;
     
+    if(!_same){
+        _isPlaying = NO;
+        _layerOn = NO;
+        [ self.videoPlayer pause];
+        [self.avLayer removeFromSuperlayer];
+    }
+    
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
@@ -173,30 +189,17 @@
         //        [self PlayingVideoAtOnce];
     }else if([_controller.loadingVideo containsObject:_videoName]){
         //self.videoPlayImg.hidden = YES;
-        
-        _playingVideoName = nil;
+        _isPlaying = NO;
         if(!_progressOverlayView) [self play:nil];
     }else{
-        _playingVideoName = nil;
+        _isPlaying = NO;
         self.videoPlayImg.hidden = NO;
     }
-
     
-    
-    [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
-            [self.video_button setImage:image forState:UIControlStateNormal];
-            self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            self.videoThumb = image;
-        }
+    [self.thumbImg sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        self.thumbImg.contentMode = UIViewContentModeScaleAspectFill;
+        self.videoThumb = image;
     }];
-    
-    if(!_playingVideoName || !([_playingVideoName isEqualToString:_videoName])){
-        _isPlaying = NO;
-        [ self.videoPlayer pause];
-        [self.avLayer removeFromSuperlayer];
-    }
-    
     
 }
 
@@ -369,6 +372,7 @@
                 _receivedBytes += size;
                 CGFloat progress = _receivedBytes*1.0f / total;
                 self.progressOverlayView.progress = progress;
+                NSLog(@"%f",progress);
                 if (!(_controller.navigationController.viewControllers.lastObject == _controller)) {
                     [self clearVideoRequest];
                 }
@@ -423,10 +427,10 @@
 {
     [self.videoPlayImg setHidden:YES];
     if (!self.progressOverlayView)
-        self.progressOverlayView = [[DAProgressOverlayView alloc] initWithFrame:self.video_button.bounds];
+        self.progressOverlayView = [[DAProgressOverlayView alloc] initWithFrame:self.thumbImg.bounds];
     [self.progressOverlayView setHidden:NO];
     self.progressOverlayView.progress = 0;
-    [self.video_button addSubview:self.progressOverlayView];
+    [self.thumbImg addSubview:self.progressOverlayView];
     [self.progressOverlayView displayOperationWillTriggerAnimation];
 }
 
@@ -466,28 +470,21 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
-        BOOL need = NO;
-        if (!_playingVideoName || !([_playingVideoName isEqualToString:_videoName]) ) {
-            need = YES;
-            _playingVideoName = _videoName;
+        if (!_same) {
             NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
             _videoItem = [AVPlayerItem playerItemWithURL:url];
         }
         
         if (!_videoPlayer) {
             _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
-        }else if(need) {
+        }else if(!_same) {
             [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
             [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
         }
         if (!_avLayer) {
             _avLayer = [AVPlayerLayer playerLayerWithPlayer:_videoPlayer];
         }
-        
-        
-//            self.videoItem = [_controller.AVPlayerItems objectForKey:_videoName];
-//            self.videoPlayer = [_controller.AVPlayers objectForKey:_videoName];
-//            self.avLayer = [_controller.AVPlayerLayers objectForKey:_videoName];
+
             self.videoPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
 //            dispatch_sync(dispatch_get_main_queue(), ^{
@@ -512,10 +509,16 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
         });
+        self.videoPlayer.muted = YES;
+        if (!_same || !_layerOn){
+            [self.videoView.layer addSublayer:self.avLayer];
+            _same = YES;
+            _layerOn = YES;
+            
+        }
+        [self.videoPlayer play];
         
-        if (need) [self.videoView.layer addSublayer:self.avLayer];
-                self.videoPlayer.volume = 0;
-                [self.videoPlayer play];
+        
 //            });
 //        });
     }
@@ -530,6 +533,7 @@
     UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
     if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
         _isPlaying = NO;
+        _layerOn = NO;
         [self.avLayer removeFromSuperlayer];
         return;
     }
