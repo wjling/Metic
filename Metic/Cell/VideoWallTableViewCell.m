@@ -168,6 +168,26 @@
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
     self.videoThumb = nil;
     
+    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+    
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+    {
+        self.videoPlayImg.hidden = YES;
+        //        [self PlayingVideoAtOnce];
+    }else if([_controller.loadingVideo containsObject:_videoName]){
+        //self.videoPlayImg.hidden = YES;
+        
+        _playingVideoName = nil;
+        if(!_progressOverlayView) [self play:nil];
+    }else{
+        _playingVideoName = nil;
+        self.videoPlayImg.hidden = NO;
+    }
+
+    
+    
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image && !([_playingVideoName isEqualToString:_videoName])) {
             [self.video_button setImage:image forState:UIControlStateNormal];
@@ -182,21 +202,7 @@
         [self.avLayer removeFromSuperlayer];
     }
     
-    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
-    {
-        self.videoPlayImg.hidden = YES;
-//        [self PlayingVideoAtOnce];
-    }else if([_controller.loadingVideo containsObject:_videoName]){
-        //self.videoPlayImg.hidden = YES;
-        if(!_progressOverlayView) [self play:nil];
-    }else{
-        self.videoPlayImg.hidden = NO;
-    }
-
 }
 
 - (void)clearVideoRequest
