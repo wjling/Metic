@@ -127,12 +127,7 @@
         [_myPlayerViewController.view removeFromSuperview];
         _myPlayerViewController = nil;
     }
-    
-    
-    
-    
-    
-    
+
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -189,7 +184,7 @@
     
     
     [self.video_button.imageView sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image && !([_playingVideoName isEqualToString:_videoName])) {
+        if (image) {
             [self.video_button setImage:image forState:UIControlStateNormal];
             self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;
@@ -518,7 +513,7 @@
             
         });
         
-        if (need) [self.videoContainer.layer addSublayer:self.avLayer];
+        if (need) [self.videoView.layer addSublayer:self.avLayer];
                 self.videoPlayer.volume = 0;
                 [self.videoPlayer play];
 //            });
