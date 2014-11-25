@@ -700,9 +700,11 @@
                             break;
                         }
                     }
+                    [vc.eventIds_all removeObject:event_id1];
                     break;
                 }
             }
+            
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
         {
