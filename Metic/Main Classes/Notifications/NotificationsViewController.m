@@ -1147,11 +1147,20 @@ enum Response_Type
             }
                 break;
                 
-            case QUIT_EVENT_NOTIFICATION:
+            case QUIT_EVENT_NOTIFICATION:  //985
             {
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* text;
                 text = [NSString stringWithFormat:@"%@ 活动已经被解散",subject];
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+            case KICK_EVENT_NOTIFICATION:  //984
+            {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text;
+                text = [NSString stringWithFormat:@"您已经被请出 %@ 活动",subject];
                 cell.title_label.text = @"活动消息";
                 cell.sys_msg_label.text = text;
             }

@@ -138,6 +138,7 @@ enum Return_Code
     NEW_COMMENT_REPLY=988,
     
     QUIT_EVENT_NOTIFICATION = 985,   //活动解散
+    KICK_EVENT_NOTIFICATION = 984,   //被踢出活动
     
 };
 
