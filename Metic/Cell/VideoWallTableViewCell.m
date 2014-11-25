@@ -55,6 +55,9 @@
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
+    UITapGestureRecognizer * tapRecognizer1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(play:)];
+    [self.thumbImg addGestureRecognizer:tapRecognizer1];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PlayingVideoAtOnce) name: @"initLVideo" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Playfrompause) name: @"Playfrompause" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pauseVideo) name: @"pauseVideo" object:nil];
@@ -470,7 +473,7 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
-        if (!_same) {
+        if (!_same || !_videoItem) {
             NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
             _videoItem = [AVPlayerItem playerItemWithURL:url];
         }
@@ -494,6 +497,7 @@
                 AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
                 CGFloat width = videoTrack.naturalSize.width;
                 CGFloat height = videoTrack.naturalSize.height;
+                if(width == 0 || height == 0)return;
                 if (width/height > Bframe.size.width/Bframe.size.height) {
                     frame.origin.y = 0;
                     frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
