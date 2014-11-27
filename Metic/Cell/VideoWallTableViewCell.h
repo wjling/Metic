@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *time;
 @property (strong, nonatomic) IBOutlet UIView *videoContainer;
 
+@property (strong, nonatomic) IBOutlet UIImageView *thumbImg;
 @property (strong, nonatomic) IBOutlet UIButton *video_button;
 @property (strong, nonatomic) IBOutlet UIView *videoView;
 @property (strong, nonatomic) UIImage* videoThumb;
