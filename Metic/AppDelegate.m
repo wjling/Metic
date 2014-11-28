@@ -676,7 +676,7 @@
         }
         else if (msg_cmd == 985) //活动被解散
         {
-            [[MTUser sharedInstance].systemMsg addObject:msg_dic];
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             NSString* subject = [msg_dic objectForKey:@"subject"];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
@@ -708,7 +708,7 @@
         }
         else if (msg_cmd == 984) //被踢出活动
         {
-            [[MTUser sharedInstance].systemMsg addObject:msg_dic];
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             NSString* subject = [msg_dic objectForKey:@"subject"];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"您已经被请出 %@ 活动", subject] andNumber:numOfSyncMessages withType:2];

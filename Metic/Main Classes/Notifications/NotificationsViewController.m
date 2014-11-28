@@ -748,6 +748,7 @@ enum Response_Type
             case EVENT_INVITE_RESPONSE:
             case REQUEST_EVENT_RESPONSE:
             case QUIT_EVENT_NOTIFICATION:
+            case KICK_EVENT_NOTIFICATION:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label3.hidden) {
