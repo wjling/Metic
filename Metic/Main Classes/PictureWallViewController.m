@@ -18,6 +18,7 @@
 #import "MobClick.h"
 #import "NSString+JSON.h"
 #import "../Utils/Reachability.h"
+#import "../Source/SlideNavigationController.h"
 
 #define PhotoNum 20
 
@@ -60,7 +61,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:NO];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
     
@@ -418,12 +419,29 @@
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (scrollView == _tableView1 && !_header2.refreshing) {
-        _header1.hidden = NO;
-        _header2.hidden = YES;
-    }else if (scrollView == _tableView2 && !_header1.refreshing){
-        _header1.hidden = YES;
-        _header2.hidden = NO;
+    if (scrollView == _tableView1) {
+        NSLog(@"left");
+        if(!_header2.refreshing){
+            _header1.hidden = NO;
+            _header2.hidden = YES;
+        }
+        if (_tableView2.isDragging) {
+            [_tableView2 setContentOffset:_tableView1.contentOffset animated:NO];
+            [_tableView1 setContentOffset:_tableView1.contentOffset animated:NO];
+        }
+        
+        
+    }else if (scrollView == _tableView2){
+        
+        NSLog(@"right");
+        if (!_header1.refreshing) {
+            _header1.hidden = YES;
+            _header2.hidden = NO;
+        }
+        if(_tableView1.isDragging){
+            [_tableView1 setContentOffset:_tableView1.contentOffset animated:NO];
+            [_tableView2 setContentOffset:_tableView1.contentOffset animated:NO];
+        }
     }
 }
 
@@ -636,18 +654,22 @@
     
 }
 
+-(void)stopIt
+{
+    NSLog(@"stopIt");
+    
+}
+
 
 
 -(void)dealloc
 {
+    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:YES];
     [_header1 free];
     [_header2 free];
 }
 
 @end
-
-
-
 
 
 
