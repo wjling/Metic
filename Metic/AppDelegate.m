@@ -23,6 +23,7 @@
 {
     BOOL isConnected;
     int numOfSyncMessages;
+    BOOL isInBackground;
 //    NSString* DB_path;
 }
 @synthesize mySocket;
@@ -34,12 +35,13 @@
 @synthesize networkStatusNotifier_view;
 @synthesize isNetworkConnected;
 @synthesize isLogined;
+@synthesize leftMenu;
 //@synthesize operationQueue;
 
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"app did finish launch");
+    NSLog(@"app did finish launch===============");
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
@@ -63,7 +65,7 @@
         [userDf synchronize];
     }
 	
-	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
+	leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	leftMenu.cellIdentifier = @"leftMenuCell";
 
@@ -75,6 +77,7 @@
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     isNetworkConnected = YES;
+    isInBackground = NO;
     isLogined = NO;
     [self initViews];
 //    [self initApp];
@@ -151,7 +154,8 @@
 //         NSLog(@"alive in background");
 //         [NSThread sleepForTimeInterval:10];
 //     }];
-     NSLog(@"enter Background====================");
+     NSLog(@"app did enter Background====================");
+    isInBackground = YES;
     application.applicationIconBadgeNumber = 0;
     
     UIApplication*   app = [UIApplication sharedApplication];
@@ -188,24 +192,56 @@
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
-    NSLog(@"enter foreground");
+    NSLog(@"app will enter foreground==================");
     application.applicationIconBadgeNumber = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
                                                       userInfo:nil];
+    isInBackground = NO;
+    
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        [self.leftMenu showNotificationCenter];
+//    }
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
-    NSLog(@"did become active");
+    NSLog(@"app did become active===================");
+    isInBackground = NO;
     
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     //点击提示框的打开
+    NSLog(@"点击通知");
     application.applicationIconBadgeNumber = 0;
+    isInBackground = NO;
+    
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self.leftMenu showNotificationCenter];
+//        });
+//        [self.leftMenu showNotificationCenter];
+//        
+//    }
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -455,6 +491,13 @@
     }
     [self.sql closeMyDB];
     
+    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+    [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
+    [userDf setObject:userSettings forKey:key];
+    [userDf synchronize];
+    
     //通知铃声
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     AudioServicesPlayAlertSound(1106);
@@ -468,8 +511,13 @@
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
 
+//    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+    [self.leftMenu showUpdateInRow:4];
     numOfSyncMessages = -1;
     [self.syncMessages removeAllObjects];
+    if (isInBackground) {
+        [self.leftMenu showNotificationCenter];
+    }
 }
 
 //参数：text：横幅显示的信息， num：消息数量， type：哪一类消息（与消息中心的tab编号相对应）
@@ -502,10 +550,11 @@
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
-    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+//    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     [userSettings setValue:[NSNumber numberWithInt:(type < 3 && type >= 0)? type : -1] forKey:@"hasUnreadNotification"];
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
+    
 }
 
 

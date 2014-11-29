@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "SFHFKeychainUtils.h"
+#import "MenuViewController.h"
 #import "MobClick.h"
 
 @interface LoginViewController ()
@@ -364,6 +365,21 @@
 
 - (void)jumpToMainView
 {
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        [appDelegate.leftMenu showNotificationCenter];
+//    }
+//    else
+//    {
+//         [self performSegueWithIdentifier:@"loginTohome" sender:self];
+//    }
+    
     [self performSegueWithIdentifier:@"loginTohome" sender:self];
     
 //    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"

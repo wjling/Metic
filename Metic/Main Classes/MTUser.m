@@ -335,11 +335,13 @@ static MTUser *singletonInstance;
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* userSettings = [userDf objectForKey:[NSString stringWithFormat:@"USER%@",uid]];
     if (!userSettings) {
+        NSLog(@"重置用户设置信息");
         userSettings = [[NSMutableDictionary alloc]init];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
         [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+        [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];
     }
@@ -749,6 +751,8 @@ static MTUser *singletonInstance;
                 case ADD_FRIEND_RESULT:
                 case EVENT_INVITE_RESPONSE:
                 case REQUEST_EVENT_RESPONSE:
+                case QUIT_EVENT_NOTIFICATION:
+                case KICK_EVENT_NOTIFICATION:
                 {
                     [self.systemMsg addObject:msg_dic];
                 }
