@@ -16,12 +16,12 @@
 @property (strong, nonatomic) IBOutlet UIView *infoView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (strong, nonatomic) IBOutlet UIButton *button_Detail;
+//@property (strong, nonatomic) IBOutlet UIButton *button_Detail;
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (weak, nonatomic) PictureWallViewController* PhotoWall;
 @property BOOL isloading;
 @property BOOL isLeft;
-- (IBAction)button_DetailPressed:(id)sender;
+- (void)button_DetailPressed:(id)sender;
 -(void)animationBegin;
 @end
