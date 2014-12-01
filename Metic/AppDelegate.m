@@ -23,6 +23,7 @@
 {
     BOOL isConnected;
     int numOfSyncMessages;
+    dispatch_queue_t sync_queue;
     BOOL isInBackground;
 //    NSString* DB_path;
 }
@@ -42,6 +43,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"app did finish launch===============");
+    sync_queue = dispatch_queue_create("msg_syncueue", NULL);
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
@@ -468,7 +470,7 @@
 
 //===================================SOCKET METHODS============================================
 
-- (void)handleReceivedNotifications
+- (void)handleReceivedNotifications:(NSMutableArray*)syn_messges withCount:(NSInteger)numOfMsg
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
@@ -477,7 +479,7 @@
     }
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
-    for (NSDictionary* message in self.syncMessages) {
+    for (NSDictionary* message in syn_messges) {
         NSString* timeStamp = [message objectForKey:@"timestamp"];
         NSNumber* seq = [message objectForKey:@"seq"];
         NSString* msg = [message objectForKey:@"msg"];
@@ -513,8 +515,8 @@
 
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     [self.leftMenu showUpdateInRow:4];
-    numOfSyncMessages = -1;
-    [self.syncMessages removeAllObjects];
+//    numOfSyncMessages = -1;
+//    [self.syncMessages removeAllObjects];
     if (isInBackground) {
         [self.leftMenu showNotificationCenter];
     }
@@ -830,9 +832,16 @@
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
             NSLog(@"feedback send json: %@",json);
-            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
+//            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
+//            
+//            [thread start];
+            dispatch_sync(sync_queue, ^{
+                [self handleReceivedNotifications:[NSMutableArray arrayWithArray:syncMessages] withCount:numOfSyncMessages];
+            });
             
-            [thread start];
+            numOfSyncMessages = -1;
+            [self.syncMessages removeAllObjects];
+
             
             
         }

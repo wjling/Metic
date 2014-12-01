@@ -66,8 +66,11 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"menuviewcontroller will appear");
-    NSNumber* flag = [[NSUserDefaults standardUserDefaults]valueForKey:@"hasUnreadNotification"];
-    if (flag >= 0) {
+    NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
+    NSNumber* flag = [userSettings valueForKey:@"hasUnreadNotification"];
+    NSLog(@"hasUnreadNotification: %@", flag);
+    if ([flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }
 }

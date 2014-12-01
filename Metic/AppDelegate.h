@@ -77,7 +77,7 @@
 - (void)sendHeartBeatMessage;
 - (void)disconnect;
 
-- (void)handleReceivedNotifications;
+//- (void)handleReceivedNotifications;
 - (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath;
 - (void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type;
 
