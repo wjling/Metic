@@ -11,6 +11,7 @@
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "../Utils/CommonUtils.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
+#import "CircleCellTableViewCell.h"
 
 @interface EventDetail2 ()
 
@@ -28,6 +29,8 @@
 @property (nonatomic,strong) UIButton* share;
 @property (nonatomic,strong) UIButton* favor;
 
+@property BOOL nibsRegistered;
+
 
 @end
 
@@ -35,13 +38,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self initData];
     [self initUI];
+    
     // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)initData
+{
+    _nibsRegistered = NO;
 }
 
 - (void)initUI
@@ -308,6 +318,7 @@
     
     //活动小圈
     UITableView* tableView = [[UITableView alloc]initWithFrame:CGRectMake(frame.size.width, 0, frame.size.width, frame.size.height)];
+    tableView.bounces = YES;
     tableView.scrollEnabled = NO;
     tableView.layer.borderWidth = 2;
     tableView.layer.borderColor = [UIColor redColor].CGColor;
@@ -402,15 +413,20 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 150;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* cell = [[UITableViewCell alloc]init];
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, 80)];
-    [label setBackgroundColor:[UIColor redColor]];
-    [cell addSubview:label];
+    NSString* circleCellIdentifier = @"CircleCellTableViewCell";
+    if (!_nibsRegistered) {
+        UINib *nib = [UINib nibWithNibName:NSStringFromClass([CircleCellTableViewCell class]) bundle:nil];
+        [tableView registerNib:nib forCellReuseIdentifier:circleCellIdentifier];
+        _nibsRegistered = YES;
+    }
+    CircleCellTableViewCell *cell = (CircleCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:circleCellIdentifier];
+    [cell drawCell];
     return cell;
+    
 }
 @end

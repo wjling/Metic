@@ -138,6 +138,8 @@
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B8D63B19B87FB100552663 /* AssetsLibrary.framework */; };
 		08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B8D64019B89C9400552663 /* VideoPreviewViewController.m */; };
+		08BEE9B91A2DE4DC00132F18 /* CircleCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9B71A2DE4DC00132F18 /* CircleCellTableViewCell.m */; };
+		08BEE9BA1A2DE4DC00132F18 /* CircleCellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08BEE9B81A2DE4DC00132F18 /* CircleCellTableViewCell.xib */; };
 		08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */; };
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
@@ -616,6 +618,9 @@
 		08B8D63B19B87FB100552663 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPreviewViewController.h; path = Video/VideoPreviewViewController.h; sourceTree = "<group>"; };
 		08B8D64019B89C9400552663 /* VideoPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPreviewViewController.m; path = Video/VideoPreviewViewController.m; sourceTree = "<group>"; };
+		08BEE9B61A2DE4DC00132F18 /* CircleCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleCellTableViewCell.h; sourceTree = "<group>"; };
+		08BEE9B71A2DE4DC00132F18 /* CircleCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleCellTableViewCell.m; sourceTree = "<group>"; };
+		08BEE9B81A2DE4DC00132F18 /* CircleCellTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CircleCellTableViewCell.xib; sourceTree = "<group>"; };
 		08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		08C62DD21A177C91001F7C45 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
@@ -1385,6 +1390,9 @@
 				082EC6261A147EE000A43072 /* EventDetail2.h */,
 				082EC6271A147EE000A43072 /* EventDetail2.m */,
 				082EC6281A147EE000A43072 /* EventDetail2.xib */,
+				08BEE9B61A2DE4DC00132F18 /* CircleCellTableViewCell.h */,
+				08BEE9B71A2DE4DC00132F18 /* CircleCellTableViewCell.m */,
+				08BEE9B81A2DE4DC00132F18 /* CircleCellTableViewCell.xib */,
 			);
 			name = Event;
 			sourceTree = "<group>";
@@ -2363,6 +2371,7 @@
 				04B6F89719A25D5C00229393 /* face08.png in Resources */,
 				04B63B4E196463DD0015357B /* default_avatar.jpg in Resources */,
 				04B6F8A119A25D5C00229393 /* face18.png in Resources */,
+				08BEE9BA1A2DE4DC00132F18 /* CircleCellTableViewCell.xib in Resources */,
 				04B6F8A319A25D5C00229393 /* face20.png in Resources */,
 				04B6F8A619A25D5C00229393 /* face23.png in Resources */,
 				04B6F89B19A25D5C00229393 /* face12.png in Resources */,
@@ -2395,6 +2404,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08BEE9B91A2DE4DC00132F18 /* CircleCellTableViewCell.m in Sources */,
 				0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */,
 				04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */,
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
