@@ -7,6 +7,7 @@
 //
 
 #import "CustomCellTableViewCell.h"
+#import "../Main Classes/PictureWall2.h"
 
 @implementation CustomCellTableViewCell
 
@@ -91,6 +92,13 @@
 - (IBAction)jumpToPictureWall:(id)sender {
     self.homeController.selete_Eventid = self.eventId;
     self.homeController.selete_EventName = _event;
+    
+    PictureWall2* pictureWall = [[PictureWall2 alloc]initWithNibName:@"PictureWall2" bundle:nil];
+    pictureWall.eventId = _homeController.selete_Eventid;
+    pictureWall.eventName = _homeController.selete_EventName;
+    [_homeController.navigationController pushViewController:pictureWall animated:YES];
+    
+    return;
     [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
 }
 

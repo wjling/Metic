@@ -62,6 +62,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _tableView1.hidden = YES;
+    _tableView2.hidden = YES;
+    
+    
+    self.quiltView.dataSource = self;
+    self.quiltView.delegate = self;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 //    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:NO];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.photos = [[NSMutableDictionary alloc]init];
@@ -345,6 +363,8 @@
     if (_photo_list_all && _photo_list_all.count > 0) {
         [self photoDistribution];
     }else [_header1 beginRefreshing];
+    
+    [self.quiltView reloadData];
 }
 
 
@@ -510,7 +530,8 @@
     }
     PhotoTableViewCell *cell = (PhotoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (!cell) {
-        cell = [[PhotoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[PhotoTableViewCell alloc]initWithReuseIdentifier:CellIdentifier];
+//        cell = [[PhotoTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
     }
     [cell.imgView setFrame:CGRectZero];
@@ -556,10 +577,10 @@
     if (height == 0) {
         [cell.activityIndicator startAnimating];
         [cell.activityIndicator setHidden:NO];
-        [cell.imageView setHidden:YES];
+        [cell.imgView setHidden:YES];
     }else{
         [cell setHidden:NO];
-        [cell.imageView setHidden:NO];
+        [cell.imgView setHidden:NO];
         [cell.activityIndicator stopAnimating];
         [cell.activityIndicator setHidden:YES];
         [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
@@ -688,12 +709,90 @@
     
 }
 
--(void)stopIt
-{
-    NSLog(@"stopIt");
-    
+#pragma mark - TMQuiltViewDelegate
+- (NSInteger)quiltViewNumberOfCells:(TMQuiltView *)TMQuiltView {
+    return [_photo_list_all count];
 }
 
+
+- (TMQuiltViewCell *)quiltView:(TMQuiltView *)quiltView cellAtIndexPath:(NSIndexPath *)indexPath {
+    PhotoTableViewCell *cell = (PhotoTableViewCell *)[quiltView dequeueReusableCellWithReuseIdentifier:@"photocell"];
+    if (!cell) {
+        cell = [[PhotoTableViewCell alloc] initWithReuseIdentifier:@"photocell"];
+    }
+    [cell.imgView setFrame:CGRectZero];
+    [cell.infoView setFrame:CGRectZero];
+    
+    NSMutableDictionary *a = _photo_list_all[indexPath.row];
+    
+    //显示备注名
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"author_id"]]];
+    if (alias == nil || [alias isEqual:[NSNull null]]) {
+        alias = [a valueForKey:@"author"];
+    }
+    cell.author.text = alias;
+    cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
+    
+    cell.avatar.layer.masksToBounds = YES;
+    [cell.avatar.layer setCornerRadius:5];
+    cell.photoInfo = a;
+    cell.PhotoWall = self;
+    cell.photo_id = [a valueForKey:@"photo_id"];
+    
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
+    [avatarGetter getAvatar];
+    UIImageView* photo = cell.imgView;
+    [cell.infoView removeFromSuperview];
+    
+    NSString* url = [a valueForKey:@"url"];
+    
+    [photo setContentMode:UIViewContentModeScaleAspectFit];
+    [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
+    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (image) {
+            [photo setContentMode:UIViewContentModeScaleToFill];
+        }
+    }];
+    
+    int width = [[a valueForKey:@"width"] intValue];
+    int height = [[a valueForKey:@"height"] intValue];
+    float RealHeight = height * 150.0f / width;
+    
+    [cell setHidden:NO];
+    [cell.imgView setHidden:NO];
+    [cell.activityIndicator stopAnimating];
+    [cell.activityIndicator setHidden:YES];
+    [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
+    [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
+    [cell addSubview:cell.infoView];
+
+    cell.isloading = _isLoading;
+    [cell animationBegin];
+    
+    return cell;
+}
+
+
+- (NSInteger)quiltViewNumberOfColumns:(TMQuiltView *)quiltView {
+    return 2;
+
+}
+
+- (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *a = _photo_list_all[indexPath.row];
+    
+    
+    int width = [[a valueForKey:@"width"] intValue];
+    int height = [[a valueForKey:@"height"] intValue];
+    float RealHeight = height * 150.0f / width;
+    
+    return RealHeight + 43;
+}
+
+- (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"sdfasdfasdf");
+}
 
 
 -(void)dealloc

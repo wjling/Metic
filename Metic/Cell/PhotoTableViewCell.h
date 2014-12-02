@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PictureWallViewController.h"
+#import "../Source/TMQuiltView/TMQuiltViewCell.h"
 
-@interface PhotoTableViewCell : UITableViewCell
+@interface PhotoTableViewCell : TMQuiltViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet UILabel *publish_date;

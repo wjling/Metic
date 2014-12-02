@@ -19,13 +19,6 @@
     [self.infoView addGestureRecognizer:tapRecognizer];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void)button_DetailPressed:(id)sender {
     NSLog(@"pressed");
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"

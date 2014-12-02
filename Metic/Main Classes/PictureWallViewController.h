@@ -13,7 +13,11 @@
 #import "MJRefreshHeaderView.h"
 #import "UIImageView+WebCache.h"
 
-@interface PictureWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
+
+
+#import "TMQuiltViewController.h"
+#import "../Source/TMQuiltView/TMQuiltView.h"
+@interface PictureWallViewController : TMQuiltViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,TMQuiltViewDataSource,TMQuiltViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView1;
 @property (strong, nonatomic) IBOutlet UITableView *tableView2;
 @property (strong, nonatomic) UIView *indicatorView;
