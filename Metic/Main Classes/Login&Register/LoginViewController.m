@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "SFHFKeychainUtils.h"
+#import "MenuViewController.h"
 #import "MobClick.h"
 
 @interface LoginViewController ()
@@ -56,12 +57,13 @@
 {
     [super viewDidLoad];
     NSLog(@"login did load, fromRegister: %d",fromRegister);
+    [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (!fromRegister) {
         if ([userDf boolForKey:@"firstLaunched"]) {
             NSLog(@"login: it is the first launch");
-            [self showBlackView];
+//            [self showBlackView];
 //            [userDf setValue:[NSNumber numberWithBool:NO] forKey:@"firstLaunched"];
 //            [userDf synchronize];
             UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -77,8 +79,8 @@
         else
         {
             NSLog(@"login: it is not the first launch");
-//            [self showLaunchView];
-//            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+            [self showLaunchView];
+//            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
         }
 
     }
@@ -124,7 +126,7 @@
     NSLog(@"login will apear");
     if (fromRegister) {
 //        [self.view setHidden:NO];
-        [self dismissBlackView];
+//        [self dismissBlackView];
         fromRegister = NO;
 //        text_password = nil;
 //        text_userName = nil;
@@ -133,7 +135,7 @@
     }
     else{
 //        [self.view setHidden:YES];
-        [self showBlackView];
+//        [self showBlackView];
         [self checkPreUP];
     }
 //    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
@@ -193,6 +195,7 @@
 }
 
 
+#pragma mark - ShowViews
 -(void)showLaunchView
 {
     CGRect bounds = [UIScreen mainScreen].bounds;
@@ -220,12 +223,16 @@
     [page4 addSubview:imgV4_2];
     [launchV.view addSubview:page4];
     launchV.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self.view.window.rootViewController.navigationController presentViewController:launchV animated:NO completion:nil];
+    [self.navigationController presentViewController:launchV animated:NO completion:
+     ^{
+         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+     }];
+    
 }
 
 -(void)dismissLaunchView
 {
-    
+    [self dismissBlackView];
     [launchV dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -310,15 +317,15 @@
     else if ([userStatus isEqualToString:@"change"])
     {
 //        [self.view setHidden:NO];
-        [self dismissBlackView];
+//        [self dismissBlackView];
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     else
     {
-        [self dismissBlackView];
-        [self showLaunchView];
-        [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+//        [self dismissBlackView];
+//        [self showLaunchView];
+//        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
     }
     if (userName && password) {
         self.textField_userName.text = userName;
@@ -358,6 +365,21 @@
 
 - (void)jumpToMainView
 {
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        [appDelegate.leftMenu showNotificationCenter];
+//    }
+//    else
+//    {
+//         [self performSegueWithIdentifier:@"loginTohome" sender:self];
+//    }
+    
     [self performSegueWithIdentifier:@"loginTohome" sender:self];
     
 //    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"

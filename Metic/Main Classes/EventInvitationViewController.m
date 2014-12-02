@@ -336,7 +336,7 @@
             [mySql openMyDB:DB_path];
             [mySql updateDataWitTableName:@"notification"
                                  andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%d",event_id1],@"event_id",
+                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
                                            nil]
                                    andSet:[CommonUtils packParamsInDictionary:
                                            [NSString stringWithFormat:@"%@",response_result],@"ishandled",
@@ -369,6 +369,47 @@
             //            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
             //            [self.notificationsTable reloadData];
             
+        }
+            break;
+        case EVENT_NOT_EXIST:
+        {
+            [SVProgressHUD dismissWithError:@"该活动已经解散" afterDelay:2.0];
+            
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
+            NSInteger row = selectedPath.row;
+            NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:row];
+            NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+            NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+            NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+            NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
+            
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
+                                           nil]];
+            
+            for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                    continue;
+                }
+            }
+            
+            [mySql closeMyDB];
+            
+            [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+            [msg_arr removeObjectAtIndex:row];
+            [self.tableView reloadData];
+
         }
             break;
         default:

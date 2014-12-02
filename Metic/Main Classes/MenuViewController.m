@@ -66,8 +66,11 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"menuviewcontroller will appear");
-    NSNumber* flag = [[NSUserDefaults standardUserDefaults]valueForKey:@"hasUnreadNotification"];
-    if (flag > 0) {
+    NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
+    NSNumber* flag = [userSettings valueForKey:@"hasUnreadNotification"];
+    NSLog(@"hasUnreadNotification: %@", flag);
+    if ([flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }
 }
@@ -178,14 +181,30 @@
 
 -(void)showUpdateInRow:(NSInteger)row
 {
+    NSLog(@"显示消息中心红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:YES]];
     [_tableView reloadData];
 }
 
 -(void)hideUpdateInRow:(NSInteger)row
 {
+    NSLog(@"隐藏消息中心红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
     [_tableView reloadData];
+}
+
+-(void)showNotificationCenter
+{
+    NSLog(@"自动跳转到消息中心");
+    if (![[SlideNavigationController sharedInstance].topViewController isKindOfClass:[NotificationsViewController class]]) {
+        if (!self.notificationsViewController) {
+            UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            self.notificationsViewController = [mainStoryBoard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+            
+        }
+        [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:self.notificationsViewController withCompletion:nil];
+    }
+    
 }
 
 
@@ -306,6 +325,9 @@
 //                _homeViewController = vc;
                 NSLog(@"homeViewController is nil");
                 homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+                if (!homeViewController) {
+                    homeViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
+                }
                 vc = homeViewController;
             }else vc = homeViewController;
 			break;
@@ -367,7 +389,6 @@
             return;
             
 	}
-	[self hideUpdateInRow:indexPath.row];
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 

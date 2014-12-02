@@ -28,6 +28,7 @@
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
+		04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */; };
 		04ADDD811A168D4D0044DF09 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
@@ -141,6 +142,8 @@
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
 		08CAB31219FE9701009DAFA9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */; };
+		08D5E8C21A22050800D368D8 /* MTVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */; };
+		08D5E8C31A22050800D368D8 /* MTVideoPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */; };
 		08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */; };
 		08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697019541F3A00F80F3F /* AFHTTPRequestOperationManager.m */; };
 		08DB69A119541F3A00F80F3F /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DB697219541F3A00F80F3F /* AFHTTPSessionManager.m */; };
@@ -387,6 +390,8 @@
 		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
+		04A531841A222947002FDDC1 /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
+		04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LBBlurredImage.m"; sourceTree = "<group>"; };
 		04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
@@ -619,6 +624,9 @@
 		08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		08CAB30F19FE9701009DAFA9 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		08D5E8BF1A22050800D368D8 /* MTVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTVideoPlayerViewController.h; path = Video/MTVideoPlayerViewController.h; sourceTree = "<group>"; };
+		08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTVideoPlayerViewController.m; path = Video/MTVideoPlayerViewController.m; sourceTree = "<group>"; };
+		08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MTVideoPlayerViewController.xib; path = Video/MTVideoPlayerViewController.xib; sourceTree = "<group>"; };
 		08DB696D19541F3A00F80F3F /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		08DB696E19541F3A00F80F3F /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		08DB696F19541F3A00F80F3F /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -1027,6 +1035,15 @@
 				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
 			);
 			name = "Login&Register";
+			sourceTree = "<group>";
+		};
+		04A531831A222947002FDDC1 /* LBBlurredImage */ = {
+			isa = PBXGroup;
+			children = (
+				04A531841A222947002FDDC1 /* UIImageView+LBBlurredImage.h */,
+				04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */,
+			);
+			path = LBBlurredImage;
 			sourceTree = "<group>";
 		};
 		04B22C3F1984F3F100B33B7C /* SystemSettings */ = {
@@ -1536,6 +1553,9 @@
 				08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */,
 				0896AAC919E7914A00A93A1B /* MTUIImagePickerController.h */,
 				0896AACA19E7914A00A93A1B /* MTUIImagePickerController.m */,
+				08D5E8BF1A22050800D368D8 /* MTVideoPlayerViewController.h */,
+				08D5E8C01A22050800D368D8 /* MTVideoPlayerViewController.m */,
+				08D5E8C11A22050800D368D8 /* MTVideoPlayerViewController.xib */,
 			);
 			name = Video;
 			sourceTree = "<group>";
@@ -1925,6 +1945,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				04A531831A222947002FDDC1 /* LBBlurredImage */,
 				08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */,
 				088DCEAB19FF97D70036BE82 /* Multi-Player */,
 				08CAB30D19FE9701009DAFA9 /* SVProgressHUD */,
@@ -2315,6 +2336,7 @@
 				085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */,
 				0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
+				08D5E8C31A22050800D368D8 /* MTVideoPlayerViewController.xib in Resources */,
 				51F06C1F197E0109000E8428 /* zbar-samples.png in Resources */,
 				51DFF384199A121900BF5FED /* UserTableViewCell.xib in Resources */,
 				51F06C1E197E0109000E8428 /* zbar-helpicons.png in Resources */,
@@ -2437,6 +2459,7 @@
 				08CAB31219FE9701009DAFA9 /* SVProgressHUD.m in Sources */,
 				0896AACB19E7914A00A93A1B /* MTUIImagePickerController.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
+				04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */,
 				51F4CB0C19E6307500E487F1 /* ASIDownloadCache.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				083FF6A319D06048001BB61E /* photoRankingViewController.m in Sources */,
@@ -2498,6 +2521,7 @@
 				5192530519FA2BBF00CF6BB3 /* myInputView.m in Sources */,
 				04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */,
 				04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */,
+				08D5E8C21A22050800D368D8 /* MTVideoPlayerViewController.m in Sources */,
 				51F4CB1219E6307500E487F1 /* ContextFilterLogFormatter.m in Sources */,
 				04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */,
 				510D45A1196E8A960081672A /* UIImage+GIF.m in Sources */,

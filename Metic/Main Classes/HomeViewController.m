@@ -77,6 +77,7 @@
     
     self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
+    [_tableView reloadData];
     
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
@@ -95,7 +96,6 @@
     [self.listenerDelegate connect];
     
     self.sql = [[MySqlite alloc]init];
-    [self pullEventsFromDB];
     
     
 }
@@ -563,11 +563,11 @@
 
 
 
-
-#pragma mark 代理方法-触摸scrollview开始时调用
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-}
+//
+//#pragma mark 代理方法-触摸scrollview开始时调用
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//}
 
 - (void) tableViewReload
 {
@@ -717,27 +717,27 @@
 
 @end
 
-
-@implementation UIScrollView(UITouchEvent)
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [[self nextResponder]touchesBegan:touches withEvent:event];
-    [super touchesBegan:touches withEvent:event];
-}
-
-
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [[self nextResponder]touchesMoved:touches withEvent:event];
-    [super touchesMoved:touches withEvent:event];
-}
-
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [[self nextResponder]touchesEnded:touches withEvent:event];
-    [super touchesEnded:touches withEvent:event];
-}
-
-@end
+//
+//@implementation UIScrollView(UITouchEvent)
+//
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [[self nextResponder]touchesBegan:touches withEvent:event];
+//    [super touchesBegan:touches withEvent:event];
+//}
+//
+//
+//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [[self nextResponder]touchesMoved:touches withEvent:event];
+//    [super touchesMoved:touches withEvent:event];
+//}
+//
+//-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [[self nextResponder]touchesEnded:touches withEvent:event];
+//    [super touchesEnded:touches withEvent:event];
+//}
+//
+//@end
 

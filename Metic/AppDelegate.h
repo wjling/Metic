@@ -58,6 +58,7 @@
 @property (strong, nonatomic) BMKMapManager* mapManager;
 @property (strong, nonatomic) UIViewController* homeViewController;
 @property (strong, nonatomic) UIView* networkStatusNotifier_view;
+@property (strong, nonatomic) MenuViewController* leftMenu;
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 @property (nonatomic) BOOL isNetworkConnected;
 @property (nonatomic) BOOL isLogined;
@@ -76,7 +77,7 @@
 - (void)sendHeartBeatMessage;
 - (void)disconnect;
 
-- (void)handleReceivedNotifications;
+//- (void)handleReceivedNotifications;
 - (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath;
 - (void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type;
 

@@ -15,6 +15,8 @@
 - (void)awakeFromNib
 {
     // Initialization code
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(button_DetailPressed:)];
+    [self.infoView addGestureRecognizer:tapRecognizer];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -24,7 +26,8 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)button_DetailPressed:(id)sender {
+- (void)button_DetailPressed:(id)sender {
+    NSLog(@"pressed");
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
 	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"]; ;

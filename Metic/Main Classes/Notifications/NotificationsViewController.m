@@ -102,6 +102,7 @@ enum Response_Type
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO];
     self.appListener.notificationDelegate = self;
     self.eventRequestMsg = [[NSMutableArray alloc]init];
     self.friendRequestMsg = [[NSMutableArray alloc]init];
@@ -144,10 +145,11 @@ enum Response_Type
         clickTab = NO;
     }
     [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
     
-    
+    [self.appListener.leftMenu hideUpdateInRow:4];
 //    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
 //    if ([temp isKindOfClass:[NSMutableDictionary class]]) {
@@ -748,6 +750,7 @@ enum Response_Type
             case EVENT_INVITE_RESPONSE:
             case REQUEST_EVENT_RESPONSE:
             case QUIT_EVENT_NOTIFICATION:
+            case KICK_EVENT_NOTIFICATION:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label3.hidden) {
@@ -1147,11 +1150,20 @@ enum Response_Type
             }
                 break;
                 
-            case QUIT_EVENT_NOTIFICATION:
+            case QUIT_EVENT_NOTIFICATION:  //985
             {
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* text;
                 text = [NSString stringWithFormat:@"%@ 活动已经被解散",subject];
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+            case KICK_EVENT_NOTIFICATION:  //984
+            {
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                NSString* text;
+                text = [NSString stringWithFormat:@"您已经被请出 %@ 活动",subject];
                 cell.title_label.text = @"活动消息";
                 cell.sys_msg_label.text = text;
             }

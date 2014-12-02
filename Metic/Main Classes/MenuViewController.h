@@ -36,5 +36,6 @@
 -(void)clearVC;
 -(void)showUpdateInRow:(NSInteger)row;
 -(void)hideUpdateInRow:(NSInteger)row;
+-(void)showNotificationCenter;
 
 @end

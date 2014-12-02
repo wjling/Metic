@@ -20,6 +20,7 @@
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
 #import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
+#import "MTVideoPlayerViewController.h"
 
 
 #define chooseArray @[@[@"举报视频"]]
@@ -376,6 +377,16 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+//        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
+//        player.videoName = videoName;
+//        player.wall = _controller;
+//        player.cell = _SeleVcell;
+//        [self.controller presentViewController:player animated:YES completion:nil];
+//        
+//        
+//        
+//        
+//        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -428,18 +439,15 @@
 
                     if (self && self.navigationController.viewControllers.lastObject == self ) {
                         [self downloadVideo:videoName url:url];
-                        if (_controller) {
-                            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
-                            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
-                            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
-                            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-                            [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
-                            [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
-                            [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
-//                            NSIndexPath* indexPath = [_controller.tableView indexPathForCell:_SeleVcell];
-//                            [_controller.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-//                            [_SeleVcell PlayingVideoAtOnce];
-                        }
+//                        if (_controller) {
+//                            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
+//                            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
+//                            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
+//                            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
+//                            [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
+//                            [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
+//                            [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
+//                        }
                     }
                 });
                 

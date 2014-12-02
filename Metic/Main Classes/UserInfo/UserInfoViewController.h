@@ -31,5 +31,6 @@
 @property BOOL needPopBack;
 
 -(void)refresh;
+- (IBAction)rightBarBtnClicked:(id)sender;
 
 @end

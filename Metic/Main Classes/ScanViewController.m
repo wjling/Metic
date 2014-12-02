@@ -17,6 +17,9 @@
 @property(nonatomic,strong)NSNumber* efid;
 @property(nonatomic,strong)NSDictionary* events;
 @property(nonatomic,strong)NSDictionary* friend;
+@property (nonatomic, strong) UIImageView * line;
+@property (nonatomic, strong) NSTimer * timer;
+@property BOOL upOrdown;
 @property BOOL isScaning;
 @end
 
@@ -35,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initUI];
     readerView = [[ZBarReaderView alloc]init];
     readerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:readerView];
@@ -54,7 +58,9 @@
         _isScaning = YES;
         [readerView start];
     }
-    
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation) userInfo:nil repeats:YES];
+    }
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -67,13 +73,24 @@
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
-    
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc
+{
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
 }
 
 //返回上一层
@@ -92,6 +109,16 @@
         [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
     }
     
+}
+
+- (void) initUI
+{
+    _line = [[UIImageView alloc] initWithFrame:CGRectMake(57, 125, 206, 2)];
+    _line.image = [UIImage imageNamed:@"line.png"];
+    [_GUI addSubview:_line];
+    //定时器，设定时间过1.5秒，
+    _upOrdown = YES;
+    _timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation) userInfo:nil repeats:YES];
 }
 
 - (IBAction)wantIn:(id)sender {
@@ -280,6 +307,28 @@
         UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"请扫描由活动宝网站或活动宝App提供的二维码" WithDelegate:self WithCancelTitle:@"确定"];
         [alertView setTag:10];
     }
+}
+
+
+-(void)animation
+{
+    NSLog(@"aaa");
+    CGRect frame = _line.frame;
+    if (_upOrdown && CGRectGetMaxY(frame) + 2 > 321) {
+        _upOrdown = NO;
+    }else if(!_upOrdown && CGRectGetMinY(frame) - 2 < 125){
+        _upOrdown = YES;
+    }
+    if (_upOrdown == YES) {
+        frame.origin.y += 2.0f;
+        [_line setFrame:frame];
+    }
+    else {
+        frame.origin.y -= 2.0f;
+        [_line setFrame:frame];
+    }
+    
+    
 }
 
 -(void)dismissAlertView:(UIAlertView*) alertView

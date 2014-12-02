@@ -16,12 +16,15 @@
 #import "HttpSender.h"
 #import "MenuViewController.h"
 #import "NotificationsViewController.h"
+#import "HomeViewController.h"
 
 
 @implementation AppDelegate
 {
     BOOL isConnected;
     int numOfSyncMessages;
+    dispatch_queue_t sync_queue;
+    BOOL isInBackground;
 //    NSString* DB_path;
 }
 @synthesize mySocket;
@@ -33,11 +36,14 @@
 @synthesize networkStatusNotifier_view;
 @synthesize isNetworkConnected;
 @synthesize isLogined;
+@synthesize leftMenu;
 //@synthesize operationQueue;
 
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"app did finish launch===============");
+    sync_queue = dispatch_queue_create("msg_syncueue", NULL);
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
@@ -47,7 +53,6 @@
 //	//rightMenu.view.backgroundColor = [UIColor yellowColor];
 //	rightMenu.cellIdentifier = @"rightMenuCell";
     
-    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
@@ -62,17 +67,19 @@
         [userDf synchronize];
     }
 	
-	MenuViewController *leftMenu = (MenuViewController*)[mainStoryboard
+	leftMenu = (MenuViewController*)[mainStoryboard
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	leftMenu.cellIdentifier = @"leftMenuCell";
 
 //	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
+//    [leftMenu tableView:leftMenu.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
     [self initApp];
     self.sql = [[MySqlite alloc]init];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     isNetworkConnected = YES;
+    isInBackground = NO;
     isLogined = NO;
     [self initViews];
 //    [self initApp];
@@ -149,7 +156,8 @@
 //         NSLog(@"alive in background");
 //         [NSThread sleepForTimeInterval:10];
 //     }];
-     NSLog(@"enter Background====================");
+     NSLog(@"app did enter Background====================");
+    isInBackground = YES;
     application.applicationIconBadgeNumber = 0;
     
     UIApplication*   app = [UIApplication sharedApplication];
@@ -186,24 +194,56 @@
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
-    NSLog(@"enter foreground");
+    NSLog(@"app will enter foreground==================");
     application.applicationIconBadgeNumber = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
                                                       userInfo:nil];
+    isInBackground = NO;
+    
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        [self.leftMenu showNotificationCenter];
+//    }
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
-    NSLog(@"did become active");
+    NSLog(@"app did become active===================");
+    isInBackground = NO;
     
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     //点击提示框的打开
+    NSLog(@"点击通知");
     application.applicationIconBadgeNumber = 0;
+    isInBackground = NO;
+    
+//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
+//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+//    [userDf setObject:userSettings forKey:key];
+//    [userDf synchronize];
+//    if (openNC) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [self.leftMenu showNotificationCenter];
+//        });
+//        [self.leftMenu showNotificationCenter];
+//        
+//    }
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -430,7 +470,7 @@
 
 //===================================SOCKET METHODS============================================
 
-- (void)handleReceivedNotifications
+- (void)handleReceivedNotifications:(NSMutableArray*)syn_messges withCount:(NSInteger)numOfMsg
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
@@ -439,7 +479,7 @@
     }
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
-    for (NSDictionary* message in self.syncMessages) {
+    for (NSDictionary* message in syn_messges) {
         NSString* timeStamp = [message objectForKey:@"timestamp"];
         NSNumber* seq = [message objectForKey:@"seq"];
         NSString* msg = [message objectForKey:@"msg"];
@@ -452,6 +492,13 @@
         [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
     }
     [self.sql closeMyDB];
+    
+    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+    [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
+    [userDf setObject:userSettings forKey:key];
+    [userDf synchronize];
     
     //通知铃声
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
@@ -466,8 +513,13 @@
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
 
-    numOfSyncMessages = -1;
-    [self.syncMessages removeAllObjects];
+//    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+    [self.leftMenu showUpdateInRow:4];
+//    numOfSyncMessages = -1;
+//    [self.syncMessages removeAllObjects];
+    if (isInBackground) {
+        [self.leftMenu showNotificationCenter];
+    }
 }
 
 //参数：text：横幅显示的信息， num：消息数量， type：哪一类消息（与消息中心的tab编号相对应）
@@ -500,10 +552,11 @@
         
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
-    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
+//    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     [userSettings setValue:[NSNumber numberWithInt:(type < 3 && type >= 0)? type : -1] forKey:@"hasUnreadNotification"];
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
+    
 }
 
 
@@ -672,13 +725,69 @@
             }
             NSLog(@"有人@你： %@",msg_dic);
         }
-        else if (msg_cmd == 985)
+        else if (msg_cmd == 985) //活动被解散
         {
-            [[MTUser sharedInstance].systemMsg addObject:msg_dic];
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             NSString* subject = [msg_dic objectForKey:@"subject"];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
             }
+            
+            NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+            [sql openMyDB:path];
+            NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+            NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
+            [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+            [sql closeMyDB];
+            
+            for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
+                if ([vc isKindOfClass:[HomeViewController class]]) {
+                    for (int i = 0; i < vc.events.count; i++) {
+                        NSMutableDictionary* event = vc.events[i];
+                        NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                            [vc.events removeObject:event];
+                            [vc.tableView reloadData];
+                            break;
+                        }
+                    }
+                    [vc.eventIds_all removeObject:event_id1];
+                    break;
+                }
+            }
+            
+        }
+        else if (msg_cmd == 984) //被踢出活动
+        {
+            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+            NSString* subject = [msg_dic objectForKey:@"subject"];
+            if (numOfSyncMessages <= 1) {
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"您已经被请出 %@ 活动", subject] andNumber:numOfSyncMessages withType:2];
+            }
+            
+            NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+            [sql openMyDB:path];
+            NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+            NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
+            [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+            [sql closeMyDB];
+            
+            for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
+                if ([vc isKindOfClass:[HomeViewController class]]) {
+                    for (int i = 0; i < vc.events.count; i++) {
+                        NSMutableDictionary* event = vc.events[i];
+                        NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                            [vc.events removeObject:event];
+                            [vc.tableView reloadData];
+                            break;
+                        }
+                    }
+                    [vc.eventIds_all removeObject:event_id1];
+                    break;
+                }
+            }
+
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
         {
@@ -723,9 +832,16 @@
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
             NSLog(@"feedback send json: %@",json);
-            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
+//            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
+//            
+//            [thread start];
+            dispatch_sync(sync_queue, ^{
+                [self handleReceivedNotifications:[NSMutableArray arrayWithArray:syncMessages] withCount:numOfSyncMessages];
+            });
             
-            [thread start];
+            numOfSyncMessages = -1;
+            [self.syncMessages removeAllObjects];
+
             
             
         }

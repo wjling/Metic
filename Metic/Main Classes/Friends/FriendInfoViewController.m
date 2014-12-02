@@ -8,6 +8,7 @@
 
 #import "FriendInfoViewController.h"
 #import "math.h"
+#import "UIImageView+LBBlurredImage.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate>
 {
@@ -268,7 +269,13 @@
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
-    [getter getAvatar];
+    [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.fInfoView setImageToBlur:image blurRadius:1.5 brightness:-0.25 completionBlock:nil];
+            [self.fDescriptionView setImageToBlur:image blurRadius:1 brightness:-0.2 completionBlock:nil];
+        });
+        
+    }];
     name_label.text = name;
     if (alias && ![alias isEqual:[NSNull null]]) {
         alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];

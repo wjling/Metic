@@ -1048,7 +1048,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="个人信息" id="aBk-5v-IKJ">
-                        <barButtonItem key="backBarButtonItem" title=" " id="YuC-WP-Ela"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="r60-v5-zt0">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Waw-F2-eNP">
+                                <rect key="frame" x="264" y="7" width="35" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="头部右上角图标-更多">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="rightBarBtnClicked:" destination="FRw-iK-B1T" eventType="touchUpInside" id="bnd-In-dVC"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="avatar_imageView" destination="TeT-cC-fCq" id="m8r-OU-Jev"/>
@@ -2036,7 +2047,7 @@
         <!--用户二维码-->
         <scene sceneID="2wn-kM-mf8">
             <objects>
-                <viewController id="FUy-p0-XSb" customClass="UserQRCodeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserQRCodeViewController" id="FUy-p0-XSb" customClass="UserQRCodeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Mch-74-eRh"/>
                         <viewControllerLayoutGuide type="bottom" id="dSv-X1-GNS"/>
@@ -2619,7 +2630,7 @@
                         <outlet property="textField_password" destination="g9y-HK-245" id="5bf-l5-v0K"/>
                         <outlet property="textField_userName" destination="kgi-Wx-Csu" id="evf-H2-uTR"/>
                         <segue destination="cDI-rw-2Dm" kind="push" identifier="LoginToFriends" id="6hY-qj-DR3"/>
-                        <segue destination="hMX-YH-n10" kind="push" id="Lay-DH-g1S"/>
+                        <segue destination="hMX-YH-n10" kind="push" identifier="loginToNotificationCenter" id="Lay-DH-g1S"/>
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>
                         <segue destination="von-Oa-xrt" kind="push" identifier="loginTohome" id="5EZ-nf-AfT"/>
                         <segue destination="VkY-lH-zTs" kind="push" id="mCC-Hp-8GT"/>
@@ -4355,19 +4366,19 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b3l-AQ-ESg">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3l-AQ-ESg">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDJ-Z9-TTX">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="267"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGn-bI-Fah">
-                                        <rect key="frame" x="0.0" y="115" width="47" height="368"/>
+                                        <rect key="frame" x="0.0" y="115" width="47" height="216"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qH8-oq-nG6">
-                                        <rect key="frame" x="273" y="115" width="47" height="368"/>
+                                        <rect key="frame" x="273" y="115" width="47" height="216"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
                                     </view>
                                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVh-H6-CrH">
@@ -4387,6 +4398,38 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="me3-5M-jh7">
+                                        <rect key="frame" x="45" y="113" width="3" height="30"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WzD-K0-XGz">
+                                        <rect key="frame" x="272" y="113" width="3" height="30"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EtG-29-wjm">
+                                        <rect key="frame" x="45" y="303" width="3" height="30"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RdD-SM-Yx6">
+                                        <rect key="frame" x="272" y="303" width="3" height="30"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfM-ww-fgG">
+                                        <rect key="frame" x="45" y="113" width="30" height="3"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KDu-uq-kjs">
+                                        <rect key="frame" x="244" y="113" width="30" height="3"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYy-sY-i5P">
+                                        <rect key="frame" x="45" y="331" width="30" height="3"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bhH-fY-l9h">
+                                        <rect key="frame" x="244" y="330" width="30" height="3"/>
+                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4482,6 +4525,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="GrL-qN-Zy2"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="GUI" destination="b3l-AQ-ESg" id="hdb-I1-HRj"/>
                         <outlet property="backButton" destination="nsZ-uf-Vg2" id="OCS-7a-zMk"/>
                         <outlet property="controlView" destination="Qp1-rE-p61" id="zjM-aO-b9N"/>
                         <outlet property="inButton" destination="GFn-Gn-JH8" id="w45-Ud-JPt"/>

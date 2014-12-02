@@ -10,6 +10,7 @@
 #import "CloudOperation.h"
 #import "MTUser.h"
 #import "MySqlite.h"
+#import "SDImageCache.h"
 
 
 @protocol PhotoGetterDelegate
@@ -39,6 +40,7 @@
 - (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;
 - (instancetype)initUploadAvatarMethod:(UIImage*)aImage type:(int)type viewController:(UIViewController*)vc;
 -(void)getAvatar;
+-(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
 -(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL;
 -(void)updatePhoto;
 -(void)uploadPhoto;

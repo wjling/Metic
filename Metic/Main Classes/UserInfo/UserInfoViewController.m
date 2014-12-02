@@ -8,6 +8,8 @@
 
 #import "UserInfoViewController.h"
 #import "MobClick.h"
+#import "UserQRCodeViewController.h"
+#import "UIImageView+LBBlurredImage.h"
 
 
 @interface UserInfoViewController ()
@@ -15,6 +17,7 @@
     SingleSelectionAlertView* alert;
     NSInteger newGender;
     UIImage* newAvatar;
+    UIView* moreFunction_view;
 }
 
 @end
@@ -112,6 +115,26 @@
     self.info_tableView.dataSource = self;
     self.info_tableView.scrollEnabled = YES;
     
+    [self initMoreFunctionView];
+    
+}
+
+-(void)initMoreFunctionView
+{
+    if (!moreFunction_view) {
+        UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+        moreFunction_view = [[UIView alloc]initWithFrame:CGRectMake(215, 0, 100, 40)];
+        moreFunction_view.backgroundColor = color;
+        UIButton* QRcode_button = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 39)];
+        [QRcode_button setTitle:@"二维码" forState:UIControlStateNormal];
+        QRcode_button.titleLabel.font = [UIFont systemFontOfSize:12];
+        [QRcode_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [QRcode_button setBackgroundColor:[UIColor whiteColor]];
+        [QRcode_button addTarget:self action:@selector(QRcodeBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [moreFunction_view addSubview:QRcode_button];
+        [self.view addSubview:moreFunction_view];
+    }
+    moreFunction_view.hidden = YES;
 }
 
 -(void)avatarClicked:(id)sender
@@ -131,6 +154,24 @@
     sheet.tag = 255;
     
     [sheet showInView:self.view];
+}
+
+-(void)QRcodeBtnClicked:(id)sender
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    UserQRCodeViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"UserQRCodeViewController"];
+    NSMutableDictionary* userInfo = [CommonUtils packParamsInDictionary:
+                                     [MTUser sharedInstance].userid, @"id",
+                                     [MTUser sharedInstance].name, @"name",
+                                     [MTUser sharedInstance].email, @"email",
+                                     nil];
+    vc.friendInfo_dic = userInfo;
+    [moreFunction_view setHidden:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (IBAction)rightBarBtnClicked:(id)sender {
+    [moreFunction_view setHidden:!moreFunction_view.hidden];
 }
 
 - (IBAction)openEditor:(id)sender
@@ -165,7 +206,20 @@
     self.name_label.text = [MTUser sharedInstance].name;
     self.email_label.text = [MTUser sharedInstance].email;
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
-    [getter getAvatar];
+    [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.banner_imageView setImageToBlur:image blurRadius:2.0 brightness:-0.2 completionBlock:nil];
+            
+//            UIImage* img1 = [image brightness:0.5];
+//            UIImage* img2 = [img1 gaussianBlur:5];
+//            self.banner_imageView.image = img2;
+//            img = [img brightness:0.5];
+            
+        });
+//        UIImage* img = image;
+//        img = [img gaussianBlur:5];
+//        self.banner_imageView.image = img;
+    }];
     
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
@@ -187,6 +241,12 @@
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
     [self.info_tableView reloadData];
+}
+
+#pragma mark - Touches
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [moreFunction_view setHidden:YES];
 }
 
 
@@ -590,6 +650,7 @@
 
 -(void)sendDistance:(float)distance
 {
+    [moreFunction_view setHidden:YES];
     if (distance > 0) {
         self.shadowView.hidden = NO;
         [self.view bringSubviewToFront:self.shadowView];

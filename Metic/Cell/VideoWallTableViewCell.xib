@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
@@ -52,7 +51,7 @@
                         <rect key="frame" x="0.0" y="57" width="300" height="225"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9rh-BY-Zg2">
+                            <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="9rh-BY-Zg2">
                                 <rect key="frame" x="0.0" y="0.0" width="300" height="225"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -64,11 +63,22 @@
                                     <action selector="play:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zt3-4d-Uhk"/>
                                 </connections>
                             </button>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="OZE-37-iK5">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="225"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="视频按钮" id="bnY-ob-KKM">
                                 <rect key="frame" x="112" y="76" width="75" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" id="yJx-Uw-jrr">
+                                <rect key="frame" x="0.0" y="0.0" width="300" height="225"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -133,10 +143,12 @@
                 <outlet property="controlContainer" destination="ggb-FM-QNH" id="ZbG-RU-f2I"/>
                 <outlet property="good_button" destination="XGc-gE-KBP" id="DT2-jK-seT"/>
                 <outlet property="textViewContainer" destination="X0C-HN-q06" id="TIr-jg-Ire"/>
+                <outlet property="thumbImg" destination="OZE-37-iK5" id="ccu-hk-C13"/>
                 <outlet property="time" destination="w0j-wN-3Bj" id="8Dt-Lw-XKH"/>
                 <outlet property="title" destination="ZBF-qj-boh" id="kmC-5h-hSP"/>
                 <outlet property="videoContainer" destination="WLv-Jr-h4B" id="7Ia-Tq-iEk"/>
                 <outlet property="videoPlayImg" destination="bnY-ob-KKM" id="kz9-Bk-e62"/>
+                <outlet property="videoView" destination="yJx-Uw-jrr" id="BMM-sZ-AJs"/>
                 <outlet property="video_button" destination="9rh-BY-Zg2" id="r8V-Vc-NyK"/>
             </connections>
         </tableViewCell>
