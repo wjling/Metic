@@ -7,21 +7,19 @@
 //
 
 #import "TMQuiltViewController.h"
+#import "MJRefreshHeaderView.h"
 
-@interface PictureWall2 : TMQuiltViewController
-@property (strong, nonatomic) UIView *indicatorView;
+@interface PictureWall2 : TMQuiltViewController<MJRefreshBaseViewDelegate>
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSString* eventName;
 @property(nonatomic,strong)NSNumber *sequence;
-@property (nonatomic,strong) NSMutableArray* lefPhotos;
-@property (nonatomic,strong) NSMutableArray* rigPhotos;
-@property double leftH;
-@property double rightH;
+
 @property(nonatomic,strong)NSMutableArray *photo_list;//部分
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
-@property(nonatomic,strong)NSMutableArray *photoPath_list;
-@property(nonatomic,strong)NSMutableDictionary *photos;
+@property (strong,nonatomic) MJRefreshHeaderView *header;
 
-//@property (strong,nonatomic) MJRefreshFooterView *footer;
 @property BOOL shouldReloadPhoto;
+//@property (strong,nonatomic) MJRefreshFooterView *footer;
+
+- (IBAction)toBestPhotos:(id)sender;
 @end

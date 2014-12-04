@@ -11,7 +11,7 @@
 #import "Event2DcodeViewController.h"
 #import "BannerSelectorViewController.h"
 #import "MTUser.h"
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 #import "VideoWallViewController.h"
 #import "Report/ReportViewController.h"
 #import "../Cell/CustomCellTableViewCell.h"
@@ -1435,8 +1435,8 @@
 {
     //这里我很谨慎的对sender和目标视图控制器作了判断
     if ([sender isKindOfClass:[EventDetailViewController class]]) {
-        if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
-            PictureWallViewController *nextViewController = segue.destinationViewController;
+        if ([segue.destinationViewController isKindOfClass:[PictureWall2 class]]) {
+            PictureWall2 *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
         }

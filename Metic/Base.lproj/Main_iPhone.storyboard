@@ -3871,7 +3871,7 @@
         <!--图片墙-->
         <scene sceneID="jET-B2-Ifw">
             <objects>
-                <viewController id="EfS-Jw-ePs" customClass="PictureWallViewController" sceneMemberID="viewController">
+                <viewController id="EfS-Jw-ePs" customClass="PictureWall2" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aZO-Rz-Mw7"/>
                         <viewControllerLayoutGuide type="bottom" id="yxv-Y7-moU"/>
@@ -3879,27 +3879,7 @@
                     <view key="view" clipsSubviews="YES" contentMode="scaleToFill" id="Xaj-L2-zKu">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <tableView contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2jD-tS-9IS">
-                                <rect key="frame" x="10" y="10" width="145" height="406"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </tableView>
-                            <tableView contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="1" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="snf-8S-WRM">
-                                <rect key="frame" x="165" y="10" width="145" height="406"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="snf-8S-WRM" secondAttribute="trailing" constant="10" id="4YB-bJ-uAV"/>
-                            <constraint firstAttribute="trailing" secondItem="2jD-tS-9IS" secondAttribute="trailing" constant="165" id="5WL-w4-2Av"/>
-                            <constraint firstItem="2jD-tS-9IS" firstAttribute="leading" secondItem="Xaj-L2-zKu" secondAttribute="leading" constant="10" id="QaX-NW-S44"/>
-                            <constraint firstItem="snf-8S-WRM" firstAttribute="leading" secondItem="Xaj-L2-zKu" secondAttribute="leading" constant="165" id="Slz-Jn-ziv"/>
-                            <constraint firstItem="2jD-tS-9IS" firstAttribute="top" secondItem="aZO-Rz-Mw7" secondAttribute="bottom" constant="10" id="StU-VB-Nd9"/>
-                            <constraint firstItem="yxv-Y7-moU" firstAttribute="top" secondItem="2jD-tS-9IS" secondAttribute="bottom" id="WlE-pa-HHv"/>
-                            <constraint firstItem="snf-8S-WRM" firstAttribute="top" secondItem="aZO-Rz-Mw7" secondAttribute="bottom" constant="10" id="dkU-X3-CvU"/>
-                            <constraint firstItem="yxv-Y7-moU" firstAttribute="top" secondItem="snf-8S-WRM" secondAttribute="bottom" id="yRs-oP-Eq2"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="图片墙" id="emD-kW-msS">
                         <barButtonItem key="backBarButtonItem" title=" " id="LTR-Mb-3jG"/>
@@ -3916,8 +3896,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="tableView1" destination="2jD-tS-9IS" id="bbz-mj-vpw"/>
-                        <outlet property="tableView2" destination="snf-8S-WRM" id="liP-N9-JXX"/>
                         <segue destination="h8r-CT-ILs" kind="push" identifier="photosShow" id="ybG-ek-un6"/>
                         <segue destination="0NQ-fO-IlQ" kind="push" identifier="toUploadPhoto" id="1Bl-uW-u7J"/>
                         <segue destination="JHf-vJ-onu" kind="push" identifier="toPhotoRanking" id="YD0-xD-YSu"/>
@@ -3965,7 +3943,7 @@
         <!--图片详情-->
         <scene sceneID="W3X-7y-wZo">
             <objects>
-                <viewController id="h8r-CT-ILs" customClass="PhotoDisplayViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoDisplayViewController" id="h8r-CT-ILs" customClass="PhotoDisplayViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fVi-RX-GIK"/>
                         <viewControllerLayoutGuide type="bottom" id="zlu-Fc-0ZR"/>
@@ -4924,13 +4902,13 @@
         <segue reference="ItJ-aD-aY9"/>
         <segue reference="8Lk-Kp-pHu"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="c1O-Ly-Hfg"/>
-        <segue reference="UXj-VV-omZ"/>
         <segue reference="823-Eq-eYh"/>
         <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="06u-oh-4gy"/>
         <segue reference="kIc-uU-eUg"/>
+        <segue reference="L2M-th-cr6"/>
+        <segue reference="hOW-ww-bKW"/>
+        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>
 </document>

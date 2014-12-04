@@ -102,9 +102,7 @@
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
-		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
-		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
 		085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4219C7FF85005FEEF9 /* square_1.jpg */; };
 		085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4319C7FF85005FEEF9 /* square_2.jpg */; };
 		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
@@ -120,7 +118,6 @@
 		088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */; };
 		088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */; };
 		08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */ = {isa = PBXBuildFile; fileRef = 08905A711A2E096B0089CF08 /* PictureWall2.m */; };
-		08905A741A2E096B0089CF08 /* PictureWall2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08905A721A2E096B0089CF08 /* PictureWall2.xib */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		08921E5819D116D800A2BAF8 /* PhotoRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */; };
 		08921E5919D116D800A2BAF8 /* PhotoRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */; };
@@ -555,11 +552,8 @@
 		084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailViewController.m; sourceTree = "<group>"; };
 		084EC7271966446500E9B48F /* PhotoUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoUploadViewController.h; sourceTree = "<group>"; };
 		084EC7281966446500E9B48F /* PhotoUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoUploadViewController.m; sourceTree = "<group>"; };
-		08574B58196057BD00D967D4 /* PictureWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureWallViewController.h; path = "Metic/Main Classes/PictureWallViewController.h"; sourceTree = SOURCE_ROOT; };
-		08574B59196057BD00D967D4 /* PictureWallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PictureWallViewController.m; path = "Metic/Main Classes/PictureWallViewController.m"; sourceTree = SOURCE_ROOT; };
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
-		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		085A5D4219C7FF85005FEEF9 /* square_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_1.jpg; sourceTree = "<group>"; };
 		085A5D4319C7FF85005FEEF9 /* square_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_2.jpg; sourceTree = "<group>"; };
 		085A5D4419C7FF85005FEEF9 /* square_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_3.jpg; sourceTree = "<group>"; };
@@ -586,7 +580,6 @@
 		088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerViewController.m; sourceTree = "<group>"; };
 		08905A701A2E096B0089CF08 /* PictureWall2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureWall2.h; sourceTree = "<group>"; };
 		08905A711A2E096B0089CF08 /* PictureWall2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureWall2.m; sourceTree = "<group>"; };
-		08905A721A2E096B0089CF08 /* PictureWall2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PictureWall2.xib; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoRankingTableViewCell.h; sourceTree = "<group>"; };
@@ -1291,8 +1284,6 @@
 		083FF69E19D06021001BB61E /* photo */ = {
 			isa = PBXGroup;
 			children = (
-				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
-				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
 				084EC7271966446500E9B48F /* PhotoUploadViewController.h */,
 				084EC7281966446500E9B48F /* PhotoUploadViewController.m */,
 				080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */,
@@ -1303,7 +1294,6 @@
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
 				08905A701A2E096B0089CF08 /* PictureWall2.h */,
 				08905A711A2E096B0089CF08 /* PictureWall2.m */,
-				08905A721A2E096B0089CF08 /* PictureWall2.xib */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -1495,7 +1485,6 @@
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
 				08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */,
 				08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */,
-				08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */,
 				510BE1A4195C32FE00084014 /* MTTableView.h */,
 				510BE1A5195C32FE00084014 /* MTTableView.m */,
 				519C65FF198B8E8000710B26 /* EventInvitationTableViewCell.h */,
@@ -2341,7 +2330,6 @@
 				5144D99D196B880300C953FB /* UMSCommentInputController.xib in Resources */,
 				08E92DDD19B2D354002499BF /* VideoWallTableViewCell.xib in Resources */,
 				04B6F89119A25D5C00229393 /* face02.png in Resources */,
-				08905A741A2E096B0089CF08 /* PictureWall2.xib in Resources */,
 				51581D3F1933575300943606 /* Images.xcassets in Resources */,
 				51E546B3199896E5003FA551 /* nearbyEventTableViewCell.xib in Resources */,
 				04B6F89019A25D5C00229393 /* face01.png in Resources */,
@@ -2362,7 +2350,6 @@
 				08293F6119C487D9009B637A /* mapapi.bundle in Resources */,
 				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
-				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
 				519C65951989F61B00710B26 /* 3兜风.jpg in Resources */,
 				519C6603198B8E8000710B26 /* EventInvitationTableViewCell.xib in Resources */,
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
@@ -2504,7 +2491,6 @@
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
 				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
-				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
 				08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */,

@@ -12,6 +12,45 @@
 @implementation PhotoTableViewCell
 
 
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithReuseIdentifier:reuseIdentifier];
+    _imgView = [[UIImageView alloc]initWithFrame:CGRectZero];
+    [self addSubview:_imgView];
+    
+    _infoView = [[UIView alloc]initWithFrame:CGRectZero];
+    [_infoView setBackgroundColor:[UIColor whiteColor]];
+    [self addSubview:_infoView];
+    
+    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 145, 3)];
+    [line setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:92.0/255.0 blue:35.0/255.0 alpha:1.0]];
+    [_infoView addSubview:line];
+    
+    _avatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 8, 20, 20)];
+    [_infoView addSubview:_avatar];
+    
+    _author = [[UILabel alloc]initWithFrame:CGRectMake(30, 8, 110, 10)];
+    _author.font = [UIFont systemFontOfSize:12];
+    _author.textColor = [UIColor colorWithWhite:51.0/255.0 alpha:1.0f];
+    [_infoView addSubview:_author];
+    
+    _publish_date = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 110, 10)];
+    _publish_date.font = [UIFont systemFontOfSize:11];
+    _publish_date.textColor = [UIColor colorWithWhite:145.0/255.0 alpha:1.0f];
+    [_infoView addSubview:_publish_date];
+    
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(button_DetailPressed:)];
+    [self.infoView addGestureRecognizer:tapRecognizer];
+    
+    
+    
+    
+    
+    return self;
+}
+
+
+
 - (void)awakeFromNib
 {
     // Initialization code
@@ -23,7 +62,7 @@
     NSLog(@"pressed");
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"]; ;
+	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
     
     viewcontroller.photoId = self.photo_id;
     viewcontroller.photo = self.imgView.image;

@@ -15,7 +15,7 @@
 @interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate,HttpSenderDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
 //@property(nonatomic,strong)NSMutableDictionary *photoscache;//存放图片uiimage
-@property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
+//@property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
 @property(nonatomic,strong)NSMutableDictionary *photos;//存放图片父uiscrollview
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据
 @property(nonatomic,strong)NSNumber* photoId;

@@ -55,7 +55,7 @@
     [self.scrollView setPagingEnabled:YES];
     self.scrollView.delegate = self;
     [self.scrollView setClipsToBounds:YES];
-    [self.scrollView setContentSize:CGSizeMake(320*self.photoPath_list.count, self.view.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(320*self.photo_list.count, self.view.bounds.size.height)];
     [self.scrollView setContentOffset:CGPointMake(320*self.photoIndex, 0)];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
@@ -237,11 +237,11 @@
     [self displaynthPhoto:photoIndex];
     [self loadPictureDescription];
     photoIndex++;
-    if (photoIndex>=0 && photoIndex<self.photoPath_list.count) {
+    if (photoIndex>=0 && photoIndex<self.photo_list.count) {
         [self displaynthPhoto:photoIndex];
     }
     photoIndex-=2;
-    if (photoIndex>=0 && photoIndex<self.photoPath_list.count) {
+    if (photoIndex>=0 && photoIndex<self.photo_list.count) {
         [self displaynthPhoto:photoIndex];
     }
 }
@@ -256,7 +256,7 @@
     [zoomScrollView setFrame:CGRectMake(320*photoIndex+2,0,316, self.scrollView.frame.size.height)];
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
-    NSString *url = _photoPath_list[photoIndex];
+    NSString *url = [_photo_list[photoIndex] valueForKey:@"url"];
     [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
     [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
@@ -363,7 +363,7 @@
             int index = self.scrollView.contentOffset.x/320;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
-            nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:_photoPath_list[index]];
+            nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:[_photo_list[index] valueForKey:@"url"]];
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;
