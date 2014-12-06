@@ -22,4 +22,5 @@
 //@property (strong,nonatomic) MJRefreshFooterView *footer;
 
 - (IBAction)toBestPhotos:(id)sender;
+-(void)calculateLRH;
 @end
