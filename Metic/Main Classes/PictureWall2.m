@@ -187,10 +187,13 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
-                    NSMutableArray* newphoto_list =[[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"photo_list"]];
-                    for (int i = 0; i < newphoto_list.count; i++) {
-                        NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list[i]];
-                        newphoto_list[i] = dictionary;
+                    NSArray* newphoto_list_origin = [response1 valueForKey:@"photo_list"];
+                    NSMutableArray* newphoto_list =[[NSMutableArray alloc]init];
+                    for (int i = 0; i < newphoto_list_origin.count; i++) {
+                        NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list_origin[i]];
+                        if ([dictionary valueForKey:@"width"] && [dictionary valueForKey:@"height"]) {
+                            [newphoto_list addObject:dictionary];
+                        }
                     }
                     [self updatePhotoInfoToDB:newphoto_list];
                     self.sequence = [response1 valueForKey:@"sequence"];
