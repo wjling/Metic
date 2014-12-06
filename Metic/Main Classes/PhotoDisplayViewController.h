@@ -10,18 +10,18 @@
 #import "../Utils/HttpSender.h"
 #import "../Utils/PhotoGetter.h"
 #import "UIImageView+WebCache.h"
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 
 @interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate,HttpSenderDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
 //@property(nonatomic,strong)NSMutableDictionary *photoscache;//存放图片uiimage
-@property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
+//@property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
 @property(nonatomic,strong)NSMutableDictionary *photos;//存放图片父uiscrollview
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据
 @property(nonatomic,strong)NSNumber* photoId;
 @property(nonatomic,strong)NSNumber* eventId;
 @property(nonatomic,strong)NSString* eventName;
-@property (strong, nonatomic) PictureWallViewController* controller;
+@property (strong, nonatomic) PictureWall2* controller;
 @property long photoIndex;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;

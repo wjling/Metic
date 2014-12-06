@@ -7,7 +7,7 @@
 //
 
 #import "PhotoUploadViewController.h"
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 #import "../Category/UINavigationController+Vertical.h"
 #import "../Utils/CommonUtils.h"
 #import "THProgressView.h"
@@ -439,7 +439,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self removeWaitingView];
-                ((PictureWallViewController*)self.photoWallController).shouldReloadPhoto = YES;
+                ((PictureWall2*)self.photoWallController).shouldReloadPhoto = YES;
                 [self.navigationController popToViewController:self.photoWallController animated:YES];
             });
             

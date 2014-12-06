@@ -7,6 +7,7 @@
 //
 
 #import "CustomCellTableViewCell.h"
+#import "../Main Classes/PictureWall2.h"
 
 @implementation CustomCellTableViewCell
 

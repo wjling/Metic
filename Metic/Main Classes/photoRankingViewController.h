@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 #import "../MJRefresh/MJRefresh.h"
 
 @interface photoRankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) UITableView* tableView;
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSString* eventName;
-@property(nonatomic,strong) PictureWallViewController* pictureWallController;
+@property(nonatomic,strong) PictureWall2* pictureWallController;
 @property BOOL shouldFlash;
 @end

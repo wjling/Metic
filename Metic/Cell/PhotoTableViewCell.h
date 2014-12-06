@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
+#import "../Source/TMQuiltView/TMQuiltViewCell.h"
 
-@interface PhotoTableViewCell : UITableViewCell
+@interface PhotoTableViewCell : TMQuiltViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) IBOutlet UILabel *publish_date;
@@ -19,7 +20,7 @@
 //@property (strong, nonatomic) IBOutlet UIButton *button_Detail;
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
-@property (weak, nonatomic) PictureWallViewController* PhotoWall;
+@property (weak, nonatomic) PictureWall2* PhotoWall;
 @property BOOL isloading;
 @property BOOL isLeft;
 - (void)button_DetailPressed:(id)sender;

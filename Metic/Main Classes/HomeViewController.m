@@ -11,13 +11,13 @@
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
 #import "../Utils/PhotoGetter.h"
-#import "PictureWallViewController.h"
 #import "Video/VideoWallViewController.h"
 #import "LaunchEventViewController.h"
 #import "DynamicViewController.h"
 #import "AdViewController.h"
 #import "MobClick.h"
 #import "EventDetail2.h"
+#import "PictureWall2.h"
 
 @interface HomeViewController ()
 
@@ -472,8 +472,8 @@
         EventDetailViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
     }
-    if ([segue.destinationViewController isKindOfClass:[PictureWallViewController class]]) {
-        PictureWallViewController *nextViewController = segue.destinationViewController;
+    if ([segue.destinationViewController isKindOfClass:[PictureWall2 class]]) {
+        PictureWall2 *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
         nextViewController.eventName = self.selete_EventName;
     }

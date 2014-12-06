@@ -11,7 +11,7 @@
 #import "../MJRefresh/MJRefreshFooterView.h"
 #import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
 #import "../UIView/MTMessageTextView.h"
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>
 @property (nonatomic,strong) UIImage* photo;
@@ -27,7 +27,7 @@
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
-@property (strong, nonatomic) PictureWallViewController* controller;
+@property (strong, nonatomic) PictureWall2* controller;
 @property int type;
 @property BOOL isEmotionOpen;
 - (IBAction)good:(id)sender;
