@@ -20,6 +20,7 @@
 
 @interface PictureWall2 ()
 @property (nonatomic,strong) UIButton* add;
+@property float h1;
 @property BOOL nibsRegistered;
 @end
 
@@ -73,6 +74,7 @@
 {
     _nibsRegistered = NO;
     _shouldReloadPhoto = NO;
+    _h1 = 0;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
@@ -166,6 +168,7 @@
         
     }
     [sql closeMyDB];
+    [self calculateLRH];
     [self.quiltView reloadData];
 }
 
@@ -206,6 +209,7 @@
                     }else{
                         [self.photo_list removeAllObjects];
                         [self.photo_list addObjectsFromArray:_photo_list_all];
+                        [self calculateLRH];
                         [self.quiltView reloadData];
                         if(_header.refreshing) [_header endRefreshing];
                     }
@@ -224,15 +228,46 @@
     }];
 }
 
+-(void)calculateLRH
+{
+    float lH = 0, rH = 0;
+    for (NSDictionary* dict in _photo_list) {
+        float width = [[dict valueForKey:@"width"] floatValue];
+        float height = [[dict valueForKey:@"height"] floatValue];
+        float RealHeight = height * 150.0f / width + 43;
+        if (lH <= rH) {
+            lH += RealHeight;
+        }else{
+            rH += RealHeight;
+        }
+    }
+    NSLog(@"lH: %f , rH: %f",lH,rH);
+    _h1 = lH - rH;
+}
 
 
 #pragma mark - TMQuiltViewDelegate
 - (NSInteger)quiltViewNumberOfCells:(TMQuiltView *)TMQuiltView {
-    return [_photo_list count];
+    return [_photo_list count]+2;
 }
 
 
 - (TMQuiltViewCell *)quiltView:(TMQuiltView *)quiltView cellAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row >= _photo_list.count) {
+        TMQuiltViewCell* cell = [[TMQuiltViewCell alloc]init];
+        if ((_h1 > 0 && indexPath.row == _photo_list.count + 1) || (_h1 <= 0 && indexPath.row == _photo_list.count)) {
+            float width = 300;
+            float height = (_h1 > 0)? 50 : abs(_h1) + 50;
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-50, width*4/6, 40)];
+            label.text = @"没有更多了哦，去上传吧~";
+            label.font = [UIFont systemFontOfSize:15];
+            label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+            label.textAlignment = NSTextAlignmentCenter;
+            [cell addSubview:label];
+        }
+        
+        return cell;
+    }
     static NSString *CellIdentifier = @"photocell";
 
     
@@ -289,11 +324,14 @@
 }
 
 - (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == _photo_list.count) {
+        return abs(_h1) + 50;
+    }else if(indexPath.row == _photo_list.count + 1) return 50;
+    
     NSDictionary *a = _photo_list[indexPath.row];
     
-    
-    int width = [[a valueForKey:@"width"] intValue];
-    int height = [[a valueForKey:@"height"] intValue];
+    float width = [[a valueForKey:@"width"] floatValue];
+    float height = [[a valueForKey:@"height"] floatValue];
     float RealHeight = height * 150.0f / width;
     
     return RealHeight + 33;
@@ -301,7 +339,9 @@
 
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    if (indexPath.row >= _photo_list.count) {
+        return;
+    }
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];
