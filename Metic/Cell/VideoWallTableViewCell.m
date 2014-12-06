@@ -95,10 +95,6 @@
 }
 
 - (IBAction)play:(id)sender {
-    
-    if (videoRequest) {
-        return;
-    }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
     NSLog(@"%@",url);
@@ -321,20 +317,6 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-
-        //av播放器播放
-//        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
-//        player.videoName = _videoName;
-//        player.wall = _controller;
-//        player.cell = self;
-//        [self.controller presentViewController:player animated:YES completion:nil];
-//        
-//        
-//        
-//        
-//        
-//        
-//        return;
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -390,31 +372,10 @@
                     }
                     if (_controller) {
                         NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
-//                        AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
-//                        AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
-//                        AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-//                        [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
-//                        [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
-//                        [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
                         [self PlayingVideoAtOnce];
                     }
                 }
-            
-                
-                
-                
-                
                 return;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    // my video player
-                    float tableY = _controller.tableView.contentOffset.y;
-                    float cellY = self.frame.origin.y;
-                    if (tableY <= cellY + 57 && tableY + _controller.tableView.frame.size.height >=cellY + 57 + 225 && _controller &&_controller.navigationController.viewControllers.lastObject == _controller ) {
-                        //[self downloadVideo:videoName url:url];
-                    }
-                    //[self PlayingVideoAtOnce];
-                });
-                
             }];
             //断点续载
             [request setAllowResumeForFileDownloads:YES];
