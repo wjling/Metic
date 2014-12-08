@@ -8,6 +8,7 @@
 
 #import "EventCellTableViewCell.h"
 #import "BannerViewController.h"
+#import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @implementation EventCellTableViewCell
 
@@ -69,7 +70,10 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
-    [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
+    });
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {

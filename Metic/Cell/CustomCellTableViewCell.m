@@ -8,6 +8,7 @@
 
 #import "CustomCellTableViewCell.h"
 #import "../Main Classes/PictureWall2.h"
+#import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @implementation CustomCellTableViewCell
 
@@ -92,7 +93,11 @@
 - (IBAction)jumpToPictureWall:(id)sender {
     self.homeController.selete_Eventid = self.eventId;
     self.homeController.selete_EventName = _event;
-    [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
+    });
+    
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {

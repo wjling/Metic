@@ -505,7 +505,7 @@ NSString *const kDefaultReusableIdentifier = @"kTMQuiltViewDefaultReusableIdenti
     // We need to recompute the cell tops because their width is 
     // based on the bounding width, and their height is generally based
     // on their width.
-    [self resetView];
+    //[self resetView];
 }
 
 #pragma mark - Cell visibility
