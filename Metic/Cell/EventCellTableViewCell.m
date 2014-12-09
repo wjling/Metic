@@ -77,8 +77,11 @@
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
-    //[CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"敬请期待" WithDelegate:nil WithCancelTitle:@"确定"];
-    [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
+    });
+    
 }
 
 - (IBAction)addComment:(id)sender {

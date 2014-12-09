@@ -104,7 +104,11 @@
     //[CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"敬请期待" WithDelegate:nil WithCancelTitle:@"确定"];
     self.homeController.selete_Eventid = self.eventId;
     self.homeController.selete_EventName = _event;
-    [self.homeController performSegueWithIdentifier:@"HomeToVideoWall" sender:self.homeController];
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.homeController performSegueWithIdentifier:@"HomeToVideoWall" sender:self.homeController];
+    });
+    
 }
 
 
