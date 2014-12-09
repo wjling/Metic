@@ -419,10 +419,7 @@
     
     if(_isPlaying) return;
     NSLog(@"play");
-    
-    
-    
-    
+
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     

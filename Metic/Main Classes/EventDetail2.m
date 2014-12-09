@@ -30,6 +30,7 @@
 @property (nonatomic,strong) UIButton* favor;
 
 @property BOOL nibsRegistered;
+@property BOOL shouldPlay;
 
 
 @end
@@ -44,6 +45,16 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    });
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -52,6 +63,7 @@
 - (void)initData
 {
     _nibsRegistered = NO;
+    _loadingVideo = [[NSMutableSet alloc]init];
 }
 
 - (void)initUI
@@ -381,6 +393,7 @@
     }
     
     if (scrollView == _tableView){
+        _shouldPlay = NO;
         if (_tableView.contentOffset.y <= 0 && _tableView.isScrollEnabled) {
             _tableView.scrollEnabled = NO;
         }else if(_tableView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame) && !_tableView.isScrollEnabled){
@@ -403,6 +416,30 @@
             _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_details.frame) + CGRectGetMinY(_SscrollView.frame));
         }
     }
+    
+    if (scrollView == _tableView) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                            object:nil
+                                                          userInfo:nil];
+    }
+    
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView == _tableView) {
+        _shouldPlay = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (_shouldPlay == YES) {
+                _shouldPlay = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
+                                                                    object:nil
+                                                                  userInfo:nil];
+                
+            }
+            
+        });
+    }
 }
 
 #pragma mark 代理方法-UIScrollView
@@ -413,7 +450,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 150;
+    switch (indexPath.row % 3) {
+        case 0:
+            return 150;
+            break;
+        case 1:
+            return 400;
+            break;
+        case 2:
+            return 400;
+            break;
+            
+        default:
+            return 150;
+            break;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -425,6 +476,8 @@
         _nibsRegistered = YES;
     }
     CircleCellTableViewCell *cell = (CircleCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:circleCellIdentifier];
+    cell.type = indexPath.row % 3;
+    cell.controller = self;
     [cell drawCell];
     return cell;
     

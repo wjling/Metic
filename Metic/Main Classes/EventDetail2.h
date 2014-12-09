@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventDetail2 : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
-
+@property(nonatomic,strong) NSMutableSet* loadingVideo;
 @end
