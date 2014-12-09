@@ -17,6 +17,7 @@
 #import "PhotoDisplayViewController.h"
 #import "photoRankingViewController.h"
 #import "PhotoUploadViewController.h"
+#import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @interface PictureWall2 ()
 @property (nonatomic,strong) UIButton* add;
@@ -79,17 +80,17 @@
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     [self pullPhotoInfosFromDB];
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
-        if ([_photo_list_all count] == 0) {
-            self.sequence = [[NSNumber alloc]initWithInt:0];
-            [_header beginRefreshing];
-        }
+    if ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+        self.sequence = [[NSNumber alloc]initWithInt:0];
+        [_header beginRefreshing];
+    
     }
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [SVProgressHUD dismiss];
     [MobClick beginLogPageView:@"图片墙"];
     CGRect frame = self.navigationController.view.window.frame;
     [_add setFrame:CGRectMake(CGRectGetWidth(frame)*0.7, CGRectGetHeight(frame) - CGRectGetWidth(frame)*0.3 , CGRectGetWidth(frame)*0.2, CGRectGetWidth(frame)*0.2)];
@@ -162,6 +163,9 @@
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
         if ([photoInfo valueForKey:@"width"] && [photoInfo valueForKey:@"height"]) {
+            if ([[photoInfo valueForKey:@"width"] floatValue] == 0 || [[photoInfo valueForKey:@"height"] floatValue] == 0) {
+                continue;
+            }
             [self.photo_list_all addObject:photoInfo];
             [self.photo_list addObject:photoInfo];
         }
@@ -195,6 +199,9 @@
                     for (int i = 0; i < newphoto_list_origin.count; i++) {
                         NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list_origin[i]];
                         if ([dictionary valueForKey:@"width"] && [dictionary valueForKey:@"height"]) {
+                            if ([[dictionary valueForKey:@"width"] floatValue] == 0 || [[dictionary valueForKey:@"height"] floatValue] == 0) {
+                                continue;
+                            }
                             [newphoto_list addObject:dictionary];
                         }
                     }
@@ -258,7 +265,7 @@
         if ((_h1 > 0 && indexPath.row == _photo_list.count + 1) || (_h1 <= 0 && indexPath.row == _photo_list.count)) {
             float width = 300;
             float height = (_h1 > 0)? 50 : abs(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-50, width*4/6, 40)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-40, width*4/6, 40)];
             label.text = @"没有更多了哦，去上传吧~";
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
@@ -324,6 +331,7 @@
 }
 
 - (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath {
+//    NSLog(@"heightForCellAtIndexPath %d",indexPath.row);
     if (indexPath.row == _photo_list.count) {
         return abs(_h1) + 50;
     }else if(indexPath.row == _photo_list.count + 1) return 50;

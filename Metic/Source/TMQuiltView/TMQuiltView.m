@@ -480,14 +480,17 @@ NSString *const kDefaultReusableIdentifier = @"kTMQuiltViewDefaultReusableIdenti
         }
         
         // Move top and bottom if the cells they point to were harvested
-        for (int j = 0; j < [indexPaths count]; j++) {
+        int j = *top - 5;
+        if (j < 0) j = 0;
+        for (; j < [indexPaths count]; j++) {
             if ([indexPathToView objectForKey:[indexPaths objectAtIndex:j]] != nil) {
                 *top = j;
                 break;
             }
         }
-        
-        for (int j = [indexPaths count] - 1; j >= 0; j--) {
+        j = *bottom + 5;
+        if (j > [indexPaths count] - 1) j = [indexPaths count] - 1;
+        for (; j >= 0; j--) {
             if ([indexPathToView objectForKey:[indexPaths objectAtIndex:j]] != nil) {
                 *bottom = j;
                 break;
@@ -502,7 +505,7 @@ NSString *const kDefaultReusableIdentifier = @"kTMQuiltViewDefaultReusableIdenti
     // We need to recompute the cell tops because their width is 
     // based on the bounding width, and their height is generally based
     // on their width.
-    [self resetView];
+    //[self resetView];
 }
 
 #pragma mark - Cell visibility
