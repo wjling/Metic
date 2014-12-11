@@ -102,9 +102,7 @@
 		0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0842A89919588DA5003229A9 /* InviteFriendViewController.m */; };
 		084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */; };
 		084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 084EC7281966446500E9B48F /* PhotoUploadViewController.m */; };
-		08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B59196057BD00D967D4 /* PictureWallViewController.m */; };
 		08574B5E1960EFC200D967D4 /* PhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */; };
-		08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */; };
 		085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4219C7FF85005FEEF9 /* square_1.jpg */; };
 		085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4319C7FF85005FEEF9 /* square_2.jpg */; };
 		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
@@ -119,6 +117,7 @@
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */; };
 		088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */; };
+		08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */ = {isa = PBXBuildFile; fileRef = 08905A711A2E096B0089CF08 /* PictureWall2.m */; };
 		08920731197224C30076D2BC /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 08920730197224C30076D2BC /* SFHFKeychainUtils.m */; };
 		08921E5819D116D800A2BAF8 /* PhotoRankingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08921E5619D116D800A2BAF8 /* PhotoRankingTableViewCell.m */; };
 		08921E5919D116D800A2BAF8 /* PhotoRankingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 08921E5719D116D800A2BAF8 /* PhotoRankingTableViewCell.xib */; };
@@ -136,6 +135,9 @@
 		08B3F709195711A3003B32B7 /* CloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B3F708195711A3003B32B7 /* CloudOperation.m */; };
 		08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B8D63B19B87FB100552663 /* AssetsLibrary.framework */; };
 		08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08B8D64019B89C9400552663 /* VideoPreviewViewController.m */; };
+		08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9BF1A2DEFAA00132F18 /* TMQuiltView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		08BEE9C51A2DEFAA00132F18 /* TMQuiltViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9C11A2DEFAA00132F18 /* TMQuiltViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */; };
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
@@ -550,11 +552,8 @@
 		084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDetailViewController.m; sourceTree = "<group>"; };
 		084EC7271966446500E9B48F /* PhotoUploadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoUploadViewController.h; sourceTree = "<group>"; };
 		084EC7281966446500E9B48F /* PhotoUploadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoUploadViewController.m; sourceTree = "<group>"; };
-		08574B58196057BD00D967D4 /* PictureWallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PictureWallViewController.h; path = "Metic/Main Classes/PictureWallViewController.h"; sourceTree = SOURCE_ROOT; };
-		08574B59196057BD00D967D4 /* PictureWallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PictureWallViewController.m; path = "Metic/Main Classes/PictureWallViewController.m"; sourceTree = SOURCE_ROOT; };
 		08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PhotoTableViewCell.h; path = Metic/Cell/PhotoTableViewCell.h; sourceTree = SOURCE_ROOT; };
 		08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PhotoTableViewCell.m; path = Metic/Cell/PhotoTableViewCell.m; sourceTree = SOURCE_ROOT; };
-		08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PhotoTableViewCell.xib; path = Metic/Cell/PhotoTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		085A5D4219C7FF85005FEEF9 /* square_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_1.jpg; sourceTree = "<group>"; };
 		085A5D4319C7FF85005FEEF9 /* square_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_2.jpg; sourceTree = "<group>"; };
 		085A5D4419C7FF85005FEEF9 /* square_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_3.jpg; sourceTree = "<group>"; };
@@ -579,6 +578,8 @@
 		088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerView.m; sourceTree = "<group>"; };
 		088DCEAE19FF97D70036BE82 /* VideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerViewController.h; sourceTree = "<group>"; };
 		088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerViewController.m; sourceTree = "<group>"; };
+		08905A701A2E096B0089CF08 /* PictureWall2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureWall2.h; sourceTree = "<group>"; };
+		08905A711A2E096B0089CF08 /* PictureWall2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PictureWall2.m; sourceTree = "<group>"; };
 		0892072F197224C30076D2BC /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		08920730197224C30076D2BC /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
 		08921E5519D116D800A2BAF8 /* PhotoRankingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoRankingTableViewCell.h; sourceTree = "<group>"; };
@@ -611,6 +612,13 @@
 		08B8D63B19B87FB100552663 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		08B8D63F19B89C9400552663 /* VideoPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoPreviewViewController.h; path = Video/VideoPreviewViewController.h; sourceTree = "<group>"; };
 		08B8D64019B89C9400552663 /* VideoPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VideoPreviewViewController.m; path = Video/VideoPreviewViewController.m; sourceTree = "<group>"; };
+		08BEE9BD1A2DEFAA00132F18 /* TMQuiltView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TMQuiltView-Prefix.pch"; sourceTree = "<group>"; };
+		08BEE9BE1A2DEFAA00132F18 /* TMQuiltView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMQuiltView.h; sourceTree = "<group>"; };
+		08BEE9BF1A2DEFAA00132F18 /* TMQuiltView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMQuiltView.m; sourceTree = "<group>"; };
+		08BEE9C01A2DEFAA00132F18 /* TMQuiltViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMQuiltViewCell.h; sourceTree = "<group>"; };
+		08BEE9C11A2DEFAA00132F18 /* TMQuiltViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMQuiltViewCell.m; sourceTree = "<group>"; };
+		08BEE9C21A2DEFAA00132F18 /* TMQuiltViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMQuiltViewController.h; sourceTree = "<group>"; };
+		08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMQuiltViewController.m; sourceTree = "<group>"; };
 		08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		08C62DD21A177C91001F7C45 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
@@ -1276,8 +1284,6 @@
 		083FF69E19D06021001BB61E /* photo */ = {
 			isa = PBXGroup;
 			children = (
-				08574B58196057BD00D967D4 /* PictureWallViewController.h */,
-				08574B59196057BD00D967D4 /* PictureWallViewController.m */,
 				084EC7271966446500E9B48F /* PhotoUploadViewController.h */,
 				084EC7281966446500E9B48F /* PhotoUploadViewController.m */,
 				080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */,
@@ -1286,6 +1292,8 @@
 				084EC7251965B5C300E9B48F /* PhotoDetailViewController.m */,
 				083FF6A119D06048001BB61E /* photoRankingViewController.h */,
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
+				08905A701A2E096B0089CF08 /* PictureWall2.h */,
+				08905A711A2E096B0089CF08 /* PictureWall2.m */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -1394,6 +1402,20 @@
 			path = Metic/GTMBase64;
 			sourceTree = SOURCE_ROOT;
 		};
+		08BEE9BC1A2DEFAA00132F18 /* TMQuiltView */ = {
+			isa = PBXGroup;
+			children = (
+				08BEE9BD1A2DEFAA00132F18 /* TMQuiltView-Prefix.pch */,
+				08BEE9BE1A2DEFAA00132F18 /* TMQuiltView.h */,
+				08BEE9BF1A2DEFAA00132F18 /* TMQuiltView.m */,
+				08BEE9C01A2DEFAA00132F18 /* TMQuiltViewCell.h */,
+				08BEE9C11A2DEFAA00132F18 /* TMQuiltViewCell.m */,
+				08BEE9C21A2DEFAA00132F18 /* TMQuiltViewController.h */,
+				08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */,
+			);
+			path = TMQuiltView;
+			sourceTree = "<group>";
+		};
 		08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1463,7 +1485,6 @@
 				08DB698C19541F3A00F80F3F /* SCommentTableViewCell.xib */,
 				08574B5B1960EFC200D967D4 /* PhotoTableViewCell.h */,
 				08574B5C1960EFC200D967D4 /* PhotoTableViewCell.m */,
-				08574B5D1960EFC200D967D4 /* PhotoTableViewCell.xib */,
 				510BE1A4195C32FE00084014 /* MTTableView.h */,
 				510BE1A5195C32FE00084014 /* MTTableView.m */,
 				519C65FF198B8E8000710B26 /* EventInvitationTableViewCell.h */,
@@ -1929,6 +1950,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				08BEE9BC1A2DEFAA00132F18 /* TMQuiltView */,
 				04A531831A222947002FDDC1 /* LBBlurredImage */,
 				08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */,
 				088DCEAB19FF97D70036BE82 /* Multi-Player */,
@@ -2328,7 +2350,6 @@
 				08293F6119C487D9009B637A /* mapapi.bundle in Resources */,
 				04E657C219797A380091524F /* Provinces.plist in Resources */,
 				5144D9A2196B880300C953FB /* UMSnsAccountViewController.xib in Resources */,
-				08574B5F1960EFC200D967D4 /* PhotoTableViewCell.xib in Resources */,
 				519C65951989F61B00710B26 /* 3兜风.jpg in Resources */,
 				519C6603198B8E8000710B26 /* EventInvitationTableViewCell.xib in Resources */,
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
@@ -2470,9 +2491,9 @@
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
 				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
-				08574B5A196057BD00D967D4 /* PictureWallViewController.m in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
+				08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */,
 				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				510D4597196E8A960081672A /* MKAnnotationView+WebCache.m in Sources */,
@@ -2511,6 +2532,7 @@
 				48A4DDF2194FE42D0066BF8D /* ChineseToPinyinResource.m in Sources */,
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,
 				089337A5197579CE00AD940B /* PECropRectView.m in Sources */,
+				08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */,
 				51F4CB1319E6307500E487F1 /* DDAbstractDatabaseLogger.m in Sources */,
 				08A68E2419FE62D000A9EB76 /* KxMenu.m in Sources */,
 				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
@@ -2520,6 +2542,7 @@
 				08DB69A819541F3A00F80F3F /* CustomCellTableViewCell.m in Sources */,
 				51F4CB1119E6307500E487F1 /* SEAOperationQueue.m in Sources */,
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
+				08BEE9C51A2DEFAA00132F18 /* TMQuiltViewCell.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */,
@@ -2549,6 +2572,7 @@
 				085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
+				08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */,
 				04CB1B7F1977769E00BC083C /* SingleSelectionAlertView.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */,

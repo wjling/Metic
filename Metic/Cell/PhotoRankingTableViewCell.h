@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "../Main Classes/photoRankingViewController.h"
-#import "PictureWallViewController.h"
+#import "PictureWall2.h"
 
 
 @interface PhotoRankingTableViewCell : UITableViewCell

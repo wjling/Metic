@@ -19,6 +19,7 @@
 #import "MTUIImagePickerController.h"
 #import "../../Utils/NSString+JSON.h"
 #import "../../Utils/Reachability.h"
+#import "../../Source/SVProgressHUD/SVProgressHUD.h"
 
 
 
@@ -97,6 +98,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [SVProgressHUD dismiss];
     [_tableView setFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     if (_shouldReload) {
         _shouldReload = NO;
