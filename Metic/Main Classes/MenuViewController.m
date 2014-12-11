@@ -389,6 +389,7 @@
             return;
             
 	}
+    [self hideUpdateInRow:4];
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 
