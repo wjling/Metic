@@ -82,6 +82,7 @@
 
 - (void)initParams
 {
+    self.banner_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.banner_UIview.frame.size.width, self.banner_UIview.frame.size.height - 3)];
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatar];
     self.avatar_imageView.layer.cornerRadius = self.avatar_imageView.frame.size.width/2;
@@ -110,6 +111,8 @@
         NSLog(@"性别男");
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
+    [self.banner_UIview addSubview:self.banner_imageView];
+    [self.banner_UIview sendSubviewToBack:self.banner_imageView];
     [self.banner_UIview addSubview:self.gender_imageView];
     self.info_tableView.delegate = self;
     self.info_tableView.dataSource = self;
@@ -207,8 +210,16 @@
     self.email_label.text = [MTUser sharedInstance].email;
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        CGRect frame = self.banner_UIview.frame;
+        CGFloat imgWidth = self.banner_UIview.frame.size.width;
+        CGFloat imgHeight = imgWidth * image.size.height / image.size.width;
+        frame.origin.x = 0;
+        frame.origin.y = -(imgHeight - self.banner_UIview.frame.size.height) / 2.0;
+        frame.size.width = imgWidth;
+        frame.size.height = imgHeight;
+        [self.banner_imageView setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.banner_imageView setImageToBlur:image blurRadius:2.0 brightness:-0.2 completionBlock:nil];
+            [self.banner_imageView setImageToBlur:image blurRadius:2.0 completionBlock:nil];
             
 //            UIImage* img1 = [image brightness:0.5];
 //            UIImage* img2 = [img1 gaussianBlur:5];

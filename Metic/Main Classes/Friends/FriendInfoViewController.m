@@ -29,6 +29,7 @@
 @synthesize moreFunction_view;
 
 @synthesize fInfoView;
+@synthesize fInfoView_imgV;
 @synthesize photo;
 @synthesize name_label;
 @synthesize alias_label;
@@ -36,6 +37,7 @@
 @synthesize gender_imageView;
 
 @synthesize fDescriptionView;
+@synthesize fDescriptionView_imgV;
 @synthesize title_label;
 @synthesize description_label;
 
@@ -126,7 +128,7 @@
     sView.delegate = self;
     sView.showsHorizontalScrollIndicator = NO;
     sView.showsVerticalScrollIndicator = NO;
-    [sView setBackgroundColor:[UIColor grayColor]];
+    [sView setBackgroundColor:[UIColor lightGrayColor]];
     
     pControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, sv_height-15, sv_width, 10)];
     pControl.numberOfPages = kNumberOfPages;
@@ -136,9 +138,10 @@
     [pControl addTarget:self action:@selector(pageControlClicked:) forControlEvents:UIControlEventValueChanged];
     
     
-    self.fInfoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
+    self.fInfoView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
 //    [self.fInfoView setBackgroundColor:[UIColor lightGrayColor]];
-    self.fInfoView.image = [UIImage imageNamed:@"1星空.jpg"];
+//    self.fInfoView.image = [UIImage imageNamed:@"1星空.jpg"];
+    self.fInfoView_imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
     
     photo = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"default_avatar.jpg"]];
     photo.frame = CGRectMake(20, 30, 50, 50);
@@ -209,6 +212,7 @@
     [friend_alias_button addTarget:self action:@selector(changeAlias:) forControlEvents:UIControlEventTouchUpInside];
     
 //    self.fInfoView.layer.borderColor
+    [self.fInfoView addSubview:fInfoView_imgV];
     [self.fInfoView addSubview:photo];
     [self.fInfoView addSubview:name_label];
     [self.fInfoView addSubview:alias_label];
@@ -219,9 +223,11 @@
     
     
     
-    self.fDescriptionView = [[UIImageView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
+    self.fDescriptionView = [[UIView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
-    self.fDescriptionView.image = [UIImage imageNamed:@"1星空.jpg"];
+//    self.fDescriptionView.image = [UIImage imageNamed:@"1星空.jpg"];
+    self.fDescriptionView_imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
+    
     title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
     [title_label setBackgroundColor:[UIColor clearColor]];
@@ -243,7 +249,7 @@
     self.friendInfoEvents_tableView.delegate = self;
     self.friendInfoEvents_tableView.dataSource = self;
 
-    
+    [self.fDescriptionView addSubview:self.fDescriptionView_imgV];
     [self.fDescriptionView addSubview:title_label];
     [self.fDescriptionView addSubview:description_label];
     
@@ -266,6 +272,20 @@
     [moreFunction_view setHidden:YES];
 }
 
+- (UIImage *)scaleToSize:(UIImage *)img size:(CGSize)size{
+    // 创建一个bitmap的context
+    // 并把它设置成为当前正在使用的context
+    UIGraphicsBeginImageContext(size);
+    // 绘制改变大小的图片
+    [img drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    // 从当前context中创建一个改变大小后的图片
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    // 返回新的改变大小后的图片
+    return scaledImage; 
+}
+
 -(void)refreshFriendInfo
 {
     NSString* name = [friendInfo_dic objectForKey:@"name"];
@@ -276,9 +296,19 @@
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        CGFloat imgWidth = self.view.frame.size.width;
+        CGFloat imgHeight = image.size.height/image.size.width * imgWidth;
+//        UIImage* img = [self scaleToSize:image size:CGSizeMake(imgWidth, imgHeight)];
+        CGRect frame = self.fInfoView.frame;
+        frame.origin.y -= (imgHeight - self.fInfoView.frame.size.height) / 2.0;
+        frame.size.width = imgWidth;
+        frame.size.height = imgHeight;
+        [self.fInfoView_imgV setFrame:frame];
+        [self.fDescriptionView_imgV setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.fInfoView setImageToBlur:image blurRadius:1.5 brightness:-0.25 completionBlock:nil];
-            [self.fDescriptionView setImageToBlur:image blurRadius:1 brightness:-0.2 completionBlock:nil];
+//            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:0 completionBlock:nil];
+            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 completionBlock:nil];
+            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:1 completionBlock:nil];
         });
         
     }];
