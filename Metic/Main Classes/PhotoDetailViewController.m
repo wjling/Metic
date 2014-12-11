@@ -984,7 +984,9 @@
                                 if (index >= 0 && index < self.controller.photo_list.count) {
                                     [self.controller.photo_list removeObject:_photoInfo];
                                     [self.controller calculateLRH];
+                                    [self.controller.quiltView beginUpdates];
                                     [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+                                    [self.controller.quiltView endUpdates];
                                 }
                                 index = [self.controller.photo_list_all indexOfObject:_photoInfo];
                                 if (index >= 0 && index < self.controller.photo_list_all.count) {
@@ -1023,7 +1025,9 @@
         if (index >= 0 && index < self.controller.photo_list.count) {
             [self.controller.photo_list removeObject:_photoInfo];
             [self.controller calculateLRH];
+            [self.controller.quiltView beginUpdates];
             [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+            [self.controller.quiltView endUpdates];
         }
         index = [self.controller.photo_list_all indexOfObject:_photoInfo];
         if (index >= 0 && index < self.controller.photo_list_all.count) {

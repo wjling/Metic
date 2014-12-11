@@ -260,19 +260,21 @@
 
 
 - (TMQuiltViewCell *)quiltView:(TMQuiltView *)quiltView cellAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (indexPath.row >= _photo_list.count) {
         TMQuiltViewCell* cell = [[TMQuiltViewCell alloc]init];
-        if ((_h1 > 0 && indexPath.row == _photo_list.count + 1) || (_h1 <= 0 && indexPath.row == _photo_list.count)) {
+        if(indexPath.row == _photo_list.count + 1){
+            TMQuiltViewCell* preCell = [quiltView cellAtIndexPath:[NSIndexPath indexPathForRow:_photo_list.count inSection:0]];
+            float preHeight = CGRectGetHeight(preCell.frame);
             float width = 300;
-            float height = (_h1 > 0)? 50 : abs(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-40, width*4/6, 40)];
+            float height = (preHeight != 50)? 50 : abs(_h1) + 50;
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6 - 155, height-40, width*4/6, 40)];
             label.text = @"没有更多了哦，去上传吧~";
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
             label.textAlignment = NSTextAlignmentCenter;
             [cell addSubview:label];
         }
-        
         return cell;
     }
     static NSString *CellIdentifier = @"photocell";
