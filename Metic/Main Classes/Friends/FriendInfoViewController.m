@@ -257,7 +257,13 @@
     [root addSubview:self.friend_alias_button];
 //    [root addSubview:self.del_friend_Button];
 //    [root addSubview:friendInfoEvents_tableView];
-    
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapDown)];
+    [sView addGestureRecognizer:tapGesture];
+}
+
+-(void)tapDown
+{
+    [moreFunction_view setHidden:YES];
 }
 
 -(void)refreshFriendInfo
@@ -436,10 +442,17 @@
     
 }
 
+#pragma mark - Touches
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [moreFunction_view setHidden:YES];
+}
+
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView               // any offset changes
 {
+    [moreFunction_view setHidden:YES];
     if (scrollView == sView) {
         CGFloat page_width = sView.frame.size.width;
         int page_index = floor((sView.contentOffset.x - page_width/2) / page_width) +1;
@@ -450,7 +463,7 @@
 // called on start of dragging (may require some time and or distance to move)
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    
+    [moreFunction_view setHidden:YES];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView      // called when scroll view grinds to a halt
@@ -496,6 +509,8 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [moreFunction_view setHidden:YES];
 //    [self.friendInfoEvents_tableView reloadData];
 //    NSLog(@"reload data");
 }
