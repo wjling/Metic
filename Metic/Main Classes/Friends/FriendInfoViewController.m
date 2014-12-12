@@ -296,6 +296,9 @@
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            image = [UIImage imageNamed:@"默认用户头像"];
+        }
         CGFloat imgWidth = self.view.frame.size.width;
         CGFloat imgHeight = image.size.height/image.size.width * imgWidth;
 //        UIImage* img = [self scaleToSize:image size:CGSizeMake(imgWidth, imgHeight)];
@@ -307,8 +310,8 @@
         [self.fDescriptionView_imgV setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:0 completionBlock:nil];
-            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 completionBlock:nil];
-            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:1 completionBlock:nil];
+            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:-0.08 completionBlock:nil];
+            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:1 brightness: -0.07 completionBlock:nil];
         });
         
     }];
