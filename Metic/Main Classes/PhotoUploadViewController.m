@@ -140,8 +140,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        NSLog(@"cancel");
     }];
-    [actionSheet addButton:cancelItem type:RIButtonItemType_Destructive];
+    [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
         RIButtonItem *takeItem = [RIButtonItem itemWithLabel:@"拍照" action:^{
@@ -154,7 +155,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [actionSheet addButton:takeItem type:RIButtonItemType_Other];
     }
     
-    
     RIButtonItem *seleteItem = [RIButtonItem itemWithLabel:@"从相册选择" action:^{
         // 跳转到相机或相册页面
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
@@ -166,9 +166,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [self presentViewController:imagePickerController animated:YES completion:^{}];
     }];
     [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
-    
-    
-    
+
     [actionSheet showInView:self.view];
 }
 
