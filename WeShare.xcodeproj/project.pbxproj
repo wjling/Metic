@@ -115,6 +115,10 @@
 		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
+		0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E84E1A3AC5F500E3C18C /* BOAlertController.m */; };
+		0878E85A1A3AC76F00E3C18C /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E8551A3AC76F00E3C18C /* RIButtonItem.m */; };
+		0878E85B1A3AC76F00E3C18C /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E8571A3AC76F00E3C18C /* UIActionSheet+Blocks.m */; };
+		0878E85C1A3AC76F00E3C18C /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E8591A3AC76F00E3C18C /* UIAlertView+Blocks.m */; };
 		088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */; };
 		088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 088DCEAF19FF97D70036BE82 /* VideoPlayerViewController.m */; };
 		08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */ = {isa = PBXBuildFile; fileRef = 08905A711A2E096B0089CF08 /* PictureWall2.m */; };
@@ -574,6 +578,14 @@
 		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
 		08775A0419A8F7840034BB58 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportViewController.h; path = Report/ReportViewController.h; sourceTree = "<group>"; };
 		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
+		0878E84E1A3AC5F500E3C18C /* BOAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOAlertController.m; sourceTree = "<group>"; };
+		0878E8521A3AC66100E3C18C /* BOAlertController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BOAlertController.h; sourceTree = "<group>"; };
+		0878E8541A3AC76F00E3C18C /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIButtonItem.h; sourceTree = "<group>"; };
+		0878E8551A3AC76F00E3C18C /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RIButtonItem.m; sourceTree = "<group>"; };
+		0878E8561A3AC76F00E3C18C /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
+		0878E8571A3AC76F00E3C18C /* UIActionSheet+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+Blocks.m"; sourceTree = "<group>"; };
+		0878E8581A3AC76F00E3C18C /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+Blocks.h"; sourceTree = "<group>"; };
+		0878E8591A3AC76F00E3C18C /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		088DCEAC19FF97D70036BE82 /* VideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerView.h; sourceTree = "<group>"; };
 		088DCEAD19FF97D70036BE82 /* VideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoPlayerView.m; sourceTree = "<group>"; };
 		088DCEAE19FF97D70036BE82 /* VideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayerViewController.h; sourceTree = "<group>"; };
@@ -1344,6 +1356,28 @@
 			name = Report;
 			sourceTree = "<group>";
 		};
+		0878E8531A3AC76F00E3C18C /* UIAlertView-Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				0878E8541A3AC76F00E3C18C /* RIButtonItem.h */,
+				0878E8551A3AC76F00E3C18C /* RIButtonItem.m */,
+				0878E8561A3AC76F00E3C18C /* UIActionSheet+Blocks.h */,
+				0878E8571A3AC76F00E3C18C /* UIActionSheet+Blocks.m */,
+				0878E8581A3AC76F00E3C18C /* UIAlertView+Blocks.h */,
+				0878E8591A3AC76F00E3C18C /* UIAlertView+Blocks.m */,
+			);
+			path = "UIAlertView-Blocks";
+			sourceTree = "<group>";
+		};
+		0878E85E1A3AC78E00E3C18C /* BOAlertController */ = {
+			isa = PBXGroup;
+			children = (
+				0878E8521A3AC66100E3C18C /* BOAlertController.h */,
+				0878E84E1A3AC5F500E3C18C /* BOAlertController.m */,
+			);
+			name = BOAlertController;
+			sourceTree = "<group>";
+		};
 		088DCEAB19FF97D70036BE82 /* Multi-Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -1950,6 +1984,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0878E8531A3AC76F00E3C18C /* UIAlertView-Blocks */,
 				08BEE9BC1A2DEFAA00132F18 /* TMQuiltView */,
 				04A531831A222947002FDDC1 /* LBBlurredImage */,
 				08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */,
@@ -1970,6 +2005,7 @@
 				510D4575196E8A960081672A /* SDWebImage */,
 				5144D97F196B880300C953FB /* UMSocial_Sdk_4.0 */,
 				51581D6C19335CDD00943606 /* Assets */,
+				0878E85E1A3AC78E00E3C18C /* BOAlertController */,
 				519100EE19651388005DF607 /* MRZoomScrollView.h */,
 				519100EF19651388005DF607 /* MRZoomScrollView.m */,
 				51581D6F19335CDD00943606 /* SlideNavigationController.h */,
@@ -2452,6 +2488,7 @@
 				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */,
+				0878E85B1A3AC76F00E3C18C /* UIActionSheet+Blocks.m in Sources */,
 				08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */,
 				510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */,
 				51F4CB0E19E6307500E487F1 /* ASIHTTPRequest.m in Sources */,
@@ -2498,6 +2535,7 @@
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				510D4597196E8A960081672A /* MKAnnotationView+WebCache.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
+				0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */,
 				08FC57F919E4377100D1BC66 /* EventPhotosTableViewCell.m in Sources */,
 				04B6F8B219A25FCC00229393 /* BannerViewController.m in Sources */,
 				51F4CB2119E6307500E487F1 /* HTTPDynamicFileResponse.m in Sources */,
@@ -2533,6 +2571,8 @@
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,
 				089337A5197579CE00AD940B /* PECropRectView.m in Sources */,
 				08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */,
+				0878E85A1A3AC76F00E3C18C /* RIButtonItem.m in Sources */,
+				0878E85C1A3AC76F00E3C18C /* UIAlertView+Blocks.m in Sources */,
 				51F4CB1319E6307500E487F1 /* DDAbstractDatabaseLogger.m in Sources */,
 				08A68E2419FE62D000A9EB76 /* KxMenu.m in Sources */,
 				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
