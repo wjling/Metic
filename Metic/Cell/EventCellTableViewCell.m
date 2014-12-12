@@ -70,17 +70,19 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
-    });
+    [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
+//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
+//    });
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
-    });
+    [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
+//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
+//    });
     
 }
 
