@@ -13,6 +13,7 @@
 #import "THProgressView.h"
 #import "MobClick.h"
 #import "../Utils/Reachability.h"
+#import "BOAlertController.h"
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 
@@ -136,20 +137,37 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 - (void)UesrImageClicked
 {
-    UIActionSheet *sheet;
+    BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
     
-    // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照", @"从相册选择", nil];
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        NSLog(@"cancel");
+    }];
+    [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+        RIButtonItem *takeItem = [RIButtonItem itemWithLabel:@"拍照" action:^{
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.delegate = self;
+            imagePickerController.allowsEditing = NO;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:imagePickerController animated:YES completion:^{}];
+        }];
+        [actionSheet addButton:takeItem type:RIButtonItemType_Other];
     }
-    else {
-        sheet = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
-    }
     
-    sheet.tag = 255;
-    
-    [sheet showInView:self.view];
+    RIButtonItem *seleteItem = [RIButtonItem itemWithLabel:@"从相册选择" action:^{
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.allowsEditing = NO;
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+            imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
+        }else imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }];
+    [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
+
+    [actionSheet showInView:self.view];
 }
 
 -(void)MTdismissKeyboard
@@ -278,42 +296,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }
 
-
-
-#pragma mark - action sheet delegte
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == 255) {
-        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        // 判断是否支持相机
-        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            switch (buttonIndex) {
-                case 0:
-                    return;
-                case 1: //相机
-                    sourceType = UIImagePickerControllerSourceTypeCamera;
-                    break;
-                case 2: //相册
-                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    break;
-            }
-        }
-        else {
-            if (buttonIndex == 0) {
-                return;
-            } else {
-                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            }
-        }
-        // 跳转到相机或相册页面
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.delegate = self;
-        imagePickerController.allowsEditing = NO;
-        imagePickerController.sourceType = sourceType;
-        
-        [self presentViewController:imagePickerController animated:YES completion:^{}];
-    }
-}
 
 #pragma mark - image picker delegte
 

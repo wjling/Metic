@@ -19,10 +19,16 @@
 #import "PhotoUploadViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 
+#define photoNumPP 60
+
 @interface PictureWall2 ()
 @property (nonatomic,strong) UIButton* add;
 @property float h1;
 @property BOOL nibsRegistered;
+
+@property int showPhoNum;
+@property BOOL shouldLoadPhoto;
+@property BOOL haveLoadedPhoto;
 @end
 
 @implementation PictureWall2
@@ -75,16 +81,25 @@
 {
     _nibsRegistered = NO;
     _shouldReloadPhoto = NO;
+    _shouldLoadPhoto = NO;
+    _haveLoadedPhoto = NO;
+    _showPhoNum = 0;
     _h1 = 0;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
-    [self pullPhotoInfosFromDB];
-    if ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
-        self.sequence = [[NSNumber alloc]initWithInt:0];
-        [_header beginRefreshing];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self pullPhotoInfosFromDB];
+        if ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+            self.sequence = [[NSNumber alloc]initWithInt:0];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [_header beginRefreshing];
+            });
+            
+            
+        }
+    });
     
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -172,8 +187,40 @@
         
     }
     [sql closeMyDB];
+    _haveLoadedPhoto = YES;
+    [self resetPhoNum];
     [self calculateLRH];
-    [self.quiltView reloadData];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [self.quiltView reloadData];
+    });
+    
+}
+
+-(void)resetPhoNum
+{
+    int count = _photo_list.count;
+    if (count > photoNumPP) {
+        _showPhoNum = photoNumPP;
+        _shouldLoadPhoto = YES;
+    }else{
+        _showPhoNum = count;
+        _shouldLoadPhoto = NO;
+    }
+}
+
+-(void)addPhoNum
+{
+    if (!_shouldLoadPhoto) {
+        return;
+    }
+    int count = _photo_list.count;
+    if (_showPhoNum + photoNumPP > count) {
+        _showPhoNum = count;
+        _shouldLoadPhoto = NO;
+    }else{
+        _showPhoNum += photoNumPP;
+        _shouldLoadPhoto = YES;
+    }
 }
 
 -(void)getPhotolist
@@ -194,6 +241,7 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
+                    
                     NSArray* newphoto_list_origin = [response1 valueForKey:@"photo_list"];
                     NSMutableArray* newphoto_list =[[NSMutableArray alloc]init];
                     for (int i = 0; i < newphoto_list_origin.count; i++) {
@@ -216,7 +264,9 @@
                     }else{
                         [self.photo_list removeAllObjects];
                         [self.photo_list addObjectsFromArray:_photo_list_all];
+                        [self resetPhoNum];
                         [self calculateLRH];
+                        _haveLoadedPhoto = YES;
                         [self.quiltView reloadData];
                         if(_header.refreshing) [_header endRefreshing];
                     }
@@ -238,7 +288,8 @@
 -(void)calculateLRH
 {
     float lH = 0, rH = 0;
-    for (NSDictionary* dict in _photo_list) {
+    NSArray* tmp = [_photo_list subarrayWithRange:NSMakeRange(0, _showPhoNum)];
+    for (NSDictionary* dict in tmp) {
         float width = [[dict valueForKey:@"width"] floatValue];
         float height = [[dict valueForKey:@"height"] floatValue];
         float RealHeight = height * 150.0f / width + 43;
@@ -255,24 +306,39 @@
 
 #pragma mark - TMQuiltViewDelegate
 - (NSInteger)quiltViewNumberOfCells:(TMQuiltView *)TMQuiltView {
-    return [_photo_list count]+2;
+    return _showPhoNum+2;
 }
 
 
 - (TMQuiltViewCell *)quiltView:(TMQuiltView *)quiltView cellAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row >= _photo_list.count) {
+    
+    if (indexPath.row >= _showPhoNum) {
         TMQuiltViewCell* cell = [[TMQuiltViewCell alloc]init];
-        if ((_h1 > 0 && indexPath.row == _photo_list.count + 1) || (_h1 <= 0 && indexPath.row == _photo_list.count)) {
+        if(indexPath.row == _showPhoNum + 1){
+            TMQuiltViewCell* preCell = [quiltView cellAtIndexPath:[NSIndexPath indexPathForRow:_showPhoNum inSection:0]];
+            float preHeight = CGRectGetHeight(preCell.frame);
+            float preX = CGRectGetMinX(preCell.frame);
             float width = 300;
-            float height = (_h1 > 0)? 50 : abs(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-40, width*4/6, 40)];
-            label.text = @"没有更多了哦，去上传吧~";
+            float height = (preHeight != 50)? 50 : abs(_h1) + 50;
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-40, width*4/6, 40)];
+            if (!_haveLoadedPhoto) {
+                label.text = @"正在加载 ...";
+            }else if (_shouldLoadPhoto) {
+                label.text = @"正在加载 ...";
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self addPhoNum];
+                    [self calculateLRH];
+                    [self.quiltView reloadData];
+                });
+            }else{
+                label.text = @"没有更多了哦，去上传吧~";
+            }
+            
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
             label.textAlignment = NSTextAlignmentCenter;
             [cell addSubview:label];
         }
-        
         return cell;
     }
     static NSString *CellIdentifier = @"photocell";
@@ -332,9 +398,9 @@
 
 - (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"heightForCellAtIndexPath %d",indexPath.row);
-    if (indexPath.row == _photo_list.count) {
+    if (indexPath.row == _showPhoNum) {
         return abs(_h1) + 50;
-    }else if(indexPath.row == _photo_list.count + 1) return 50;
+    }else if(indexPath.row == _showPhoNum + 1) return 50;
     
     NSDictionary *a = _photo_list[indexPath.row];
     
@@ -354,7 +420,7 @@
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];
 
-    photoDisplay.photo_list = self.photo_list;
+    photoDisplay.photo_list = [NSMutableArray arrayWithArray:[self.photo_list subarrayWithRange:NSMakeRange(0, _showPhoNum)]];
     photoDisplay.photoIndex = indexPath.row;
     photoDisplay.eventId = self.eventId;
     photoDisplay.eventName = self.eventName;
