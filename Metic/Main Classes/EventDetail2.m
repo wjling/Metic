@@ -13,11 +13,13 @@
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "CircleCellTableViewCell.h"
 
+#define bannerHeight 160
+
 @interface EventDetail2 ()
 
-@property (nonatomic,strong) UIScrollView* scrollView;
+@property (nonatomic,strong) UIView* flowInfoView;
 @property (nonatomic,strong) UIScrollView* SscrollView;
-@property (nonatomic,strong) UIView* details;
+@property (nonatomic,strong) UIScrollView* details;
 @property (nonatomic,strong) UITableView* tableView;
 @property (nonatomic,strong) UIView* indicator;
 
@@ -69,18 +71,30 @@
 - (void)initUI
 {
     [self.navigationItem setTitle:@"活动详情"];
-    
     CGRect frame = self.navigationController.view.window.frame;
-    NSLog(@"%f  %f",frame.size.width,frame.size.height);
     frame.size.height -= 64.0f;
-    _scrollView = [[UIScrollView alloc]initWithFrame:frame];
-    _scrollView.delegate = self;
-    [self.view addSubview:_scrollView];
+    
+    //容器
+    UIScrollView* SscrollView = [[UIScrollView alloc]initWithFrame:frame];
+    _SscrollView = SscrollView;
+    SscrollView.delegate = self;
+    SscrollView.layer.borderWidth = 1;
+    SscrollView.layer.borderColor = [UIColor yellowColor].CGColor;
+    [SscrollView setContentSize:CGSizeMake(frame.size.width*2, frame.size.height)];
+    SscrollView.pagingEnabled = YES;
+    [self.view addSubview:SscrollView];
+
+    
+    
+    
+    UIView* flowInfoView = [[UIView alloc]initWithFrame:CGRectZero];
+    _flowInfoView = flowInfoView;
+    
     
     UIButton* banner = [UIButton buttonWithType:UIButtonTypeCustom];
     [banner setFrame:CGRectMake(0, 0, frame.size.width, frame.size.width/2)];
     [banner sd_setImageWithURL:nil forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
-    [_scrollView addSubview:banner];
+    [flowInfoView addSubview:banner];
     
     //官字号
     float width = banner.bounds.size.width;
@@ -90,7 +104,7 @@
     
     UIView* tabs = [[UIView alloc]initWithFrame:CGRectMake(0, banner.frame.size.height, frame.size.width, 35)];
     [tabs setBackgroundColor:[UIColor colorWithWhite:224.0f/255.0 alpha:1.0f]];
-    [_scrollView addSubview:tabs];
+    [flowInfoView addSubview:tabs];
     
     UIButton* tab1 = [UIButton buttonWithType:UIButtonTypeSystem];
     [tab1 setTitle:@"活动详情" forState:UIControlStateNormal];
@@ -113,14 +127,25 @@
     [tabs addSubview:indicator];
     _indicator = indicator;
     
+    [flowInfoView setFrame:CGRectMake(0, 0, 320, CGRectGetMaxY(tabs.frame))];
+    [self.view addSubview:flowInfoView];
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //活动详情
-    UIView* details = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, 0)];
-//    details.scrollEnabled = NO;
-//    details.delegate = self;
+    UIScrollView* details = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+    details.scrollEnabled = YES;
+    details.delegate = self;
     _details = details;
     
     //发起者信息
-    CGRect headFrame = CGRectMake(0, 0, details.frame.size.width, 45);
+    CGRect headFrame = CGRectMake(0, CGRectGetMaxY(_flowInfoView.frame), details.frame.size.width, 45);
     UIView* head = [[UIView alloc]initWithFrame:headFrame];
     head.layer.borderColor = [UIColor colorWithWhite:224.0f/255.0 alpha:1.0f].CGColor;
     head.layer.borderWidth = 0.5;
@@ -320,47 +345,29 @@
             [eventType setFrame:CGRectMake(0, CGRectGetMaxY(toolsView.frame), frame.size.width, CGRectGetMaxY(typeButton.frame)+10)];
         }
     }
-    
-    details.frame = CGRectMake(0, 0, frame.size.width, CGRectGetMaxY(eventType.frame)+10);
-//    details.contentSize = CGSizeMake(frame.size.width, 1000);
-    
-    
-    
-    
+    details.contentSize = CGSizeMake(frame.size.width, CGRectGetMaxY(eventType.frame));
+    [_SscrollView addSubview:details];
+
     
     //活动小圈
     UITableView* tableView = [[UITableView alloc]initWithFrame:CGRectMake(frame.size.width, 0, frame.size.width, frame.size.height)];
     tableView.bounces = YES;
-    tableView.scrollEnabled = NO;
+    tableView.scrollEnabled = YES;
     tableView.layer.borderWidth = 2;
     tableView.layer.borderColor = [UIColor redColor].CGColor;
     tableView.delegate = self;
     tableView.dataSource = self;
     _tableView = tableView;
+    [_SscrollView addSubview:_tableView];
     
     
-    float height = details.frame.size.height;
-    if (tableView.frame.size.height > height) height = tableView.frame.size.height;
     
-    //容器
-    CGRect Sframe = frame;
-    Sframe.origin.y = CGRectGetMaxY(tabs.frame);
-    Sframe.size.height = height;
-    NSLog(@"%f",Sframe.origin.y);
-    UIScrollView* SscrollView = [[UIScrollView alloc]initWithFrame:Sframe];
-    _SscrollView = SscrollView;
-    SscrollView.delegate = self;
-//    SscrollView.layer.borderWidth = 1;
-//    SscrollView.layer.borderColor = [UIColor yellowColor].CGColor;
-    [SscrollView setContentSize:CGSizeMake(Sframe.size.width*2, Sframe.size.height)];
-    SscrollView.pagingEnabled = YES;
     
-    [SscrollView addSubview:details];
-    [SscrollView addSubview:tableView];
     
-    [_scrollView addSubview:SscrollView];
     
-    [_scrollView setContentSize:CGSizeMake(frame.size.width, CGRectGetMaxY(SscrollView.frame))];
+    
+    
+    
 }
 
 #pragma mark 代理方法-UITableView
@@ -372,50 +379,51 @@
         _indicator.frame = frame;
     }
     
-    if (scrollView == _scrollView) {
-        if (_scrollView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame)) {
-            if (!_tableView.isScrollEnabled) {
-                _tableView.scrollEnabled = YES;
+    if (scrollView == _details) {
+        if (scrollView.contentOffset.y <= bannerHeight) {
+            CGRect frame = _flowInfoView.frame;
+            frame.origin.y = scrollView.contentOffset.y * -1;
+            _flowInfoView.frame = frame;
+        }else{
+            CGRect frame = _flowInfoView.frame;
+            if (frame.origin.y != bannerHeight*-1) {
+                frame.origin.y = bannerHeight * -1;
+                _flowInfoView.frame = frame;
             }
-            if (_SscrollView.contentOffset.x == 0) {
-                _tableView.frame = CGRectMake(_SscrollView.frame.size.width, _scrollView.contentOffset.y - CGRectGetMinY(_SscrollView.frame), _SscrollView.frame.size.width, _SscrollView.frame.size.height);
-            }
-            
-
-            
-        }else if(_scrollView.contentOffset.y < CGRectGetMinY(_SscrollView.frame)) {
-            if (_tableView.isScrollEnabled) {
-                _tableView.scrollEnabled = NO;
-            }
-
             
         }
     }
     
-    if (scrollView == _tableView){
+    if (scrollView == _tableView) {
         _shouldPlay = NO;
-        if (_tableView.contentOffset.y <= 0 && _tableView.isScrollEnabled) {
-            _tableView.scrollEnabled = NO;
-        }else if(_tableView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame) && !_tableView.isScrollEnabled){
-            _tableView.scrollEnabled = YES;
+        if (scrollView.contentOffset.y <= bannerHeight) {
+            CGRect frame = _flowInfoView.frame;
+            frame.origin.y = scrollView.contentOffset.y * -1;
+            _flowInfoView.frame = frame;
+        }else{
+            CGRect frame = _flowInfoView.frame;
+            if (frame.origin.y != bannerHeight*-1) {
+                frame.origin.y = bannerHeight * -1;
+                _flowInfoView.frame = frame;
+            }
+            
         }
     }
-
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (scrollView == _SscrollView) {
-        if (_SscrollView.contentOffset.x == _SscrollView.frame.size.width) {
-            
-            _tableView.frame = CGRectMake(_SscrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-            if (_scrollView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame)) _scrollView.contentOffset = CGPointMake(0, CGRectGetMinY(_SscrollView.frame));
-            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_tableView.frame) + CGRectGetMinY(_SscrollView.frame));
-        }
-        if (_SscrollView.contentOffset.x == 0) {
-            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_details.frame) + CGRectGetMinY(_SscrollView.frame));
-        }
-    }
+//    if (scrollView == _SscrollView) {
+//        if (_SscrollView.contentOffset.x == _SscrollView.frame.size.width) {
+//            
+//            _tableView.frame = CGRectMake(_SscrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+//            if (_scrollView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame)) _scrollView.contentOffset = CGPointMake(0, CGRectGetMinY(_SscrollView.frame));
+//            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_tableView.frame) + CGRectGetMinY(_SscrollView.frame));
+//        }
+//        if (_SscrollView.contentOffset.x == 0) {
+//            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_details.frame) + CGRectGetMinY(_SscrollView.frame));
+//        }
+//    }
     
     if (scrollView == _tableView) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
@@ -442,6 +450,35 @@
     }
 }
 
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (scrollView == _details) {
+        CGPoint point = _tableView.contentOffset;
+        if (point.y != 0) {
+            _tableView.contentOffset = CGPointMake(0, 0);
+        }
+    }
+    
+    if (scrollView == _tableView) {
+        CGPoint point = _details.contentOffset;
+        if (point.y != 0) {
+            _details.contentOffset = CGPointMake(0, 0);
+        }
+    }
+    
+    if (scrollView == _SscrollView) {
+        if (scrollView.contentOffset.x == 0) {
+            NSLog(@"left");
+            _tableView.contentOffset = CGPointMake(0, _flowInfoView.frame.origin.y * -1);
+        }
+        
+        if (scrollView.contentOffset.x == self.view.frame.size.width) {
+            NSLog(@"right");
+            _details.contentOffset = CGPointMake(0, _flowInfoView.frame.origin.y * -1);
+        }
+    }
+}
+
 #pragma mark 代理方法-UIScrollView
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -450,6 +487,9 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) {
+        return _flowInfoView.frame.size.height;
+    }
     switch (indexPath.row % 3) {
         case 0:
             return 150;
@@ -469,6 +509,12 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == 0) {
+        UITableViewCell* cell = [[UITableViewCell alloc]init];
+        cell.userInteractionEnabled = NO;
+        return cell;
+    }
+    
     NSString* circleCellIdentifier = @"CircleCellTableViewCell";
     if (!_nibsRegistered) {
         UINib *nib = [UINib nibWithNibName:NSStringFromClass([CircleCellTableViewCell class]) bundle:nil];
@@ -480,6 +526,7 @@
     cell.controller = self;
     [cell drawCell];
     return cell;
-    
 }
+
+
 @end
