@@ -12,8 +12,18 @@
 #import "../Utils/CommonUtils.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "CircleCellTableViewCell.h"
+#import "../Source/SlideNavigationController.h"
 
 #define bannerHeight 160
+
+enum bottomViewStatus{
+    bottomHide = 0,
+    bottomReadytoAppear = 1,
+    bottomAppearing = 2,
+    bottomShow = 3,
+    bottomDisappearing = 4,
+};
+
 
 @interface EventDetail2 ()
 
@@ -22,6 +32,7 @@
 @property (nonatomic,strong) UIScrollView* details;
 @property (nonatomic,strong) UITableView* tableView;
 @property (nonatomic,strong) UIView* indicator;
+@property (nonatomic,strong) UIView* bottomView;
 
 //活动详情元素
 @property (nonatomic,strong) UILabel* author;
@@ -31,8 +42,12 @@
 @property (nonatomic,strong) UIButton* share;
 @property (nonatomic,strong) UIButton* favor;
 
+@property (nonatomic,strong) NSTimer* bottomViewDisappear;
+
 @property BOOL nibsRegistered;
 @property BOOL shouldPlay;
+@property int bottomViewStatus;
+@property float bottomPosY;
 
 
 @end
@@ -57,6 +72,12 @@
     });
 }
 
+- (void)dealloc
+{
+    NSLog(@"dealloc");
+    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -65,12 +86,14 @@
 - (void)initData
 {
     _nibsRegistered = NO;
+    _bottomViewStatus = bottomHide;
     _loadingVideo = [[NSMutableSet alloc]init];
 }
 
 - (void)initUI
 {
     [self.navigationItem setTitle:@"活动详情"];
+    [((SlideNavigationController*)self.navigationController) setEnableSwipeGesture:NO];
     CGRect frame = self.navigationController.view.window.frame;
     frame.size.height -= 64.0f;
     
@@ -78,6 +101,7 @@
     UIScrollView* SscrollView = [[UIScrollView alloc]initWithFrame:frame];
     _SscrollView = SscrollView;
     SscrollView.delegate = self;
+    SscrollView.showsHorizontalScrollIndicator = NO;
     SscrollView.layer.borderWidth = 1;
     SscrollView.layer.borderColor = [UIColor yellowColor].CGColor;
     [SscrollView setContentSize:CGSizeMake(frame.size.width*2, frame.size.height)];
@@ -359,15 +383,171 @@
     tableView.dataSource = self;
     _tableView = tableView;
     [_SscrollView addSubview:_tableView];
+
     
     
     
     
     
     
+    //小圈下操作栏
+    UIView* bottomView = [[UIView alloc]initWithFrame:CGRectMake(frame.size.width, CGRectGetMaxY(tableView.frame), frame.size.width, 50)];
+    bottomView.layer.borderColor = [UIColor colorWithWhite:216.0/255.0 alpha:1.0f].CGColor;
+    bottomView.layer.borderWidth = 0.5;
+    [bottomView setBackgroundColor:[UIColor colorWithWhite:238.0/255.0 alpha:1.0f]];
+    _bottomView = bottomView;
+    [_SscrollView addSubview:bottomView];
     
+    //图片墙按钮
+    UIButton* toPicW = [UIButton buttonWithType:UIButtonTypeCustom];
+    [toPicW setTag:1];
+    [toPicW setFrame:CGRectMake(0, 0, 100, 50)];
+    [toPicW addTarget:self action:@selector(buttonTouchdown:) forControlEvents:UIControlEventTouchDown];
+    [toPicW addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [toPicW addTarget:self action:@selector(buttonTouchdragexit:) forControlEvents:UIControlEventTouchDragExit];
+    [bottomView addSubview:toPicW];
+    UIImageView* icon1 = [[UIImageView alloc]initWithFrame:CGRectMake(42, 10, 16, 16)];
+    icon1.tag = 100;
+    icon1.image = [UIImage imageNamed:@"detailed_picture"];
+    [toPicW addSubview:icon1];
     
+    UILabel* label1 = [[UILabel alloc]initWithFrame:CGRectMake(20, 27, 60, 20)];
+    label1.tag = 101;
+    label1.font = [UIFont systemFontOfSize:13];
+    label1.textColor = [UIColor colorWithWhite:120.0/255.0 alpha:1.0f];
+    label1.textAlignment = NSTextAlignmentCenter;
+    label1.text = @"图片墙";
+    [toPicW addSubview:label1];
     
+    //发表按钮
+    UIButton* pubBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [pubBtn setTag:2];
+    [pubBtn setFrame:CGRectMake(110, 0, 100, 50)];
+    [pubBtn addTarget:self action:@selector(buttonTouchdown:) forControlEvents:UIControlEventTouchDown];
+    [pubBtn addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [pubBtn addTarget:self action:@selector(buttonTouchdragexit:) forControlEvents:UIControlEventTouchDragExit];
+    [bottomView addSubview:pubBtn];
+    UIImageView* icon2 = [[UIImageView alloc]initWithFrame:CGRectMake(42, 10, 16, 16)];
+    icon2.tag = 100;
+    icon2.image = [UIImage imageNamed:@"detailed_published"];
+    [pubBtn addSubview:icon2];
+    
+    UILabel* label2 = [[UILabel alloc]initWithFrame:CGRectMake(20, 27, 60, 20)];
+    label2.tag = 101;
+    label2.font = [UIFont systemFontOfSize:13];
+    label2.textColor = [UIColor colorWithWhite:120.0/255.0 alpha:1.0f];
+    label2.textAlignment = NSTextAlignmentCenter;
+    label2.text = @"发表";
+    [pubBtn addSubview:label2];
+    
+    //视频墙按钮
+    UIButton* toVidW = [UIButton buttonWithType:UIButtonTypeCustom];
+    [toVidW setTag:3];
+    [toVidW setFrame:CGRectMake(220, 0, 100, 50)];
+    [toVidW addTarget:self action:@selector(buttonTouchdown:) forControlEvents:UIControlEventTouchDown];
+    [toVidW addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [toVidW addTarget:self action:@selector(buttonTouchdragexit:) forControlEvents:UIControlEventTouchDragExit];
+    [bottomView addSubview:toVidW];
+    UIImageView* icon3 = [[UIImageView alloc]initWithFrame:CGRectMake(42, 10, 16, 16)];
+    icon3.tag = 100;
+    icon3.image = [UIImage imageNamed:@"detailed_video"];
+    [toVidW addSubview:icon3];
+    
+    UILabel* label3 = [[UILabel alloc]initWithFrame:CGRectMake(20, 27, 60, 20)];
+    label3.tag = 101;
+    label3.font = [UIFont systemFontOfSize:13];
+    label3.textColor = [UIColor colorWithWhite:120.0/255.0 alpha:1.0f];
+    label3.textAlignment = NSTextAlignmentCenter;
+    label3.text = @"视频墙";
+    [toVidW addSubview:label3];
+
+}
+
+- (void)buttonTouchdown:(UIButton*)button{
+    NSLog(@"buttonTouchdown %d",button.tag);
+    UIImageView* icon = (UIImageView*)[button viewWithTag:100];
+    UILabel* label = (UILabel*)[button viewWithTag:101];
+    label.textColor = [UIColor colorWithRed:52.0/255.0 green:171.0/255.0 blue:139.0/255.0 alpha:1.0f];
+    switch (button.tag) {
+        case 1:
+            icon.image = [UIImage imageNamed:@"detailed_picture_pressed"];
+            break;
+        case 2:
+            icon.image = [UIImage imageNamed:@"detailed_published_pressed"];
+            break;
+        case 3:
+            icon.image = [UIImage imageNamed:@"detailed_video_pressed"];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)buttonTouchdragexit:(UIButton*)button{
+    NSLog(@"buttonTouchdragexit %d",button.tag);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIImageView* icon = (UIImageView*)[button viewWithTag:100];
+        UILabel* label = (UILabel*)[button viewWithTag:101];
+        label.textColor = [UIColor colorWithWhite:120.0/255.0 alpha:1.0f];
+        switch (button.tag) {
+            case 1:
+                icon.image = [UIImage imageNamed:@"detailed_picture"];
+                break;
+            case 2:
+                icon.image = [UIImage imageNamed:@"detailed_published"];
+                break;
+            case 3:
+                icon.image = [UIImage imageNamed:@"detailed_video"];
+                break;
+                
+            default:
+                break;
+        }
+    });
+    
+}
+
+- (void)buttonPressed:(UIButton*)button{
+    NSLog(@"buttonPressed %d",button.tag);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIImageView* icon = (UIImageView*)[button viewWithTag:100];
+        UILabel* label = (UILabel*)[button viewWithTag:101];
+        label.textColor = [UIColor colorWithWhite:120.0/255.0 alpha:1.0f];
+        switch (button.tag) {
+            case 1:
+                icon.image = [UIImage imageNamed:@"detailed_picture"];
+                break;
+            case 2:
+                icon.image = [UIImage imageNamed:@"detailed_published"];
+                break;
+            case 3:
+                icon.image = [UIImage imageNamed:@"detailed_video"];
+                break;
+                
+            default:
+                break;
+        }
+    });
+}
+
+- (void)disappearBottomView{
+    NSLog(@"底部控制栏向下滑出");
+    
+    if (_bottomViewStatus == bottomShow) {
+        _bottomViewStatus = bottomDisappearing;
+        [UIView beginAnimations:@"bottomDisappearing" context:nil];
+        [UIView setAnimationDuration:0.5];
+        [UIView setAnimationDelegate:self];
+        CGRect frame = _bottomView.frame;
+        frame.origin.y = CGRectGetMaxY(_tableView.frame);
+        [self.bottomView setFrame:frame];
+        [UIView commitAnimations];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            _bottomViewStatus = bottomHide;
+        });
+    }
 }
 
 #pragma mark 代理方法-UITableView
@@ -408,27 +588,48 @@
             }
             
         }
+        
+        if (_bottomViewStatus == bottomReadytoAppear) {
+            float curTabY = _tableView.contentOffset.y;
+            if (curTabY > _bottomPosY) {
+                _bottomViewStatus = bottomAppearing;
+                
+                [UIView beginAnimations:@"bottomAppearing" context:nil];
+                [UIView setAnimationDuration:0.5];
+                [UIView setAnimationDelegate:self];
+                CGRect frame = _bottomView.frame;
+                frame.origin.y = CGRectGetMaxY(_tableView.frame) - 50;
+                [self.bottomView setFrame:frame];
+                [UIView commitAnimations];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    _bottomViewStatus = bottomShow;
+                });
+                
+                
+            }else _bottomViewStatus = bottomHide;
+        }else if (_bottomViewStatus == bottomShow){
+            if (_bottomViewDisappear) {
+                [_bottomViewDisappear invalidate];
+                _bottomViewDisappear = nil;
+            }
+        }
+        
+        
+        
     }
 }
 
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-//    if (scrollView == _SscrollView) {
-//        if (_SscrollView.contentOffset.x == _SscrollView.frame.size.width) {
-//            
-//            _tableView.frame = CGRectMake(_SscrollView.frame.size.width, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
-//            if (_scrollView.contentOffset.y >= CGRectGetMinY(_SscrollView.frame)) _scrollView.contentOffset = CGPointMake(0, CGRectGetMinY(_SscrollView.frame));
-//            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_tableView.frame) + CGRectGetMinY(_SscrollView.frame));
-//        }
-//        if (_SscrollView.contentOffset.x == 0) {
-//            _scrollView.contentSize = CGSizeMake(CGRectGetWidth(_scrollView.frame), CGRectGetMaxY(_details.frame) + CGRectGetMinY(_SscrollView.frame));
-//        }
-//    }
-    
     if (scrollView == _tableView) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
                                                             object:nil
                                                           userInfo:nil];
+        if (_bottomViewDisappear) {
+            [_bottomViewDisappear invalidate];
+        }
+        _bottomViewDisappear = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(disappearBottomView) userInfo:nil repeats:NO];
     }
     
 }
@@ -447,6 +648,11 @@
             }
             
         });
+        
+        if (_bottomViewDisappear) {
+            [_bottomViewDisappear invalidate];
+        }
+        _bottomViewDisappear = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(disappearBottomView) userInfo:nil repeats:NO];
     }
 }
 
@@ -463,6 +669,10 @@
         CGPoint point = _details.contentOffset;
         if (point.y != 0) {
             _details.contentOffset = CGPointMake(0, 0);
+        }
+        if (_bottomViewStatus == bottomHide) {
+            _bottomPosY = _tableView.contentOffset.y;
+            _bottomViewStatus = bottomReadytoAppear;
         }
     }
     
