@@ -70,7 +70,7 @@
     NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
     NSNumber* flag = [userSettings valueForKey:@"hasUnreadNotification"];
     NSLog(@"hasUnreadNotification: %@", flag);
-    if ([flag integerValue]>= 0) {
+    if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }
 }
