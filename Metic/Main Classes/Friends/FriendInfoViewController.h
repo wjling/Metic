@@ -30,14 +30,16 @@
 @property (strong, nonatomic) IBOutlet UIView *moreFunction_view;
 
 
-@property (strong, nonatomic) UIImageView* fInfoView;
+@property (strong, nonatomic) UIView* fInfoView;
+@property (strong, nonatomic) UIImageView* fInfoView_imgV;
 @property (strong, nonatomic) UIImageView* photo;
 @property (strong, nonatomic) UILabel* name_label;
 @property (strong, nonatomic) UILabel* alias_label;
 @property (strong, nonatomic) UILabel* location_label;
 @property (strong, nonatomic) UIImageView* gender_imageView;
 
-@property (strong, nonatomic) UIImageView* fDescriptionView;
+@property (strong, nonatomic) UIView* fDescriptionView;
+@property (strong, nonatomic) UIImageView* fDescriptionView_imgV;
 @property (strong, nonatomic) UILabel* title_label;
 @property (strong, nonatomic) UILabel* description_label;
 

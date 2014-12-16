@@ -70,7 +70,7 @@
     NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
     NSNumber* flag = [userSettings valueForKey:@"hasUnreadNotification"];
     NSLog(@"hasUnreadNotification: %@", flag);
-    if ([flag integerValue]>= 0) {
+    if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }
 }
@@ -131,6 +131,7 @@
 {
     NSLog(@"homeViewController is cleared ");
     homeViewController = nil;
+    [(AppDelegate*)[UIApplication sharedApplication].delegate setHomeViewController:nil];
     eventInvitationViewController = nil;
     friendsViewController = nil;
     notificationsViewController = nil;
@@ -189,6 +190,12 @@
 -(void)hideUpdateInRow:(NSInteger)row
 {
     NSLog(@"隐藏消息中心红点");
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSUserDefaults* usrDfs = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[usrDfs objectForKey:key]];
+    [userSettings setValue:[NSNumber numberWithInteger:-1] forKey:@"hasUnreadNotification"];
+    [usrDfs setValue:userSettings forKey:key];
+    [usrDfs synchronize];
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
     [_tableView reloadData];
 }
@@ -389,6 +396,7 @@
             return;
             
 	}
+    [self hideUpdateInRow:4];
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 
