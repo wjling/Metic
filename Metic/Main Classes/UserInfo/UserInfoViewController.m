@@ -10,6 +10,7 @@
 #import "MobClick.h"
 #import "UserQRCodeViewController.h"
 #import "UIImageView+LBBlurredImage.h"
+#import "BOAlertController.h"
 
 
 @interface UserInfoViewController ()
@@ -83,6 +84,9 @@
 - (void)initParams
 {
     self.banner_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.banner_UIview.frame.size.width, self.banner_UIview.frame.size.height - 3)];
+    self.banner_imageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.banner_imageView.clipsToBounds = YES;
+    
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatar];
     self.avatar_imageView.layer.cornerRadius = self.avatar_imageView.frame.size.width/2;
@@ -143,20 +147,40 @@
 -(void)avatarClicked:(id)sender
 {
     NSLog(@"avatar clicked");
-    UIActionSheet *sheet;
     
-    // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照", @"从相册选择", nil];
+    
+    
+    BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
+    
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        NSLog(@"cancel");
+    }];
+    [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+        RIButtonItem *takeItem = [RIButtonItem itemWithLabel:@"拍照" action:^{
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.delegate = self;
+            imagePickerController.allowsEditing = NO;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:imagePickerController animated:YES completion:^{}];
+        }];
+        [actionSheet addButton:takeItem type:RIButtonItemType_Other];
     }
-    else {
-        sheet = [[UIActionSheet alloc] initWithTitle:@"选择图像" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
-    }
     
-    sheet.tag = 255;
+    RIButtonItem *seleteItem = [RIButtonItem itemWithLabel:@"从相册选择" action:^{
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.allowsEditing = NO;
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+            imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
+        }else imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }];
+    [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
     
-    [sheet showInView:self.view];
+    [actionSheet showInView:self.view];
 }
 
 -(void)QRcodeBtnClicked:(id)sender
@@ -210,14 +234,6 @@
     self.email_label.text = [MTUser sharedInstance].email;
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        CGRect frame = self.banner_UIview.frame;
-        CGFloat imgWidth = self.banner_UIview.frame.size.width;
-        CGFloat imgHeight = imgWidth * image.size.height / image.size.width;
-        frame.origin.x = 0;
-        frame.origin.y = -(imgHeight - self.banner_UIview.frame.size.height) / 2.0;
-        frame.size.width = imgWidth;
-        frame.size.height = imgHeight;
-        [self.banner_imageView setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.banner_imageView setImageToBlur:image blurRadius:1.7 brightness: -0.07 completionBlock:nil];
             
@@ -551,41 +567,6 @@
     }
 }
 
-
-#pragma mark - action sheet delegte
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == 255) {
-        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        // 判断是否支持相机
-        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            switch (buttonIndex) {
-                case 0:
-                    return;
-                case 1: //相机
-                    sourceType = UIImagePickerControllerSourceTypeCamera;
-                    break;
-                case 2: //相册
-                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    break;
-            }
-        }
-        else {
-            if (buttonIndex == 0) {
-                return;
-            } else {
-                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            }
-        }
-        // 跳转到相机或相册页面
-        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-        imagePickerController.delegate = self;
-        imagePickerController.allowsEditing = NO;
-        imagePickerController.sourceType = sourceType;
-        
-        [self presentViewController:imagePickerController animated:YES completion:^{}];
-    }
-}
 
 #pragma mark - image picker delegte
 
