@@ -11,6 +11,8 @@
 #import "UserQRCodeViewController.h"
 #import "UIImageView+LBBlurredImage.h"
 #import "BOAlertController.h"
+#import "../BannerViewController.h"
+#import "KxMenu.h"
 
 
 @interface UserInfoViewController ()
@@ -94,7 +96,7 @@
     self.avatar_imageView.layer.borderColor = ([UIColor lightGrayColor].CGColor);
     self.avatar_imageView.layer.borderWidth = 2;
     
-    UITapGestureRecognizer* avatarGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(avatarClicked:)];
+    UITapGestureRecognizer* avatarGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showAvatar)];
     self.avatar_imageView.userInteractionEnabled = YES;
     [self.avatar_imageView addGestureRecognizer:avatarGesture];
     
@@ -122,27 +124,8 @@
     self.info_tableView.dataSource = self;
     self.info_tableView.scrollEnabled = YES;
     
-    [self initMoreFunctionView];
-    
 }
 
--(void)initMoreFunctionView
-{
-    if (!moreFunction_view) {
-        UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
-        moreFunction_view = [[UIView alloc]initWithFrame:CGRectMake(215, 0, 100, 40)];
-        moreFunction_view.backgroundColor = color;
-        UIButton* QRcode_button = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, 39)];
-        [QRcode_button setTitle:@"二维码" forState:UIControlStateNormal];
-        QRcode_button.titleLabel.font = [UIFont systemFontOfSize:12];
-        [QRcode_button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [QRcode_button setBackgroundColor:[UIColor whiteColor]];
-        [QRcode_button addTarget:self action:@selector(QRcodeBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [moreFunction_view addSubview:QRcode_button];
-        [self.view addSubview:moreFunction_view];
-    }
-    moreFunction_view.hidden = YES;
-}
 
 -(void)avatarClicked:(id)sender
 {
@@ -198,7 +181,7 @@
 }
 
 - (IBAction)rightBarBtnClicked:(id)sender {
-    [moreFunction_view setHidden:!moreFunction_view.hidden];
+    [self showMenu];
 }
 
 - (IBAction)openEditor:(id)sender
@@ -227,6 +210,37 @@
     
 }
 
+-(void)showAvatar
+{
+    BannerViewController* bannerView = [[BannerViewController alloc] init];
+    bannerView.banner = self.avatar_imageView.image;
+    [self presentViewController:bannerView animated:YES completion:^{}];
+}
+
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+
+    [menuItems addObjectsFromArray:@[
+                                     
+                                     [KxMenuItem menuItem:@"上传头像"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(avatarClicked:)],
+                                     
+                                     [KxMenuItem menuItem:@"二维码"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(QRcodeBtnClicked:)],
+                                     ]];
+        
+        
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.navigationController.view.window
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 60, 0, 0)
+                 menuItems:menuItems];
+}
 
 -(void)refresh
 {
