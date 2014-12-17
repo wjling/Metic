@@ -14,6 +14,7 @@
 @property(nonatomic,strong)NSString* eventName;
 @property(nonatomic,strong)NSNumber *sequence;
 
+@property int showPhoNum;
 @property(nonatomic,strong)NSMutableArray *photo_list;//部分
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property (strong,nonatomic) MJRefreshHeaderView *header;
