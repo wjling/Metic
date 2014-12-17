@@ -514,6 +514,7 @@
             
 //            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
             //[user getInfo:userid myid:userid delegateId:self];
+            [[appDelegate leftMenu] clearVC];
             NSString* logintime = [response1 objectForKey:@"logintime"];
             if ([logintime isEqualToString:@"None"]) {
                 [self jumpToFillinInfo];

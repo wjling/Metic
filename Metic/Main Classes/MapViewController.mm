@@ -131,6 +131,12 @@
 }
 
 - (IBAction)getLocation:(id)sender {
+    if(_locService){
+        [_locService stopUserLocationService];
+        _locService.delegate = nil;
+        _locService = nil;
+    }
+    
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
         //由于IOS8中定位的授权机制改变 需要进行手动授权
         _locationManager = [[CLLocationManager alloc] init];
@@ -151,6 +157,10 @@
  */
 - (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
 {
+    [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _locService = nil;
+    
     [mapView updateLocationData:userLocation];
     
     [mapView removeAnnotation:_panPoint];
