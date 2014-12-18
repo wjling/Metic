@@ -138,12 +138,16 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSInteger index = [[userSettings valueForKey:@"hasUnreadNotification"]integerValue];
-    if (index != -1) {
-        tab_index = index;
-        [self tabBtnClicked:self.tabs[tab_index]];
-        clickTab = NO;
+    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
+    NSLog(@"notification: hasUnreadNotification: %@", index);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
     }
+    
     [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
     [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
     [userDfs setValue:userSettings forKey:key];
@@ -800,6 +804,23 @@ enum Response_Type
     {
         [self.systemMessage_tableView reloadData];
     }
+    
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
+//    NSLog(@"notification: hasUnreadNotification: %@", index);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
+    }
+    
+    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
 
 }
 
