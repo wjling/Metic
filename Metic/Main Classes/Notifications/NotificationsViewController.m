@@ -260,7 +260,7 @@ enum Response_Type
     
     
     [eventR_button setTitle:@"活动邀请" forState:UIControlStateNormal];
-    [friendR_button setTitle:@"好友验证" forState:UIControlStateNormal];
+    [friendR_button setTitle:@"好友消息" forState:UIControlStateNormal];
     [systemMsg_button setTitle:@"系统消息" forState:UIControlStateNormal];
     
     [eventR_button titleLabel].font = [UIFont systemFontOfSize:14];
