@@ -706,7 +706,7 @@ static MTUser *singletonInstance;
 
 
 //============================================================================
-
+#pragma mark - Init Notification Messages
 //================================Init Notification Messages=====================
 
 - (void) getMsgFromDataBase
@@ -744,11 +744,11 @@ static MTUser *singletonInstance;
         if ([ishandled integerValue] == -1) {
             switch (cmd) {
                 case ADD_FRIEND_NOTIFICATION:
+                case ADD_FRIEND_RESULT:
                 {
                     [self.friendRequestMsg addObject:msg_dic];
                 }
                     break;
-                case ADD_FRIEND_RESULT:
                 case EVENT_INVITE_RESPONSE:
                 case REQUEST_EVENT_RESPONSE:
                 case QUIT_EVENT_NOTIFICATION:

@@ -677,7 +677,7 @@
 
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {
-            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+            [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
             [[MTUser sharedInstance] synchronizeFriends];
             NSNumber* result = [msg_dic objectForKey:@"result"];
             NSLog(@"friend request result: %@",result);
@@ -707,7 +707,7 @@
             }
             
             if (numOfSyncMessages <= 1) {
-                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:2];
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:1];
             }
             
         }

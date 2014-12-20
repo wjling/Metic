@@ -731,10 +731,12 @@ enum Response_Type
             case ADD_FRIEND_NOTIFICATION:
             {
                 NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                for (NSMutableDictionary* msg in self.friendRequestMsg) {
+                for (int i = 0; i < self.friendRequestMsg.count; i++) {
+                    NSMutableDictionary* msg = [self.friendRequestMsg objectAtIndex:i];
                     NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                     if (fid1 == fid2) {
                         [self.friendRequestMsg removeObject:msg];
+                        continue;
                     }
                 }
                 [friendRequestMsg insertObject:msg_dic atIndex:0];
@@ -745,9 +747,9 @@ enum Response_Type
                 break;
             case ADD_FRIEND_RESULT:
             {
-                [systemMsg insertObject:msg_dic atIndex:0];
-                if (!label3.hidden) {
-                    label3.hidden = YES;
+                [friendRequestMsg insertObject:msg_dic atIndex:0];
+                if (!label2.hidden) {
+                    label2.hidden = YES;
                 }
             }
                 break;
@@ -770,14 +772,15 @@ enum Response_Type
                 NSInteger fid1, fid2;
                 eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
                 fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                for (NSMutableDictionary* aMsg in self.eventRequestMsg) {
+                for (int i = 0; i < self.eventRequestMsg.count; i++) {
+                    NSMutableDictionary* aMsg = [self.eventRequestMsg objectAtIndex:i];
                     cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
                     eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                     fid2 = [[aMsg objectForKey:@"id"]integerValue];
                     if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
                         NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
                         [self.eventRequestMsg removeObject:aMsg];
-                        break;
+                        continue;
                     }
                 }
                 
@@ -1034,10 +1037,6 @@ enum Response_Type
     }
     else if(tableView == self.friendRequest_tableView)
     {
-        NotificationsFriendRequestTableViewCell* cell = [self.friendRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsFriendRequestTableViewCell"];
-        if (nil == cell) {
-            cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
-        }
         NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:indexPath.row];
 //        NSLog(@"friend %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
@@ -1045,6 +1044,11 @@ enum Response_Type
         switch (cmd) {
             case ADD_FRIEND_NOTIFICATION: //cmd 999
             {
+                NotificationsFriendRequestTableViewCell* cell = [self.friendRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsFriendRequestTableViewCell"];
+                if (nil == cell) {
+                    cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
+                }
+
                 NSString* name = [msg_dic objectForKey:@"name"];
                 NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
                 NSNumber* uid = [msg_dic objectForKey:@"id"];
@@ -1074,16 +1078,39 @@ enum Response_Type
                 }
                 [cell.okBtn addTarget:self action:@selector(friend_request_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.noBtn addTarget:self action:@selector(friend_request_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                return cell;
                 
             }
                 break;
+                
+            case ADD_FRIEND_RESULT: //cmd 998
+            {
+                NotificationsSystemMessageTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
+                NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
+                NSString* name = [msg_dic objectForKey:@"name"];
+                NSString* text = @"";
+                if (result) {
+                    text = [NSString stringWithFormat:@"你已经成功添加 %@ 为好友",name];
+                }
+                else
+                {
+                    text = [NSString stringWithFormat:@" %@ 拒绝添加你为好友",name];
+                    
+                }
+                cell.title_label.text = @"好友消息";
+                cell.sys_msg_label.text = text;
+                
+                return cell;
+            }
+                break;
+
             default:
+                return nil;
                 break;
         }
-        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
-        return cell;
+//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+//        cell.layer.borderColor = borderColor.CGColor;
+//        cell.layer.borderWidth = 0.3;
     }
     else if (tableView == self.systemMessage_tableView)
     {
