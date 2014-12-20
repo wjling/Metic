@@ -9,6 +9,7 @@
 #import "NotificationsViewController.h"
 #import "MobClick.h"
 #import "MenuViewController.h"
+#import "KxMenu.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
 #define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
@@ -555,58 +556,83 @@ enum Response_Type
 }
 
 - (IBAction)rightBarBtnClicked:(id)sender {
-    if (!functions_uiview.hidden) {
-        
-        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-        [UIView beginAnimations:@"View shows" context:nil];
-        //动画持续时间
-        [UIView setAnimationDuration:0.5];
-        //设置动画的回调函数，设置后可以使用回调方法
-        [UIView setAnimationDelegate:self];
-        //设置动画曲线，控制动画速度
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-        //设置动画方式，并指出动画发生的位置
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
-        
-        [functions_uiview setHidden:YES];
-        //提交UIView动画
-        [UIView commitAnimations];
-        
-    }
-    else{
-        
-        [UIView beginAnimations:@"View shows" context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
-        [functions_uiview setHidden:NO];
-        [UIView commitAnimations];
-
-        
-    }
+    [self showMenu];
+//    if (!functions_uiview.hidden) {
+//        
+//        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        //动画持续时间
+//        [UIView setAnimationDuration:0.5];
+//        //设置动画的回调函数，设置后可以使用回调方法
+//        [UIView setAnimationDelegate:self];
+//        //设置动画曲线，控制动画速度
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
+//        //设置动画方式，并指出动画发生的位置
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
+//        
+//        [functions_uiview setHidden:YES];
+//        //提交UIView动画
+//        [UIView commitAnimations];
+//        
+//    }
+//    else{
+//        
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        [UIView setAnimationDuration:0.5];
+//        [UIView setAnimationDelegate:self];
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
+//        [functions_uiview setHidden:NO];
+//        [UIView commitAnimations];
+//
+//        
+//    }
     
 }
 
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    [menuItems addObjectsFromArray:@[
+                                     
+                                     [KxMenuItem menuItem:@"历史记录"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function1Clicked:)],
+                                     
+                                     [KxMenuItem menuItem:@"清空当前页"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function2Clicked:)],
+                                     ]];
+
+    
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+                 menuItems:menuItems];
+}
+
 - (IBAction)function1Clicked:(id)sender {
-    [UIView beginAnimations:@"View shows" context:nil];
-    [functions_uiview setHidden:YES];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-    [UIView commitAnimations];
+//    [UIView beginAnimations:@"View shows" context:nil];
+//    [functions_uiview setHidden:YES];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationDelegate:self];
+//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
+//    [UIView commitAnimations];
     [self performSegueWithIdentifier:@"notificationvc_historicalvc" sender:self];
 }
 
 - (IBAction)function2Clicked:(id)sender {
-    [UIView beginAnimations:@"View shows" context:nil];
-    [functions_uiview setHidden:YES];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-    [UIView commitAnimations];
+//    [UIView beginAnimations:@"View shows" context:nil];
+//    [functions_uiview setHidden:YES];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationDelegate:self];
+//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
+//    [UIView commitAnimations];
 
     //[self performSelectorOnMainThread:@selector(clearCurrentPage) withObject:nil waitUntilDone:NO];
     [self clearCurrentPage];
@@ -624,6 +650,7 @@ enum Response_Type
         [eventRequestMsg removeAllObjects];
         [MTUser_eventRequestMsg removeAllObjects];
         [self.eventRequest_tableView reloadData];
+        label1.hidden = NO;
     }
     else if (tab_index == 1)
     {
@@ -635,6 +662,7 @@ enum Response_Type
         [friendRequestMsg removeAllObjects];
         [MTUser_friendRequestMsg removeAllObjects];
         [self.friendRequest_tableView reloadData];
+        label2.hidden = NO;
     }
     else if (tab_index == 2)
     {
@@ -646,6 +674,7 @@ enum Response_Type
         [systemMsg removeAllObjects];
         [MTUser_systemMsg removeAllObjects];
         [self.systemMessage_tableView reloadData];
+        label3.hidden = NO;
     }
     [mySql closeMyDB];
 

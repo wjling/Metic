@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "440771820.675342"
+            timestampString = "440774756.118898"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1451"
-            endingLineNumber = "1451"
+            startingLineNumber = "1480"
+            endingLineNumber = "1480"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "440771820.675342"
+            timestampString = "440774756.118898"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1497"
-            endingLineNumber = "1497"
+            startingLineNumber = "1526"
+            endingLineNumber = "1526"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "440771820.675342"
+            timestampString = "440774756.118898"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1471"
-            endingLineNumber = "1471"
+            startingLineNumber = "1500"
+            endingLineNumber = "1500"
             landmarkName = "-finishWithReceivedData:"
             landmarkType = "5">
          </BreakpointContent>
