@@ -7,8 +7,10 @@
 //
 
 #import "FriendRecommendationViewController.h"
+#import "MJRefreshHeaderView.h"
+#import "MJRefreshFooterView.h"
 
-@interface FriendRecommendationViewController ()
+@interface FriendRecommendationViewController ()<MJRefreshBaseViewDelegate>
 {
     UIView* tabIndicator_view;
 //    UIButton *tab1, *tab2, *tab3;
@@ -39,6 +41,8 @@
 
 @synthesize tabPage2_view;
 @synthesize nearbyFriends_tableview;
+@synthesize nearbyFriends_header;
+@synthesize nearbyFriends_footer;
 
 @synthesize tabPage3_view;
 @synthesize kankan_tableview;
@@ -101,10 +105,10 @@
 {
     [super viewWillAppear:animated];
     
-//    NSLog(@"friend recommendation view will appear");
-//    
+    NSLog(@"friend recommendation view will appear");
+    
 //    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-//    self.content_scrollview.contentSize = CGSizeMake(960, 450);
+//    [self.content_scrollview setContentSize: CGSizeMake(960, 450)];
 //    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 
 }
@@ -115,11 +119,11 @@
 
     [super viewDidAppear:animated];
     locationService.delegate = self;
-    NSLog(@"tabbar content size==before, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
+//    NSLog(@"tabbar content size==before, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
     self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
 //    NSLog(@"friend recommendation view did appear");
-    NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
-    NSLog(@"tabbar content size==after, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
+//    NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
+//    NSLog(@"tabbar content size==after, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
     waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
     actIndicator.center = waitingView.center;
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
@@ -140,9 +144,9 @@
     }
 
     
-//    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-//    self.content_scrollview.contentSize = CGSizeMake(960, self.content_scrollview.frame.size.height);
-//    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+    [self.content_scrollview setContentSize: CGSizeMake(960, self.content_scrollview.frame.size.height)];
+    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 }
 
 - (void)didReceiveMemoryWarning
@@ -221,6 +225,8 @@
     [self.tabbar_scrollview addSubview:tab3];
 //    [tab1 setNeedsDisplay];
     [self.tabbar_scrollview addSubview:tabIndicator_view];
+    
+    self.tabbar_scrollview.scrollEnabled = NO;
 }
 
 -(void)initContentView
@@ -243,7 +249,13 @@
     [self.nearbyFriends_tableview setBackgroundColor:bgColor];
     [self.kankan_tableview setBackgroundColor:bgColor];
     
+    self.nearbyFriends_header = [[MJRefreshHeaderView alloc]init];
+    self.nearbyFriends_header.scrollView = self.nearbyFriends_tableview;
+    self.nearbyFriends_header.delegate = self;
     
+//    self.nearbyFriends_footer = [[MJRefreshFooterView alloc]init];
+//    self.nearbyFriends_footer.scrollView = self.nearbyFriends_tableview;
+//    self.nearbyFriends_footer.delegate = self;
     
     UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
     waitingView = [[UIView alloc]init];
@@ -408,7 +420,7 @@
 
 }
 
--(void)getNearbyFriends
+-(void)getNearbyFriends:(void(^)()) didGetReceived
 {
     void (^getNearbyFriendsDone)(NSData*) = ^(NSData* rData)
     {
@@ -430,6 +442,9 @@
         if ([cmd integerValue] == 100) {
             nearbyFriends_arr = [response1 objectForKey:@"friend_list"];
             [nearbyFriends_tableview reloadData];
+        }
+        if (didGetReceived) {
+            didGetReceived();
         }
         [waitingView removeFromSuperview];
     };
@@ -755,7 +770,7 @@
     coordinate = userLocation.location.coordinate;
     NSLog(@"%f   %f",coordinate.latitude,coordinate.longitude);
     [locationService stopUserLocationService];
-    [self getNearbyFriends];
+    [self getNearbyFriends:nil];
 }
 
 
@@ -868,6 +883,15 @@
     }
 }
 
+#pragma mark - MJRefreshBaseViewDelegate
+- (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
+{
+    if (refreshView == self.nearbyFriends_header) {
+        [self getNearbyFriends:^{
+            [refreshView endRefreshing];
+        }];
+    }
+}
 
 
 @end

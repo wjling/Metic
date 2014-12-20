@@ -1749,15 +1749,15 @@ enum Response_Type
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     NSLog(@"scroll view did begin scroll");
-    if (!functions_uiview.hidden) {
-        [UIView beginAnimations:@"View shows" context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
-        [functions_uiview setHidden:YES];
-        [UIView commitAnimations];
-    }
+//    if (!functions_uiview.hidden) {
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        [UIView setAnimationDuration:0.5];
+//        [UIView setAnimationDelegate:self];
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
+//        [functions_uiview setHidden:YES];
+//        [UIView commitAnimations];
+//    }
     
 }
 
