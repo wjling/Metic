@@ -26,7 +26,6 @@
 @property float h1;
 @property BOOL nibsRegistered;
 
-@property int showPhoNum;
 @property BOOL shouldLoadPhoto;
 @property BOOL haveLoadedPhoto;
 @end
