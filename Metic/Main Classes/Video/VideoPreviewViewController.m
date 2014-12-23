@@ -419,7 +419,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         break;
                     default:
                     {
-                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败，请重试" WithDelegate:self WithCancelTitle:@"确定"];
+                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败" WithDelegate:self WithCancelTitle:@"确定"];
                         [alert setTag:102];
                     }
                 }
@@ -498,7 +498,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
         }else if([alertView tag] == 102){
+            [_progressView setProgress:1.0f animated:YES];
             [_confirmBtn setEnabled:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self removeWaitingView];
+            });
+            
+            
         }
         
     }
