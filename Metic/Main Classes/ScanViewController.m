@@ -127,7 +127,9 @@
         confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [confirmAlert show];
     }else if ([_type isEqualToString: @"user"]){
-        //添加好友
+        UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [confirmAlert show];
     }
 
 }
@@ -312,7 +314,6 @@
 
 -(void)animation
 {
-    NSLog(@"aaa");
     CGRect frame = _line.frame;
     if (_upOrdown && CGRectGetMaxY(frame) + 2 > 321) {
         _upOrdown = NO;
@@ -352,7 +353,15 @@
                 
             
             }else{
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"请等待发起人验证" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                NSString* mesg;
+                
+                if ([_type isEqualToString: @"event"]) {
+                    mesg = @"请等待发起人验证";
+                }else if ([_type isEqualToString: @"user"]){
+                    mesg = @"添加好友请求已发送";
+                }
+                
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:mesg delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [alert show];
                 [self performSelector:@selector(dismissAlertView:) withObject:alert afterDelay:1.5];
                 [self performSelector:@selector(back:) withObject:alert afterDelay:2.0];
@@ -434,22 +443,43 @@
 {
     switch (alertView.tag) {
         case 0:{
-            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
-            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
-            if (buttonIndex == cancelBtnIndex) {
-                ;
+            if ([_type isEqualToString: @"event"]) {
+                NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+                NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+                if (buttonIndex == cancelBtnIndex) {
+                    ;
+                }
+                else if (buttonIndex == okBtnIndex)
+                {
+                    NSString* cm = [alertView textFieldAtIndex:0].text;
+                    
+                    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
+                    NSLog(@"%@",dictionary);
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+                    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+                    
+                }
+            }else if ([_type isEqualToString: @"user"]){
+                NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
+                NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
+                if (buttonIndex == cancelBtnIndex) {
+                    ;
+                }
+                else if (buttonIndex == okBtnIndex)
+                {
+                    NSString* cm = [alertView textFieldAtIndex:0].text;
+                    NSNumber* userId = [MTUser sharedInstance].userid;
+                    NSNumber* friendId = self.efid;
+                    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+                    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
+                    NSLog(@"add friend apply: %@",json);
+                    
+                }
             }
-            else if (buttonIndex == okBtnIndex)
-            {
-                NSString* cm = [alertView textFieldAtIndex:0].text;
-
-                NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
-                NSLog(@"%@",dictionary);
-                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
-
-            }
+            
         }
             break;
         case 10:{
