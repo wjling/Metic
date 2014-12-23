@@ -4361,76 +4361,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3l-AQ-ESg">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDJ-Z9-TTX">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="115"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGn-bI-Fah">
-                                        <rect key="frame" x="0.0" y="115" width="47" height="216"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qH8-oq-nG6">
-                                        <rect key="frame" x="273" y="115" width="47" height="216"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OVh-H6-CrH">
-                                        <rect key="frame" x="0.0" y="331" width="320" height="237"/>
-                                        <subviews>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="请将取景器对准" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Bu-9T-Xat">
-                                                <rect key="frame" x="60" y="10" width="200" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="活动宝网站或活动宝App提供的二维码" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yI1-pE-AT9">
-                                                <rect key="frame" x="40" y="35" width="240" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <color key="textColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.69999999999999996" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="me3-5M-jh7">
-                                        <rect key="frame" x="45" y="113" width="3" height="30"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WzD-K0-XGz">
-                                        <rect key="frame" x="272" y="113" width="3" height="30"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EtG-29-wjm">
-                                        <rect key="frame" x="45" y="303" width="3" height="30"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RdD-SM-Yx6">
-                                        <rect key="frame" x="272" y="303" width="3" height="30"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfM-ww-fgG">
-                                        <rect key="frame" x="45" y="113" width="30" height="3"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KDu-uq-kjs">
-                                        <rect key="frame" x="244" y="113" width="30" height="3"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aYy-sY-i5P">
-                                        <rect key="frame" x="45" y="331" width="30" height="3"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bhH-fY-l9h">
-                                        <rect key="frame" x="244" y="330" width="30" height="3"/>
-                                        <color key="backgroundColor" red="0.33333334329999997" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                                    </view>
-                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="OVh-H6-CrH" firstAttribute="top" secondItem="qH8-oq-nG6" secondAttribute="bottom" id="HTh-i2-pOO"/>
-                                    <constraint firstItem="qH8-oq-nG6" firstAttribute="top" secondItem="yGn-bI-Fah" secondAttribute="bottom" constant="-216" id="UR7-OX-RPA"/>
-                                    <constraint firstItem="yGn-bI-Fah" firstAttribute="top" secondItem="zDJ-Z9-TTX" secondAttribute="bottom" id="eM5-po-Th4"/>
-                                </constraints>
                             </view>
                             <view alpha="0.0" tag="101" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u8a-Yr-5Ae">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -4507,11 +4438,9 @@
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="B1d-D9-g3b" secondAttribute="bottom" id="ad0-7O-3Cm"/>
                             <constraint firstItem="u8a-Yr-5Ae" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leading" id="arR-o4-AKp"/>
                             <constraint firstItem="B1d-D9-g3b" firstAttribute="leading" secondItem="Re2-5z-Vte" secondAttribute="leading" id="c8y-K1-9ja"/>
-                            <constraint firstItem="zDJ-Z9-TTX" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="eoV-IT-t0X"/>
                             <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="u8a-Yr-5Ae" secondAttribute="bottom" id="kM4-nB-V9s"/>
                             <constraint firstAttribute="trailing" secondItem="B1d-D9-g3b" secondAttribute="trailing" id="sn0-UF-adV"/>
                             <constraint firstItem="u8a-Yr-5Ae" firstAttribute="top" secondItem="i08-dF-yKI" secondAttribute="bottom" id="uQ6-nx-2eJ"/>
-                            <constraint firstItem="GKX-CO-XK0" firstAttribute="top" secondItem="OVh-H6-CrH" secondAttribute="bottom" id="wZr-sA-jhb"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="扫一扫" id="gWT-c4-a3k">

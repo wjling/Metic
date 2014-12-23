@@ -113,7 +113,84 @@
 
 - (void) initUI
 {
-    _line = [[UIImageView alloc] initWithFrame:CGRectMake(57, 125, 206, 2)];
+    float stdH = (self.view.bounds.size.height - 64)/2 - 108;
+    float wid = self.view.bounds.size.width;
+    NSLog(@"作图起始高度：%f",stdH);
+    
+    UIView* up = [[UIView alloc]initWithFrame:CGRectMake(0, 0, wid, stdH)];
+    up.backgroundColor =[UIColor blackColor];
+    up.alpha = 0.7;
+    [_GUI addSubview:up];
+    
+    UIView* left = [[UIView alloc]initWithFrame:CGRectMake(0, stdH, 47, 216)];
+    left.backgroundColor =[UIColor blackColor];
+    left.alpha = 0.7;
+    [_GUI addSubview:left];
+    
+    UIView* right = [[UIView alloc]initWithFrame:CGRectMake(wid -47, stdH, 47, 216)];
+    right.backgroundColor =[UIColor blackColor];
+    right.alpha = 0.7;
+    [_GUI addSubview:right];
+    
+    UIView* down = [[UIView alloc]initWithFrame:CGRectMake(0, stdH + 216, wid, stdH)];
+    down.backgroundColor =[UIColor blackColor];
+    down.alpha = 0.7;
+    [_GUI addSubview:down];
+    
+    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(60, 10, 200, 21)];
+    label1.text = @"请将取景器对准";
+    label1.textAlignment = NSTextAlignmentCenter;
+    label1.textColor = [UIColor colorWithWhite:232.0/255.0 alpha:1.0f];
+    label1.font = [UIFont systemFontOfSize:14];
+    [down addSubview:label1];
+    
+    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(40, 30, 240, 21)];
+    label2.text = @"活动宝网站或活动宝App提供的二维码";
+    label2.textAlignment = NSTextAlignmentCenter;
+    label2.textColor = [UIColor colorWithWhite:232.0/255.0 alpha:1.0f];
+    label2.font = [UIFont systemFontOfSize:14];
+    [down addSubview:label2];
+    
+    
+    
+    
+    
+    UIView* leftup = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH - 2, 3, 30)];
+    leftup.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:leftup];
+    
+    UIView* leftdown = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH + 216 - 30 + 2, 3, 30)];
+    leftdown.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:leftdown];
+    
+    UIView* rightup = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -1, stdH - 2, 3, 30)];
+    rightup.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:rightup];
+    
+    UIView* rightdown = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -1, stdH + 216 - 30 + 2, 3, 30)];
+    rightdown.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:rightdown];
+    
+    UIView* upleft = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH - 2, 30, 3)];
+    upleft.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:upleft];
+    
+    UIView* upright = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -30 + 2, stdH - 2, 30, 3)];
+    upright.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:upright];
+    
+    UIView* downleft = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH + 216 - 1, 30, 3)];
+    downleft.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:downleft];
+    
+    UIView* downright = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 - 30 + 2, stdH + 216 - 1, 30, 3)];
+    downright.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    [_GUI addSubview:downright];
+    
+    
+    
+    
+    _line = [[UIImageView alloc] initWithFrame:CGRectMake(57, stdH + 10, 206, 2)];
     _line.image = [UIImage imageNamed:@"line.png"];
     [_GUI addSubview:_line];
     //定时器，设定时间过1.5秒，
@@ -221,11 +298,14 @@
             
         }
         CGRect frame = _resultView.frame;
-        frame.origin.y = 30;
+        frame.origin.y = (self.view.frame.size.height - 292 - _controlView.frame.size.height)/2;
         frame.size.height = 292;
         [_resultView setFrame:frame];
         [_resultView addSubview:cell];
         [_resultView setHidden:NO];
+        frame = _controlView.frame;
+        frame.origin.y = CGRectGetMaxY(_resultView.frame);
+        _controlView.frame = frame;
         [_controlView setHidden:NO];
     }else if([_type isEqualToString: @"user"])
     {
@@ -258,12 +338,15 @@
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
         [avatarGetter getAvatar];
         [_resultView addSubview:cell];
-        CGRect frame = _resultView.frame;
-        frame.origin.y = 120;
-        frame.size.height = 172;
         
+        CGRect frame = _resultView.frame;
+        frame.size.height = 210;
+        frame.origin.y = (self.view.frame.size.height - 210 - _controlView.frame.size.height)/2;
         [_resultView setFrame:frame];
         [_resultView setHidden:NO];
+        frame = _controlView.frame;
+        frame.origin.y = CGRectGetMaxY(_resultView.frame);;
+        _controlView.frame = frame;
         [_controlView setHidden:NO];
     }
     
@@ -314,10 +397,11 @@
 
 -(void)animation
 {
+    float stdH = (self.view.bounds.size.height)/2 - 108;
     CGRect frame = _line.frame;
-    if (_upOrdown && CGRectGetMaxY(frame) + 2 > 321) {
+    if (_upOrdown && CGRectGetMaxY(frame) + 2 > stdH + 216 - 10 ) {
         _upOrdown = NO;
-    }else if(!_upOrdown && CGRectGetMinY(frame) - 2 < 125){
+    }else if(!_upOrdown && CGRectGetMinY(frame) - 2 < stdH + 10){
         _upOrdown = YES;
     }
     if (_upOrdown == YES) {
