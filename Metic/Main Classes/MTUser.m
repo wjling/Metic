@@ -663,8 +663,9 @@ static MTUser *singletonInstance;
 -(void)insertAliasToFriendList
 {
     NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
-    for (NSMutableDictionary* friend in self.friendList) {
+    for (int i = 0; i < friendList.count; i++) {
 //        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
+        NSMutableDictionary* friend = [friendList objectAtIndex:i];
         NSNumber* fid = [friend objectForKey:@"id"];
        
         NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];

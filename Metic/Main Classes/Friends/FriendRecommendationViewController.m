@@ -71,7 +71,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [CommonUtils addLeftButton:self isFirstPage:NO];
+//    [CommonUtils addLeftButton:self isFirstPage:NO];
     
     locationService = [[BMKLocationService alloc]init];
     contacts_arr = [[NSMutableArray alloc]init];
@@ -97,9 +97,9 @@
 }
 
 //返回上一层
--(void)MTpopViewController{
-    [self.navigationController popViewControllerAnimated:YES];
-}
+//-(void)MTpopViewController{
+//    [self.navigationController popViewControllerAnimated:YES];
+//}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -147,6 +147,14 @@
     NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
     [self.content_scrollview setContentSize: CGSizeMake(960, self.content_scrollview.frame.size.height)];
     NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"friend recommandation viewdiddisappear");
+    [super viewDidDisappear:animated];
+    [locationService stopUserLocationService];
+    locationService.delegate = nil;
 }
 
 - (void)didReceiveMemoryWarning
