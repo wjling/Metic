@@ -73,7 +73,7 @@
     // Do any additional setup after loading the view.
 //    [CommonUtils addLeftButton:self isFirstPage:NO];
     
-    locationService = [[BMKLocationService alloc]init];
+    
     contacts_arr = [[NSMutableArray alloc]init];
     contactFriends_arr = [[NSMutableArray alloc]init];
     nearbyFriends_arr = [[NSMutableArray alloc]init];
@@ -118,7 +118,6 @@
 {
 
     [super viewDidAppear:animated];
-    locationService.delegate = self;
 //    NSLog(@"tabbar content size==before, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
     self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
 //    NSLog(@"friend recommendation view did appear");
@@ -152,9 +151,15 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     NSLog(@"friend recommandation viewdiddisappear");
-    [super viewDidDisappear:animated];
-    [locationService stopUserLocationService];
     locationService.delegate = nil;
+    [locationService stopUserLocationService];
+    [super viewDidDisappear:animated];
+}
+
+-(void)dealloc
+{
+    [nearbyFriends_header free];
+    [nearbyFriends_footer free];
 }
 
 - (void)didReceiveMemoryWarning
@@ -337,8 +342,11 @@
     else if (tab_index == 1)
     {
         NSLog(@"tab 1");
-        NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
-        [locate start];
+        locationService = [[BMKLocationService alloc]init];
+        locationService.delegate = self;
+//        NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
+//        [locate start];
+        [locationService startUserLocationService];
     }
     else if (tab_index == 2)
     {

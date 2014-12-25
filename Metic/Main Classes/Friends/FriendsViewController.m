@@ -6,6 +6,7 @@
 //
 
 #import "FriendsViewController.h"
+#import "FriendRecommendationViewController.h"
 #import "MobClick.h"
 
 
@@ -64,17 +65,16 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self initTableData];
     });
-    
 }
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-//    [MobClick beginLogPageView:@"好友中心"];
+    [MobClick beginLogPageView:@"好友中心"];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-//    [MobClick endLogPageView:@"好友中心"];
+    [MobClick endLogPageView:@"好友中心"];
 }
 - (void) initParams
 {
@@ -137,7 +137,9 @@
                 }
                 self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                 self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                [self.friendTableView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.friendTableView reloadData];
+                });
             }
             
         }
@@ -174,7 +176,10 @@
                         self.friendList = [[MTUser sharedInstance] friendList];
                         self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                         self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                        [self.friendTableView reloadData];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.friendTableView reloadData];
+                        });
+                        
                     }
                 }
                 else
@@ -183,7 +188,10 @@
                     self.friendList = [[MTUser sharedInstance] friendList];
                     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                     self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                    [self.friendTableView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.friendTableView reloadData];
+                    });
+                    
                 }
             }
             else //网络不连通，直接从数据库取
@@ -329,7 +337,7 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 45;
+    return 44;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -342,7 +350,7 @@
     }
     else
     {
-        return 44;
+        return 0;
     }
 }
 
@@ -379,6 +387,9 @@
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
                 [self performSegueWithIdentifier:@"friendCenter_friendRecommendation" sender:self];
+//                UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+//                FriendRecommendationViewController* vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FriendRecommendationViewController"];
+//                [self.navigationController pushViewController:vc animated:YES];
             }
         }
         else
