@@ -10,4 +10,5 @@
 
 @interface EventDetail2 : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSMutableSet* loadingVideo;
+@property(nonatomic,strong) NSNumber*eventId;
 @end

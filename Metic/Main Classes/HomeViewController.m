@@ -477,23 +477,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    EventDetail2* eventDetail = [[EventDetail2 alloc]init];
-    [self.navigationController pushViewController:eventDetail animated:YES];
-    return;
-    if (![self.morefuctions isHidden]) {
-        [self closeButtonView];
-        return;
-    }
-    
-    
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
     
-    
-    
-    ;
-    [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
+    EventDetail2* eventDetail = [[EventDetail2 alloc]init];
+    eventDetail.eventId = cell.eventId;
+    [self.navigationController pushViewController:eventDetail animated:YES];
+   
 }
 
 #pragma mark 用segue跳转时传递参数eventid

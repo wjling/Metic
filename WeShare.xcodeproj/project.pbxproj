@@ -116,6 +116,7 @@
 		086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */; };
 		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
+		086C09B61A4D69BE00F57203 /* HttpSender2.m in Sources */ = {isa = PBXBuildFile; fileRef = 086C09B51A4D69BE00F57203 /* HttpSender2.m */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E84E1A3AC5F500E3C18C /* BOAlertController.m */; };
 		0878E85A1A3AC76F00E3C18C /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E8551A3AC76F00E3C18C /* RIButtonItem.m */; };
@@ -595,6 +596,8 @@
 		086AE6D819B5C32800EDF629 /* VcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VcommentTableViewCell.h; sourceTree = "<group>"; };
 		086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VcommentTableViewCell.m; sourceTree = "<group>"; };
 		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
+		086C09B41A4D69BE00F57203 /* HttpSender2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender2.h; sourceTree = "<group>"; };
+		086C09B51A4D69BE00F57203 /* HttpSender2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpSender2.m; sourceTree = "<group>"; };
 		08775A0419A8F7840034BB58 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportViewController.h; path = Report/ReportViewController.h; sourceTree = "<group>"; };
 		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
 		0878E84E1A3AC5F500E3C18C /* BOAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOAlertController.m; sourceTree = "<group>"; };
@@ -1709,6 +1712,8 @@
 				48151F17194947EB009E156E /* CommonUtils.m */,
 				48151F18194947EB009E156E /* HttpSender.h */,
 				48151F19194947EB009E156E /* HttpSender.m */,
+				086C09B41A4D69BE00F57203 /* HttpSender2.h */,
+				086C09B51A4D69BE00F57203 /* HttpSender2.m */,
 				08B3F707195711A3003B32B7 /* CloudOperation.h */,
 				08B3F708195711A3003B32B7 /* CloudOperation.m */,
 				48151F1A194947EB009E156E /* MySqlite.h */,
@@ -2744,6 +2749,7 @@
 				510D459C196E8A960081672A /* SDWebImageDownloader.m in Sources */,
 				51F4CB0919E6307500E487F1 /* ASIAuthenticationDialog.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
+				086C09B61A4D69BE00F57203 /* HttpSender2.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 				51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */,
 				0435EF4D19B49DA2003BB2F6 /* HistoricalNotificationViewController.m in Sources */,
