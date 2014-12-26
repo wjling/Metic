@@ -45,6 +45,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteItem" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replaceItem:) name: @"replaceItem" object:nil];
+    
+    
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _type = 0;
     _clearIds = NO;
@@ -138,6 +142,37 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+//删除某个卡片
+-(void)deleteItem:(id)sender
+{
+    int eventId = [[[sender userInfo] objectForKey:@"eventId"] intValue];
+    
+    for (NSMutableDictionary* dict in self.events) {
+        if ([[dict valueForKey:@"event_id"] intValue] == eventId) {
+            [self.events removeObject:dict];
+            [_tableView reloadData];
+            break;
+        }
+    }
+    
+    NSLog(@"deleteItem %d",eventId);
+}
+
+//更新某个卡片
+-(void)replaceItem:(id)sender
+{
+    int eventId = [[[sender userInfo] objectForKey:@"eventId"] intValue];
+    NSMutableArray *dict = [[sender userInfo] objectForKey:@"eventInfo"];
+    for (NSMutableDictionary* dic in self.events) {
+        if ([[dic valueForKey:@"event_id"] intValue] == eventId) {
+            [self.events replaceObjectAtIndex:[_events indexOfObject:dic] withObject:dict];
+            [_tableView reloadData];
+            break;
+        }
+    }
+    NSLog(@"replaceItem %d ",eventId);
 }
 
 -(void)ToSquare
@@ -591,6 +626,8 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteItem" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"replaceItem" object:nil];
     [_header free];
     [_footer free];
     

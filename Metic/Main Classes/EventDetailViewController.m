@@ -449,7 +449,7 @@
     NSArray* eventids = @[_eventId];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventids forKey:@"sequence"];
-    
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
@@ -458,6 +458,14 @@
             NSLog(@"%@", response1);
             if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
                 NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                
+                if (![[dist valueForKey:@"isIn"] boolValue]) {
+                    [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
+                    [self removeEventFromDB];
+                    [self deleteItemfromHomeArray];
+                    return ;
+                }
+                
                 if (_event) {
                     NSString* updatetime1 = [_event valueForKey:@"updatetime"];
                     NSString* updatetime2 = [dist valueForKey:@"updatetime"];
@@ -466,7 +474,7 @@
                         [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
                     }
                 }
-                [self reloadHomeArray:_event newArr:dist];
+                [self replaceItemfromArray:_event newArr:dist];
                 [_tableView endUpdates];
                 self.event = dist;
                 [_tableView reloadData];
@@ -474,7 +482,7 @@
             }else{
                 [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
                 [self removeEventFromDB];
-                [self renewHomeArray];
+                [self deleteItemfromHomeArray];
             }
             
         }
@@ -505,8 +513,14 @@
     [sql closeMyDB];
 }
 
--(void)renewHomeArray
+-(void)deleteItemfromHomeArray
 {
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:_eventId,@"eventId", nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
+    return;
+    
+    
     int index = self.navigationController.viewControllers.count - 2;
     HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
     
@@ -516,8 +530,14 @@
     }
 }
 
--(void)reloadHomeArray:(NSDictionary*)oldArr newArr:(NSDictionary*)newArr
+-(void)replaceItemfromArray:(NSDictionary*)oldArr newArr:(NSDictionary*)newArr
 {
+    
+    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:_eventId,@"eventId", newArr,@"eventInfo",nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"replaceItem" object:nil userInfo:dict];
+    return;
+    
     int index = self.navigationController.viewControllers.count - 2;
     HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
     
@@ -1499,7 +1519,7 @@
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == QUIT_EVENT_SUC) {
                         [self removeEventFromDB];
-                        [self renewHomeArray];
+                        [self deleteItemfromHomeArray];
                         
                         [SVProgressHUD dismissWithSuccess:@"退出活动成功" afterDelay:0.2];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1532,7 +1552,7 @@
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == QUIT_EVENT_SUC) {
                         [self removeEventFromDB];
-                        [self renewHomeArray];
+                        [self deleteItemfromHomeArray];
                         
                         [SVProgressHUD dismissWithSuccess:@"解散活动成功" afterDelay:0.2];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
