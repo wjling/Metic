@@ -663,8 +663,9 @@ static MTUser *singletonInstance;
 -(void)insertAliasToFriendList
 {
     NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
-    for (NSMutableDictionary* friend in self.friendList) {
+    for (int i = 0; i < friendList.count; i++) {
 //        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
+        NSMutableDictionary* friend = [friendList objectAtIndex:i];
         NSNumber* fid = [friend objectForKey:@"id"];
        
         NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
@@ -706,7 +707,7 @@ static MTUser *singletonInstance;
 
 
 //============================================================================
-
+#pragma mark - Init Notification Messages
 //================================Init Notification Messages=====================
 
 - (void) getMsgFromDataBase
@@ -744,11 +745,11 @@ static MTUser *singletonInstance;
         if ([ishandled integerValue] == -1) {
             switch (cmd) {
                 case ADD_FRIEND_NOTIFICATION:
+                case ADD_FRIEND_RESULT:
                 {
                     [self.friendRequestMsg addObject:msg_dic];
                 }
                     break;
-                case ADD_FRIEND_RESULT:
                 case EVENT_INVITE_RESPONSE:
                 case REQUEST_EVENT_RESPONSE:
                 case QUIT_EVENT_NOTIFICATION:

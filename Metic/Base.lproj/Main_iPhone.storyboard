@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -330,6 +329,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9Rr-XN-lhg">
                                 <rect key="frame" x="0.0" y="44" width="320" height="372"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableFooterView" hidden="YES" alpha="0.0" tag="101" contentMode="scaleToFill" id="Hc6-Qr-xXh">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="notificationcentercell" id="aky-VX-Shy" customClass="NotificationCenterCell">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
@@ -375,23 +379,16 @@
                                         <connections>
                                             <outlet property="avatar" destination="fZ5-Or-PIM" id="F8k-q7-NpW"/>
                                             <outlet property="title" destination="lAh-Xf-ksN" id="Hle-eK-IMG"/>
-                                            <segue destination="FXr-Y8-zhi" kind="push" identifier="FriendToFriendInfo" id="DsC-hh-HTw"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
                             </tableView>
-                            <view hidden="YES" alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hc6-Qr-xXh">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Hc6-Qr-xXh" firstAttribute="top" secondItem="CgB-17-DBF" secondAttribute="bottom" id="5th-aX-zXL"/>
                             <constraint firstItem="9kw-Z0-asa" firstAttribute="top" secondItem="9Rr-XN-lhg" secondAttribute="bottom" id="H5z-wu-hXW"/>
                             <constraint firstItem="9Rr-XN-lhg" firstAttribute="top" secondItem="dQg-35-1RW" secondAttribute="bottom" id="Yj8-vu-9LT"/>
-                            <constraint firstItem="9kw-Z0-asa" firstAttribute="top" secondItem="Hc6-Qr-xXh" secondAttribute="bottom" id="hJL-nr-hHB"/>
                             <constraint firstItem="dQg-35-1RW" firstAttribute="top" secondItem="CgB-17-DBF" secondAttribute="bottom" id="xHd-Dg-Mcs"/>
                         </constraints>
                     </view>
@@ -416,6 +413,7 @@
                         <outlet property="searchDisplayController" destination="qXK-mQ-xDc" id="g0o-R3-FLK"/>
                         <outlet property="shadowView" destination="Hc6-Qr-xXh" id="lw6-jE-o1c"/>
                         <segue destination="SWe-qF-jqe" kind="push" identifier="friendCenter_friendRecommendation" id="ItJ-aD-aY9"/>
+                        <segue destination="FXr-Y8-zhi" kind="push" identifier="FriendToFriendInfo" id="vrP-dE-x9J"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BMT-X0-7Cy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -523,6 +521,34 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bkl-GJ-uzZ" userLabel="friend Table View">
                                         <rect key="frame" x="320" y="0.0" width="320" height="376"/>
                                         <prototypes>
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationsSystemMessageTableViewCell" rowHeight="50" id="JpJ-Gg-Svn" customClass="NotificationsSystemMessageTableViewCell">
+                                                <rect key="frame" x="0.0" y="163" width="320" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JpJ-Gg-Svn" id="9UP-lT-vKu">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="系统消息图标" translatesAutoresizingMaskIntoConstraints="NO" id="4e1-Dz-1I7">
+                                                            <rect key="frame" x="15" y="10" width="30" height="30"/>
+                                                        </imageView>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="恭喜你获得“喜当爹”成就" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgI-ec-P60">
+                                                            <rect key="frame" x="54" y="28" width="260" height="15"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="系统消息" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uod-ab-KRW">
+                                                            <rect key="frame" x="54" y="9" width="163" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="sys_msg_label" destination="WgI-ec-P60" id="9Rl-Lj-TfK"/>
+                                                    <outlet property="title_label" destination="Uod-ab-KRW" id="neo-gk-PFb"/>
+                                                </connections>
+                                            </tableViewCell>
                                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationsFriendRequestTableViewCell" rowHeight="50" id="g57-qe-gjd" customClass="NotificationsFriendRequestTableViewCell">
                                                 <rect key="frame" x="0.0" y="22" width="320" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1791,7 +1817,7 @@
         <!--好友推荐-->
         <scene sceneID="q10-2z-J9R">
             <objects>
-                <viewController id="SWe-qF-jqe" customClass="FriendRecommendationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FriendRecommendationViewController" id="SWe-qF-jqe" customClass="FriendRecommendationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="a8s-J6-mBn"/>
                         <viewControllerLayoutGuide type="bottom" id="pu1-f4-9TS"/>
@@ -4841,18 +4867,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="vrP-dE-x9J"/>
         <segue reference="ItJ-aD-aY9"/>
+        <segue reference="ib8-0I-OZA"/>
         <segue reference="8Lk-Kp-pHu"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="kIc-uU-eUg"/>
-        <segue reference="L2M-th-cr6"/>
-        <segue reference="hOW-ww-bKW"/>
-        <segue reference="c1O-Ly-Hfg"/>
+        <segue reference="KQw-JA-BHy"/>
         <segue reference="UXj-VV-omZ"/>
+        <segue reference="kIc-uU-eUg"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="L2M-th-cr6"/>
     </inferredMetricsTieBreakers>
 </document>

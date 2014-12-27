@@ -553,9 +553,15 @@
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
-    [userSettings setValue:[NSNumber numberWithInt:(type < 3 && type >= 0)? type : -1] forKey:@"hasUnreadNotification"];
+    int i = (type < 3 && type >= 0)? type : -1;
+    NSLog(@"新消息来了，message type: %d", i);
+    [userSettings setValue:[NSNumber numberWithInt:i] forKey:@"hasUnreadNotification"];
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
+    
+//    NSDictionary* setting = [[NSUserDefaults standardUserDefaults]objectForKey:key];
+//    NSNumber* num_temp = [setting objectForKey:@"hasUnreadNotification"];
+//    NSLog(@"存储的hasUnreadNotification: %@", num_temp);
     
 }
 
@@ -671,7 +677,7 @@
 
         if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
         {
-            [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+            [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
             [[MTUser sharedInstance] synchronizeFriends];
             NSNumber* result = [msg_dic objectForKey:@"result"];
             NSLog(@"friend request result: %@",result);
@@ -701,7 +707,7 @@
             }
             
             if (numOfSyncMessages <= 1) {
-                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:2];
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:1];
             }
             
         }

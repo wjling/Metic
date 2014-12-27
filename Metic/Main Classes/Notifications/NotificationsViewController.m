@@ -9,6 +9,7 @@
 #import "NotificationsViewController.h"
 #import "MobClick.h"
 #import "MenuViewController.h"
+#import "KxMenu.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
 #define MTUser_friendRequestMsg [MTUser sharedInstance].friendRequestMsg
@@ -138,12 +139,16 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSInteger index = [[userSettings valueForKey:@"hasUnreadNotification"]integerValue];
-    if (index != -1) {
-        tab_index = index;
-        [self tabBtnClicked:self.tabs[tab_index]];
-        clickTab = NO;
+    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
+    NSLog(@"notification: hasUnreadNotification: %@", index);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
     }
+    
     [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
     [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
     [userDfs setValue:userSettings forKey:key];
@@ -256,7 +261,7 @@ enum Response_Type
     
     
     [eventR_button setTitle:@"活动邀请" forState:UIControlStateNormal];
-    [friendR_button setTitle:@"好友验证" forState:UIControlStateNormal];
+    [friendR_button setTitle:@"好友消息" forState:UIControlStateNormal];
     [systemMsg_button setTitle:@"系统消息" forState:UIControlStateNormal];
     
     [eventR_button titleLabel].font = [UIFont systemFontOfSize:14];
@@ -551,58 +556,83 @@ enum Response_Type
 }
 
 - (IBAction)rightBarBtnClicked:(id)sender {
-    if (!functions_uiview.hidden) {
-        
-        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-        [UIView beginAnimations:@"View shows" context:nil];
-        //动画持续时间
-        [UIView setAnimationDuration:0.5];
-        //设置动画的回调函数，设置后可以使用回调方法
-        [UIView setAnimationDelegate:self];
-        //设置动画曲线，控制动画速度
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-        //设置动画方式，并指出动画发生的位置
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
-        
-        [functions_uiview setHidden:YES];
-        //提交UIView动画
-        [UIView commitAnimations];
-        
-    }
-    else{
-        
-        [UIView beginAnimations:@"View shows" context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
-        [functions_uiview setHidden:NO];
-        [UIView commitAnimations];
-
-        
-    }
+    [self showMenu];
+//    if (!functions_uiview.hidden) {
+//        
+//        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        //动画持续时间
+//        [UIView setAnimationDuration:0.5];
+//        //设置动画的回调函数，设置后可以使用回调方法
+//        [UIView setAnimationDelegate:self];
+//        //设置动画曲线，控制动画速度
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
+//        //设置动画方式，并指出动画发生的位置
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
+//        
+//        [functions_uiview setHidden:YES];
+//        //提交UIView动画
+//        [UIView commitAnimations];
+//        
+//    }
+//    else{
+//        
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        [UIView setAnimationDuration:0.5];
+//        [UIView setAnimationDelegate:self];
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
+//        [functions_uiview setHidden:NO];
+//        [UIView commitAnimations];
+//
+//        
+//    }
     
 }
 
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    [menuItems addObjectsFromArray:@[
+                                     
+                                     [KxMenuItem menuItem:@"历史记录"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function1Clicked:)],
+                                     
+                                     [KxMenuItem menuItem:@"清空当前页"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function2Clicked:)],
+                                     ]];
+
+    
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+                 menuItems:menuItems];
+}
+
 - (IBAction)function1Clicked:(id)sender {
-    [UIView beginAnimations:@"View shows" context:nil];
-    [functions_uiview setHidden:YES];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-    [UIView commitAnimations];
+//    [UIView beginAnimations:@"View shows" context:nil];
+//    [functions_uiview setHidden:YES];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationDelegate:self];
+//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
+//    [UIView commitAnimations];
     [self performSegueWithIdentifier:@"notificationvc_historicalvc" sender:self];
 }
 
 - (IBAction)function2Clicked:(id)sender {
-    [UIView beginAnimations:@"View shows" context:nil];
-    [functions_uiview setHidden:YES];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-    [UIView commitAnimations];
+//    [UIView beginAnimations:@"View shows" context:nil];
+//    [functions_uiview setHidden:YES];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationDelegate:self];
+//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
+//    [UIView commitAnimations];
 
     //[self performSelectorOnMainThread:@selector(clearCurrentPage) withObject:nil waitUntilDone:NO];
     [self clearCurrentPage];
@@ -620,6 +650,7 @@ enum Response_Type
         [eventRequestMsg removeAllObjects];
         [MTUser_eventRequestMsg removeAllObjects];
         [self.eventRequest_tableView reloadData];
+        label1.hidden = NO;
     }
     else if (tab_index == 1)
     {
@@ -631,6 +662,7 @@ enum Response_Type
         [friendRequestMsg removeAllObjects];
         [MTUser_friendRequestMsg removeAllObjects];
         [self.friendRequest_tableView reloadData];
+        label2.hidden = NO;
     }
     else if (tab_index == 2)
     {
@@ -642,6 +674,7 @@ enum Response_Type
         [systemMsg removeAllObjects];
         [MTUser_systemMsg removeAllObjects];
         [self.systemMessage_tableView reloadData];
+        label3.hidden = NO;
     }
     [mySql closeMyDB];
 
@@ -727,10 +760,12 @@ enum Response_Type
             case ADD_FRIEND_NOTIFICATION:
             {
                 NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                for (NSMutableDictionary* msg in self.friendRequestMsg) {
+                for (int i = 0; i < self.friendRequestMsg.count; i++) {
+                    NSMutableDictionary* msg = [self.friendRequestMsg objectAtIndex:i];
                     NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                     if (fid1 == fid2) {
                         [self.friendRequestMsg removeObject:msg];
+                        continue;
                     }
                 }
                 [friendRequestMsg insertObject:msg_dic atIndex:0];
@@ -741,9 +776,9 @@ enum Response_Type
                 break;
             case ADD_FRIEND_RESULT:
             {
-                [systemMsg insertObject:msg_dic atIndex:0];
-                if (!label3.hidden) {
-                    label3.hidden = YES;
+                [friendRequestMsg insertObject:msg_dic atIndex:0];
+                if (!label2.hidden) {
+                    label2.hidden = YES;
                 }
             }
                 break;
@@ -766,14 +801,15 @@ enum Response_Type
                 NSInteger fid1, fid2;
                 eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
                 fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                for (NSMutableDictionary* aMsg in self.eventRequestMsg) {
+                for (int i = 0; i < self.eventRequestMsg.count; i++) {
+                    NSMutableDictionary* aMsg = [self.eventRequestMsg objectAtIndex:i];
                     cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
                     eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                     fid2 = [[aMsg objectForKey:@"id"]integerValue];
                     if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
                         NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
                         [self.eventRequestMsg removeObject:aMsg];
-                        break;
+                        continue;
                     }
                 }
                 
@@ -800,6 +836,23 @@ enum Response_Type
     {
         [self.systemMessage_tableView reloadData];
     }
+    
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
+//    NSLog(@"notification: hasUnreadNotification: %@", index);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
+    }
+    
+    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
 
 }
 
@@ -1013,10 +1066,6 @@ enum Response_Type
     }
     else if(tableView == self.friendRequest_tableView)
     {
-        NotificationsFriendRequestTableViewCell* cell = [self.friendRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsFriendRequestTableViewCell"];
-        if (nil == cell) {
-            cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
-        }
         NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:indexPath.row];
 //        NSLog(@"friend %d request: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
@@ -1024,6 +1073,11 @@ enum Response_Type
         switch (cmd) {
             case ADD_FRIEND_NOTIFICATION: //cmd 999
             {
+                NotificationsFriendRequestTableViewCell* cell = [self.friendRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsFriendRequestTableViewCell"];
+                if (nil == cell) {
+                    cell = [[NotificationsFriendRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsFriendRequestTableViewCell"];
+                }
+
                 NSString* name = [msg_dic objectForKey:@"name"];
                 NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
                 NSNumber* uid = [msg_dic objectForKey:@"id"];
@@ -1053,16 +1107,39 @@ enum Response_Type
                 }
                 [cell.okBtn addTarget:self action:@selector(friend_request_okBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
                 [cell.noBtn addTarget:self action:@selector(friend_request_noBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+                return cell;
                 
             }
                 break;
+                
+            case ADD_FRIEND_RESULT: //cmd 998
+            {
+                NotificationsSystemMessageTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
+                NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
+                NSString* name = [msg_dic objectForKey:@"name"];
+                NSString* text = @"";
+                if (result) {
+                    text = [NSString stringWithFormat:@"你已经成功添加 %@ 为好友",name];
+                }
+                else
+                {
+                    text = [NSString stringWithFormat:@" %@ 拒绝添加你为好友",name];
+                    
+                }
+                cell.title_label.text = @"好友消息";
+                cell.sys_msg_label.text = text;
+                
+                return cell;
+            }
+                break;
+
             default:
+                return nil;
                 break;
         }
-        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
-        return cell;
+//        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+//        cell.layer.borderColor = borderColor.CGColor;
+//        cell.layer.borderWidth = 0.3;
     }
     else if (tableView == self.systemMessage_tableView)
     {
@@ -1672,15 +1749,15 @@ enum Response_Type
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     NSLog(@"scroll view did begin scroll");
-    if (!functions_uiview.hidden) {
-        [UIView beginAnimations:@"View shows" context:nil];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
-        [functions_uiview setHidden:YES];
-        [UIView commitAnimations];
-    }
+//    if (!functions_uiview.hidden) {
+//        [UIView beginAnimations:@"View shows" context:nil];
+//        [UIView setAnimationDuration:0.5];
+//        [UIView setAnimationDelegate:self];
+//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
+//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
+//        [functions_uiview setHidden:YES];
+//        [UIView commitAnimations];
+//    }
     
 }
 

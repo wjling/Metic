@@ -16,6 +16,9 @@
 #import "SearchedFriendTableViewCell.h"
 #import "AddFriendConfirmViewController.h"
 
+@class MJRefreshHeaderView;
+@class MJRefreshFooterView;
+
 @interface FriendRecommendationViewController : UIViewController<UIScrollViewDelegate,BMKLocationServiceDelegate,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *tabbar_scrollview;
 @property (strong, nonatomic) IBOutlet UIScrollView *content_scrollview;
@@ -32,6 +35,8 @@
 
 @property (strong, nonatomic) IBOutlet UIView *tabPage2_view;
 @property (strong, nonatomic) IBOutlet UITableView *nearbyFriends_tableview;
+@property (strong, nonatomic) MJRefreshHeaderView* nearbyFriends_header;
+@property (strong, nonatomic) MJRefreshFooterView* nearbyFriends_footer;
 
 @property (strong, nonatomic) IBOutlet UIView *tabPage3_view;
 @property (strong, nonatomic) IBOutlet UITableView *kankan_tableview;
