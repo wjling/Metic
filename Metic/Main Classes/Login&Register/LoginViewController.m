@@ -586,7 +586,7 @@
     frame = button_login.frame;
     
     NSLog(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 30);//键盘高度216
+    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
     NSLog(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];

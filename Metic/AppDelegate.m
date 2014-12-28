@@ -514,7 +514,11 @@
     }
 
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
-    [self.leftMenu showUpdateInRow:4];
+    int flag = [[userSettings objectForKey:@"hasUnreadNotification"]intValue];
+    if (flag >= 0) {
+        [self.leftMenu showUpdateInRow:4];
+    }
+    
 //    numOfSyncMessages = -1;
 //    [self.syncMessages removeAllObjects];
     if (isInBackground) {

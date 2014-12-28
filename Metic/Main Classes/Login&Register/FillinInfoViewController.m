@@ -96,6 +96,10 @@
 
 - (IBAction)okBtnClicked:(id)sender {
     
+    if (![MTUser sharedInstance].name || [[MTUser sharedInstance].name isEqualToString:@""]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
     [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
 //    [self.navigationController popViewControllerAnimated:NO];
 }
@@ -178,7 +182,7 @@
             }
             else
             {
-                label.text = email;
+                label.text = @"";
             }
         }
         else if (row == 1)

@@ -197,12 +197,14 @@
         gender = [NSNumber numberWithInt:0];
     }
     //    NSLog(@"random String: %@",salt);
-//    if (password.length<6) {
-//        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong password length" WithDelegate:self WithCancelTitle:@"OK"];
-//    }
-//    else if (![CommonUtils isEmailValid:email]) {
-//        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Wrong email format" WithDelegate:self WithCancelTitle:@"OK"];
-//    }
+    if (password.length<6) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少6位" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    else if (![CommonUtils isEmailValid:email]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
 //    else if (![conformPassword isEqualToString:password])
 //    {
 //        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Password conformed error" WithDelegate:self WithCancelTitle:@"OK"];
@@ -260,11 +262,11 @@
 }
 
 - (IBAction)step_next:(id)sender {
-    if (textField_password.text.length<6) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少为5" WithDelegate:self WithCancelTitle:@"确定"];
-    }
-    else if (![CommonUtils isEmailValid:textField_email.text]) {
+    if (![CommonUtils isEmailValid:textField_email.text]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"账号请填写正确的邮箱格式" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+    else if (textField_password.text.length<6) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少为6" WithDelegate:self WithCancelTitle:@"确定"];
     }
     else
     {
@@ -349,7 +351,7 @@
     frame = [scrollView convertRect:button_signUp.frame toView:self.view];
     
     NSLog(@"register frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    viewOffet = frame.origin.y + button_signUp.frame.size.height - (self.view.frame.size.height - 216.0 - 30);//键盘高度216
+    viewOffet = frame.origin.y + button_signUp.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
     NSLog(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
