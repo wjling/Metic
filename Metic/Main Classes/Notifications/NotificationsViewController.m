@@ -480,8 +480,14 @@ enum Response_Type
 //    [self.view addSubview:waitingView];
     
 //    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollView.contentSize.width,self.content_scrollView.contentSize.height);
-    clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
+    if (index == tab_index) {
+        clickTab = NO;
+    }
+    else
+    {
+        clickTab = YES;
+    }
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
     UIButton* currentBtn = (UIButton*)sender;
 //    NSLog(@"selected button: %d",index);

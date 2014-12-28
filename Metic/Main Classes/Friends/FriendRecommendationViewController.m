@@ -142,7 +142,7 @@
         
     }
 
-    
+    NSLog(@"content_scrollview height: %f", self.content_scrollview.frame.size.height);
     NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
     [self.content_scrollview setContentSize: CGSizeMake(960, self.content_scrollview.frame.size.height)];
     NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
@@ -323,8 +323,15 @@
 -(void)tabClicked:(UIButton*)sender
 {
 //    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-    clickTab = YES;
+    
     NSInteger index = [tab_arr indexOfObject:sender];
+    if (index == tab_index) {
+        clickTab = NO;
+    }
+    else
+    {
+        clickTab = YES;
+    }
     UIButton* lastBtn = [tab_arr objectAtIndex:tab_index];
     UIButton* currentBtn = sender;
     [lastBtn setSelected:NO];
@@ -351,7 +358,6 @@
     else if (tab_index == 2)
     {
         NSLog(@"tab 2");
-//        [NSThread detachNewThreadSelector:@selector(getKanKan) toTarget:self withObject:nil];
         [self getKanKan];
     }
     
@@ -819,17 +825,39 @@
         
         CGRect frame = CGRectMake(currentBtn.frame.origin.x + 10, tabIndicator_view.frame.origin.y, tabIndicator_view.frame.size.width, tabIndicator_view.frame.size.height);
         [self scrollTabIndicator:frame];
-        if (tab_index == 1) {
-            NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
-            [locate start];
-        }
         
     }
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    clickTab = NO;
+    if (clickTab) {
+        clickTab = NO;
+        NSLog(@"scrollviewdidendscrollingAnimation: clicktab NO");
+        return;
+    }
+   
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView;
+{
+    if (scrollView == self.content_scrollview) {
+        if (clickTab) {
+            clickTab = NO;
+            NSLog(@"scrollviewdidenddecelerating: clicktab NO");
+            return;
+        }
+        NSLog(@"滚动停止");
+        if (tab_index == 1) {
+            NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
+            [locate start];
+        }
+        else if (tab_index == 2)
+        {
+            [self getKanKan];
+        }
+
+    }
 }
 
 #pragma mark - UIAlertViewDelegate
