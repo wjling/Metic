@@ -13,6 +13,8 @@
 {
     BOOL registerSucceeded;
     NSNumber* gender;
+    CGRect originFrame;
+    CGFloat viewOffet;
 }
 
 @end
@@ -77,11 +79,11 @@
     male_button.hidden = YES;
     female_button.hidden = YES;
     
-    rootView.myDelegate = self;
+//    rootView.myDelegate = self;
 //    textField_confromPassword.delegate = rootView;
-    textField_email.delegate = rootView;
-    textField_password.delegate = rootView;
-    textField_userName.delegate = rootView;
+    textField_email.delegate = self;
+    textField_password.delegate = self;
+//    textField_userName.delegate = rootView;
     
 //    textField_confromPassword.placeholder = @"请再次输入密码";
     textField_email.placeholder = @"请输入您的邮箱";
@@ -99,6 +101,9 @@
     textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField_email.clearButtonMode = UITextFieldViewModeWhileEditing;
 //    textField_confromPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
+    
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
+    [self.view addGestureRecognizer:tapRecognizer];
 
 }
 
@@ -120,7 +125,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark - Navigation
 
@@ -283,6 +287,19 @@
     }
 }
 
+-(void)backgroundBtn:(id)sender
+{
+    if (viewOffet != 0) {
+        viewOffet = 0;
+        [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
+        NSTimeInterval animationDuration = 0.30f;
+        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+        [UIView setAnimationDuration:animationDuration];
+        self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+        [UIView commitAnimations];
+    }
+}
+
 
 
 #pragma mark - HttpSenderDelegate
@@ -319,18 +336,54 @@
 }
 
 
-//#pragma mark - UItextFieldDelegate
-//
-//- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
-//{
-//    
-//}
-//
-//
-//- (void)textFieldDidEndEditing:(UITextField *)textField;             // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
-//{
-//    [textField resignFirstResponder];
-//    
-//}
+#pragma mark - UItextFieldDelegate
+
+//开始编辑输入框的时候，软键盘出现，执行此事件
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if (viewOffet > 0) {
+        return;
+    }
+    originFrame = self.view.frame;
+    CGRect frame;
+    frame = [scrollView convertRect:button_signUp.frame toView:self.view];
+    
+    NSLog(@"register frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+    viewOffet = frame.origin.y + button_signUp.frame.size.height - (self.view.frame.size.height - 216.0 - 30);//键盘高度216
+    NSLog(@"textField offset: %f",viewOffet);
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
+    if(viewOffet > 0)
+        self.view.frame = CGRectMake(0.0f, self.view.frame.origin.y - viewOffet, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [UIView commitAnimations];
+}
+
+//当用户按下return键或者按回车键，keyboard消失
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    NSTimeInterval animationDuration = 0.30f;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    [UIView commitAnimations];
+    
+    return YES;
+}
+
+//输入框编辑完成以后，将视图恢复到原始状态
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    //    NSTimeInterval animationDuration = 0.30f;
+    //    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    //    [UIView setAnimationDuration:animationDuration];
+    //    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    //    [UIView commitAnimations];
+    
+}
 
 @end

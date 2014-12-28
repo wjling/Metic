@@ -142,6 +142,7 @@
         case NORMAL_REPLY:
         {
             NSLog(@"意见反馈发送成功");
+            self.content_textView.text = @"";
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"意见反馈发送成功，非常感谢您的支持" WithDelegate:self WithCancelTitle:@"OK"];
         }
             break;

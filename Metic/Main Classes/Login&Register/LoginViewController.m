@@ -583,17 +583,10 @@
     }
     originFrame = self.view.frame;
     CGRect frame;
-//    if ([textField superview] == self) {
-//        frame = textField.frame;
-//    }
-//    else
-//    {
-//        frame = [textField convertRect:textField.frame toView:self];
-//    }
-//    frame = [button_login convertRect:button_login.frame toView:self.view];
     frame = button_login.frame;
+    
     NSLog(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0);//键盘高度216
+    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 30);//键盘高度216
     NSLog(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
