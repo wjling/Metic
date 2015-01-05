@@ -314,42 +314,31 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    [self.goodButton setEnabled:YES];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"received Data: %@",temp);
     NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            NSMutableDictionary* dict = self.photo_list[self.goodindex];
-            BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
-            int zan_number = [[dict valueForKey:@"good"]intValue];
-            if (iszan) {
-                zan_number --;
-                self.goodImg.image = [UIImage imageNamed:@"点赞icon"];
-                
-            }else{
-                zan_number ++;
-                self.goodImg.image = [UIImage imageNamed:@"实心点赞图"];
-            }
-            self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
-            [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
-            [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
-            [self updatePhotoInfoToDB:dict];
-            //self.photo_list[self.goodindex] = dict;
+    if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
+        NSMutableDictionary* dict = self.photo_list[self.goodindex];
+        BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
+        int zan_number = [[dict valueForKey:@"good"]intValue];
+        if (iszan) {
+            zan_number --;
+            self.goodImg.image = [UIImage imageNamed:@"点赞icon"];
             
-            [self.goodButton setEnabled:YES];
-
+        }else{
+            zan_number ++;
+            self.goodImg.image = [UIImage imageNamed:@"实心点赞图"];
         }
-            break;
-        default:
-        {
-            
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-            
-        }
-            break;
+        self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
+        [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
+        [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
+        [self updatePhotoInfoToDB:dict];
+    }else{
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
     }
+
 }
 
 #pragma mark 用segue跳转时传递参数eventid

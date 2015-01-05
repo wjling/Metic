@@ -251,7 +251,7 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY) {
+            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == DATABASE_ERROR || [cmd intValue] == REQUEST_FAIL) {
                 [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
                 int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
                 if (isZan) {

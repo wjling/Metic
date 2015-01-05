@@ -284,7 +284,27 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
+        [self.good_button setEnabled:YES];
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"received Data: %@",temp);
+        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
+            BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
+            int good = [[self.photoInfo valueForKey:@"good"]intValue];
+            if (isZan) {
+                good --;
+            }else good ++;
+            [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+            [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+            [self updatePhotoInfoToDB:_photoInfo];
+            [self setGoodButton];
+            [self.good_button setEnabled:YES];
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+    }];
 }
 
 - (IBAction)comment:(id)sender {
@@ -555,20 +575,7 @@
                 self.sequence = [response1 valueForKey:@"sequence"];
                 [self closeRJ];
 //
-            }else{
-                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-                int good = [[self.photoInfo valueForKey:@"good"]intValue];
-                if (isZan) {
-                    good --;
-                }else good ++;
-                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-                [self updatePhotoInfoToDB:_photoInfo];
-                [self setGoodButton];
-                [self.good_button setEnabled:YES];
-                
             }
-            
         }
             break;
         default:
