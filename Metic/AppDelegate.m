@@ -90,7 +90,7 @@
 		NSLog(@"manager start failed!");
 	}
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
-    [UMSocialWechatHandler setWXAppId:@"wx4ec735a39c7a60f9" url:@"http://www.whatsact.com"];
+    [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" url:@"http://www.whatsact.com"];
     [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.whatsact.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
    
