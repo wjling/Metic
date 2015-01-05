@@ -386,6 +386,7 @@
 - (void)pullMainCommentFromAir
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    long sequence = [self.master_sequence longValue];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:0] forKey:@"master"];
     [dictionary setValue:self.master_sequence forKey:@"sequence"];
@@ -393,7 +394,44 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS];
+    [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    if ([response1 valueForKey:@"comment_list"]) {
+                        int type = [[response1 valueForKey:@"type"]intValue];
+                        NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
+                        for (int i = 0; i < tmp.count; i++) {
+                            tmp[i] = [[NSMutableArray alloc] initWithArray:tmp[i]];
+                            for (int j = 0; j < ((NSMutableArray*)tmp[i]).count; j++) {
+                                tmp[i][j] = [[NSMutableDictionary alloc]initWithDictionary:tmp[i][j]];
+                            }
+                        }
+                        if (type == 0) {
+                            if (sequence == [_master_sequence longValue]) {
+                                self.master_sequence = [response1 valueForKey:@"sequence"];
+                                if (_Headeropen) [_comment_list removeAllObjects];
+                                [self.comment_list addObjectsFromArray:tmp];
+                                if (_Footeropen && [_master_sequence intValue] == -1) {
+                                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
+                                    [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+                                }else if (_Footeropen || _Headeropen) {
+                                    [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
+                                }else [_tableView reloadData];
+                            }
+                        }
+                    }
+                    
+                }
+                    break;
+            }
+        }
+    }];
 }
 
 -(void)getmoreComments:(NSNumber*) master sub_Sequence:(NSNumber*)sub_Sequence Scomments:(NSMutableArray*)Scomments
@@ -615,7 +653,7 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY) {
+            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
                 [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
                 int zan_num = [[waitingComment valueForKey:@"good"] intValue];
                 if (isZan) {
@@ -626,13 +664,10 @@
                 [waitingComment setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
                 [_tableView reloadData];
             }
-//            else{
-//                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-//            }
         }
-//        else{
-//            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-//        }
+        else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
 
     }];
 }
@@ -1415,39 +1450,7 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            if ([response1 valueForKey:@"comment_list"]) {
-                int type = [[response1 valueForKey:@"type"]intValue];
-                NSMutableArray *tmp = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"comment_list"]];
-                for (int i = 0; i < tmp.count; i++) {
-                    tmp[i] = [[NSMutableArray alloc] initWithArray:tmp[i]];
-                    for (int j = 0; j < ((NSMutableArray*)tmp[i]).count; j++) {
-                        tmp[i][j] = [[NSMutableDictionary alloc]initWithDictionary:tmp[i][j]];
-                    }
-                }
-                if (type == 0) {
-                    
-                    self.master_sequence = [response1 valueForKey:@"sequence"];
-                    if (_Headeropen) [_comment_list removeAllObjects];
-                    [self.comment_list addObjectsFromArray:tmp];
-                    if (_Footeropen && [_master_sequence intValue] == -1) {
-                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-                        [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
-                    }else if (_Footeropen || _Headeropen) {
-                        [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
-                    }else [_tableView reloadData];
-                }
-            }
-            
-        }
-            break;
-    }
+    
 }
 
 

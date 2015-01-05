@@ -242,12 +242,41 @@
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    long sequence = [self.sequence longValue];
     [dictionary setValue:self.sequence forKey:@"sequence"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS];
+    [httpSender sendMessage:jsonData withOperationCode:GET_PCOMMENTS finshedBlock:^(NSData *rData) {
+        if(rData){
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    if ([response1 valueForKey:@"pcomment_list"]) {
+                        NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
+                        if ([_sequence longValue] == sequence) {
+                            if (sequence == 0) [_pcomment_list removeAllObjects];
+                            [self.pcomment_list addObjectsFromArray:newComments] ;
+                            self.sequence = [response1 valueForKey:@"sequence"];
+                        }
+                        [self closeRJ];
+                        //
+                    }
+                }
+                    break;
+                default:
+                {
+                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                    
+                }
+            }
+        }
+    }];
 }
 
 - (void)commentNumPlus
@@ -556,35 +585,6 @@
 	
 }
 
-
-#pragma mark - HttpSenderDelegate
-
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            if ([response1 valueForKey:@"pcomment_list"]) {
-                NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
-                if ([_sequence intValue] == 0) [_pcomment_list removeAllObjects];
-                [self.pcomment_list addObjectsFromArray:newComments] ;
-                self.sequence = [response1 valueForKey:@"sequence"];
-                [self closeRJ];
-//
-            }
-        }
-            break;
-        default:
-        {
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-            
-        }
-    }
-}
 
 #pragma mark - Table view data source
 
