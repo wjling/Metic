@@ -57,10 +57,16 @@
 
 -(void)fitImageView
 {
-    [self setContentSize:CGSizeMake(316, self.frame.size.height)];
-    float photoHeight = self.imageView.image.size.height*316/imageView.image.size.width;
-    [self.imageView setFrame:CGRectMake(0, (self.frame.size.height - photoHeight)/2, 316, photoHeight)];
-    
+    float containerWidth = 316;
+    float containerHeight = self.frame.size.height;
+    [self setContentSize:CGSizeMake(containerWidth, containerHeight)];
+    if (containerWidth/containerHeight < self.imageView.image.size.width / self.imageView.image.size.height) {
+        float photoHeight = self.imageView.image.size.height*containerWidth/imageView.image.size.width;
+        [self.imageView setFrame:CGRectMake(0, (containerHeight - photoHeight)/2, containerWidth, photoHeight)];
+    }else{
+        float photoWidth = self.imageView.image.size.width*containerHeight/imageView.image.size.height;
+        [self.imageView setFrame:CGRectMake((containerWidth - photoWidth)/2, 0, photoWidth, containerHeight)];
+    }
 }
 #pragma mark - Zoom methods
 
