@@ -352,7 +352,6 @@
             int index = self.scrollView.contentOffset.x/320;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
-            nextViewController.photo = [_manager.imageCache imageFromDiskCacheForKey:[_photo_list[index] valueForKey:@"url"]];
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;

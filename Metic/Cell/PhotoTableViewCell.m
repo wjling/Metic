@@ -65,7 +65,6 @@
 	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
     
     viewcontroller.photoId = self.photo_id;
-    viewcontroller.photo = self.imgView.image;
     viewcontroller.eventId = self.PhotoWall.eventId;
     viewcontroller.photoInfo = self.photoInfo;
     viewcontroller.eventName = _PhotoWall.eventName;

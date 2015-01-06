@@ -344,18 +344,23 @@
 }
 
 - (IBAction)share:(id)sender {
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"WeShare"
-                                     shareImage:self.photo
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
-                                       delegate:self];
+    if (_photo) {
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:@"WeShare"
+                                         shareImage:self.photo
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
+                                           delegate:self];
+    }
 }
 
 - (IBAction)download:(id)sender {
-    [self.download_button setEnabled:NO];
-    UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    if (_photo) {
+        [self.download_button setEnabled:NO];
+        UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    }
+    
     //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
 }
 
@@ -534,9 +539,11 @@
                 [self.navigationController popViewControllerAnimated:YES];
                 break;
             case 2:{
-                BannerViewController* bannerView = [[BannerViewController alloc] init];
-                bannerView.banner = self.photo;
-                [self presentViewController:bannerView animated:YES completion:^{}];
+                if (_photo) {
+                    BannerViewController* bannerView = [[BannerViewController alloc] init];
+                    bannerView.banner = self.photo;
+                    [self presentViewController:bannerView animated:YES completion:^{}];
+                }
             }
                 break;
             default:
@@ -602,12 +609,20 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-        float height = self.photo.size.height *320.0/self.photo.size.width;
+        float height = [[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue];
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
+        [imageView setContentMode:UIViewContentModeScaleAspectFit];
+        [imageView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
+        [imageView sd_setImageWithURL:[NSURL URLWithString:[_photoInfo valueForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                _photo = image;
+                [imageView setContentMode:UIViewContentModeScaleToFill];
+            }
+        }];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        imageView.image = self.photo;
+        
         [cell addSubview:imageView];
         [cell addSubview:label];
         
@@ -778,7 +793,7 @@
     if (indexPath.row == 0) {
         self.specificationHeight = [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0 isEmotion:YES];
         NSLog(@"%f",self.specificationHeight);
-        height = self.photo.size.height *320.0/self.photo.size.width;
+        height = [[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue];
         height += 3;
         height += 50;
         height += 30;//delete button
