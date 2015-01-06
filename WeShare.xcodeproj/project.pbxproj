@@ -32,6 +32,7 @@
 		04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A69AA01A51A50E0075D149 /* libXG-SDK.a */; };
 		04A69AA51A51A50E0075D149 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */; };
 		04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AF99EA1A582AA300C9ED8C /* AdSupport.framework */; };
+		04AF99FB1A5C353000C9ED8C /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -260,7 +261,6 @@
 		515F9FF419736D58009D96BA /* MapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 515F9FF319736D58009D96BA /* MapViewController.mm */; };
 		516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */; };
 		5172E2E1197D05240050F446 /* libQREncoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5172E2E0197D05240050F446 /* libQREncoder.a */; };
-		518555B71A5BE316007E1DF3 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 518555B61A5BE316007E1DF3 /* libbaidumapapi.a */; };
 		519100F019651388005DF607 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 519100EF19651388005DF607 /* MRZoomScrollView.m */; };
 		5192530519FA2BBF00CF6BB3 /* myInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5192530419FA2BBF00CF6BB3 /* myInputView.m */; };
 		519C65941989F61B00710B26 /* 2聚餐.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 519C658E1989F61B00710B26 /* 2聚餐.jpg */; };
@@ -404,6 +404,7 @@
 		04A69AA21A51A50E0075D149 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		04A69AA31A51A50E0075D149 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
 		04AF99EA1A582AA300C9ED8C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -853,7 +854,6 @@
 		516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventInvitationViewController.m; sourceTree = "<group>"; };
 		5172E2D5197D03DB0050F446 /* QREncoder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QREncoder.xcodeproj; path = src/QREncoder.xcodeproj; sourceTree = "<group>"; };
 		5172E2E0197D05240050F446 /* libQREncoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libQREncoder.a; sourceTree = "<group>"; };
-		518555B61A5BE316007E1DF3 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		519100EE19651388005DF607 /* MRZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRZoomScrollView.h; sourceTree = "<group>"; };
 		519100EF19651388005DF607 /* MRZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRZoomScrollView.m; sourceTree = "<group>"; };
 		5192530319FA2BBF00CF6BB3 /* myInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = myInputView.h; path = "Custom Wedgets/myInputView.h"; sourceTree = "<group>"; };
@@ -1019,7 +1019,7 @@
 				51E86D971973CA8000CBAE86 /* CoreLocation.framework in Frameworks */,
 				510D4574196E87A70081672A /* ImageIO.framework in Frameworks */,
 				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
-				518555B71A5BE316007E1DF3 /* libbaidumapapi.a in Frameworks */,
+				04AF99FB1A5C353000C9ED8C /* libbaidumapapi.a in Frameworks */,
 				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
 				51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */,
 				5144D99B196B880300C953FB /* libUMSocial_Sdk_4.0.a in Frameworks */,
@@ -1860,7 +1860,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				518555B61A5BE316007E1DF3 /* libbaidumapapi.a */,
+				04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */,
 				04AF99EA1A582AA300C9ED8C /* AdSupport.framework */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,

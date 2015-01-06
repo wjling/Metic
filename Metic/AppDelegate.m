@@ -142,8 +142,8 @@
     /* 信鸽推送 */
 //    [XGPush unRegisterDevice];
     [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];
-    [XGPush setAccount:@"211_hdb"];
-    [self registerPush];
+//    [XGPush setAccount:@"211_hdb"];
+//    [self registerPush];
     
     //推送反馈回调版本示例
     void (^successBlock)(void) = ^(void){
@@ -313,8 +313,43 @@
     //在此处理接受到的消息
     NSLog(@"APP receive remote userInfo: %@", userInfo);
     [XGPush handleReceiveNotification:userInfo];
-    NSMutableDictionary* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
-    NSLog(@"APP receive alert: %@", message);
+    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
+    
+    NSNumber* seq = [message_dic objectForKey:@"seq"];
+    void(^getPushMessageDone)(NSData*) = ^(NSData* rData)
+    {
+        NSString* temp = [NSString string];
+        if (!rData) {
+            NSLog(@"服务器返回错误，返回的data为空");
+            return;
+        }
+        if ([rData isKindOfClass:[NSString class]]) {
+            temp = (NSString*)rData;
+        }
+        else if ([rData isKindOfClass:[NSData class]])
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        NSMutableDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        NSLog(@"获取到服务器推送消息: %@", response);
+        NSMutableArray* list = [response objectForKey:@"list"];
+        for (int i = 0; i < list.count; i++) {
+            NSString* content = [list[i] objectForKey:@"content"];
+            NSMutableDictionary* content_dic = [CommonUtils NSDictionaryWithNSString:content];
+            
+        }
+    };
+    
+    NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                     [NSNumber numberWithInt:1], @"operation",
+                                     [MTUser sharedInstance].userid, @"id",
+                                     seq, @"min_seq",
+                                     seq, @"max_seq",
+                                     nil];
+    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
 }
 
 -(void)initApp
@@ -414,6 +449,195 @@
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     NSLog(@"register Push for iOS8 end");
 #endif
+}
+
+-(void)handlePushMessageContent:(NSDictionary*)message
+{
+    NSNumber* seq = [message objectForKey:@"seq"];
+    NSString* content_str = [message objectForKey:@"content"];
+    NSDictionary* content_dic = [CommonUtils NSDictionaryWithNSString:content_str];
+    NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:content_dic];
+    [msg_dic setValue:[NSNumber numberWithInteger:-1] forKeyPath:@"ishandled"];
+    [msg_dic setValue:seq forKey:@"seq"];
+    NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
+    
+    int type;
+
+    if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
+    {
+        [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
+        [[MTUser sharedInstance] synchronizeFriends];
+        NSNumber* result = [msg_dic objectForKey:@"result"];
+        NSLog(@"friend request result: %@",result);
+        if ([result integerValue] == 1) {
+            NSString* name = [msg_dic objectForKey:@"name"];
+            NSString* email = [msg_dic objectForKey:@"email"];
+            NSNumber* fid = [msg_dic objectForKey:@"id"];
+            NSNumber* gender = [msg_dic objectForKey:@"gender"];
+            NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+            [sql openMyDB:path];
+            [sql insertToTable:@"friend"
+                   withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
+                     andValues:[[NSArray alloc] initWithObjects:
+                                [NSString stringWithFormat:@"%@",fid],
+                                [NSString stringWithFormat:@"'%@'",name],
+                                [NSString stringWithFormat:@"'%@'",email],
+                                [NSString stringWithFormat:@"%@",gender], nil]];
+            [sql closeMyDB];
+            //                [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+            NSDictionary* newFriend = [CommonUtils packParamsInDictionary:fid,@"id",name,@"name",gender,@"gender",email,@"email",nil];
+            [[MTUser sharedInstance].friendList addObject:newFriend];
+            [[MTUser sharedInstance] friendListDidChanged];
+        }
+        else if ([result integerValue] == 0)
+        {
+            NSLog(@"friend request is refused");
+        }
+        
+//        if (numOfSyncMessages <= 1) {
+//            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:1];
+//        }
+        
+    }
+    else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
+        if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
+            [[MTUser sharedInstance].updateEventIds addObject:[msg_dic valueForKey:@"event_id"]];
+            [[MTUser sharedInstance].updateEvents addObject:msg_dic];
+            NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
+        }
+        NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
+//        if (numOfSyncMessages <= 1) {
+//            NSString* subject = [msg_dic objectForKey:@"subject"];
+//            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"\"%@\"活动更新啦",subject] andNumber:numOfSyncMessages withType:-1];
+//        }
+        
+    }
+    else if (msg_cmd == 988 || msg_cmd == 989) {
+        [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+//        if (numOfSyncMessages <= 1) {
+//            [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
+//        }
+        NSLog(@"有人@你： %@",msg_dic);
+    }
+    else if (msg_cmd == 985) //活动被解散
+    {
+        [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+        NSString* subject = [msg_dic objectForKey:@"subject"];
+        if (numOfSyncMessages <= 1) {
+            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
+        }
+        
+        NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+        [sql openMyDB:path];
+        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
+        [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+        [sql closeMyDB];
+        
+        for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
+            if ([vc isKindOfClass:[HomeViewController class]]) {
+                for (int i = 0; i < vc.events.count; i++) {
+                    NSMutableDictionary* event = vc.events[i];
+                    NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                        [vc.events removeObject:event];
+                        [vc.tableView reloadData];
+                        break;
+                    }
+                }
+                [vc.eventIds_all removeObject:event_id1];
+                break;
+            }
+        }
+        
+    }
+    else if (msg_cmd == 984) //被踢出活动
+    {
+        [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+        NSString* subject = [msg_dic objectForKey:@"subject"];
+        if (numOfSyncMessages <= 1) {
+            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"您已经被请出 %@ 活动", subject] andNumber:numOfSyncMessages withType:2];
+        }
+        
+        NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+        [sql openMyDB:path];
+        NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
+        [sql deleteTurpleFromTable:@"event" withWhere:wheres];
+        [sql closeMyDB];
+        
+        for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
+            if ([vc isKindOfClass:[HomeViewController class]]) {
+                for (int i = 0; i < vc.events.count; i++) {
+                    NSMutableDictionary* event = vc.events[i];
+                    NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                        [vc.events removeObject:event];
+                        [vc.tableView reloadData];
+                        break;
+                    }
+                }
+                [vc.eventIds_all removeObject:event_id1];
+                break;
+            }
+        }
+        
+    }
+    else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
+    {
+        [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
+        if (numOfSyncMessages <= 1) {
+            NSString* name = [msg_dic objectForKey:@"name"];
+            NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
+            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 请求加你为好友\n验证信息:%@", name, confirm_msg] andNumber:numOfSyncMessages withType:1];
+        }
+    }
+    else if (msg_cmd == EVENT_INVITE_RESPONSE || msg_cmd == REQUEST_EVENT_RESPONSE)
+    {
+        [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+        if (numOfSyncMessages <= 1) {
+            [self sendMessageArrivedNotification:@"有人回复了活动消息" andNumber:numOfSyncMessages withType:2];
+        }
+    }
+    else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
+    {
+        [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
+        if (numOfSyncMessages <= 1) {
+            NSString* launcher = [msg_dic objectForKey:@"launcher"];
+            NSString* subject = [msg_dic objectForKey:@"subject"];
+            if (msg_cmd == NEW_EVENT_NOTIFICATION) {
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 邀请你加入活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+                
+            }
+            else
+            {
+                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"有人邀请你加入%@的活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+            }
+        }
+    }
+    
+    NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+    while (![self.sql isExistTable:@"notification"]) {
+        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+    }
+    NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
+//    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
+    NSArray* values = [[NSArray alloc]initWithObjects:
+                       [NSString stringWithFormat:@"%@",seq],
+                       [NSString stringWithFormat:@"'%@'",content_str],
+                       [NSString stringWithFormat:@"%d",-1],
+                       nil];
+    [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
+    [self.sql closeMyDB];
+    
+    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+    [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
+    [userDf setObject:userSettings forKey:key];
+    [userDf synchronize];
+
 }
 
 

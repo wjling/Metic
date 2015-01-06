@@ -231,12 +231,12 @@ static MTUser *singletonInstance;
     DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self initUserDir];
     
-//    NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
-//    NSLog(@"设置别名: %@",account);
-//    [XGPush setTag:account];
-//    
-//    
-//     [(AppDelegate*)([UIApplication sharedApplication].delegate) registerPush];
+    NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
+    NSLog(@"设置别名: %@",account);
+    [XGPush setAccount:account];
+    
+    
+     [(AppDelegate*)([UIApplication sharedApplication].delegate) registerPush];
     
     [self getAliasFromDB];
     [self getAliasFromServer];
