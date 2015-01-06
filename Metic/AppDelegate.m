@@ -140,7 +140,11 @@
 //     UIRemoteNotificationTypeBadge];
     
     /* 信鸽推送 */
+//    [XGPush unRegisterDevice];
+    [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];
+    [XGPush setAccount:@"211_hdb"];
     [self registerPush];
+    
     //推送反馈回调版本示例
     void (^successBlock)(void) = ^(void){
         //成功之后的处理
@@ -266,6 +270,18 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+        NSLog(@"[XGPush]unRegisterDevice successBlock");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+        NSLog(@"[XGPush]unRegisterDevice errorBlock");
+    };
+
+    [XGPush unRegisterDevice:successBlock errorCallback:errorBlock];
     NSLog(@"Metic被残忍杀死了");
     NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
@@ -326,9 +342,9 @@
 }
 
 #pragma mark - XinGe Push
+
 - (void)registerPush{
     NSLog(@"XG register");
-    [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];
     
     void (^successCallback)(void) = ^(void){
         //如果变成需要注册状态
@@ -349,6 +365,7 @@
             //注册Push服务，注册后才能收到推送
             [self registerPushBelowiOS8];
 #endif
+            
         }
     };
     [XGPush initForReregister:successCallback];

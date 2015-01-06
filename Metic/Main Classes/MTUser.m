@@ -9,6 +9,8 @@
 #import "MTUser.h"
 #import "../Utils/PhotoGetter.h"
 #import "SDImageCache.h"
+#import "XGPush.h"
+#import "AppDelegate.h"
 
 
 @interface MTUser ()
@@ -229,10 +231,13 @@ static MTUser *singletonInstance;
     DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self initUserDir];
     
-//    [self.friendList removeAllObjects];
-//    [self.sortedFriendDic removeAllObjects];
-//    [self.sectionArray removeAllObjects];
-//    [self synchronizeFriends];
+//    NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
+//    NSLog(@"设置别名: %@",account);
+//    [XGPush setTag:account];
+//    
+//    
+//     [(AppDelegate*)([UIApplication sharedApplication].delegate) registerPush];
+    
     [self getAliasFromDB];
     [self getAliasFromServer];
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];

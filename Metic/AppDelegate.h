@@ -67,6 +67,7 @@
 -(void)initApp;
 +(void)refreshMenu;
 
+-(void)registerPush;
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;
