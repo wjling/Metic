@@ -465,6 +465,10 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    if (!rData) {
+        NSLog(@"服务器错误，返回的data为空");
+        return;
+    }
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -516,6 +520,29 @@
             //[user getInfo:userid myid:userid delegateId:self];
             [[appDelegate leftMenu] clearVC];
             NSString* logintime = [response1 objectForKey:@"logintime"];
+            NSNumber* min_seq = [response1 objectForKey:@"min_seq"];
+            NSNumber* max_seq = [response1 objectForKey:@"max_seq"];
+            if ([min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+                void(^getPushMessageDone)(NSData*) = ^(NSData* rData)
+                {
+                    if (!rData) {
+                        NSLog(@"服务器错误，返回的data为空");
+                        return;
+                    }
+                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSLog(@"Received Push Message: %@",temp);
+
+                };
+                NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                                 [NSNumber numberWithInt:1], @"operation",
+                                                 [MTUser sharedInstance].userid, @"id",
+                                                 min_seq, @"min_seq",
+                                                 max_seq, @"max_seq",
+                                                 nil];
+                NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
+            }
             if ([logintime isEqualToString:@"None"]) {
                 [self jumpToFillinInfo];
             }
