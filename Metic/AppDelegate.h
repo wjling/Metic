@@ -69,7 +69,11 @@
 
 //信鸽推送相关
 -(void)registerPush;
--(void)handlePushMessage:(NSDictionary*)message;
+-(void)handlePushMessage:(NSDictionary*)message andFeedBack:(BOOL)feedback;
+-(void)synchronizePushSeqAndCallBack:(void(^)(NSNumber* min_seq, NSNumber* max_seq))block;
+-(void)pullAndHandlePushMessageWithMinSeq:(NSNumber*)min_seq andMaxSeq:(NSNumber*)max_seq andCallBackBlock:(void(^)(NSDictionary* response))block;
+-(void)feedBackPushMessagewithMinSeq:(NSNumber*)min_seq andMaxSeq:(NSNumber*)max_seq andCallBack:(void(^)(NSDictionary* response))block;
+
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;
