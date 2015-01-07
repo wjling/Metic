@@ -239,7 +239,33 @@
             temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         }
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        int cmd = [[response objectForKey:@"cmd"]intValue];
         NSLog(@"同步消息seq，返回结果: %@", response);
+        switch (cmd) {
+            case NORMAL_REPLY:
+            {
+                NSNumber* min_seq = [response objectForKey:@"min_seq"];
+                NSNumber* max_seq = [response objectForKey:@"max_seq"];
+                
+                void(^getPushMessageDone)(NSData*) = ^(NSData* rData)
+                {
+                    
+                };
+                NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                          [NSNumber numberWithInt:1], @"operation",
+                                          [MTUser sharedInstance].userid, @"id",
+                                          min_seq, @"min_seq",
+                                          max_seq, @"max_seq",
+                                          nil];
+                NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
+            }
+                break;
+                
+            default:
+                break;
+        }
         
     };
     
@@ -344,10 +370,10 @@
     //在此处理接受到的消息
     NSLog(@"APP receive remote userInfo: %@", userInfo);
     [XGPush handleReceiveNotification:userInfo];
-    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
-    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
+//    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+//    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
     
-    NSNumber* seq = [message_dic objectForKey:@"seq"];
+    NSNumber* seq = [userInfo objectForKey:@"seq"];
     void(^getPushMessageDone)(NSData*) = ^(NSData* rData)
     {
         NSString* temp = [NSString string];
