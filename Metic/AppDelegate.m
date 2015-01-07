@@ -437,6 +437,7 @@
     if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
     {
         [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
+        
         [[MTUser sharedInstance] synchronizeFriends];
         NSNumber* result = [msg_dic objectForKey:@"result"];
         NSLog(@"friend request result: %@",result);
@@ -598,12 +599,18 @@
     if (isInBackground) {
         [self.leftMenu showNotificationCenter];
     }
-
+    
+    NSDictionary* pack = [CommonUtils packParamsInDictionary:
+                          [NSNumber numberWithInteger:type], @"type",
+                          msg_dic, @"msg",
+                          nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
     
     if (feedback) {
         //反馈给服务器
         [self feedBackPushMessagewithMinSeq:seq andMaxSeq:seq andCallBack:nil];
     }
+    
 }
 
 

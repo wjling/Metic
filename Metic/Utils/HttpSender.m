@@ -40,15 +40,15 @@
     
 //    PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
 //    PHOTO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/";//正式服
-    PHOTO_mainServer = @[@"http://42.96.203.86:20000/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/"][Server];
+    PHOTO_mainServer = @[@"http://182.254.176.64:20000/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/"][Server];
     
 //    VIDEO_mainServer = @"http://42.96.203.86:20001/";//测试服
 //    VIDEO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/";//正式服
-    VIDEO_mainServer = @[@"http://42.96.203.86:20001/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/"][Server];
+    VIDEO_mainServer = @[@"http://182.254.176.64:20001/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/"][Server];
     
-    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
+//    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
 //    feedBack_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/";//正式服
-    feedBack_mainServer = @[@"http://42.96.203.86:10089/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/"][Server];
+    feedBack_mainServer = @[@"http://182.254.176.64:10089/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/"][Server];
     
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
