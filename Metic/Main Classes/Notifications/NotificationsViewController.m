@@ -73,13 +73,9 @@ enum Response_Type
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.appListener.notificationDelegate = self;
     [self initParams];
-//    [self getMsgFromDataBase];
-//    NSLog(@"hahahah");
-//    self.msgFromDB = [MTUser sharedInstance].msgFromDB;
-//    self.eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
-//    self.friendRequestMsg = [MTUser sharedInstance].friendRequestMsg;
-//    self.systemMsg = [MTUser sharedInstance].systemMsg;
-//    self.historicalMsg = [MTUser sharedInstance].historicalMsg;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewMessage:) name:@"pull_message" object:nil];
+    
 }
 
 
@@ -177,6 +173,112 @@ enum Response_Type
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
     
     
+}
+
+-(void)handleNewMessage:(id)sender
+{
+//    NSNumber* type = [[sender userInfo] objectForKey:@"type"];
+    NSMutableDictionary* msg_dic = [[sender userInfo] objectForKey:@"msg"];
+
+    NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+    switch (cmd) {
+        case ADD_FRIEND_NOTIFICATION:
+        {
+            NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+            for (int i = 0; i < self.friendRequestMsg.count; i++) {
+                NSMutableDictionary* msg = [self.friendRequestMsg objectAtIndex:i];
+                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+                if (fid1 == fid2) {
+                    [self.friendRequestMsg removeObject:msg];
+                    continue;
+                }
+            }
+            [friendRequestMsg insertObject:msg_dic atIndex:0];
+            if (!label2.hidden) {
+                label2.hidden = YES;
+            }
+        }
+            break;
+        case ADD_FRIEND_RESULT:
+        {
+            [friendRequestMsg insertObject:msg_dic atIndex:0];
+            if (!label2.hidden) {
+                label2.hidden = YES;
+            }
+        }
+            break;
+        case EVENT_INVITE_RESPONSE:
+        case REQUEST_EVENT_RESPONSE:
+        case QUIT_EVENT_NOTIFICATION:
+        case KICK_EVENT_NOTIFICATION:
+        {
+            [systemMsg insertObject:msg_dic atIndex:0];
+            if (!label3.hidden) {
+                label3.hidden = YES;
+            }
+        }
+            break;
+        case NEW_EVENT_NOTIFICATION:
+        case REQUEST_EVENT:
+        {
+            NSInteger cmd2;
+            NSInteger eventid1, eventid2;
+            NSInteger fid1, fid2;
+            eventid1 = [[msg_dic objectForKey:@"event_id"] integerValue];
+            fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+            for (int i = 0; i < self.eventRequestMsg.count; i++) {
+                NSMutableDictionary* aMsg = [self.eventRequestMsg objectAtIndex:i];
+                cmd2 = [[aMsg objectForKey:@"cmd"] integerValue];
+                eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
+                fid2 = [[aMsg objectForKey:@"id"]integerValue];
+                if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
+                    NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
+                    [self.eventRequestMsg removeObject:aMsg];
+                    continue;
+                }
+            }
+            
+            [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+            if (!label1.hidden) {
+                label1.hidden = YES;
+            }
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (tab_index == 0) {
+        [self.eventRequest_tableView reloadData];
+    }
+    else if (tab_index == 1)
+    {
+        [self.friendRequest_tableView reloadData];
+    }
+    else if (tab_index == 2)
+    {
+        [self.systemMessage_tableView reloadData];
+    }
+    
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
+    //    NSLog(@"notification: hasUnreadNotification: %@", index);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
+    }
+    
+    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
+
+
 }
 
 #pragma mark - Navigation
@@ -480,8 +582,14 @@ enum Response_Type
 //    [self.view addSubview:waitingView];
     
 //    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollView.contentSize.width,self.content_scrollView.contentSize.height);
-    clickTab = YES;
     NSInteger index = [self.tabs indexOfObject:sender];
+    if (index == tab_index) {
+        clickTab = NO;
+    }
+    else
+    {
+        clickTab = YES;
+    }
     UIButton* lastBtn = (UIButton*)[self.tabs objectAtIndex:tab_index];
     UIButton* currentBtn = (UIButton*)sender;
 //    NSLog(@"selected button: %d",index);

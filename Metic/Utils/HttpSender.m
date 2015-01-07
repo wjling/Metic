@@ -36,19 +36,19 @@
     
 //    URL_mainServer = @"http://42.96.203.86:10087/";//阿里云//测试服
 //    URL_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:10087/";//腾讯//正式服
-    URL_mainServer = @[@"http://42.96.203.86:10087/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10087/"][Server];
+    URL_mainServer = @[@"http://182.254.176.64:10087/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10087/"][Server];
     
 //    PHOTO_mainServer = @"http://42.96.203.86:20000/";//测试服
 //    PHOTO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/";//正式服
-    PHOTO_mainServer = @[@"http://42.96.203.86:20000/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/"][Server];
+    PHOTO_mainServer = @[@"http://182.254.176.64:20000/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/"][Server];
     
 //    VIDEO_mainServer = @"http://42.96.203.86:20001/";//测试服
 //    VIDEO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/";//正式服
-    VIDEO_mainServer = @[@"http://42.96.203.86:20001/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/"][Server];
+    VIDEO_mainServer = @[@"http://182.254.176.64:20001/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/"][Server];
     
-    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
+//    feedBack_mainServer = @"http://42.96.203.86:10089/";//测试服
 //    feedBack_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/";//正式服
-    feedBack_mainServer = @[@"http://42.96.203.86:10089/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/"][Server];
+    feedBack_mainServer = @[@"http://182.254.176.64:10089/",@"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/"][Server];
     
     httpURL = @"";
     responseData = [[NSMutableData alloc]init];
@@ -229,6 +229,9 @@
         case 46:
             resultCode = @"set_event_banner";
             break;
+        case 47:
+            resultCode = @"push_message";
+            break;
         default:
             resultCode = @"json";
             break;
@@ -336,6 +339,22 @@
     NSLog(@"URL: %@ ",httpURL);
     
 }
+
+-(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code HttpMethod:(NSString*)method finshedBlock:(FinishBlock)block
+{
+    self.finishBlock = block;
+    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
+    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    [request setHTTPMethod:method];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:jsonData];
+    [request setTimeoutInterval:12];
+    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    NSLog(@"URL: %@ ",httpURL);
+    
+}
+
 
 -(void)sendFeedBackMessage:(NSDictionary *)json
 {

@@ -29,7 +29,10 @@
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
 		04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */; };
-		04ADDD811A168D4D0044DF09 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */; };
+		04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A69AA01A51A50E0075D149 /* libXG-SDK.a */; };
+		04A69AA51A51A50E0075D149 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */; };
+		04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AF99EA1A582AA300C9ED8C /* AdSupport.framework */; };
+		04AF99FB1A5C353000C9ED8C /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
 		04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B3F5EB19756DAE00C0A6EB /* FeedBackViewController.m */; };
@@ -396,7 +399,12 @@
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
 		04A531841A222947002FDDC1 /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
 		04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LBBlurredImage.m"; sourceTree = "<group>"; };
-		04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		04A69AA01A51A50E0075D149 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
+		04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
+		04A69AA21A51A50E0075D149 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
+		04A69AA31A51A50E0075D149 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
+		04AF99EA1A582AA300C9ED8C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
 		04B22E371988B5F300B33B7C /* SearchFriendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SearchFriendViewController.h; path = Friends/SearchFriendViewController.h; sourceTree = "<group>"; };
@@ -992,6 +1000,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */,
 				08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */,
 				08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */,
 				0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */,
@@ -1004,13 +1013,13 @@
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
 				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
-				04ADDD811A168D4D0044DF09 /* libbaidumapapi.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
 				51E86D971973CA8000CBAE86 /* CoreLocation.framework in Frameworks */,
 				510D4574196E87A70081672A /* ImageIO.framework in Frameworks */,
 				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
+				04AF99FB1A5C353000C9ED8C /* libbaidumapapi.a in Frameworks */,
 				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
 				51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */,
 				5144D99B196B880300C953FB /* libUMSocial_Sdk_4.0.a in Frameworks */,
@@ -1023,6 +1032,7 @@
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
 				51581D241933575300943606 /* Foundation.framework in Frameworks */,
 				08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */,
+				04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1059,6 +1069,17 @@
 				04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */,
 			);
 			path = LBBlurredImage;
+			sourceTree = "<group>";
+		};
+		04A69A9F1A51A50E0075D149 /* xg-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				04A69AA01A51A50E0075D149 /* libXG-SDK.a */,
+				04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */,
+				04A69AA21A51A50E0075D149 /* XGPush.h */,
+				04A69AA31A51A50E0075D149 /* XGSetting.h */,
+			);
+			path = "xg-sdk";
 			sourceTree = "<group>";
 		};
 		04B22C3F1984F3F100B33B7C /* SystemSettings */ = {
@@ -1839,7 +1860,8 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				04ADDD801A168D4D0044DF09 /* libbaidumapapi.a */,
+				04AF99FA1A5C353000C9ED8C /* libbaidumapapi.a */,
+				04AF99EA1A582AA300C9ED8C /* AdSupport.framework */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
 				0435EF0B19AC945C003BB2F6 /* AudioToolbox.framework */,
@@ -1984,6 +2006,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				04A69A9F1A51A50E0075D149 /* xg-sdk */,
 				0878E8531A3AC76F00E3C18C /* UIAlertView-Blocks */,
 				08BEE9BC1A2DEFAA00132F18 /* TMQuiltView */,
 				04A531831A222947002FDDC1 /* LBBlurredImage */,
@@ -2406,6 +2429,7 @@
 				04B6F8A319A25D5C00229393 /* face20.png in Resources */,
 				04B6F8A619A25D5C00229393 /* face23.png in Resources */,
 				04B6F89B19A25D5C00229393 /* face12.png in Resources */,
+				04A69AA51A51A50E0075D149 /* ReleaseNotes.txt in Resources */,
 				519C65981989F61B00710B26 /* 6听课.jpg in Resources */,
 				04B6F8AB19A25D5C00229393 /* ic_content_backspace.png in Resources */,
 				514812151937064E00DBBED7 /* MJRefresh.bundle in Resources */,
@@ -2739,7 +2763,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "aab6c026-35f1-4876-9546-9075050e8e44";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -2778,7 +2802,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7461d1bf-4b93-4f55-9ceb-bdf35f67a85e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2821,12 +2845,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.9",
+					"$(PROJECT_DIR)/Metic/Source/xg-sdk",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "e151aafc-10e1-4dea-880c-b51181a4e497";
+				PROVISIONING_PROFILE = "aab6c026-35f1-4876-9546-9075050e8e44";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -2868,12 +2893,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.3",
 					"/Users/mac/Downloads/BaiduMap_IOSSDK_v2/Release-iphonesimulator",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.1.9",
+					"$(PROJECT_DIR)/Metic/Source/xg-sdk",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7461d1bf-4b93-4f55-9ceb-bdf35f67a85e";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv7s";

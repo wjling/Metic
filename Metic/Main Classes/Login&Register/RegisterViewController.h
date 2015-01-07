@@ -14,7 +14,7 @@
 #import "LoginViewController.h"
 #import "FillinInfoViewController.h"
 
-@interface RegisterViewController : UIViewController <InputHandleViewDelegate, HttpSenderDelegate,UIScrollViewDelegate>
+@interface RegisterViewController : UIViewController <InputHandleViewDelegate, HttpSenderDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *textField_email;
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;

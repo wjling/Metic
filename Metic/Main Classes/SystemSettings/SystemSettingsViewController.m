@@ -8,6 +8,7 @@
 
 #import "SystemSettingsViewController.h"
 #import "../../Source/security/SFHFKeychainUtils.h"
+#import "XGPush.h"
 
 @interface SystemSettingsViewController ()
 {
@@ -294,6 +295,7 @@
         else if (buttonIndex == 2)
         {
             NSLog(@"切换账号");
+            [XGPush unRegisterDevice];
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
             [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
             [[MTUser alloc]init];
@@ -429,7 +431,7 @@
 //        [cell addSubview:button];
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
         [label setBackgroundColor:[UIColor clearColor]];
-        label.textAlignment = NSTextAlignmentLeft;
+        label.textAlignment = NSTextAlignmentCenter;
         label.text = @"退出";
         [cell setBackgroundColor:[UIColor redColor]];
         label.center = cell.center;

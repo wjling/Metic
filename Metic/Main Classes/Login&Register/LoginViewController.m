@@ -465,6 +465,10 @@
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
+    if (!rData) {
+        NSLog(@"服务器错误，返回的data为空");
+        return;
+    }
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -516,6 +520,16 @@
             //[user getInfo:userid myid:userid delegateId:self];
             [[appDelegate leftMenu] clearVC];
             NSString* logintime = [response1 objectForKey:@"logintime"];
+            NSNumber* min_seq = [response1 objectForKey:@"min_seq"];
+            NSNumber* max_seq = [response1 objectForKey:@"max_seq"];
+            if ([min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+                void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
+                {
+                    //反馈给服务器
+                    [appDelegate feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:nil];
+                };
+                [appDelegate pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:getPushMessageDone];
+            }
             if ([logintime isEqualToString:@"None"]) {
                 [self jumpToFillinInfo];
             }
@@ -583,17 +597,10 @@
     }
     originFrame = self.view.frame;
     CGRect frame;
-//    if ([textField superview] == self) {
-//        frame = textField.frame;
-//    }
-//    else
-//    {
-//        frame = [textField convertRect:textField.frame toView:self];
-//    }
-//    frame = [button_login convertRect:button_login.frame toView:self.view];
     frame = button_login.frame;
+    
     NSLog(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0);//键盘高度216
+    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
     NSLog(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];

@@ -84,6 +84,7 @@ enum Operation_Code
     GET_POSTER = 44,
     ALIAS_OPERATION = 45,
     SET_EVENT_BANNER = 46,
+    PUSH_MESSAGE = 47,
 };
 
 enum CloudOperation_Code
