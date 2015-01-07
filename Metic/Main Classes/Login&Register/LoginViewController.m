@@ -529,8 +529,58 @@
                         NSLog(@"服务器错误，返回的data为空");
                         return;
                     }
-                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                    NSLog(@"Received Push Message: %@",temp);
+                    NSString* temp = [NSString string];
+                    if ([rData isKindOfClass:[NSString class]]) {
+                        temp = (NSString*)rData;
+                    }
+                    else if ([rData isKindOfClass:[NSData class]])
+                    {
+                        temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    }
+                    NSLog(@"Login Received Push Message: %@",temp);
+                    NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+                    int cmd = [[response objectForKey:@"cmd"]intValue];
+                    switch (cmd) {
+                        case NORMAL_REPLY:
+                        {
+                            NSArray* list = [response objectForKey:@"list"];
+                            for (int i = 0; i < list.count; i++) {
+                                NSDictionary* messge = [list objectAtIndex:i];
+                                [(AppDelegate*)[UIApplication sharedApplication].delegate handlePushMessage:messge];
+                            }
+                        }
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    
+                    //反馈给服务器
+//                    void(^feedbackDone)(NSData*) = ^(NSData* rData)
+//                    {
+//                        if (!rData) {
+//                            NSLog(@"服务器返回数据为空");
+//                            return ;
+//                        }
+//                        NSString* temp = [NSString string];
+//                        if ([rData isKindOfClass:[NSString class]]) {
+//                            temp = (NSString*)rData;
+//                        }
+//                        else if ([rData isKindOfClass:[NSData class]])
+//                        {
+//                            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//                        }
+//                        NSLog(@"反馈推送的结果：%@",temp);
+//                    };
+//                    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+//                                              [NSNumber numberWithInteger:0], @"operation",
+//                                              [MTUser sharedInstance].userid, @"id",
+//                                              min_seq, @"min_seq",
+//                                              max_seq, @"max_seq",
+//                                              nil];
+//                    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+//                    HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
+//                    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:feedbackDone];
 
                 };
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:

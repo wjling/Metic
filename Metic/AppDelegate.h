@@ -67,7 +67,9 @@
 -(void)initApp;
 +(void)refreshMenu;
 
+//信鸽推送相关
 -(void)registerPush;
+-(void)handlePushMessage:(NSDictionary*)message;
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;

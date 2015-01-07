@@ -222,6 +222,37 @@
                                                       userInfo:nil];
     isInBackground = NO;
     
+    //同步推送消息
+    NSLog(@"开始同步消息");
+    void(^returnResult)(NSData*) = ^(NSData* rData)
+    {
+        if (!rData) {
+            NSLog(@"服务器返回的消息为空");
+            return;
+        }
+        NSString* temp = [NSString string];
+        if ([rData isKindOfClass:[NSString class]]) {
+            temp = (NSString*)rData;
+        }
+        else if ([rData isKindOfClass:[NSData class]])
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        NSLog(@"同步消息seq，返回结果: %@", response);
+        
+    };
+    
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                              [NSNumber numberWithInteger:2], @"operation",
+                              [MTUser sharedInstance].userid, @"id",
+                              [NSNumber numberWithInt:0], @"min_seq",
+                              [NSNumber numberWithInt:0], @"max_seq",
+                              nil];
+    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:returnResult];
+    
 //    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
 //    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
 //    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
@@ -332,13 +363,25 @@
             temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         }
         NSMutableDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        NSInteger cmd = [[response objectForKey:@"cmd"] integerValue];
         NSLog(@"获取到服务器推送消息: %@", response);
-        NSMutableArray* list = [response objectForKey:@"list"];
-        for (int i = 0; i < list.count; i++) {
-            NSString* content = [list[i] objectForKey:@"content"];
-            NSMutableDictionary* content_dic = [CommonUtils NSDictionaryWithNSString:content];
-            
+        switch (cmd) {
+            case NORMAL_REPLY:
+            {
+                NSMutableArray* list = [response objectForKey:@"list"];
+                for (int i = 0; i < list.count; i++) {
+                    NSDictionary* message = [list objectAtIndex:i];
+                    [self handlePushMessage:message];
+                }
+            }
+                break;
+                
+            default:
+                NSLog(@"返回的cmd有问题，cmd: %d",cmd);
+                break;
         }
+        
+        
     };
     
     NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
@@ -451,7 +494,7 @@
 #endif
 }
 
--(void)handlePushMessageContent:(NSDictionary*)message
+-(void)handlePushMessage:(NSDictionary*)message
 {
     NSNumber* seq = [message objectForKey:@"seq"];
     NSString* content_str = [message objectForKey:@"content"];
@@ -461,7 +504,7 @@
     [msg_dic setValue:seq forKey:@"seq"];
     NSInteger msg_cmd = [[msg_dic objectForKey:@"cmd"] integerValue];
     
-    int type;
+    int type = -1;
 
     if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
     {
@@ -494,6 +537,7 @@
             NSLog(@"friend request is refused");
         }
         
+        type = 1;
 //        if (numOfSyncMessages <= 1) {
 //            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 回复了你的好友请求", [msg_dic objectForKey:@"name"]] andNumber:numOfSyncMessages withType:1];
 //        }
@@ -505,6 +549,7 @@
             [[MTUser sharedInstance].updateEvents addObject:msg_dic];
             NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
         }
+        type = -1;
         NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
 //        if (numOfSyncMessages <= 1) {
 //            NSString* subject = [msg_dic objectForKey:@"subject"];
@@ -514,6 +559,7 @@
     }
     else if (msg_cmd == 988 || msg_cmd == 989) {
         [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+        type = -1;
 //        if (numOfSyncMessages <= 1) {
 //            [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
 //        }
@@ -523,9 +569,10 @@
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         NSString* subject = [msg_dic objectForKey:@"subject"];
-        if (numOfSyncMessages <= 1) {
-            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
-        }
+        type = 2;
+//        if (numOfSyncMessages <= 1) {
+//            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 活动已经被解散", subject] andNumber:numOfSyncMessages withType:2];
+//        }
         
         NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
         [sql openMyDB:path];
@@ -555,9 +602,10 @@
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         NSString* subject = [msg_dic objectForKey:@"subject"];
-        if (numOfSyncMessages <= 1) {
-            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"您已经被请出 %@ 活动", subject] andNumber:numOfSyncMessages withType:2];
-        }
+        type = 2;
+//        if (numOfSyncMessages <= 1) {
+//            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"您已经被请出 %@ 活动", subject] andNumber:numOfSyncMessages withType:2];
+//        }
         
         NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
         [sql openMyDB:path];
@@ -586,34 +634,37 @@
     else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
     {
         [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
-        if (numOfSyncMessages <= 1) {
-            NSString* name = [msg_dic objectForKey:@"name"];
-            NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
-            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 请求加你为好友\n验证信息:%@", name, confirm_msg] andNumber:numOfSyncMessages withType:1];
-        }
+        type = 1;
+//        if (numOfSyncMessages <= 1) {
+//            NSString* name = [msg_dic objectForKey:@"name"];
+//            NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
+//            [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 请求加你为好友\n验证信息:%@", name, confirm_msg] andNumber:numOfSyncMessages withType:1];
+//        }
     }
     else if (msg_cmd == EVENT_INVITE_RESPONSE || msg_cmd == REQUEST_EVENT_RESPONSE)
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
-        if (numOfSyncMessages <= 1) {
-            [self sendMessageArrivedNotification:@"有人回复了活动消息" andNumber:numOfSyncMessages withType:2];
-        }
+        type = 2;
+//        if (numOfSyncMessages <= 1) {
+//            [self sendMessageArrivedNotification:@"有人回复了活动消息" andNumber:numOfSyncMessages withType:2];
+//        }
     }
     else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
     {
         [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
-        if (numOfSyncMessages <= 1) {
-            NSString* launcher = [msg_dic objectForKey:@"launcher"];
-            NSString* subject = [msg_dic objectForKey:@"subject"];
-            if (msg_cmd == NEW_EVENT_NOTIFICATION) {
-                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 邀请你加入活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
-                
-            }
-            else
-            {
-                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"有人邀请你加入%@的活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
-            }
-        }
+        type = 0;
+//        if (numOfSyncMessages <= 1) {
+//            NSString* launcher = [msg_dic objectForKey:@"launcher"];
+//            NSString* subject = [msg_dic objectForKey:@"subject"];
+//            if (msg_cmd == NEW_EVENT_NOTIFICATION) {
+//                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"%@ 邀请你加入活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+//                
+//            }
+//            else
+//            {
+//                [self sendMessageArrivedNotification:[NSString stringWithFormat:@"有人邀请你加入%@的活动 \"%@\"",launcher,subject] andNumber:numOfSyncMessages withType:0];
+//            }
+//        }
     }
     
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -634,9 +685,54 @@
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+    
     [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
+    int i = (type < 3 && type >= 0)? type : -1;
+    NSLog(@"新消息来了，message type: %d", i);
+    [userSettings setValue:[NSNumber numberWithInt:i] forKey:@"hasUnreadNotification"];
+    
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
+    
+    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
+        [self.notificationDelegate notificationDidReceive:self.syncMessages];
+    }
+    
+    int flag = [[userSettings objectForKey:@"hasUnreadNotification"]intValue];
+    if (flag >= 0) {
+        [self.leftMenu showUpdateInRow:4];
+    }
+    
+    if (isInBackground) {
+        [self.leftMenu showNotificationCenter];
+    }
+
+    //反馈给服务器
+    void(^feedbackDone)(NSData*) = ^(NSData* rData)
+    {
+        if (!rData) {
+            NSLog(@"服务器返回数据为空");
+            return ;
+        }
+        NSString* temp = [NSString string];
+        if ([rData isKindOfClass:[NSString class]]) {
+            temp = (NSString*)rData;
+        }
+        else if ([rData isKindOfClass:[NSData class]])
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        NSLog(@"反馈推送的结果：%@",temp);
+    };
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                              [NSNumber numberWithInteger:0], @"operation",
+                              [MTUser sharedInstance].userid, @"id",
+                              seq, @"min_seq",
+                              seq, @"max_seq",
+                              nil];
+    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:feedbackDone];
 
 }
 
