@@ -522,7 +522,7 @@
             NSString* logintime = [response1 objectForKey:@"logintime"];
             NSNumber* min_seq = [response1 objectForKey:@"min_seq"];
             NSNumber* max_seq = [response1 objectForKey:@"max_seq"];
-            if ([min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+            if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
                 void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
                 {
                     //反馈给服务器

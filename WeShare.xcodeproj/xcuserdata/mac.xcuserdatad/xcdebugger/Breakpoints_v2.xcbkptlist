@@ -41,7 +41,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1486"
             endingLineNumber = "1486"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,7 +57,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1532"
             endingLineNumber = "1532"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-event_request_noBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -73,7 +73,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1506"
             endingLineNumber = "1506"
-            landmarkName = "-finishWithReceivedData:"
+            landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

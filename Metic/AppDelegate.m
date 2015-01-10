@@ -243,8 +243,8 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    //点击提示框的打开
-    NSLog(@"点击通知");
+    //点击本地通知提示框的打开
+    NSLog(@"点击本地通知");
     application.applicationIconBadgeNumber = 0;
     isInBackground = NO;
     
