@@ -665,37 +665,6 @@ enum Response_Type
 
 - (IBAction)rightBarBtnClicked:(id)sender {
     [self showMenu];
-//    if (!functions_uiview.hidden) {
-//        
-//        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-//        [UIView beginAnimations:@"View shows" context:nil];
-//        //动画持续时间
-//        [UIView setAnimationDuration:0.5];
-//        //设置动画的回调函数，设置后可以使用回调方法
-//        [UIView setAnimationDelegate:self];
-//        //设置动画曲线，控制动画速度
-//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-//        //设置动画方式，并指出动画发生的位置
-//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:YES];
-//        
-//        [functions_uiview setHidden:YES];
-//        //提交UIView动画
-//        [UIView commitAnimations];
-//        
-//    }
-//    else{
-//        
-//        [UIView beginAnimations:@"View shows" context:nil];
-//        [UIView setAnimationDuration:0.5];
-//        [UIView setAnimationDelegate:self];
-//        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-//        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.functions_uiview  cache:YES];
-//        [functions_uiview setHidden:NO];
-//        [UIView commitAnimations];
-//
-//        
-//    }
-    
 }
 
 -(void)showMenu
@@ -971,6 +940,18 @@ enum Response_Type
     return 0;
 }
 
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (tableView == self.eventRequest_tableView) {
+//        NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:indexPath.row];
+//        NSInteger cmd = [[msg_dic objectForKey:@"cmd"]integerValue];
+//        if (cmd == REQUEST_EVENT) {
+//            return 80;
+//        }
+//    }
+//    return 50;
+//}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -1028,6 +1009,7 @@ enum Response_Type
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* launcher = [msg_dic objectForKey:@"launcher"];
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
+                
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
                 if (alias && ![alias isEqual:[NSNull null]]) {
@@ -1075,8 +1057,6 @@ enum Response_Type
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
 //                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
                 
-                
-                
                 cell.okBtn.hidden = YES;
                 cell.noBtn.hidden = YES;
                 cell.remark_label.hidden = YES;
@@ -1090,6 +1070,7 @@ enum Response_Type
                 NSNumber* uid = [msg_dic valueForKey:@"id"];
                 NSString* fname = [msg_dic valueForKey:@"name"];
                 NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
+                NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
                 if (alias && ![alias isEqual:[NSNull null]]) {
@@ -1132,7 +1113,16 @@ enum Response_Type
                     cell.label1.text = @"活动";
                 }
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
-//                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+                
+                if (!cell.confirm_msg_textview) {
+                    cell.confirm_msg_textview = [[UITextView alloc]initWithFrame:CGRectMake(75, 50, 150, 30)];
+                    [cell.contentView addSubview:cell.confirm_msg_textview];
+                    cell.confirm_msg_textview.font = [UIFont systemFontOfSize:11];
+                    cell.confirm_msg_textview.textColor = [UIColor blackColor];
+                    cell.confirm_msg_textview.backgroundColor = [UIColor clearColor];
+                    cell.userInteractionEnabled = NO;
+                }
+                cell.confirm_msg_textview.text = confirm_msg;
                 
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getAvatar];

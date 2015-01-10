@@ -18,5 +18,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *remark_label;
 @property (strong, nonatomic) IBOutlet UILabel *label1;
 @property (strong, nonatomic) IBOutlet UILabel *event_name_label;
+@property (strong, nonatomic) UITextView* confirm_msg_textview;
 
 @end

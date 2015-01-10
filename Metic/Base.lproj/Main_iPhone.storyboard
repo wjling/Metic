@@ -462,17 +462,17 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Adz-kL-fW6" customClass="myScrollView">
                                 <rect key="frame" x="0.0" y="40" width="320" height="376"/>
                                 <subviews>
-                                    <tableView contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bju-hI-gfv" userLabel="event Table View">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="bju-hI-gfv" userLabel="event Table View">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="376"/>
                                         <prototypes>
-                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationsEventRequestTableViewCell" rowHeight="50" id="3hB-hp-iYQ" customClass="NotificationsEventRequestTableViewCell">
+                                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotificationsEventRequestTableViewCell" rowHeight="80" id="3hB-hp-iYQ" customClass="NotificationsEventRequestTableViewCell">
                                                 <rect key="frame" x="0.0" y="22" width="320" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3hB-hp-iYQ" id="Lol-fh-Xe1">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="默认用户头像" translatesAutoresizingMaskIntoConstraints="NO" id="ssY-Pc-cXP">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="默认用户头像" translatesAutoresizingMaskIntoConstraints="NO" id="ssY-Pc-cXP">
                                                             <rect key="frame" x="15" y="10" width="30" height="30"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="30" id="oFV-JI-L9p"/>
@@ -484,13 +484,18 @@
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="验证信息：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4eJ-ZQ-gcL">
+                                                            <rect key="frame" x="15" y="50" width="60" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="我是乔巴酱" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Rh-QL-aUB">
                                                             <rect key="frame" x="54" y="9" width="163" height="20"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yzq-Mw-eko">
-                                                            <rect key="frame" x="272" y="9" width="43" height="18"/>
+                                                            <rect key="frame" x="272" y="9" width="43" height="22"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                                             <state key="normal" title="拒绝" backgroundImage="小按钮橙色">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -498,13 +503,13 @@
                                                             </state>
                                                         </button>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="已同意" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="os1-Dw-U5e">
-                                                            <rect key="frame" x="272" y="9" width="43" height="21"/>
+                                                            <rect key="frame" x="272" y="10" width="43" height="21"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvD-aY-C9c">
-                                                            <rect key="frame" x="219" y="9" width="43" height="18"/>
+                                                            <rect key="frame" x="219" y="9" width="43" height="22"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
                                                             <state key="normal" title="同意" backgroundImage="小按钮绿色">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -513,7 +518,7 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="ssY-Pc-cXP" secondAttribute="bottom" constant="9" id="7yd-mK-KFw"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ssY-Pc-cXP" secondAttribute="bottom" constant="40" id="7yd-mK-KFw"/>
                                                         <constraint firstItem="XQy-r5-mCs" firstAttribute="leading" secondItem="ssY-Pc-cXP" secondAttribute="trailing" constant="9" id="KF4-HS-G9h"/>
                                                         <constraint firstAttribute="trailing" secondItem="6Rh-QL-aUB" secondAttribute="trailing" constant="103" id="NCs-8t-Ugb"/>
                                                         <constraint firstItem="ssY-Pc-cXP" firstAttribute="top" secondItem="Lol-fh-Xe1" secondAttribute="top" constant="10" id="ZmW-oM-jAt"/>
@@ -658,51 +663,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cDo-Qy-sEn">
-                                <rect key="frame" x="215" y="0.0" width="100" height="80"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xLs-Wt-4Wv">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTJ-lu-Q67">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="历史记录">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="function1Clicked:" destination="hMX-YH-n10" eventType="touchUpInside" id="e0T-Az-7WP"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rKe-LF-39V">
-                                        <rect key="frame" x="0.0" y="40" width="100" height="39"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MCr-2n-REN">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="清空当前页">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="function2Clicked:" destination="hMX-YH-n10" eventType="touchUpInside" id="wMd-gI-EYd"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.17254902420000001" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="cDo-Qy-sEn" firstAttribute="top" secondItem="Lyi-aI-pIE" secondAttribute="top" id="07f-6H-bHE"/>
                             <constraint firstItem="Lyi-aI-pIE" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" id="49P-Cd-UXE"/>
                             <constraint firstItem="bkl-GJ-uzZ" firstAttribute="top" secondItem="Oxa-Xd-vcr" secondAttribute="bottom" constant="40" id="8ji-sS-Uc7"/>
                             <constraint firstItem="umw-Ff-J50" firstAttribute="top" secondItem="bkl-GJ-uzZ" secondAttribute="bottom" id="9Eo-gF-9Bo"/>
@@ -735,9 +699,6 @@
                         <outlet property="content_scrollView" destination="Adz-kL-fW6" id="XNI-Fm-wsk"/>
                         <outlet property="eventRequest_tableView" destination="bju-hI-gfv" id="P38-nm-zJU"/>
                         <outlet property="friendRequest_tableView" destination="bkl-GJ-uzZ" id="LWU-jP-X6V"/>
-                        <outlet property="function1_button" destination="sTJ-lu-Q67" id="N8k-PJ-s6h"/>
-                        <outlet property="function2_button" destination="MCr-2n-REN" id="fNb-V3-7Ty"/>
-                        <outlet property="functions_uiview" destination="cDo-Qy-sEn" id="vTj-3M-zTO"/>
                         <outlet property="rightBarButton" destination="Eow-OI-lju" id="vAV-mY-pcK"/>
                         <outlet property="rootView" destination="HbB-c8-nWA" id="75m-sj-t8X"/>
                         <outlet property="shadowView" destination="JCv-GU-pwd" id="6Pa-8k-tI8"/>
@@ -919,51 +880,10 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gz2-sU-KQV">
-                                <rect key="frame" x="215" y="0.0" width="100" height="80"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DSF-pQ-iRm">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c2J-cE-skg">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="清空此页">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="function1Clicked:" destination="Liv-Qh-Xxf" eventType="touchUpInside" id="hpB-gt-sYx"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qmq-Ng-AqG">
-                                        <rect key="frame" x="0.0" y="40" width="100" height="39"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gKS-XY-ZUP">
-                                                <rect key="frame" x="0.0" y="0.0" width="100" height="39"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                <state key="normal" title="取消所有屏蔽">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="function2Clicked:" destination="Liv-Qh-Xxf" eventType="touchUpInside" id="CBD-Un-FKN"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.17254902420000001" green="0.79607850309999995" blue="0.67058825489999996" alpha="1" colorSpace="deviceRGB"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="efa-9q-Z2E" secondAttribute="bottom" id="4j5-ZW-Cs4"/>
-                            <constraint firstItem="efa-9q-Z2E" firstAttribute="top" secondItem="gz2-sU-KQV" secondAttribute="top" id="UPZ-kn-R69"/>
                             <constraint firstAttribute="trailing" secondItem="efa-9q-Z2E" secondAttribute="trailing" id="WxC-BP-Zao"/>
                             <constraint firstItem="efa-9q-Z2E" firstAttribute="top" secondItem="1iF-Jd-TIT" secondAttribute="top" id="X71-65-9XD"/>
                             <constraint firstItem="efa-9q-Z2E" firstAttribute="leading" secondItem="1iF-Jd-TIT" secondAttribute="leading" id="ePu-Ux-OfQ"/>
@@ -985,9 +905,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="function1_button" destination="c2J-cE-skg" id="SsY-at-W4M"/>
-                        <outlet property="function2_button" destination="gKS-XY-ZUP" id="jfo-oN-qz9"/>
-                        <outlet property="functions_view" destination="gz2-sU-KQV" id="LXv-6R-ZFj"/>
                         <outlet property="historicalNF_tableview" destination="efa-9q-Z2E" id="xPl-fY-c0W"/>
                         <outlet property="right_barbutton" destination="YUA-Ti-PdX" id="Imb-51-vjA"/>
                     </connections>
@@ -3299,7 +3216,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
@@ -3693,7 +3610,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
