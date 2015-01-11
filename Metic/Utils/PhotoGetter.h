@@ -41,6 +41,7 @@
 - (instancetype)initUploadAvatarMethod:(UIImage*)aImage type:(int)type viewController:(UIViewController*)vc;
 -(void)getAvatar;
 -(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
+-(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
 -(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL;
 -(void)updatePhoto;
 -(void)uploadPhoto;
