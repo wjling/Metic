@@ -1114,15 +1114,15 @@ enum Response_Type
                 }
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
                 
-                if (!cell.confirm_msg_textview) {
-                    cell.confirm_msg_textview = [[UITextView alloc]initWithFrame:CGRectMake(75, 50, 150, 30)];
-                    [cell.contentView addSubview:cell.confirm_msg_textview];
-                    cell.confirm_msg_textview.font = [UIFont systemFontOfSize:11];
-                    cell.confirm_msg_textview.textColor = [UIColor blackColor];
-                    cell.confirm_msg_textview.backgroundColor = [UIColor clearColor];
-                    cell.userInteractionEnabled = NO;
+                if (!cell.confirm_msg_label) {
+                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(75, 45, 220, 30)];
+                    [cell.contentView addSubview:cell.confirm_msg_label];
+                    cell.confirm_msg_label.font = [UIFont systemFontOfSize:11];
+                    cell.confirm_msg_label.textColor = [UIColor blackColor];
+                    cell.confirm_msg_label.backgroundColor = [UIColor clearColor];
+                    cell.confirm_msg_label.numberOfLines = 2;
                 }
-                cell.confirm_msg_textview.text = confirm_msg;
+                cell.confirm_msg_label.text = confirm_msg;
                 
                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
                 [getter getAvatar];

@@ -197,15 +197,14 @@
         gender = [NSNumber numberWithInt:0];
     }
     //    NSLog(@"random String: %@",salt);
-    if (password.length<6) {
+    if (![CommonUtils isEmailValid:email]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }else if (password.length<6) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少6位" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
-    else if (![CommonUtils isEmailValid:email]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
-        return;
-    }
-//    else if (![conformPassword isEqualToString:password])
+    //    else if (![conformPassword isEqualToString:password])
 //    {
 //        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Password conformed error" WithDelegate:self WithCancelTitle:@"OK"];
 //    }
@@ -219,15 +218,7 @@
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:REGISTER];
-//        [self jumpToFillinInfo];
-//        registerSucceeded = YES;
-//        [self jumpToLogin];
-    }
-    
-    
-    //    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:4],email,@"email",md5_str,@"passwd",userName,@"name",gender,@"gender",salt,@"salt",nil];
-    
-    
+    }  
     
 }
 

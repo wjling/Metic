@@ -591,7 +591,7 @@
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
     
-    int flag = [[userSettings objectForKey:@"hasUnreadNotification"]intValue];
+    int flag = type;
     if (flag >= 0) {
         [self.leftMenu showUpdateInRow:4];
     }

@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "442593687.64756"
+            timestampString = "442682331.72828"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1480"
-            endingLineNumber = "1480"
+            startingLineNumber = "1476"
+            endingLineNumber = "1476"
             landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "442593687.64756"
+            timestampString = "442682331.72828"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1526"
-            endingLineNumber = "1526"
+            startingLineNumber = "1522"
+            endingLineNumber = "1522"
             landmarkName = "-event_request_noBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "442593687.64756"
+            timestampString = "442682331.72828"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1500"
-            endingLineNumber = "1500"
+            startingLineNumber = "1496"
+            endingLineNumber = "1496"
             landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
