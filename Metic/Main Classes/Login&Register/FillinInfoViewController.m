@@ -59,7 +59,14 @@
     info_tableview.delegate = self;
     info_tableview.dataSource = self;
     
+    [CommonUtils addLeftButton:self isFirstPage:NO];
 }
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 -(void)viewWillAppear:(BOOL)animated
 {

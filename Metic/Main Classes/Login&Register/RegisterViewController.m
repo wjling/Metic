@@ -8,6 +8,7 @@
 
 #import "RegisterViewController.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
 
 @interface RegisterViewController ()
 {
@@ -220,6 +221,13 @@
         [httpSender sendMessage:jsonData withOperationCode:REGISTER];
     }  
     
+    [SVProgressHUD showWithStatus:@"请稍等.." maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(dismissHUD:) userInfo:nil repeats:NO];
+}
+
+-(void)dismissHUD:(id)sender
+{
+    [SVProgressHUD dismissWithError:@"服务器未响应" afterDelay:1];
 }
 
 - (IBAction)backToLoginButtonClicked:(id)sender
@@ -306,6 +314,7 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
             NSLog(@"register succeeded");
+            [SVProgressHUD dismissWithSuccess:@"注册成功" afterDelay:2];
             registerSucceeded = YES;
             [self jumpToLogin];
 //            [self jumpToFillinInfo];
@@ -313,12 +322,14 @@
         case USER_EXIST:
         {
             NSLog(@"user existed");
-            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
+            [SVProgressHUD dismissWithError:@"用户已存在" afterDelay:1.5];
+//            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//            [alertView show];
+//            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
             break;
         }
         default:
+            [SVProgressHUD dismissWithError:@"服务器返回异常" afterDelay:1];
             break;
     }
 }
