@@ -7,6 +7,7 @@
 //
 
 #import "NameSettingViewController.h"
+#import "SVProgressHUD.h"
 
 @interface NameSettingViewController ()
 {
@@ -101,14 +102,23 @@
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
         [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
+        [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeGradient];
+        [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(dismissHUD:) userInfo:nil repeats:NO];
+//        [self.confirm_barButton setEnabled:NO];
         
     }
     
 }
 
+-(void)dismissHUD:(id)sender
+{
+    [SVProgressHUD dismissWithError:@"服务器未响应" afterDelay:1.5];
+}
+
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
+//    [self.confirm_barButton setEnabled:YES];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -120,19 +130,22 @@
             [MTUser sharedInstance].name = newName;
             [AppDelegate refreshMenu];	
             NSLog(@"昵称修改成功");
-            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:2];
+//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
             [self.navigationController popViewControllerAnimated:YES];
         }
             break;
         case USER_NAME_EXIST:  //120
         {
-            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"该昵称已存在，请重试" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithError:@"该昵称已存在" afterDelay:2];
+//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"该昵称已存在，请重试" withDelegate:self withDuaration:1.5];
         }
             break;
             
         default:
             NSLog(@"昵称修改失败");
-            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithError:@"昵称修改失败" afterDelay:1];
+//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
             break;
     }
     
@@ -146,7 +159,7 @@
     NSString* toBeString = textField.text;
     //获取当前输入法
     NSString* lang = [[UITextInputMode currentInputMode] primaryLanguage];
-    NSLog(@"当前输入法： %@", lang);
+//    NSLog(@"当前输入法： %@", lang);
     if ([lang isEqualToString:@"zh-Hans"]) { //当前输入法是中文
         UITextRange* selectedRange = [textField markedTextRange]; //高亮的文本范围
         UITextPosition* position = [textField positionFromPosition:selectedRange.start offset:0];
