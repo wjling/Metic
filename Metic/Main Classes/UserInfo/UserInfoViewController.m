@@ -249,7 +249,7 @@
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.banner_imageView setImageToBlur:image blurRadius:1.7 brightness: -0.07 completionBlock:nil];
+            [self.banner_imageView setImageToBlur:self.avatar_imageView.image blurRadius:1.7 brightness: -0.07 completionBlock:nil];
             
 //            UIImage* img1 = [image brightness:0.5];
 //            UIImage* img2 = [img1 gaussianBlur:5];
