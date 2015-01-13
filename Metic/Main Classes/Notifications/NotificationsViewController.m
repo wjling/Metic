@@ -1821,7 +1821,7 @@ enum Response_Type
             [MTUser_eventRequestMsg removeObject:msg_dic];
             [eventRequestMsg removeObjectAtIndex:row];
             [self.eventRequest_tableView reloadData];
-            [SVProgressHUD dismissWithError:@"您已经在此活动中了" afterDelay:2];
+            [SVProgressHUD dismissWithError:@"该用户已经在此活动中了" afterDelay:2];
 //            int count = self.msgFromDB.count;
 //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
 //            NSNumber* seq = [dataMsg objectForKey:@"seq"];
