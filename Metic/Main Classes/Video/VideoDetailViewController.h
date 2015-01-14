@@ -26,7 +26,7 @@
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSDictionary * videoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong,nonatomic) VideoWallTableViewCell *SeleVcell;
+@property (strong,nonatomic) NSIndexPath *index;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (weak, nonatomic) VideoWallViewController* controller;
 @property (nonatomic,strong) UIView* optionShadowView;

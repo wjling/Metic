@@ -19,6 +19,7 @@
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) UITableView* tableView;
 @property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
+@property (strong,nonatomic) UITableViewCell *SeleVcell;
 @property(nonatomic,strong) UIImage* seleted_videoThumb;
 @property BOOL shouldReload;
 @property BOOL shouldFlash;

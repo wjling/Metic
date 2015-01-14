@@ -275,6 +275,15 @@
 
 -(void)toDetail:(UIButton*)button
 {
+    _controller.SeleVcell = self;
+    _controller.seleted_videoInfo = _videoInfo;
+    _controller.seleted_videoThumb = _videoThumb;
+    [self clearVideoRequest];
+    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
+    return;
+    
+    
+    
     _controller.seleted_videoInfo = _videoInfo;
     _controller.seleted_videoThumb = _videoThumb;
     [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];

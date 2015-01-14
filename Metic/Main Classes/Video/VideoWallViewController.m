@@ -30,7 +30,6 @@
 @property(nonatomic,strong) UIImage* preViewImage;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
-@property (strong,nonatomic) VideoWallTableViewCell *SeleVcell;
 @property(nonatomic,strong) UILabel* promt;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
@@ -442,7 +441,7 @@
     if ([sender isKindOfClass:[VideoWallViewController class]]) {
         if ([segue.destinationViewController isKindOfClass:[VideoDetailViewController class]]) {
             VideoDetailViewController *nextViewController = segue.destinationViewController;
-            nextViewController.SeleVcell = _SeleVcell;
+            nextViewController.index = [_tableView indexPathForCell:_SeleVcell];
             nextViewController.controller = self;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = self.eventName;
