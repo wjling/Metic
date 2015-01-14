@@ -91,6 +91,14 @@
 
 }
 
+-(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
+{
+    NSString* url = [self getLocalAvatarUrl];
+//    NSString* avatarURL = [CommonUtils getUrl:url];
+    [[SDImageCache sharedImageCache] removeImageForKey:url];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
+}
+
 //-(void)getAvatar
 //{
 //    __block NSString* url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];

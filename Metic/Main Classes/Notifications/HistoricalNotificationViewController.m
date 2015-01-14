@@ -8,6 +8,7 @@
 
 #import "HistoricalNotificationViewController.h"
 #import "MobClick.h"
+#import "KxMenu.h"
 
 @interface HistoricalNotificationViewController ()
 {
@@ -84,37 +85,32 @@
 */
 
 - (IBAction)rightBarBtnClicked:(id)sender {
-    if (!self.functions_view.hidden) {
-        [self.functions_view setHidden:YES];
-        //UIView开始动画，第一个参数是动画的标识，第二个参数附加的应用程序信息用来传递给动画代理消息
-        [UIView beginAnimations:@"View shows" context:nil];
-        //动画持续时间
-        [UIView setAnimationDuration:0.5];
-        //设置动画的回调函数，设置后可以使用回调方法
-        [UIView setAnimationDelegate:self];
-        //设置动画曲线，控制动画速度
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseOut];
-        //设置动画方式，并指出动画发生的位置
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.self.functions_view  cache:YES];
-        
-        //提交UIView动画
-        [UIView commitAnimations];
-        
-    }
-    else{
-        
-        [UIView beginAnimations:@"View shows" context:nil];
-        [self.functions_view setHidden:NO];
-        [UIView setAnimationDuration:0.5];
-        [UIView setAnimationDelegate:self];
-        [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-        [UIView setAnimationTransition:UIViewAnimationTransitionCurlDown forView:self.self.functions_view  cache:YES];
-        [UIView commitAnimations];
-        
-        
-    }
-
+    [self showMenu];
 }
+
+-(void)showMenu
+{
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    [menuItems addObjectsFromArray:@[
+                                     
+                                     [KxMenuItem menuItem:@"清空此页"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function1Clicked:)]
+                                     /*
+                                     [KxMenuItem menuItem:@"清空当前页"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(function2Clicked:)],*/
+                                     ]];
+    
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+                 menuItems:menuItems];
+}
+
 
 - (IBAction)function1Clicked:(id)sender {
     [UIView beginAnimations:@"View shows" context:nil];
@@ -139,13 +135,6 @@
 }
 
 - (IBAction)function2Clicked:(id)sender {
-    [UIView beginAnimations:@"View shows" context:nil];
-    [self.functions_view setHidden:YES];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.self.functions_view  cache:YES];
-    [UIView commitAnimations];
 }
 
 #pragma mark - UITableViewDataSource

@@ -7,6 +7,7 @@
 //
 
 #import "LocationSettingViewController.h"
+#import "SVProgressHUD.h"
 
 @interface LocationSettingViewController ()
 {
@@ -62,6 +63,7 @@
     self.city_tableView.dataSource = self;
     
     navigationItem.title = @"请选择省份";
+    right_barButton.hidden = YES;
     [left_barButton addTarget:self action:@selector(leftBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
     [right_barButton addTarget:self action:@selector(rightBarButtonInProvinceClicked:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -148,7 +150,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* cell;
+    UITableViewCell* cell = nil;
     if (tableView == self.province_tableView) {
         cell = [self.province_tableView dequeueReusableCellWithIdentifier:@"provincecell"];
         if (nil == cell) {
@@ -171,16 +173,44 @@
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == self.province_tableView) {
         selected_province_index = indexPath.row;
         [self.province_tableView reloadData];
+        
+        selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
+        NSLog(@"selected_city_array: %@",selected_city_array);
+        [self.city_tableView reloadData];
+        CGPoint p = CGPointMake(320, 0);
+        [self.content_scrollView setContentOffset:p animated:YES];
+        navigationItem.title = @"请选择城市";
+        [left_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [right_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [left_barButton addTarget:self action:@selector(leftBarButtonInCityClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [right_barButton addTarget:self action:@selector(rightBarButtonInCityClicked:) forControlEvents:UIControlEventTouchUpInside];
+
     }
     else if(tableView == self.city_tableView)
     {
         selected_city_index = indexPath.row;
         [self.city_tableView reloadData];
+        NSString* province = [province_array objectAtIndex:selected_province_index];
+        NSString* city = [[selected_city_array objectAtIndex:selected_city_index] objectForKey:@"CityName"];
+        newLocation = [NSString stringWithFormat:@"%@ %@",province,city];
+        NSDictionary* json = [CommonUtils packParamsInDictionary:
+                              [MTUser sharedInstance].userid,@"id",
+                              newLocation,@"location",nil  ];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+        [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
+        [SVProgressHUD showWithStatus:@"正在处理中" maskType:SVProgressHUDMaskTypeGradient];
+        [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(dismissHUD:) userInfo:nil repeats:NO];
     }
 
 }
@@ -206,6 +236,10 @@
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
+    if (!rData) {
+        NSLog(@"服务器返回为空");
+        return;
+    }
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -215,6 +249,7 @@
         case NORMAL_REPLY:
         {
             NSLog(@"所在地修改成功");
+            [SVProgressHUD dismissWithSuccess:@"地址修改成功" afterDelay:2];
             [MTUser sharedInstance].location = newLocation;
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -222,10 +257,16 @@
             
         default:
             NSLog(@"所在地修改失败");
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因所在地修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
+            [SVProgressHUD dismissWithSuccess:@"地址修改失败" afterDelay:2];
+//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因所在地修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
             break;
     }
     
+}
+
+-(void)dismissHUD:(id)sender
+{
+    [SVProgressHUD dismissWithError:@"服务器未响应" afterDelay:1];
 }
 
 

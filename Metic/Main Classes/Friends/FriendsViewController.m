@@ -86,7 +86,6 @@
     self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
-//    self.friendSearchBar.delegate = self;
     self.searchFriendList = [[NSMutableArray alloc]init];
     
     friendSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -346,7 +345,7 @@
         if (section < initialSectionForFriendList) {
             return 0;
         }
-        return 23;
+        return 22;
     }
     else
     {
@@ -462,6 +461,7 @@
     if (tableView == friendTableView) {
         NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
         if (groupOfFriends) {
+            NSLog(@"section: %d, num of row: %d", section, groupOfFriends.count);
             return groupOfFriends.count;
         }
         else
@@ -475,7 +475,6 @@
     {
         return 0;
     }
-//    return groupOfFriends.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

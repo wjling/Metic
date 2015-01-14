@@ -8,6 +8,7 @@
 
 #import "RegisterViewController.h"
 #import "MobClick.h"
+#import "SVProgressHUD.h"
 
 @interface RegisterViewController ()
 {
@@ -197,15 +198,14 @@
         gender = [NSNumber numberWithInt:0];
     }
     //    NSLog(@"random String: %@",salt);
-    if (password.length<6) {
+    if (![CommonUtils isEmailValid:email]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }else if (password.length<6) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"密码长度至少6位" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
-    else if (![CommonUtils isEmailValid:email]) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
-        return;
-    }
-//    else if (![conformPassword isEqualToString:password])
+    //    else if (![conformPassword isEqualToString:password])
 //    {
 //        [CommonUtils showSimpleAlertViewWithTitle:@"Warning" WithMessage:@"Password conformed error" WithDelegate:self WithCancelTitle:@"OK"];
 //    }
@@ -219,16 +219,15 @@
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:REGISTER];
-//        [self jumpToFillinInfo];
-//        registerSucceeded = YES;
-//        [self jumpToLogin];
-    }
+    }  
     
-    
-    //    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:4],email,@"email",md5_str,@"passwd",userName,@"name",gender,@"gender",salt,@"salt",nil];
-    
-    
-    
+    [SVProgressHUD showWithStatus:@"请稍等.." maskType:SVProgressHUDMaskTypeGradient];
+    [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(dismissHUD:) userInfo:nil repeats:NO];
+}
+
+-(void)dismissHUD:(id)sender
+{
+    [SVProgressHUD dismissWithError:@"服务器未响应" afterDelay:1];
 }
 
 - (IBAction)backToLoginButtonClicked:(id)sender
@@ -315,6 +314,7 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
             NSLog(@"register succeeded");
+            [SVProgressHUD dismissWithSuccess:@"注册成功" afterDelay:2];
             registerSucceeded = YES;
             [self jumpToLogin];
 //            [self jumpToFillinInfo];
@@ -322,12 +322,14 @@
         case USER_EXIST:
         {
             NSLog(@"user existed");
-            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
+            [SVProgressHUD dismissWithError:@"用户已存在" afterDelay:1.5];
+//            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//            [alertView show];
+//            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
             break;
         }
         default:
+            [SVProgressHUD dismissWithError:@"服务器返回异常" afterDelay:1];
             break;
     }
 }

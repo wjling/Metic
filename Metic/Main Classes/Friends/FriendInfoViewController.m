@@ -292,10 +292,11 @@
     NSString* location = [friendInfo_dic objectForKey:@"location"];
     NSNumber* gender = [friendInfo_dic objectForKey:@"gender"];
 //    NSString* email = [friendInfo_dic objectForKey:@"email"];
+    NSString* sign = [friendInfo_dic objectForKey:@"sign"];
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
-    [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
             image = [UIImage imageNamed:@"默认用户头像"];
         }
@@ -352,6 +353,12 @@
         location_label.text = @"暂无地址信息";
     }
     
+    
+    if (sign && ![sign isEqual:[NSNull null]]) {
+        (description_label).text = sign;
+    }
+    
+    [self.friendInfoEvents_tableView reloadData];
 
 }
 
@@ -411,7 +418,14 @@
     NSString* location = [response objectForKey:@"location"];
     NSNumber* gender = [response objectForKey:@"gender"];
     NSString* email = [response objectForKey:@"email"];
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+    NSString* sign = [response objectForKey:@"sign"];
+    
+    [friendInfo_dic setValue:name forKey:@"name"];
+    [friendInfo_dic setValue:location forKey:@"location"];
+    [friendInfo_dic setValue:gender forKey:@"gender"];
+    [friendInfo_dic setValue:email forKey:@"email"];
+    [friendInfo_dic setValue:sign forKey:@"sign"];
+    
     NSDictionary* wheres = [CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",fid],@"id",nil];
     NSDictionary* sets = [CommonUtils packParamsInDictionary:
                           [NSString stringWithFormat:@"'%@'",name],@"name",
@@ -427,51 +441,7 @@
     [[MTUser sharedInstance] friendListDidChanged];
     NSLog(@"event_list: %@",events);
     
-    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
-    [getter getAvatar];
-    name_label.text = name;
-    if (alias && ![alias isEqual:[NSNull null]]) {
-        alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
-    }
-    else
-    {
-        alias_label.text = @"备注名: 无";
-    }
-    
-    UIFont* font = [UIFont systemFontOfSize:15];
-    CGSize sizeOfName = [name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, 30) lineBreakMode:NSLineBreakByCharWrapping];
-    CGRect frame = CGRectMake(name_label.frame.origin.x + sizeOfName.width + 5, name_label.frame.origin.y + 1, 17, 17);
-    if (gender_imageView) {
-        gender_imageView.frame = frame;
-    }
-    else
-    {
-        gender_imageView = [[UIImageView alloc]initWithFrame:frame];
-    }
-
-    if (0 == [gender intValue]) {
-        gender_imageView.image = [UIImage imageNamed:@"女icon"];
-    }
-    else
-    {
-        gender_imageView.image = [UIImage imageNamed:@"男icon"];
-    }
-    
-    if (![location isEqual:[NSNull null]]) {
-        location_label.text = location;
-        
-    }
-    else
-    {
-        location_label.text = @"暂无地址信息";
-    }
-
-    NSString* sign = [response objectForKey:@"sign"];
-    if (![sign isEqual:[NSNull null]]) {
-        (description_label).text = sign;
-    }
-    
-    [self.friendInfoEvents_tableView reloadData];
+    [self refreshFriendInfo];
     
 }
 

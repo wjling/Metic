@@ -243,8 +243,8 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    //点击提示框的打开
-    NSLog(@"点击通知");
+    //点击本地通知提示框的打开
+    NSLog(@"点击本地通知");
     application.applicationIconBadgeNumber = 0;
     isInBackground = NO;
     
@@ -591,7 +591,7 @@
         [self.notificationDelegate notificationDidReceive:self.syncMessages];
     }
     
-    int flag = [[userSettings objectForKey:@"hasUnreadNotification"]intValue];
+    int flag = type;
     if (flag >= 0) {
         [self.leftMenu showUpdateInRow:4];
     }
