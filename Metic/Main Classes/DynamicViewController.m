@@ -10,10 +10,9 @@
 #import "EventDetailViewController.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "../Utils/PhotoGetter.h"
-#import "AppDelegate.h"
 #import "MobClick.h"
 
-@interface DynamicViewController ()
+@interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
 @property(nonatomic,strong) NSNumber* selete_Eventid;
 
@@ -96,8 +95,7 @@
 - (IBAction)atMe_pressdown:(id)sender {
     [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
 }
-
-#pragma mark tableView Delegate
+#pragma mark tableView DataSource
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == _dynamic_tableView) {
@@ -147,12 +145,6 @@
     }
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (tableView == _dynamic_tableView) {
-//        
-//    }
-//}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -231,7 +223,7 @@
 {
     for (NSDictionary* message in messages) {
         NSLog(@"homeviewcontroller receive a message %@",message);
-        NSString *eventInfo = [message valueForKey:@"msg"];
+        NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
@@ -243,6 +235,8 @@
             }else if(_updateEvents.count != 0 && _atMeEvents.count == 0){
                 [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
             }
+            _dynamic_tableView.dataSource = self;
+            _atMe_tableView.dataSource = self;
             [_dynamic_tableView reloadData];
             [_atMe_tableView reloadData];
         }

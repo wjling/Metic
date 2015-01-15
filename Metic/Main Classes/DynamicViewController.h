@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface DynamicViewController : UIViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,NotificationDelegate>
+@interface DynamicViewController : UIViewController<UIScrollViewDelegate,NotificationDelegate>
 @property (strong, nonatomic) IBOutlet UIButton *dynamics_button;
 @property (strong, nonatomic) IBOutlet UIButton *atMe_button;
 - (IBAction)dynamics_pressdown:(id)sender;

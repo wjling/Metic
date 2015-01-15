@@ -579,7 +579,7 @@
 {
     for (NSDictionary* message in messages) {
         NSLog(@"homeviewcontroller receive a message %@",message);
-        NSString *eventInfo = [message valueForKey:@"msg"];
+        NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];

@@ -588,7 +588,7 @@
     [userDf synchronize];
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
-        [self.notificationDelegate notificationDidReceive:self.syncMessages];
+        [self.notificationDelegate notificationDidReceive:[NSArray arrayWithObject:message]];
     }
     
     int flag = type;
