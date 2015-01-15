@@ -38,8 +38,7 @@
 @property (strong,nonatomic) NSMutableDictionary* alias_dic;    //fid(NSString)-alias(NSString)
 
 //For HomeViewController
-@property (nonatomic,strong) NSMutableSet* updateEventIds;
-@property (nonatomic,strong) NSMutableArray* updateEvents;
+@property (nonatomic,strong) NSMutableDictionary* updateEventIds;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 
 //For NotificationViewController

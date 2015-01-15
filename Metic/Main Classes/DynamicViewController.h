@@ -19,8 +19,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *atMe_tableView;
 @property (strong, nonatomic) IBOutlet UILabel *atMe_empty_label;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (nonatomic,strong) NSMutableArray* updateEvents;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
-@property (nonatomic,strong) NSMutableSet* updateEventIds;
+@property (nonatomic,strong) NSMutableDictionary* updateEventIds;
 
 @end

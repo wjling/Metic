@@ -470,11 +470,14 @@
         
     }
     else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
-        if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
-            [[MTUser sharedInstance].updateEventIds addObject:[msg_dic valueForKey:@"event_id"]];
-            [[MTUser sharedInstance].updateEvents addObject:msg_dic];
-            NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
+        if (![[MTUser sharedInstance].updateEventIds objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
+            [[MTUser sharedInstance].updateEventIds setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
         }
+        NSMutableArray *status = [[MTUser sharedInstance].updateEventIds objectForKey:[msg_dic valueForKey:@"event_id"]];
+        status = [NSMutableArray arrayWithArray:status];
+        status[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
+        [[MTUser sharedInstance].updateEventIds setObject:status forKey:[msg_dic valueForKey:@"event_id"]];
+        
         type = -1;
         NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
     }
@@ -992,11 +995,15 @@
             
         }
         else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
-            if (![[MTUser sharedInstance].updateEventIds containsObject:[msg_dic valueForKey:@"event_id"]]) {
-                [[MTUser sharedInstance].updateEventIds addObject:[msg_dic valueForKey:@"event_id"]];
-                [[MTUser sharedInstance].updateEvents addObject:msg_dic];
-                NSLog(@"新动态+1, updateEvents: %@",[MTUser sharedInstance].updateEvents);
+            if (![[MTUser sharedInstance].updateEventIds objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
+                [[MTUser sharedInstance].updateEventIds setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
             }
+            NSMutableArray *status = [[MTUser sharedInstance].updateEventIds valueForKey:[msg_dic valueForKey:@"event_id"]];
+            status = [NSMutableArray arrayWithArray:status];
+            status[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
+            [[MTUser sharedInstance].updateEventIds setObject:status forKey:[msg_dic valueForKey:@"event_id"]];
+            
+            
             NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
             if (numOfSyncMessages <= 1) {
                 NSString* subject = [msg_dic objectForKey:@"subject"];

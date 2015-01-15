@@ -53,7 +53,7 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"新动态"];
-    if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
+    if (_updateEventIds.count == 0 && _atMeEvents.count != 0) {
         [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
     }
 }
@@ -71,7 +71,6 @@
 -(void)dealloc
 {
     [_atMeEvents removeAllObjects];
-    [_updateEvents removeAllObjects];
     [_updateEventIds removeAllObjects];
 }
 //返回上一层
@@ -100,11 +99,15 @@
 {
     if (tableView == _dynamic_tableView) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"updateCell"];
-        if (_updateEvents) {
-            NSDictionary *updateInfo = _updateEvents[indexPath.row];
-            NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",[updateInfo valueForKey:@"subject"]];
+        if (_updateEventIds) {
+            
+            NSArray *updateInfo = [_updateEventIds objectForKey:[[_updateEventIds keyEnumerator] allObjects][indexPath.row]];
+            NSString* subject = updateInfo[0];
+            
+            
+            NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",subject];
             NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
-            [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,((NSString*)[updateInfo valueForKey:@"subject"]).length)];
+            [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,subject.length)];
             
             TTTAttributedLabel *update_label = (TTTAttributedLabel*)[cell viewWithTag:131];
             if (!update_label) {
@@ -150,10 +153,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == _dynamic_tableView) {
-        NSDictionary *updateInfo = _updateEvents[indexPath.row];
-        _selete_Eventid = [updateInfo valueForKey:@"event_id"];
-        [_updateEvents removeObjectAtIndex:indexPath.row];
-        [_updateEventIds removeObject:_selete_Eventid];
+//        NSDictionary *updateInfo = _updateEvents[indexPath.row];
+        _selete_Eventid = [[_updateEventIds keyEnumerator] allObjects][indexPath.row];
+        [_updateEventIds removeObjectForKey:_selete_Eventid];
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
@@ -172,9 +174,9 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == _dynamic_tableView) {
-        if (_updateEvents && _updateEvents.count >0) {
+        if (_updateEventIds && _updateEventIds.count >0) {
             [_dynamic_empty_label setHidden:YES];
-            return _updateEvents.count;
+            return _updateEventIds.count;
         }else{
             [_dynamic_empty_label setHidden:NO];
             return 0;
@@ -229,14 +231,11 @@
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
         if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
-            NSLog(@"%@",_updateEvents);
-            if (_updateEvents.count == 0 && _atMeEvents.count != 0) {
+            if (_updateEventIds.count == 0 && _atMeEvents.count != 0) {
                 [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
-            }else if(_updateEvents.count != 0 && _atMeEvents.count == 0){
+            }else if(_updateEventIds.count != 0 && _atMeEvents.count == 0){
                 [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
             }
-            _dynamic_tableView.dataSource = self;
-            _atMe_tableView.dataSource = self;
             [_dynamic_tableView reloadData];
             [_atMe_tableView reloadData];
         }
