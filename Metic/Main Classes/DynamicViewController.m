@@ -104,6 +104,54 @@
             NSArray *updateInfo = [_updateEventIds objectForKey:[[_updateEventIds keyEnumerator] allObjects][indexPath.row]];
             NSString* subject = updateInfo[0];
             
+            float restWidth = 310;
+            if ([updateInfo[1] boolValue]) {
+                restWidth -= 34;
+                UIImageView* image = (UIImageView*)[cell viewWithTag:991];
+                if (!image) {
+                    image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_video"]];
+                    [image setTag:991];
+                }
+                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [cell addSubview:image];
+            }else{
+                UIImageView* image = (UIImageView*)[cell viewWithTag:991];
+                [image removeFromSuperview];
+            }
+            
+            if ([updateInfo[2] boolValue]) {
+                restWidth -= 34;
+                UIImageView* image = (UIImageView*)[cell viewWithTag:992];
+                if (!image) {
+                    image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_photo"]];
+                    [image setTag:992];
+                }
+                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [cell addSubview:image];
+            }else{
+                UIImageView* image = (UIImageView*)[cell viewWithTag:992];
+                [image removeFromSuperview];
+            }
+            
+            if ([updateInfo[3] boolValue]) {
+                restWidth -= 34;
+                UIImageView* image = (UIImageView*)[cell viewWithTag:993];
+                if (!image) {
+                    image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_comment"]];
+                    [image setTag:993];
+                }
+                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [cell addSubview:image];
+            }else{
+                UIImageView* image = (UIImageView*)[cell viewWithTag:993];
+                [image removeFromSuperview];
+            }
+            
+            if (restWidth!= 310) {
+                restWidth-=10;
+            }
+            
+            
             
             NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",subject];
             NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
@@ -111,10 +159,10 @@
             
             TTTAttributedLabel *update_label = (TTTAttributedLabel*)[cell viewWithTag:131];
             if (!update_label) {
-                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, 200, 30)];
+                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, restWidth, 30)];
                 [cell addSubview:update_label];
                 [update_label setTag:131];
-            }
+            }else [update_label setFrame:CGRectMake(10, 10, restWidth, 30)];
             
             [update_label setNumberOfLines:0];
             [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
