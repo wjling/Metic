@@ -38,11 +38,10 @@
 - (IBAction)showParticipators:(id)sender;
 - (IBAction)showBanner:(id)sender;
 -(void)drawOfficialFlag:(BOOL)isOfficial;
+-(void)setImgWallpoint;
+-(void)setVideoWallpoint;
+
 @property(nonatomic,strong) UIImageView* officialFlag;
-
-
-
-
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UILabel *beginDate;

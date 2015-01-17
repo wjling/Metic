@@ -20,6 +20,7 @@
 #import "../../Utils/NSString+JSON.h"
 #import "../../Utils/Reachability.h"
 #import "../../Source/SVProgressHUD/SVProgressHUD.h"
+#import "NotificationController.h"
 
 
 
@@ -55,6 +56,7 @@
     _canPlay = YES;
     _shouldPlay = NO;
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [NotificationController visitVideoWall:_eventId needClear:YES];
     _loadingVideo = [[NSMutableSet alloc]init];
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];

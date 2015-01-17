@@ -97,6 +97,7 @@
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
 		08293F6119C487D9009B637A /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08293F6019C487D9009B637A /* mapapi.bundle */; };
 		08293F8219C5DC3A009B637A /* THProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08293F8119C5DC3A009B637A /* THProgressView.m */; };
+		083411831A6A75B600EEB584 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083411821A6A75B600EEB584 /* NotificationController.m */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
 		0838E7B01969030A004E4655 /* PcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */; };
 		083FF69319CF003A001BB61E /* EventSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083FF69219CF003A001BB61E /* EventSearchViewController.m */; };
@@ -550,6 +551,8 @@
 		08293F6019C487D9009B637A /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		08293F8019C5DC3A009B637A /* THProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THProgressView.h; sourceTree = "<group>"; };
 		08293F8119C5DC3A009B637A /* THProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THProgressView.m; sourceTree = "<group>"; };
+		083411811A6A75B600EEB584 /* NotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		083411821A6A75B600EEB584 /* NotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
 		0838E7AC1969030A004E4655 /* PcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PcommentTableViewCell.h; sourceTree = "<group>"; };
 		0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PcommentTableViewCell.m; sourceTree = "<group>"; };
 		0838E7AE1969030A004E4655 /* PcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PcommentTableViewCell.xib; sourceTree = "<group>"; };
@@ -1653,6 +1656,8 @@
 				510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */,
 				04BAF6551993644F00BF00E1 /* Reachability.h */,
 				04BAF6561993644F00BF00E1 /* Reachability.m */,
+				083411811A6A75B600EEB584 /* NotificationController.h */,
+				083411821A6A75B600EEB584 /* NotificationController.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2509,6 +2514,7 @@
 				08DB699F19541F3A00F80F3F /* AFHTTPRequestOperation.m in Sources */,
 				519100F019651388005DF607 /* MRZoomScrollView.m in Sources */,
 				514812181937064E00DBBED7 /* MJRefreshFooterView.m in Sources */,
+				083411831A6A75B600EEB584 /* NotificationController.m in Sources */,
 				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */,

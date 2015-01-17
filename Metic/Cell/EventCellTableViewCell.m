@@ -8,6 +8,7 @@
 
 #import "EventCellTableViewCell.h"
 #import "BannerViewController.h"
+#import "NotificationController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @implementation EventCellTableViewCell
@@ -129,6 +130,44 @@
     }else{
         if (_officialFlag) {
             [_officialFlag removeFromSuperview];
+        }
+    }
+}
+
+-(void)setImgWallpoint
+{
+    NSLog(@"init button");
+    if ([NotificationController visitPhotoWall:_eventId needClear:NO]) {
+        UIImageView* image = (UIImageView*)[imgWall viewWithTag:992];
+        if (!image) {
+            image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
+            image.image = [UIImage imageNamed:@"选择点图标"];
+            [imgWall addSubview:image];
+            [image setTag:992];
+        }
+    }else{
+        UIImageView* image = (UIImageView*)[imgWall viewWithTag:992];
+        if (image) {
+            [image removeFromSuperview];
+        }
+    }
+}
+
+-(void)setVideoWallpoint
+{
+    NSLog(@"init button");
+    if ([NotificationController visitVideoWall:_eventId needClear:NO]) {
+        UIImageView* image = (UIImageView*)[videoWall viewWithTag:991];
+        if (!image) {
+            image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
+            image.image = [UIImage imageNamed:@"选择点图标"];
+            [videoWall addSubview:image];
+            [image setTag:991];
+        }
+    }else{
+        UIImageView* image = (UIImageView*)[videoWall viewWithTag:991];
+        if (image) {
+            [image removeFromSuperview];
         }
     }
 }

@@ -159,11 +159,10 @@
             
             TTTAttributedLabel *update_label = (TTTAttributedLabel*)[cell viewWithTag:131];
             if (!update_label) {
-                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 10, restWidth, 30)];
+                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 0, restWidth, 50)];
                 [cell addSubview:update_label];
                 [update_label setTag:131];
-            }else [update_label setFrame:CGRectMake(10, 10, restWidth, 30)];
-            
+            }else [update_label setFrame:CGRectMake(10, 0, restWidth, 50)];
             [update_label setNumberOfLines:0];
             [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
             [update_label setText:hintString1];
@@ -201,9 +200,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == _dynamic_tableView) {
-//        NSDictionary *updateInfo = _updateEvents[indexPath.row];
         _selete_Eventid = [[_updateEventIds keyEnumerator] allObjects][indexPath.row];
-        [_updateEventIds removeObjectForKey:_selete_Eventid];
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];

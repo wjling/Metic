@@ -25,6 +25,7 @@
 #import "MobClick.h"
 #import "KxMenu.h"
 #import "SVProgressHUD.h"
+#import "NotificationController.h"s
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -78,6 +79,7 @@
     [self initUI];
     
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [NotificationController visitEvent:_eventId];
     self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
     self.Bannercode = -1;
@@ -1072,6 +1074,8 @@
             }else tmp.image = nil;
             
         }
+        [cell setImgWallpoint];
+        [cell setVideoWallpoint];
 
         return cell;
     }

@@ -18,6 +18,7 @@
 #import "photoRankingViewController.h"
 #import "PhotoUploadViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "NotificationController.h"
 
 #define photoNumPP 60
 
@@ -89,7 +90,7 @@
     self.photo_list_all= [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self pullPhotoInfosFromDB];
-        if ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+        if ([NotificationController visitPhotoWall:_eventId needClear:YES] || ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0)) {
             self.sequence = [[NSNumber alloc]initWithInt:0];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [_header beginRefreshing];
