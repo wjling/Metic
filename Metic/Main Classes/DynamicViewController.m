@@ -11,6 +11,8 @@
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
 #import "../Utils/PhotoGetter.h"
 #import "MobClick.h"
+#import "PhotoDetailViewController.h"
+#import "VideoDetailViewController.h"
 
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
@@ -174,7 +176,7 @@
         UITableViewCell* cell;
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
-        if (cmd == 988) {
+        if (cmd == 986 || cmd == 987 || cmd == 988) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
@@ -204,9 +206,87 @@
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
+        int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
         _selete_Eventid = [atMeInfo valueForKey:@"event_id"];
-        [_atMeEvents removeObjectAtIndex:indexPath.row];
-        [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+        switch (cmd) {
+            case 986:{
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                         bundle: nil];
+                VideoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"VideoDetailViewController"];
+                
+                viewcontroller.videoId = [atMeInfo valueForKey:@"video_id"];
+                viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
+                viewcontroller.controller = nil;
+                [self.navigationController pushViewController:viewcontroller animated:YES];
+            }
+                break;
+            case 987:{
+                UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                         bundle: nil];
+                PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
+                
+                viewcontroller.photoId = [atMeInfo valueForKey:@"photo_id"];
+                viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
+                viewcontroller.controller = nil;
+                viewcontroller.type = 2;
+                [self.navigationController pushViewController:viewcontroller animated:YES];
+            }
+                
+                break;
+            case 988:
+                if (_selete_Eventid) [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+                break;
+            case 989:{
+                int operation = [[atMeInfo valueForKey:@"operation"] intValue];
+                switch (operation) {
+                    case 1:
+                    {
+                        if (_selete_Eventid) [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+                    }
+                        break;
+                        
+                    case 3:
+                    {
+                        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                                 bundle: nil];
+                        PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
+                        
+                        viewcontroller.photoId = [atMeInfo valueForKey:@"photo_id"];
+                        viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                        viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
+                        viewcontroller.controller = nil;
+                        viewcontroller.type = 2;
+                        [self.navigationController pushViewController:viewcontroller animated:YES];
+                    }
+                        break;
+                        
+                    case 5:
+                    {
+                        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                                 bundle: nil];
+                        VideoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"VideoDetailViewController"];
+                        
+                        viewcontroller.videoId = [atMeInfo valueForKey:@"video_id"];
+                        viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                        viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
+                        viewcontroller.controller = nil;
+                        [self.navigationController pushViewController:viewcontroller animated:YES];
+                    }
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+                break;
+                
+            default:
+                if (_selete_Eventid) [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
+                break;
+        }
+        
     }
     
     
@@ -275,7 +355,7 @@
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
-        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 988 || cmd == 989) {
+        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 986 || cmd == 987 || cmd == 988 || cmd == 989) {
             if (_updateEventIds.count == 0 && _atMeEvents.count != 0) {
                 [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
             }else if(_updateEventIds.count != 0 && _atMeEvents.count == 0){

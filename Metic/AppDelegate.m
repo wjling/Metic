@@ -481,7 +481,7 @@
         type = -1;
         NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventIds.count);
     }
-    else if (msg_cmd == 988 || msg_cmd == 989) {
+    else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
         [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
         type = -1;
         NSLog(@"有人@你： %@",msg_dic);
@@ -1011,7 +1011,7 @@
             }
             
         }
-        else if (msg_cmd == 988 || msg_cmd == 989) {
+        else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];

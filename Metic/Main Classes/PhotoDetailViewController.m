@@ -54,23 +54,7 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initUI];
-    self.sequence = [NSNumber numberWithInt:0];
-    self.isKeyBoard = NO;
-    self.Footeropen = NO;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _emotionKeyboard.textView = _inputTextView;
-    self.pcomment_list = [[NSMutableArray alloc]init];
-    //[self initButtons];
-    [self setGoodButton];
-    //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
-    
-    
-
-    
+    [self initData];
     // Do any additional setup after loading the view.
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -166,7 +150,7 @@
     textView.delegate = self;
     
     [self.commentView addSubview:textView];
-	_inputTextView = textView;
+    _inputTextView = textView;
     
     _inputTextView.frame = CGRectMake(38, 5, 240, 35);
     _inputTextView.backgroundColor = [UIColor clearColor];
@@ -177,6 +161,69 @@
     [_emotionKeyboard initCollectionView];
 }
 
+-(void)initData
+{
+    self.sequence = [NSNumber numberWithInt:0];
+    self.isKeyBoard = NO;
+    self.Footeropen = NO;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    _emotionKeyboard.textView = _inputTextView;
+    self.pcomment_list = [[NSMutableArray alloc]init];
+    //[self initButtons];
+    [self setGoodButton];
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
+    
+    if (!_photoInfo) {
+        if (![self pullPhotoInfoFromDB]) {
+            [self pullPhotoInfoFromAir];
+        }
+    }
+}
+
+-(BOOL)pullPhotoInfoFromDB
+{
+    BOOL ret = NO;
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.photoId],@"photo_id", nil];
+    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
+    if (result.count) {
+        NSString *tmpa = [result[0] valueForKey:@"photoInfo"];
+        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+        self.photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+        ret = YES;
+    }
+    [sql closeMyDB];
+    return ret;
+}
+
+-(void)pullPhotoInfoFromAir
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.photoId forKey:@"photo_id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"拉取图片%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_OBJECT_INFO finshedBlock:^(NSData *rData) {
+        if(rData){
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            _photoInfo = response1;
+            
+        }
+    }];
+
+}
 
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
@@ -233,7 +280,7 @@
 
 -(void) setGoodButton
 {
-    if ([[self.photoInfo valueForKey:@"isZan"] boolValue]) {
+    if (_photoInfo && [[self.photoInfo valueForKey:@"isZan"] boolValue]) {
         [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
     }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
 }
@@ -314,25 +361,28 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        [self.good_button setEnabled:YES];
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        NSLog(@"received Data: %@",temp);
-        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber *cmd = [response1 valueForKey:@"cmd"];
-        if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-            BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-            int good = [[self.photoInfo valueForKey:@"good"]intValue];
-            if (isZan) {
-                good --;
-            }else good ++;
-            [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-            [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-            [self updatePhotoInfoToDB:_photoInfo];
-            [self setGoodButton];
+        if (rData) {
             [self.good_button setEnabled:YES];
-        }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
+                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
+                int good = [[self.photoInfo valueForKey:@"good"]intValue];
+                if (isZan) {
+                    good --;
+                }else good ++;
+                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+                [self updatePhotoInfoToDB:_photoInfo];
+                [self setGoodButton];
+                [self.good_button setEnabled:YES];
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
         }
+        
     }];
 }
 
@@ -609,7 +659,7 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-        float height = [[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue];
+        float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -791,9 +841,9 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0 isEmotion:YES];
+        self.specificationHeight = _photoInfo? [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0 isEmotion:YES]:0;
         NSLog(@"%f",self.specificationHeight);
-        height = [[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue];
+        height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         height += 3;
         height += 50;
         height += 30;//delete button
@@ -862,7 +912,7 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+    if (!_photoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         NSLog(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
@@ -870,10 +920,6 @@
         return;
     }
     [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
-//    if (refreshView == _header) {
-//        _Headeropen = YES;
-//        self.master_sequence = [NSNumber numberWithInt:0];
-//    }else
     _Footeropen = YES;
     [self pullMainCommentFromAir];
 }

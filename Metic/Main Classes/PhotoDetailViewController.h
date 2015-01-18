@@ -18,7 +18,7 @@
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSString* eventName;
-@property (nonatomic,strong) NSDictionary * photoInfo;
+@property (nonatomic,strong) NSMutableDictionary * photoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;

@@ -21,6 +21,7 @@
 #import "../UserInfo/UserInfoViewController.h"
 #import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "MTVideoPlayerViewController.h"
+#import "UIButton+WebCache.h"
 
 
 #define chooseArray @[@[@"举报视频"]]
@@ -60,24 +61,7 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initUI];
-    //[self getthumb];
-    self.sequence = [NSNumber numberWithInt:0];
-    self.videoId = [_videoInfo valueForKey:@"video_id"];
-    self.isKeyBoard = NO;
-    self.Footeropen = NO;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _emotionKeyboard.textView = _inputTextView;
-    self.vcomment_list = [[NSMutableArray alloc]init];
-
-    //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
-    
-    
-    
-    
+    [self initData];
     // Do any additional setup after loading the view.
 }
 -(void)viewDidAppear:(BOOL)animated
@@ -176,6 +160,71 @@
     
 }
 
+- (void)initData
+{
+    self.sequence = [NSNumber numberWithInt:0];
+    if (_videoInfo) self.videoId = [_videoInfo valueForKey:@"video_id"];
+    self.isKeyBoard = NO;
+    self.Footeropen = NO;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    _emotionKeyboard.textView = _inputTextView;
+    self.vcomment_list = [[NSMutableArray alloc]init];
+    
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
+    
+    if (!_videoInfo) {
+        if (![self pullVideoInfoFromDB]) {
+            [self pullVideoInfoFromAir];
+        }
+    }
+}
+
+-(BOOL)pullVideoInfoFromDB
+{
+    BOOL ret = NO;
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.videoId],@"video_id", nil];
+    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
+    if (result.count) {
+        NSString *tmpa = [result[0] valueForKey:@"videoInfo"];
+        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+        self.videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+        ret = YES;
+    }
+    [sql closeMyDB];
+    return ret;
+}
+
+-(void)pullVideoInfoFromAir
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.videoId forKey:@"video_id"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"拉取视频%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_OBJECT_INFO finshedBlock:^(NSData *rData) {
+        if(rData){
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            _videoInfo = response1;
+            [_tableView reloadData];
+            
+        }
+    }];
+    
+}
+
 - (void)play:(id)sender {
     if (_isKeyBoard) {
         [_inputTextView resignFirstResponder];
@@ -183,6 +232,10 @@
     }
     if (_isEmotionOpen) {
         [self button_Emotionpress:nil];
+        return;
+    }
+    if (!_videoInfo) {
+        [self pullVideoInfoFromAir];
         return;
     }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
@@ -377,16 +430,7 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-//        MTVideoPlayerViewController* player = [[MTVideoPlayerViewController alloc]init];
-//        player.videoName = videoName;
-//        player.wall = _controller;
-//        player.cell = _SeleVcell;
-//        [self.controller presentViewController:player animated:YES completion:nil];
-//        
-//        
-//        
-//        
-//        return;
+        
         MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -439,15 +483,6 @@
 
                     if (self && self.navigationController.viewControllers.lastObject == self ) {
                         [self downloadVideo:videoName url:url];
-//                        if (_controller) {
-//                            NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]];
-//                            AVPlayerItem *videoItem = [AVPlayerItem playerItemWithURL:url];
-//                            AVPlayer *videoPlayer = [AVPlayer playerWithPlayerItem:videoItem];
-//                            AVPlayerLayer* playerLayer = [AVPlayerLayer playerLayerWithPlayer:videoPlayer];
-//                            [_controller.AVPlayerItems setObject:videoItem forKey:videoName];
-//                            [_controller.AVPlayers setObject:videoPlayer forKey:videoName];
-//                            [_controller.AVPlayerLayers setObject:playerLayer forKey:videoName];
-//                        }
                     }
                 });
                 
@@ -922,7 +957,16 @@
         if (!_video_thumb) {
             [video setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
             [video setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
+            
         }
+        NSString *url = [_videoInfo valueForKey:@"thumb"];
+        
+        [video sd_setImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            if (image) {
+                video.contentMode = UIViewContentModeScaleAspectFill;
+                _video_thumb = image;
+            }
+        }];
         
         UIImageView* videoIc = [[UIImageView alloc]initWithFrame:CGRectMake((320-75)/2, (height-75)/2, 75,75)];
         [videoIc setUserInteractionEnabled:NO];
@@ -931,7 +975,7 @@
         
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        [video setImage:self.video_thumb forState:UIControlStateNormal];
+        
         [cell addSubview:video];
         [cell addSubview:videoIc];
         [cell addSubview:label];
@@ -1090,7 +1134,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = [CommonUtils calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0 isEmotion:NO];
+        self.specificationHeight = _videoInfo? [CommonUtils calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:260.0 fontSize:12.0 isEmotion:NO]:0;
         height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
         height += 3;
         height += 50;
@@ -1151,7 +1195,7 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+    if (!_videoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         NSLog(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];

@@ -232,6 +232,9 @@
         case 47:
             resultCode = @"push_message";
             break;
+        case 48:
+            resultCode = @"get_object_info";
+            break;
         default:
             resultCode = @"json";
             break;

@@ -194,10 +194,13 @@
         _isPlaying = NO;
         self.videoPlayImg.hidden = NO;
     }
-    
+
     [self.thumbImg sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        self.thumbImg.contentMode = UIViewContentModeScaleAspectFill;
-        self.videoThumb = image;
+        if (image) {
+            self.thumbImg.contentMode = UIViewContentModeScaleAspectFill;
+            self.videoThumb = image;
+        }
+        
     }];
     
 }
