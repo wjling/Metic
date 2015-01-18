@@ -99,6 +99,15 @@
 }
 
 - (IBAction)back:(id)sender {
+    
+    [_resultView setHidden:YES];
+    [_controlView setHidden:YES];
+    [_showView setHidden:YES];
+    [readerView start];
+    
+    
+    
+    return;
     UIViewController *vc = _menu.homeViewController;
     if (vc) {
         [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
