@@ -819,7 +819,7 @@ enum Response_Type
 {
     [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) hideUpdateInRow:4];
     for (NSDictionary* msg in messages) {
-        NSString* msg_str = [msg objectForKey:@"msg"];
+        NSString* msg_str = [msg objectForKey:@"content"];
         NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
         NSNumber* seq = [msg objectForKey:@"seq"];
         [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
