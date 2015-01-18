@@ -61,6 +61,9 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldEditChanged:)
+                                                name:@"UITextFieldTextDidChangeNotification"
+                                              object:self.subject_text];
     [self drawLeftButton];
     [self turnRoundCorner];
     self.scrollView.delegate = self;
@@ -364,6 +367,7 @@
     }
 }
 
+
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     
@@ -391,6 +395,37 @@
     }else{
         [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         return YES;
+    }
+}
+
+-(void)textFieldEditChanged:(NSNotification*)obj
+{
+    NSInteger kMaxLength = 45;
+    UITextField* textField = (UITextField*)obj.object;
+    NSString* toBeString = textField.text;
+    //获取当前输入法
+    NSString* lang = [[UITextInputMode currentInputMode] primaryLanguage];
+    //    NSLog(@"当前输入法： %@", lang);
+    if ([lang isEqualToString:@"zh-Hans"]) { //当前输入法是中文
+        UITextRange* selectedRange = [textField markedTextRange]; //高亮的文本范围
+        UITextPosition* position = [textField positionFromPosition:selectedRange.start offset:0];
+        
+        if (!position) { //不存在高亮的文本
+            if (toBeString.length > kMaxLength) { //超过了最大长度限制
+                textField.text = [toBeString substringToIndex:kMaxLength];
+            }
+            
+            else{
+                
+            }
+        }
+    }
+    else{ //非中文输入法
+        
+        if (toBeString.length > kMaxLength) { //超过了最大长度
+            textField.text = [toBeString substringToIndex:kMaxLength];
+        }
+        
     }
 }
 
