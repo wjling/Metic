@@ -129,6 +129,7 @@
         [self ToSquare];
     }else if([userDf integerForKey:@"newNotificationCome"] > 0){
         [userDf setInteger:0 forKey:@"newNotificationCome"];
+        [userDf synchronize];
         [self ToNotificationCenter];
     }else [self initWelcomePage];
 }

@@ -160,7 +160,11 @@
     if (userInfo) {
         //新消息来了 type：1跳转到消息中心 type：0表示忽略
         [[NSUserDefaults standardUserDefaults]setInteger:1 forKey:@"newNotificationCome"];
-    }else [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }else {
+        [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     return YES;
 
 }
