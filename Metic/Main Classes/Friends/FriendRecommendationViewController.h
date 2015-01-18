@@ -46,6 +46,7 @@
 @property (strong, nonatomic) NSMutableArray* contacts_arr;
 @property CLLocationCoordinate2D coordinate;
 @property (strong, nonatomic) BMKLocationService* locationService;
+@property (nonatomic, strong) CLLocationManager  *locationManager;
 @property (strong, nonatomic) NSMutableArray* contactFriends_arr;
 @property (strong, nonatomic) NSMutableArray* nearbyFriends_arr;
 @property (strong, nonatomic) NSMutableArray* kankan_arr;

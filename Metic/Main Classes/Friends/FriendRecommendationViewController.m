@@ -349,10 +349,18 @@
     else if (tab_index == 1)
     {
         NSLog(@"tab 1");
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+            //由于IOS8中定位的授权机制改变 需要进行手动授权
+            _locationManager = [[CLLocationManager alloc] init];
+            //获取授权认证
+            [_locationManager requestAlwaysAuthorization];
+            [_locationManager requestWhenInUseAuthorization];
+        }
         locationService = [[BMKLocationService alloc]init];
         locationService.delegate = self;
 //        NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
 //        [locate start];
+        
         [locationService startUserLocationService];
     }
     else if (tab_index == 2)
@@ -849,6 +857,13 @@
         }
         NSLog(@"滚动停止");
         if (tab_index == 1) {
+            if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+                //由于IOS8中定位的授权机制改变 需要进行手动授权
+                _locationManager = [[CLLocationManager alloc] init];
+                //获取授权认证
+                [_locationManager requestAlwaysAuthorization];
+                [_locationManager requestWhenInUseAuthorization];
+            }
             NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
             [locate start];
         }
