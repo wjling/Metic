@@ -127,6 +127,9 @@
     if (!_hasTurntoSquare && [userDf boolForKey:@"firstLaunched"]) {
         _hasTurntoSquare = YES;
         [self ToSquare];
+    }else if([userDf integerForKey:@"newNotificationCome"] > 0){
+        [userDf setInteger:0 forKey:@"newNotificationCome"];
+        [self ToNotificationCenter];
     }else [self initWelcomePage];
 }
 
@@ -178,6 +181,15 @@
                                                              bundle: nil];
     UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventSquareViewController"];
 
+    [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
+}
+
+-(void)ToNotificationCenter
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+    
     [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
 }
 

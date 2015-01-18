@@ -155,6 +155,12 @@
     };
     
     [XGPush handleLaunching:launchOptions successCallback:successBlock errorCallback:errorBlock];
+    
+    NSDictionary*userInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (userInfo) {
+        //新消息来了 type：1跳转到消息中心 type：0表示忽略
+        [[NSUserDefaults standardUserDefaults]setInteger:1 forKey:@"newNotificationCome"];
+    }else [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
     return YES;
 
 }
@@ -212,6 +218,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
     NSLog(@"app will enter foreground==================");
     application.applicationIconBadgeNumber = 0;
