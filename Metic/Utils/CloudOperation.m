@@ -101,10 +101,16 @@
                     }
                 }
                     break;
+                default:
+                    if(COtype == 2){
+                        [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
+                    }
+                    break;
+                    
             }
 
         }else if(COtype == 2){
-            [self.mDelegate finishwithOperationStatus:NO type:3 data:nil path:mpath];
+            [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
         }
        
     }];
