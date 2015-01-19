@@ -686,8 +686,8 @@ enum Response_Type
     
     [KxMenu setTintColor:[UIColor whiteColor]];
     [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
-    [KxMenu showMenuInView:self.view
-                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 0, 0, 0)
+    [KxMenu showMenuInView:self.navigationController.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 60, 0, 0)
                  menuItems:menuItems];
 }
 

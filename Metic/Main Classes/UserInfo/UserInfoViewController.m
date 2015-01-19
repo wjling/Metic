@@ -237,7 +237,7 @@
         
     [KxMenu setTintColor:[UIColor whiteColor]];
     [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
-    [KxMenu showMenuInView:self.navigationController.view.window
+    [KxMenu showMenuInView:self.navigationController.view
                   fromRect:CGRectMake(self.view.bounds.size.width*0.9, 60, 0, 0)
                  menuItems:menuItems];
 }
