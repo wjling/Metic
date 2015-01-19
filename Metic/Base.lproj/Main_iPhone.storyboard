@@ -1575,7 +1575,7 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="主人好懒都懒得描述的说～" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rle-2c-DoH">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="主人好懒都懒得描述的说～" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rle-2c-DoH">
                                                     <rect key="frame" x="10" y="110" width="280" height="60"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>

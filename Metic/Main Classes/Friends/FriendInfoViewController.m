@@ -513,9 +513,27 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    [moreFunction_view setHidden:YES];
-//    [self.friendInfoEvents_tableView reloadData];
-//    NSLog(@"reload data");
+    
+    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
+        NSNumber* rowHeight = rowHeights[indexPath.section];
+        NSLog(@"%@",rowHeight);
+        if (cell.isExpanded) {
+            [rowHeights replaceObjectAtIndex:indexPath.section withObject:[NSNumber numberWithFloat:110]];
+        }else {
+            [rowHeights replaceObjectAtIndex:indexPath.section withObject:[NSNumber numberWithFloat:225]];
+        }
+        cell.isExpanded = !cell.isExpanded;
+        
+        [self.friendInfoEvents_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+
+    
+    
+    
+    
+    
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -583,29 +601,25 @@
     }
     cell.numOfMember_label.text = [CommonUtils NSStringWithNSNumber:[event objectForKey:@"member_count"]];
     
-    
     if (!cell.stretch_button) {
-        cell.stretch_button = [[UIButton alloc]initWithFrame:CGRectMake(155, 90, 10, 10)];
-        [cell.stretch_button setBackgroundImage:[UIImage imageNamed:@"箭头icon"] forState:UIControlStateNormal];
-        [cell.stretch_button addTarget:self action:@selector(stretchBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        cell.stretch_button = [[UIImageView alloc]initWithFrame:CGRectMake(155, 90, 10, 10)];
+        [cell.stretch_button setImage:[UIImage imageNamed:@"箭头icon"]];
         [cell.contentView addSubview:cell.stretch_button];
     }
-//    NSLog(@"button tag: %d",cell.stretch_button.tag);
     
-    
-//    if (reloadHeight<= 100) {
-//        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
-//        cell.isExpanded = NO;
-//    }
-//    else
-//    {
-//        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
-//        cell.isExpanded = YES;
-//    }
+    NSNumber* rowHeight = rowHeights[indexPath.section];
+    if ([rowHeight floatValue] == 225) {
+        cell.isExpanded = YES;
+        cell.stretch_button.frame = CGRectMake(155, 200, 10, 10);
+        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
+        
+    }else if([rowHeight floatValue] == 110) {
+        cell.isExpanded = NO;
+        cell.stretch_button.frame = CGRectMake(155, 90, 10, 10);
+        [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
+    }
     
 
-    
-    
     
     
     
@@ -633,86 +647,6 @@
 //    cell.layer.borderWidth = 0.3;
     return cell;
     
-}
-
-- (IBAction)stretchBtnClicked:(id)sender
-{
-    FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[sender superview];
-    while (![cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
-        cell = (FriendInfoEventsTableViewCell*)[cell superview];
-    }
-    if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
-        NSLog(@"is friendINFO cell");
-    }
-    NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
-    BOOL temp = cell.isExpanded;
-    NSLog(@"clicked row: %d, if expanded: %d",indexP.section,temp);
-    if (!cell.isExpanded) {
-        [rowHeights replaceObjectAtIndex:indexP.section withObject:[NSNumber numberWithFloat:215]];
-        
-//        [cell.stretch_button removeFromSuperview];
-//        cell.stretch_button.tag = 200;
-        cell.stretch_button.frame = CGRectMake(155, 200, 10, 10);
-//        cell.stretch_button.hidden = YES;
-//        [cell.contentView addSubview:cell.stretch_button];
-        
-
-        //        NSLog(@"初始————x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
-        
-        
-//             [cell.stretch_button removeFromSuperview];
-//             [cell.contentView addSubview:cell.stretch_button];
-             NSLog(@"x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
-             NSLog(@"Yes contentView height: %f",cell.contentView.bounds.size.height);
-             [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
-        
-//        isReload = YES;
-//        reloadHeight = 200;
-        
-
-        
-//        for (UIImageView* imgV in cell.avatars) {
-//            imgV.hidden = NO;
-//            [cell.contentView addSubview:imgV];
-//        }
-//        for (UIView* v in [cell subviews]) {
-//            if ( [v isKindOfClass:[UIImageView class]]) {
-//                NSLog(@"there is an ImageView");
-//                v.hidden = NO;
-//            }
-//        }
-        
-
-    }
-    else
-    {
-        [rowHeights replaceObjectAtIndex:indexP.section withObject:[NSNumber numberWithFloat:110]];
-//        for (UIImageView* imgV in cell.avatars) {
-//            imgV.hidden = YES;
-//        }
-        
-        [UIView animateWithDuration:5 animations:^
-         {
-//             cell.stretch_button.tag = 90;
-             cell.stretch_button.frame = CGRectMake(155, 90, 10, 10);
-//             isReload = YES;
-//             reloadHeight = 90;
-//             [cell.stretch_button removeFromSuperview];
-//             [cell.contentView addSubview:cell.stretch_button];
-             NSLog(@"x: %f, y: %f, width: %f, height: %f",cell.stretch_button.frame.origin.x,cell.stretch_button.frame.origin.y,cell.stretch_button.frame.size.width,cell.stretch_button.frame.size.height);
-             NSLog(@"NO contentView height: %f",cell.contentView.bounds.size.height);
-             [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
-         }];
-
-    }
-    cell.isExpanded = !cell.isExpanded;
-//    [self.friendInfoEvents_tableView beginUpdates];
-//    [self.friendInfoEvents_tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexP] withRowAnimation:UITableViewRowAnimationAutomatic];
-//    [self.friendInfoEvents_tableView endUpdates];
-    [self.friendInfoEvents_tableView reloadData];
-    
-//    [self.friendInfoEvents_tableView reloadData];
-
 }
 
 - (IBAction)participate_event:(id)sender

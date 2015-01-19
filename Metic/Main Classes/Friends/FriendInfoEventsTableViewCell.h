@@ -20,7 +20,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *numOfMember_label;
 @property (strong, nonatomic,readonly) IBOutlet UIView *contentView;
 @property (strong, nonatomic) NSMutableArray* avatars;
-@property (strong, nonatomic) UIButton *stretch_button;
+@property (strong, nonatomic) UIImageView *stretch_button;
 @property (readwrite,nonatomic) BOOL isExpanded;
 
 
