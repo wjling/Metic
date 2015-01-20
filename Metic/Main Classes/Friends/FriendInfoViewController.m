@@ -117,7 +117,11 @@
     [self getfriendInfoFromDB];
     CGRect screen = [UIScreen mainScreen].bounds;
     contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 135)];
-    [contentView setBackgroundColor:[UIColor orangeColor]];
+    contentView.clipsToBounds = YES;
+    [contentView setBackgroundColor:[UIColor clearColor]];
+    
+    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 132, screen.size.width, 3)];
+    [line setBackgroundColor:[UIColor orangeColor]];
     
     sView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height-3)];
     CGFloat sv_width = sView.frame.size.width;
@@ -128,7 +132,7 @@
     sView.delegate = self;
     sView.showsHorizontalScrollIndicator = NO;
     sView.showsVerticalScrollIndicator = NO;
-    [sView setBackgroundColor:[UIColor lightGrayColor]];
+    [sView setBackgroundColor:[UIColor clearColor]];
     
     pControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, sv_height-15, sv_width, 10)];
     pControl.numberOfPages = kNumberOfPages;
@@ -212,7 +216,7 @@
     [friend_alias_button addTarget:self action:@selector(changeAlias:) forControlEvents:UIControlEventTouchUpInside];
     
 //    self.fInfoView.layer.borderColor
-    [self.fInfoView addSubview:fInfoView_imgV];
+//    [self.fInfoView addSubview:fInfoView_imgV];
     [self.fInfoView addSubview:photo];
     [self.fInfoView addSubview:name_label];
     [self.fInfoView addSubview:alias_label];
@@ -226,7 +230,7 @@
     self.fDescriptionView = [[UIView alloc]initWithFrame:CGRectMake(fInfoView.frame.size.width, 0, sv_width, sv_height)];
 //    [self.fDescriptionView setBackgroundColor:[UIColor yellowColor]];
 //    self.fDescriptionView.image = [UIImage imageNamed:@"1星空.jpg"];
-    self.fDescriptionView_imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
+//    self.fDescriptionView_imgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, sv_width, sv_height)];
     
     title_label = [[UILabel alloc]initWithFrame:CGRectMake(30, 20, 100, 30)];
     title_label.text = @"个人描述";
@@ -249,13 +253,15 @@
     self.friendInfoEvents_tableView.delegate = self;
     self.friendInfoEvents_tableView.dataSource = self;
 
-    [self.fDescriptionView addSubview:self.fDescriptionView_imgV];
+//    [self.fDescriptionView addSubview:self.fDescriptionView_imgV];
     [self.fDescriptionView addSubview:title_label];
     [self.fDescriptionView addSubview:description_label];
     
+    [contentView addSubview:line];
     [sView addSubview:fInfoView];
     [sView addSubview:fDescriptionView];
     
+    [contentView addSubview:fInfoView_imgV];
     [contentView addSubview:sView];
     [contentView addSubview:pControl];
     
@@ -294,7 +300,9 @@
 //    NSString* email = [friendInfo_dic objectForKey:@"email"];
     NSString* sign = [friendInfo_dic objectForKey:@"sign"];
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-    
+    self.fInfoView_imgV.contentMode = UIViewContentModeScaleAspectFill;
+    self.fInfoView_imgV.clipsToBounds = YES;
+    self.fInfoView_imgV.image = [UIImage imageNamed:@"默认用户头像"];
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
@@ -312,7 +320,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:0 completionBlock:nil];
             [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
-            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:1 brightness: -0.07 completionBlock:nil];
+            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:6 brightness: -0.1 completionBlock:nil];
         });
         
     }];
