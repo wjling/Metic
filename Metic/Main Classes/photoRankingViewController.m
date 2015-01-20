@@ -190,12 +190,29 @@
 #pragma UITableView DataSource & Delegate
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_photos) return _photos.count;
-    else return 0;
+    if (_photos && _photos.count > 0) return _photos.count;
+    else return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(_photos.count==0){
+        UITableViewCell* cell = [[UITableViewCell alloc]init];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,300,80)];
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+        
+        
+        label.text = @"还没有图片哦，快去上传吧";
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont systemFontOfSize:14];
+        label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+        label.textAlignment = NSTextAlignmentCenter;
+        [cell addSubview:label];
+        return cell;
+    }
+    
     static NSString *CellIdentifier = @"PhotoRankingTableViewCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -220,7 +237,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 226;
+    return _photos.count == 0? 80:226;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

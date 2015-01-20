@@ -331,7 +331,7 @@
                     [self.quiltView reloadData];
                 });
             }else{
-                label.text = @"没有更多了哦，去上传吧~";
+                label.text = _showPhoNum > 0? @"没有更多了哦，去上传吧~":@"还没有图片哦，快去上传吧";
             }
             
             label.font = [UIFont systemFontOfSize:15];
@@ -397,10 +397,11 @@
 }
 
 - (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"heightForCellAtIndexPath %d",indexPath.row);
+    
+    float defaultHeight = _showPhoNum == 0? 200:50;
     if (indexPath.row == _showPhoNum) {
-        return abs(_h1) + 50;
-    }else if(indexPath.row == _showPhoNum + 1) return 50;
+        return abs(_h1) + defaultHeight;
+    }else if(indexPath.row == _showPhoNum + 1) return defaultHeight;
     
     NSDictionary *a = _photo_list[indexPath.row];
     

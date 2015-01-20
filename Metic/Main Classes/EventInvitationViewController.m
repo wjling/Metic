@@ -105,16 +105,33 @@
 #pragma mark UITableViewDataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 289;
+    return msg_arr.count==0? 80:289;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return msg_arr.count;
+    return msg_arr.count==0? 1:msg_arr.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(msg_arr.count==0){
+        UITableViewCell* cell = [[UITableViewCell alloc]init];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,300,80)];
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+        
+
+        label.text = @"暂时没有活动邀请了\n去活动广场看看吧";
+        label.numberOfLines = 2;
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont systemFontOfSize:14];
+        label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+        label.textAlignment = NSTextAlignmentCenter;
+        [cell addSubview:label];
+        return cell;
+    }
+    
     static NSString *CellIdentifier = @"eventInvitationCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
