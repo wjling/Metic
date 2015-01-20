@@ -311,7 +311,7 @@
         [self.fDescriptionView_imgV setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:0 completionBlock:nil];
-            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:-0.08 completionBlock:nil];
+            [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
             [self.fDescriptionView_imgV setImageToBlur:image blurRadius:1 brightness: -0.07 completionBlock:nil];
         });
         
