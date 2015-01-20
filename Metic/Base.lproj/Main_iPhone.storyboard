@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -1214,6 +1215,7 @@
                         <outlet property="gou_imageview" destination="yNH-qo-OI6" id="DuF-xJ-gmJ"/>
                         <outlet property="hint1_textfield" destination="210-lK-X6X" id="3Gf-6e-DIK"/>
                         <outlet property="hint2_label" destination="Fim-Yg-y5q" id="ScO-lg-MOD"/>
+                        <segue destination="SWe-qF-jqe" kind="push" identifier="bindphone_friendrecommend" id="z1d-kw-SOt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlz-LR-0tl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3626,7 +3628,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
@@ -4095,10 +4097,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
                                 <rect key="frame" x="0.0" y="341" width="320" height="75"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
                                         <rect key="frame" x="0.0" y="40" width="320" height="35"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="dishcool" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c84-4Q-aVr">
@@ -4156,7 +4158,7 @@
                                             <constraint firstAttribute="height" constant="35" id="Wh5-OH-bVl"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                         <color key="backgroundColor" red="0.22352942819999999" green="0.2117647231" blue="0.1764705926" alpha="0.88" colorSpace="deviceRGB"/>
                                         <constraints>
@@ -4969,18 +4971,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="vrP-dE-x9J"/>
-        <segue reference="ItJ-aD-aY9"/>
         <segue reference="ib8-0I-OZA"/>
-        <segue reference="8Lk-Kp-pHu"/>
-        <segue reference="KQw-JA-BHy"/>
-        <segue reference="UXj-VV-omZ"/>
+        <segue reference="823-Eq-eYh"/>
         <segue reference="kIc-uU-eUg"/>
+        <segue reference="hB7-KS-rrK"/>
         <segue reference="QDz-81-eMP"/>
         <segue reference="L2M-th-cr6"/>
+        <segue reference="UXj-VV-omZ"/>
+        <segue reference="z1d-kw-SOt"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="8Lk-Kp-pHu"/>
     </inferredMetricsTieBreakers>
 </document>

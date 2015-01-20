@@ -33,6 +33,12 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -112,6 +118,10 @@
     else if (buttonIndex == 1)
     {
         NSString* phone = [alertView textFieldAtIndex:0].text;
+        if ([phone isEqualToString:@""]) {
+            [CommonUtils showToastWithTitle:@"温馨提示" withMessage:@"不能绑定空号码" withDelegate:self withDuaration:2];
+            return;
+        }
         
         void (^uploadPhoneNumberDone)(NSData*) = ^(NSData* rData)
         {
