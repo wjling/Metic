@@ -522,6 +522,11 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
+    if(!moreFunction_view.hidden){
+        moreFunction_view.hidden = YES;
+        return;
+    }
+    
     FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
         NSNumber* rowHeight = rowHeights[indexPath.section];
