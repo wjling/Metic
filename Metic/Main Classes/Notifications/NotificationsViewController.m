@@ -171,7 +171,8 @@ enum Response_Type
 //    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
-    
+    [self.view bringSubviewToFront:_shadowView];
+    _shadowView.hidden = NO;
     
 }
 

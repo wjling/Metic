@@ -70,6 +70,8 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"好友中心"];
+    [self.view bringSubviewToFront:_shadowView];
+    _shadowView.hidden = NO;
 }
 -(void)viewDidDisappear:(BOOL)animated
 {

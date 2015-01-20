@@ -65,6 +65,15 @@
     
     
 }
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [MobClick beginLogPageView:@"消息中心"];
+    [self.view bringSubviewToFront:_shadowView];
+    _shadowView.hidden = NO;
+}
+
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
