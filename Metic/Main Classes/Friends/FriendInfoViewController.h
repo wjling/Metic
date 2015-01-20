@@ -39,7 +39,6 @@
 @property (strong, nonatomic) UIImageView* gender_imageView;
 
 @property (strong, nonatomic) UIView* fDescriptionView;
-@property (strong, nonatomic) UIImageView* fDescriptionView_imgV;
 @property (strong, nonatomic) UILabel* title_label;
 @property (strong, nonatomic) UILabel* description_label;
 

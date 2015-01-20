@@ -9,6 +9,7 @@
 #import "FriendInfoViewController.h"
 #import "math.h"
 #import "UIImageView+LBBlurredImage.h"
+#import "BannerViewController.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate>
 {
@@ -37,7 +38,6 @@
 @synthesize gender_imageView;
 
 @synthesize fDescriptionView;
-@synthesize fDescriptionView_imgV;
 @synthesize title_label;
 @synthesize description_label;
 
@@ -69,6 +69,8 @@
     [self getUserInfo];
     [self.view bringSubviewToFront:moreFunction_view];
      NSLog(@"friend info fid: %@",fid);
+    
+    [self refreshFriendInfo];
 }
 
 //返回上一层
@@ -88,7 +90,7 @@
     {
         [self.navigationItem setTitle:@"用户信息"];
     }
-    [self refreshFriendInfo];
+    
 
 }
 
@@ -98,7 +100,7 @@
     NSLog(@"view did appear");
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
         NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
-        [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
+//        [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
         
     }
     
@@ -154,6 +156,9 @@
     [photo setTag:0];
     photo.layer.borderColor = ([UIColor yellowColor].CGColor);
     photo.layer.borderWidth = 2;
+    photo.userInteractionEnabled = YES;
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showAvatar)];
+    [photo addGestureRecognizer:tap];
     
     
     name_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 30, 200, 25)];
@@ -257,11 +262,12 @@
     [self.fDescriptionView addSubview:title_label];
     [self.fDescriptionView addSubview:description_label];
     
-    [contentView addSubview:line];
+    
     [sView addSubview:fInfoView];
     [sView addSubview:fDescriptionView];
     
     [contentView addSubview:fInfoView_imgV];
+    [contentView addSubview:line];
     [contentView addSubview:sView];
     [contentView addSubview:pControl];
     
@@ -271,6 +277,13 @@
 //    [root addSubview:friendInfoEvents_tableView];
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapDown)];
     [sView addGestureRecognizer:tapGesture];
+}
+
+-(void)showAvatar
+{
+    BannerViewController* bannerView = [[BannerViewController alloc] init];
+    bannerView.banner = self.photo.image;
+    [self presentViewController:bannerView animated:YES completion:^{}];
 }
 
 -(void)tapDown
@@ -308,19 +321,8 @@
         if (!image) {
             image = [UIImage imageNamed:@"默认用户头像"];
         }
-        CGFloat imgWidth = self.view.frame.size.width;
-        CGFloat imgHeight = image.size.height/image.size.width * imgWidth;
-//        UIImage* img = [self scaleToSize:image size:CGSizeMake(imgWidth, imgHeight)];
-        CGRect frame = self.fInfoView.frame;
-        frame.origin.y -= (imgHeight - self.fInfoView.frame.size.height) / 2.0;
-        frame.size.width = imgWidth;
-        frame.size.height = imgHeight;
-        [self.fInfoView_imgV setFrame:frame];
-        [self.fDescriptionView_imgV setFrame:frame];
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.fInfoView_imgV setImageToBlur:image blurRadius:1.5 brightness:0 completionBlock:nil];
             [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
-            [self.fDescriptionView_imgV setImageToBlur:image blurRadius:6 brightness: -0.1 completionBlock:nil];
         });
         
     }];
