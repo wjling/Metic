@@ -51,7 +51,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [super viewDidLoad];
     [self initData];
     [self initUI];
-    [self encodeVideo];
+//    [self encodeVideo];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -170,6 +170,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         return;
     }
     [sender setEnabled:NO];
+    [self encodeVideo];
+}
+
+- (void)upload
+{
+    
     [_textView resignFirstResponder];
     [self showWaitingView];
     PhotoGetter *uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
@@ -260,15 +266,20 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [_alert dismissWithClickedButtonIndex:0 animated:YES];
              });
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [self upload];
+             });
              NSLog(@"Video export succeeded");
          }
          else if (encoder.status == AVAssetExportSessionStatusCancelled)
          {
              NSLog(@"Video export cancelled");
+             _confirmBtn.enabled = YES;
          }
          else
          {
              NSLog(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
+             _confirmBtn.enabled = YES;
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [_alert dismissWithClickedButtonIndex:0 animated:YES];
                  [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频无法处理" WithDelegate:nil WithCancelTitle:@"确定"];
