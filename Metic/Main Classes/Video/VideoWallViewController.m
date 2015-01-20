@@ -21,7 +21,7 @@
 #import "../../Utils/Reachability.h"
 #import "../../Source/SVProgressHUD/SVProgressHUD.h"
 #import "NotificationController.h"
-
+#import "BOAlertController.h"
 
 
 @interface VideoWallViewController ()
@@ -327,20 +327,50 @@
 }
 
 - (IBAction)uploadVideo:(id)sender {
-    UIActionSheet *sheet;
     
-    // 判断是否支持相机
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择视频" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"录像", @"从相册选择", nil];
+    BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择视频" message:nil viewController:self];
+    
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        NSLog(@"cancel");
+    }];
+    [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+        RIButtonItem *takeItem = [RIButtonItem itemWithLabel:@"录像" action:^{
+            UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+            imagePickerController.delegate = self;
+            imagePickerController.allowsEditing = NO;
+            imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            
+            imagePickerController.videoQuality = UIImagePickerControllerQualityType640x480;
+            NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+            imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
+            imagePickerController.videoMaximumDuration = 20;
+            
+            [self presentViewController:imagePickerController animated:YES completion:^{}];
+        }];
+        [actionSheet addButton:takeItem type:RIButtonItemType_Other];
     }
-    else {
-        sheet = [[UIActionSheet alloc] initWithTitle:@"选择视频" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
-    }
     
-    sheet.tag = 255;
+    RIButtonItem *seleteItem = [RIButtonItem itemWithLabel:@"从相册选择" action:^{
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        imagePickerController.delegate = self;
+        imagePickerController.allowsEditing = NO;
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+            imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
+        }else imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        
+        imagePickerController.videoQuality = UIImagePickerControllerQualityType640x480;
+        NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
+        imagePickerController.videoMaximumDuration = 20;
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+    }];
+    [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
     
-    [sheet showInView:self.view];
+    [actionSheet showInView:self.view];
+    
 }
 
 #pragma scrollview Delegate
@@ -453,42 +483,7 @@
     }
 }
 
-#pragma mark - action sheet delegte
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == 255) {
-        // 跳转到相机或相册页面
-        UIImagePickerController* pickerView = [[UIImagePickerController alloc] init];
-        NSUInteger sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        // 判断是否支持相机
-        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            switch (buttonIndex) {
-                case 0:
-                    return;
-                case 1: //相机
-                    sourceType = UIImagePickerControllerSourceTypeCamera;
-                    break;
-                case 2: //相册
-                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                    break;
-            }
-        }
-        else {
-            if (buttonIndex == 0) {
-                return;
-            } else {
-                sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-            }
-        }
-        pickerView.sourceType = sourceType;
-        pickerView.videoQuality = UIImagePickerControllerQualityType640x480;
-        NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
-        pickerView.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
-        [self presentViewController:pickerView animated:YES completion:^{}];
-        pickerView.videoMaximumDuration = 20;
-        pickerView.delegate = self;
-    }
-}
+
 
 #pragma mark - UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
