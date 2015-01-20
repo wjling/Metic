@@ -78,22 +78,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.userName.text = [MTUser sharedInstance].name;
-    self.email.text = [MTUser sharedInstance].email;
-    
-    if (!_gender && [MTUser sharedInstance].gender) {
-        float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
-        _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20 , 20)];
-        if ([[MTUser sharedInstance].gender intValue] == 1) {
-            [self.gender setImage:[UIImage imageNamed:@"男icon"]];
-        }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
-        [self.view addSubview:_gender];
-        
-    }
-    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
-    NSLog(@"menu did appear,  Uid: %@",[MTUser sharedInstance].userid);
-    [getter getAvatar];
-    //[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [self refresh];
 }
 
 -(void)refresh
@@ -101,9 +86,9 @@
     self.userName.text = [MTUser sharedInstance].name;
     self.email.text = [MTUser sharedInstance].email;
     float userNameLength = [self calculateTextWidth:[MTUser sharedInstance].name height:self.userName.frame.size.height fontSize:18];
-    if (!_gender) {
+    if (!_gender && self.UserInfoView) {
         _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20)];
-        [self.view addSubview:_gender];
+        [self.UserInfoView addSubview:_gender];
     }
     _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20);
     if ([[MTUser sharedInstance].gender intValue] == 1) {
