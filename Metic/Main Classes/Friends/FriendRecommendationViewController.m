@@ -107,9 +107,20 @@
     
     NSLog(@"friend recommendation view will appear");
     
-//    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-//    [self.content_scrollview setContentSize: CGSizeMake(960, 450)];
-//    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
+    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
+    if (![hasUploadContact boolValue]) {
+        self.noUpload_view.hidden = NO;
+        self.hasUpload_view.hidden = YES;
+    }
+    else
+    {
+        self.noUpload_view.hidden = YES;
+        self.hasUpload_view.hidden = NO;
+        [self getContactFriends];
+    }
+
 
 }
 
@@ -118,34 +129,12 @@
 {
 
     [super viewDidAppear:animated];
-//    NSLog(@"tabbar content size==before, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
+
     self.tabbar_scrollview.contentSize = CGSizeMake(self.tabbar_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
-//    NSLog(@"friend recommendation view did appear");
-//    NSLog(@"tabbar view, width: %f, height: %f",tabbar_scrollview.frame.size.width,tabbar_scrollview.frame.size.height);
-//    NSLog(@"tabbar content size==after, width: %f, height: %f",self.tabbar_scrollview.contentSize.width,self.tabbar_scrollview.contentSize.height);
     waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
     actIndicator.center = waitingView.center;
-    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
-    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
-    if (![hasUploadContact boolValue]) {
-        self.noUpload_view.hidden = NO;
-        self.hasUpload_view.hidden = YES;
-        //        [userDf setBool:NO forKey:@"hasUploadContact"];
-    }
-    else
-    {
-        self.noUpload_view.hidden = YES;
-        self.hasUpload_view.hidden = NO;
-        [self getContactFriends];
-        //        [userDf setBool:YES forKey:@"hasUploadContact"];
-        
-    }
-
-    NSLog(@"content_scrollview height: %f", self.content_scrollview.frame.size.height);
-    NSLog(@"content size===before, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+    
     [self.content_scrollview setContentSize: CGSizeMake(960, self.content_scrollview.frame.size.height)];
-    NSLog(@"content size===after, width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -270,7 +259,7 @@
 //    self.nearbyFriends_footer.scrollView = self.nearbyFriends_tableview;
 //    self.nearbyFriends_footer.delegate = self;
     
-    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
+    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.7];
     waitingView = [[UIView alloc]init];
     waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
     NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollview.frame.size.width,self.content_scrollview.frame.size.height);
@@ -447,6 +436,7 @@
     NSLog(@"doing getContactFriends, json: %@",json_dic);
     [waitingView removeFromSuperview];
     [tabPage1_view addSubview:waitingView];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
 
 }
 
@@ -488,6 +478,7 @@
     NSLog(@"doing getNearbyFriends, json: %@",json_dic);
     [waitingView removeFromSuperview];
     [tabPage2_view addSubview:waitingView];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
 }
 
 -(void)getKanKan
@@ -522,6 +513,7 @@
     NSLog(@"doing getKanKan, json: %@",jsonDic);
     [waitingView removeFromSuperview];
     [tabPage3_view addSubview:waitingView];
+    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
 }
 
 -(void)dismissAlert:(NSTimer*)timer
@@ -559,7 +551,7 @@
 
 -(void)hideWaitingView
 {
-    
+    [waitingView removeFromSuperview];
 }
 
 #pragma mark - HttpSenderDelegate
