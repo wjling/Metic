@@ -21,6 +21,7 @@
 #import "NotificationController.h"
 
 #define photoNumPP 60
+#define photoNumToGet 100
 
 @interface PictureWall2 ()
 @property (nonatomic,strong) UIButton* add;
@@ -229,6 +230,7 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
+    [dictionary setValue:[NSNumber numberWithInt:photoNumToGet] forKey:@"number"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
