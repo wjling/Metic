@@ -2829,7 +2829,7 @@
                                     <action selector="closeOptionView:" destination="von-Oa-xrt" eventType="touchDown" id="bDc-gw-jba"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ao0-ve-MK9">
+                            <view alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ao0-ve-MK9">
                                 <rect key="frame" x="80" y="-1" width="160" height="1"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AV3-h6-yac">

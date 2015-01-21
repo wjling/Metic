@@ -132,8 +132,6 @@
         [userDf synchronize];
         [self ToNotificationCenter];
     }else [self initWelcomePage];
-    [self.view bringSubviewToFront:_shadowView];
-    _shadowView.hidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -689,6 +687,7 @@
     CGRect frame = _ArrangementView.frame;
     frame.size.height = (frame.size.height == 1)? 81:1;
     self.ArrangementView.frame = frame;
+    self.ArrangementView.alpha = (frame.size.height == 1)? 0:1;
     [UIView commitAnimations];
     
     
