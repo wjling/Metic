@@ -111,6 +111,8 @@ static MTUser *singletonInstance;
         _phone = [aDecoder decodeObjectForKey:@"phone"];
         _location = [aDecoder decodeObjectForKey:@"location"];
         saltValue = [aDecoder decodeObjectForKey:@"saltValue"];
+        
+        if(!updateEventStatus) updateEventStatus = [[NSMutableDictionary alloc]init];
     }
     
     return self;
