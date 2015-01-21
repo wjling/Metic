@@ -23,7 +23,7 @@
 
 
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
-@property (nonatomic,strong) NSMutableDictionary* updateEventIds;
+@property (nonatomic,strong) NSMutableDictionary* updateEventStatus;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 @property (nonatomic,strong) UIAlertView *Alert;
 @property (nonatomic,strong) NSString *AdUrl;
@@ -115,7 +115,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    _updateEventIds = [MTUser sharedInstance].updateEventIds;
+    _updateEventStatus = [MTUser sharedInstance].updateEventStatus;
     _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [MobClick beginLogPageView:@"活动主页"];
     if (_shouldRefresh) {
@@ -305,8 +305,8 @@
 {
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
     
-    long num = [MTUser sharedInstance].updateEventIds.count + [MTUser sharedInstance].atMeEvents.count;
-    NSLog(@"有%d条新动态",[MTUser sharedInstance].updateEventIds.count + [MTUser sharedInstance].atMeEvents.count);
+    long num = [MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count;
+    NSLog(@"有%d条新动态",[MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count);
     if (num > 0) {
         [_updateInfoView setHidden:NO];
         if (num < 10) {
@@ -531,7 +531,7 @@
     if ([segue.destinationViewController isKindOfClass:[DynamicViewController class]]) {
         DynamicViewController *nextViewController = segue.destinationViewController;
         nextViewController.atMeEvents = _atMeEvents;
-        nextViewController.updateEventIds = _updateEventIds;
+        nextViewController.updateEventStatus = _updateEventStatus;
     }
     
     

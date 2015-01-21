@@ -31,7 +31,7 @@
 @synthesize nameFromID_dic;
 @synthesize alias_dic;
 
-@synthesize updateEventIds;
+@synthesize updateEventStatus;
 @synthesize atMeEvents;
 
 @synthesize msgFromDB;
@@ -69,7 +69,7 @@ static MTUser *singletonInstance;
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
         self.alias_dic = [[NSMutableDictionary alloc]init];
         self.friendsIdSet = [[NSMutableSet alloc]init];
-        self.updateEventIds = [[NSMutableDictionary alloc]init];
+        self.updateEventStatus = [[NSMutableDictionary alloc]init];
         self.atMeEvents = [[NSMutableArray alloc]init];
         self.eventRequestMsg = [[NSMutableArray alloc]init];
         self.friendRequestMsg = [[NSMutableArray alloc]init];
@@ -97,7 +97,7 @@ static MTUser *singletonInstance;
         sectionArray = [aDecoder decodeObjectForKey:@"sectionArray"];
         alias_dic = [aDecoder decodeObjectForKey:@"alias_dic"];
         friendsIdSet = [aDecoder decodeObjectForKey:@"friendsIdSet"];
-        updateEventIds = [aDecoder decodeObjectForKey:@"updateEventIds"];
+        updateEventStatus = [aDecoder decodeObjectForKey:@"updateEventStatus"];
         atMeEvents = [aDecoder decodeObjectForKey:@"atMeEvents"];
         eventRequestMsg = [aDecoder decodeObjectForKey:@"eventRequestMsg"];
         friendRequestMsg = [aDecoder decodeObjectForKey:@"friendRequestMsg"];
@@ -127,7 +127,7 @@ static MTUser *singletonInstance;
     [aCoder encodeObject:self.sectionArray forKey:@"sectionArray"];
     [aCoder encodeObject:self.alias_dic forKey:@"alias_dic"];
     [aCoder encodeObject:self.friendsIdSet forKey:@"friendsIdSet"];
-    [aCoder encodeObject:self.updateEventIds forKey:@"updateEventIds"];
+    [aCoder encodeObject:self.updateEventStatus forKey:@"updateEventStatus"];
     [aCoder encodeObject:self.atMeEvents forKey:@"atMeEvents"];
     [aCoder encodeObject:self.eventRequestMsg forKey:@"eventRequestMsg"];
     [aCoder encodeObject:self.friendRequestMsg forKey:@"friendRequestMsg"];

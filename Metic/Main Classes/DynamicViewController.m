@@ -55,7 +55,7 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"新动态"];
-    if (_updateEventIds.count == 0 && _atMeEvents.count != 0) {
+    if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
         [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
     }
 }
@@ -73,7 +73,7 @@
 -(void)dealloc
 {
     [_atMeEvents removeAllObjects];
-    [_updateEventIds removeAllObjects];
+    [_updateEventStatus removeAllObjects];
 }
 //返回上一层
 -(void)MTpopViewController{
@@ -101,9 +101,9 @@
 {
     if (tableView == _dynamic_tableView) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"updateCell"];
-        if (_updateEventIds) {
+        if (_updateEventStatus) {
             
-            NSArray *updateInfo = [_updateEventIds objectForKey:[[_updateEventIds keyEnumerator] allObjects][indexPath.row]];
+            NSArray *updateInfo = [_updateEventStatus objectForKey:[[_updateEventStatus keyEnumerator] allObjects][indexPath.row]];
             NSString* subject = updateInfo[0];
             
             float restWidth = 310;
@@ -202,7 +202,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == _dynamic_tableView) {
-        _selete_Eventid = [[_updateEventIds keyEnumerator] allObjects][indexPath.row];
+        _selete_Eventid = [[_updateEventStatus keyEnumerator] allObjects][indexPath.row];
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
         NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
@@ -299,9 +299,9 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == _dynamic_tableView) {
-        if (_updateEventIds && _updateEventIds.count >0) {
+        if (_updateEventStatus && _updateEventStatus.count >0) {
             [_dynamic_empty_label setHidden:YES];
-            return _updateEventIds.count;
+            return _updateEventStatus.count;
         }else{
             [_dynamic_empty_label setHidden:NO];
             return 0;
@@ -356,9 +356,9 @@
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
         if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 986 || cmd == 987 || cmd == 988 || cmd == 989) {
-            if (_updateEventIds.count == 0 && _atMeEvents.count != 0) {
+            if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
                 [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
-            }else if(_updateEventIds.count != 0 && _atMeEvents.count == 0){
+            }else if(_updateEventStatus.count != 0 && _atMeEvents.count == 0){
                 [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
             }
             [_dynamic_tableView reloadData];
