@@ -75,6 +75,8 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"用户主页"];
+    [self.view bringSubviewToFront:_shadowView];
+    _shadowView.hidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated

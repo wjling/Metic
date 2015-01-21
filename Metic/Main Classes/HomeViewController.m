@@ -132,6 +132,8 @@
         [userDf synchronize];
         [self ToNotificationCenter];
     }else [self initWelcomePage];
+    [self.view bringSubviewToFront:_shadowView];
+    _shadowView.hidden = NO;
 }
 
 -(void)viewDidDisappear:(BOOL)animated
