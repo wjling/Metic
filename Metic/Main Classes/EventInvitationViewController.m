@@ -7,6 +7,7 @@
 //
 
 #import "EventInvitationViewController.h"
+#import "MenuViewController.h"
 #import "../Cell/EventInvitationTableViewCell.h"
 #import "PhotoGetter.h"
 #import "MTUser.h"
@@ -38,6 +39,7 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
 //    _eventRequestMsg = [MTUser sharedInstance].eventRequestMsg;
     
     _tableView.dataSource = self;
@@ -72,9 +74,43 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+}
+
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+//返回本页并跳转到消息页
+-(void)PopToHereAndTurnToNotificationPage:(id)sender
+{
+    NSLog(@"PopToHereAndTurnToNotificationPage  from  invitation");
+    
+    if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
+        NSLog(@"Here");
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
+            [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
+            [self ToNotificationCenter];
+        }
+    }else{
+        NSLog(@"NotHere");
+    }
+}
+
+-(void)ToNotificationCenter
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    UIViewController* vc = [MenuViewController sharedInstance].notificationsViewController;
+    if(!vc){
+        vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+        [MenuViewController sharedInstance].notificationsViewController = vc;
+    }
+    
+    [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
 }
 
 -(void)getMsgArray

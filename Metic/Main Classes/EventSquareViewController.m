@@ -10,6 +10,7 @@
 #import "NearbyEventViewController.h"
 #import "EventSearchViewController.h"
 #import "EventDetailViewController.h"
+#import "MenuViewController.h"
 #import "AdViewController.h"
 #import "MobClick.h"
 #import "AppConstants.h"
@@ -78,13 +79,48 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+}
+
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+//返回本页并跳转到消息页
+-(void)PopToHereAndTurnToNotificationPage:(id)sender
+{
+    NSLog(@"PopToHereAndTurnToNotificationPage  from  square");
+    
+    if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
+        NSLog(@"Here");
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
+            [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
+            [self ToNotificationCenter];
+        }
+    }else{
+        NSLog(@"NotHere");
+    }
+}
+
+-(void)ToNotificationCenter
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    UIViewController* vc = [MenuViewController sharedInstance].notificationsViewController;
+    if(!vc){
+        vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+        [MenuViewController sharedInstance].notificationsViewController = vc;
+    }
+    
+    [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
+}
+
 -(void)initData
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     _isAuto = YES;
     [self getPoster];
 }

@@ -69,6 +69,7 @@ enum Response_Type
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [MenuViewController sharedInstance].notificationsViewController = self;
     [CommonUtils addLeftButton:self isFirstPage:YES];
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
     self.appListener.notificationDelegate = self;

@@ -7,6 +7,7 @@
 //
 
 #import "UserInfoViewController.h"
+#import "MenuViewController.h"
 #import "MobClick.h"
 #import "UserQRCodeViewController.h"
 #import "UIImageView+LBBlurredImage.h"
@@ -48,7 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
     [self initParams];
 }
@@ -84,6 +85,41 @@
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"用户主页"];
 }
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+}
+
+//返回本页并跳转到消息页
+-(void)PopToHereAndTurnToNotificationPage:(id)sender
+{
+    NSLog(@"PopToHereAndTurnToNotificationPage  from  UserInfo");
+    
+    if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
+        NSLog(@"Here");
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
+            [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
+            [self ToNotificationCenter];
+        }
+    }else{
+        NSLog(@"NotHere");
+    }
+}
+
+-(void)ToNotificationCenter
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    UIViewController* vc = [MenuViewController sharedInstance].notificationsViewController;
+    if(!vc){
+        vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+        [MenuViewController sharedInstance].notificationsViewController = vc;
+    }
+    
+    [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
+}
+
 
 - (void)initParams
 {
@@ -139,6 +175,7 @@
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
         NSLog(@"cancel");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
@@ -148,6 +185,7 @@
             imagePickerController.delegate = self;
             imagePickerController.allowsEditing = NO;
             imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
             [self presentViewController:imagePickerController animated:YES completion:^{}];
         }];
         [actionSheet addButton:takeItem type:RIButtonItemType_Other];
@@ -161,10 +199,11 @@
         if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
             imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
         }else imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [self presentViewController:imagePickerController animated:YES completion:^{}];
     }];
     [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
-    
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
     [actionSheet showInView:self.view];
 }
 
@@ -602,7 +641,9 @@
 
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
-    [controller dismissViewControllerAnimated:YES completion:NULL];
+    [controller dismissViewControllerAnimated:YES completion:^{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+    }];
     newAvatar = croppedImage;
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:21 viewController:self];
     [getter uploadAvatar];
@@ -610,7 +651,9 @@
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
 {
-    [controller dismissViewControllerAnimated:YES completion:NULL];
+    [controller dismissViewControllerAnimated:YES completion:^{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+    }];
 }
 
 

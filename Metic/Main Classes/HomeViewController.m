@@ -8,6 +8,7 @@
 
 #import "../Cell/CustomCellTableViewCell.h"
 #import "HomeViewController.h"
+#import "MenuViewController.h"
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
 #import "../Utils/PhotoGetter.h"
@@ -45,7 +46,8 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replaceItem:) name: @"replaceItem" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+   
     
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _type = 0;
@@ -176,6 +178,62 @@
     NSLog(@"replaceItem %d ",eventId);
 }
 
+//返回本页并跳转到消息页
+-(void)PopToHereAndTurnToNotificationPage:(id)sender
+{
+    NSLog(@"PopToHereAndTurnToNotificationPage  from  home");
+    
+    if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
+        NSLog(@"Here");
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
+            [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
+            [self ToNotificationCenter];
+        }
+    }else{
+        NSLog(@"NotHere");
+    }
+}
+
+// 获取当前处于activity状态的view controller
+- (UIViewController *)activityViewController
+{
+    UIViewController* activityViewController = nil;
+    
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if(window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow *tmpWin in windows)
+        {
+            if(tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    
+    NSArray *viewsArray = [window subviews];
+    if([viewsArray count] > 0)
+    {
+        UIView *frontView = [viewsArray objectAtIndex:0];
+        
+        id nextResponder = [frontView nextResponder];
+        
+        if([nextResponder isKindOfClass:[UIViewController class]])
+        {
+            activityViewController = nextResponder;
+        }
+        else
+        {
+            activityViewController = window.rootViewController;
+        }
+    }
+    
+    return activityViewController;
+}
+
+
 -(void)ToSquare
 {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -189,7 +247,11 @@
 {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
-    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+    UIViewController* vc = [MenuViewController sharedInstance].notificationsViewController;
+    if(!vc){
+        vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
+        [MenuViewController sharedInstance].notificationsViewController = vc;
+    }
     
     [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
 }
@@ -633,6 +695,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"replaceItem" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     [_header free];
     [_footer free];
     

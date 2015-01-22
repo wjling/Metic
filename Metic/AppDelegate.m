@@ -138,7 +138,7 @@
 //     UIRemoteNotificationTypeSound |
 //     UIRemoteNotificationTypeAlert |
 //     UIRemoteNotificationTypeBadge];
-    
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     /* 信鸽推送 */
     
     [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];
@@ -319,6 +319,28 @@
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    //判断位于前台还是后台
+    switch ([application applicationState]) {
+        case UIApplicationStateActive:
+            NSLog(@"UIApplicationStateActive");
+            break;
+        case UIApplicationStateInactive:
+            NSLog(@"UIApplicationStateInactive");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                                object:nil
+                                                              userInfo:nil];
+            break;
+        case UIApplicationStateBackground:
+            NSLog(@"UIApplicationStateBackground");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                                object:nil
+                                                              userInfo:nil];
+            break;
+            
+        default:
+            break;
+    }
+    
     //在此处理接受到的消息
     NSLog(@"APP receive remote userInfo: %@", userInfo);
     [XGPush handleReceiveNotification:userInfo];
@@ -799,6 +821,7 @@
     NetworkStatus status = [curReach currentReachabilityStatus];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     
+    return;
     if (status == NotReachable) {
         if (isNetworkConnected) {
             [self showNetworkNotification:@"网络连接异常，请检查网络设置"];

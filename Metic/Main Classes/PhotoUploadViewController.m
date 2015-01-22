@@ -141,6 +141,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
         NSLog(@"cancel");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
@@ -150,6 +151,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             imagePickerController.delegate = self;
             imagePickerController.allowsEditing = NO;
             imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
             [self presentViewController:imagePickerController animated:YES completion:^{}];
         }];
         [actionSheet addButton:takeItem type:RIButtonItemType_Other];
@@ -163,11 +165,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
             imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
         }else imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [self presentViewController:imagePickerController animated:YES completion:^{}];
     }];
     [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
 
     [actionSheet showInView:self.view];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
 }
 
 -(void)MTdismissKeyboard
@@ -324,7 +328,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
             self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
         }
-        
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
         
     }];
 

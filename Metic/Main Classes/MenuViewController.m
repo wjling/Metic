@@ -40,6 +40,13 @@
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
 
+static MenuViewController *singletonInstance;
+
++ (MenuViewController *)sharedInstance
+{
+    return singletonInstance;
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -48,6 +55,7 @@
         frame.origin.y = 20;
         [self.view setFrame:frame];
     }
+    singletonInstance = self;
     self.img.layer.masksToBounds = YES;
     [self.img.layer setBorderColor:[UIColor grayColor].CGColor];
     [self.img.layer setBorderWidth:3.0f];

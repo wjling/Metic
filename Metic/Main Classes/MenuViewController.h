@@ -31,6 +31,7 @@
 @property(nonatomic,strong) UIViewController* eventSquareViewController;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 
++ (MenuViewController *)sharedInstance;
 - (IBAction)selector_tap:(id)sender;
 -(void)refresh;
 -(void)clearVC;

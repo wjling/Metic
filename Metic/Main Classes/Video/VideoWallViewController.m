@@ -332,6 +332,7 @@
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
         NSLog(@"cancel");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
@@ -346,7 +347,7 @@
             NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
             imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
             imagePickerController.videoMaximumDuration = 20;
-            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
             [self presentViewController:imagePickerController animated:YES completion:^{}];
         }];
         [actionSheet addButton:takeItem type:RIButtonItemType_Other];
@@ -365,11 +366,13 @@
         NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
         imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
         imagePickerController.videoMaximumDuration = 20;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [self presentViewController:imagePickerController animated:YES completion:^{}];
     }];
     [actionSheet addButton:seleteItem type:RIButtonItemType_Other];
     
     [actionSheet showInView:self.view];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
     
 }
 
@@ -494,6 +497,7 @@
     NSString* videoLen = [NSString stringWithFormat:@"%.0f s", [self getVideoDuration:videoURL]];
     NSLog(@"%@   %@",fileSize,videoLen);
     [picker dismissViewControllerAnimated:YES completion:^{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
         //[self openEditor:nil];
     }];
 
