@@ -258,7 +258,7 @@
     [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
     [_scrollView addSubview:_isAllowStrangerView];
     
-    _isAllowStrangerButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 5, 30, 30)];
+    _isAllowStrangerButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 5, 26, 26)];
     [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
     [_isAllowStrangerButton addTarget:self action:@selector(changeAllowStangerStage) forControlEvents:UIControlEventTouchUpInside];
     [_isAllowStrangerView addSubview:_isAllowStrangerButton];
