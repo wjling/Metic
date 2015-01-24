@@ -675,7 +675,7 @@
         if ([self.seletedText.text isEqualToString:@""]) {
             return;
         }
-        [dateFormatter setDateFormat:@" HH:mm:ss"];
+        [dateFormatter setDateFormat:@" HH:mm:00"];
         NSString *value = [dateFormatter stringFromDate:date];
         value = [[self.seletedText.text substringToIndex:10] stringByAppendingString:value];
         self.seletedText.text = value;

@@ -192,9 +192,12 @@
         _minutes = [self getMinutes];
         _seconds = [self getSeconds];
 
-        [self buildSelectorHoursOffsetX:0.0 andWidth:((self.frame.size.width / 3.0) - kFlatDatePickerScrollViewLeftMargin)];
-        [self buildSelectorMinutesOffsetX:(self.frame.size.width / 3.0) andWidth:((self.frame.size.width / 3.0) - kFlatDatePickerScrollViewLeftMargin)];
+        [self buildSelectorHoursOffsetX:(self.frame.size.width / 6.0) andWidth:((self.frame.size.width / 3.0) - kFlatDatePickerScrollViewLeftMargin)];
+        [self buildSelectorMinutesOffsetX:(self.frame.size.width / 2.0) andWidth:((self.frame.size.width / 3.0) - kFlatDatePickerScrollViewLeftMargin)];
         [self buildSelectorSecondsOffsetX:((self.frame.size.width / 3.0) * 2.0) andWidth:(self.frame.size.width / 3.0)];
+        [self buildSelectorRest:((self.frame.size.width / 6.0) - kFlatDatePickerScrollViewLeftMargin)];
+        
+        
     }
     
     // Date & Time Selectors :
@@ -335,9 +338,9 @@
     _lineMonthsTop.backgroundColor = kFlatDatePickerBackgroundColorLines;
     [self addSubview:_lineMonthsTop];
     
-    _lineDaysBottom = [[UIView alloc] initWithFrame:CGRectMake(_scollViewMonths.frame.origin.x + kFlatDatePickerLineMargin, _scollViewMonths.frame.origin.y + (_scollViewMonths.frame.size.height / 2) + (kFlatDatePickerScrollViewItemHeight / 2), width - (2 * kFlatDatePickerLineMargin), kFlatDatePickerLineWidth)];
-    _lineDaysBottom.backgroundColor = kFlatDatePickerBackgroundColorLines;
-    [self addSubview:_lineDaysBottom];
+    _lineMonthsBottom = [[UIView alloc] initWithFrame:CGRectMake(_scollViewMonths.frame.origin.x + kFlatDatePickerLineMargin, _scollViewMonths.frame.origin.y + (_scollViewMonths.frame.size.height / 2) + (kFlatDatePickerScrollViewItemHeight / 2), width - (2 * kFlatDatePickerLineMargin), kFlatDatePickerLineWidth)];
+    _lineMonthsBottom.backgroundColor = kFlatDatePickerBackgroundColorLines;
+    [self addSubview:_lineMonthsBottom];
  
     
     // Update ScrollView Data
@@ -714,6 +717,7 @@
     
     // ScrollView Seconds :
     _scollViewSeconds = [[UIScrollView alloc] initWithFrame:CGRectMake(x, kFlatDatePickerHeaderHeight + kFlatDatePickerHeaderBottomMargin, width, self.frame.size.height - kFlatDatePickerHeaderHeight - kFlatDatePickerHeaderBottomMargin)];
+    _scollViewSeconds.hidden = YES;
     _scollViewSeconds.tag = TAG_SECONDS;
     _scollViewSeconds.delegate = self;
     _scollViewSeconds.backgroundColor = kFlatDatePickerBackgroundColorScrolView;
@@ -723,10 +727,12 @@
     
     _lineSecondsTop = [[UIView alloc] initWithFrame:CGRectMake(_scollViewSeconds.frame.origin.x + kFlatDatePickerLineMargin, _scollViewSeconds.frame.origin.y + (_scollViewSeconds.frame.size.height / 2) - (kFlatDatePickerScrollViewItemHeight / 2), width - (2 * kFlatDatePickerLineMargin), kFlatDatePickerLineWidth)];
     _lineSecondsTop.backgroundColor = kFlatDatePickerBackgroundColorLines;
+    _lineSecondsTop.hidden = YES;
     [self addSubview:_lineSecondsTop];
     
     _lineSecondsBottom = [[UIView alloc] initWithFrame:CGRectMake(_scollViewSeconds.frame.origin.x + kFlatDatePickerLineMargin, _scollViewSeconds.frame.origin.y + (_scollViewSeconds.frame.size.height / 2) + (kFlatDatePickerScrollViewItemHeight / 2), width - (2 * kFlatDatePickerLineMargin), kFlatDatePickerLineWidth)];
     _lineSecondsBottom.backgroundColor = kFlatDatePickerBackgroundColorLines;
+    _lineSecondsBottom.hidden = YES;
     [self addSubview:_lineSecondsBottom];
     
     // Update ScrollView Data
@@ -782,6 +788,17 @@
         [_lineSecondsBottom removeFromSuperview];
         _lineSecondsBottom = nil;
     }
+}
+
+#pragma mark - Build Selector Rest
+- (void)buildSelectorRest:(CGFloat)width{
+    UIView* restL = [[UIView alloc] initWithFrame:CGRectMake(0, kFlatDatePickerHeaderHeight + kFlatDatePickerHeaderBottomMargin, width, self.frame.size.height - kFlatDatePickerHeaderHeight - kFlatDatePickerHeaderBottomMargin)];
+    restL.backgroundColor = kFlatDatePickerBackgroundColorScrolView;
+    [self addSubview:restL];
+    
+    UIView* restR = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width - width, kFlatDatePickerHeaderHeight + kFlatDatePickerHeaderBottomMargin, width, self.frame.size.height - kFlatDatePickerHeaderHeight - kFlatDatePickerHeaderBottomMargin)];
+    restR.backgroundColor = kFlatDatePickerBackgroundColorScrolView;
+    [self addSubview:restR];
 }
 
 #pragma mark - Actions 
