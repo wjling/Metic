@@ -226,7 +226,12 @@
                 [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
                 NSString* url = [dict valueForKey:@"image_url"];
                 NSLog(@"%@",url);
-                [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+                button.contentMode = UIViewContentModeScaleAspectFit;
+                [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    if (image) {
+                        button.contentMode = UIViewContentModeScaleAspectFill;
+                    }
+                }];
                 [_scrollView addSubview:button];
             }
             
@@ -239,7 +244,12 @@
             [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
             NSString* url = [dict valueForKey:@"image_url"];
             NSLog(@"%@",url);
-            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+            button.contentMode = UIViewContentModeScaleAspectFit;
+            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (image) {
+                    button.contentMode = UIViewContentModeScaleAspectFill;
+                }
+            }];
             [_scrollView addSubview:button];
             i++;
         }
@@ -258,7 +268,7 @@
     }else{
         [_scrollView setBackgroundColor:[UIColor colorWithWhite:204/255.0 alpha:1.0]];
         UIImageView* tmp = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame))];
-        [tmp setContentMode:UIViewContentModeCenter];
+        [tmp setContentMode:UIViewContentModeScaleAspectFit];
         tmp.image = [UIImage imageNamed:@"活动图片的默认图片"];
         [self.view addSubview:tmp];
     }
