@@ -118,6 +118,7 @@
 		086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */; };
 		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
+		087271441A75507C0097A22B /* libzbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087271431A75507C0097A22B /* libzbar.a */; };
 		08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08775A0519A8F7840034BB58 /* ReportViewController.m */; };
 		0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E84E1A3AC5F500E3C18C /* BOAlertController.m */; };
 		0878E85A1A3AC76F00E3C18C /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0878E8551A3AC76F00E3C18C /* RIButtonItem.m */; };
@@ -289,7 +290,6 @@
 		51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E86D9A1973CCBF00CBAE86 /* OpenGLES.framework */; };
 		51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51E86DDC1974BF9F00CBAE86 /* SystemConfiguration.framework */; };
 		51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51EDF3A3197512B4005BEA39 /* CoreText.framework */; };
-		51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51F06C15197E0109000E8428 /* libzbar.a */; };
 		51F06C1C197E0109000E8428 /* zbar-back.png in Resources */ = {isa = PBXBuildFile; fileRef = 51F06C17197E0109000E8428 /* zbar-back.png */; };
 		51F06C1D197E0109000E8428 /* zbar-help.html in Resources */ = {isa = PBXBuildFile; fileRef = 51F06C18197E0109000E8428 /* zbar-help.html */; };
 		51F06C1E197E0109000E8428 /* zbar-helpicons.png in Resources */ = {isa = PBXBuildFile; fileRef = 51F06C19197E0109000E8428 /* zbar-helpicons.png */; };
@@ -587,6 +587,7 @@
 		086AE6D819B5C32800EDF629 /* VcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VcommentTableViewCell.h; sourceTree = "<group>"; };
 		086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VcommentTableViewCell.m; sourceTree = "<group>"; };
 		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
+		087271431A75507C0097A22B /* libzbar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzbar.a; sourceTree = "<group>"; };
 		08775A0419A8F7840034BB58 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportViewController.h; path = Report/ReportViewController.h; sourceTree = "<group>"; };
 		08775A0519A8F7840034BB58 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportViewController.m; path = Report/ReportViewController.m; sourceTree = "<group>"; };
 		0878E84E1A3AC5F500E3C18C /* BOAlertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOAlertController.m; sourceTree = "<group>"; };
@@ -917,7 +918,6 @@
 		51F06C12197E0109000E8428 /* ZBarReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBarReaderViewController.h; sourceTree = "<group>"; };
 		51F06C13197E0109000E8428 /* ZBarSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBarSDK.h; sourceTree = "<group>"; };
 		51F06C14197E0109000E8428 /* ZBarSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBarSymbol.h; sourceTree = "<group>"; };
-		51F06C15197E0109000E8428 /* libzbar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzbar.a; sourceTree = "<group>"; };
 		51F06C17197E0109000E8428 /* zbar-back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zbar-back.png"; sourceTree = "<group>"; };
 		51F06C18197E0109000E8428 /* zbar-help.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "zbar-help.html"; sourceTree = "<group>"; };
 		51F06C19197E0109000E8428 /* zbar-helpicons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zbar-helpicons.png"; sourceTree = "<group>"; };
@@ -1015,7 +1015,6 @@
 				51F06C25197E0173000E8428 /* CoreMedia.framework in Frameworks */,
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
-				51F06C1B197E0109000E8428 /* libzbar.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
 				51E86D991973CAA300CBAE86 /* QuartzCore.framework in Frameworks */,
@@ -1024,6 +1023,7 @@
 				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
 				04AF99FB1A5C353000C9ED8C /* libbaidumapapi.a in Frameworks */,
 				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
+				087271441A75507C0097A22B /* libzbar.a in Frameworks */,
 				51E857C7196B951300812F7D /* libSocialSina.a in Frameworks */,
 				5144D99B196B880300C953FB /* libUMSocial_Sdk_4.0.a in Frameworks */,
 				5172E2E1197D05240050F446 /* libQREncoder.a in Frameworks */,
@@ -2116,8 +2116,8 @@
 		51F06BFD197E0109000E8428 /* ZBarSDK */ = {
 			isa = PBXGroup;
 			children = (
+				087271431A75507C0097A22B /* libzbar.a */,
 				51F06BFE197E0109000E8428 /* Headers */,
-				51F06C15197E0109000E8428 /* libzbar.a */,
 				51F06C16197E0109000E8428 /* Resources */,
 			);
 			path = ZBarSDK;
