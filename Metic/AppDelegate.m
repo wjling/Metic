@@ -158,9 +158,16 @@
     
     NSDictionary*userInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
-        //新消息来了 type：1跳转到消息中心 type：0表示忽略
-        [[NSUserDefaults standardUserDefaults]setInteger:1 forKey:@"newNotificationCome"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        NSInteger cmd = [[userInfo valueForKey:@"cmd"] integerValue];
+        if (cmd == ADD_FRIEND_NOTIFICATION || cmd == ADD_FRIEND_RESULT || cmd == NEW_EVENT_NOTIFICATION || cmd == REQUEST_EVENT || cmd == QUIT_EVENT_NOTIFICATION || cmd == KICK_EVENT_NOTIFICATION) {
+            //新消息来了 type：1跳转到消息中心 type：0表示忽略
+            [[NSUserDefaults standardUserDefaults]setInteger:1 forKey:@"newNotificationCome"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }else{
+            [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
     }else {
         [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -320,26 +327,30 @@
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     //判断位于前台还是后台
-    switch ([application applicationState]) {
-        case UIApplicationStateActive:
-            NSLog(@"UIApplicationStateActive");
-            break;
-        case UIApplicationStateInactive:
-            NSLog(@"UIApplicationStateInactive");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
-                                                                object:nil
-                                                              userInfo:nil];
-            break;
-        case UIApplicationStateBackground:
-            NSLog(@"UIApplicationStateBackground");
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
-                                                                object:nil
-                                                              userInfo:nil];
-            break;
-            
-        default:
-            break;
+    NSInteger cmd = [[userInfo valueForKey:@"cmd"] integerValue];
+    if (cmd == ADD_FRIEND_NOTIFICATION || cmd == ADD_FRIEND_RESULT || cmd == NEW_EVENT_NOTIFICATION || cmd == REQUEST_EVENT || cmd == QUIT_EVENT_NOTIFICATION || cmd == KICK_EVENT_NOTIFICATION) {
+        switch ([application applicationState]) {
+            case UIApplicationStateActive:
+                NSLog(@"UIApplicationStateActive");
+                break;
+            case UIApplicationStateInactive:
+                NSLog(@"UIApplicationStateInactive");
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                                    object:nil
+                                                                  userInfo:nil];
+                break;
+            case UIApplicationStateBackground:
+                NSLog(@"UIApplicationStateBackground");
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                                    object:nil
+                                                                  userInfo:nil];
+                break;
+                
+            default:
+                break;
+        }
     }
+    
     
     //在此处理接受到的消息
     NSLog(@"APP receive remote userInfo: %@", userInfo);
