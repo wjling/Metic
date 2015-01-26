@@ -102,6 +102,7 @@
 		081B6DAC1A7685D80044D623 /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = 081B6DA31A7685D80044D623 /* rscode.c */; };
 		081B6DAD1A7685D80044D623 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = 081B6DA51A7685D80044D623 /* split.c */; };
 		081B6DB01A76861F0044D623 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 081B6DAF1A76861F0044D623 /* QRCodeGenerator.m */; };
+		081B6DB61A76A3FA0044D623 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 081B6DB31A76A3FA0044D623 /* libMobClickLibrary.a */; };
 		08293F8219C5DC3A009B637A /* THProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08293F8119C5DC3A009B637A /* THProgressView.m */; };
 		083411831A6A75B600EEB584 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083411821A6A75B600EEB584 /* NotificationController.m */; };
 		0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0838E7AD1969030A004E4655 /* PcommentTableViewCell.m */; };
@@ -172,7 +173,6 @@
 		08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9BF1A2DEFAA00132F18 /* TMQuiltView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		08BEE9C51A2DEFAA00132F18 /* TMQuiltViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9C11A2DEFAA00132F18 /* TMQuiltViewCell.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */; };
 		08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */; };
 		08CAB31119FE9701009DAFA9 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */; };
 		08CAB31219FE9701009DAFA9 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 08CAB31019FE9701009DAFA9 /* SVProgressHUD.m */; };
@@ -502,6 +502,9 @@
 		081B6DA61A7685D80044D623 /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
 		081B6DAE1A76861F0044D623 /* QRCodeGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeGenerator.h; sourceTree = "<group>"; };
 		081B6DAF1A76861F0044D623 /* QRCodeGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeGenerator.m; sourceTree = "<group>"; };
+		081B6DB31A76A3FA0044D623 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		081B6DB41A76A3FA0044D623 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		081B6DB51A76A3FA0044D623 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
 		08293F8019C5DC3A009B637A /* THProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THProgressView.h; sourceTree = "<group>"; };
 		08293F8119C5DC3A009B637A /* THProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THProgressView.m; sourceTree = "<group>"; };
 		083411811A6A75B600EEB584 /* NotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
@@ -689,9 +692,6 @@
 		08BEE9C11A2DEFAA00132F18 /* TMQuiltViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMQuiltViewCell.m; sourceTree = "<group>"; };
 		08BEE9C21A2DEFAA00132F18 /* TMQuiltViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMQuiltViewController.h; sourceTree = "<group>"; };
 		08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMQuiltViewController.m; sourceTree = "<group>"; };
-		08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
-		08C62DD21A177C91001F7C45 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
-		08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
 		08C7EE0219DABAA400FF54C2 /* MTMPMoviePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMPMoviePlayerViewController.h; sourceTree = "<group>"; };
 		08C7EE0319DABAA400FF54C2 /* MTMPMoviePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMPMoviePlayerViewController.m; sourceTree = "<group>"; };
 		08CAB30E19FE9701009DAFA9 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
@@ -1024,6 +1024,7 @@
 				51DDBF7619A31B610051B88C /* libz.dylib in Frameworks */,
 				04B6F86519A0EEBB00229393 /* AddressBookUI.framework in Frameworks */,
 				087271C51A7615870097A22B /* libSocialWechat.a in Frameworks */,
+				081B6DB61A76A3FA0044D623 /* libMobClickLibrary.a in Frameworks */,
 				04B6F86319A0EEA500229393 /* AddressBook.framework in Frameworks */,
 				51F06C29197E0193000E8428 /* libiconv.dylib in Frameworks */,
 				51F06C27197E017F000E8428 /* CoreVideo.framework in Frameworks */,
@@ -1049,7 +1050,6 @@
 				51581D261933575300943606 /* CoreGraphics.framework in Frameworks */,
 				51581D281933575300943606 /* UIKit.framework in Frameworks */,
 				51581D241933575300943606 /* Foundation.framework in Frameworks */,
-				08C62DD41A177C91001F7C45 /* libMobClickLibrary.a in Frameworks */,
 				04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1279,6 +1279,16 @@
 				081B6DA61A7685D80044D623 /* split.h */,
 			);
 			path = libqrencode;
+			sourceTree = "<group>";
+		};
+		081B6DB21A76A3FA0044D623 /* UMAnalytics_Sdk_3.4.5 */ = {
+			isa = PBXGroup;
+			children = (
+				081B6DB31A76A3FA0044D623 /* libMobClickLibrary.a */,
+				081B6DB41A76A3FA0044D623 /* MobClick.h */,
+				081B6DB51A76A3FA0044D623 /* MobClickSocialAnalytics.h */,
+			);
+			path = UMAnalytics_Sdk_3.4.5;
 			sourceTree = "<group>";
 		};
 		08293F7F19C5DC3A009B637A /* THProgressView */ = {
@@ -1598,16 +1608,6 @@
 				08BEE9C31A2DEFAA00132F18 /* TMQuiltViewController.m */,
 			);
 			path = TMQuiltView;
-			sourceTree = "<group>";
-		};
-		08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */ = {
-			isa = PBXGroup;
-			children = (
-				08C62DD11A177C91001F7C45 /* libMobClickLibrary.a */,
-				08C62DD21A177C91001F7C45 /* MobClick.h */,
-				08C62DD31A177C91001F7C45 /* MobClickSocialAnalytics.h */,
-			);
-			path = UMAnalytics_Sdk_3.1.9;
 			sourceTree = "<group>";
 		};
 		08CAB30D19FE9701009DAFA9 /* SVProgressHUD */ = {
@@ -2095,7 +2095,7 @@
 				0878E8531A3AC76F00E3C18C /* UIAlertView-Blocks */,
 				08BEE9BC1A2DEFAA00132F18 /* TMQuiltView */,
 				04A531831A222947002FDDC1 /* LBBlurredImage */,
-				08C62DD01A177C91001F7C45 /* UMAnalytics_Sdk_3.1.9 */,
+				081B6DB21A76A3FA0044D623 /* UMAnalytics_Sdk_3.4.5 */,
 				0872718C1A7613C50097A22B /* UMSocial_Sdk_4.2.1 */,
 				088DCEAB19FF97D70036BE82 /* Multi-Player */,
 				08CAB30D19FE9701009DAFA9 /* SVProgressHUD */,
@@ -2882,6 +2882,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Wechat",
+					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.4.5",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
@@ -2934,6 +2935,7 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Sina",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Wechat",
+					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.4.5",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
