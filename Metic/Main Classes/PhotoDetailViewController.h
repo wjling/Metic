@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PhotoGetter.h"
 #import "../MJRefresh/MJRefreshFooterView.h"
-#import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
+#import "UMSocial.h"
 #import "../UIView/MTMessageTextView.h"
 #import "PictureWall2.h"
 

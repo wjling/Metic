@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QREncoder/QREncoder.h>
-#import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
+#import "UMSocial.h"
 
 @interface Event2DcodeViewController : UIViewController<UMSocialUIDelegate>
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;

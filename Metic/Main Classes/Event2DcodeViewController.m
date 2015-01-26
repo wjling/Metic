@@ -7,7 +7,7 @@
 //
 
 #import "Event2DcodeViewController.h"
-#import "../Source/UMSocial_Sdk_4.0/Header/UMSocial.h"
+#import "UMSocial.h"
 #import "../Utils/PhotoGetter.h"
 #import "MobClick.h"
 
