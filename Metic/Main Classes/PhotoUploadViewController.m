@@ -260,7 +260,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(modifyProgress:) name: @"uploadFile" object:nil];
         
         
-        
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [[UIApplication sharedApplication].keyWindow addSubview:_waitingView];
     }
 }
@@ -268,6 +268,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)removeWaitingView
 {
     if (_waitingView) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
         [_waitingView removeFromSuperview];
         [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
         _waitingView = nil;
