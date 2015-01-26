@@ -786,7 +786,7 @@
 }
 
 #pragma mark BaiDuMap Location Service Delegate
-- (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
     //cclocat
     coordinate = userLocation.location.coordinate;

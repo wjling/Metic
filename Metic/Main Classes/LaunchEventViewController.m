@@ -783,11 +783,12 @@
     }
 }
 
+
 /**
  *用户位置更新后，会调用此函数
  *@param userLocation 新的用户位置
  */
-- (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
 
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];

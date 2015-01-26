@@ -55,6 +55,7 @@
     mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     mapView.centerCoordinate = _position;
     mapView.mapType = BMKMapTypeStandard;
+    mapView.zoomLevel = 15;
 
     _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
     _geoCodeSearch.delegate = self;
@@ -155,7 +156,7 @@
  *用户位置更新后，会调用此函数
  *@param userLocation 新的用户位置
  */
-- (void)didUpdateUserLocation:(BMKUserLocation *)userLocation
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
     [_locService stopUserLocationService];
     _locService.delegate = nil;
@@ -166,6 +167,8 @@
     [mapView removeAnnotation:_panPoint];
     _panPoint.coordinate = userLocation.location.coordinate;
     [mapView addAnnotation:_panPoint];
+    mapView.centerCoordinate = userLocation.location.coordinate;
+    mapView.zoomLevel = 15;
     
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
     reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
