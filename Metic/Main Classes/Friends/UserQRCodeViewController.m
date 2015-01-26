@@ -7,6 +7,7 @@
 //
 
 #import "UserQRCodeViewController.h"
+#import "QRCodeGenerator.h"
 
 @interface UserQRCodeViewController ()
 {
@@ -102,7 +103,8 @@
     NSString* ID_STRING = [CommonUtils stringByReversed:[text substringToIndex:text.length-3]];
     ID_STRING = [ID_STRING stringByAppendingString:[text substringWithRange:NSMakeRange(text.length-3, 3)]];
     NSString* QRCODE_STRING = [NSString stringWithFormat:@"%@%@%@",url,type,ID_STRING];
-    QRcode_imageview.image = [QREncoder encode:QRCODE_STRING];
+    QRcode_imageview.image = [QRCodeGenerator qrImageForString:QRCODE_STRING imageSize:1000];
+//    QRcode_imageview.image = [QREncoder encode:QRCODE_STRING];
     [QRcode_imageview layer].magnificationFilter = kCAFilterNearest;
     friendQRcode = [CommonUtils convertViewToImage:mainView];
 }

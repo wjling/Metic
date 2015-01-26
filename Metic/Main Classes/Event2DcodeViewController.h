@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <QREncoder/QREncoder.h>
 #import "UMSocial.h"
 
 @interface Event2DcodeViewController : UIViewController<UMSocialUIDelegate>

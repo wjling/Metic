@@ -10,7 +10,6 @@
 #import "CommonUtils.h"
 #import "MobClick.h"
 #import "PhotoGetter.h"
-#import <QREncoder/QREncoder.h>
 #import "UMSocial.h"
 
 @interface UserQRCodeViewController : UIViewController<UMSocialUIDelegate>
