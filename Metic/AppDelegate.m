@@ -280,17 +280,17 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     
-    void (^successBlock)(void) = ^(void){
-        //成功之后的处理
-        NSLog(@"[XGPush]unRegisterDevice successBlock");
-    };
-    
-    void (^errorBlock)(void) = ^(void){
-        //失败之后的处理
-        NSLog(@"[XGPush]unRegisterDevice errorBlock");
-    };
-
-    [XGPush unRegisterDevice:successBlock errorCallback:errorBlock];
+//    void (^successBlock)(void) = ^(void){
+//        //成功之后的处理
+//        NSLog(@"[XGPush]unRegisterDevice successBlock");
+//    };
+//    
+//    void (^errorBlock)(void) = ^(void){
+//        //失败之后的处理
+//        NSLog(@"[XGPush]unRegisterDevice errorBlock");
+//    };
+//
+//    [XGPush unRegisterDevice:successBlock errorCallback:errorBlock];
     NSLog(@"Metic被残忍杀死了");
     NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
@@ -616,12 +616,33 @@
     NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
     
     [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
-    int i = (type < 3 && type >= 0)? type : -1;
+    NSInteger i = (type < 3 && type >= 0)? type : -1;
     NSLog(@"新消息来了，message type: %d", i);
-    [userSettings setValue:[NSNumber numberWithInt:i] forKey:@"hasUnreadNotification"];
+    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    
+    if (!unRead_dic) {
+        unRead_dic = [[NSMutableDictionary alloc]init];
+    }
+    if (i >= 0) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn_old = [unRead_dic objectForKey:key_n];
+        NSNumber* tabn_new;
+        if (tabn_old) {
+            tabn_new = [NSNumber numberWithInteger:([tabn_old integerValue] + 1)];;
+        }
+        else
+        {
+            tabn_new = [NSNumber numberWithInteger:1];
+        }
+        [unRead_dic setValue:tabn_new forKey:key_n];
+    }
+    
+    [unRead_dic setValue:[NSNumber numberWithInteger:i] forKey:@"tab_show"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
     
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
+    NSLog(@"appdelegate， unRead_dic: %@", unRead_dic);
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:[NSArray arrayWithObject:message]];
@@ -629,6 +650,7 @@
     
     int flag = type;
     if (flag >= 0) {
+//        NSLog(@"收到新推送，显示消息中心红点");
         [self.leftMenu showUpdateInRow:4];
     }
     
@@ -828,9 +850,9 @@
         }
         isNetworkConnected = NO;
         
-        if (isConnected) {
-            [self disconnect];
-        }
+//        if (isConnected) {
+//            [self disconnect];
+//        }
         
         NSLog(@"Network is not reachable");
     }
@@ -853,9 +875,9 @@
 //        while (!isLogined) {
             [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }
-        if (!isConnected) {
-            [self connect];
-        }
+//        if (!isConnected) {
+//            [self connect];
+//        }
 
         
         
@@ -1232,7 +1254,7 @@
     }
 
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
-    int flag = [[userSettings objectForKey:@"hasUnreadNotification"]intValue];
+    int flag = [[[userSettings objectForKey:@"hasUnreadNotification"] objectForKey:@"tab_show"] integerValue];
     if (flag >= 0) {
         [self.leftMenu showUpdateInRow:4];
     }
@@ -1277,14 +1299,30 @@
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     int i = (type < 3 && type >= 0)? type : -1;
     NSLog(@"新消息来了，message type: %d", i);
-    [userSettings setValue:[NSNumber numberWithInt:i] forKey:@"hasUnreadNotification"];
+    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    
+    if (!unRead_dic) {
+        unRead_dic = [[NSMutableDictionary alloc]init];
+    }
+    if (i >= 0) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn_old = [unRead_dic objectForKey:key_n];
+        NSNumber* tabn_new;
+        if (tabn_old) {
+            tabn_new = [NSNumber numberWithInteger:([tabn_old integerValue] + 1)];;
+        }
+        else
+        {
+            tabn_new = [NSNumber numberWithInteger:1];
+        }
+        [unRead_dic setValue:tabn_new forKey:key_n];
+    }
+    
+    [unRead_dic setValue:[NSNumber numberWithInteger:i] forKey:@"tab_show"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
-    
-//    NSDictionary* setting = [[NSUserDefaults standardUserDefaults]objectForKey:key];
-//    NSNumber* num_temp = [setting objectForKey:@"hasUnreadNotification"];
-//    NSLog(@"存储的hasUnreadNotification: %@", num_temp);
-    
+        
 }
 
 
@@ -1385,10 +1423,10 @@
     [self disconnect];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
-    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
-        [self connect];
-        NSLog(@"Reconnecting from fail...");
-    }
+//    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
+//        [self connect];
+//        NSLog(@"Reconnecting from fail...");
+//    }
     
 }
 
@@ -1399,10 +1437,10 @@
     [self disconnect];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
-    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
-        [self connect];
-        NSLog(@"Reconnecting from close...");
-    }
+//    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
+//        [self connect];
+//        NSLog(@"Reconnecting from close...");
+//    }
 }
 //=============================================================================================
 

@@ -97,7 +97,7 @@
     
     
     self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    [self.listenerDelegate connect];
+//    [self.listenerDelegate connect];
     
     self.sql = [[MySqlite alloc]init];
     

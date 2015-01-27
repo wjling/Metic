@@ -13,7 +13,9 @@
    当前该字典键值对介绍：
     * systemSetting1:(bool) 系统设置里“通知栏提醒”的开关，开：YES， 关：NO
     * systemSetting2:(bool) 系统设置里“版本更新提醒”的开关，开：YES， 关：NO
-    * hasUnreadNotification(nsnumber): 0-2为消息中心tab的标号，－1为不出现在tab中的信息或者没有未读的新信息
+    * hasUnreadNotification(dictionary): 
+        tab_show(NSNumber) : 最后一条来到的消息，0-2为消息中心tab的标号，－1为不出现在tab中的信息
+        tab_n(NSNumber): n是tab编号. 未读的消息数量
  
  */
 

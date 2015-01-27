@@ -343,7 +343,7 @@ static MTUser *singletonInstance;
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
-        [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+        [userSettings setValue:[NSMutableDictionary dictionary] forKey:@"hasUnreadNotification"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];
@@ -410,7 +410,7 @@ static MTUser *singletonInstance;
         NSString* fname_py;
         NSLog(@"alias: %@----%@",fAlias,[fAlias class]);
         if (fAlias) {
-            if (![fAlias isEqual:[NSNull null]]) {
+            if (![fAlias isEqual:[NSNull null]] && ![fAlias isEqualToString:@""]) {
                 fname_py = [CommonUtils pinyinFromNSString:fAlias];
             }
             else
