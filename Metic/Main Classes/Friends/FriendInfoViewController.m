@@ -326,6 +326,7 @@
         });
         
     }];
+    NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
     name_label.text = name;
     if (alias && ![alias isEqual:[NSNull null]]) {
         alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
@@ -421,15 +422,21 @@
 {
     events = [response objectForKey:@"event_list"];
     rowHeights = [[NSMutableArray alloc]init];
-    for (int i = 0; i < events.count; i++) {
-        [rowHeights addObject:[NSNumber numberWithFloat:110.0]];
+    if (events) {
+        for (int i = 0; i < events.count; i++) {
+            [rowHeights addObject:[NSNumber numberWithFloat:110.0]];
+        }
     }
+    
     NSString* name = [response objectForKey:@"name"];
     NSString* location = [response objectForKey:@"location"];
     NSNumber* gender = [response objectForKey:@"gender"];
     NSString* email = [response objectForKey:@"email"];
     NSString* sign = [response objectForKey:@"sign"];
     
+    if (!friendInfo_dic) {
+        friendInfo_dic = [[NSMutableDictionary alloc]init];
+    }
     [friendInfo_dic setValue:name forKey:@"name"];
     [friendInfo_dic setValue:location forKey:@"location"];
     [friendInfo_dic setValue:gender forKey:@"gender"];
@@ -449,7 +456,7 @@
     [mySql closeMyDB];
     [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
     [[MTUser sharedInstance] friendListDidChanged];
-    NSLog(@"event_list: %@",events);
+//    NSLog(@"event_list: %@",events);
     
     [self refreshFriendInfo];
     
@@ -542,9 +549,8 @@
         
         [self.friendInfoEvents_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
-
     
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     
     

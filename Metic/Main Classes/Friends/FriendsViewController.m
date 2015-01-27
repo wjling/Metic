@@ -501,7 +501,6 @@
     if (tableView == friendTableView) {
         NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
         if (groupOfFriends) {
-            NSLog(@"section: %d, num of row: %d", section, groupOfFriends.count);
             return groupOfFriends.count;
         }
         else

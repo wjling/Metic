@@ -26,6 +26,7 @@
     BOOL clickTab;
     UIView* tabIndicator;
     UILabel *label1,*label2,*label3;
+    NSInteger num_tabs;
     
     UIView* waitingView;
     UIActivityIndicatorView* actIndicator;
@@ -72,10 +73,8 @@ enum Response_Type
     [MenuViewController sharedInstance].notificationsViewController = self;
     [CommonUtils addLeftButton:self isFirstPage:YES];
     self.appListener = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    self.appListener.notificationDelegate = self;
+//    self.appListener.notificationDelegate = self;
     [self initParams];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewMessage:) name:@"pull_message" object:nil];
     
 }
 
@@ -85,6 +84,7 @@ enum Response_Type
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"消息中心"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pull_message" object:nil];
 }
 //返回上一层
 -(void)MTpopViewController{
@@ -100,15 +100,18 @@ enum Response_Type
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //注册观察者接收推送
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNewMessage:) name:@"pull_message" object:nil];
+    
     [self.navigationController setNavigationBarHidden:NO];
-    self.appListener.notificationDelegate = self;
+//    self.appListener.notificationDelegate = self;
     self.eventRequestMsg = [[NSMutableArray alloc]init];
     self.friendRequestMsg = [[NSMutableArray alloc]init];
     self.systemMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].systemMsg];
-    [self removeDuplicate_msgFromDatabase];
-//    [self.eventRequest_tableView reloadData];
-//    [self.friendRequest_tableView reloadData];
+    [self.eventRequest_tableView reloadData];
+    [self.friendRequest_tableView reloadData];
     [self.systemMessage_tableView reloadData];
+    [self removeDuplicate_msgFromDatabase];
     
     if (eventRequestMsg.count == 0) {
         label1.hidden = NO;
@@ -133,25 +136,7 @@ enum Response_Type
     {
         label3.hidden = YES;
     }
-    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
-    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
-    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
-    NSLog(@"notification: hasUnreadNotification: %@", index);
-    if (index) {
-        if ([index integerValue] != -1) {
-            tab_index = [index integerValue];
-            [self tabBtnClicked:self.tabs[tab_index]];
-            clickTab = NO;
-        }
-    }
     
-    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
-    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
-    [userDfs setValue:userSettings forKey:key];
-    [userDfs synchronize];
-    
-    [self.appListener.leftMenu hideUpdateInRow:4];
 //    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
 //    id temp = [eventRequestMsg objectAtIndex:0];
 //    if ([temp isKindOfClass:[NSMutableDictionary class]]) {
@@ -174,6 +159,49 @@ enum Response_Type
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
     [self.view bringSubviewToFront:_shadowView];
     _shadowView.hidden = NO;
+    
+    NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
+    NSLog(@"消息中心,viewdidappear notification: hasUnreadNotification: %@", unRead_dic);
+    if (index) {
+        if ([index integerValue] != -1) {
+            tab_index = [index integerValue];
+            [self tabBtnClicked:self.tabs[tab_index]];
+            clickTab = NO;
+        }
+    }
+    
+    for (int i = 0; i < num_tabs; i++) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn = [unRead_dic objectForKey:key_n];
+        if (tabn) {
+            if ([tabn integerValue] > 0) {
+                if (i != tab_index) {
+                    [self showDian:i];
+                }
+                else
+                {
+                    [self hideDian:i];
+                }
+            }
+            else
+            {
+                [self hideDian:i];
+            }
+        }
+    }
+
+    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
+    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
+    
+    [self.appListener.leftMenu hideUpdateInRow:4];
     
 }
 
@@ -234,7 +262,7 @@ enum Response_Type
                 eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                 fid2 = [[aMsg objectForKey:@"id"]integerValue];
                 if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
-                    NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
+//                    NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
                     [self.eventRequestMsg removeObject:aMsg];
                     continue;
                 }
@@ -266,21 +294,26 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
-    //    NSLog(@"notification: hasUnreadNotification: %@", index);
-    if (index) {
-        if ([index integerValue] != -1) {
-            tab_index = [index integerValue];
-            [self tabBtnClicked:self.tabs[tab_index]];
-            clickTab = NO;
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+//    NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
+//    NSLog(@"notification: hasUnreadNotification: %@", index);
+    for (int i = 0; i < num_tabs; i++) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn = [unRead_dic objectForKey:key_n];
+        if (tabn) {
+            if ([tabn integerValue] > 0 && i != tab_index) {
+                [self showDian:i];
+            }
         }
     }
-    
-    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
+    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
 
-
+//    NSLog(@"消息中心收到推送，隐藏消息中心红点");
+//    [[MenuViewController sharedInstance] hideUpdateInRow:4];
 }
 
 #pragma mark - Navigation
@@ -302,14 +335,11 @@ enum Response_Type
 
 - (void)initParams
 {
-//    self.msgFromDB = [[NSMutableArray alloc]init];
-//    self.friendRequestMsg = [[NSMutableArray alloc]init];
-//    self.eventRequestMsg = [[NSMutableArray alloc]init];
-//    self.systemMsg = [[NSMutableArray alloc]init];
-//    self.historicalMsg = [[NSMutableArray alloc]init];
     selectedPath = [[NSIndexPath alloc]init];
     mySql = [[MySqlite alloc]init];
     DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    num_tabs = 3;
+    
     self.friendRequest_tableView.delegate = self;
     self.friendRequest_tableView.dataSource = self;
     self.eventRequest_tableView.delegate = self;
@@ -456,7 +486,7 @@ enum Response_Type
 {
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSLog(@"消息中心：从数据库取出的eventRequestMsg 去重");
+//        NSLog(@"消息中心：从数据库取出的eventRequestMsg 去重");
         for (NSMutableDictionary* MTUser_msg_dic in MTUser_eventRequestMsg) {
             BOOL flag = YES;
             NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
@@ -469,21 +499,21 @@ enum Response_Type
                 NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
                 
                 if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
-                    NSLog(@"\ncmd1: %d, cmd2: %d\nevent_id1: %d, event_id2: %d\nfid1: %d, fid2: %d",cmd1,cmd2,event_id1,event_id2,fid1,fid2);
+//                    NSLog(@"\ncmd1: %d, cmd2: %d\nevent_id1: %d, event_id2: %d\nfid1: %d, fid2: %d",cmd1,cmd2,event_id1,event_id2,fid1,fid2);
                     flag = NO;
                     break;
                 }
             }
             if (flag) {
                 [self.eventRequestMsg addObject:MTUser_msg_dic];
-                NSLog(@"插入eventRequestMsg: %@",MTUser_msg_dic);
+//                NSLog(@"插入eventRequestMsg: %@",MTUser_msg_dic);
             }
             
         }
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
-                           NSLog(@"消息中心：eventRequestMsg去重已经完成");
+//                           NSLog(@"消息中心：eventRequestMsg去重已经完成");
                            [self.eventRequest_tableView reloadData];
                            if (eventRequestMsg.count == 0) {
                                label1.hidden = NO;
@@ -498,17 +528,17 @@ enum Response_Type
     
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        NSLog(@"消息中心：从数据库取出的friendRequestMsg 去重");
+//        NSLog(@"消息中心：从数据库取出的friendRequestMsg 去重");
         for (NSMutableDictionary* MTUser_msg_dic in MTUser_friendRequestMsg) {
             BOOL flag = YES;
             NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
             for (NSMutableDictionary* msg_dic in self.friendRequestMsg) {
                 NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
-                NSLog(@"MT_fri_cmd: %d, NF_fri_cmd: %d",cmd1,cmd2);
+//                NSLog(@"MT_fri_cmd: %d, NF_fri_cmd: %d",cmd1,cmd2);
                 if (cmd1 == cmd2) {
                     NSInteger fid1 = [[MTUser_msg_dic objectForKey:@"id"]integerValue];
                     NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
-                    NSLog(@"MT_fid: %d, NF_fid: %d",fid1,fid2);
+//                    NSLog(@"MT_fid: %d, NF_fid: %d",fid1,fid2);
                     if (fid1 == fid2) {
                         flag = NO;
                         break;
@@ -517,14 +547,14 @@ enum Response_Type
             }
             if (flag) {
                 [self.friendRequestMsg addObject:MTUser_msg_dic];
-                NSLog(@"插入friendRequestMsg: %@",MTUser_msg_dic);
+//                NSLog(@"插入friendRequestMsg: %@",MTUser_msg_dic);
             }
         }
         
         
         dispatch_async(dispatch_get_main_queue(), ^
                        {
-                           NSLog(@"消息中心：friendRequestMsg去重已经完成");
+//                           NSLog(@"消息中心：friendRequestMsg去重已经完成");
                            [self.friendRequest_tableView reloadData];
                            if (friendRequestMsg.count == 0) {
                                label2.hidden = NO;
@@ -540,7 +570,7 @@ enum Response_Type
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
        
-        NSLog(@"消息中心：暂时不用对systemMsg 去重");
+//        NSLog(@"消息中心：暂时不用对systemMsg 去重");
         dispatch_async(dispatch_get_main_queue(), ^
                        {
                            [self.systemMessage_tableView reloadData];
@@ -549,30 +579,9 @@ enum Response_Type
 
 }
 
-//-(void)waitingTimerDone:(NSTimer*)timer
-//{
-//    [waitingView removeFromSuperview];
-//}
-//
-//-(void)waitingViewShow:(UIView*)view
-//{
-//    if ([waitingView superview]) {
-//        [waitingView removeFromSuperview];
-//        [waitingTimer invalidate];
-//    }
-//    [view addSubview:waitingView];
-//    [waitingTimer fire];
-//}
-//
-//-(void)waitingViewHide
-//{
-//    [waitingView removeFromSuperview];
-//    [waitingTimer invalidate];
-//}
-
 -(void)dismissHud:(NSTimer*)timer
 {
-    [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:2.0];
+    [SVProgressHUD dismiss];
 }
 
 - (void)tabBtnClicked:(id)sender
@@ -606,14 +615,10 @@ enum Response_Type
     [self scrollTabIndicator:frame];
     tab_index = index;
     
-//    NSLog(@"clicked, x: %f,y: %f, width: %f, height: %f",self.bgOfTabs.frame.origin.x, self.bgOfTabs.frame.origin.y,self.bgOfTabs.frame.size.width,self.bgOfTabs.frame.size.height);
-//
-//    [self.content_scrollView scrollRectToVisible:frame animated:YES];
-    
+    NSLog(@"width * index = %f", self.content_scrollView.frame.size.width * index);
     CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
-    [self.content_scrollView setContentOffset:point animated:YES];
     [self.content_scrollView setScrollEnabled:YES];
-    
+    [self.content_scrollView setContentOffset:point animated:YES];
     
     if (index == 0) {
         if (self.eventRequestMsg.count == 0) {
@@ -623,7 +628,7 @@ enum Response_Type
         {
             label1.hidden = YES;
         }
-        NSLog(@"活动邀请：\neventRequest: %@\n============\nMT_eventRequest: %@",eventRequestMsg,MTUser_eventRequestMsg);
+//        NSLog(@"活动邀请：\neventRequest: %@\n============\nMT_eventRequest: %@",eventRequestMsg,MTUser_eventRequestMsg);
         [self.eventRequest_tableView reloadData];
     }
     else if (index == 1)
@@ -635,7 +640,7 @@ enum Response_Type
         {
             label2.hidden = YES;
         }
-        NSLog(@"好友请求：\nfriendRequest: %@\n============\nMT_friendRequest: %@",friendRequestMsg,MTUser_friendRequestMsg);
+//        NSLog(@"好友请求：\nfriendRequest: %@\n============\nMT_friendRequest: %@",friendRequestMsg,MTUser_friendRequestMsg);
         [self.friendRequest_tableView reloadData];
     }
     else if (index == 2)
@@ -647,11 +652,20 @@ enum Response_Type
         {
             label3.hidden = YES;
         }
-        NSLog(@"系统消息：\nsystemRequest: %@\n============\nMT_systemRequest: %@",systemMsg,MTUser_systemMsg);
+//        NSLog(@"系统消息：\nsystemRequest: %@\n============\nMT_systemRequest: %@",systemMsg,MTUser_systemMsg);
         [self.systemMessage_tableView reloadData];
     }
 
+    NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", index]];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userDfs setValue:userSettings forKey:key];
+    [userDfs synchronize];
     
+    [self hideDian:index];
 }
 
 -(void)scrollTabIndicator:(CGRect)frame
@@ -694,26 +708,11 @@ enum Response_Type
 }
 
 - (IBAction)function1Clicked:(id)sender {
-//    [UIView beginAnimations:@"View shows" context:nil];
-//    [functions_uiview setHidden:YES];
-//    [UIView setAnimationDuration:0.5];
-//    [UIView setAnimationDelegate:self];
-//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-//    [UIView commitAnimations];
     [self performSegueWithIdentifier:@"notificationvc_historicalvc" sender:self];
 }
 
 - (IBAction)function2Clicked:(id)sender {
-//    [UIView beginAnimations:@"View shows" context:nil];
-//    [functions_uiview setHidden:YES];
-//    [UIView setAnimationDuration:0.5];
-//    [UIView setAnimationDelegate:self];
-//    [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
-//    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.functions_uiview  cache:NO];
-//    [UIView commitAnimations];
 
-    //[self performSelectorOnMainThread:@selector(clearCurrentPage) withObject:nil waitUntilDone:NO];
     [self clearCurrentPage];
 }
 
@@ -762,6 +761,30 @@ enum Response_Type
 - (void) refresh
 {
     [self.view setNeedsDisplay];
+}
+
+-(void)showDian:(NSInteger)indexOfTab
+{
+    NSLog(@"显示tab红点： %d", indexOfTab);
+    UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
+    UIView* view = [tab viewWithTag:233];
+    if (!view) {
+        UIImage* img = [UIImage imageNamed:@"选择点图标"];
+        UIImageView* dian = [[UIImageView alloc]initWithFrame:CGRectMake(tab.frame.size.width - 30, tab.frame.origin.y + 5, 18, 18)];
+        dian.image = img;
+        dian.tag = 233;
+        [tab addSubview:dian];
+    }
+}
+
+-(void)hideDian:(NSInteger)indexOfTab
+{
+    NSLog(@"隐藏tab红点： %d", indexOfTab);
+    UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
+    UIImageView* dian = (UIImageView*)[tab viewWithTag:233];
+    if (dian) {
+        [dian removeFromSuperview];
+    }
 }
 //==========================================================================================
 
@@ -819,7 +842,7 @@ enum Response_Type
 
 -(void) notificationDidReceive:(NSArray *)messages
 {
-    [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) hideUpdateInRow:4];
+    NSLog(@"消息中心，notificationDidReceive");
     for (NSDictionary* msg in messages) {
         NSString* msg_str = [msg objectForKey:@"content"];
         NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
@@ -886,7 +909,6 @@ enum Response_Type
                     eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                     fid2 = [[aMsg objectForKey:@"id"]integerValue];
                     if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
-                        NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
                         [self.eventRequestMsg removeObject:aMsg];
                         continue;
                     }
@@ -919,8 +941,9 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSNumber* index = [userSettings objectForKey:@"hasUnreadNotification"];
-//    NSLog(@"notification: hasUnreadNotification: %@", index);
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
+//    NSLog(@"viewwillappear notification: hasUnreadNotification: %@", index);
     if (index) {
         if ([index integerValue] != -1) {
             tab_index = [index integerValue];
@@ -929,9 +952,33 @@ enum Response_Type
         }
     }
     
-    [userSettings setValue:[NSNumber numberWithInt:-1] forKey:@"hasUnreadNotification"];
+    for (int i = 0; i < num_tabs; i++) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn = [unRead_dic objectForKey:key_n];
+        if (tabn) {
+            if ([tabn integerValue] > 0) {
+                if (i != tab_index) {
+                    [self showDian:i];
+                }
+                else
+                {
+                    [self hideDian:i];
+                }
+            }
+            else
+            {
+                [self hideDian:i];
+            }
+        }
+    }
+    
+    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
+    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
+    
+    [[MenuViewController sharedInstance] hideUpdateInRow:4];
 
 }
 
@@ -942,17 +989,17 @@ enum Response_Type
     return 0;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (tableView == self.eventRequest_tableView) {
-//        NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:indexPath.row];
-//        NSInteger cmd = [[msg_dic objectForKey:@"cmd"]integerValue];
-//        if (cmd == REQUEST_EVENT) {
-//            return 80;
-//        }
-//    }
-//    return 50;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == self.eventRequest_tableView) {
+        NSDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:indexPath.row];
+        NSInteger cmd = [[msg_dic objectForKey:@"cmd"]integerValue];
+        if (cmd == REQUEST_EVENT) {
+            return 80;
+        }
+    }
+    return 50;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1062,7 +1109,6 @@ enum Response_Type
                 cell.okBtn.hidden = YES;
                 cell.noBtn.hidden = YES;
                 cell.remark_label.hidden = YES;
-//                [cell.event_name_button addTarget:self action:@selector(eventBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
 
             }
                 break;
@@ -1119,6 +1165,7 @@ enum Response_Type
                 if (!cell.confirm_msg_label) {
                     cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(75, 45, 220, 30)];
                     [cell.contentView addSubview:cell.confirm_msg_label];
+                    [cell.contentView setClipsToBounds:YES];
                     cell.confirm_msg_label.font = [UIFont systemFontOfSize:11];
                     cell.confirm_msg_label.textColor = [UIColor blackColor];
                     cell.confirm_msg_label.backgroundColor = [UIColor clearColor];
@@ -1162,6 +1209,16 @@ enum Response_Type
         UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
         cell.layer.borderColor = borderColor.CGColor;
         cell.layer.borderWidth = 0.3;
+        
+        CGRect cellFrame = cell.contentView.frame;
+        if (cmd == NEW_EVENT_NOTIFICATION) {
+            cellFrame.size.height = 50;
+        }
+        else if (cmd == REQUEST_EVENT)
+        {
+            cellFrame.size.height = 80;
+        }
+        [cell.contentView setFrame:cellFrame];
         return cell;
     }
     else if(tableView == self.friendRequest_tableView)
@@ -1363,7 +1420,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1408,7 +1465,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1472,7 +1529,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1509,7 +1566,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1837,7 +1894,6 @@ enum Response_Type
         }
             break;
         default:
-//            [SVProgressHUD dismissWithError:@"呵呵" afterDelay:1];
             NSLog(@"消息中心未对该cmd做处理, cmd: %@",cmd);
             break;
     }
@@ -1989,6 +2045,17 @@ enum Response_Type
             }
             NSLog(@"reload system_table");
         }
+        
+        NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+        NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+        NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
+        NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+        [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+        [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+        [userDfs setValue:userSettings forKey:key];
+        [userDfs synchronize];
+        
+        [self hideDian:tab_index];
         
     }
 }

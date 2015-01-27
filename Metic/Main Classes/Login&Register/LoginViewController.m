@@ -536,7 +536,6 @@
             else
             {
                 [self jumpToMainView];
-//                [self jumpToFillinInfo];
             }
             
             [button_login setEnabled:YES];
