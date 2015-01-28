@@ -77,7 +77,7 @@ static MenuViewController *singletonInstance;
     NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
     NSNumber* flag = [[userSettings valueForKey:@"hasUnreadNotification"] objectForKey:@"tab_show"];
-    NSLog(@"hasUnreadNotification: %@", flag);
+    NSLog(@"侧边栏，viewWillAppear, hasUnreadNotification: %@", flag);
     if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }
@@ -108,16 +108,6 @@ static MenuViewController *singletonInstance;
     [getter getAvatar];
     NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
     
-//    if ([MTUser sharedInstance].eventRequestMsg.count > 0 ||
-//        [MTUser sharedInstance].friendRequestMsg.count > 0 ||
-//        [MTUser sharedInstance].systemMsg.count > 0)
-//    {
-//        notificationSigns_arr[4] = [NSNumber numberWithBool:YES];
-//    }
-//    else
-//    {
-//        notificationSigns_arr[4] = [NSNumber numberWithBool:NO];
-//    }
 }
 
 -(void)clearVC
@@ -175,14 +165,14 @@ static MenuViewController *singletonInstance;
 
 -(void)showUpdateInRow:(NSInteger)row
 {
-    NSLog(@"显示消息中心红点");
+    NSLog(@"显示侧边栏红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:YES]];
     [_tableView reloadData];
 }
 
 -(void)hideUpdateInRow:(NSInteger)row
 {
-    NSLog(@"隐藏消息中心红点");
+    NSLog(@"隐藏侧边栏红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
     [_tableView reloadData];
 }
@@ -301,9 +291,6 @@ static MenuViewController *singletonInstance;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -355,6 +342,7 @@ static MenuViewController *singletonInstance;
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"NotificationsViewController"];
                 notificationsViewController = (NotificationsViewController*)vc;
             }else vc = notificationsViewController;
+            [self hideUpdateInRow:4];
 			break;
         
         case 5:

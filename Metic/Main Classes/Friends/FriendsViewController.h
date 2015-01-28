@@ -42,7 +42,6 @@
 - (void)initParams;
 - (void)initTableData;
 //- (void)synchronize_friends;
-- (IBAction)search_friends:(id)sender;
 - (IBAction)switchToAddFriendView:(id)sender;
 
 //- (void) createFriendTable;

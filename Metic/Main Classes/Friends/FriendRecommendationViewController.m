@@ -9,6 +9,7 @@
 #import "FriendRecommendationViewController.h"
 #import "MJRefreshHeaderView.h"
 #import "MJRefreshFooterView.h"
+#import "FriendInfoViewController.h"
 
 @interface FriendRecommendationViewController ()<MJRefreshBaseViewDelegate>
 {
@@ -71,7 +72,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    [CommonUtils addLeftButton:self isFirstPage:NO];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     
     
     contacts_arr = [[NSMutableArray alloc]init];
@@ -90,16 +91,12 @@
     [self initContentView];
     
     
-
-//    [locationService startUserLocationService];
-    
-    
 }
 
 //返回上一层
-//-(void)MTpopViewController{
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -311,8 +308,6 @@
 
 -(void)tabClicked:(UIButton*)sender
 {
-//    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
-    
     NSInteger index = [tab_arr indexOfObject:sender];
     if (index == tab_index) {
         clickTab = NO;
@@ -536,12 +531,7 @@
 -(void)addFriendBtnClicked:(UIButton*)sender
 {
     selectedFriendID = [NSNumber numberWithInteger:sender.tag];
-    [self performSegueWithIdentifier:@"friendRecommend_addFriend" sender:self];
-//    UIStoryboard* main_storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-//    AddFriendConfirmViewController* vc = [main_storyboard instantiateViewControllerWithIdentifier:@"AddFriendConfirmViewController"];
-//    vc.fid = selectedFriendID;
-//    [self.navigationController pushViewController:vc animated:YES];
-    
+    [self performSegueWithIdentifier:@"friendRecommend_addFriend" sender:self];    
 }
 
 -(void)showWaitingView
@@ -569,6 +559,23 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary* friend;
+    if (tableView == self.nearbyFriends_tableview) {
+        friend = [nearbyFriends_arr objectAtIndex:indexPath.row];
+    }
+    else if (tableView == self.kankan_tableview)
+    {
+        friend = [kankan_arr objectAtIndex:indexPath.row];
+    }
+    
+    if ([friend isKindOfClass:[NSDictionary class]]) {
+        selectedFriendID = [friend valueForKey:@"id"];
+        UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        FriendInfoViewController* vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FriendInfoViewController"];
+        vc.fid = selectedFriendID;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -612,7 +619,7 @@
         NSNumber* fid = [friend valueForKey:@"id"];
         NSString* fname = [friend valueForKey:@"name"];
         NSNumber* isFriend = [friend valueForKey:@"isFriend"];
-        NSLog(@"isFriend: %hhd",[isFriend boolValue]);
+        NSLog(@"isFriend: %d",[isFriend boolValue]);
         cell.name_label.text = fname;
         if ([isFriend boolValue]) {
             cell.add_button.hidden = YES;
@@ -631,11 +638,15 @@
         
         [cell setBackgroundColor:bgColor];
         
-        if (!cell.cellSeperator) {
-            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
-            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
-            [cell.contentView addSubview:cell.cellSeperator];
-        }
+//        if (!cell.cellSeperator) {
+//            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+//            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
+//            [cell.contentView addSubview:cell.cellSeperator];
+//        }
+        
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
         
     }
@@ -702,12 +713,15 @@
         
         [cell setBackgroundColor:bgColor];
         
-        if (!cell.cellSeperator) {
-            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
-            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
-            [cell.contentView addSubview:cell.cellSeperator];
-        }
+//        if (!cell.cellSeperator) {
+//            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+//            [cell.cellSeperator setBackgroundColor:[UIColor lightGrayColor]];
+//            [cell.contentView addSubview:cell.cellSeperator];
+//        }
         
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
     }
     else if (tableView == kankan_tableview)
@@ -761,12 +775,15 @@
 //        UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
         [cell setBackgroundColor:bgColor];
         
-        if (!cell.cellSeperator) {
-            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
-            [cell.cellSeperator setBackgroundColor:seperatorColor];
-            [cell.contentView addSubview:cell.cellSeperator];
-        }
+//        if (!cell.cellSeperator) {
+//            cell.cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, cell.frame.size.height - 1, cell.frame.size.width, 1)];
+//            [cell.cellSeperator setBackgroundColor:seperatorColor];
+//            [cell.contentView addSubview:cell.cellSeperator];
+//        }
 
+        UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        cell.layer.borderColor = borderColor.CGColor;
+        cell.layer.borderWidth = 0.3;
         return cell;
         
     }

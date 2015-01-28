@@ -22,7 +22,6 @@
 - (void)awakeFromNib
 {
     // Initialization code
-    NSLog(@"awake from NIB");
 //    if (!_alreadyFriend_label) {
 //        _alreadyFriend_label = [[UILabel alloc]initWithFrame:CGRectMake(250, 7, 60, 30)];
 //        _alreadyFriend_label.font = [UIFont systemFontOfSize:12];
@@ -31,6 +30,13 @@
 //        self.alreadyFriend_label.text = @"已经是好友";
 //        [self.contentView addSubview:self.alreadyFriend_label];
 //    }
+    UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
+    if (!_cellSeperator) {
+        _cellSeperator = [[UIView alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 1, self.frame.size.width, 1)];
+        [_cellSeperator setBackgroundColor:seperatorColor];
+        [self addSubview:_cellSeperator];
+    }
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

@@ -84,6 +84,7 @@ enum Response_Type
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"消息中心"];
+    NSLog(@"消息中心viewdidDisappear");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pull_message" object:nil];
 }
 //返回上一层
@@ -137,24 +138,12 @@ enum Response_Type
         label3.hidden = YES;
     }
     
-//    waitingView.frame = self.content_scrollView.frame;  //修正waitingView的位置
-//    id temp = [eventRequestMsg objectAtIndex:0];
-//    if ([temp isKindOfClass:[NSMutableDictionary class]]) {
-//        NSLog(@"temp is mutable_dic");
-//    }
-//    else if ([temp isKindOfClass:[NSDictionary class]])
-//    {
-//        NSLog(@"temp is dic");
-//    }
-    
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"消息中心"];
-//    label1.frame = self.content_scrollView.frame;
-//    NSLog(@"hennnnn");
     self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
     self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
     [self.view bringSubviewToFront:_shadowView];
@@ -165,7 +154,7 @@ enum Response_Type
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
     NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
     NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
-    NSLog(@"消息中心,viewdidappear notification: hasUnreadNotification: %@", unRead_dic);
+    NSLog(@"消息中心viewdidappear, hasUnreadNotification: %@", unRead_dic);
     if (index) {
         if ([index integerValue] != -1) {
             tab_index = [index integerValue];
@@ -306,11 +295,11 @@ enum Response_Type
             }
         }
     }
-    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
-    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
-    [userDfs setValue:userSettings forKey:key];
-    [userDfs synchronize];
+//    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
+//    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+//    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+//    [userDfs setValue:userSettings forKey:key];
+//    [userDfs synchronize];
 
 //    NSLog(@"消息中心收到推送，隐藏消息中心红点");
 //    [[MenuViewController sharedInstance] hideUpdateInRow:4];
@@ -468,18 +457,6 @@ enum Response_Type
     [self.friendRequest_tableView addSubview:label2];
     [self.systemMessage_tableView addSubview:label3];
     
-    // waiting view
-//    UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1];
-//    waitingView = [[UIView alloc]init];
-//    waitingView.frame = CGRectMake(0, 0, self.content_scrollView.frame.size.width, self.content_scrollView.frame.size.height);
-//    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollView.frame.size.width,self.content_scrollView.frame.size.height);
-//    [waitingView setBackgroundColor:waitingBgColor];
-//    [waitingView setAlpha:0.5];
-//    actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
-//    [waitingView addSubview:actIndicator];
-//    [actIndicator startAnimating];
-//    
-//    waitingTimer = [NSTimer timerWithTimeInterval:6.0 target:self selector:@selector(waitingTimerDone:) userInfo:nil repeats:NO];
 }
 
 -(void)removeDuplicate_msgFromDatabase
@@ -615,7 +592,6 @@ enum Response_Type
     [self scrollTabIndicator:frame];
     tab_index = index;
     
-    NSLog(@"width * index = %f", self.content_scrollView.frame.size.width * index);
     CGPoint point = CGPointMake(self.content_scrollView.frame.size.width * index, 0);
     [self.content_scrollView setScrollEnabled:YES];
     [self.content_scrollView setContentOffset:point animated:YES];
@@ -1642,7 +1618,6 @@ enum Response_Type
                     NSString* femail = [msg_dic objectForKey:@"email"];
                     NSNumber* fgender = [msg_dic objectForKey:@"gender"];
                     NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                    NSLog(@"response friend, seq: %d, fid: %d",seq1, fid1);
                     [mySql openMyDB:DB_path];
                     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq1],@"seq", nil]];
                     [mySql insertToTable:@"friend"

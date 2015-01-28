@@ -269,32 +269,6 @@
     
 }
 
-
-- (IBAction)search_friends:(id)sender
-{
-//    NSString* text = self.friendSearchBar.text;
-//    if ([CommonUtils isEmailValid:text]) {
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        dictionary = [CommonUtils packParamsInDictionary:text,@"email",nil];
-//        NSLog(@"%@",dictionary);
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
-//    }
-//    else
-//    {
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        dictionary = [CommonUtils packParamsInDictionary:text,@"name",nil];
-//        NSLog(@"%@",dictionary);
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
-//    }
-}
-
-
 -(void)getRangesOfText:(NSString*)text withKeyWord:(NSString*)keyWord
 {
     NSMutableArray* ranges_arr = [[NSMutableArray alloc]init];
