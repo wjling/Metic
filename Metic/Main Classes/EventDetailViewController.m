@@ -780,7 +780,8 @@
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
     NSMutableArray*newComments;
-    switch (_mainCommentId) {
+    long commentType = _mainCommentId;
+    switch (commentType) {
         case 0:{
             
             //加入到评论数组里
@@ -823,7 +824,7 @@
                 {
                     [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
                     [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    if (_mainCommentId == 0) {
+                    if (commentType == 0) {
                         [_comment_list removeObject:newComments];
                         [_comment_list insertObject:newComments atIndex:0];
                     }else{
