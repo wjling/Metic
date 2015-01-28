@@ -687,7 +687,7 @@
             alias = [_photoInfo valueForKey:@"author"];
         }
         
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 150, 12)];
+        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+11, 150, 17)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];

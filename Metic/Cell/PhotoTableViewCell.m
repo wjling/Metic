@@ -29,7 +29,7 @@
     _avatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 8, 20, 20)];
     [_infoView addSubview:_avatar];
     
-    _author = [[UILabel alloc]initWithFrame:CGRectMake(30, 8, 110, 10)];
+    _author = [[UILabel alloc]initWithFrame:CGRectMake(30, 5, 110, 15)];
     _author.font = [UIFont systemFontOfSize:12];
     _author.textColor = [UIColor colorWithWhite:51.0/255.0 alpha:1.0f];
     [_infoView addSubview:_author];

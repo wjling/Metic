@@ -985,14 +985,14 @@
             alias = [_videoInfo valueForKey:@"author"];
         }
         
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 200, 12)];
+        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 200, 17)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];
         author.text = alias;
         [cell addSubview:author];
         
-        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
+        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+30, 150, 13)];
         [date setFont:[UIFont systemFontOfSize:11]];
         [date setTextColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0]];
         date.text = [self.videoInfo valueForKey:@"time"];
