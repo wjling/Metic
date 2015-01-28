@@ -443,6 +443,26 @@
     [_datePickerView removeFromSuperview ];
 }
 
+- (void)checkTimeValid
+{
+    if ([self.begin_time_text.text isEqualToString:@""] || [self.end_time_text.text isEqualToString:@""]) {
+        return;
+    }
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    NSDate* begin = [dateFormatter dateFromString:self.begin_time_text.text];
+    NSDate* end = [dateFormatter dateFromString:self.end_time_text.text];
+    NSTimeInterval begins = [begin timeIntervalSince1970];
+    NSTimeInterval ends = [end timeIntervalSince1970];
+    int dis = ends-begins;
+    if (dis<0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"结束时间必须大于开始时间" WithDelegate:nil WithCancelTitle:@"确定"];
+        self.end_time_text.text = @"";
+    }
+    
+}
 
 - (IBAction)launch:(id)sender {
     [self.subject_text becomeFirstResponder];
@@ -698,6 +718,9 @@
     } else if (datePicker.datePickerMode == FlatDatePickerModeTime) {
         //[datePicker setDatePickerMode:FlatDatePickerModeDate];
         [self.scrollView setUserInteractionEnabled:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self checkTimeValid];
+        });
         return;
     }
     
