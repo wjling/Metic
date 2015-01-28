@@ -333,16 +333,19 @@
 #pragma mark scrollView Delegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGRect frame =_bar.frame;
-    frame.origin.x = scrollView.contentOffset.x / 2;
-    [_bar setFrame:frame];
-    if (scrollView.contentOffset.x > 88) {
-        [_atMe_button setHighlighted:YES];
-        [_dynamics_button setHighlighted:NO];
-    }else{
-        [_atMe_button setHighlighted:NO];
-        [_dynamics_button setHighlighted:YES];
+    if (scrollView == _scrollView) {
+        CGRect frame =_bar.frame;
+        frame.origin.x = scrollView.contentOffset.x / 2;
+        [_bar setFrame:frame];
+        if (scrollView.contentOffset.x > 88) {
+            [_atMe_button setHighlighted:YES];
+            [_dynamics_button setHighlighted:NO];
+        }else{
+            [_atMe_button setHighlighted:NO];
+            [_dynamics_button setHighlighted:YES];
+        }
     }
+    
 }
 
 #pragma mark notificationDidReceive
