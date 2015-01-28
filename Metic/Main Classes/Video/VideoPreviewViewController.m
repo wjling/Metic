@@ -295,6 +295,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     if (_isKeyBoard) {
         [_textView resignFirstResponder];
         return;
+    }else if(!_confirmBtn.isEnabled){
+        return;
     }
     MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:_videoURL];
     
