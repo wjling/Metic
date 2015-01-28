@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -2913,7 +2914,7 @@
                             <rect key="frame" x="96" y="6" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                            <state key="normal" title="活动中心">
+                            <state key="normal" title="我的活动">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="highlighted">
@@ -4952,18 +4953,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="ItJ-aD-aY9"/>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="0y8-RS-ijM"/>
+        <segue reference="a7Z-Ie-XBp"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="kIc-uU-eUg"/>
         <segue reference="UXj-VV-omZ"/>
         <segue reference="vrP-dE-x9J"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="ItJ-aD-aY9"/>
         <segue reference="Bdm-ot-CYp"/>
-        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="KQw-JA-BHy"/>
+        <segue reference="8Lk-Kp-pHu"/>
     </inferredMetricsTieBreakers>
 </document>
