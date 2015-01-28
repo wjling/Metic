@@ -467,8 +467,9 @@
         return;
     }
     
-    NSString*beg_Time = self.begin_time_text.text;
-    NSString*end_Time = self.end_time_text.text;
+    NSString*beg_Time = ([self.begin_time_text.text isEqualToString:@""])? self.begin_time_text.text:[self.begin_time_text.text stringByAppendingString:@":00"];
+    NSString*end_Time = ([self.end_time_text.text isEqualToString:@""])? self.end_time_text.text:[self.end_time_text.text stringByAppendingString:@":00"];
+    
     if ([beg_Time isEqualToString:@""]) {
         if (![end_Time isEqualToString:@""]) {
             beg_Time = end_Time;
@@ -675,7 +676,7 @@
         if ([self.seletedText.text isEqualToString:@""]) {
             return;
         }
-        [dateFormatter setDateFormat:@" HH:mm:00"];
+        [dateFormatter setDateFormat:@" HH:mm"];
         NSString *value = [dateFormatter stringFromDate:date];
         value = [[self.seletedText.text substringToIndex:10] stringByAppendingString:value];
         self.seletedText.text = value;
