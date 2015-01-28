@@ -15,7 +15,7 @@
 #import "MobClick.h"
 #import "AppConstants.h"
 #import "HttpSender.h"
-#import "UIButton+WebCache.h"
+#import "UIImageView+WebCache.h"
 
 
 #define bannerWidth self.view.bounds.size.width
@@ -213,44 +213,46 @@
 {
     if (_posterList && _posterList.count>0) {
 
-        [_scrollView setBackgroundColor:[UIColor clearColor]];
+        [_scrollView setBackgroundColor:[UIColor colorWithWhite:204.0/255.0 alpha:1.0f]];
         [_scrollView setContentSize:CGSizeMake(bannerWidth*(_posterList.count+1), bannerHeight)];
         int i = 0;
         for (NSDictionary* dict in _posterList) {
             if (i == _posterList.count-1) {
-                UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-                [button setFrame:CGRectMake(bannerWidth*0, 0, bannerWidth, bannerHeight)];
-                
-                [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
-                [button setTag:i];
-                [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView* img = [[UIImageView alloc]init];
+                [img setUserInteractionEnabled:YES];
+                [img setFrame:CGRectMake(bannerWidth*0, 0, bannerWidth, bannerHeight)];
+                [img setTag:i];
+                UITapGestureRecognizer* tap  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
+                [img addGestureRecognizer:tap];
                 NSString* url = [dict valueForKey:@"image_url"];
                 NSLog(@"%@",url);
-                button.contentMode = UIViewContentModeScaleAspectFit;
-                [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                img.contentMode = UIViewContentModeScaleAspectFit;
+                [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (image) {
-                        button.contentMode = UIViewContentModeScaleAspectFill;
+                        img.contentMode = UIViewContentModeScaleAspectFill;
                     }
                 }];
-                [_scrollView addSubview:button];
+                [_scrollView addSubview:img];
             }
             
             
-            UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button setFrame:CGRectMake(bannerWidth*(i+1), 0, bannerWidth, bannerHeight)];
+            UIImageView* img = [[UIImageView alloc]init];
+            [img setUserInteractionEnabled:YES];
+            [img setFrame:CGRectMake(bannerWidth*(i+1), 0, bannerWidth, bannerHeight)];
             
-            [button.imageView setContentMode:UIViewContentModeScaleAspectFill];
-            [button setTag:i];
-            [button addTarget:self action:@selector(tapEvent:) forControlEvents:UIControlEventTouchUpInside];
+            [img setContentMode:UIViewContentModeScaleAspectFill];
+            [img setTag:i];
+            UITapGestureRecognizer* tap  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
+            [img addGestureRecognizer:tap];
             NSString* url = [dict valueForKey:@"image_url"];
             NSLog(@"%@",url);
-            button.contentMode = UIViewContentModeScaleAspectFit;
-            [button sd_setBackgroundImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            img.contentMode = UIViewContentModeScaleAspectFit;
+            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image) {
-                    button.contentMode = UIViewContentModeScaleAspectFill;
+                    img.contentMode = UIViewContentModeScaleAspectFill;
                 }
             }];
-            [_scrollView addSubview:button];
+            [_scrollView addSubview:img];
             i++;
         }
         
@@ -278,9 +280,9 @@
 
 
 
--(void)tapEvent:(UIButton*)button
+-(void)tapEvent:(UITapGestureRecognizer*)tap
 {
-    int index = [button tag];
+    NSInteger index = tap.view.tag;
     NSDictionary* dict = _posterList[index];
     if ([[dict valueForKey:@"type"] isEqualToString:@"event"]) {
         NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"content"]];
