@@ -2768,47 +2768,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zun-iL-axE">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3e1-ue-ABn">
-                                        <rect key="frame" x="10" y="5" width="300" height="31"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" image="新消息底块">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="toDynamic:" destination="von-Oa-xrt" eventType="touchUpInside" id="E3c-jx-L4V"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="新动态" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IY4-jG-gth">
-                                        <rect key="frame" x="122" y="10" width="100" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="新消息条数底块" translatesAutoresizingMaskIntoConstraints="NO" id="WAB-Zf-CBw">
-                                        <rect key="frame" x="174" y="8" width="24" height="24"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffz-di-Vme">
-                                        <rect key="frame" x="173" y="10" width="26" height="20"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="0.94117647059999998" green="0.44705882349999998" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="289" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="C6T-iD-Ati" customClass="MTTableView">
-                                <rect key="frame" x="10" y="0.0" width="300" height="568"/>
-                                <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="OUh-cB-sTd"/>
-                                </constraints>
-                                <sections/>
-                            </tableView>
                             <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wUd-vA-uNZ" customClass="UIButton">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -2903,8 +2862,6 @@
                         <constraints>
                             <constraint firstItem="wUd-vA-uNZ" firstAttribute="top" secondItem="U1C-WT-wVb" secondAttribute="bottom" id="CKf-IS-Dh5"/>
                             <constraint firstItem="R7f-cx-H5J" firstAttribute="top" secondItem="wUd-vA-uNZ" secondAttribute="bottom" id="Ngd-OR-40l"/>
-                            <constraint firstItem="C6T-iD-Ati" firstAttribute="top" secondItem="U1C-WT-wVb" secondAttribute="bottom" id="Qvr-g9-ctZ"/>
-                            <constraint firstItem="R7f-cx-H5J" firstAttribute="top" secondItem="C6T-iD-Ati" secondAttribute="bottom" id="YhU-6i-8Jt"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Q1r-io-uov">
@@ -2929,9 +2886,6 @@
                         <outlet property="ArrangementView" destination="Ao0-ve-MK9" id="g0F-2Q-J3Q"/>
                         <outlet property="morefuctions" destination="ZLa-Nx-Oif" id="AGo-Bi-JFP"/>
                         <outlet property="shadowView" destination="wUd-vA-uNZ" id="8Bg-Ov-dEh"/>
-                        <outlet property="tableView" destination="C6T-iD-Ati" id="bp9-ch-xT6"/>
-                        <outlet property="updateInfoNumLabel" destination="Ffz-di-Vme" id="EkA-MO-vcU"/>
-                        <outlet property="updateInfoView" destination="Zun-iL-axE" id="bGb-tE-ytm"/>
                         <outletCollection property="arrangementButtons" destination="AV3-h6-yac" id="bmf-G8-05m"/>
                         <outletCollection property="arrangementButtons" destination="adx-AW-JHW" id="icT-cG-dXa"/>
                         <segue destination="cGW-AM-0QH" kind="push" identifier="eventDetailIdentifier" id="fLJ-gw-aSw"/>
@@ -4929,8 +4883,6 @@
         <image name="小按钮橙色" width="83" height="33"/>
         <image name="小按钮绿色" width="83" height="33"/>
         <image name="手机" width="94" height="94"/>
-        <image name="新消息底块" width="300" height="31"/>
-        <image name="新消息条数底块" width="16" height="16"/>
         <image name="活动地点icon" width="7" height="7"/>
         <image name="活动宝" width="201" height="151"/>
         <image name="活动时间icon" width="6" height="6"/>

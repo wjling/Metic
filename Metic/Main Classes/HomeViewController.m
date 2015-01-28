@@ -47,8 +47,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replaceItem:) name: @"replaceItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustInfoView) name: @"adjustInfoView" object:nil];
    
-    
+    [self initUI];
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _type = 0;
     _clearIds = NO;
@@ -147,6 +148,61 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)initUI
+{
+    if (!_updateInfoView) {
+        _updateInfoView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+        _updateInfoView.userInteractionEnabled = YES;
+        _updateInfoView.backgroundColor = [UIColor clearColor];
+        
+        UIButton* toDynamicBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [toDynamicBtn setFrame:CGRectMake(10, 5, 300, 31)];
+        [toDynamicBtn setImage:[UIImage imageNamed:@"新消息底块"] forState:UIControlStateNormal];
+        [toDynamicBtn addTarget:self action:@selector(toDynamic:) forControlEvents:UIControlEventTouchUpInside];
+        [_updateInfoView addSubview:toDynamicBtn];
+        
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(122, 10, 100, 21)];
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont systemFontOfSize:16];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setTextAlignment:NSTextAlignmentLeft];
+        [label setText:@"新动态"];
+        [_updateInfoView addSubview:label];
+        
+        UIImageView* littleCircle = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"新消息条数底块"]];
+        [littleCircle setFrame:CGRectMake(174, 8, 24, 24)];
+        [_updateInfoView addSubview:littleCircle];
+        
+        if (!_updateInfoNumLabel) {
+            _updateInfoNumLabel = [[UILabel alloc]initWithFrame:CGRectMake(173, 10, 26, 20)];
+            [_updateInfoNumLabel setTextColor:[UIColor colorWithRed:240.0/255.0 green:114.0/255.0 blue:52.0/255.0 alpha:1.0]];
+            [_updateInfoNumLabel setFont:[UIFont systemFontOfSize:14]];
+            [_updateInfoNumLabel setTextAlignment:NSTextAlignmentCenter];
+        }
+        [_updateInfoView addSubview:_updateInfoNumLabel];
+        [_updateInfoView setHidden:YES];
+        [self.view addSubview:_updateInfoView];
+        [self.view sendSubviewToBack:_updateInfoView];
+    }
+    
+    if (!_tableView) {
+        CGRect frame = self.view.frame;
+        NSLog(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+        
+        frame.origin.x += 10;
+        frame.size.width -= 20;
+        frame.size.height -= 64;
+        _tableView = [[MTTableView alloc]initWithFrame:frame];
+        [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
+        [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        [_tableView setRowHeight:289];
+        [_tableView setShowsVerticalScrollIndicator:NO];
+        [self.view addSubview:_tableView];
+        [self.view sendSubviewToBack:_tableView];
+    }
+    
+}
+
 //删除某个卡片
 -(void)deleteItem:(id)sender
 {
@@ -192,45 +248,6 @@
     }else{
         NSLog(@"NotHere");
     }
-}
-
-// 获取当前处于activity状态的view controller
-- (UIViewController *)activityViewController
-{
-    UIViewController* activityViewController = nil;
-    
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    if(window.windowLevel != UIWindowLevelNormal)
-    {
-        NSArray *windows = [[UIApplication sharedApplication] windows];
-        for(UIWindow *tmpWin in windows)
-        {
-            if(tmpWin.windowLevel == UIWindowLevelNormal)
-            {
-                window = tmpWin;
-                break;
-            }
-        }
-    }
-    
-    NSArray *viewsArray = [window subviews];
-    if([viewsArray count] > 0)
-    {
-        UIView *frontView = [viewsArray objectAtIndex:0];
-        
-        id nextResponder = [frontView nextResponder];
-        
-        if([nextResponder isKindOfClass:[UIViewController class]])
-        {
-            activityViewController = nextResponder;
-        }
-        else
-        {
-            activityViewController = window.rootViewController;
-        }
-    }
-    
-    return activityViewController;
 }
 
 
@@ -368,7 +385,7 @@
     //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
     
     long num = [MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count;
-    NSLog(@"有%d条新动态",[MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count);
+    NSLog(@"有%lu条新动态",([MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count));
     if (num > 0) {
         [_updateInfoView setHidden:NO];
         if (num < 10) {
@@ -696,12 +713,24 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"replaceItem" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"adjustInfoView" object:nil];
+    
     [_header free];
     [_footer free];
     
 }
 
 - (IBAction)toDynamic:(id)sender {
+    
+    _updateInfoNumLabel.text = @"";
+    [_updateInfoView setHidden:YES];
+    CGRect frame = _tableView.frame;
+    if (frame.origin.y == 40) {
+        frame.origin.y = 0;
+        frame.size.height += 40;
+        [_tableView setFrame:frame];
+    }
+    
     [self performSegueWithIdentifier:@"toDynamics" sender:self];
 }
 

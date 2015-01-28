@@ -258,6 +258,9 @@
     NSLog(@"app did become active===================");
     isInBackground = NO;
     
+    //通知活动中心刷新新动态
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"adjustInfoView" object:nil userInfo:nil];
+    
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
