@@ -108,7 +108,7 @@ enum Response_Type
 //    self.appListener.notificationDelegate = self;
     self.eventRequestMsg = [[NSMutableArray alloc]init];
     self.friendRequestMsg = [[NSMutableArray alloc]init];
-    self.systemMsg = [[NSMutableArray alloc]initWithArray:[MTUser sharedInstance].systemMsg];
+    self.systemMsg = [[NSMutableArray alloc]init];
     [self.eventRequest_tableView reloadData];
     [self.friendRequest_tableView reloadData];
     [self.systemMessage_tableView reloadData];
@@ -231,7 +231,20 @@ enum Response_Type
         case QUIT_EVENT_NOTIFICATION:
         case KICK_EVENT_NOTIFICATION:
         {
-            [systemMsg insertObject:msg_dic atIndex:0];
+            for (int j = 0; j < self.systemMsg.count; j++) {
+                NSDictionary* msg_dic2 = [self.systemMsg objectAtIndex:j];
+                NSInteger cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
+                if (cmd == cmd2) {
+                    NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+                    NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
+                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                        [self.systemMsg removeObject:msg_dic2];
+                        continue;
+                    }
+                }
+            }
+            [self.systemMsg insertObject:msg_dic atIndex:0];
+
             if (!label3.hidden) {
                 label3.hidden = YES;
             }
@@ -251,7 +264,6 @@ enum Response_Type
                 eventid2 = [[aMsg objectForKey:@"event_id"] integerValue];
                 fid2 = [[aMsg objectForKey:@"id"]integerValue];
                 if (cmd == cmd2 && eventid1 == eventid2 && fid1 == fid2) {
-//                    NSLog(@"找到相同的活动消息,\n cmd1: %d, cmd2: %d,\n event_id1: %d, event_id2: %d,\n fid1: %d, fid2: %d",cmd, cmd2, eventid1, eventid2, fid1, fid2);
                     [self.eventRequestMsg removeObject:aMsg];
                     continue;
                 }
@@ -547,10 +559,40 @@ enum Response_Type
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
        
-//        NSLog(@"消息中心：暂时不用对systemMsg 去重");
+        NSLog(@"消息中心：对systemMsg 去重");
+        for (int i = 0; i < MTUser_systemMsg.count; i++) {
+            BOOL flag = YES;
+            NSDictionary* MTUser_msg_dic = [MTUser_systemMsg objectAtIndex:i];
+            NSLog(@"%d——消息中心, sysmsg: %@", i, MTUser_msg_dic);
+            NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
+            for (int j = 0; j < self.systemMsg.count; j++) {
+                NSDictionary* msg_dic = [self.systemMsg objectAtIndex:j];
+                NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"] integerValue];
+                if (cmd1 == cmd2) {
+                    NSNumber* event_id1 = [MTUser_msg_dic objectForKey:@"event_id"];
+                    NSNumber* event_id2 = [msg_dic objectForKey:@"event_id"];
+                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                        flag = NO;
+                        break;
+                    }
+                }
+            }
+            
+            if (flag) {
+                [self.systemMsg addObject:MTUser_msg_dic];
+            }
+           
+        }
         dispatch_async(dispatch_get_main_queue(), ^
                        {
                            [self.systemMessage_tableView reloadData];
+                           if (systemMsg.count == 0) {
+                               label3.hidden = NO;
+                           }
+                           else
+                           {
+                               label3.hidden = YES;
+                           }
                        });
     });
 

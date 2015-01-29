@@ -533,7 +533,7 @@
         type = -1;
         NSLog(@"有人@你： %@",msg_dic);
     }
-    else if (msg_cmd == 985) //活动被解散
+    else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散985
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
 //        NSString* subject = [msg_dic objectForKey:@"subject"];
@@ -563,7 +563,7 @@
         }
         
     }
-    else if (msg_cmd == 984) //被踢出活动
+    else if (msg_cmd == KICK_EVENT_NOTIFICATION) //被踢出活动984
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
 //        NSString* subject = [msg_dic objectForKey:@"subject"];
