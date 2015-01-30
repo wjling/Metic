@@ -76,8 +76,8 @@ static MenuViewController *singletonInstance;
     NSLog(@"menuviewcontroller will appear");
     NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]valueForKey:key];
-    NSNumber* flag = [[userSettings valueForKey:@"hasUnreadNotification"] objectForKey:@"tab_show"];
-    NSLog(@"侧边栏，viewWillAppear, hasUnreadNotification: %@", flag);
+    NSNumber* flag = [[userSettings valueForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"];
+    NSLog(@"侧边栏，viewWillAppear, hasUnreadNotification1: %@", flag);
     if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
     }

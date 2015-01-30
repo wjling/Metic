@@ -343,7 +343,7 @@ static MTUser *singletonInstance;
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
-        [userSettings setValue:[NSMutableDictionary dictionary] forKey:@"hasUnreadNotification"];
+        [userSettings setValue:[NSMutableDictionary dictionary] forKey:@"hasUnreadNotification1"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];

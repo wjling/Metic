@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "444215453.48231"
+            timestampString = "444298388.694443"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1553"
-            endingLineNumber = "1553"
+            startingLineNumber = "1551"
+            endingLineNumber = "1551"
             landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "444215453.48231"
+            timestampString = "444298388.694443"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1599"
-            endingLineNumber = "1599"
+            startingLineNumber = "1597"
+            endingLineNumber = "1597"
             landmarkName = "-event_request_noBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "444215453.48231"
+            timestampString = "444298388.694443"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1573"
-            endingLineNumber = "1573"
+            startingLineNumber = "1571"
+            endingLineNumber = "1571"
             landmarkName = "-event_request_okBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>

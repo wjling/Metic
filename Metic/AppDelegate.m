@@ -632,7 +632,7 @@
     [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
     NSInteger i = (type < 3 && type >= 0)? type : -1;
     NSLog(@"新消息来了，message type: %d", i);
-    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     
     if (!unRead_dic) {
         unRead_dic = [[NSMutableDictionary alloc]init];
@@ -652,7 +652,7 @@
     }
     
     [unRead_dic setValue:[NSNumber numberWithInteger:i] forKey:@"tab_show"];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
@@ -1268,7 +1268,7 @@
     }
 
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
-    int flag = [[[userSettings objectForKey:@"hasUnreadNotification"] objectForKey:@"tab_show"] integerValue];
+    int flag = [[[userSettings objectForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"] integerValue];
     if (flag >= 0) {
         [self.leftMenu showUpdateInRow:4];
     }
@@ -1313,7 +1313,7 @@
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     int i = (type < 3 && type >= 0)? type : -1;
     NSLog(@"新消息来了，message type: %d", i);
-    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     
     if (!unRead_dic) {
         unRead_dic = [[NSMutableDictionary alloc]init];
@@ -1333,7 +1333,7 @@
     }
     
     [unRead_dic setValue:[NSNumber numberWithInteger:i] forKey:@"tab_show"];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
         

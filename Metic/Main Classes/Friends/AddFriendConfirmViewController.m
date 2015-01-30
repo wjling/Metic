@@ -7,8 +7,12 @@
 //
 
 #import "AddFriendConfirmViewController.h"
+#import "SVProgressHUD.h"
 
 @interface AddFriendConfirmViewController ()
+{
+    NSTimer* timer;
+}
 
 @end
 
@@ -29,6 +33,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    
 }
 
 //返回上一层
@@ -40,6 +45,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dismissHUD
+{
+    [SVProgressHUD dismissWithError:@"网络异常" afterDelay:1.5];
 }
 
 /*
@@ -58,6 +68,9 @@
 }
 
 - (IBAction)okBtnClicked:(id)sender {
+    [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeGradient];
+    timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHUD) userInfo:nil repeats:NO];
+    [self.comfirm_textField resignFirstResponder];
     NSString* cm = self.comfirm_textField.text;
     NSNumber* userId = [MTUser sharedInstance].userid;
     NSNumber* friendId = self.fid;
@@ -86,10 +99,15 @@
     NSLog(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"您已成功发送验证信息" WithDelegate:nil WithCancelTitle:@"确定"];
+            [SVProgressHUD dismissWithSuccess:@"验证信息发送成功" afterDelay:2];
+            [timer invalidate];
+            timer = nil;
             [self.navigationController popViewControllerAnimated:YES];
             break;
         case ALREADY_FRIENDS:
+            [SVProgressHUD dismissWithError:@"已经是好友" afterDelay:2];
+            [timer invalidate];
+            timer = nil;
             break;
         case REQUEST_FAIL:
             break;

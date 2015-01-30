@@ -152,9 +152,9 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
-    NSLog(@"消息中心viewdidappear, hasUnreadNotification: %@", unRead_dic);
+    NSLog(@"消息中心viewdidappear, hasUnreadNotification1: %@", unRead_dic);
     if (index) {
         if ([index integerValue] != -1) {
             tab_index = [index integerValue];
@@ -185,7 +185,7 @@ enum Response_Type
 
     [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
@@ -295,9 +295,9 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
 //    NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
-//    NSLog(@"notification: hasUnreadNotification: %@", index);
+//    NSLog(@"notification: hasUnreadNotification1: %@", index);
     for (int i = 0; i < num_tabs; i++) {
         NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
         NSNumber* tabn = [unRead_dic objectForKey:key_n];
@@ -309,7 +309,7 @@ enum Response_Type
     }
 //    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
 //    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-//    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+//    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
 //    [userDfs setValue:userSettings forKey:key];
 //    [userDfs synchronize];
 
@@ -677,9 +677,9 @@ enum Response_Type
     NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", index]];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
     
@@ -959,9 +959,9 @@ enum Response_Type
     NSUserDefaults *userDfs = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary *userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+    NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     NSNumber* index = [unRead_dic objectForKey:@"tab_show"];
-//    NSLog(@"viewwillappear notification: hasUnreadNotification: %@", index);
+//    NSLog(@"viewwillappear notification: hasUnreadNotification1: %@", index);
     if (index) {
         if ([index integerValue] != -1) {
             tab_index = [index integerValue];
@@ -992,7 +992,7 @@ enum Response_Type
     
     [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     [userDfs setValue:userSettings forKey:key];
     [userDfs synchronize];
     
@@ -2066,9 +2066,9 @@ enum Response_Type
         NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
         NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
         NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDfs objectForKey:key]];
-        NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification"]];
+        NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
         [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-        [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification"];
+        [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
         [userDfs setValue:userSettings forKey:key];
         [userDfs synchronize];
         
