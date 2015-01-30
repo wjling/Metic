@@ -257,9 +257,12 @@
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
     NSString *url = [_photo_list[photoIndex] valueForKey:@"url"];
-    [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
+
     [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
+            [zoomScrollView fitImageView];
+        }else{
+            zoomScrollView.imageView.image = [UIImage imageNamed:@"加载失败"];
             [zoomScrollView fitImageView];
         }
     }];

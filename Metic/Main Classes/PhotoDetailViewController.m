@@ -668,6 +668,8 @@
             if (image) {
                 _photo = image;
                 [imageView setContentMode:UIViewContentModeScaleToFill];
+            }else{
+                imageView.image = [UIImage imageNamed:@"加载失败"];
             }
         }];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];

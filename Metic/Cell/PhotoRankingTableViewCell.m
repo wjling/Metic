@@ -58,8 +58,11 @@
     [self setGood_buttonNum:[_photoInfo valueForKey:@"good"]];
 
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[_photoInfo valueForKey:@"photo_name"]]];
-    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
-    
+    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            self.photo.image = [UIImage imageNamed:@"加载失败"];
+        }
+    }];
 }
 
 -(void)animationBegin
