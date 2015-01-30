@@ -546,22 +546,19 @@
         [sql deleteTurpleFromTable:@"event" withWhere:wheres];
         [sql closeMyDB];
         
-        for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
-            if ([vc isKindOfClass:[HomeViewController class]]) {
-                for (int i = 0; i < vc.events.count; i++) {
-                    NSMutableDictionary* event = vc.events[i];
-                    NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                        [vc.events removeObject:event];
-                        [vc.tableView reloadData];
-                        break;
-                    }
+        HomeViewController* vc = (HomeViewController*)self.homeViewController;
+        if (vc && [vc isKindOfClass:[HomeViewController class]]) {
+            for (int i = 0; i < vc.events.count; i++) {
+                NSMutableDictionary* event = vc.events[i];
+                NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                    [vc.events removeObject:event];
+                    [vc.tableView reloadData];
+                    break;
                 }
-                [vc.eventIds_all removeObject:event_id1];
-                break;
             }
+            [vc.eventIds_all removeObject:event_id1];
         }
-        
     }
     else if (msg_cmd == 984) //被踢出活动
     {
@@ -576,20 +573,18 @@
         [sql deleteTurpleFromTable:@"event" withWhere:wheres];
         [sql closeMyDB];
         
-        for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
-            if ([vc isKindOfClass:[HomeViewController class]]) {
-                for (int i = 0; i < vc.events.count; i++) {
-                    NSMutableDictionary* event = vc.events[i];
-                    NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                    if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                        [vc.events removeObject:event];
-                        [vc.tableView reloadData];
-                        break;
-                    }
+        HomeViewController* vc = (HomeViewController*)self.homeViewController;
+        if (vc && [vc isKindOfClass:[HomeViewController class]]) {
+            for (int i = 0; i < vc.events.count; i++) {
+                NSMutableDictionary* event = vc.events[i];
+                NSNumber* event_id2 = [event objectForKey:@"event_id"];
+                if ([event_id1 integerValue] == [event_id2 integerValue]) {
+                    [vc.events removeObject:event];
+                    [vc.tableView reloadData];
+                    break;
                 }
-                [vc.eventIds_all removeObject:event_id1];
-                break;
             }
+            [vc.eventIds_all removeObject:event_id1];
         }
         
     }
