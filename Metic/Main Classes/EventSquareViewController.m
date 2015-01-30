@@ -230,6 +230,8 @@
                 [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (image) {
                         img.contentMode = UIViewContentModeScaleAspectFill;
+                    }else{
+                        img.image = [UIImage imageNamed:@"加载失败"];
                     }
                 }];
                 [_scrollView addSubview:img];
@@ -250,6 +252,8 @@
             [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image) {
                     img.contentMode = UIViewContentModeScaleAspectFill;
+                }else{
+                    img.image = [UIImage imageNamed:@"加载失败"];
                 }
             }];
             [_scrollView addSubview:img];

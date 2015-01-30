@@ -348,6 +348,12 @@
 }
 
 - (IBAction)good:(id)sender {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    
+    
     [self.good_button setEnabled:NO];
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -368,22 +374,25 @@
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-                int good = [[self.photoInfo valueForKey:@"good"]intValue];
-                if (isZan) {
-                    good --;
-                }else good ++;
-                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-                [self updatePhotoInfoToDB:_photoInfo];
-                [self setGoodButton];
-                [self.good_button setEnabled:YES];
+                
             }else{
+                return ;
                 [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
             }
         }
         
     }];
+    
+    BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
+    int good = [[self.photoInfo valueForKey:@"good"]intValue];
+    if (isZan) {
+        good --;
+    }else good ++;
+    [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+    [self updatePhotoInfoToDB:_photoInfo];
+    [self setGoodButton];
+    [self.good_button setEnabled:YES];
 }
 
 - (IBAction)comment:(id)sender {
@@ -668,6 +677,8 @@
             if (image) {
                 _photo = image;
                 [imageView setContentMode:UIViewContentModeScaleToFill];
+            }else{
+                imageView.image = [UIImage imageNamed:@"加载失败"];
             }
         }];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
@@ -687,7 +698,7 @@
             alias = [_photoInfo valueForKey:@"author"];
         }
         
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+13, 150, 12)];
+        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+11, 150, 17)];
         [author setFont:[UIFont systemFontOfSize:14]];
         [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
         [author setBackgroundColor:[UIColor clearColor]];

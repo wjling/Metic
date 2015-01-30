@@ -173,7 +173,7 @@
         [[cell viewWithTag:3] setHidden:YES];//mask
     }else{
         UIImageView* add = (UIImageView*)[cell viewWithTag:1];
-        [add setImage:[UIImage imageNamed:@"grid_remove"]];
+        [add setImage:[UIImage imageNamed:@"删除图标"]];
         UILabel* name = (UILabel*)[cell viewWithTag:2];
         name.text = @"";
         [[cell viewWithTag:4] setHidden:YES];//delete icon

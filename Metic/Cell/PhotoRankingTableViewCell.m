@@ -58,8 +58,11 @@
     [self setGood_buttonNum:[_photoInfo valueForKey:@"good"]];
 
     NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[_photoInfo valueForKey:@"photo_name"]]];
-    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]];
-    
+    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            self.photo.image = [UIImage imageNamed:@"加载失败"];
+        }
+    }];
 }
 
 -(void)animationBegin
@@ -93,14 +96,10 @@
 
 - (IBAction)addGood:(id)button
 {
-
-    [button setEnabled:NO];
-    int photoid = [[self.photoInfo valueForKey:@"photo_id"] intValue];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self && ![button isEnabled] && [[self.photoInfo valueForKey:@"photo_id"] intValue] == photoid) {
-            [button setEnabled:YES];
-        }
-    });
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
     
     BOOL isZan = [[_photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -113,27 +112,28 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        [self.good_Btn setEnabled:YES];
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY) {
-                [_photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                int zan_num = [[_photoInfo valueForKey:@"good"] intValue];
-                if (isZan) {
-                    zan_num --;
-                }else{
-                    zan_num ++;
-                }
-                [_photoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-                _controller.shouldFlash = NO;
-                [_controller.tableView reloadData];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    _controller.shouldFlash = YES;
-                });
+                
             }
         }
     }];
+    
+    [_photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    int zan_num = [[_photoInfo valueForKey:@"good"] intValue];
+    if (isZan) {
+        zan_num --;
+    }else{
+        zan_num ++;
+    }
+    [_photoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+    _controller.shouldFlash = NO;
+    [_controller.tableView reloadData];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _controller.shouldFlash = YES;
+    });
     
 }
 
