@@ -634,6 +634,10 @@
 }
 
 - (void)appreciate:(id)sender {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
@@ -656,22 +660,24 @@
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                int zan_num = [[waitingComment valueForKey:@"good"] intValue];
-                if (isZan) {
-                    zan_num --;
-                }else{
-                    zan_num ++;
-                }
-                [waitingComment setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-                [_tableView reloadData];
+                
             }
         }
         else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            
         }
 
     }];
+    
+    [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    int zan_num = [[waitingComment valueForKey:@"good"] intValue];
+    if (isZan) {
+        zan_num --;
+    }else{
+        zan_num ++;
+    }
+    [waitingComment setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+    [_tableView reloadData];
 }
 
 

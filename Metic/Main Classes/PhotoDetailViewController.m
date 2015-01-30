@@ -348,6 +348,12 @@
 }
 
 - (IBAction)good:(id)sender {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    
+    
     [self.good_button setEnabled:NO];
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -368,22 +374,25 @@
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-                int good = [[self.photoInfo valueForKey:@"good"]intValue];
-                if (isZan) {
-                    good --;
-                }else good ++;
-                [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-                [self updatePhotoInfoToDB:_photoInfo];
-                [self setGoodButton];
-                [self.good_button setEnabled:YES];
+                
             }else{
+                return ;
                 [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
             }
         }
         
     }];
+    
+    BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
+    int good = [[self.photoInfo valueForKey:@"good"]intValue];
+    if (isZan) {
+        good --;
+    }else good ++;
+    [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
+    [self updatePhotoInfoToDB:_photoInfo];
+    [self setGoodButton];
+    [self.good_button setEnabled:YES];
 }
 
 - (IBAction)comment:(id)sender {

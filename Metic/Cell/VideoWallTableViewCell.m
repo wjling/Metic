@@ -232,12 +232,17 @@
 
 -(void)good:(UIButton*)button
 {
-    [button setEnabled:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self && ![button isEnabled]) {
-            [button setEnabled:YES];
-        }
-    });
+//    [button setEnabled:NO];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        if (self && ![button isEnabled]) {
+//            [button setEnabled:YES];
+//        }
+//    });
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    
 
     BOOL isZan = [[_videoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -255,25 +260,27 @@
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == DATABASE_ERROR || [cmd intValue] == REQUEST_FAIL) {
-                [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-                int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
-                if (isZan) {
-                    zan_num --;
-                }else{
-                    zan_num ++;
-                }
-                [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-                [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
-                _controller.shouldFlash = NO;
-                [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
-                [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    _controller.shouldFlash = YES;
-                });
+                
             }
         }
     }];
 
+    
+    [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
+    if (isZan) {
+        zan_num --;
+    }else{
+        zan_num ++;
+    }
+    [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+    [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
+    _controller.shouldFlash = NO;
+    [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
+    [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _controller.shouldFlash = YES;
+    });
 }
 
 -(void)toDetail:(UIButton*)button

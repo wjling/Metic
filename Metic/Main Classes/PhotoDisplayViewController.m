@@ -13,6 +13,7 @@
 #import "../Utils/PhotoGetter.h"
 #import "../Utils/CommonUtils.h"
 #import "NSString+JSON.h"
+#import "Reachability.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -291,19 +292,46 @@
 
 
 - (IBAction)appreciate:(id)sender {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+    
+    
     [(UIButton*)sender setEnabled:NO];
     self.goodindex = self.scrollView.contentOffset.x/320;
-    BOOL iszan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
+    BOOL isZan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
+    [dictionary setValue:[NSNumber numberWithInt:isZan? 2:3]  forKey:@"operation"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
+        if (rData) {
+            //
+        }
+    }];
+    
+    NSMutableDictionary* dict = self.photo_list[self.goodindex];
+    BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
+    int zan_number = [[dict valueForKey:@"good"]intValue];
+    if (iszan) {
+        zan_number --;
+        self.goodImg.image = [UIImage imageNamed:@"点赞icon"];
+        
+    }else{
+        zan_number ++;
+        self.goodImg.image = [UIImage imageNamed:@"实心点赞图"];
+    }
+    self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
+    [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
+    [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
+    [self updatePhotoInfoToDB:dict];
+    
 }
 
 - (IBAction)comment:(id)sender {
@@ -313,36 +341,22 @@
     self.commentImg.image = [UIImage imageNamed:@"评论按下按钮icon"];
 }
 
-#pragma mark - HttpSenderDelegate
-
--(void)finishWithReceivedData:(NSData *)rData
-{
-    [self.goodButton setEnabled:YES];
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-        NSMutableDictionary* dict = self.photo_list[self.goodindex];
-        BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
-        int zan_number = [[dict valueForKey:@"good"]intValue];
-        if (iszan) {
-            zan_number --;
-            self.goodImg.image = [UIImage imageNamed:@"点赞icon"];
-            
-        }else{
-            zan_number ++;
-            self.goodImg.image = [UIImage imageNamed:@"实心点赞图"];
-        }
-        self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
-        [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
-        [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
-        [self updatePhotoInfoToDB:dict];
-    }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-    }
-
-}
+//#pragma mark - HttpSenderDelegate
+//
+//-(void)finishWithReceivedData:(NSData *)rData
+//{
+//    [self.goodButton setEnabled:YES];
+//    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//    NSLog(@"received Data: %@",temp);
+//    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//    if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
+//        
+//    }else{
+////        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+//    }
+//
+//}
 
 #pragma mark 用segue跳转时传递参数eventid
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
