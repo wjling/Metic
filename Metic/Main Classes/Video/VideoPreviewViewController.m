@@ -33,6 +33,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 @property(nonatomic,strong) UIView* waitingView;
 @property(nonatomic,strong) THProgressView *progressView;
 @property BOOL isKeyBoard;
+@property BOOL hasEncode;
 @end
 
 @implementation VideoPreviewViewController
@@ -88,6 +89,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     _preViewImage = [self getVideoPreViewImage:_videoURL];
     _isKeyBoard = NO;
+    _hasEncode = NO;
 }
 
 -(void)initUI
@@ -169,8 +171,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
-    [sender setEnabled:NO];
-    [self encodeVideo];
+//    [sender setEnabled:NO];
+    if (!_hasEncode) {
+        [self encodeVideo];
+    }else [self upload];
+    
 }
 
 - (void)upload
@@ -269,6 +274,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [self upload];
              });
+             _hasEncode = YES;
              NSLog(@"Video export succeeded");
          }
          else if (encoder.status == AVAssetExportSessionStatusCancelled)

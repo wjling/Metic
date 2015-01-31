@@ -14,6 +14,7 @@
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "MobClick.h"
 #import "EventDetailViewController.h"
+#import "SVProgressHUD.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -109,7 +110,7 @@
     _searchBar.delegate = self;
     [self.view addSubview:_tableView];
     [self.view addSubview:_searchBar];
-    
+    [self.view setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
     //初始化上拉加载功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
@@ -123,8 +124,10 @@
         self.searchBar.text = @"";
         return;
     }
+    
+    [SVProgressHUD showWithStatus:@"正在搜索…" maskType:SVProgressHUDMaskTypeGradient];
+    
     [self.searchBar resignFirstResponder];
-    [self showWaitingView];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:text forKey:@"subject"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -148,14 +151,12 @@
                 }
                     break;
                 default:{
-                    [self removeWaitingView];
-                    [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
+                    [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
                 }
                     break;
             }
         }else{
-            [self removeWaitingView];
-            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
+        
         }
         
     }];
@@ -166,7 +167,7 @@
 {
     int restNum = MIN(20, _eventIds.count - _events.count);
     if (restNum == 0){
-        [self removeWaitingView];
+        [SVProgressHUD dismiss];
         [self closeRJ];
         return;
     }
@@ -197,20 +198,19 @@
                         [_events addObjectsFromArray:tmp];
                     }
                     
-                    [self removeWaitingView];
+                    [SVProgressHUD dismiss];
                     [_tableView reloadData];
                     [self closeRJ];
                 }
                     break;
                 default:{
-                    [self removeWaitingView];
-                    [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
+                    [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
                     [self closeRJ];
                 }
                     break;
             }
         }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:nil WithCancelTitle:@"确定"];
+            [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
             [self closeRJ];
         }
     }];

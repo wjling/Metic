@@ -168,6 +168,17 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
+        //同步推送消息
+        NSLog(@"开始同步消息");
+        void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
+        {
+            if (!min_seq || !max_seq) {
+                return;
+            }
+            [self pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
+        };
+        [self synchronizePushSeqAndCallBack:synchronizeDone];
+        
     }else {
         [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
         [[NSUserDefaults standardUserDefaults] synchronize];
