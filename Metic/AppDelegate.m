@@ -495,8 +495,7 @@
     if (msg_cmd  == ADD_FRIEND_RESULT) //cmd 998
     {
         [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
-        
-        [[MTUser sharedInstance] synchronizeFriends];
+
         NSNumber* result = [msg_dic objectForKey:@"result"];
         NSLog(@"friend request result: %@",result);
         if ([result integerValue] == 1) {
@@ -514,7 +513,7 @@
                                 [NSString stringWithFormat:@"'%@'",email],
                                 [NSString stringWithFormat:@"%@",gender], nil]];
             [sql closeMyDB];
-            //                [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+            
             NSDictionary* newFriend = [CommonUtils packParamsInDictionary:fid,@"id",name,@"name",gender,@"gender",email,@"email",nil];
             [[MTUser sharedInstance].friendList addObject:newFriend];
             [[MTUser sharedInstance] friendListDidChanged];
@@ -525,6 +524,8 @@
         }
         
         type = 1;
+        
+        [[MTUser sharedInstance] synchronizeFriends];
         
     }
     else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
