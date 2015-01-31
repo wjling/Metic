@@ -313,8 +313,8 @@ enum Response_Type
 //    [userDfs setValue:userSettings forKey:key];
 //    [userDfs synchronize];
 
-//    NSLog(@"消息中心收到推送，隐藏消息中心红点");
-//    [[MenuViewController sharedInstance] hideUpdateInRow:4];
+    NSLog(@"消息中心收到推送，隐藏消息中心红点");
+    [[MenuViewController sharedInstance] hideUpdateInRow:4];
 }
 
 #pragma mark - Navigation
@@ -706,7 +706,7 @@ enum Response_Type
     NSMutableArray *menuItems = [[NSMutableArray alloc]init];
     [menuItems addObjectsFromArray:@[
                                      
-                                     [KxMenuItem menuItem:@"历史记录"
+                                     [KxMenuItem menuItem:@"历史动态"
                                                     image:nil
                                                    target:self
                                                    action:@selector(function1Clicked:)],

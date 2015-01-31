@@ -38,6 +38,7 @@
     self.historicalNF_tableview.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     self.functions_view.hidden = YES;
+    self.navigationItem.title = @"历史动态";
 }
 
 //返回上一层

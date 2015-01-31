@@ -460,6 +460,7 @@
                         if (updateAvatarFlag) {
                             
                             if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[UserInfoViewController class]]) {
+                                NSLog(@"上传头像后个人信息刷新");
                                 [(UserInfoViewController*)updateAvatarViewController refresh];
                                 
                             }
