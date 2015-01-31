@@ -130,7 +130,14 @@
     }
     [sql appendString:@")VALUES("];
     for (int i = 0; i < valuesCount; i++) {
-        [sql appendString:(NSString*)[values objectAtIndex:i]];
+        NSString* value = [values objectAtIndex:i];
+        if (value && ![value isEqual:[NSNull null]]) {
+            [sql appendString:value];
+        }
+        else if ([value isEqual:[NSNull null]])
+        {
+            [sql appendString:@"NULL"];
+        }
         if (i != valuesCount - 1) {
             [sql appendString:@","];
         }

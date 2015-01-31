@@ -1654,21 +1654,22 @@ enum Response_Type
                     [self.friendRequest_tableView reloadData];
                     
                     NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
-                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+                    int seq1 = [[msg_dic objectForKey:@"seq"]intValue];
                     
                     NSString* fname = [msg_dic objectForKey:@"name"];
                     NSString* femail = [msg_dic objectForKey:@"email"];
                     NSNumber* fgender = [msg_dic objectForKey:@"gender"];
-                    NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+                    int fid1 = [[msg_dic objectForKey:@"id"]intValue];
                     [mySql openMyDB:DB_path];
                     [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq1],@"seq", nil]];
                     [mySql insertToTable:@"friend"
-                             withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
+                             withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender",@"alias", nil]
                                andValues:[[NSArray alloc] initWithObjects:
                                           [NSString stringWithFormat:@"%d",fid1],
                                           [NSString stringWithFormat:@"'%@'",fname],
                                           [NSString stringWithFormat:@"'%@'",femail],
-                                          [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]], nil]];
+                                          [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]],
+                                          [NSNull null],nil]];
                     [mySql updateDataWitTableName:@"notification"
                                          andWhere:[CommonUtils packParamsInDictionary:
                                                    [NSString stringWithFormat:@"%d",seq1],@"seq",
@@ -1678,8 +1679,8 @@ enum Response_Type
                                                    nil]];
                     for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
                         NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
-                        NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
-                        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                        int fid2 = [[msg objectForKey:@"id"]intValue];
+                        int seq2 = [[msg objectForKey:@"seq"]intValue];
                         if (fid1 == fid2 && seq1 != seq2) {
                             [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
                             [MTUser_friendRequestMsg removeObject:msg];
