@@ -340,11 +340,10 @@
             [_locationManager requestAlwaysAuthorization];
             [_locationManager requestWhenInUseAuthorization];
         }
-        locationService = [[BMKLocationService alloc]init];
-        locationService.delegate = self;
-//        NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
-//        [locate start];
-        
+        if (!locationService) {
+            locationService = [[BMKLocationService alloc]init];
+            locationService.delegate = self;
+        }
         [locationService startUserLocationService];
     }
     else if (tab_index == 2)
@@ -866,6 +865,7 @@
         }
         NSLog(@"滚动停止");
         if (tab_index == 1) {
+            NSLog(@"附近的人");
             if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
                 //由于IOS8中定位的授权机制改变 需要进行手动授权
                 _locationManager = [[CLLocationManager alloc] init];
@@ -873,11 +873,15 @@
                 [_locationManager requestAlwaysAuthorization];
                 [_locationManager requestWhenInUseAuthorization];
             }
-            NSThread* locate = [[NSThread alloc]initWithTarget:locationService selector:@selector(startUserLocationService) object:nil];
-            [locate start];
+            if (!locationService) {
+                locationService = [[BMKLocationService alloc]init];
+                locationService.delegate = self;
+            }
+            [locationService startUserLocationService];
         }
         else if (tab_index == 2)
         {
+            NSLog(@"随便看看");
             [self getKanKan];
         }
 
