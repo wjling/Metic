@@ -28,6 +28,8 @@
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
+		045A77B31A807DF10036BDC4 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 045A77B21A807DF10036BDC4 /* libbaidumapapi.a */; };
+		045A77B51A807E4E0036BDC4 /* libzbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 045A77B41A807E4E0036BDC4 /* libzbar.a */; };
 		04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */; };
 		04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A69AA01A51A50E0075D149 /* libXG-SDK.a */; };
 		04A69AA51A51A50E0075D149 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */; };
@@ -125,9 +127,7 @@
 		086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6CD19B5954000EDF629 /* VideoDetailViewController.m */; };
 		086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */; };
 		086AE6DC19B5C32800EDF629 /* VcommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */; };
-		087271441A75507C0097A22B /* libzbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087271431A75507C0097A22B /* libzbar.a */; };
 		087271851A7553260097A22B /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 087271841A7553260097A22B /* mapapi.bundle */; };
-		087271871A7553820097A22B /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 087271861A7553820097A22B /* libbaidumapapi.a */; };
 		087271A71A7613C50097A22B /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0872718D1A7613C50097A22B /* UMSocialLocalizable.strings */; };
 		087271A81A7613C50097A22B /* libUMSocial_Sdk_4.2.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0872719B1A7613C50097A22B /* libUMSocial_Sdk_4.2.1.a */; };
 		087271A91A7613C50097A22B /* UMSCommentDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0872719D1A7613C50097A22B /* UMSCommentDetailController.xib */; };
@@ -394,6 +394,8 @@
 		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
+		045A77B21A807DF10036BDC4 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		045A77B41A807E4E0036BDC4 /* libzbar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzbar.a; sourceTree = "<group>"; };
 		04A531841A222947002FDDC1 /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
 		04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+LBBlurredImage.m"; sourceTree = "<group>"; };
 		04A69AA01A51A50E0075D149 /* libXG-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libXG-SDK.a"; sourceTree = "<group>"; };
@@ -543,7 +545,6 @@
 		086AE6D819B5C32800EDF629 /* VcommentTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VcommentTableViewCell.h; sourceTree = "<group>"; };
 		086AE6D919B5C32800EDF629 /* VcommentTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VcommentTableViewCell.m; sourceTree = "<group>"; };
 		086AE6DA19B5C32800EDF629 /* VcommentTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VcommentTableViewCell.xib; sourceTree = "<group>"; };
-		087271431A75507C0097A22B /* libzbar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzbar.a; sourceTree = "<group>"; };
 		0872714B1A7553260097A22B /* BMapKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMapKit.h; sourceTree = "<group>"; };
 		0872714C1A7553260097A22B /* BMKActionPaopaoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKActionPaopaoView.h; sourceTree = "<group>"; };
 		0872714D1A7553260097A22B /* BMKAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKAnnotation.h; sourceTree = "<group>"; };
@@ -602,7 +603,6 @@
 		087271821A7553260097A22B /* BMKUtilsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUtilsComponent.h; sourceTree = "<group>"; };
 		087271831A7553260097A22B /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
 		087271841A7553260097A22B /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
-		087271861A7553820097A22B /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		0872718E1A7613C50097A22B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UMSocialLocalizable.strings; sourceTree = "<group>"; };
 		087271901A7613C50097A22B /* UMSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocial.h; sourceTree = "<group>"; };
 		087271911A7613C50097A22B /* UMSocialAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialAccountManager.h; sourceTree = "<group>"; };
@@ -1018,6 +1018,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */,
+				045A77B31A807DF10036BDC4 /* libbaidumapapi.a in Frameworks */,
 				08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */,
 				08E92DDF19B37E1C002499BF /* MediaPlayer.framework in Frameworks */,
 				0435EF0C19AC945C003BB2F6 /* AudioToolbox.framework in Frameworks */,
@@ -1032,6 +1033,7 @@
 				087271C11A7615870097A22B /* libSocialSina.a in Frameworks */,
 				51F06C23197E0166000E8428 /* AVFoundation.framework in Frameworks */,
 				51EDF3A4197512B4005BEA39 /* CoreText.framework in Frameworks */,
+				045A77B51A807E4E0036BDC4 /* libzbar.a in Frameworks */,
 				087271C61A7615880097A22B /* libWeChatSDK.a in Frameworks */,
 				51E86DDD1974BF9F00CBAE86 /* SystemConfiguration.framework in Frameworks */,
 				51E86D9B1973CCBF00CBAE86 /* OpenGLES.framework in Frameworks */,
@@ -1042,8 +1044,6 @@
 				087271C31A7615870097A22B /* TencentOpenAPI.framework in Frameworks */,
 				48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */,
 				48151F0E19493FA1009E156E /* Security.framework in Frameworks */,
-				087271871A7553820097A22B /* libbaidumapapi.a in Frameworks */,
-				087271441A75507C0097A22B /* libzbar.a in Frameworks */,
 				087271A81A7613C50097A22B /* libUMSocial_Sdk_4.2.1.a in Frameworks */,
 				4892337E1947F9BA00068BBC /* libicucore.dylib in Frameworks */,
 				483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */,
@@ -1945,7 +1945,7 @@
 		51581D221933575300943606 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				087271861A7553820097A22B /* libbaidumapapi.a */,
+				045A77B21A807DF10036BDC4 /* libbaidumapapi.a */,
 				04AF99EA1A582AA300C9ED8C /* AdSupport.framework */,
 				08B8D63B19B87FB100552663 /* AssetsLibrary.framework */,
 				08E92DDE19B37E1C002499BF /* MediaPlayer.framework */,
@@ -2156,7 +2156,7 @@
 		51F06BFD197E0109000E8428 /* ZBarSDK */ = {
 			isa = PBXGroup;
 			children = (
-				087271431A75507C0097A22B /* libzbar.a */,
+				045A77B41A807E4E0036BDC4 /* libzbar.a */,
 				51F06BFE197E0109000E8428 /* Headers */,
 				51F06C16197E0109000E8428 /* Resources */,
 			);
@@ -2347,7 +2347,7 @@
 				ORGANIZATIONNAME = WeShare;
 				TargetAttributes = {
 					51581D1F1933575300943606 = {
-						DevelopmentTeam = BQWKD37TRB;
+						DevelopmentTeam = 56ZKXR2BF7;
 					};
 					51581D431933575300943606 = {
 						TestTargetID = 51581D1F1933575300943606;
@@ -2774,7 +2774,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: huang shiguang (6UW4C2C27E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2795,7 +2795,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "aab6c026-35f1-4876-9546-9075050e8e44";
+				PROVISIONING_PROFILE = "12316db1-8f93-4695-8fb1-1247d18ea2ef";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -2819,7 +2819,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2834,7 +2834,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "7461d1bf-4b93-4f55-9ceb-bdf35f67a85e";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2849,7 +2849,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: huang shiguang (6UW4C2C27E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2883,12 +2883,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.4.5",
+					"$(PROJECT_DIR)/a/libBMKapi/Release-iphonesimulator",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "aab6c026-35f1-4876-9546-9075050e8e44";
+				PROVISIONING_PROFILE = "12316db1-8f93-4695-8fb1-1247d18ea2ef";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -2902,7 +2903,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2936,12 +2937,13 @@
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.2.1/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/Metic/Source/UMAnalytics_Sdk_3.4.5",
+					"$(PROJECT_DIR)/a/libBMKapi/Release-iphonesimulator",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "7461d1bf-4b93-4f55-9ceb-bdf35f67a85e";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";
