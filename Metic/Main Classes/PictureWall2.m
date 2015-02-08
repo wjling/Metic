@@ -264,6 +264,7 @@
                         [self getPhotolist];
                         return;
                     }else{
+                        [NotificationController visitPhotoWall:_eventId needClear:YES];
                         [self.photo_list removeAllObjects];
                         [self.photo_list addObjectsFromArray:_photo_list_all];
                         [self resetPhoNum];
