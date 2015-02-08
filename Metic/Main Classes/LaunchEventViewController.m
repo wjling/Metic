@@ -520,7 +520,6 @@
     
     [self showWaitingView];
     [sender setEnabled:NO];
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverButton) userInfo:nil repeats:NO];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
     [dictionary setValue:beg_Time forKey:@"time"];
@@ -537,7 +536,33 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:LAUNCH_EVENT];
+    [httpSender sendMessage:jsonData withOperationCode:LAUNCH_EVENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"Received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            NSNumber *tmpid = [response1 valueForKey:@"event_id"];
+            if ([cmd intValue] != SERVER_ERROR && [tmpid intValue] != -1) {
+                if (self.uploadImage) {
+                    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+                    getter.mDelegate = self;
+                    [getter uploadBanner:[response1 valueForKey:@"event_id"]];
+                }else{
+                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+                }
+            }else{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:nil WithCancelTitle:@"确定"];
+                [self removeWaitingView];
+                [sender setEnabled:YES];
+            }
+        }else{
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+            [self removeWaitingView];
+            [sender setEnabled:YES];
+        }
+        
+    }];
     
 }
 
@@ -673,14 +698,6 @@
 	}
 }
 
-
-
-- (void) recoverButton
-{
-    [self.launch_button setEnabled:YES];
-}
-
-
 #pragma mark - FlatDatePicker Delegate
 
 - (void)flatDatePicker:(FlatDatePicker*)datePicker dateDidChange:(NSDate*)date {
@@ -727,27 +744,6 @@
 }
 
 
-#pragma mark - httpsender delegte
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    NSNumber *tmpid = [response1 valueForKey:@"event_id"];
-    if ([cmd intValue] != SERVER_ERROR && [tmpid intValue] != -1) {
-        if (self.uploadImage) {
-            PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
-            getter.mDelegate = self;
-            [getter uploadBanner:[response1 valueForKey:@"event_id"]];
-        }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
-        }
-    }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:nil WithCancelTitle:@"确定"];
-    }
-    
-}
 #pragma mark - PhotoGetterDelegate
 -(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
 {
