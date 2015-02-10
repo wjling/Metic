@@ -296,9 +296,7 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
-    
-    
-    [(UIButton*)sender setEnabled:NO];
+
     self.goodindex = self.scrollView.contentOffset.x/320;
     BOOL isZan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
