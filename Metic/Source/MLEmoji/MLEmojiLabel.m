@@ -321,14 +321,14 @@ static inline CGFloat TTTFlushFactorForTextAlignment(NSTextAlignment textAlignme
 		NSString *imageName = emojiDict[emojiKey];
         if (!self.customEmojiRegularExpression) {
             //微信的表情没有结束符号,所以有可能会发现过长的只有头部才是表情的段，需要循环检测一次。微信最大表情特殊字符是8个长度，检测8次即可
-            if (!imageName&&emojiKey.length>2) {
-                NSUInteger maxDetctIndex = emojiKey.length>3+2?3:emojiKey.length-2;
+            if (!imageName&&emojiKey.length>1) {
+                NSUInteger maxDetctIndex = emojiKey.length;
                 //从头开始检测是否有对应的
                 for (NSUInteger i=0; i<maxDetctIndex; i++) {
                     //                NSLog(@"%@",[emojiKey substringToIndex:3+i]);
-                    imageName = emojiDict[[emojiKey substringToIndex:3+i]];
+                    imageName = emojiDict[[emojiKey substringToIndex:i]];
                     if (imageName) {
-                        otherAppendStr  = [[NSMutableAttributedString alloc]initWithString:[emojiKey substringFromIndex:3+i]];
+                        otherAppendStr  = [[NSMutableAttributedString alloc]initWithString:[emojiKey substringFromIndex:i]];
                         break;
                     }
                 }
