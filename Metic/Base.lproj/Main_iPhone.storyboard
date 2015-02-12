@@ -3111,20 +3111,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="08Q-Er-FO7" customClass="emotion_Keyboard">
-                                <rect key="frame" x="0.0" y="416" width="320" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="Bq5-sf-KPm"/>
-                                    <constraint firstAttribute="width" constant="320" id="qgz-CA-AMI"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="sad-WS-38C" secondAttribute="trailing" id="3kI-nV-cxi"/>
                             <constraint firstItem="sad-WS-38C" firstAttribute="leading" secondItem="ARj-Z4-ISz" secondAttribute="leading" id="A7D-ZC-wES"/>
-                            <constraint firstItem="08Q-Er-FO7" firstAttribute="top" secondItem="PLs-O3-Ixn" secondAttribute="bottom" id="G0m-vH-PPt"/>
                             <constraint firstItem="sad-WS-38C" firstAttribute="top" secondItem="R69-RB-EZ5" secondAttribute="bottom" id="QQq-Xe-gnu"/>
                             <constraint firstItem="PLs-O3-Ixn" firstAttribute="top" secondItem="sad-WS-38C" secondAttribute="bottom" constant="45" id="uxe-yV-kTm"/>
                         </constraints>
@@ -3144,7 +3135,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="emotionKeyboard" destination="08Q-Er-FO7" id="Bj9-lB-oKJ"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
@@ -4228,18 +4218,9 @@
                                     <constraint firstItem="Ygo-LO-AWi" firstAttribute="leading" secondItem="pZT-L4-2hm" secondAttribute="trailing" id="sIs-9U-Dry"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oGJ-mZ-er7" customClass="emotion_Keyboard">
-                                <rect key="frame" x="0.0" y="416" width="320" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="VZJ-hV-utk"/>
-                                    <constraint firstAttribute="height" constant="200" id="i1K-mW-4cG"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="oGJ-mZ-er7" firstAttribute="top" secondItem="yL4-QP-KUp" secondAttribute="bottom" id="8YK-DG-lot"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="wJW-xi-MsO" secondAttribute="bottom" constant="45" id="Rxr-hx-8zA"/>
                             <constraint firstAttribute="trailing" secondItem="wJW-xi-MsO" secondAttribute="trailing" id="VNL-mx-idL"/>
                             <constraint firstItem="yL4-QP-KUp" firstAttribute="top" secondItem="DBC-PM-woG" secondAttribute="bottom" id="aPi-JA-uwa"/>
@@ -4255,7 +4236,6 @@
                     <connections>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
                         <outlet property="download_button" destination="CLr-x0-Y7a" id="vrd-CL-xYV"/>
-                        <outlet property="emotionKeyboard" destination="oGJ-mZ-er7" id="4az-Id-TBV"/>
                         <outlet property="good_button" destination="pZT-L4-2hm" id="Pcs-y9-BHb"/>
                         <outlet property="tableView" destination="wJW-xi-MsO" id="d3J-vv-iVx"/>
                         <outletCollection property="buttons" destination="pZT-L4-2hm" id="b9j-Fx-rOr"/>
@@ -4798,14 +4778,6 @@
                                 <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                                 <color key="separatorColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FsU-VY-D2s" customClass="emotion_Keyboard">
-                                <rect key="frame" x="0.0" y="416" width="320" height="200"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="3ft-tT-lHk"/>
-                                    <constraint firstAttribute="width" constant="320" id="RrJ-8u-wl7"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -4813,7 +4785,6 @@
                             <constraint firstItem="AjO-Mk-bh2" firstAttribute="leading" secondItem="HzU-zg-tCK" secondAttribute="leading" id="Fz7-9m-e0R"/>
                             <constraint firstItem="AjO-Mk-bh2" firstAttribute="top" secondItem="uu5-HW-k6z" secondAttribute="bottom" id="PFc-PP-QgR"/>
                             <constraint firstAttribute="trailing" secondItem="AjO-Mk-bh2" secondAttribute="trailing" id="yRw-vY-Guk"/>
-                            <constraint firstItem="FsU-VY-D2s" firstAttribute="top" secondItem="e5r-ZA-mvX" secondAttribute="bottom" id="zZj-dg-uFq"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="视频详情" id="7hk-aB-QWt">
@@ -4832,7 +4803,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="emotionKeyboard" destination="FsU-VY-D2s" id="j6f-RF-g1N"/>
                         <outlet property="moreBtn" destination="QIa-21-CeF" id="GU1-HY-rS1"/>
                         <outlet property="tableView" destination="AjO-Mk-bh2" id="sqS-8T-BHg"/>
                         <segue destination="RNm-zE-pmQ" kind="push" identifier="VideoToReport" id="fwI-VG-d1n"/>
@@ -4906,16 +4876,16 @@
     <inferredMetricsTieBreakers>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="823-Eq-eYh"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="kIc-uU-eUg"/>
+        <segue reference="fwI-VG-d1n"/>
+        <segue reference="UXj-VV-omZ"/>
         <segue reference="ItJ-aD-aY9"/>
         <segue reference="vrP-dE-x9J"/>
-        <segue reference="KQw-JA-BHy"/>
         <segue reference="8Lk-Kp-pHu"/>
-        <segue reference="EEO-gR-a4J"/>
-        <segue reference="0y8-RS-ijM"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="UXj-VV-omZ"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="L2M-th-cr6"/>
+        <segue reference="KQw-JA-BHy"/>
     </inferredMetricsTieBreakers>
 </document>

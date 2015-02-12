@@ -32,7 +32,7 @@
 @property (nonatomic,strong)UIButton * delete_button;
 @property float specificationHeight;
 @property (nonatomic,strong) NSMutableArray * vcomment_list;
-@property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
+@property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property (nonatomic,strong) UIView* moreView;
@@ -156,6 +156,10 @@
     _inputTextView.layer.borderWidth = 0.65f;
     _inputTextView.layer.cornerRadius = 6.0f;
     
+    //初始化表情面板
+    _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 64, self.view.frame.size.width,200)];
+    [self.view addSubview:_emotionKeyboard];
+    _emotionKeyboard.textView = _inputTextView;
     [_emotionKeyboard initCollectionView];
     
 }
@@ -168,7 +172,6 @@
     self.Footeropen = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    _emotionKeyboard.textView = _inputTextView;
     self.vcomment_list = [[NSMutableArray alloc]init];
     
     //初始化上拉加载更多

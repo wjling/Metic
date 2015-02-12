@@ -36,7 +36,7 @@
 @property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
-@property (strong, nonatomic) IBOutlet emotion_Keyboard *emotionKeyboard;
+@property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
@@ -246,6 +246,10 @@
     _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     _inputTextView.layer.borderWidth = 0.65f;
     _inputTextView.layer.cornerRadius = 6.0f;
+    
+    //初始化表情面板
+    _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 64, self.view.frame.size.width,200)];
+    [self.view addSubview:_emotionKeyboard];
    
 }
 
