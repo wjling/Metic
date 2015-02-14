@@ -34,7 +34,7 @@
 @property (strong, nonatomic) AVPlayer* videoPlayer;
 @property (strong, nonatomic) AVPlayerLayer* avLayer;
 //@property (strong, nonatomic) NSString* playingVideoName;
-@property BOOL same;
+@property (strong, nonatomic) NSString* playingVideoName;
 @property BOOL layerOn;
 @property BOOL isPlaying;
 
@@ -123,7 +123,6 @@
 
 -(void)refresh
 {
-    _same = NO;
     _isVideoReady = NO;
     if (_progressOverlayView) {
         [_progressOverlayView removeFromSuperview];
@@ -145,9 +144,10 @@
     self.authorId = [_videoInfo valueForKey:@"author_id"];
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:self.authorId];
     [avatarGetter getAvatar];
-    NSString* vN = [_videoInfo valueForKey:@"video_name"];
-    _same = [_videoName isEqualToString:vN];
-    _videoName = vN;
+    _videoName = [_videoInfo valueForKey:@"video_name"];
+    if (![_videoName isEqualToString:_playingVideoName]) {
+        _playingVideoName = nil;
+    }
     NSString* text = [_videoInfo valueForKey:@"title"];
     //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
     CGRect frame = self.textViewContainer.frame;
@@ -171,7 +171,7 @@
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
     self.videoThumb = nil;
     
-    if(!_same){
+    if(!_playingVideoName){
         _isPlaying = NO;
         _layerOn = NO;
         [ self.videoPlayer pause];
@@ -453,14 +453,16 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
-        if (!_same || !_videoItem) {
+        BOOL same = [_videoName isEqualToString:_playingVideoName];
+        if (!same || !_videoItem) {
             NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
             _videoItem = [AVPlayerItem playerItemWithURL:url];
+            _playingVideoName = [NSString stringWithString:_videoName];
         }
         
         if (!_videoPlayer) {
             _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
-        }else if(!_same) {
+        }else if(!same) {
             [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
             [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
         }
@@ -472,31 +474,34 @@
 
 //            dispatch_sync(dispatch_get_main_queue(), ^{
         
-                CGRect Bframe = _video_button.frame;
-                CGRect frame = Bframe;
-                AVAssetTrack* videoTrack = [[_videoItem.asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-                CGFloat width = videoTrack.naturalSize.width;
-                CGFloat height = videoTrack.naturalSize.height;
-                if(width == 0 || height == 0)return;
-                if (width/height > Bframe.size.width/Bframe.size.height) {
-                    frame.origin.y = 0;
-                    frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
-                    frame.size.width = width*Bframe.size.height/height;
-                }else{
-                    frame.origin.x = 0;
-                    frame.origin.y = 0.5*(Bframe.size.height - height*Bframe.size.width/width);
-                    frame.size.height = height*Bframe.size.width/width;
-                }
-     
-                
-                self.avLayer.frame = frame;
+        CGRect Bframe = _video_button.frame;
+        CGRect frame = Bframe;
+        NSArray* tracks = [_videoItem.asset tracksWithMediaType:AVMediaTypeVideo];
+        if (tracks.count == 0) {
+            return;
+        }
+        AVAssetTrack* videoTrack = [tracks objectAtIndex:0];
+        CGFloat width = videoTrack.naturalSize.width;
+        CGFloat height = videoTrack.naturalSize.height;
+        if(width == 0 || height == 0)return;
+        if (width/height > Bframe.size.width/Bframe.size.height) {
+            frame.origin.y = 0;
+            frame.origin.x = 0.5*(Bframe.size.width - width*Bframe.size.height/height);
+            frame.size.width = width*Bframe.size.height/height;
+        }else{
+            frame.origin.x = 0;
+            frame.origin.y = 0.5*(Bframe.size.height - height*Bframe.size.width/width);
+            frame.size.height = height*Bframe.size.width/width;
+        }
+
+        
+        self.avLayer.frame = frame;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
         });
         self.videoPlayer.muted = YES;
-        if (!_same || !_layerOn){
+        if (!same || !_layerOn){
             [self.videoView.layer addSublayer:self.avLayer];
-            _same = YES;
             _layerOn = YES;
             
         }
