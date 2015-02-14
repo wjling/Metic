@@ -32,6 +32,7 @@
 @synthesize alias_dic;
 
 @synthesize updateEventStatus;
+@synthesize updatePVStatus;
 @synthesize atMeEvents;
 
 @synthesize msgFromDB;
@@ -98,6 +99,7 @@ static MTUser *singletonInstance;
         alias_dic = [aDecoder decodeObjectForKey:@"alias_dic"];
         friendsIdSet = [aDecoder decodeObjectForKey:@"friendsIdSet"];
         updateEventStatus = [aDecoder decodeObjectForKey:@"updateEventStatus"];
+        updatePVStatus = [aDecoder decodeObjectForKey:@"updatePVStatus"];
         atMeEvents = [aDecoder decodeObjectForKey:@"atMeEvents"];
         eventRequestMsg = [aDecoder decodeObjectForKey:@"eventRequestMsg"];
         friendRequestMsg = [aDecoder decodeObjectForKey:@"friendRequestMsg"];
@@ -113,6 +115,7 @@ static MTUser *singletonInstance;
         saltValue = [aDecoder decodeObjectForKey:@"saltValue"];
         
         if(!updateEventStatus) updateEventStatus = [[NSMutableDictionary alloc]init];
+        if(!updatePVStatus) updatePVStatus = [[NSMutableDictionary alloc]init];
     }
     
     return self;
@@ -130,6 +133,7 @@ static MTUser *singletonInstance;
     [aCoder encodeObject:self.alias_dic forKey:@"alias_dic"];
     [aCoder encodeObject:self.friendsIdSet forKey:@"friendsIdSet"];
     [aCoder encodeObject:self.updateEventStatus forKey:@"updateEventStatus"];
+    [aCoder encodeObject:self.updatePVStatus forKey:@"updatePVStatus"];
     [aCoder encodeObject:self.atMeEvents forKey:@"atMeEvents"];
     [aCoder encodeObject:self.eventRequestMsg forKey:@"eventRequestMsg"];
     [aCoder encodeObject:self.friendRequestMsg forKey:@"friendRequestMsg"];

@@ -527,8 +527,16 @@
         status[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
         [[MTUser sharedInstance].updateEventStatus setObject:status forKey:[msg_dic valueForKey:@"event_id"]];
         
+        if (![[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
+            [[MTUser sharedInstance].updatePVStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
+        }
+        NSMutableArray *pvStatus = [[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]];
+        pvStatus = [NSMutableArray arrayWithArray:status];
+        pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
+        [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
+        
         type = -1;
-        NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);
+        NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
     else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
         [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
@@ -1106,6 +1114,15 @@
             status = [NSMutableArray arrayWithArray:status];
             status[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
             [[MTUser sharedInstance].updateEventStatus setObject:status forKey:[msg_dic valueForKey:@"event_id"]];
+            
+            if (![[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
+                [[MTUser sharedInstance].updatePVStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
+            }
+            NSMutableArray *pvStatus = [[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]];
+            pvStatus = [NSMutableArray arrayWithArray:status];
+            pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
+            [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
+            
             
             
             NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);

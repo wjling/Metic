@@ -15,11 +15,11 @@
 +(void)visitEvent:(NSNumber*)EventId
 {
     if (!EventId) return;
-    NSArray *updateInfo = [[MTUser sharedInstance].updateEventStatus objectForKey:EventId];
+    NSArray *updateInfo = [[MTUser sharedInstance].updatePVStatus objectForKey:EventId];
     if (updateInfo) {
         NSMutableArray *status = [NSMutableArray arrayWithArray:updateInfo];
         status[3] = [NSNumber numberWithBool:NO];
-        [[MTUser sharedInstance].updateEventStatus setObject:status forKey:EventId];
+        [[MTUser sharedInstance].updatePVStatus setObject:status forKey:EventId];
         [self clearInavalidInfo:EventId];
     }
 }
@@ -29,14 +29,14 @@
 {
     if (!EventId) return NO;
     BOOL ret = NO;
-    NSArray *updateInfo = [[MTUser sharedInstance].updateEventStatus objectForKey:EventId];
+    NSArray *updateInfo = [[MTUser sharedInstance].updatePVStatus objectForKey:EventId];
     if (updateInfo) {
         NSMutableArray *status = [NSMutableArray arrayWithArray:updateInfo];
         if ([status[2]boolValue]) {
             ret = YES;
             if (needClear) {
                 status[2] = [NSNumber numberWithBool:NO];
-                [[MTUser sharedInstance].updateEventStatus setObject:status forKey:EventId];
+                [[MTUser sharedInstance].updatePVStatus setObject:status forKey:EventId];
             }
             
         }else ret = NO;
@@ -50,14 +50,14 @@
 {
     if (!EventId) return NO;
     BOOL ret = NO;
-    NSArray *updateInfo = [[MTUser sharedInstance].updateEventStatus objectForKey:EventId];
+    NSArray *updateInfo = [[MTUser sharedInstance].updatePVStatus objectForKey:EventId];
     if (updateInfo) {
         NSMutableArray *status = [NSMutableArray arrayWithArray:updateInfo];
         if ([status[1]boolValue]) {
             ret = YES;
             if (needClear){
                 status[1] = [NSNumber numberWithBool:NO];
-                [[MTUser sharedInstance].updateEventStatus setObject:status forKey:EventId];
+                [[MTUser sharedInstance].updatePVStatus setObject:status forKey:EventId];
             }
         }else ret = NO;
         if (needClear) [self clearInavalidInfo:EventId];
@@ -68,10 +68,10 @@
 //清除无效提醒信息
 +(void)clearInavalidInfo:(NSNumber*)EventId{
     if (!EventId) return;
-    NSArray *updateInfo = [[MTUser sharedInstance].updateEventStatus objectForKey:EventId];
+    NSArray *updateInfo = [[MTUser sharedInstance].updatePVStatus objectForKey:EventId];
     if (updateInfo) {
-        if ([updateInfo[1]intValue]+[updateInfo[2]intValue]+[updateInfo[3]intValue] == 0) {
-            [[MTUser sharedInstance].updateEventStatus removeObjectForKey:EventId];
+        if ([updateInfo[1]intValue]+[updateInfo[2]intValue] == 0) {
+            [[MTUser sharedInstance].updatePVStatus removeObjectForKey:EventId];
         }
     }
 }

@@ -39,6 +39,7 @@
 
 //For HomeViewController
 @property (nonatomic,strong) NSMutableDictionary* updateEventStatus;
+@property (nonatomic,strong) NSMutableDictionary* updatePVStatus;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 
 //For NotificationViewController
