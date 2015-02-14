@@ -767,37 +767,41 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
-                if ([MTUser sharedInstance].userid) {
-                    NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-                    if (maxSeqDict) {
-                        maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
-                        NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                        if(localMaxSeq){
-                            if([localMaxSeq integerValue]< [max_seq integerValue]){
+                NSArray* list = [response objectForKey:@"list"];
+                if (list && list.count > 0) {
+                    if ([MTUser sharedInstance].userid) {
+                        NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+                        if (maxSeqDict) {
+                            maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+                            NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                            if(localMaxSeq){
+                                if([localMaxSeq integerValue]< [max_seq integerValue]){
+                                    [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                                }
+                                if([max_seq integerValue] == 0){
+                                    NSArray* list = [response objectForKey:@"list"];
+                                    if (list && list.count > 0) {
+                                        [maxSeqDict setObject:[NSNumber numberWithInteger:[localMaxSeq integerValue]+list.count] forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                                    }
+                                    
+                                }
+                            }else{
                                 [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                             }
-                            if([max_seq integerValue] == 0){
-                                NSArray* list = [response objectForKey:@"list"];
-                                if (list && list.count > 0) {
-                                    [maxSeqDict setObject:[NSNumber numberWithInteger:[localMaxSeq integerValue]+list.count] forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                                }
-                            
-                            }
                         }else{
+                            maxSeqDict = [[NSMutableDictionary alloc]init];
                             [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                         }
-                    }else{
-                        maxSeqDict = [[NSMutableDictionary alloc]init];
-                        [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                        [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
                     }
-                    [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 
                 
                 
                 
-                NSArray* list = [response objectForKey:@"list"];
+                
+                
                 for (int i = 0; i < list.count; i++) {
                     NSDictionary* message = [list objectAtIndex:i];
                     [self handlePushMessage:message andFeedBack:YES];
