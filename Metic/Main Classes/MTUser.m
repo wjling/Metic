@@ -71,6 +71,7 @@ static MTUser *singletonInstance;
         self.alias_dic = [[NSMutableDictionary alloc]init];
         self.friendsIdSet = [[NSMutableSet alloc]init];
         self.updateEventStatus = [[NSMutableDictionary alloc]init];
+        self.updatePVStatus = [[NSMutableDictionary alloc]init];
         self.atMeEvents = [[NSMutableArray alloc]init];
         self.eventRequestMsg = [[NSMutableArray alloc]init];
         self.friendRequestMsg = [[NSMutableArray alloc]init];
