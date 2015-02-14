@@ -776,6 +776,13 @@
                             if([localMaxSeq integerValue]< [max_seq integerValue]){
                                 [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                             }
+                            if([max_seq integerValue] == 0){
+                                NSArray* list = [response objectForKey:@"list"];
+                                if (list && list.count > 0) {
+                                    [maxSeqDict setObject:[NSNumber numberWithInteger:[localMaxSeq integerValue]+list.count] forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                                }
+                            
+                            }
                         }else{
                             [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                         }
