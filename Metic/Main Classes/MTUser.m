@@ -240,6 +240,17 @@ static MTUser *singletonInstance;
     [self getAliasFromServer];
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
     [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
+    
+    //同步推送消息
+    NSLog(@"开始同步消息");
+    void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
+    {
+        if (!min_seq || !max_seq) {
+            return;
+        }
+        [(AppDelegate*)([UIApplication sharedApplication].delegate) pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
+    };
+    [(AppDelegate*)([UIApplication sharedApplication].delegate) synchronizePushSeqAndCallBack:synchronizeDone];
 }
 
 - (void)initUserDir

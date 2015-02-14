@@ -167,22 +167,12 @@
             [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-        
-        //同步推送消息
-        NSLog(@"开始同步消息");
-        void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
-        {
-            if (!min_seq || !max_seq) {
-                return;
-            }
-            [self pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
-        };
-        [self synchronizePushSeqAndCallBack:synchronizeDone];
-        
+
     }else {
         [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    
     return YES;
 
 }
@@ -769,6 +759,29 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
+                if ([MTUser sharedInstance].userid) {
+                    NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+                    if (maxSeqDict) {
+                        maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+                        NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                        if(localMaxSeq){
+                            if([localMaxSeq integerValue]< [max_seq integerValue]){
+                                [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                            }
+                        }else{
+                            [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                        }
+                    }else{
+                        maxSeqDict = [[NSMutableDictionary alloc]init];
+                        [maxSeqDict setObject:max_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                    }
+                    [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
+                
+                
+                
+                
                 NSArray* list = [response objectForKey:@"list"];
                 for (int i = 0; i < list.count; i++) {
                     NSDictionary* message = [list objectAtIndex:i];
@@ -784,12 +797,26 @@
              block(response);
         }
     };
+    
+    if ([MTUser sharedInstance].userid) {
+        NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+        if (maxSeqDict) {
+            NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+            if(localMaxSeq){
+                min_seq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
+            }
+        }
+    }
+    
+    
+    
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInt:1], @"operation",
                               [MTUser sharedInstance].userid, @"id",
                               min_seq, @"min_seq",
                               max_seq, @"max_seq",
                               nil];
+    NSLog(@"拉取消息请求: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
