@@ -104,6 +104,7 @@
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
     [readerView start];
+    _isScaning = YES;
     
     
     
