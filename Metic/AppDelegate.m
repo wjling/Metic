@@ -1,4 +1,4 @@
-//
+ //
 //  AppDelegate.m
 //  Metic
 //
@@ -120,8 +120,6 @@
     //开启本地视频服务
     [self initLocalVideoServer];
     
-//    application.applicationIconBadgeNumber = 0;
-    
     //判断是否由远程消息通知触发应用程序启动
 //    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
 //        //获取应用程序消息通知标记数
@@ -172,6 +170,9 @@
         [[NSUserDefaults standardUserDefaults]setInteger:0 forKey:@"newNotificationCome"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
     return YES;
 
@@ -230,6 +231,10 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
     NSLog(@"app will enter foreground==================");
