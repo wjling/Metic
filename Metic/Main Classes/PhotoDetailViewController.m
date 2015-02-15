@@ -32,6 +32,7 @@
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
+@property BOOL shouldExit;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
@@ -170,6 +171,7 @@
     self.sequence = [NSNumber numberWithInt:0];
     self.isKeyBoard = NO;
     self.Footeropen = NO;
+    self.shouldExit = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.pcomment_list = [[NSMutableArray alloc]init];
@@ -221,7 +223,29 @@
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            _photoInfo = response1;
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    _photoInfo = response1;
+                }
+                    break;
+                case PHOTO_NOT_EXIST:
+                {
+                    if (!_shouldExit) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                    break;
+                }
+                default:
+                {
+                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                    
+                }
+            }
             
         }
     }];
@@ -319,6 +343,16 @@
                     }
                 }
                     break;
+                case PHOTO_NOT_EXIST:
+                {
+                    if (!_shouldExit) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                    break;
+                }
                 default:
                 {
                     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
@@ -351,11 +385,13 @@
 }
 
 - (IBAction)good:(id)sender {
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
+    {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
     
+    if(!_photoInfo) return;
     
     [self.good_button setEnabled:NO];
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
@@ -378,9 +414,15 @@
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
                 
-            }else{
+            }else if([cmd integerValue] == PHOTO_NOT_EXIST){
+                if (!_shouldExit) {
+                    _shouldExit = YES;
+                    [self deleteLocalData];
+                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                    [alert setTag:1];
+                }
                 return ;
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                
             }
         }
         
@@ -475,6 +517,15 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd integerValue] == PHOTO_NOT_EXIST) {
+                if (!_shouldExit) {
+                    _shouldExit = YES;
+                    [self deleteLocalData];
+                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                    [alert setTag:1];
+                }
+                return;
+            }
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
                 {
                     [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
@@ -497,6 +548,7 @@
 
 
 - (IBAction)publishComment:(id)sender {
+    if (!_photoInfo) return;
     NSString *comment = self.inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.inputTextView.text = @"";
@@ -559,6 +611,15 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd integerValue] == PHOTO_NOT_EXIST) {
+                if (!_shouldExit) {
+                    _shouldExit = YES;
+                    [self deleteLocalData];
+                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                    [alert setTag:1];
+                }
+                return;
+            }
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
                 {
                     [newComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
@@ -625,6 +686,29 @@
         [_footer endRefreshing];
     }
     [self.tableView reloadData];
+}
+
+- (void)deleteLocalData
+{
+    if (_photoId) {
+        [self deletePhotoInfoFromDB];
+    }
+    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
+        NSInteger index = -1;
+        index = [self.controller.photo_list indexOfObject:_photoInfo];
+        if (index >= 0 && index < self.controller.photo_list.count) {
+            [self.controller.photo_list removeObject:_photoInfo];
+            self.controller.showPhoNum --;
+            [self.controller calculateLRH];
+            [self.controller.quiltView beginUpdates];
+            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+            [self.controller.quiltView endUpdates];
+        }
+        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
+        if (index >= 0 && index < self.controller.photo_list_all.count) {
+            [self.controller.photo_list_all removeObject:_photoInfo];
+        }
+    }
 }
 
 - (void)deletePhotoInfoFromDB
@@ -1051,30 +1135,11 @@
                                 //百度云 删除
                                 CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
                                 [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
-                                //数据库 删除
-                                [self deletePhotoInfoFromDB];
-                                
-                                
                             }
                                 break;
                             default:
                             {
-                                [self deletePhotoInfoFromDB];
-                                [self.delete_button setEnabled:YES];
-                                int index = -1;
-                                index = [self.controller.photo_list indexOfObject:_photoInfo];
-                                if (index >= 0 && index < self.controller.photo_list.count) {
-                                    [self.controller.photo_list removeObject:_photoInfo];
-                                    self.controller.showPhoNum --;
-                                    [self.controller calculateLRH];
-                                    [self.controller.quiltView beginUpdates];
-                                    [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-                                    [self.controller.quiltView endUpdates];
-                                }
-                                index = [self.controller.photo_list_all indexOfObject:_photoInfo];
-                                if (index >= 0 && index < self.controller.photo_list_all.count) {
-                                    [self.controller.photo_list_all removeObject:_photoInfo];
-                                }
+                                [self deleteLocalData];
                                 
                                 UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
                                 [alert setTag:1];
@@ -1108,20 +1173,7 @@
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
     if (status){
-        int index = -1;
-        index = [self.controller.photo_list indexOfObject:_photoInfo];
-        if (index >= 0 && index < self.controller.photo_list.count) {
-            [self.controller.photo_list removeObject:_photoInfo];
-            self.controller.showPhoNum --;
-            [self.controller calculateLRH];
-            [self.controller.quiltView beginUpdates];
-            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-            [self.controller.quiltView endUpdates];
-        }
-        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
-        if (index >= 0 && index < self.controller.photo_list_all.count) {
-            [self.controller.photo_list_all removeObject:_photoInfo];
-        }
+        [self deleteLocalData];
 
 
         UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
