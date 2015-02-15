@@ -1092,7 +1092,12 @@
         }
             break;
         case 1:{
-            [self.navigationController popToViewController:self.controller animated:YES];
+            if (_controller) {
+                [self.navigationController popToViewController:self.controller animated:YES];
+            }else{
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            
         }
         default:
             break;
