@@ -323,12 +323,7 @@
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
-    
-    __block unsigned long long totalBytes = 0;
-    _receivedBytes = 0;
-    __block BOOL canReplay = YES;
-    
-    
+
     //plan b 缓存视频
     NSFileManager *fileManager=[NSFileManager defaultManager];
     if(![fileManager fileExistsAtPath:cachePath])
@@ -363,6 +358,9 @@
         
         else{
             
+            __block unsigned long long totalBytes = 0;
+            _receivedBytes = 0;
+
             [self readyProgressOverlayView];
             
             ASIHTTPRequest *request=[[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:url]];
