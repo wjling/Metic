@@ -26,6 +26,7 @@
 
 @interface VideoWallViewController ()
 @property(nonatomic,strong) NSMutableArray* videoInfos;
+@property(nonatomic,strong) NSMutableArray* videoInfos_all;
 @property(nonatomic,strong) NSNumber* sequence;
 @property(nonatomic,strong) NSString* urlFormat;
 @property(nonatomic,strong) UIImage* preViewImage;
@@ -72,6 +73,7 @@
     _urlFormat = @[@"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@",@"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@"][Server];
     
     _videoInfos = [[NSMutableArray alloc]init];
+    _videoInfos_all = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
     _shouldFlash = NO;
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
@@ -191,7 +193,6 @@
         
         return;
     }
-    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
     if (_Footeropen||_Headeropen) {
         [refreshView endRefreshing];
         return;
@@ -199,8 +200,50 @@
     if (refreshView == _header) {
         _Headeropen = YES;
         self.sequence = [NSNumber numberWithInt:0];
-    }else _Footeropen = YES;
-    [self getVideolist];
+        [self getVideolist];
+    }else{
+        _Footeropen = YES;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSInteger rest = [_videoInfos_all count] - [_videoInfos count];
+            if (rest > 0) {
+                [_videoInfos addObjectsFromArray:[_videoInfos_all subarrayWithRange:NSMakeRange(_videoInfos.count, rest > 10? 10:rest)]];
+                _shouldFlash = NO;
+                [_timer invalidate];
+                _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
+                [_tableView reloadData];
+                [self closeRJ];
+            }else{
+                [self closeRJ];
+            }
+        });
+        
+        
+        
+        
+    }
+    
+}
+
+-(void)refreshvideoInfoFromDB:(NSMutableArray*)videoInfos
+{
+    if (_eventId) {
+        [self deleteAllVideoInfoFromDB:_eventId];
+        [VideoWallViewController updateVideoInfoToDB:videoInfos eventId:_eventId];
+    }
+    
+}
+
+-(void)deleteAllVideoInfoFromDB:(NSNumber*) eventId
+{
+    if (!eventId) {
+        return;
+    }
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
+    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
+    [sql closeMyDB];
 }
 
 + (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId
@@ -291,13 +334,21 @@
                         NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newvideo_list[i]];
                         newvideo_list[i] = dictionary;
                     }
-                    [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
-                    if ([_sequence intValue] == 0) [_videoInfos removeAllObjects];
+                    
+                    if ([_sequence intValue] == 0) [_videoInfos_all removeAllObjects];
                     _sequence = [response1 valueForKey:@"sequence"];
-                    for (NSMutableDictionary *dictionary in newvideo_list) {
-                        [_videoInfos addObject:dictionary];
+                    if ([_sequence integerValue] != -1) {
+                        [_videoInfos_all addObjectsFromArray:newvideo_list];
+                        [self getVideolist];
+                        return ;
                     }
-//                    [self initAVPlayers];
+                    [self refreshvideoInfoFromDB:_videoInfos_all];
+                    
+                    NSInteger rest = [_videoInfos_all count];
+
+                    [_tableView reloadData];
+                    _videoInfos = [NSMutableArray arrayWithArray:[_videoInfos_all subarrayWithRange:NSMakeRange(0, rest > 10? 10:rest)]];
+
                     _shouldFlash = NO;
                     [_timer invalidate];
                     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
