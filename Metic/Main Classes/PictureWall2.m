@@ -147,6 +147,25 @@
     [self performSegueWithIdentifier:@"toPhotoRanking" sender:self];
 }
 
+-(void)refreshPhotoInfoFromDB:(NSMutableArray*)photoInfos
+{
+    [self deleteAllPhotoInfoFromDB:_eventId];
+    [self updatePhotoInfoToDB:photoInfos];
+}
+
+-(void)deleteAllPhotoInfoFromDB:(NSNumber*) eventId
+{
+    if (!eventId) {
+        return;
+    }
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite *sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
+    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
+    [sql closeMyDB];
+}
+
 - (void)updatePhotoInfoToDB:(NSMutableArray*)photoInfos
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
@@ -255,7 +274,6 @@
                             [newphoto_list addObject:dictionary];
                         }
                     }
-                    [self updatePhotoInfoToDB:newphoto_list];
                     self.sequence = [response1 valueForKey:@"sequence"];
                     
                     [self.photo_list_all addObjectsFromArray:newphoto_list];
@@ -264,6 +282,7 @@
                         [self getPhotolist];
                         return;
                     }else{
+                        [self refreshPhotoInfoFromDB:_photo_list_all];
                         [NotificationController visitPhotoWall:_eventId needClear:YES];
                         [self.photo_list removeAllObjects];
                         [self.photo_list addObjectsFromArray:_photo_list_all];
