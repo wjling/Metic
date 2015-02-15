@@ -40,6 +40,7 @@
 @property (strong, nonatomic) UIButton *video_button;
 @property (strong, nonatomic) UIImageView *videoPlayImg;
 @property __block unsigned long long receivedBytes;
+@property BOOL shouldExit;
 @property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
@@ -170,6 +171,7 @@
     if (_videoInfo) self.videoId = [_videoInfo valueForKey:@"video_id"];
     self.isKeyBoard = NO;
     self.Footeropen = NO;
+    self.shouldExit = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.vcomment_list = [[NSMutableArray alloc]init];
@@ -183,6 +185,13 @@
         if (![self pullVideoInfoFromDB]) {
             [self pullVideoInfoFromAir];
         }
+    }
+}
+
+- (void)deleteLocalData
+{
+    if (_videoId) {
+        [self deleteVideoInfoFromDB];
     }
 }
 
@@ -220,8 +229,25 @@
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            _videoInfo = response1;
-            [_tableView reloadData];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    _videoInfo = response1;
+                    [_tableView reloadData];
+                }
+                    break;
+                case VIDEO_NOT_EXIST:{
+                    if (_shouldExit == NO) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                }
+                break;
+            }
+            
+            
             
         }
     }];
@@ -710,6 +736,15 @@
                     }
                 }
                     break;
+                case VIDEO_NOT_EXIST:{
+                    if (_shouldExit == NO) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                }
+                    break;
                 default:
                 {
                     [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
@@ -737,7 +772,7 @@
 
 -(void)resendComment:(id)sender
 {
-    
+    if (!_videoInfo) return;
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
@@ -770,6 +805,15 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == VIDEO_NOT_EXIST) {
+                if (_shouldExit == NO) {
+                    _shouldExit = YES;
+                    [self deleteLocalData];
+                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                    [alert setTag:1];
+                }
+                return ;
+            }
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
                 {
                     [waitingComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
@@ -792,6 +836,7 @@
 
 
 - (IBAction)publishComment:(id)sender {
+    if (!_videoInfo) return;
     NSString *comment = self.inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.inputTextView.text = @"";
@@ -853,6 +898,15 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == VIDEO_NOT_EXIST) {
+                if (_shouldExit == NO) {
+                    _shouldExit = YES;
+                    [self deleteLocalData];
+                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                    [alert setTag:1];
+                }
+                return ;
+            }
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
                 {
                     [newComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
@@ -876,9 +930,9 @@
 
 - (void)commentNumPlus
 {
-    int comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
+    NSInteger comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
-    [self.videoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [self.videoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
     [_controller.tableView reloadRowsAtIndexPaths:@[_index] withRowAnimation:UITableViewRowAnimationNone];
     [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
 }
@@ -1341,9 +1395,12 @@
         }
             break;
         case 1:{
-            int index = self.navigationController.viewControllers.count - 2;
-            VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
-            controller.shouldReload = YES;
+            NSInteger index = self.navigationController.viewControllers.count - 2;
+            NSArray * controllers = self.navigationController.viewControllers;
+            if (controllers.count > index+1 && [controllers[index] isKindOfClass:[VideoWallViewController class]]) {
+                VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+                controller.shouldReload = YES;
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
         default:

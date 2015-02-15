@@ -370,6 +370,7 @@
             }
 
         }else{
+            [self closeRJ];
         }
         [self showPromt];
     }];
