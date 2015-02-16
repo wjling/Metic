@@ -367,8 +367,23 @@
     [XGPush handleReceiveNotification:userInfo];
 //    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
 //    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
+    
+    
+    
+    
+    //当位于前台 而且该消息序号大于本地消息最大序号才拉取该推送消息
     if ([application applicationState] == UIApplicationStateActive) {
         NSNumber* seq = [userInfo objectForKey:@"seq"];
+        if ([MTUser sharedInstance].userid) {
+            NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+            if (maxSeqDict) {
+                NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                if([localMaxSeq integerValue] >= [seq integerValue]){
+                    return;
+                }
+            }
+        }
+        
         void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
         {
             
