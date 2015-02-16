@@ -3086,6 +3086,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="0kw-3v-VU1"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="atMeRPoin" destination="8QU-Y3-9uQ" id="rMF-mE-XEo"/>
                         <outlet property="atMe_button" destination="bVQ-oV-pLZ" id="Pdj-kv-TC6"/>
                         <outlet property="atMe_empty_label" destination="t7a-SU-1IP" id="x7u-O1-d0a"/>
                         <outlet property="atMe_tableView" destination="4Am-kh-Nqm" id="ouO-fX-2mM"/>
