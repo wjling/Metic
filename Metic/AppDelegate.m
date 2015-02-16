@@ -554,7 +554,7 @@
             [[MTUser sharedInstance].updatePVStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
         }
         NSMutableArray *pvStatus = [[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]];
-        pvStatus = [NSMutableArray arrayWithArray:status];
+        pvStatus = [NSMutableArray arrayWithArray:pvStatus];
         pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
         [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
@@ -1155,7 +1155,7 @@
                 [[MTUser sharedInstance].updatePVStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
             }
             NSMutableArray *pvStatus = [[MTUser sharedInstance].updatePVStatus objectForKey:[msg_dic valueForKey:@"event_id"]];
-            pvStatus = [NSMutableArray arrayWithArray:status];
+            pvStatus = [NSMutableArray arrayWithArray:pvStatus];
             pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
             [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
