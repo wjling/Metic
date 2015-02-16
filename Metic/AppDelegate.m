@@ -557,7 +557,9 @@
         pvStatus = [NSMutableArray arrayWithArray:status];
         pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
         [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
+                                                            object:nil
+                                                          userInfo:nil];
         type = -1;
         NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
@@ -1156,7 +1158,9 @@
             pvStatus = [NSMutableArray arrayWithArray:status];
             pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
             [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
+                                                                object:nil
+                                                              userInfo:nil];
             
             
             NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);

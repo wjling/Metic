@@ -47,6 +47,12 @@
     
 }
 
+- (void)awakeFromNib
+{
+    // Initialization code
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshPVRPStatus) name: @"refreshPVRPStatus" object:nil];
+}
+
 //- (void)setFrame:(CGRect)frame
 //{
 //    frame.origin.x += widthspace;
@@ -134,6 +140,14 @@
     }
 }
 
+-(void)refreshPVRPStatus
+{
+    if (self && _eventId) {
+        if (imgWall) [self setImgWallpoint];
+        if (videoWall) [self setVideoWallpoint];
+    }
+}
+
 -(void)setImgWallpoint
 {
     NSLog(@"init button");
@@ -173,7 +187,7 @@
 }
 
 - (void)dealloc {
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshPVRPStatus" object:nil];
     
 }
 
