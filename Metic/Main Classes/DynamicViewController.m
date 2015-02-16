@@ -174,7 +174,7 @@
 
     }else{
         UITableViewCell* cell;
-        NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
+        NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
         if (cmd == 986 || cmd == 987 || cmd == 988) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
@@ -205,7 +205,7 @@
         _selete_Eventid = [[_updateEventStatus keyEnumerator] allObjects][indexPath.row];
         [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
     }else{
-        NSDictionary *atMeInfo = _atMeEvents[indexPath.row];
+        NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
         _selete_Eventid = [atMeInfo valueForKey:@"event_id"];
         switch (cmd) {
