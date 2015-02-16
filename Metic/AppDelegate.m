@@ -362,18 +362,21 @@
     
     
     //在此处理接受到的消息
+    
     NSLog(@"APP receive remote userInfo: %@", userInfo);
     [XGPush handleReceiveNotification:userInfo];
 //    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
 //    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
-    
-    NSNumber* seq = [userInfo objectForKey:@"seq"];
-    void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
-    {
+    if ([application applicationState] == UIApplicationStateActive) {
+        NSNumber* seq = [userInfo objectForKey:@"seq"];
+        void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
+        {
+            
+        };
         
-    };
+        [self pullAndHandlePushMessageWithMinSeq:seq andMaxSeq:seq andCallBackBlock:getPushMessageDone];
+    }
     
-    [self pullAndHandlePushMessageWithMinSeq:seq andMaxSeq:seq andCallBackBlock:getPushMessageDone];
 }
 
 -(void)initApp
