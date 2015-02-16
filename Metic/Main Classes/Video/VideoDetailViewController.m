@@ -933,8 +933,11 @@
     NSInteger comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.videoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
-    [_controller.tableView reloadRowsAtIndexPaths:@[_index] withRowAnimation:UITableViewRowAnimationNone];
-    [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
+    if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
+        [_controller.tableView reloadRowsAtIndexPaths:@[_index] withRowAnimation:UITableViewRowAnimationNone];
+        [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
+    }
+    
 }
 
 
