@@ -22,6 +22,12 @@
 
 @implementation DynamicViewController
 
+enum pos{
+    ALL = 0,
+    LEFT = 1,
+    RIGHT = 2,
+};
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -41,6 +47,12 @@
     _dynamic_tableView.dataSource = self;
     _atMe_tableView.delegate = self;
     _atMe_tableView.dataSource = self;
+    
+    if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
+        [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+    }else if(_atMeEvents.count != 0){
+        [self refreshRPoin:RIGHT];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -87,6 +99,29 @@
     [self.view addSubview:_bar];
 }
 
+- (void)refreshRPoin:(NSInteger)pos
+{
+    switch (pos) {
+        case LEFT:
+            if (_scrollView.contentOffset.x != 0) {
+                _dynamicRPoin.hidden = NO;
+            }
+            break;
+        case RIGHT:
+            if (_scrollView.contentOffset.x != 320) {
+                _atMeRPoin.hidden = NO;
+            }
+            break;
+        case ALL:
+            if (_scrollView.contentOffset.x != 0) {
+                _dynamicRPoin.hidden = NO;
+            }
+            if (_scrollView.contentOffset.x != 320) {
+                _atMeRPoin.hidden = NO;
+            }
+            break;
+    }
+}
 
 
 - (IBAction)dynamics_pressdown:(id)sender {
@@ -344,6 +379,13 @@
             [_atMe_button setHighlighted:NO];
             [_dynamics_button setHighlighted:YES];
         }
+        
+        if (scrollView.contentOffset.x == 0) {
+            _dynamicRPoin.hidden = YES;
+        }else if (scrollView.contentOffset.x == 320){
+            _atMeRPoin.hidden = YES;
+        }
+        
     }
     
 }
@@ -359,11 +401,9 @@
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
         if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 986 || cmd == 987 || cmd == 988 || cmd == 989) {
-            if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
-                [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
-            }else if(_updateEventStatus.count != 0 && _atMeEvents.count == 0){
-                [_scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-            }
+            if (cmd == 993 || cmd == 992 || cmd == 991) {
+                [self refreshRPoin:LEFT];
+            }else [self refreshRPoin:RIGHT];
             [_dynamic_tableView reloadData];
             [_atMe_tableView reloadData];
         }

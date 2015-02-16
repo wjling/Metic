@@ -2928,6 +2928,9 @@
                                     <action selector="dynamics_pressdown:" destination="a8T-4m-XZD" eventType="touchUpInside" id="Dgc-zb-1i1"/>
                                 </connections>
                             </button>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="选择点图标" translatesAutoresizingMaskIntoConstraints="NO" id="1dC-rn-t0H">
+                                <rect key="frame" x="110" y="11" width="11" height="11"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bVQ-oV-pLZ">
                                 <rect key="frame" x="160" y="0.0" width="160" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -2945,6 +2948,9 @@
                                     <action selector="atMe_pressdown:" destination="a8T-4m-XZD" eventType="touchUpInside" id="sS6-1s-rUJ"/>
                                 </connections>
                             </button>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="选择点图标" translatesAutoresizingMaskIntoConstraints="NO" id="8QU-Y3-9uQ">
+                                <rect key="frame" x="260" y="11" width="11" height="11"/>
+                            </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8g-40-Ff2">
                                 <rect key="frame" x="159" y="10" width="1" height="15"/>
                                 <color key="backgroundColor" white="0.80000000000000004" alpha="1" colorSpace="calibratedWhite"/>
@@ -3000,7 +3006,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afS-dC-VhQ">
-                                                            <rect key="frame" x="80" y="27" width="180" height="16"/>
+                                                            <rect key="frame" x="80" y="25" width="180" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <nil key="highlightedColor"/>
@@ -3083,6 +3089,7 @@
                         <outlet property="atMe_button" destination="bVQ-oV-pLZ" id="Pdj-kv-TC6"/>
                         <outlet property="atMe_empty_label" destination="t7a-SU-1IP" id="x7u-O1-d0a"/>
                         <outlet property="atMe_tableView" destination="4Am-kh-Nqm" id="ouO-fX-2mM"/>
+                        <outlet property="dynamicRPoin" destination="1dC-rn-t0H" id="5OY-6R-yaO"/>
                         <outlet property="dynamic_empty_label" destination="Ved-GE-nMh" id="SQq-cb-BaX"/>
                         <outlet property="dynamic_tableView" destination="ZGm-dy-cGR" id="CLv-Q5-PFw"/>
                         <outlet property="dynamics_button" destination="5pL-ib-WJT" id="z2z-mQ-sRS"/>
@@ -4866,6 +4873,7 @@
         <image name="白色箭头" width="17" height="17"/>
         <image name="系统消息图标" width="45" height="45"/>
         <image name="输入框-1" width="295" height="43"/>
+        <image name="选择点图标" width="8" height="8"/>
         <image name="默认用户头像" width="125" height="125"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

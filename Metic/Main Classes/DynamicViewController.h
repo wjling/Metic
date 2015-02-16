@@ -12,6 +12,9 @@
 @interface DynamicViewController : UIViewController<UIScrollViewDelegate,NotificationDelegate>
 @property (strong, nonatomic) IBOutlet UIButton *dynamics_button;
 @property (strong, nonatomic) IBOutlet UIButton *atMe_button;
+@property (strong, nonatomic) IBOutlet UIImageView *dynamicRPoin;
+@property (strong, nonatomic) IBOutlet UIImageView *atMeRPoin;
+
 - (IBAction)dynamics_pressdown:(id)sender;
 - (IBAction)atMe_pressdown:(id)sender;
 @property (strong, nonatomic) IBOutlet UITableView *dynamic_tableView;
