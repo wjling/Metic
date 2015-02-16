@@ -321,14 +321,10 @@ enum pos{
                 if (_selete_Eventid) [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
                 break;
         }
-        
+        //删除表项
+        [_atMeEvents removeObject:atMeInfo];
+        [_atMe_tableView reloadData];
     }
-    
-    
-    
-    
-    
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
