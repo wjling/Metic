@@ -85,13 +85,13 @@
         if (needClear) [self clearInavalidPVInfo:EventId];
     }
     
-    NSArray *updateInfo = [[MTUser sharedInstance].updatePVStatus objectForKey:EventId];
+    NSArray *updateInfo = [[MTUser sharedInstance].updateEventStatus objectForKey:EventId];
     if (updateInfo) {
         NSMutableArray *status = [NSMutableArray arrayWithArray:updateInfo];
         if ([status[1]boolValue]) {
             if (needClear){
                 status[1] = [NSNumber numberWithBool:NO];
-                [[MTUser sharedInstance].updatePVStatus setObject:status forKey:EventId];
+                [[MTUser sharedInstance].updateEventStatus setObject:status forKey:EventId];
             }
         }
         if (needClear) [self clearInavalidInfo:EventId];
