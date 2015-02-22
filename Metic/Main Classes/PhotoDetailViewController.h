@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property (strong, nonatomic) PictureWall2* controller;
 @property int type;
+@property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;

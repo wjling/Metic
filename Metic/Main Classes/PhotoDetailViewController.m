@@ -33,7 +33,6 @@
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property BOOL shouldExit;
-@property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
 

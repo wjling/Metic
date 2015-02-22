@@ -44,6 +44,9 @@
     if ([_pcomment_id intValue]<0) {
         return;
     }
+    if (_controller.isKeyBoard || _controller.isEmotionOpen) {
+        return;
+    }
     if (sender.state == UIGestureRecognizerStateBegan) {
         NSLog(@"showOption");
         if (!_controller.optionShadowView) {

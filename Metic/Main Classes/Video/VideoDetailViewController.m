@@ -41,7 +41,6 @@
 @property (strong, nonatomic) UIImageView *videoPlayImg;
 @property __block unsigned long long receivedBytes;
 @property BOOL shouldExit;
-@property BOOL isKeyBoard;
 @property BOOL Footeropen;
 @property long Selete_section;
 @end

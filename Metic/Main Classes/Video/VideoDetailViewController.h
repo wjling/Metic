@@ -34,6 +34,7 @@
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property (strong, nonatomic) IBOutlet UIButton *moreBtn;
+@property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
