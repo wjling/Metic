@@ -119,6 +119,7 @@
 		085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4219C7FF85005FEEF9 /* square_1.jpg */; };
 		085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4319C7FF85005FEEF9 /* square_2.jpg */; };
 		085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 085A5D4419C7FF85005FEEF9 /* square_3.jpg */; };
+		085B358E1A9CA8E900881778 /* UIImage+fixOrien.m in Sources */ = {isa = PBXBuildFile; fileRef = 085B358D1A9CA8E900881778 /* UIImage+fixOrien.m */; };
 		085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */; };
 		085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 085E7A0C19828AAA001E99E4 /* DynamicViewController.m */; };
 		085EAF3A19FBC24D00BFDA10 /* DAProgressOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 085EAF3919FBC24D00BFDA10 /* DAProgressOverlayView.m */; };
@@ -530,6 +531,8 @@
 		085A5D4219C7FF85005FEEF9 /* square_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_1.jpg; sourceTree = "<group>"; };
 		085A5D4319C7FF85005FEEF9 /* square_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_2.jpg; sourceTree = "<group>"; };
 		085A5D4419C7FF85005FEEF9 /* square_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square_3.jpg; sourceTree = "<group>"; };
+		085B358C1A9CA8E900881778 /* UIImage+fixOrien.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+fixOrien.h"; sourceTree = "<group>"; };
+		085B358D1A9CA8E900881778 /* UIImage+fixOrien.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+fixOrien.m"; sourceTree = "<group>"; };
 		085D99FD19C996D6004362B8 /* SDAVAssetExportSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDAVAssetExportSession.h; sourceTree = "<group>"; };
 		085D99FE19C996D6004362B8 /* SDAVAssetExportSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDAVAssetExportSession.m; sourceTree = "<group>"; };
 		085E7A0B19828AAA001E99E4 /* DynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicViewController.h; sourceTree = "<group>"; };
@@ -1503,6 +1506,8 @@
 			children = (
 				0896AAD519E90C2200A93A1B /* UINavigationController+Vertical.h */,
 				0896AAD619E90C2200A93A1B /* UINavigationController+Vertical.m */,
+				085B358C1A9CA8E900881778 /* UIImage+fixOrien.h */,
+				085B358D1A9CA8E900881778 /* UIImage+fixOrien.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2483,6 +2488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */,
+				085B358E1A9CA8E900881778 /* UIImage+fixOrien.m in Sources */,
 				04CB1BB6197824CF00BC083C /* CustomIOS7AlertView.m in Sources */,
 				08DB69A719541F3A00F80F3F /* AFURLSessionManager.m in Sources */,
 				08DB69A319541F3A00F80F3F /* AFSecurityPolicy.m in Sources */,

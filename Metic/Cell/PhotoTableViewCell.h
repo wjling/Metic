@@ -11,13 +11,13 @@
 #import "../Source/TMQuiltView/TMQuiltViewCell.h"
 
 @interface PhotoTableViewCell : TMQuiltViewCell
-@property (strong, nonatomic) IBOutlet UIImageView *avatar;
-@property (strong, nonatomic) IBOutlet UILabel *author;
-@property (strong, nonatomic) IBOutlet UILabel *publish_date;
-@property (strong, nonatomic) IBOutlet UIView *infoView;
-@property (strong, nonatomic) IBOutlet UIImageView *imgView;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-//@property (strong, nonatomic) IBOutlet UIButton *button_Detail;
+@property (strong, nonatomic) UIImageView *avatar;
+@property (strong, nonatomic) UILabel *author;
+@property (strong, nonatomic) UILabel *publish_date;
+@property (strong, nonatomic) UIView *infoView;
+@property (strong, nonatomic) UIImageView *imgView;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
+//@property (strong, nonatomic) UIButton *button_Detail;
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (weak, nonatomic) PictureWall2* PhotoWall;

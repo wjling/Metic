@@ -16,6 +16,7 @@
 {
     self = [super initWithReuseIdentifier:reuseIdentifier];
     _imgView = [[UIImageView alloc]initWithFrame:CGRectZero];
+    _imgView.clipsToBounds = YES;
     [self addSubview:_imgView];
     
     _infoView = [[UIView alloc]initWithFrame:CGRectZero];

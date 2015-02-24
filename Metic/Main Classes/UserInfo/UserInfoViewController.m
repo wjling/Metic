@@ -14,6 +14,7 @@
 #import "BOAlertController.h"
 #import "../BannerViewController.h"
 #import "KxMenu.h"
+#import "UIImage+fixOrien.h"
 
 
 @interface UserInfoViewController ()
@@ -630,6 +631,7 @@
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    if (image) image = [UIImage fixOrientation:image];
     newAvatar = image;
     [picker dismissViewControllerAnimated:YES completion:^{
         [self openEditor:nil];

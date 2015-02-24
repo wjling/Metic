@@ -7,6 +7,7 @@
 //
 
 #import "FillinInfoViewController.h"
+#import "UIImage+fixOrien.h"
 
 @interface FillinInfoViewController ()
 {
@@ -495,8 +496,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
-    
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    if (image) image = [UIImage fixOrientation:image];
     avatar = image;
     [picker dismissViewControllerAnimated:YES completion:^{
         [self openEditor:nil];

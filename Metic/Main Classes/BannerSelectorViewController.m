@@ -7,6 +7,7 @@
 //
 
 #import "BannerSelectorViewController.h"
+#import "UIImage+fixOrien.h"
 
 @interface BannerSelectorViewController ()
 @property int code;
@@ -157,6 +158,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    if (image) image = [UIImage fixOrientation:image];
     self.uploadImage = image;
     [picker dismissViewControllerAnimated:YES completion:^{
         [self openEditor];

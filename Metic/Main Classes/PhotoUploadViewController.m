@@ -14,6 +14,7 @@
 #import "MobClick.h"
 #import "../Utils/Reachability.h"
 #import "BOAlertController.h"
+#import "UIImage+fixOrien.h"
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 
@@ -309,6 +310,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
     
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+    if (image) image = [UIImage fixOrientation:image];
 //    self.uploadImage = image;
 //    [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
 //    self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
