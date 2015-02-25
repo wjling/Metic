@@ -335,8 +335,10 @@
         
         playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
         [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
+        [[NSNotificationCenter defaultCenter] removeObserver:playerViewController
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self
+        [[NSNotificationCenter defaultCenter] addObserver:self
          
                                                 selector:@selector(movieFinishedCallback:)
          
@@ -564,27 +566,27 @@
 
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause" object:nil userInfo:nil];
     MPMoviePlayerController* theMovie = [notify object];
+    int value = [[notify.userInfo valueForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    if (value == MPMovieFinishReasonUserExited) {
+        [self.controller dismissMoviePlayerViewControllerAnimated];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause" object:nil userInfo:nil];
+        
+        
+        [[NSNotificationCenter defaultCenter]removeObserver:self
+         
+                                                       name:MPMoviePlayerPlaybackDidFinishNotification
+         
+                                                     object:theMovie];
+        
+        [videoRequest clearDelegatesAndCancel];
+        videoRequest = nil;
+        _controller.canPlay = YES;
+    }else if(value == MPMovieFinishReasonPlaybackEnded){
+        [theMovie play];
+        [theMovie pause];
+    }
     
-    [[NSNotificationCenter defaultCenter]removeObserver:self
-     
-                                                  name:MPMoviePlayerPlaybackDidFinishNotification
-     
-                                                object:theMovie];
-    
-
-//    planb
-//    NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-//    NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
-//    NSString *filePath = [webPath stringByAppendingPathComponent:[_videoInfo valueForKey:@"video_name"]];
-    [videoRequest clearDelegatesAndCancel];
-    videoRequest = nil;
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//    if ([fileManager fileExistsAtPath:filePath]) {
-//        [fileManager removeItemAtPath:filePath error:nil];
-//    }
-    _controller.canPlay = YES;
 }
 
 

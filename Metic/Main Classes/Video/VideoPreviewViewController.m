@@ -311,6 +311,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
     [movie.view setBackgroundColor:[UIColor clearColor]];
     [movie.view setFrame:self.navigationController.view.bounds];
+    [[NSNotificationCenter defaultCenter] removeObserver:movie
+                                                    name:MPMoviePlayerPlaybackDidFinishNotification object:movie.moviePlayer];
     [[NSNotificationCenter defaultCenter]addObserver:self
      
                                             selector:@selector(movieFinishedCallback:)
@@ -370,16 +372,23 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 }
 
 -(void)movieFinishedCallback:(NSNotification*)notify{
-
+    // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     MPMoviePlayerController* theMovie = [notify object];
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self
-     
-                                                   name:MPMoviePlayerPlaybackDidFinishNotification
-     
-                                                 object:theMovie];
-    
-    [self dismissMoviePlayerViewControllerAnimated];
+    int value = [[notify.userInfo valueForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    if (value == MPMovieFinishReasonUserExited) {
+        MPMoviePlayerController* theMovie = [notify object];
+        
+        [[NSNotificationCenter defaultCenter]removeObserver:self
+         
+                                                       name:MPMoviePlayerPlaybackDidFinishNotification
+         
+                                                     object:theMovie];
+        
+        [self dismissMoviePlayerViewControllerAnimated];
+    }else if(value == MPMovieFinishReasonPlaybackEnded){
+        [theMovie play];
+        [theMovie pause];
+    }
     
 }
 
