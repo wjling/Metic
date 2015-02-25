@@ -88,7 +88,12 @@
 //    [self initApp];
     
     _mapManager = [[BMKMapManager alloc]init];
-    BOOL ret = [_mapManager start:@"oHzEkwMGSfXfqGcBF0B0vWK5" generalDelegate:nil];
+    BOOL ret;
+    if (isEnterprise == 1) {
+        ret = [_mapManager start:@"oHzEkwMGSfXfqGcBF0B0vWK5" generalDelegate:nil];//企业版本
+    }else{
+        ret = [_mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];//上架版本
+    }
 	if (!ret) {
 		NSLog(@"manager start failed!");
 	}
@@ -138,8 +143,13 @@
 //     UIRemoteNotificationTypeBadge];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     /* 信鸽推送 */
+    if (isEnterprise == 1) {
+        [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//企业版本
+    }else{
+        [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//上架版本
+    }
     
-    [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];
+    
     
     //推送反馈回调版本示例
     void (^successBlock)(void) = ^(void){
@@ -1628,30 +1638,11 @@
 
 - (NSUInteger)application:(UIApplication *)application
 supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    
-    if ([[self.window.rootViewController presentedViewController]
-         isKindOfClass:[MTMPMoviePlayerViewController class]]) {
+    if ([[self.window.rootViewController presentedViewController] isKindOfClass:[MTMPMoviePlayerViewController class]])
+    {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     } else {
         return UIInterfaceOrientationMaskPortrait;
-        if ([[self.window.rootViewController presentedViewController]
-             isKindOfClass:[UINavigationController class]]) {
-            return UIInterfaceOrientationMaskPortrait;
-            // look for it inside UINavigationController
-            UINavigationController *nc = (UINavigationController *)[self.window.rootViewController presentedViewController];
-            
-            // is at the top?
-            if ([nc.topViewController isKindOfClass:[MPMoviePlayerViewController class]]) {
-                return UIInterfaceOrientationMaskAllButUpsideDown;
-                
-                // or it's presented from the top?
-            } else if ([[nc.topViewController presentedViewController]
-                        isKindOfClass:[MPMoviePlayerViewController class]]) {
-                return UIInterfaceOrientationMaskAllButUpsideDown;
-            }
-        }
     }
-    
-    return UIInterfaceOrientationMaskPortrait;
 }
 @end

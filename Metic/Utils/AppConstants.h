@@ -31,6 +31,11 @@ enum Server_code{
     Server = 1,//正式服
 };
 
+enum Enterprise_code{
+//    isEnterprise = 0,//上架版
+    isEnterprise = 1,//企业版
+};
+
 enum Alias_code
 {
     ALIAS_GET = 0,
