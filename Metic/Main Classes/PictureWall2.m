@@ -30,6 +30,7 @@
 
 @property BOOL shouldLoadPhoto;
 @property BOOL haveLoadedPhoto;
+@property BOOL isLoading;
 @end
 
 @implementation PictureWall2
@@ -218,7 +219,7 @@
 
 -(void)resetPhoNum
 {
-    int count = _photo_list.count;
+    NSInteger count = _photo_list.count;
     if (count > photoNumPP) {
         _showPhoNum = photoNumPP;
         _shouldLoadPhoto = YES;
@@ -228,12 +229,22 @@
     }
 }
 
+-(BOOL)checkPhoNum
+{
+    NSInteger count = _photo_list.count;
+    if (_showPhoNum == count && [_sequence integerValue] == -1) {
+        return NO;
+    }else{
+        return YES;
+    }
+}
+
 -(void)addPhoNum
 {
     if (!_shouldLoadPhoto) {
         return;
     }
-    int count = _photo_list.count;
+    NSInteger count = _photo_list.count;
     if (_showPhoNum + photoNumPP > count) {
         _showPhoNum = count;
         _shouldLoadPhoto = NO;
@@ -252,10 +263,12 @@
     [dictionary setValue:[NSNumber numberWithInt:photoNumToGet] forKey:@"number"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    _isLoading = YES;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
         if (rData) {
             if (!([self.navigationController.viewControllers containsObject:self])) {
+                _isLoading = NO;
                 return ;
             }
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
@@ -287,22 +300,19 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                         [self updatePhotoInfoToDB:newphoto_list];
                     });
-                    
-                    self.sequence = [response1 valueForKey:@"sequence"];
-                    if ([_sequence intValue] != -1) {
-                        [self getPhotolist];
-                        return;
-                    }else{
-//                        [self refreshPhotoInfoFromDB:_photo_list_all];
-                        [NotificationController visitPhotoWall:_eventId needClear:YES];
-                        [self.photo_list removeAllObjects];
-                        [self.photo_list addObjectsFromArray:_photo_list_all];
+
+                    [NotificationController visitPhotoWall:_eventId needClear:YES];
+                    [self.photo_list removeAllObjects];
+                    [self.photo_list addObjectsFromArray:_photo_list_all];
+                    if([_sequence integerValue] == 0){
                         [self resetPhoNum];
-                        [self calculateLRH];
-                        _haveLoadedPhoto = YES;
-                        [self.quiltView reloadData];
-                        if(_header.refreshing) [_header endRefreshing];
                     }
+                    
+                    [self calculateLRH];
+                    self.sequence = [response1 valueForKey:@"sequence"];
+                    _haveLoadedPhoto = YES;
+                    [self.quiltView reloadData];
+                    if(_header.refreshing) [_header endRefreshing];
                     
                 }
                     break;
@@ -315,6 +325,7 @@
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
             if(_header.refreshing) [_header endRefreshing];
         }
+        _isLoading = NO;
     }];
 }
 
@@ -356,13 +367,23 @@
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-40, width*4/6, 40)];
             if (!_haveLoadedPhoto) {
                 label.text = @"正在加载 ...";
-            }else if (_shouldLoadPhoto) {
-                label.text = @"正在加载 ...";
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self addPhoNum];
-                    [self calculateLRH];
-                    [self.quiltView reloadData];
-                });
+            }else if([self checkPhoNum]){
+                NSInteger count = _photo_list.count;
+                if (_showPhoNum + photoNumPP > count && [_sequence integerValue]!=-1){
+                    label.text = @"正在加载 ...";
+                    if (![_header isRefreshing] && !_isLoading) {
+                        [self getPhotolist];
+                    }
+                }else if (_shouldLoadPhoto) {
+                    label.text = @"正在加载 ...";
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self addPhoNum];
+                        [self calculateLRH];
+                        [self.quiltView reloadData];
+                    });
+                }else{
+                    label.text = _showPhoNum > 0? @"没有更多了哦，去上传吧~":@"还没有图片哦，快去上传吧";
+                }
             }else{
                 label.text = _showPhoNum > 0? @"没有更多了哦，去上传吧~":@"还没有图片哦，快去上传吧";
             }
