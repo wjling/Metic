@@ -241,10 +241,11 @@ static MTUser *singletonInstance;
     
      [(AppDelegate*)([UIApplication sharedApplication].delegate) registerPush];
     
+    [self systemSettingsInit:user_id];
     [self getAliasFromDB];
     [self getAliasFromServer];
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
-    [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
+//    [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
     
     //同步推送消息
     NSLog(@"开始同步消息");
@@ -359,7 +360,14 @@ static MTUser *singletonInstance;
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting1"];
         [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"systemSetting2"];
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"hasUploadPhoneNumber"];
-        [userSettings setValue:[NSMutableDictionary dictionary] forKey:@"hasUnreadNotification1"];
+        
+        NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]init];
+        [unRead_dic setValue:[NSNumber numberWithInt:-1] forKey:@"tab_show"];
+        [unRead_dic setValue:[NSNumber numberWithInt:0] forKey:@"tab_0"];
+        [unRead_dic setValue:[NSNumber numberWithInt:0] forKey:@"tab_1"];
+        [unRead_dic setValue:[NSNumber numberWithInt:0] forKey:@"tab_2"];
+        [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
+        
         [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
         [userDf setObject:userSettings forKey:[NSString stringWithFormat:@"USER%@",uid]];
         [userDf synchronize];
