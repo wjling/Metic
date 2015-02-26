@@ -465,6 +465,7 @@
             }
             else{//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
+                [self compareAndDeleteEventToDB:[NSArray arrayWithArray:_eventIds_all]];
                 //[self.eventIds removeAllObjects];
                 //[_eventIds addObjectsFromArray:[_eventIds_all subarrayWithRange:NSMakeRange(0, 10)]];
                 if (self.eventIds_all) {
@@ -484,6 +485,41 @@
 
 
 #pragma mark - 数据库操作
+-(void)compareAndDeleteEventToDB:(NSArray*)sequences
+{
+    if (!sequences || sequences.count == 0) {
+        return;
+    }
+    
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    [self.sql openMyDB:path];
+
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
+    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
+    NSLog(@"%@",result);
+    
+    [self.sql closeMyDB];
+    
+    //比较
+    NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
+    for (NSDictionary* res in result) {
+        NSString* sequence_S = [res valueForKey:@"event_id"];
+        NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
+        if (!sequence) continue;
+        if (![eventIds containsObject:sequence]) {
+            //删除
+            NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+            MySqlite *sql0 = [[MySqlite alloc]init];
+            [sql0 openMyDB:path0];
+            NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
+            [sql0 deleteTurpleFromTable:@"event" withWhere:wheres0];
+            [sql0 closeMyDB];
+        }
+    }
+}
+
+
 - (void)updateEventToDB:(NSArray*)events
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
