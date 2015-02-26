@@ -146,7 +146,7 @@
     if (isEnterprise == 1) {
         [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//企业版本
     }else{
-        [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//上架版本
+        [XGPush startApp:2200086281 appKey:@"IHI87C3K71YC"];//上架版本
     }
     
     
