@@ -19,6 +19,8 @@
     NSIndexPath* selectedPath;
     MySqlite* mySql;
     NSString* DB_path;
+    
+    NSTimer* timer;
 }
 //@property (nonatomic,strong) NSMutableArray* eventRequestMsg;
 @end
@@ -230,7 +232,7 @@
 - (IBAction)participate_event_okBtnClicked:(id)sender
 {
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeBlack];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    timer = [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
         cell = [cell superview];
@@ -268,7 +270,7 @@
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeBlack];
-    [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    timer = [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
 //    [SVProgressHUD showSuccessWithStatus:@"捣乱中..." duration:3];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
@@ -307,13 +309,14 @@
 
 -(void)dismissHud:(NSTimer*)timer
 {
-    [SVProgressHUD dismissWithError:@"网络异常，服务没有响应" afterDelay:2.0];
+    [SVProgressHUD dismiss];
 }
 
 
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
+    [timer invalidate];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -466,7 +469,7 @@
         }
             break;
         default:
-            [SVProgressHUD dismissWithError:@"服务器返回错误" afterDelay:2.0];
+            NSLog(@"好友邀请，服务器返回错误");
             break;
     }
     

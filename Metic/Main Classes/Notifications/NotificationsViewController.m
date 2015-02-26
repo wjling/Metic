@@ -1774,7 +1774,7 @@ enum Response_Type
                                                nil]];
                 
                 for (int i = 0; i < MTUser_eventRequestMsg.count; i++) {
-                    NSMutableDictionary* msg  = MTUser_eventRequestMsg[i];
+                    NSMutableDictionary* msg  = [MTUser_eventRequestMsg objectAtIndex:i];
                     NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
                     NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
                     NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
@@ -1882,13 +1882,13 @@ enum Response_Type
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
             NSMutableDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:row];
-            NSNumber* event_id = [msg_dic objectForKey:@"event_id"];
+            NSNumber* seq = [msg_dic objectForKey:@"seq"];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
             
             [mySql openMyDB:DB_path];
             [mySql updateDataWitTableName:@"notification"
                                  andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",event_id],@"event_id",
+                                           [NSString stringWithFormat:@"%@",seq],@"seq",
                                            nil]
                                    andSet:[CommonUtils packParamsInDictionary:
                                            [NSString stringWithFormat:@"%@",response_result],@"ishandled",
