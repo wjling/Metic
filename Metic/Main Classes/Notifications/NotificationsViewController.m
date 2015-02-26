@@ -36,9 +36,9 @@
 enum Response_Type
 {
     RESPONSE_EVENT_INVITE = 0,
-    RESPONSE_EVENT_REQUEST,
-    RESPONSE_FRIEND,
-    RESPONSE_SYSTEM
+    RESPONSE_EVENT_REQUEST = 1,
+    RESPONSE_FRIEND = 2,
+    RESPONSE_SYSTEM = 3
 };
 
 @end
@@ -187,7 +187,7 @@ enum Response_Type
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
     [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
     [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
-    [userDfs setValue:userSettings forKey:key];
+    [userDfs setObject:userSettings forKey:key];
     [userDfs synchronize];
     
     [self.appListener.leftMenu hideUpdateInRow:4];
@@ -307,11 +307,11 @@ enum Response_Type
             }
         }
     }
-//    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
-//    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
-//    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
-//    [userDfs setValue:userSettings forKey:key];
-//    [userDfs synchronize];
+    [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
+    [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
+    [userDfs setObject:userSettings forKey:key];
+    [userDfs synchronize];
 
     NSLog(@"消息中心收到推送，隐藏消息中心红点");
     [[MenuViewController sharedInstance] hideUpdateInRow:4];
@@ -680,7 +680,7 @@ enum Response_Type
     NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", index]];
     [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
-    [userDfs setValue:userSettings forKey:key];
+    [userDfs setObject:userSettings forKey:key];
     [userDfs synchronize];
     
     [self hideDian:index];
@@ -993,7 +993,7 @@ enum Response_Type
     [unRead_dic setValue:[NSNumber numberWithInteger:-1] forKey:@"tab_show"];
     [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
     [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
-    [userDfs setValue:userSettings forKey:key];
+    [userDfs setObject:userSettings forKey:key];
     [userDfs synchronize];
     
     [[MenuViewController sharedInstance] hideUpdateInRow:4];
@@ -1449,7 +1449,7 @@ enum Response_Type
     NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
     
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"ok button row: %d, seq: %@",selectedPath.row,seq);
+    NSLog(@"friend, ok button row: %d, seq: %@",selectedPath.row,seq);
     
     NSNumber* userid = [MTUser sharedInstance].userid;
     NSNumber* friendid = [msg_dic objectForKey:@"id"];
@@ -1494,7 +1494,7 @@ enum Response_Type
     NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
     
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"no button row: %d, seq: %@",selectedPath.row,seq);
+    NSLog(@"friend, no button row: %d, seq: %@",selectedPath.row,seq);
     NSNumber* userid = [MTUser sharedInstance].userid;
     NSNumber* friendid = [msg_dic objectForKey:@"id"];
     NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
@@ -1678,13 +1678,16 @@ enum Response_Type
                                                    [NSString stringWithFormat:@"%d",1],@"ishandled",
                                                    nil]];
                     for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
-                        NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
-                        int fid2 = [[msg objectForKey:@"id"]intValue];
-                        int seq2 = [[msg objectForKey:@"seq"]intValue];
-                        if (fid1 == fid2 && seq1 != seq2) {
-                            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
-                            [MTUser_friendRequestMsg removeObject:msg];
-                            i--;
+                        NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
+                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                        if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+                            int fid2 = [[msg objectForKey:@"id"]intValue];
+                            int seq2 = [[msg objectForKey:@"seq"]intValue];
+                            if (fid1 == fid2 && seq1 != seq2) {
+                                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                                [MTUser_friendRequestMsg removeObject:msg];
+                                i--;
+                            }
                         }
                     }
                     
@@ -1725,13 +1728,16 @@ enum Response_Type
                                                    nil]];
                     
                     for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
-                        NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
-                        NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
-                        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
-                        if (fid1 == fid2 && seq1 != seq2) {
-                            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
-                            [MTUser_friendRequestMsg removeObject:msg];
-                            continue;
+                        NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
+                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                        if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+                            int fid2 = [[msg objectForKey:@"id"]intValue];
+                            int seq2 = [[msg objectForKey:@"seq"]intValue];
+                            if (fid1 == fid2 && seq1 != seq2) {
+                                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                                [MTUser_friendRequestMsg removeObject:msg];
+                                i--;
+                            }
                         }
                     }
 
@@ -1815,7 +1821,7 @@ enum Response_Type
             NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
             NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
-            NSLog(@"response event, seq: %d, fid: %d",seq1, fid1);
+            NSLog(@"response already friend, seq: %d, fid: %d",seq1, fid1);
             
             //!已经是好友的情况下修改数据库的用户操作字段ishandled，有可能会造成数据错误。当然，只是有可能。我需要修改ishandled的值使这条消息标记为已处理!
             [mySql openMyDB:DB_path];
@@ -1829,25 +1835,33 @@ enum Response_Type
             
             
             for (int i = 0; i < self.friendRequestMsg.count; i++) {
-                NSMutableDictionary* msg = self.friendRequestMsg[i];
-                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
-//                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
-                if (fid1 == fid2) {
-                    [self.friendRequestMsg removeObject:msg];
-                    continue;
+                NSMutableDictionary* msg = [self.friendRequestMsg objectAtIndex:i];
+                NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+                    NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+                    //                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                    if (fid1 == fid2) {
+                        [self.friendRequestMsg removeObject:msg];
+                        continue;
+                    }
                 }
             }
 
 
             for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
-                NSMutableDictionary* msg = MTUser_friendRequestMsg[i];
-                NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
-                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
-                if (fid1 == fid2 && seq1 != seq2) {
-                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
-                    [MTUser_friendRequestMsg removeObject:msg];
-                    i--;
+                NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
+                NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+                    NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
+                    NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                    if (fid1 == fid2 && seq1 != seq2) {
+                        [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                        [MTUser_friendRequestMsg removeObject:msg];
+                        i--;
+                    }
+
                 }
+                
             }
             
             [mySql closeMyDB];
@@ -2070,7 +2084,7 @@ enum Response_Type
         NSMutableDictionary* unRead_dic = [[NSMutableDictionary alloc]initWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
         [unRead_dic setValue:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"tab_%d", tab_index]];
         [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
-        [userDfs setValue:userSettings forKey:key];
+        [userDfs setObject:userSettings forKey:key];
         [userDfs synchronize];
         
         [self hideDian:tab_index];

@@ -290,7 +290,7 @@ static MTUser *singletonInstance;
         int result;
         if (!version) {
             version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-            [userDfs setValue:version forKey:@"DB_version"];
+            [userDfs setObject:version forKey:@"DB_version"];
             [userDfs synchronize];
             result = -1;
         }
@@ -299,7 +299,7 @@ static MTUser *singletonInstance;
             result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
             
             version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-            [userDfs setValue:version forKey:@"DB_version"];
+            [userDfs setObject:version forKey:@"DB_version"];
             [userDfs synchronize];
         }
         
@@ -322,7 +322,7 @@ static MTUser *singletonInstance;
     NSLog(@"初始化数据库");
     NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [userDfs setValue:version forKey:@"DB_version"];
+    [userDfs setObject:version forKey:@"DB_version"];
     [userDfs synchronize];
     MySqlite * sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
@@ -388,10 +388,11 @@ static MTUser *singletonInstance;
     
     self.friendList = [self getFriendsFromDB];
     self.nameFromID_dic = [[NSMutableDictionary alloc]init];
-    for (NSDictionary* friend in friendList) {
+    for (int i = 0; i < friendList.count; i++) {
+        NSDictionary* friend = [friendList objectAtIndex:i];
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
         NSString* fname = [friend objectForKey:@"name"];
-        [friend setValue:fid forKey:@"id"];
+//        [friend setValue:fid forKey:@"id"];
         [friendsIdSet addObject:fid];
         [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
