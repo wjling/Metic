@@ -10,6 +10,7 @@
 #import "math.h"
 #import "UIImageView+LBBlurredImage.h"
 #import "BannerViewController.h"
+#import "AddFriendConfirmViewController.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate>
 {
@@ -85,13 +86,17 @@
     if ([[MTUser sharedInstance].friendsIdSet containsObject:fid])
     {
         [self.navigationItem setTitle:@"好友信息"];
+        self.navigationItem.rightBarButtonItem = nil;
     }
     else
     {
         [self.navigationItem setTitle:@"用户信息"];
+        UIButton* btn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [btn setBackgroundImage:[UIImage imageNamed:@"添加好友icon白"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(addfriendClick:) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem* barBtnItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
+        [self.navigationItem setRightBarButtonItem:barBtnItem];
     }
-    
-
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -103,15 +108,20 @@
 //        [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
         
     }
-    
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)addfriendClick:(id)sender
+{
+    UIStoryboard* storyBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    AddFriendConfirmViewController* vc = [storyBoard instantiateViewControllerWithIdentifier:@"AddFriendConfirmViewController"];
+    vc.fid = fid;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)initViews
