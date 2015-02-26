@@ -255,6 +255,9 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
         if (rData) {
+            if (!([self.navigationController.viewControllers containsObject:self])) {
+                return ;
+            }
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -274,15 +277,23 @@
                             [newphoto_list addObject:dictionary];
                         }
                     }
-                    self.sequence = [response1 valueForKey:@"sequence"];
+                    
                     
                     [self.photo_list_all addObjectsFromArray:newphoto_list];
                     
+                    if([_sequence integerValue] == 0){
+                        [self deleteAllPhotoInfoFromDB:_eventId];
+                    }
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                        [self updatePhotoInfoToDB:newphoto_list];
+                    });
+                    
+                    self.sequence = [response1 valueForKey:@"sequence"];
                     if ([_sequence intValue] != -1) {
                         [self getPhotolist];
                         return;
                     }else{
-                        [self refreshPhotoInfoFromDB:_photo_list_all];
+//                        [self refreshPhotoInfoFromDB:_photo_list_all];
                         [NotificationController visitPhotoWall:_eventId needClear:YES];
                         [self.photo_list removeAllObjects];
                         [self.photo_list addObjectsFromArray:_photo_list_all];
