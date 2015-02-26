@@ -69,6 +69,27 @@ static MenuViewController *singletonInstance;
     homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
 }
 
+-(void)dianReset
+{
+    notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
+    for (NSInteger i = 0; i < numberOfMenus; i++) {
+        notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
+    }
+    
+    NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+    NSDictionary* userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    NSDictionary* unRead_dic = [userSettings objectForKey:@"hasUnreadNotification1"];
+    NSInteger tab_show = [[unRead_dic objectForKey:@"tab_show"] integerValue];
+    NSLog(@"user %@ menu dianReset, tab_show： %ld", [MTUser sharedInstance].userid,(long)tab_show);
+    if (tab_show >= 0) {
+        [self showUpdateInRow:4];
+    }
+    else
+    {
+        [self hideUpdateInRow:4];
+    }
+}
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -106,8 +127,6 @@ static MenuViewController *singletonInstance;
     [_tableView reloadData];
     NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getAvatar];
-    NSLog(@"gender imageView frame: x: %f",_gender.frame.origin.x);
-    
 }
 
 -(void)clearVC

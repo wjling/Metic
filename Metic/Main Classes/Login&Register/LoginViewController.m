@@ -516,8 +516,8 @@
             NSNumber *userid = [response1 valueForKey:@"id"];
             [[MTUser sharedInstance] setUid:userid];
             
-//            [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
-            //[user getInfo:userid myid:userid delegateId:self];
+            [[MenuViewController sharedInstance] dianReset];
+            [[MenuViewController sharedInstance] refresh];
             [[appDelegate leftMenu] clearVC];
             NSString* logintime = [response1 objectForKey:@"logintime"];
             NSNumber* min_seq = [response1 objectForKey:@"min_seq"];

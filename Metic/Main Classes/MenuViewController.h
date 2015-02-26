@@ -34,6 +34,7 @@
 + (MenuViewController *)sharedInstance;
 - (IBAction)selector_tap:(id)sender;
 -(void)refresh;
+-(void)dianReset;
 -(void)clearVC;
 -(void)showUpdateInRow:(NSInteger)row;
 -(void)hideUpdateInRow:(NSInteger)row;
