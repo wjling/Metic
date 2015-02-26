@@ -91,12 +91,15 @@
     _event2Dcode = [CommonUtils convertViewToImage:_mainView];
 }
 - (IBAction)shareQRcode:(id)sender {
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"WeShare"
-                                     shareImage:_event2Dcode
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
-                                       delegate:self];
+    if (_event2Dcode) {
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:@"WeShare"
+                                         shareImage:_event2Dcode
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
+                                           delegate:self];
+    }
 }
 
 - (IBAction)saveQRcode:(id)sender {
