@@ -375,6 +375,7 @@
         [self MTdismissKeyboard];
         [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         [self.scrollView setUserInteractionEnabled:NO];
+        [_launch_button setEnabled:NO];
         self.flatDatePicker.title = @"请选择活动日期";
         NSDate *date;
         if (![textField.text isEqualToString:@""]) {
@@ -722,6 +723,7 @@
 
 - (void)flatDatePicker:(FlatDatePicker*)datePicker didCancel:(UIButton*)sender {
     self.seletedText.text = @"";
+    [_launch_button setEnabled:YES];
     [self.scrollView setUserInteractionEnabled:YES];
 }
 
@@ -734,6 +736,7 @@
         return;
     } else if (datePicker.datePickerMode == FlatDatePickerModeTime) {
         //[datePicker setDatePickerMode:FlatDatePickerModeDate];
+        [_launch_button setEnabled:YES];
         [self.scrollView setUserInteractionEnabled:YES];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self checkTimeValid];
