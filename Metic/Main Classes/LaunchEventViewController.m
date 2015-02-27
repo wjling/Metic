@@ -73,7 +73,7 @@
     self.location_text.delegate = self;
     self.detail_text.delegate = self;
     [self initInviteFriendsView];
-    _visibility = 0;
+    _visibility = 1;
     _code = 1;
     _canLeave = NO;
     _isKeyBoard = NO;
@@ -259,7 +259,7 @@
     [_scrollView addSubview:_isAllowStrangerView];
     
     _isAllowStrangerButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 5, 26, 26)];
-    [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+    [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
     [_isAllowStrangerButton addTarget:self action:@selector(changeAllowStangerStage) forControlEvents:UIControlEventTouchUpInside];
     [_isAllowStrangerView addSubview:_isAllowStrangerButton];
     
