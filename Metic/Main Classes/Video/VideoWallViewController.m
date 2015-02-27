@@ -61,6 +61,17 @@
     _loadingVideo = [[NSMutableSet alloc]init];
     //init tableView
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
+    _Headeropen = NO;
+    _Footeropen = NO;
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
+    
+    //初始化上拉加载更多
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = _tableView;
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setBackgroundColor:[UIColor clearColor]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -75,6 +86,7 @@
     _videoInfos = [[NSMutableArray alloc]init];
     _videoInfos_all = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
+    _sequence = [NSNumber numberWithInt:-1];
     _shouldFlash = NO;
     _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
     [_tableView reloadData];
@@ -84,17 +96,7 @@
                                                           userInfo:nil];
     });
     
-    _Headeropen = NO;
-    _Footeropen = NO;
-    //初始化下拉刷新功能
-    _header = [[MJRefreshHeaderView alloc]init];
-    _header.delegate = self;
-    _header.scrollView = self.tableView;
     
-    //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
 
 }
 
@@ -164,24 +166,6 @@
     }
 }
 
--(void)showPromt
-{
-    if (_videoInfos.count == 0 && _promt == nil) {
-        _promt = [[UILabel alloc]initWithFrame:CGRectMake(50, 20, 200, 21)];
-        _promt.text = @"还没有视频哦，快去上传吧";
-        _promt.textAlignment= NSTextAlignmentCenter;
-        _promt.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1];
-        _promt.font = [UIFont systemFontOfSize:15];
-        
-        [_tableView addSubview:_promt];
-    }
-    
-    if (_videoInfos.count != 0 && _promt) {
-        [_promt removeFromSuperview];
-        _promt = nil;
-    }
-}
-
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
@@ -210,10 +194,13 @@
                 _shouldFlash = NO;
                 [_timer invalidate];
                 _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
-                [_tableView reloadData];
                 [self closeRJ];
+                [_tableView reloadData];
+                
             }else{
                 [self closeRJ];
+                [_tableView reloadData];
+                
             }
         });
         
@@ -278,10 +265,10 @@
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
         [self.videoInfos addObject:videoInfo];
+        [self.videoInfos_all addObject:videoInfo];
     }
     
     [sql closeMyDB];
-    [self showPromt];
     
 //    [self initAVPlayers];
 }
@@ -335,18 +322,29 @@
                         newvideo_list[i] = dictionary;
                     }
                     
-                    if ([_sequence intValue] == 0) [_videoInfos_all removeAllObjects];
+                    if ([_sequence intValue] == 0){
+                        [_videoInfos_all removeAllObjects];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                            [self deleteAllVideoInfoFromDB:_eventId];
+                        });
+                        
+                    }
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                        if (_eventId) {
+                            [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
+                        }
+                    });
+                    
                     _sequence = [response1 valueForKey:@"sequence"];
                     if ([_sequence integerValue] != -1) {
                         [_videoInfos_all addObjectsFromArray:newvideo_list];
                         [self getVideolist];
                         return ;
                     }
-                    [self refreshvideoInfoFromDB:_videoInfos_all];
+                    
                     
                     NSInteger rest = [_videoInfos_all count];
 
-                    [_tableView reloadData];
                     _videoInfos = [NSMutableArray arrayWithArray:[_videoInfos_all subarrayWithRange:NSMakeRange(0, rest > 10? 10:rest)]];
 
                     _shouldFlash = NO;
@@ -372,7 +370,6 @@
         }else{
             [self closeRJ];
         }
-        [self showPromt];
     }];
     
     
@@ -465,13 +462,43 @@
 #pragma tableView DataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSInteger add = 0;
+    if(([_sequence integerValue] == -1 || [_videoInfos count] == 0) && _videoInfos.count == _videoInfos_all.count){
+        add = 1;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            _footer.scrollView = nil;
+            _footer.hidden = YES;
+        });
+        
+    }else{
+        _footer.scrollView = _tableView;
+        _footer.hidden = NO;
+    }
+    
+    
     if (_videoInfos) {
-        return [_videoInfos count];
-    }else return 0;
+        return [_videoInfos count] + add;
+    }else return add;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row >= [_videoInfos count]) {
+        UITableViewCell* cell = [[UITableViewCell alloc]init];
+        float width = 300;
+        float height = 60;
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-45, width*4/6, 30)];
+        label.text = [_videoInfos count] > 0? @"没有更多了哦，去上传吧~":@"还没有视频哦，快去上传吧";
+        label.font = [UIFont systemFontOfSize:15];
+        label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.userInteractionEnabled = NO;
+        [cell addSubview:label];
+        return cell;
+    }
+
     static NSString *CellIdentifier = @"VideoTableViewCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -501,6 +528,8 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(indexPath.row >= _videoInfos.count) return 60;
+    
     NSDictionary *dictionary = self.videoInfos[indexPath.row];
     NSString* text = [dictionary valueForKey:@"title"];
     float height = [CommonUtils calculateTextHeight:text width:280 fontSize:16.0f isEmotion:NO];
