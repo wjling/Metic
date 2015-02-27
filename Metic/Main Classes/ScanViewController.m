@@ -210,7 +210,7 @@
 
 - (IBAction)wantIn:(id)sender {
     if ([_type isEqualToString: @"event"]) {
-        UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
         confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
         [confirmAlert show];
     }else if ([_type isEqualToString: @"user"]){
