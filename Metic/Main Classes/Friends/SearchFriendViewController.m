@@ -8,9 +8,10 @@
 
 #import "SearchFriendViewController.h"
 
-@interface SearchFriendViewController ()
+@interface SearchFriendViewController ()<UIScrollViewDelegate>
 {
     NSInteger friendPosition;
+    UIView* noResultNote;
 }
 
 @end
@@ -60,6 +61,34 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)showNoResultNote
+{
+    if (!noResultNote) {
+        noResultNote = [[UIView alloc]initWithFrame:CGRectMake(0, 40, self.content_tableview.frame.size.width, 30)];
+        UILabel* label = [[UILabel alloc]init];
+        [label setFrame:noResultNote.frame];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = @"抱歉没有找到符合要求的用户";
+        label.font = [UIFont systemFontOfSize:13];
+        label.textColor = [UIColor darkGrayColor];
+        [noResultNote addSubview:label];
+    }
+    [self.content_tableview addSubview:noResultNote];
+}
+
+-(void)hideNoResultNote
+{
+    if (noResultNote) {
+        [noResultNote removeFromSuperview];
+        noResultNote = nil;
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.fsearchBar resignFirstResponder];
 }
 
 
@@ -152,7 +181,6 @@
         cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
     }
     NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
-    NSLog(@"a friend: %@",aFriend);
     NSString* name = [aFriend objectForKey:@"name"];
     NSString* location = [aFriend objectForKey:@"location"];
     NSInteger gender = [[aFriend objectForKey:@"gender"] integerValue];
@@ -250,10 +278,13 @@
     self.waiting_activityindicator.hidden = YES;
     if (cmd) {
         if ([cmd intValue] == USER_NOT_FOUND) {
+            self.searchFriendList = [NSMutableArray array];
+            [self showNoResultNote];
             NSLog(@"user not found");
         }
         else if ( [cmd intValue] == USER_EXIST)
         {
+            [self hideNoResultNote];
             self.searchFriendList = [response1 objectForKey:@"friend_list"];
             NSLog(@"searched friend list: %@",self.searchFriendList);
 //            self.content_tableview.hidden = NO;
