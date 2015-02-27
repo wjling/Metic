@@ -3019,9 +3019,6 @@
                                                         <imageView userInteractionEnabled="NO" tag="11" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ujf-kQ-yqq">
                                                             <rect key="frame" x="15" y="10" width="50" height="50"/>
                                                         </imageView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="vA1-Ah-SZj">
-                                                            <rect key="frame" x="15" y="10" width="50" height="50"/>
-                                                        </imageView>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="23" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a3a-zi-BTX">
                                                             <rect key="frame" x="260" y="10" width="50" height="50"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3033,9 +3030,6 @@
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="qze-Sg-ZPl">
-                                                            <rect key="frame" x="260" y="10" width="50" height="50"/>
-                                                        </imageView>
                                                     </subviews>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -3058,9 +3052,6 @@
                                                         <imageView userInteractionEnabled="NO" tag="21" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ft8-6J-BwA">
                                                             <rect key="frame" x="15" y="10" width="50" height="50"/>
                                                         </imageView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="Hrp-Kr-znM">
-                                                            <rect key="frame" x="15" y="10" width="50" height="50"/>
-                                                        </imageView>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="24" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NxO-Ms-VZ3">
                                                             <rect key="frame" x="260" y="10" width="50" height="50"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3072,9 +3063,6 @@
                                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="头像-116（白色底）" translatesAutoresizingMaskIntoConstraints="NO" id="40P-Se-pJR">
-                                                            <rect key="frame" x="260" y="10" width="50" height="50"/>
-                                                        </imageView>
                                                     </subviews>
                                                 </tableViewCellContentView>
                                             </tableViewCell>

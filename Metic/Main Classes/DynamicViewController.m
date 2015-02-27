@@ -215,6 +215,8 @@ enum pos{
         if (cmd == 986 || cmd == 987 || cmd == 988) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
+            avatar.layer.masksToBounds = YES;
+            avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
             
@@ -229,6 +231,9 @@ enum pos{
                 lab.hidden = YES;
                 img.hidden = NO;
                 if (object_content && img) {
+                    img.layer.masksToBounds = YES;
+                    img.layer.cornerRadius = 4;
+                    
                     img.contentMode = UIViewContentModeScaleAspectFit;
                     [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
@@ -244,6 +249,8 @@ enum pos{
                 lab.text = @"";
                 lab.hidden = NO;
                 if (object_content && lab) {
+                    lab.layer.masksToBounds = YES;
+                    lab.layer.cornerRadius = 4;
                     lab.text = object_content;
                 }
             }
@@ -252,6 +259,8 @@ enum pos{
         }else if(cmd == 989){
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
+            avatar.layer.masksToBounds = YES;
+            avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
@@ -269,6 +278,8 @@ enum pos{
                 NSString* photoUrl = [atMeInfo valueForKey:@"object_content"];
                 UIImageView* img = (UIImageView*)[cell viewWithTag:24];
                 if (photoUrl && img) {
+                    img.layer.masksToBounds = YES;
+                    img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
                     [img sd_setImageWithURL:[NSURL URLWithString:photoUrl] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
@@ -284,6 +295,8 @@ enum pos{
                 lab.text = @"";
                 lab.hidden = NO;
                 if (object_content && lab) {
+                    lab.layer.masksToBounds = YES;
+                    lab.layer.cornerRadius = 4;
                     lab.text = object_content;
                 }
             }
