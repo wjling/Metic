@@ -13,6 +13,7 @@
 #import "MobClick.h"
 #import "PhotoDetailViewController.h"
 #import "VideoDetailViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
@@ -214,19 +215,95 @@ enum pos{
         if (cmd == 986 || cmd == 987 || cmd == 988) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
+            avatar.layer.masksToBounds = YES;
+            avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
             
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
             ((UILabel*)[cell viewWithTag:3]).text = [atMeInfo valueForKey:@"content"];
             ((UILabel*)[cell viewWithTag:4]).text = [atMeInfo valueForKey:@"time"];
+            UIImageView* img = (UIImageView*)[cell viewWithTag:23];
+            UILabel* lab = (UILabel*)[cell viewWithTag:25];
+            NSString* object_content = [atMeInfo valueForKey:@"object_content"];
+            if (cmd == 986 || cmd == 987) {
+                lab.text = @"";
+                lab.hidden = YES;
+                img.hidden = NO;
+                if (object_content && img) {
+                    img.layer.masksToBounds = YES;
+                    img.layer.cornerRadius = 4;
+                    
+                    img.contentMode = UIViewContentModeScaleAspectFit;
+                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                        if (image) {
+                            img.contentMode = UIViewContentModeScaleAspectFill;
+                        }else{
+                            img.image = [UIImage imageNamed:@"加载失败"];
+                        }
+                    }];
+                }else img.image = nil;
+            }else if (cmd == 988){
+                img.image = nil;
+                img.hidden = YES;
+                lab.text = @"";
+                lab.hidden = NO;
+                if (object_content && lab) {
+                    lab.layer.masksToBounds = YES;
+                    lab.layer.cornerRadius = 4;
+                    lab.text = object_content;
+                }
+            }
+            
 
         }else if(cmd == 989){
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
+            avatar.layer.masksToBounds = YES;
+            avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
+            
+            
+            
+            UIImageView* img = (UIImageView*)[cell viewWithTag:24];
+            UILabel* lab = (UILabel*)[cell viewWithTag:26];
+            NSString* object_content = [atMeInfo valueForKey:@"object_content"];
+            int operation = [[atMeInfo valueForKey:@"operation"] intValue];
+            if (operation == 3 || operation == 5) {
+                lab.text = @"";
+                lab.hidden = YES;
+                img.hidden = NO;
+                NSString* photoUrl = [atMeInfo valueForKey:@"object_content"];
+                UIImageView* img = (UIImageView*)[cell viewWithTag:24];
+                if (photoUrl && img) {
+                    img.layer.masksToBounds = YES;
+                    img.layer.cornerRadius = 4;
+                    img.contentMode = UIViewContentModeScaleAspectFit;
+                    [img sd_setImageWithURL:[NSURL URLWithString:photoUrl] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                        if (image) {
+                            img.contentMode = UIViewContentModeScaleAspectFill;
+                        }else{
+                            img.image = [UIImage imageNamed:@"加载失败"];
+                        }
+                    }];
+                }else img.image = nil;
+            }else if (operation == 1){
+                img.image = nil;
+                img.hidden = YES;
+                lab.text = @"";
+                lab.hidden = NO;
+                if (object_content && lab) {
+                    lab.layer.masksToBounds = YES;
+                    lab.layer.cornerRadius = 4;
+                    lab.text = object_content;
+                }
+            }
+            
+            
+            
+            
         }
         return cell;
     }

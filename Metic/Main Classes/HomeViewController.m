@@ -44,6 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadEvent:) name: @"reloadEvent" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(replaceItem:) name: @"replaceItem" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
@@ -199,6 +200,39 @@
         [_tableView setShowsVerticalScrollIndicator:NO];
         [self.view addSubview:_tableView];
         [self.view sendSubviewToBack:_tableView];
+    }
+    
+}
+
+
+//reloadEvent
+-(void)reloadEvent:(id)sender
+{
+    _shouldRefresh = YES;
+}
+
+//在头部插入某个卡片
+-(void)insertEventToQueue:(id)sender
+{
+    return;
+    NSLog(@"在头部插入某个卡片:%@",[sender userInfo]);
+    if ([sender userInfo]) {
+        NSMutableDictionary *newEvent = [[NSMutableDictionary alloc]initWithDictionary:[sender userInfo]];
+        [newEvent removeObjectForKey:@"cmd"];
+        [newEvent removeObjectForKey:@"ishandled"];
+        [newEvent removeObjectForKey:@"promoter"];
+        [newEvent removeObjectForKey:@"promoter_id"];
+        [newEvent removeObjectForKey:@"seq"];
+        NSLog(@"经处理后的活动信息:%@",newEvent);
+        
+        //插入数据库
+        [self updateEventToDB:@[newEvent]];
+        
+        //插入列表
+        NSNumber* newEventId = [newEvent valueForKey:@"event_id"];
+        [_events insertObject:newEvent atIndex:0];
+        [_eventIds_all insertObject:newEventId atIndex:0];
+        [_tableView reloadData];
     }
     
 }
@@ -746,6 +780,7 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"reloadEvent" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteItem" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"replaceItem" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];

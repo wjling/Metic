@@ -699,7 +699,7 @@
         NSLog(@"addEventID is number, id: %@",addEventID);
 
     }
-    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入验证信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入申请加入信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     confirmAlert.tag = 0;
     [confirmAlert show];

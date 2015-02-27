@@ -367,6 +367,8 @@
             [self.tableView reloadData];
             NSLog(@"本次处理的活动邀请: %@",msg_dic);
             NSLog(@"处理之后的消息列表: \n MTUser.eventRequestMsg: %@ \nself.msg_arr: %@", [MTUser sharedInstance].eventRequestMsg, self.msg_arr);
+            //更新活动中心列表：
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
         }
             break;
             case REQUEST_FAIL:
