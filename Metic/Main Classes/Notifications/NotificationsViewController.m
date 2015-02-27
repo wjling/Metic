@@ -25,7 +25,7 @@
     CGFloat lastX;
     BOOL clickTab;
     UIView* tabIndicator;
-    UILabel *label1,*label2,*label3;
+    UILabel *label0,*label1,*label2;
     NSInteger num_tabs;
     
     UIView* waitingView;
@@ -115,27 +115,27 @@ enum Response_Type
     [self removeDuplicate_msgFromDatabase];
     
     if (eventRequestMsg.count == 0) {
+        label0.hidden = NO;
+    }
+    else
+    {
+        label0.hidden = YES;
+    }
+
+    if (friendRequestMsg.count == 0) {
         label1.hidden = NO;
     }
     else
     {
         label1.hidden = YES;
     }
-
-    if (friendRequestMsg.count == 0) {
+    
+    if (systemMsg.count == 0) {
         label2.hidden = NO;
     }
     else
     {
         label2.hidden = YES;
-    }
-    
-    if (systemMsg.count == 0) {
-        label3.hidden = NO;
-    }
-    else
-    {
-        label3.hidden = YES;
     }
     
 }
@@ -213,16 +213,16 @@ enum Response_Type
                 }
             }
             [friendRequestMsg insertObject:msg_dic atIndex:0];
-            if (!label2.hidden) {
-                label2.hidden = YES;
+            if (!label1.hidden) {
+                label1.hidden = YES;
             }
         }
             break;
         case ADD_FRIEND_RESULT:
         {
             [friendRequestMsg insertObject:msg_dic atIndex:0];
-            if (!label2.hidden) {
-                label2.hidden = YES;
+            if (!label1.hidden) {
+                label1.hidden = YES;
             }
         }
             break;
@@ -245,8 +245,8 @@ enum Response_Type
             }
             [self.systemMsg insertObject:msg_dic atIndex:0];
 
-            if (!label3.hidden) {
-                label3.hidden = YES;
+            if (!label2.hidden) {
+                label2.hidden = YES;
             }
         }
             break;
@@ -270,8 +270,8 @@ enum Response_Type
             }
             
             [self.eventRequestMsg insertObject:msg_dic atIndex:0];
-            if (!label1.hidden) {
-                label1.hidden = YES;
+            if (!label0.hidden) {
+                label0.hidden = YES;
             }
         }
             break;
@@ -441,6 +441,14 @@ enum Response_Type
     tab_index = 0;
     clickTab = NO;
     
+    label0 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    [label0 setBackgroundColor:[UIColor clearColor]];
+    label0.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
+    label0.numberOfLines = 2;
+    label0.textColor = [UIColor grayColor];
+    label0.textAlignment = NSTextAlignmentCenter;
+    label0.font = [UIFont systemFontOfSize:13];
+    
     label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
     [label1 setBackgroundColor:[UIColor clearColor]];
     label1.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
@@ -457,17 +465,9 @@ enum Response_Type
     label2.textAlignment = NSTextAlignmentCenter;
     label2.font = [UIFont systemFontOfSize:13];
     
-    label3 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
-    [label3 setBackgroundColor:[UIColor clearColor]];
-    label3.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
-    label3.numberOfLines = 2;
-    label3.textColor = [UIColor grayColor];
-    label3.textAlignment = NSTextAlignmentCenter;
-    label3.font = [UIFont systemFontOfSize:13];
-    
-    [self.eventRequest_tableView addSubview:label1];
-    [self.friendRequest_tableView addSubview:label2];
-    [self.systemMessage_tableView addSubview:label3];
+    [self.eventRequest_tableView addSubview:label0];
+    [self.friendRequest_tableView addSubview:label1];
+    [self.systemMessage_tableView addSubview:label2];
     
 }
 
@@ -505,11 +505,11 @@ enum Response_Type
 //                           NSLog(@"消息中心：eventRequestMsg去重已经完成");
                            [self.eventRequest_tableView reloadData];
                            if (eventRequestMsg.count == 0) {
-                               label1.hidden = NO;
+                               label0.hidden = NO;
                            }
                            else
                            {
-                               label1.hidden = YES;
+                               label0.hidden = YES;
                            }
 
                        });
@@ -546,11 +546,11 @@ enum Response_Type
 //                           NSLog(@"消息中心：friendRequestMsg去重已经完成");
                            [self.friendRequest_tableView reloadData];
                            if (friendRequestMsg.count == 0) {
-                               label2.hidden = NO;
+                               label1.hidden = NO;
                            }
                            else
                            {
-                               label2.hidden = YES;
+                               label1.hidden = YES;
                            }
 
                        });
@@ -587,11 +587,11 @@ enum Response_Type
                        {
                            [self.systemMessage_tableView reloadData];
                            if (systemMsg.count == 0) {
-                               label3.hidden = NO;
+                               label2.hidden = NO;
                            }
                            else
                            {
-                               label3.hidden = YES;
+                               label2.hidden = YES;
                            }
                        });
     });
@@ -640,11 +640,11 @@ enum Response_Type
     
     if (index == 0) {
         if (self.eventRequestMsg.count == 0) {
-            label1.hidden = NO;
+            label0.hidden = NO;
         }
         else
         {
-            label1.hidden = YES;
+            label0.hidden = YES;
         }
 //        NSLog(@"活动邀请：\neventRequest: %@\n============\nMT_eventRequest: %@",eventRequestMsg,MTUser_eventRequestMsg);
         [self.eventRequest_tableView reloadData];
@@ -652,11 +652,11 @@ enum Response_Type
     else if (index == 1)
     {
         if (self.friendRequestMsg.count == 0) {
-            label2.hidden = NO;
+            label1.hidden = NO;
         }
         else
         {
-            label2.hidden = YES;
+            label1.hidden = YES;
         }
 //        NSLog(@"好友请求：\nfriendRequest: %@\n============\nMT_friendRequest: %@",friendRequestMsg,MTUser_friendRequestMsg);
         [self.friendRequest_tableView reloadData];
@@ -664,11 +664,11 @@ enum Response_Type
     else if (index == 2)
     {
         if (self.systemMsg.count == 0) {
-            label3.hidden = NO;
+            label2.hidden = NO;
         }
         else
         {
-            label3.hidden = YES;
+            label2.hidden = YES;
         }
 //        NSLog(@"系统消息：\nsystemRequest: %@\n============\nMT_systemRequest: %@",systemMsg,MTUser_systemMsg);
         [self.systemMessage_tableView reloadData];
@@ -746,7 +746,7 @@ enum Response_Type
         [eventRequestMsg removeAllObjects];
         [MTUser_eventRequestMsg removeAllObjects];
         [self.eventRequest_tableView reloadData];
-        label1.hidden = NO;
+        label0.hidden = NO;
     }
     else if (tab_index == 1)
     {
@@ -758,7 +758,7 @@ enum Response_Type
         [friendRequestMsg removeAllObjects];
         [MTUser_friendRequestMsg removeAllObjects];
         [self.friendRequest_tableView reloadData];
-        label2.hidden = NO;
+        label1.hidden = NO;
     }
     else if (tab_index == 2)
     {
@@ -770,7 +770,7 @@ enum Response_Type
         [systemMsg removeAllObjects];
         [MTUser_systemMsg removeAllObjects];
         [self.systemMessage_tableView reloadData];
-        label3.hidden = NO;
+        label2.hidden = NO;
     }
     [mySql closeMyDB];
 
@@ -889,16 +889,16 @@ enum Response_Type
                     }
                 }
                 [friendRequestMsg insertObject:msg_dic atIndex:0];
-                if (!label2.hidden) {
-                    label2.hidden = YES;
+                if (!label1.hidden) {
+                    label1.hidden = YES;
                 }
             }
                 break;
             case ADD_FRIEND_RESULT:
             {
                 [friendRequestMsg insertObject:msg_dic atIndex:0];
-                if (!label2.hidden) {
-                    label2.hidden = YES;
+                if (!label1.hidden) {
+                    label1.hidden = YES;
                 }
             }
                 break;
@@ -908,8 +908,8 @@ enum Response_Type
             case KICK_EVENT_NOTIFICATION:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
-                if (!label3.hidden) {
-                    label3.hidden = YES;
+                if (!label2.hidden) {
+                    label2.hidden = YES;
                 }
             }
                 break;
@@ -933,8 +933,8 @@ enum Response_Type
                 }
                 
                 [self.eventRequestMsg insertObject:msg_dic atIndex:0];
-                if (!label1.hidden) {
-                    label1.hidden = YES;
+                if (!label0.hidden) {
+                    label0.hidden = YES;
                 }
             }
                 break;
@@ -1025,7 +1025,7 @@ enum Response_Type
     if (tableView == self.eventRequest_tableView) {
         NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
 //        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
-//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label0.frame.origin.x);
         if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
             [self eventBtnClicked:self];
         }
@@ -1645,14 +1645,10 @@ enum Response_Type
             NSNumber* response_type = [item_id_dic objectForKey:@"response_type"];
             NSNumber* result = [item_id_dic valueForKey:@"response_result"];
             
-            
-//            NSLog(@"http receive, response_type: %@, item_index: %@",response_type, item_index);
             if ([response_type intValue] == RESPONSE_FRIEND) {
                 
                 if ([result intValue] == 1) {
-//                    [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"已成功添加好友" WithDelegate:self WithCancelTitle:@"确定"];
                     [self.friendRequest_tableView reloadData];
-                    
                     NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
                     int seq1 = [[msg_dic objectForKey:@"seq"]intValue];
                     
@@ -1751,13 +1747,6 @@ enum Response_Type
                     
                     [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功拒绝%@为好友",fname] afterDelay:2];
                     
-//                    NSString* fname = [msg_dic objectForKey:@"name"];
-//                    NSString* femail = [msg_dic objectForKey:@"email"];
-//                    NSNumber* fgender = [msg_dic objectForKey:@"gender"];
-//                    NSNumber* fid = [msg_dic objectForKey:@"id"];
-//                    [mySql openMyDB:DB_path];
-//                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-//                    [mySql closeMyDB];
                 }
 
             }
@@ -1800,21 +1789,12 @@ enum Response_Type
                 NSLog(@"处理完了一条活动请求: %@",msg_dic);
                 
                 [SVProgressHUD dismissWithSuccess:@"操作成功" afterDelay:2];
-//                NSLog(@"MTUser eventRequestMsg: %@",[MTUser sharedInstance].eventRequestMsg);
-//                NSLog(@"msg_dic: %@",new_msg_dic);
-                
-//                [mySql openMyDB:DB_path];
-//                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-//                [mySql closeMyDB];
             }
-//            [self.msgFromDB removeObjectAtIndex:selectedPath.row];
             
         }
             break;
         case ALREADY_FRIENDS:
         {
-            
-//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你们已经是好友" WithDelegate:self WithCancelTitle:@"确定"];
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
             NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:row];
@@ -1885,14 +1865,11 @@ enum Response_Type
             break;
         case REQUEST_FAIL:
         {
-//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"发送请求错误" WithDelegate:self WithCancelTitle:@"确定"];
             [SVProgressHUD dismissWithError:@"发送请求错误" afterDelay:2];
-            
         }
             break;
         case ALREADY_IN_EVENT:
         {
-//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"你已经在此活动中了" WithDelegate:self WithCancelTitle:@"确定"];
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
             NSInteger row = selectedPath.row;
             NSMutableDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:row];
@@ -1925,12 +1902,61 @@ enum Response_Type
 
         }
             break;
+        case EVENT_NOT_EXIST:
+        {
+            [SVProgressHUD dismissWithError:@"该活动已经解散" afterDelay:2.0];
+            NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
+            NSInteger row = selectedPath.row;
+            NSMutableDictionary* msg_dic = [self.eventRequestMsg objectAtIndex:row];
+            NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+            NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+            NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+            NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
+            
+            [mySql openMyDB:DB_path];
+            [mySql updateDataWitTableName:@"notification"
+                                 andWhere:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
+                                           nil]
+                                   andSet:[CommonUtils packParamsInDictionary:
+                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
+                                           nil]];
+            
+            for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                    continue;
+                }
+            }
+            
+            [mySql closeMyDB];
+            
+            [MTUser_eventRequestMsg removeObject:msg_dic];
+            [self.eventRequestMsg removeObjectAtIndex:row];
+            [self.eventRequest_tableView reloadData];
+            
+        }
+            break;
+
         default:
             NSLog(@"消息中心未对该cmd做处理, cmd: %@",cmd);
             break;
     }
 //    [self waitingViewHide];
-
+    if (self.eventRequestMsg.count == 0) {
+        label0.hidden = NO;
+    }
+    if (self.friendRequestMsg.count == 0) {
+        label1.hidden = NO;
+    }
+    if (self.systemMsg.count == 0) {
+        label2.hidden = NO;
+    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -1997,44 +2023,6 @@ enum Response_Type
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     NSLog(@"scroll did end scroll animation");
-//    if (scrollView == self.content_scrollView) {
-//        if (tab_index == 0) {
-//            [self.eventRequest_tableView reloadData];
-//            if (self.eventRequestMsg.count == 0) {
-//                label1.hidden = NO;
-//            }
-//            else
-//            {
-//                label1.hidden = YES;
-//            }
-//            NSLog(@"reload event_table");
-//        }
-//        else if (tab_index == 1)
-//        {
-//            [self.friendRequest_tableView reloadData];
-//            if (self.friendRequestMsg.count == 0) {
-//                label2.hidden = NO;
-//            }
-//            else
-//            {
-//                label2.hidden = YES;
-//            }
-//            NSLog(@"reload friend_table");
-//        }
-//        else if (tab_index == 2)
-//        {
-//            [self.systemMessage_tableView reloadData];
-//            if (self.systemMsg.count == 0) {
-//                label3.hidden = NO;
-//            }
-//            else
-//            {
-//                label3.hidden = YES;
-//            }
-//            NSLog(@"reload system_table");
-//        }
-//
-//    }
     clickTab = NO;
 }
 
@@ -2045,11 +2033,11 @@ enum Response_Type
         if (tab_index == 0) {
             [self.eventRequest_tableView reloadData];
             if (self.eventRequestMsg.count == 0) {
-                label1.hidden = NO;
+                label0.hidden = NO;
             }
             else
             {
-                label1.hidden = YES;
+                label0.hidden = YES;
             }
             NSLog(@"reload event_table");
         }
@@ -2057,11 +2045,11 @@ enum Response_Type
         {
             [self.friendRequest_tableView reloadData];
             if (self.friendRequestMsg.count == 0) {
-                label2.hidden = NO;
+                label1.hidden = NO;
             }
             else
             {
-                label2.hidden = YES;
+                label1.hidden = YES;
             }
             NSLog(@"reload friend_table");
         }
@@ -2069,11 +2057,11 @@ enum Response_Type
         {
             [self.systemMessage_tableView reloadData];
             if (self.systemMsg.count == 0) {
-                label3.hidden = NO;
+                label2.hidden = NO;
             }
             else
             {
-                label3.hidden = YES;
+                label2.hidden = YES;
             }
             NSLog(@"reload system_table");
         }
