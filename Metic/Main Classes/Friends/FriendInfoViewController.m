@@ -97,6 +97,7 @@
         UIBarButtonItem* barBtnItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
         [self.navigationItem setRightBarButtonItem:barBtnItem];
     }
+    [self refreshFriendInfo];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -338,7 +339,7 @@
     }];
     NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
     name_label.text = name;
-    if (alias && ![alias isEqual:[NSNull null]]) {
+    if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
         alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
     }
     else

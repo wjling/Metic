@@ -600,7 +600,7 @@ enum Response_Type
 
 -(void)dismissHud:(NSTimer*)timer
 {
-    [SVProgressHUD dismiss];
+    [SVProgressHUD dismissWithError:@"服务器未响应"];
 }
 
 - (void)tabBtnClicked:(id)sender
@@ -1438,7 +1438,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1483,7 +1483,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1547,7 +1547,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1584,7 +1584,7 @@ enum Response_Type
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
@@ -1632,6 +1632,7 @@ enum Response_Type
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
+    [waitingTimer invalidate];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSLog(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -1847,7 +1848,6 @@ enum Response_Type
             [mySql closeMyDB];
 
             [MTUser_friendRequestMsg removeObject:msg_dic];
-//            [friendRequestMsg removeObjectAtIndex:row];
             [self.friendRequest_tableView reloadData];
             
             [SVProgressHUD dismissWithError:@"你们已经是好友" afterDelay:2];

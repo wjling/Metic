@@ -46,6 +46,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"app did finish launch===============");
+    
+    [self NetworkStatusInitViews];
     sync_queue = dispatch_queue_create("msg_syncueue", NULL);
     [self umengTrack];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -84,7 +86,6 @@
     isNetworkConnected = YES;
     isInBackground = NO;
     isLogined = NO;
-    [self initViews];
 //    [self initApp];
     
     _mapManager = [[BMKMapManager alloc]init];
@@ -914,7 +915,7 @@
 
 #pragma mark - Network Status Checking
 //================================Network Status Checking=====================================
--(void)initViews
+-(void)NetworkStatusInitViews
 {
 //    UIWindow* window = [UIApplication sharedApplication].keyWindow;
     CGRect frame = [UIScreen mainScreen].bounds;
@@ -945,7 +946,6 @@
     NetworkStatus status = [curReach currentReachabilityStatus];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     
-    return;
     if (status == NotReachable) {
         if (isNetworkConnected) {
             [self showNetworkNotification:@"网络连接异常，请检查网络设置"];
@@ -961,27 +961,17 @@
     else
     {
         if (!isNetworkConnected) {
-            
-            [UIView beginAnimations:@"showNetworkStatus" context:nil];
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-            [UIView setAnimationDidStopSelector:@selector(hideNetworkNotification)];
-            [UIView setAnimationDuration:3];
-            [UIView setAnimationDelegate:self];
-            UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
-            label.text = @"网络连接恢复正常";
-            [UIView commitAnimations];
+            [self hideNetworkNotification];
 
         }
         isNetworkConnected = YES;
-        while (![userStatus isEqualToString:@"in"]) {
-//        while (!isLogined) {
-            [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        }
+//        while (![userStatus isEqualToString:@"in"]) {
+//          while (!isLogined) {
+//            [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//        }
 //        if (!isConnected) {
 //            [self connect];
 //        }
-
-        
         
         NSLog(@"Network is reachable");
     }
@@ -999,9 +989,18 @@
 
 -(void)showNetworkNotification:(NSString*)message
 {
+    NSLog(@"show network notification");
+    CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
+//    NSLog(@"screen bounds.height: %f",[UIScreen mainScreen].bounds.size.height);
+//    NSLog(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
+//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+    if ([networkStatusNotifier_view superview]) {
+//        NSLog(@"没有执行");
+        return;
+    }
     UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
     label.text = message;
-    CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
+    
     [[UIApplication sharedApplication].keyWindow addSubview:networkStatusNotifier_view];
     
     [UIView beginAnimations:@"showNetworkStatus" context:nil];
@@ -1010,17 +1009,22 @@
     
     [UIView setAnimationDuration:1];
 //    [UIView setAnimationRepeatCount:1];
-    [UIView setAnimationDelegate:self];
+//    [UIView setAnimationDelegate:self];
     
     [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height - networkStatusNotifier_view.frame.size.height, frame.size.width, networkStatusNotifier_view.frame.size.height)];
     [UIView commitAnimations];
-    NSLog(@"show network notification");
-    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+    
 }
 
 -(void)hideNetworkNotification
 {
     CGRect frame = [UIScreen mainScreen].bounds;
+    NSLog(@"hide network notification");
+//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+    if (![networkStatusNotifier_view superview]) {
+//        NSLog(@"没有执行");
+        return;
+    }
     [UIView beginAnimations:@"hideNetworkStatus" context:nil];
     //    networkStatusNotifier_view.hidden = NO;
     [UIView setAnimationDelay:5];
@@ -1034,9 +1038,6 @@
     
     [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, networkStatusNotifier_view.frame.size.height)];
     [UIView commitAnimations];
-    
-    NSLog(@"hide network notification");
-    
 }
 
 -(void)NetworkNotificationDidHide
