@@ -11,6 +11,7 @@
 @interface ModifyPasswordViewController ()
 {
     UIView* waitingView;
+    BOOL keyboardShow;
 }
 
 @end
@@ -62,6 +63,9 @@
     modifyPS_textfield.secureTextEntry = YES;
     conformPS_textfield.secureTextEntry = YES;
     
+    keyboardShow = NO;
+    [self registerForKeyboardNotifications];
+//    [self.background_view removeFromSuperview];
 }
 
 
@@ -69,13 +73,78 @@
 {
     [super viewDidAppear:animated];
     NSLog(@"修改密码 view did appear");
+//    [self.background_view setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//    [self.view addSubview:self.background_view];
     
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [self unRegisterForKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [[UIApplication sharedApplication] resignFirstResponder];
+}
+
+- (void) registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]  addObserver:self selector:@selector(keyboardWasHidden:) name:UIKeyboardDidHideNotification object:nil];
+}
+
+- (void) unRegisterForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) keyboardWasShown:(NSNotification *) notif
+{
+    if (!keyboardShow) {
+        NSDictionary *info = [notif userInfo];
+        NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
+        CGSize keyboardSize = [value CGRectValue].size;
+        
+        NSLog(@"keyBoard:%f", keyboardSize.height);  //216
+        ///keyboardWasShown = YES;
+        CGRect frame = _confirm_btn.frame;
+        float offset = self.view.frame.size.height - keyboardSize.height - frame.size.height + 20 - frame.origin.y;
+        CGRect newFrame = self.view.frame;
+        newFrame.origin.y += offset;
+        [UIView beginAnimations:@"goUP" context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [UIView setAnimationDuration:0.1f];
+        
+        [self.view setFrame:newFrame];
+        [UIView commitAnimations];
+    }
+    keyboardShow = YES;
+}
+- (void) keyboardWasHidden:(NSNotification *) notif
+{
+    NSDictionary *info = [notif userInfo];
+    
+    NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGSize keyboardSize = [value CGRectValue].size;
+    NSLog(@"keyboardWasHidden keyBoard:%f", keyboardSize.height);
+    // keyboardWasShown = NO;
+    float offset = [UIScreen mainScreen].bounds.size.height - self.view.frame.origin.y - self.view.frame.size.height;
+    [UIView beginAnimations:@"goDOWN" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [UIView setAnimationDuration:0.1f];
+    
+    [self.view setFrame:CGRectMake(0, self.view.frame.origin.y + offset, self.view.frame.size.width, self.view.frame.size.height)];
+    [UIView commitAnimations];
+    keyboardShow = NO;
+    
 }
 
 /*

@@ -18,6 +18,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *currentPS_textfield;
 @property (strong, nonatomic) IBOutlet UITextField *modifyPS_textfield;
 @property (strong, nonatomic) IBOutlet UITextField *conformPS_textfield;
+@property (strong, nonatomic) IBOutlet UIButton *confirm_btn;
+@property (strong, nonatomic) IBOutlet UIView *background_view;
 
 - (IBAction)okBtnClicked:(id)sender;
 @end
