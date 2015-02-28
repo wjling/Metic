@@ -50,9 +50,13 @@ static MenuViewController *singletonInstance;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleUIApplicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    self.view.backgroundColor = [UIColor blackColor];
     if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
         CGRect frame = self.view.frame;
-        frame.origin.y = 20;
+        NSLog(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+        frame.size.height += frame.origin.y;
+        frame.origin.y += 20;
         [self.view setFrame:frame];
     }
     singletonInstance = self;
@@ -67,6 +71,10 @@ static MenuViewController *singletonInstance;
         notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
     }
     homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
 -(void)dianReset
@@ -393,5 +401,16 @@ static MenuViewController *singletonInstance;
 	[[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
 }
 
+#pragma mark UIApplicationWillChangeStatusBarFrameNotification
+// 如有必要，需监听系统状态栏变更通知：UIApplicationWillChangeStatusBarFrameNotification
+- (void)handleUIApplicationWillChangeStatusBarFrameNotification:(NSNotification*)notification
+{
+    CGRect newStatusBarFrame = [(NSValue*)[notification.userInfo objectForKey:UIApplicationStatusBarFrameUserInfoKey] CGRectValue];
+    // 根据系统状态栏高判断热点栏的变动
+
+    CGRect frame = self.view.frame;
+    frame.origin.y = newStatusBarFrame.size.height;
+    [self.view setFrame:frame];
+}
 
 @end

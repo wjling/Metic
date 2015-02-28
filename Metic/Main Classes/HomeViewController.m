@@ -189,10 +189,10 @@
     if (!_tableView) {
         CGRect frame = self.view.frame;
         NSLog(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-        
         frame.origin.x += 10;
         frame.size.width -= 20;
-        frame.size.height -= 64;
+        frame.size.height -= 64 - frame.origin.y;
+        frame.origin.y = 0;
         _tableView = [[MTTableView alloc]initWithFrame:frame];
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
