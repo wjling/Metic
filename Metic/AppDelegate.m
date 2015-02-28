@@ -644,6 +644,9 @@
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         type = 2;
+        if([[msg_dic valueForKey:@"result"] boolValue]){
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
+        }
     }
     else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
     {
@@ -1266,6 +1269,9 @@
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:@"有人回复了活动消息" andNumber:numOfSyncMessages withType:2];
+            }
+            if([[msg_dic valueForKey:@"result"] boolValue]){
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
             }
         }
         else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
