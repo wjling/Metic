@@ -33,6 +33,7 @@
 		04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */; };
 		04A69AA41A51A50E0075D149 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04A69AA01A51A50E0075D149 /* libXG-SDK.a */; };
 		04A69AA51A51A50E0075D149 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */; };
+		04AC64011AA1C8D500A863D6 /* GetBackPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */; };
 		04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04AF99EA1A582AA300C9ED8C /* AdSupport.framework */; };
 		04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22C441984F43400B33B7C /* SystemSettingsViewController.m */; };
 		04B22E391988B5F300B33B7C /* SearchFriendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B22E381988B5F300B33B7C /* SearchFriendViewController.m */; };
@@ -403,6 +404,8 @@
 		04A69AA11A51A50E0075D149 /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
 		04A69AA21A51A50E0075D149 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		04A69AA31A51A50E0075D149 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
+		04AC63FF1AA1C8D500A863D6 /* GetBackPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetBackPasswordViewController.h; path = "Login&Register/GetBackPasswordViewController.h"; sourceTree = "<group>"; };
+		04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetBackPasswordViewController.m; path = "Login&Register/GetBackPasswordViewController.m"; sourceTree = "<group>"; };
 		04AF99EA1A582AA300C9ED8C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		04B22C431984F43400B33B7C /* SystemSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemSettingsViewController.h; path = SystemSettings/SystemSettingsViewController.h; sourceTree = "<group>"; };
 		04B22C441984F43400B33B7C /* SystemSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SystemSettingsViewController.m; path = SystemSettings/SystemSettingsViewController.m; sourceTree = "<group>"; };
@@ -1079,6 +1082,8 @@
 				0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */,
 				0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */,
 				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
+				04AC63FF1AA1C8D500A863D6 /* GetBackPasswordViewController.h */,
+				04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -2529,6 +2534,7 @@
 				04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */,
 				51F4CB0A19E6307500E487F1 /* ASIDataCompressor.m in Sources */,
 				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
+				04AC64011AA1C8D500A863D6 /* GetBackPasswordViewController.m in Sources */,
 				51F4CB2419E6307500E487F1 /* HTTPMessage.m in Sources */,
 				04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,

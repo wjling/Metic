@@ -93,6 +93,7 @@ enum Operation_Code
     SET_EVENT_BANNER = 46,
     PUSH_MESSAGE = 47,
     GET_OBJECT_INFO = 48,
+    FIND_BACK_PASSWORD = 49,
 };
 
 enum CloudOperation_Code

@@ -235,6 +235,9 @@
         case 48:
             resultCode = @"get_object_info";
             break;
+        case 49:
+            resultCode = @"find_back_password";
+            break;
         default:
             resultCode = @"json";
             break;

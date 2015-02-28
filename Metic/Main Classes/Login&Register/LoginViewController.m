@@ -9,6 +9,8 @@
 #import "LoginViewController.h"
 #import "SFHFKeychainUtils.h"
 #import "MenuViewController.h"
+#import "GetBackPasswordViewController.h"
+#import "CommonUtils.h"
 #import "MobClick.h"
 
 @interface LoginViewController ()
@@ -111,12 +113,25 @@
 //    self.textField_password.text = @"";
     //[self checkPreUP];
     self.textField_password.text = text_password? text_password:@"";
+    
+    UIButton* forgetPS_btn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60 - 10, 275, 60, 25)];
+    [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
+    [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:forgetPS_btn];
    
     tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
     [self.view addGestureRecognizer:tapRecognizer];
-    
-    
 
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+}
+
+//返回上一层
+-(void)MTpopViewController{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -179,6 +194,13 @@
         NSLog(@"register gender: %@",vc.gender);
     }
     
+}
+
+-(void)forgetPSBtnClick:(id)sender
+{
+    UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    GetBackPasswordViewController* vc = [sb instantiateViewControllerWithIdentifier:@"GetBackPasswordViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)backgroundBtn:(id)sender
