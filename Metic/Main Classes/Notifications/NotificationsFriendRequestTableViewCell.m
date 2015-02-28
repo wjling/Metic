@@ -7,8 +7,10 @@
 //
 
 #import "NotificationsFriendRequestTableViewCell.h"
+#import "FriendInfoViewController.h"
 
 @implementation NotificationsFriendRequestTableViewCell
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -33,5 +35,7 @@
 
     // Configure the view for the selected state
 }
+
+
 
 @end

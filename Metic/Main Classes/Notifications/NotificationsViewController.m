@@ -9,6 +9,7 @@
 #import "NotificationsViewController.h"
 #import "MobClick.h"
 #import "MenuViewController.h"
+#import "FriendInfoViewController.h"
 #import "KxMenu.h"
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
@@ -31,6 +32,7 @@
     UIView* waitingView;
     UIActivityIndicatorView* actIndicator;
     NSTimer* waitingTimer;
+    
 }
 
 enum Response_Type
@@ -1030,6 +1032,19 @@ enum Response_Type
             [self eventBtnClicked:self];
         }
 
+    }
+    else if (tableView == self.friendRequest_tableView)
+    {
+        NSDictionary* friendrequest = [self.friendRequestMsg objectAtIndex:indexPath.row];
+        NSLog(@"selected friend request: %@", friendrequest);
+        NSInteger cmd = [[friendrequest objectForKey:@"cmd"]integerValue];
+        if (cmd == 999) {
+            NSNumber* friendID = [friendrequest objectForKey:@"id"];
+            UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            FriendInfoViewController* vc = [sb instantiateViewControllerWithIdentifier:@"FriendInfoViewController"];
+            vc.fid = friendID;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }
     
 }
