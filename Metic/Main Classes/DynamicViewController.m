@@ -188,9 +188,6 @@ enum pos{
             if (restWidth!= 310) {
                 restWidth-=10;
             }
-            
-            
-            
             NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",subject];
             NSMutableAttributedString *hintString1 = [[NSMutableAttributedString alloc] initWithString:text];
             [hintString1 addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[[UIColor colorWithRed:46.0/255 green:171.0/255 blue:214.0/255 alpha:1.0f] CGColor] range:NSMakeRange(0,subject.length)];
@@ -204,10 +201,8 @@ enum pos{
             [update_label setNumberOfLines:0];
             [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
             [update_label setText:hintString1];
-            
-            }
+        }
         return cell;
-
     }else{
         UITableViewCell* cell;
         NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
@@ -219,7 +214,6 @@ enum pos{
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
             ((UILabel*)[cell viewWithTag:3]).text = [atMeInfo valueForKey:@"content"];
             ((UILabel*)[cell viewWithTag:4]).text = [atMeInfo valueForKey:@"time"];
@@ -233,7 +227,6 @@ enum pos{
                 if (object_content && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
-                    
                     img.contentMode = UIViewContentModeScaleAspectFit;
                     [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
@@ -254,8 +247,6 @@ enum pos{
                     lab.text = object_content;
                 }
             }
-            
-
         }else if(cmd == 989){
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
@@ -264,9 +255,6 @@ enum pos{
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
             ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
-            
-            
-            
             UIImageView* img = (UIImageView*)[cell viewWithTag:24];
             UILabel* lab = (UILabel*)[cell viewWithTag:26];
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
@@ -275,13 +263,11 @@ enum pos{
                 lab.text = @"";
                 lab.hidden = YES;
                 img.hidden = NO;
-                NSString* photoUrl = [atMeInfo valueForKey:@"object_content"];
-                UIImageView* img = (UIImageView*)[cell viewWithTag:24];
-                if (photoUrl && img) {
+                if (object_content && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
-                    [img sd_setImageWithURL:[NSURL URLWithString:photoUrl] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
                             img.contentMode = UIViewContentModeScaleAspectFill;
                         }else{
@@ -300,10 +286,6 @@ enum pos{
                     lab.text = object_content;
                 }
             }
-            
-            
-            
-            
         }
         return cell;
     }
