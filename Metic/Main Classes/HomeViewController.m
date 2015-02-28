@@ -33,6 +33,7 @@
 @property BOOL Headeropen;
 @property BOOL Footeropen;
 @property BOOL hasTurntoSquare;
+@property BOOL firstAppear;
 @end
 
 
@@ -91,6 +92,7 @@
     _header.scrollView = self.tableView;
     [_header beginRefreshing];
     _shouldRefresh = NO;
+    _firstAppear = YES;
     
     //初始化上拉加载更多
     _footer = [[MJRefreshFooterView alloc]init];
@@ -122,10 +124,11 @@
     _updateEventStatus = [MTUser sharedInstance].updateEventStatus;
     _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [MobClick beginLogPageView:@"活动主页"];
-    if (_shouldRefresh) {
+    if (_shouldRefresh && !_firstAppear) {
         _shouldRefresh = NO;
         [_header beginRefreshing];
     }
+    _firstAppear = NO;
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     if (!_hasTurntoSquare && [userDf boolForKey:@"firstLaunched"]) {

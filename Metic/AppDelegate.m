@@ -47,7 +47,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     NSLog(@"app did finish launch===============");
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(forceQuitToLogin) name:@"forceQuitToLogin" object:nil];
     [self NetworkStatusInitViews];
     sync_queue = dispatch_queue_create("msg_syncueue", NULL);
     [self umengTrack];
@@ -1079,8 +1079,18 @@
     NSLog(@"online config has fininshed and note = %@", note.userInfo);
 }
 
-
-
+#pragma 密码验证失败 返回到登录页面
+- (void)forceQuitToLogin
+{
+    NSLog(@"切换账号");
+    [XGPush unRegisterDevice];
+    ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
+    [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
+    [[MTUser alloc]init];
+    [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
+}
 
 
 //==========================================================================================

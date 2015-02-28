@@ -304,7 +304,10 @@
         NSLog(@"用户 %@ 在线", userName);
         appDelegate.isLogined = YES;
         appDelegate.hadCheckPassWord = NO;
-        [self checkPassWord];
+        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"有网络");
+            [self checkPassWord];
+        }
         [self removeWaitingView];
 //        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
@@ -376,7 +379,7 @@
                     NSString *salt = [response1 valueForKey:@"salt"];
                     NSString *str = [self.logInPassword stringByAppendingString:salt];
                     [MTUser sharedInstance].saltValue = salt;
-                    NSLog(@"password+salt: %@",str);
+//                    NSLog(@"password+salt: %@",str);怎么能打log！！
                     
                     //MD5 encrypt
                     NSMutableString *md5_str = [NSMutableString string];
@@ -387,7 +390,7 @@
                     [params setValue:md5_str forKey:@"passwd"];
                     [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
-                    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//                    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);怎么能打log！！
                     
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                     [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
@@ -404,10 +407,12 @@
                             {
                                 appDelegate.hadCheckPassWord = YES;
                             }
+                                break;
                             default:
                             {
                                 //通知退出到登录页面
                                 NSLog(@"强制退出到登录页面");
+                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                             }
                         }
                     }];
@@ -418,6 +423,7 @@
                 {
                     //通知退出到登录页面
                     NSLog(@"强制退出到登录页面");
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                 }
             }
         }];
