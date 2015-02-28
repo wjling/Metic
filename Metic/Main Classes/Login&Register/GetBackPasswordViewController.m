@@ -143,7 +143,13 @@
                 [SVProgressHUD  dismissWithSuccess:@"操作成功，请查收邮件" afterDelay:1.5];
             }
                 break;
+            case SERVER_ERROR:
+            {
+                [SVProgressHUD dismissWithError:@"该邮箱账号不存在" afterDelay:1.5];
+            }
+                break;
             default:
+                [SVProgressHUD dismiss];
                 break;
         }
     };
@@ -174,15 +180,15 @@
     NSDictionary *info = [notif userInfo];
     NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
-    float keyboard_height;
+    float keyboard_height = 202;
     NSLog(@"keyBoard:%f", keyboardSize.height);  //216
-    if (keyboardSize.height == 0 || keyboardSize.height > 202) {
-        keyboard_height = 202;
-    }
-    else
-    {
-        keyboard_height = keyboardSize.height;
-    }
+//    if (keyboardSize.height == 0 || keyboardSize.height > 202) {
+//        keyboard_height = 202;
+//    }
+//    else
+//    {
+//        keyboard_height = keyboardSize.height;
+//    }
     CGRect frame = ok_btn.frame;
     float offset = self.view.frame.size.height - keyboard_height - frame.size.height - frame.origin.y;
     CGRect newFrame = self.view.frame;

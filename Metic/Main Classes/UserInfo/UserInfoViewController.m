@@ -169,9 +169,6 @@
 -(void)avatarClicked:(id)sender
 {
     NSLog(@"avatar clicked");
-    
-    
-    
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{

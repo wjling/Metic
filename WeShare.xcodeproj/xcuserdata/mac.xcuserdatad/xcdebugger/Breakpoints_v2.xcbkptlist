@@ -20,12 +20,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Login&amp;Register/LoginViewController.m"
-            timestampString = "446815897.528683"
+            timestampString = "446834709.764945"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
-            landmarkName = "-isTextFieldEmpty"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
+            landmarkName = "-checkPassWord"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

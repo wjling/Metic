@@ -59,6 +59,16 @@
 {
     [super viewDidLoad];
     NSLog(@"login did load, fromRegister: %d",fromRegister);
+    
+    UIButton* forgetPS_btn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60 - 10, 275, 60, 25)];
+    [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
+    [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:forgetPS_btn];
+    
     [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
@@ -113,15 +123,6 @@
 //    self.textField_password.text = @"";
     //[self checkPreUP];
     self.textField_password.text = text_password? text_password:@"";
-    
-    UIButton* forgetPS_btn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60 - 10, 275, 60, 25)];
-    [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
-    [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:forgetPS_btn];
    
     tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
     [self.view addGestureRecognizer:tapRecognizer];
