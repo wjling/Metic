@@ -62,6 +62,7 @@
 //@property (strong, nonatomic)NSOperationQueue* operationQueue;
 @property (nonatomic) BOOL isNetworkConnected;
 @property (nonatomic) BOOL isLogined;
+@property (nonatomic) BOOL hadCheckPassWord;
 
 -(void)initViews;
 -(void)initApp;

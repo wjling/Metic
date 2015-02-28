@@ -325,6 +325,11 @@
         //处理登录状态下，直接跳转 需要读取默认信息。
         NSLog(@"用户 %@ 在线", userName);
         appDelegate.isLogined = YES;
+        appDelegate.hadCheckPassWord = NO;
+        if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"有网络");
+            [self checkPassWord];
+        }
         [self removeWaitingView];
 //        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
@@ -360,7 +365,92 @@
     }else [self.button_login setEnabled:YES];
 }
 
-
+-(void)checkPassWord
+{
+    if (appDelegate.hadCheckPassWord) {
+        return;
+    }
+    NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
+    NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithFile: MtsecretPath];
+    NSString *userName = [arr objectAtIndex:0];
+    NSString *password =  [arr objectAtIndex:1];
+    self.logInEmail = userName;
+    self.logInPassword = password;
+    if (self.logInEmail && self.logInPassword) {
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:self.logInEmail forKey:@"email"];
+        [dictionary setValue:@"" forKey:@"passwd"];
+        [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
+        
+        NSLog(@"%@",dictionary);
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
+            if (!rData) {
+                NSLog(@"服务器错误，返回的data为空");
+                return;
+            }
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"Received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case GET_SALT:
+                {
+                    NSString *salt = [response1 valueForKey:@"salt"];
+                    NSString *str = [self.logInPassword stringByAppendingString:salt];
+                    [MTUser sharedInstance].saltValue = salt;
+//                    NSLog(@"password+salt: %@",str);怎么能打log！！
+                    
+                    //MD5 encrypt
+                    NSMutableString *md5_str = [NSMutableString string];
+                    md5_str = [CommonUtils MD5EncryptionWithString:str];
+                    
+                    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+                    [params setValue:self.logInEmail forKey:@"email"];
+                    [params setValue:md5_str forKey:@"passwd"];
+                    [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
+                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
+//                    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);怎么能打log！！
+                    
+                    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                    [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
+                        if (!rData) {
+                            NSLog(@"服务器错误，返回的data为空");
+                            return;
+                        }
+                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        NSLog(@"Received Data: %@",temp);
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case LOGIN_SUC:
+                            {
+                                appDelegate.hadCheckPassWord = YES;
+                            }
+                                break;
+                            default:
+                            {
+                                //通知退出到登录页面
+                                NSLog(@"强制退出到登录页面");
+                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+                            }
+                        }
+                    }];
+                    
+                }
+                    break;
+                default:
+                {
+                    //通知退出到登录页面
+                    NSLog(@"强制退出到登录页面");
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+                }
+            }
+        }];
+    }
+}
 
 - (void) recoverloginbutton
 {
@@ -522,6 +612,7 @@
         case LOGIN_SUC:
         {
             [_timer invalidate];
+            appDelegate.hadCheckPassWord = YES;
 //            BOOL name = [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
 //            BOOL key = [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
 //            BOOL status = [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];

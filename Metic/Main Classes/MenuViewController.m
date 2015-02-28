@@ -24,6 +24,7 @@
 @property(nonatomic,strong) UIImageView* testImageView;
 @property(nonatomic,strong) UIImage* testImage;
 @property(nonatomic,strong) UIImageView* gender;
+@property BOOL canJump;
 
 
 
@@ -39,6 +40,7 @@
 @synthesize systemSettingsViewController;
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
+@synthesize canJump;
 
 static MenuViewController *singletonInstance;
 
@@ -66,6 +68,7 @@ static MenuViewController *singletonInstance;
     [self.img.layer setCornerRadius:28];
     
     numberOfMenus = 8;
+    canJump = YES;
     notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
     for (NSInteger i = 0; i < numberOfMenus; i++) {
         notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
@@ -118,6 +121,10 @@ static MenuViewController *singletonInstance;
     [self refresh];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
 -(void)refresh
 {
     self.userName.text = [MTUser sharedInstance].name;
@@ -173,6 +180,12 @@ static MenuViewController *singletonInstance;
 
 
 - (IBAction)selector_tap:(id)sender {
+    if (canJump) {
+        canJump = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            canJump = YES;
+        });
+    }else return;
     __block float val = 21.0/255.0;
     UIColor *color = _UserInfoView.backgroundColor;
     [_UserInfoView setBackgroundColor:([UIColor colorWithRed:val green:val blue:val alpha:1.0f])];
@@ -282,8 +295,6 @@ static MenuViewController *singletonInstance;
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
 			break;
-
-            
 	}
     
     UIImageView* dian = (UIImageView*)[cell viewWithTag:88];
@@ -319,6 +330,12 @@ static MenuViewController *singletonInstance;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (canJump) {
+        canJump = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            canJump = YES;
+        });
+    }else return;
     
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
