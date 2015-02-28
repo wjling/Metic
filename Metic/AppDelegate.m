@@ -39,6 +39,7 @@
 @synthesize networkStatusNotifier_view;
 @synthesize isNetworkConnected;
 @synthesize isLogined;
+@synthesize hadCheckPassWord;
 @synthesize leftMenu;
 //@synthesize operationQueue;
 
@@ -86,6 +87,7 @@
     isNetworkConnected = YES;
     isInBackground = NO;
     isLogined = NO;
+    hadCheckPassWord = NO;
 //    [self initApp];
     
     _mapManager = [[BMKMapManager alloc]init];
