@@ -574,9 +574,17 @@
 {
     NSURL* videoURL = info[UIImagePickerControllerMediaURL];
     //[self save:[videoURL path]];
-    NSString* fileSize = [NSString stringWithFormat:@"%d kb", [self getFileSize:[[videoURL absoluteString] substringFromIndex:16]]];
+    NSInteger fileSize_N = [self getFileSize:[[videoURL absoluteString] substringFromIndex:16]];
+    NSString* fileSize = [NSString stringWithFormat:@"%ld kb",(long)fileSize_N];
     NSString* videoLen = [NSString stringWithFormat:@"%.0f s", [self getVideoDuration:videoURL]];
     NSLog(@"%@   %@",fileSize,videoLen);
+    if (fileSize_N > 200*1000) {
+        //视频超过200m，不能上传
+        [picker dismissViewControllerAnimated:YES completion:^{
+            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频文件过大，无法上传" WithDelegate:nil WithCancelTitle:@"确定"];
+        }];
+        return;
+    }
     [picker dismissViewControllerAnimated:YES completion:^{
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
         //[self openEditor:nil];
