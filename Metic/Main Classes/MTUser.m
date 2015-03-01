@@ -590,7 +590,8 @@ static MTUser *singletonInstance;
 {
     self.sortedFriendDic = [self sortFriendList];
     
-    for (NSDictionary* friend in friendList) {
+    for (int i = 0; i < friendList.count; i++) {
+        NSDictionary* friend = [friendList objectAtIndex:i];
         NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
         NSString* fname = [friend valueForKey:@"name"];
         [friendsIdSet addObject:fid];
@@ -655,7 +656,8 @@ static MTUser *singletonInstance;
 {
     [self.alias_dic removeAllObjects];
     NSMutableArray* friends = [self getFriendsFromDB];
-    for (NSDictionary* friend in friends) {
+    for (int i = 0; i < friends.count; i++) {
+        NSDictionary* friend = [friends objectAtIndex:i];
         NSString* fid = [friend objectForKey:@"id"];
         NSString* alias = [friend objectForKey:@"alias"];
         [self.alias_dic setValue:alias forKey:fid];
@@ -837,7 +839,8 @@ static MTUser *singletonInstance;
             if (tempFriends) {
                 if (tempFriends.count) {
                     [self.friendList removeAllObjects];
-                    for (NSMutableDictionary* friend in tempFriends) {
+                    for (int i = 0; i < tempFriends.count; i++) {
+                        NSDictionary* friend = [tempFriends objectAtIndex:i];
                         NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
                         [self.friendList addObject:friend1];
                     }
