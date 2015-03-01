@@ -587,35 +587,33 @@
                 if (Oldmsg && Oldmsg_cmd == 989) {
                     if ([[Oldmsg valueForKey:@"operation"] integerValue] == [[msg_dic valueForKey:@"operation"] integerValue]) {
                         NSInteger msg_operation = [[Oldmsg objectForKey:@"operation"] integerValue];
-                        switch (msg_operation) {
-                            case 1:
-                            {
-                                //活动评论点赞
-                                if([[Oldmsg valueForKey:@"comment_id"] longValue] == [[msg_dic valueForKey:@"comment_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
-                                    msgNeed = NO;
-                                }
+                        
+                        if (msg_operation == 1) {
+                            //活动评论点赞
+                            if([[Oldmsg valueForKey:@"comment_id"] longValue] == [[msg_dic valueForKey:@"comment_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                [[MTUser sharedInstance].atMeEvents removeObject:Oldmsg];
+                                [[MTUser sharedInstance].atMeEvents addObject:Oldmsg];
+                                msgNeed = NO;
+                                break;
                             }
+                        }else if (msg_operation == 3){
+                            //图片点赞
+                            if([[Oldmsg valueForKey:@"photo_id"] longValue] == [[msg_dic valueForKey:@"photo_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                [[MTUser sharedInstance].atMeEvents removeObject:Oldmsg];
+                                [[MTUser sharedInstance].atMeEvents addObject:Oldmsg];
+                                msgNeed = NO;
                                 break;
-                            case 3:
-                            {
-                                //图片点赞
-                                if([[Oldmsg valueForKey:@"photo_id"] longValue] == [[msg_dic valueForKey:@"photo_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
-                                    msgNeed = NO;
-                                }
                             }
+                        }else if (msg_operation == 5){
+                            //视频点赞
+                            if([[Oldmsg valueForKey:@"video_id"] longValue] == [[msg_dic valueForKey:@"video_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                [[MTUser sharedInstance].atMeEvents removeObject:Oldmsg];
+                                [[MTUser sharedInstance].atMeEvents addObject:Oldmsg];
+                                msgNeed = NO;
                                 break;
-                            case 5:
-                            {
-                                //视频点赞
-                                if([[Oldmsg valueForKey:@"video_id"] longValue] == [[msg_dic valueForKey:@"video_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
-                                    msgNeed = NO;
-                                }
                             }
-                                break;
-                                
-                            default:
-                                break;
                         }
+                        
                     }
                 }
             }
