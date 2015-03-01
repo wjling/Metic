@@ -343,7 +343,7 @@
             NSLog(@"切换账号");
             [XGPush unRegisterDevice];
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
-            [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
+//            [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
             [[MTUser alloc]init];
             [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];

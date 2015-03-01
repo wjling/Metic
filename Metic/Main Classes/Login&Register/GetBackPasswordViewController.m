@@ -191,6 +191,9 @@
 //    }
     CGRect frame = ok_btn.frame;
     float offset = self.view.frame.size.height - keyboard_height - frame.size.height - frame.origin.y;
+    if (offset >= 0) {
+        return;
+    }
     CGRect newFrame = self.view.frame;
     newFrame.origin.y += offset;
     [UIView beginAnimations:@"goUP" context:nil];

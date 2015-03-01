@@ -331,16 +331,12 @@
             NSLog(@"有网络");
             [self checkPassWord];
         }
-        [self removeWaitingView];
-//        [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
-        [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self jumpToMainView];
-//        });
-        [button_login setEnabled:YES];
-        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
-//        [self jumpToMainView];
-        return;
+//        [self removeWaitingView];
+
+//        [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
+//        [button_login setEnabled:YES];
+//        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+    
     }
     else if ([userStatus isEqualToString:@"change"])
     {
@@ -375,6 +371,7 @@
     NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithFile: MtsecretPath];
     NSString *userName = [arr objectAtIndex:0];
     NSString *password =  [arr objectAtIndex:1];
+    NSLog(@"验证密码,email: %@, password: %@", userName, password);
     self.logInEmail = userName;
     self.logInPassword = password;
     if (self.logInEmail && self.logInPassword) {
@@ -383,7 +380,7 @@
         [dictionary setValue:@"" forKey:@"passwd"];
         [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
         
-        NSLog(@"%@",dictionary);
+//        NSLog(@"%@",dictionary);
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -429,15 +426,20 @@
                             case LOGIN_SUC:
                             {
                                 appDelegate.hadCheckPassWord = YES;
+                                [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
+                                [button_login setEnabled:YES];
+                                [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+                                NSLog(@"验证密码成功");
                             }
                                 break;
                             default:
                             {
                                 //通知退出到登录页面
-                                NSLog(@"强制退出到登录页面");
-                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+                                NSLog(@"验证密码错误，强制退出到登录页面");
+//                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                             }
                         }
+                        [self removeWaitingView];
                     }];
                     
                 }
@@ -445,8 +447,9 @@
                 default:
                 {
                     //通知退出到登录页面
-                    NSLog(@"强制退出到登录页面");
-                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+                    NSLog(@"获取盐值失败，强制退出到登录页面");
+                    [self removeWaitingView];
+//                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                 }
             }
         }];
