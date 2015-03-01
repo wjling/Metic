@@ -577,9 +577,57 @@
         NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
     else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
-        [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
-        type = -1;
-        NSLog(@"有人@你： %@",msg_dic);
+        if (msg_cmd == 989) {
+            //除重
+            NSArray* atmeEvents = [NSArray arrayWithArray:[MTUser sharedInstance].atMeEvents];
+            BOOL msgNeed = YES;
+            for (int index = 0; index < atmeEvents.count; index ++) {
+                NSDictionary* Oldmsg = atmeEvents[index];
+                NSInteger Oldmsg_cmd = [[Oldmsg objectForKey:@"cmd"] integerValue];
+                if (Oldmsg && Oldmsg_cmd == 989) {
+                    if ([[Oldmsg valueForKey:@"operation"] integerValue] == [[msg_dic valueForKey:@"operation"] integerValue]) {
+                        NSInteger msg_operation = [[Oldmsg objectForKey:@"operation"] integerValue];
+                        switch (msg_operation) {
+                            case 1:
+                            {
+                                //活动评论点赞
+                                if([[Oldmsg valueForKey:@"comment_id"] longValue] == [[msg_dic valueForKey:@"comment_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                    msgNeed = NO;
+                                }
+                            }
+                                break;
+                            case 3:
+                            {
+                                //图片点赞
+                                if([[Oldmsg valueForKey:@"photo_id"] longValue] == [[msg_dic valueForKey:@"photo_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                    msgNeed = NO;
+                                }
+                            }
+                                break;
+                            case 5:
+                            {
+                                //视频点赞
+                                if([[Oldmsg valueForKey:@"video_id"] longValue] == [[msg_dic valueForKey:@"video_id"] longValue] && [[Oldmsg valueForKey:@"author_id"] longValue] == [[msg_dic valueForKey:@"author_id"] longValue]){
+                                    msgNeed = NO;
+                                }
+                            }
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            if (msgNeed) [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+            type = -1;
+            NSLog(@"有人@你： %@",msg_dic);
+        }else{
+            [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
+            type = -1;
+            NSLog(@"有人@你： %@",msg_dic);
+        }
+        
     }
     else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散985
     {
