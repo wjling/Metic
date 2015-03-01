@@ -430,7 +430,8 @@ static MTUser *singletonInstance;
     [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
     NSLog(@"before sort, friendlist: %@",friendList);
-    for (NSMutableDictionary* aFriend in self.friendList) {
+    for (int i = 0; i < self.friendList.count; i++) {
+        NSMutableDictionary* aFriend  = [self.friendList objectAtIndex:i];
         NSString* fAlias = [aFriend objectForKey:@"alias"];
         NSString* fname_py;
         NSLog(@"alias: %@----%@",fAlias,[fAlias class]);
@@ -548,7 +549,8 @@ static MTUser *singletonInstance;
     NSLog(@"insertToFriendTable begin");
     MySqlite* sql = [[MySqlite alloc]init];
     [sql openMyDB:DB_path];
-    for (NSDictionary* friend in friends) {
+    for (int i = 0; i < friends.count; i++) {
+        NSDictionary* friend = [friends objectAtIndex:i];
         NSString* friendEmail = [friend objectForKey:@"email"];
         NSNumber* friendID = [friend objectForKey:@"id"];
         NSNumber* friendGender = [friend objectForKey:@"gender"];
@@ -657,7 +659,7 @@ static MTUser *singletonInstance;
         NSString* fid = [friend objectForKey:@"id"];
         NSString* alias = [friend objectForKey:@"alias"];
         [self.alias_dic setValue:alias forKey:fid];
-        NSLog(@"alias from db: %@ (%@) --- %@ (%@)", fid, [fid class], alias, [alias class]);
+//        NSLog(@"alias from db: %@ (%@) --- %@ (%@)", fid, [fid class], alias, [alias class]);
     }
 //    NSLog(@"get alias from db: %@",alias_dic);
 }

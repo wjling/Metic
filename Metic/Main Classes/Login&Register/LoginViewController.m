@@ -328,14 +328,21 @@
         appDelegate.isLogined = YES;
         appDelegate.hadCheckPassWord = NO;
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"有网络");
+            NSLog(@"有网络，验证密码");
             [self checkPassWord];
         }
-//        [self removeWaitingView];
-
-//        [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-//        [button_login setEnabled:YES];
-//        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+//        else
+//        {
+//            NSLog(@"没网络，跳过验证密码");
+//            [self removeWaitingView];
+//            [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
+//            [button_login setEnabled:YES];
+//            [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+//        }
+        [self removeWaitingView];
+        [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
+        [button_login setEnabled:YES];
+        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
     
     }
     else if ([userStatus isEqualToString:@"change"])
@@ -426,9 +433,9 @@
                             case LOGIN_SUC:
                             {
                                 appDelegate.hadCheckPassWord = YES;
-                                [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-                                [button_login setEnabled:YES];
-                                [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+//                                [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
+//                                [button_login setEnabled:YES];
+//                                [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
                                 NSLog(@"验证密码成功");
                             }
                                 break;
@@ -436,10 +443,10 @@
                             {
                                 //通知退出到登录页面
                                 NSLog(@"验证密码错误，强制退出到登录页面");
-//                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+                                [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                             }
                         }
-                        [self removeWaitingView];
+//                        [self removeWaitingView];
                     }];
                     
                 }
@@ -448,8 +455,8 @@
                 {
                     //通知退出到登录页面
                     NSLog(@"获取盐值失败，强制退出到登录页面");
-                    [self removeWaitingView];
-//                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+//                    [self removeWaitingView];
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                 }
             }
         }];

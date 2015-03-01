@@ -1089,7 +1089,10 @@
     [[MTUser alloc]init];
     [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[SlideNavigationController sharedInstance] popToRootViewControllerAnimated:YES];
+    });
+    
 }
 
 

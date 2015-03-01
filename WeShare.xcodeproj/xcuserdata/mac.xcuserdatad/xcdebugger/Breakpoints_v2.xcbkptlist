@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Login&amp;Register/LoginViewController.m"
-            timestampString = "446843798.841578"
+            timestampString = "446894732.713829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "365"
+            endingLineNumber = "365"
             landmarkName = "-checkPreUP"
             landmarkType = "5">
          </BreakpointContent>
