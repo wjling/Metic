@@ -575,11 +575,12 @@
     NSURL* videoURL = info[UIImagePickerControllerMediaURL];
     //[self save:[videoURL path]];
     NSInteger fileSize_N = [self getFileSize:[[videoURL absoluteString] substringFromIndex:16]];
+    NSInteger videoLen_N = [self getVideoDuration:videoURL];
     NSString* fileSize = [NSString stringWithFormat:@"%ld kb",(long)fileSize_N];
-    NSString* videoLen = [NSString stringWithFormat:@"%.0f s", [self getVideoDuration:videoURL]];
+    NSString* videoLen = [NSString stringWithFormat:@"%.0ld s", (long)videoLen_N];
     NSLog(@"%@   %@",fileSize,videoLen);
-    if (fileSize_N > 200*1000) {
-        //视频超过200m，不能上传
+    if (videoLen_N > 20*60) {
+        //视频超过20分钟，不能上传
         [picker dismissViewControllerAnimated:YES completion:^{
             [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频文件过大，无法上传" WithDelegate:nil WithCancelTitle:@"确定"];
         }];
