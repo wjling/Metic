@@ -19,7 +19,8 @@
     NSMutableString *reString = [NSMutableString string];
     [reString appendString:@"["];
     NSMutableArray *values = [NSMutableArray array];
-    for (id valueObj in array) {
+    for (int i = 0; i < array.count; i++) {
+        id valueObj = [array objectAtIndex:i];
         NSString *value = [NSString jsonStringWithObject:valueObj];
         if (value) {
             [values addObject:[NSString stringWithFormat:@"%@",value]];

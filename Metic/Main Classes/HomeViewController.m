@@ -68,8 +68,8 @@
     [_ArrangementView.layer setCornerRadius:6];
     _ArrangementView.
     clipsToBounds = YES;
-    for (UIButton* button in _arrangementButtons) {
-        
+    for (int i = 0; i < _arrangementButtons.count; i++) {
+        UIButton* button = [_arrangementButtons objectAtIndex:i];
         [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     }
     [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
@@ -542,7 +542,8 @@
     
     //比较
     NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
-    for (NSDictionary* res in result) {
+    for (int i = 0; i < result.count; i++) {
+        NSDictionary* res = [result objectAtIndex:i];
         NSString* sequence_S = [res valueForKey:@"event_id"];
         NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
         if (!sequence) continue;
@@ -587,7 +588,8 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
     NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-    for (NSDictionary *temp in result) {
+    for (int i = 0; i < result.count; i++) {
+        NSDictionary* temp = [result objectAtIndex:i];
         NSString *tmpa = [temp valueForKey:@"event_info"];
         tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];

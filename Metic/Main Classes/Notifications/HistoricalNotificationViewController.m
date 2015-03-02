@@ -124,7 +124,8 @@
     
     MySqlite* mySql = [[MySqlite alloc]init];
     [mySql openMyDB:DB_path];
-    for (NSDictionary* msg in self.historicalMsgs) {
+    for (int i = 0; i < self.historicalMsgs.count; i++) {
+        NSDictionary* msg = [self.historicalMsgs objectAtIndex:i];
         NSNumber* seq = [msg objectForKey:@"seq"];
         [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
                                                                 [NSString stringWithFormat:@"%@",seq],@"seq",nil]];

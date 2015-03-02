@@ -108,7 +108,8 @@
 
 -(void) initButtons
 {
-    for (UIButton* button in self.buttons) {
+    for (int i = 0; i < self.buttons.count; i++) {
+        UIButton* button = [self.buttons objectAtIndex:i];
         UIImage *colorImage = [CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0] ];
         [button setBackgroundImage:colorImage forState:UIControlStateHighlighted];
         [button resignFirstResponder];

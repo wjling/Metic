@@ -118,11 +118,13 @@
 -(void)getMsgArray
 {
     msg_arr = [[NSMutableArray alloc]init];
-    for (NSMutableDictionary* msg in [MTUser sharedInstance].eventRequestMsg) {
+    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+        NSMutableDictionary* msg = [[MTUser sharedInstance].eventRequestMsg objectAtIndex:i];
         NSInteger cmd = [[msg objectForKey:@"cmd"] integerValue];
         if (cmd != REQUEST_EVENT) {
             BOOL flag = YES;
-            for (NSMutableDictionary* temp_msg in msg_arr) {
+            for (int j = 0; j < msg_arr.count; j++) {
+                NSMutableDictionary* temp_msg = [msg_arr objectAtIndex:j];
                 NSInteger eventId1 = [[temp_msg objectForKey:@"event_id"]integerValue];
                 NSInteger eventId2 = [[msg objectForKey:@"event_id"]integerValue];
                 NSInteger fid1 = [[temp_msg objectForKey:@"id"]integerValue];

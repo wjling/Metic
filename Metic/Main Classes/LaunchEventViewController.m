@@ -330,7 +330,8 @@
 
 -(void)turnRoundCorner
 {
-    for (UIView*view in self.roundCornerView) {
+    for (int i = 0; i < self.roundCornerView.count; i++) {
+        UIView* view = [self.roundCornerView objectAtIndex:i];
         view.layer.cornerRadius = 5;
     }
 }

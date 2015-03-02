@@ -448,7 +448,8 @@ enum pos{
 #pragma mark notificationDidReceive
 -(void)notificationDidReceive:(NSArray *)messages
 {
-    for (NSDictionary* message in messages) {
+    for (int i = 0; i < messages.count; i++) {
+        NSDictionary* message = [messages objectAtIndex:i];
         NSLog(@"homeviewcontroller receive a message %@",message);
         NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];

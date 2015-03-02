@@ -216,7 +216,8 @@
         [_scrollView setBackgroundColor:[UIColor colorWithWhite:204.0/255.0 alpha:1.0f]];
         [_scrollView setContentSize:CGSizeMake(bannerWidth*(_posterList.count+1), bannerHeight)];
         int i = 0;
-        for (NSDictionary* dict in _posterList) {
+        for (int j = 0; j < _posterList.count; j++) {
+            NSDictionary* dict = [_posterList objectAtIndex:j];
             if (i == _posterList.count-1) {
                 UIImageView* img = [[UIImageView alloc]init];
                 [img setUserInteractionEnabled:YES];

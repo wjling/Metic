@@ -172,7 +172,8 @@
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
     [sql openMyDB:path];
-    for (NSDictionary *photoInfo in photoInfos) {
+    for (int i = 0; i < photoInfos.count; i++) {
+        NSDictionary* photoInfo = [photoInfos objectAtIndex:i];
         NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
         photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
@@ -193,7 +194,8 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
     NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
-    for (NSDictionary *temp in result) {
+    for (int i = 0; i < result.count; i++) {
+        NSDictionary* temp = [result objectAtIndex:i];
         NSString *tmpa = [temp valueForKey:@"photoInfo"];
         tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
@@ -333,7 +335,8 @@
 {
     float lH = 0, rH = 0;
     NSArray* tmp = [_photo_list subarrayWithRange:NSMakeRange(0, _showPhoNum)];
-    for (NSDictionary* dict in tmp) {
+    for (int i = 0; i < tmp.count; i++) {
+        NSDictionary* dict = [tmp objectAtIndex:i];
         float width = [[dict valueForKey:@"width"] floatValue];
         float height = [[dict valueForKey:@"height"] floatValue];
         float RealHeight = height * 150.0f / width + 43;

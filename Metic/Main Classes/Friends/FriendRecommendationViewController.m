@@ -295,7 +295,8 @@
 {
     NSMutableArray* tels = [[NSMutableArray alloc]init];
     if (contacts_arr) {
-        for (id tmpPerson in contacts_arr) {
+        for (int j = 0; j < contacts_arr.count; j++) {
+            id tmpPerson = [contacts_arr objectAtIndex:j];
             ABMultiValueRef phones = ABRecordCopyValue((__bridge ABRecordRef)(tmpPerson), kABPersonPhoneProperty);
             for (NSInteger i = 0; i < ABMultiValueGetCount(phones); i++) {
                 NSMutableString* phoneNumber = (__bridge NSMutableString *)(ABMultiValueCopyValueAtIndex(phones, i));

@@ -651,18 +651,15 @@
         [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
     }
     
-
-    
-    
-    
-    int count = member_ids.count;
+    NSInteger count = member_ids.count;
     if (cell.avatars.count != 0) {
-        for (UIImageView* imgV in cell.avatars) {
+        for (int i = 0; i < cell.avatars.count; i++) {
+            UIImageView* imgV = [cell.avatars objectAtIndex:i];
             [imgV removeFromSuperview];
         }
         [cell.avatars removeAllObjects];
     }
-    for (NSInteger i = 0; i<count; i++) {
+    for (NSInteger i = 0; i < count; i++) {
         NSNumber* uid = [member_ids objectAtIndex:i];
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(i*35+10, 172, 25, 25)];
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:avatar authorId:uid];

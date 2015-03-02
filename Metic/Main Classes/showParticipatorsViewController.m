@@ -121,7 +121,8 @@
             [_participants removeAllObjects];
             [_participants addObjectsFromArray:(NSArray*)[response1 valueForKey:@"participant"]];
             [_fids removeAllObjects];
-            for (NSDictionary* participant in _participants) {
+            for (int i = 0; i < _participants.count; i++) {
+                NSDictionary* participant = [_participants objectAtIndex:i];
                 [_fids addObject:[participant valueForKey:@"id"]];
             }
             [_collectionView reloadData];

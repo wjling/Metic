@@ -238,7 +238,8 @@
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
     [sql openMyDB:path];
-    for (NSDictionary *videoInfo in videoInfos) {
+    for (int i = 0; i < videoInfos.count; i++) {
+        NSDictionary* videoInfo = [videoInfos objectAtIndex:i];
         NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
         videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
@@ -259,7 +260,8 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by video_id desc",_eventId],@"event_id", nil];
     NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
-    for (NSDictionary *temp in result) {
+    for (int i = 0; i < result.count; i++) {
+        NSDictionary* temp = [result objectAtIndex:i];
         NSString *tmpa = [temp valueForKey:@"videoInfo"];
         tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
@@ -279,7 +281,8 @@
     if (!_AVPlayers) _AVPlayers = [[NSMutableDictionary alloc]init];
     if (!_AVPlayerLayers) _AVPlayerLayers = [[NSMutableDictionary alloc]init];
     if (!_AVPlayerItems) _AVPlayerItems = [[NSMutableDictionary alloc]init];
-    for (NSDictionary* info in _videoInfos) {
+    for (int i = 0; i < _videoInfos.count; i++) {
+        NSDictionary* info = [_videoInfos objectAtIndex:i];
         NSString *videoName = [info valueForKey:@"video_name"];
         if ([_AVPlayers objectForKey:videoName]) continue;
         NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];

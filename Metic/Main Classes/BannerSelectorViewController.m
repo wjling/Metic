@@ -45,7 +45,8 @@
 }
 
 - (IBAction)selectBanner:(UIButton*)sender {
-    for (UIImageView* indictor in _selectorIndictors) {
+    for (int i = 0; i < _selectorIndictors.count; i++) {
+        UIImageView* indictor = [_selectorIndictors objectAtIndex:i];
         [indictor setHighlighted:NO];
     }
     _code = [sender tag];

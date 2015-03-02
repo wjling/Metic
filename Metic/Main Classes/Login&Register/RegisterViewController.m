@@ -155,7 +155,8 @@
 //    [self.navigationController popViewControllerAnimated:YES];
     LoginViewController* login;
     NSArray *VCs = [self.navigationController viewControllers];
-    for (UIViewController* vc in VCs) {
+    for (int i = 0; i < VCs.count; i++) {
+        UIViewController* vc = [VCs objectAtIndex:i];
         if ([vc isKindOfClass:[LoginViewController class]]) {
             login = (LoginViewController*)vc;
             break;

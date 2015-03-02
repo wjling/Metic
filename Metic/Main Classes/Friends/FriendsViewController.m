@@ -716,7 +716,8 @@
             }
         }
     } else if (friendSearchBar.text.length>0&&[CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
-        for (NSMutableDictionary *tempDic in friendList) {
+        for (int i = 0; i < friendList.count; i++) {
+            NSMutableDictionary* tempDic = [friendList objectAtIndex:i];
             NSString* fname = [tempDic objectForKey:@"name"];
             NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
             if (titleResult.length>0) {
