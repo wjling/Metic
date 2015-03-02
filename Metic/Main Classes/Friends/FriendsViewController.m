@@ -129,6 +129,7 @@
     self.searchFriendList = [[NSMutableArray alloc]init];
     
     friendSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+    friendSearchBar.placeholder = @"本地搜索";
     friendSearchBar.delegate = self;
     [friendSearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
     [friendSearchBar sizeToFit];
