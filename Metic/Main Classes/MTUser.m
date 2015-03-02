@@ -848,15 +848,16 @@ static MTUser *singletonInstance;
                         [self.friendList addObject:friend1];
                     }
                     [self insertAliasToFriendList];
-                    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:self.friendList];
+                    NSArray* backupFriendList = [[NSArray alloc]initWithArray:self.friendList copyItems:YES];
+                    NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:backupFriendList];
                     [thread start];
                 }
                 else
                 {
                     NSLog(@"好友列表已经是最新的啦～");
+                    [self insertAliasToFriendList];
                     dispatch_async(dispatch_get_global_queue(0, 0), ^
                                    {
-                                       [self insertAliasToFriendList];
                                        [self updateAliasInDB];
                                    });
                     
