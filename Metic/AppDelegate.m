@@ -574,7 +574,7 @@
                                                             object:nil
                                                           userInfo:nil];
         type = -1;
-        NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
+//        NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
     else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
         if (msg_cmd == 989) {
@@ -640,19 +640,9 @@
         [sql deleteTurpleFromTable:@"event" withWhere:wheres];
         [sql closeMyDB];
         
-        HomeViewController* vc = (HomeViewController*)self.homeViewController;
-        if (vc && [vc isKindOfClass:[HomeViewController class]]) {
-            for (int i = 0; i < vc.events.count; i++) {
-                NSMutableDictionary* event = vc.events[i];
-                NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                    [vc.events removeObject:event];
-                    [vc.tableView reloadData];
-                    break;
-                }
-            }
-            [vc.eventIds_all removeObject:event_id1];
-        }
+        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
+
     }
     else if (msg_cmd == KICK_EVENT_NOTIFICATION) //被踢出活动984
     {
@@ -667,19 +657,8 @@
         [sql deleteTurpleFromTable:@"event" withWhere:wheres];
         [sql closeMyDB];
         
-        HomeViewController* vc = (HomeViewController*)self.homeViewController;
-        if (vc && [vc isKindOfClass:[HomeViewController class]]) {
-            for (int i = 0; i < vc.events.count; i++) {
-                NSMutableDictionary* event = vc.events[i];
-                NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                    [vc.events removeObject:event];
-                    [vc.tableView reloadData];
-                    break;
-                }
-            }
-            [vc.eventIds_all removeObject:event_id1];
-        }
+        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
         
     }
     else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
@@ -987,7 +966,7 @@
 //    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:networkStatusNotifier_view];
 //    networkStatusNotifier_view.hidden = YES;
     CGRect f = networkStatusNotifier_view.frame;
-    NSLog(@"network view: x: %f, y: %f, width: %f, height: %f",f.origin.x,f.origin.y,f.size.width,f.size.height);
+//    NSLog(@"network view: x: %f, y: %f, width: %f, height: %f",f.origin.x,f.origin.y,f.size.width,f.size.height);
 }
 
 
@@ -1238,7 +1217,7 @@
                                                               userInfo:nil];
             
             
-            NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);
+//            NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);
             if (numOfSyncMessages <= 1) {
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"\"%@\"活动更新啦",subject] andNumber:numOfSyncMessages withType:-1];
@@ -1250,7 +1229,7 @@
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
             }
-            NSLog(@"有人@你： %@",msg_dic);
+//            NSLog(@"有人@你： %@",msg_dic);
         }
         else if (msg_cmd == 985) //活动被解散
         {
@@ -1267,21 +1246,8 @@
             [sql deleteTurpleFromTable:@"event" withWhere:wheres];
             [sql closeMyDB];
             
-            for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
-                if ([vc isKindOfClass:[HomeViewController class]]) {
-                    for (int i = 0; i < vc.events.count; i++) {
-                        NSMutableDictionary* event = vc.events[i];
-                        NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                            [vc.events removeObject:event];
-                            [vc.tableView reloadData];
-                            break;
-                        }
-                    }
-                    [vc.eventIds_all removeObject:event_id1];
-                    break;
-                }
-            }
+            NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
             
         }
         else if (msg_cmd == 984) //被踢出活动
@@ -1299,21 +1265,8 @@
             [sql deleteTurpleFromTable:@"event" withWhere:wheres];
             [sql closeMyDB];
             
-            for (HomeViewController* vc in [SlideNavigationController sharedInstance].viewControllers) {
-                if ([vc isKindOfClass:[HomeViewController class]]) {
-                    for (int i = 0; i < vc.events.count; i++) {
-                        NSMutableDictionary* event = vc.events[i];
-                        NSNumber* event_id2 = [event objectForKey:@"event_id"];
-                        if ([event_id1 integerValue] == [event_id2 integerValue]) {
-                            [vc.events removeObject:event];
-                            [vc.tableView reloadData];
-                            break;
-                        }
-                    }
-                    [vc.eventIds_all removeObject:event_id1];
-                    break;
-                }
-            }
+            NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
             
         }
         else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
@@ -1361,7 +1314,7 @@
                                          nil];
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
-            NSLog(@"feedback send json: %@",json);
+//            NSLog(@"feedback send json: %@",json);
             //            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
             //
             //            [thread start];
@@ -1400,7 +1353,8 @@
     }
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
-    for (NSDictionary* message in syn_messges) {
+    for (NSInteger i = 0; i < syn_messges.count; i++) {
+        NSDictionary* message = [syn_messges objectAtIndex:i];
         NSString* timeStamp = [message objectForKey:@"timestamp"];
         NSNumber* seq = [message objectForKey:@"seq"];
         NSString* msg = [message objectForKey:@"msg"];

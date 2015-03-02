@@ -191,7 +191,6 @@
     
     if (!_tableView) {
         CGRect frame = self.view.frame;
-        NSLog(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
         frame.origin.x += 10;
         frame.size.width -= 20;
         frame.size.height -= 64 - frame.origin.y;
@@ -243,17 +242,19 @@
 //删除某个卡片
 -(void)deleteItem:(id)sender
 {
-    int eventId = [[[sender userInfo] objectForKey:@"eventId"] intValue];
+    NSNumber* eventId = [[sender userInfo] objectForKey:@"eventId"];
     
-    for (NSMutableDictionary* dict in self.events) {
-        if ([[dict valueForKey:@"event_id"] intValue] == eventId) {
+    for (NSInteger i = 0; i < self.events.count; i++) {
+        NSMutableDictionary* dict = [self.events objectAtIndex:i];
+        if ([[dict valueForKey:@"event_id"] integerValue] == [eventId integerValue]) {
             [self.events removeObject:dict];
             [_tableView reloadData];
             break;
         }
     }
+    [self.eventIds_all removeObject:eventId];
     
-    NSLog(@"deleteItem %d",eventId);
+    NSLog(@"deleteItem %@",eventId);
 }
 
 //更新某个卡片
@@ -261,7 +262,8 @@
 {
     int eventId = [[[sender userInfo] objectForKey:@"eventId"] intValue];
     NSMutableArray *dict = [[sender userInfo] objectForKey:@"eventInfo"];
-    for (NSMutableDictionary* dic in self.events) {
+    for (NSInteger i = 0; i < self.events.count; i++) {
+        NSMutableDictionary* dic = [self.events objectAtIndex:i];
         if ([[dic valueForKey:@"event_id"] intValue] == eventId) {
             [self.events replaceObjectAtIndex:[_events indexOfObject:dic] withObject:dict];
             [_tableView reloadData];
@@ -477,7 +479,7 @@
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     
-    NSLog(@"received Data: %@",temp);
+//    NSLog(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -496,9 +498,9 @@
                 [self.events addObjectsFromArray:[response1 valueForKey:@"event_list"]];
                 [_tableView reloadData];
                 [self closeRJ];
-                [self updateEventToDB:[response1 valueForKey:@"event_list"]];
-   
-                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                    [self updateEventToDB:[response1 valueForKey:@"event_list"]];
+                });
             }
             else{//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
@@ -534,7 +536,7 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
     NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-    NSLog(@"%@",result);
+//    NSLog(@"%@",result);
     
     [self.sql closeMyDB];
     
@@ -561,7 +563,8 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     [self.sql openMyDB:path];
-    for (NSDictionary *event in events) {
+    for (NSInteger i = 0; i < self.events.count; i++) {
+        NSMutableDictionary* event = [self.events objectAtIndex:i];
         NSString *eventData = [NSString jsonStringWithDictionary:event];
         eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
@@ -739,7 +742,8 @@
 #pragma mark notificationDidReceive
 -(void)notificationDidReceive:(NSArray *)messages
 {
-    for (NSDictionary* message in messages) {
+    for (NSInteger i = 0; i < messages.count; i++) {
+        NSDictionary*message = [messages objectAtIndex:i];
         NSLog(@"homeviewcontroller receive a message %@",message);
         NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];

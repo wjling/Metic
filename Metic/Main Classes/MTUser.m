@@ -181,7 +181,7 @@ static MTUser *singletonInstance;
                 case NORMAL_REPLY:
                 {
                     self.avatarInfo = [response1 valueForKey:@"list"];
-                    NSLog(@"%@",_avatarInfo);
+//                    NSLog(@"%@",_avatarInfo);
                     [self updateAvatar];
                 }
                     break;
@@ -200,8 +200,9 @@ static MTUser *singletonInstance;
     MySqlite *sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
-    NSLog(@"%@",self.avatarInfo);
-    for (NSDictionary *dictionary in self.avatarInfo) {
+//    NSLog(@"%@",self.avatarInfo);
+    for (NSInteger i = 0;i < self.avatarInfo.count; i++) {
+        NSDictionary *dictionary = [self.avatarInfo objectAtIndex:i];
         NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
         NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
@@ -219,7 +220,7 @@ static MTUser *singletonInstance;
                 [sql insertToTable:@"avatar" withColumns:columns andValues:values];
                 NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
                 [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
+//                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
                 }];
             }
         }
@@ -230,12 +231,12 @@ static MTUser *singletonInstance;
 - (void)setUid:(NSNumber*) user_id
 {
     userid = user_id;
-    NSLog(@"set user id: %@", self.userid);
+//    NSLog(@"set user id: %@", self.userid);
     DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self initUserDir];
     
     NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
-    NSLog(@"设置别名: %@",account);
+//    NSLog(@"设置别名: %@",account);
     [XGPush setAccount:account];
     
     
@@ -396,7 +397,7 @@ static MTUser *singletonInstance;
         [friendsIdSet addObject:fid];
         [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
-    NSLog(@"get friends from DB, friendList: %@",self.friendList);
+//    NSLog(@"get friends from DB, friendList: %@",self.friendList);
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           self.userid,@"id",
                           [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
@@ -429,12 +430,12 @@ static MTUser *singletonInstance;
     BOOL hasSpecialChar = NO;
     [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
-    NSLog(@"before sort, friendlist: %@",friendList);
+//    NSLog(@"before sort, friendlist: %@",friendList);
     for (int i = 0; i < self.friendList.count; i++) {
         NSMutableDictionary* aFriend  = [self.friendList objectAtIndex:i];
         NSString* fAlias = [aFriend objectForKey:@"alias"];
         NSString* fname_py;
-        NSLog(@"alias: %@----%@",fAlias,[fAlias class]);
+//        NSLog(@"alias: %@----%@",fAlias,[fAlias class]);
         if (fAlias) {
             if (![fAlias isEqual:[NSNull null]] && ![fAlias isEqualToString:@""]) {
                 fname_py = [CommonUtils pinyinFromNSString:fAlias];
@@ -449,7 +450,7 @@ static MTUser *singletonInstance;
             fname_py = [CommonUtils pinyinFromNSString:[aFriend objectForKey:@"name"]];
 
         }
-        NSLog(@"friend name: %@",fname_py);
+//        NSLog(@"friend name: %@",fname_py);
         NSString *regex = @"[a-zA-Z]";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
@@ -476,7 +477,8 @@ static MTUser *singletonInstance;
         }
     }
     
-    for (NSString* key in sectionArray) {
+    for (NSInteger i = 0; i < sectionArray.count; i++) {
+        NSString* key = [sectionArray objectAtIndex:i];
         NSMutableArray* arr = [sorted objectForKey:key];
         [self rankFriendsInArray:arr];
 //        NSLog(@"sorted array: %@",arr);
@@ -494,8 +496,8 @@ static MTUser *singletonInstance;
     if (hasSpecialChar) {
         [sectionArray addObject:@"#"];
     }
-    NSLog(@"sorted friends dictionary: %@",sorted);
-    NSLog(@"section array: %@",self.sectionArray);
+//    NSLog(@"sorted friends dictionary: %@",sorted);
+//    NSLog(@"section array: %@",self.sectionArray);
     sortingFriendsDone = YES;
     doingSortingFriends = NO;
     return sorted;
@@ -597,7 +599,7 @@ static MTUser *singletonInstance;
         [friendsIdSet addObject:fid];
         [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
     }
-    NSLog(@"friend id set: %@",friendsIdSet);
+//    NSLog(@"friend id set: %@",friendsIdSet);
 }
 
 
@@ -633,7 +635,8 @@ static MTUser *singletonInstance;
                 }
                 [self.alias_dic removeAllObjects];
                 NSMutableArray* alias_list = [response1 objectForKey:@"list"];
-                for (NSDictionary* temp in alias_list) {
+                for (NSInteger i = 0; i <alias_list.count; i++) {
+                    NSDictionary* temp = [alias_list objectAtIndex:i];
                     NSString* fid = [NSString stringWithFormat:@"%@",[temp objectForKey:@"id"]];
                     NSString* alias = [temp objectForKey:@"alias"];
                     [self.alias_dic setValue:alias forKey:fid];
@@ -644,7 +647,7 @@ static MTUser *singletonInstance;
             default:
                 break;
         }
-        NSLog(@"get alias from server, alias_dic: %@",self.alias_dic);
+//        NSLog(@"get alias from server, alias_dic: %@",self.alias_dic);
         [self synchronizeFriends];
     };
     
@@ -694,14 +697,14 @@ static MTUser *singletonInstance;
 
 -(void)insertAliasToFriendList
 {
-    NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
+//    NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
     for (int i = 0; i < friendList.count; i++) {
 //        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
         NSMutableDictionary* friend = [friendList objectAtIndex:i];
         NSNumber* fid = [friend objectForKey:@"id"];
        
         NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        NSLog(@"fid: %@, alias: %@",fid, alias);
+//        NSLog(@"fid: %@, alias: %@",fid, alias);
         if (alias) {
             [friend setValue:alias forKey:@"alias"];
         }
@@ -710,7 +713,7 @@ static MTUser *singletonInstance;
             [friend setValue:[NSNull null] forKey:@"alias"];
         }
     }
-    NSLog(@"after insert alias to friendlist: %@",self.friendList);
+//    NSLog(@"after insert alias to friendlist: %@",self.friendList);
 }
 
 -(void)aliasDicDidChanged
@@ -753,7 +756,7 @@ static MTUser *singletonInstance;
     [mySql openMyDB:DB_path];
     self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
     [mySql closeMyDB];
-    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
+//    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
     //    [self.notificationsTable reloadData];
     NSInteger count = self.msgFromDB.count;
     for (NSInteger i = count - 1; i >= 0; i--) {
@@ -860,7 +863,7 @@ static MTUser *singletonInstance;
 //                    self.friendList = [self getFriendsFromDB];
 //                    self.sortedFriendDic = [self sortFriendList];
                 }
-                NSLog(@"synchronize friends: %@",friendList);
+//                NSLog(@"synchronize friends: %@",friendList);
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
                                    [self friendListDidChanged];
