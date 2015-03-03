@@ -122,5 +122,12 @@
     }
 }
 
+//强制清除该活动所有提醒信息
++(void)clearEventInfo:(NSNumber*)EventId{
+    if (!EventId) return;
+    [[MTUser sharedInstance].updatePVStatus removeObjectForKey:EventId];
+    [[MTUser sharedInstance].updateEventStatus removeObjectForKey:EventId];
+}
+
 
 @end

@@ -21,4 +21,7 @@
 
 //清除无效提醒信息
 +(void)clearInavalidInfo:(NSNumber*)EventId;
+
+//强制清除该活动所有提醒信息
++(void)clearEventInfo:(NSNumber*)EventId;
 @end
