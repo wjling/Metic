@@ -507,6 +507,7 @@
                     [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
                     [self removeEventFromDB];
                     [self deleteItemfromHomeArray];
+                    [NotificationController clearEventInfo:_eventId];
                     return ;
                 }
                 
@@ -527,6 +528,7 @@
                 [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
                 [self removeEventFromDB];
                 [self deleteItemfromHomeArray];
+                [NotificationController clearEventInfo:_eventId];
             }
             
         }
@@ -562,16 +564,6 @@
     NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:_eventId,@"eventId", nil];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
-    return;
-    
-    
-    int index = self.navigationController.viewControllers.count - 2;
-    HomeViewController* controller = (HomeViewController*)self.navigationController.viewControllers[index];
-    
-    if ([controller isKindOfClass:[HomeViewController class]]) {
-        [controller.events removeObject:_event];
-        [controller.tableView reloadData];
-    }
 }
 
 -(void)replaceItemfromArray:(NSDictionary*)oldArr newArr:(NSDictionary*)newArr

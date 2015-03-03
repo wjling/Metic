@@ -109,6 +109,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    NSLog(@"dealloc");
+}
+
 //返回上一层
 -(void)MTpopViewController{
     if(_uploadImage){

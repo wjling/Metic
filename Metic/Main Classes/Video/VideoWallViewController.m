@@ -329,14 +329,19 @@
                         [_videoInfos_all removeAllObjects];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                             [self deleteAllVideoInfoFromDB:_eventId];
+                            if (_eventId) {
+                                [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
+                            }
                         });
                         
+                    }else{
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
+                            if (_eventId) {
+                                [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
+                            }
+                        });
                     }
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                        if (_eventId) {
-                            [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
-                        }
-                    });
+                    
                     
                     _sequence = [response1 valueForKey:@"sequence"];
                     if ([_sequence integerValue] != -1) {
@@ -589,17 +594,16 @@
         }];
         return;
     }
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
-        //[self openEditor:nil];
-    }];
 
     VideoPreviewViewController* controller = [[VideoPreviewViewController alloc]init];
     controller.videoURL = videoURL;
     controller.eventId = _eventId;
     [self.navigationController pushViewController:controller animated:YES];
     
-    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+        //[self openEditor:nil];
+    }];
 }
 
 
