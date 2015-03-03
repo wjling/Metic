@@ -145,6 +145,7 @@
 //     UIRemoteNotificationTypeAlert |
 //     UIRemoteNotificationTypeBadge];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     /* 信鸽推送 */
     if (isEnterprise == 1) {
         [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//企业版本

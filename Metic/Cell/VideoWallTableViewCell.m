@@ -453,20 +453,30 @@
 //        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
 //        
 //        dispatch_async(queue, ^{
+        BOOL needReset = NO;
         BOOL same = [_videoName isEqualToString:_playingVideoName];
-        if (!same || !_videoItem) {
+        NSArray* videoTracks = [_videoItem.asset tracksWithMediaType:AVMediaTypeVideo];
+        if (!same || !_videoItem || videoTracks.count == 0) {
+            if (_videoItem && videoTracks.count == 0) {
+                needReset = YES;
+            }
             NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:_videoName]];
             _videoItem = [AVPlayerItem playerItemWithURL:url];
             _playingVideoName = [NSString stringWithString:_videoName];
         }
         
-        if (!_videoPlayer) {
+        if (!_videoPlayer || needReset) {
             _videoPlayer = [AVPlayer playerWithPlayerItem:_videoItem];
         }else if(!same) {
             [_videoPlayer replaceCurrentItemWithPlayerItem:nil];
             [_videoPlayer replaceCurrentItemWithPlayerItem:_videoItem];
         }
         if (!_avLayer) {
+            _layerOn = NO;
+            _avLayer = [AVPlayerLayer playerLayerWithPlayer:_videoPlayer];
+        }else if (needReset){
+            [_avLayer removeFromSuperlayer];
+            _layerOn = NO;
             _avLayer = [AVPlayerLayer playerLayerWithPlayer:_videoPlayer];
         }
 
@@ -478,7 +488,9 @@
         CGRect frame = Bframe;
         NSArray* tracks = [_videoItem.asset tracksWithMediaType:AVMediaTypeVideo];
         if (tracks.count == 0) {
-            return;
+            _videoItem = nil;
+            _playingVideoName = nil;
+            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频有问题" WithDelegate:nil WithCancelTitle:@"确定"];
         }
         AVAssetTrack* videoTrack = [tracks objectAtIndex:0];
         CGFloat width = videoTrack.naturalSize.width;
@@ -506,10 +518,7 @@
             
         }
         [self.videoPlayer play];
-        
-        
-//            });
-//        });
+
     }
     
 }
