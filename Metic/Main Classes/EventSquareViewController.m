@@ -532,7 +532,6 @@
     }else if([alertView tag] == 244){
         
         if(buttonIndex == 0){
-            [self.navigationController popViewControllerAnimated:YES];
         }else if(buttonIndex == 1){
             
             NSString* cm = [alertView textFieldAtIndex:0].text;
