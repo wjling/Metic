@@ -237,7 +237,8 @@
                                           (height - length) / 2,
                                           length,
                                           length);
-    
+    [controller setKeepingCropAspectRatio:YES];
+    [controller setToolbarHidden:YES];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

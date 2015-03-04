@@ -195,7 +195,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -206,7 +206,7 @@ static SlideNavigationController *singletonInstance;
         {
             [super pushViewController:viewController animated:animated];
         }
-    }else NSLog(@"nononononononononononononononononon");
+    }else //NSLog(@"nononononononononononononononononon");
     self.shouldIgnorePushingViewControllers = YES;
 	
 }
@@ -215,7 +215,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -228,7 +228,7 @@ static SlideNavigationController *singletonInstance;
         }
         
         return nil;
-    }else NSLog(@"nononononononononononononononononon");
+    }else //NSLog(@"nononononononononononononononononon");
     self.shouldIgnorePushingViewControllers = YES;
     return nil;
 }
@@ -244,9 +244,9 @@ static SlideNavigationController *singletonInstance;
 //    }
     if (!self.shouldIgnorePushingViewControllers)
     {
-        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
+//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         return [super popViewControllerAnimated:animated];
-    }else NSLog(@"nononononononononononononononononon");
+    }else //NSLog(@"nononononononononononononononononon");
     self.shouldIgnorePushingViewControllers = YES;
     return nil;
 }
