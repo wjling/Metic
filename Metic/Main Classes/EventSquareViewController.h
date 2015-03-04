@@ -10,6 +10,6 @@
 #import "CommonUtils.h"
 #import "../Source/SlideNavigationController.h"
 
-@interface EventSquareViewController : UIViewController<SlideNavigationControllerDelegate,UIScrollViewDelegate>
+@interface EventSquareViewController : UIViewController<SlideNavigationControllerDelegate,UIScrollViewDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) UIView *shadowView;
 @end

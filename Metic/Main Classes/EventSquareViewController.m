@@ -16,6 +16,7 @@
 #import "AppConstants.h"
 #import "HttpSender.h"
 #import "UIImageView+WebCache.h"
+#import "SVProgressHUD.h"
 
 
 #define bannerWidth self.view.bounds.size.width
@@ -27,6 +28,7 @@
 @property (nonatomic,strong) UIPageControl* pagecontrol;
 @property (nonatomic,strong) NSTimer* timer;
 @property (nonatomic,strong) NSMutableArray* posterList;
+@property (nonatomic,strong) NSNumber* processingEventId;
 
 @property int firstIndex;
 @property int type;
@@ -291,14 +293,9 @@
     NSDictionary* dict = _posterList[index];
     if ([[dict valueForKey:@"type"] isEqualToString:@"event"]) {
         NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"content"]];
-        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-
-        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
-        eventDetailView.eventId = eventId;
-        [self.navigationController pushViewController:eventDetailView animated:YES];
         
-        
-        
+        [self checkEvent:eventId];
+        return;
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
 
         NSString*extra = [dict valueForKey:@"extra"];
@@ -329,8 +326,49 @@
     }
 }
 
-
-
+-(void)checkEvent:(NSNumber*)eventId{
+    if (!eventId) return;
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
+    _processingEventId = nil;
+    NSArray* eventids = @[eventId];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:eventids forKey:@"sequence"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"%@", response1);
+            if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                
+                if ([[dist valueForKey:@"isIn"] boolValue]) {
+                    [SVProgressHUD dismiss];
+                    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+                    
+                    EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+                    eventDetailView.eventId = eventId;
+                    [self.navigationController pushViewController:eventDetailView animated:YES];
+                    }else{
+                        [SVProgressHUD dismiss];
+                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"你尚未加入到此活动中" delegate:self cancelButtonTitle:@"返回" otherButtonTitles:@"立即加入", nil];
+                        _processingEventId = eventId;
+                        [alert setTag:233];
+                        [alert show];
+                    }
+            }else{
+                [SVProgressHUD dismissWithError:@"此活动已经解散"];
+            }
+            
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+        
+    }];
+    
+    
+}
 
 -(void)getPoster
 {
@@ -414,7 +452,7 @@
     float x = scrollView.contentOffset.x;
     int page = x/bannerWidth - 1;
     if (page < 0) page += _posterList.count;
-    NSLog(@"page:%d",page);
+//    NSLog(@"page:%d",page);
     if (page < _posterList.count && page != _pagecontrol.currentPage) {
         [_pagecontrol setCurrentPage:page];
     }
@@ -433,7 +471,7 @@
         float x = scrollView.contentOffset.x;
         int page = x/bannerWidth - 1;
         if (page < 0) page += _posterList.count;
-        NSLog(@"page:%d",page);
+//        NSLog(@"page:%d",page);
         if (page < _posterList.count && page != _pagecontrol.currentPage) {
             [_pagecontrol setCurrentPage:page];
         }
@@ -476,5 +514,70 @@
     }
     
     
+}
+#pragma mark - AlertViewDelegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if([alertView tag] == 233){
+        //从活动广场进来
+        NSLog(@"从活动广场进来,申请加入活动");
+        if(buttonIndex == 0){
+            [self.navigationController popViewControllerAnimated:YES];
+        }else if(buttonIndex == 1){
+            UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+            confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            confirmAlert.tag = 244;
+            [confirmAlert show];
+        }
+        return;
+    }else if([alertView tag] == 244){
+        
+        if(buttonIndex == 0){
+            [self.navigationController popViewControllerAnimated:YES];
+        }else if(buttonIndex == 1){
+            
+            NSString* cm = [alertView textFieldAtIndex:0].text;
+            NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _processingEventId,@"event_id",nil];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            [SVProgressHUD showWithStatus:@"正在发送..." maskType:SVProgressHUDMaskTypeClear];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSLog(@"received Data: %@",temp);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY:
+                        {
+                            [SVProgressHUD dismissWithSuccess:@"请等待发起人验证" afterDelay:2];
+                        }
+                            break;
+                        default:{
+                            [SVProgressHUD dismissWithSuccess:@"暂时无法加入活动" afterDelay:2];
+                        }
+                    }
+
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                }
+            }];
+        }
+        return;
+    }
+    
+    
+    switch (buttonIndex) {
+        case 0:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        case 1:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+            
+        default:
+            break;
+    }
 }
 @end
