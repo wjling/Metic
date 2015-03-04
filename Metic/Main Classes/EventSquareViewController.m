@@ -522,7 +522,6 @@
         //从活动广场进来
         NSLog(@"从活动广场进来,申请加入活动");
         if(buttonIndex == 0){
-            [self.navigationController popViewControllerAnimated:YES];
         }else if(buttonIndex == 1){
             UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
             confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
