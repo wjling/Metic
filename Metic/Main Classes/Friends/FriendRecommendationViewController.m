@@ -47,6 +47,8 @@
 
 @synthesize tabPage3_view;
 @synthesize kankan_tableview;
+@synthesize kankan_header;
+@synthesize kankan_footer;
 
 @synthesize activityIndicator;
 
@@ -146,6 +148,8 @@
 {
     [nearbyFriends_header free];
     [nearbyFriends_footer free];
+    [kankan_header free];
+    [kankan_footer free];
 }
 
 - (void)didReceiveMemoryWarning
@@ -256,6 +260,10 @@
 //    self.nearbyFriends_footer.scrollView = self.nearbyFriends_tableview;
 //    self.nearbyFriends_footer.delegate = self;
     
+    self.kankan_header = [[MJRefreshHeaderView alloc]init];
+    self.kankan_header.scrollView = self.kankan_tableview;
+    self.kankan_header.delegate = self;
+    
     UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.7];
     waitingView = [[UIView alloc]init];
     waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
@@ -350,7 +358,7 @@
     else if (tab_index == 2)
     {
         NSLog(@"tab 2");
-        [self getKanKan];
+        [self getKanKan:nil];
     }
     
 }
@@ -476,7 +484,7 @@
     [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
 }
 
--(void)getKanKan
+-(void)getKanKan:(void(^)()) didGetReceived
 {
     void (^getKanKanDone)(NSData*) = ^(NSData* rData)
     {
@@ -498,6 +506,9 @@
         if ([cmd integerValue] == 100) {
             kankan_arr = [response1 objectForKey:@"friend_list"];
             [kankan_tableview reloadData];
+        }
+        if (didGetReceived) {
+            didGetReceived();
         }
         [waitingView removeFromSuperview];
     };
@@ -883,7 +894,7 @@
         else if (tab_index == 2)
         {
             NSLog(@"随便看看");
-            [self getKanKan];
+            [self getKanKan:nil];
         }
 
     }
@@ -963,6 +974,13 @@
         [self getNearbyFriends:^{
             [refreshView endRefreshing];
         }];
+    }
+    else if (refreshView == self.kankan_header)
+    {
+        [self getKanKan:^
+         {
+             [refreshView endRefreshing];
+         }];
     }
 }
 
