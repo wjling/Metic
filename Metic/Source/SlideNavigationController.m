@@ -40,6 +40,7 @@
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
 @property (nonatomic, assign) BOOL shouldIgnorePushingViewControllers;
+@property float viewHeight;
 
 @end
 
@@ -100,8 +101,9 @@ static SlideNavigationController *singletonInstance;
 {
 	self.avoidSwitchingToSameClassViewController = YES;
 	singletonInstance = self;
+    _viewHeight = self.view.frame.size.height;
 	self.delegate = self;
-    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleUIApplicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
      if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
          [self.navigationBar setTintColor:[UIColor colorWithRed:86/255.0f green:202/255.0f  blue:171/255.0f alpha:1.0f]];
      }else [self.navigationBar setTintColor:[UIColor whiteColor]];
@@ -126,6 +128,12 @@ static SlideNavigationController *singletonInstance;
 {
     return UIInterfaceOrientationMaskPortrait;
 }
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+}
+
 #pragma mark - Public Methods -
 
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion
@@ -603,6 +611,23 @@ static SlideNavigationController *singletonInstance;
 {
     [super didShowViewController:viewController animated:animated];
     self.shouldIgnorePushingViewControllers = NO;
+}
+
+#pragma mark UIApplicationWillChangeStatusBarFrameNotification
+// 如有必要，需监听系统状态栏变更通知：UIApplicationWillChangeStatusBarFrameNotification
+- (void)handleUIApplicationWillChangeStatusBarFrameNotification:(NSNotification*)notification
+{
+    CGRect newStatusBarFrame = [(NSValue*)[notification.userInfo objectForKey:UIApplicationStatusBarFrameUserInfoKey] CGRectValue];
+    // 根据系统状态栏高判断热点栏的变动
+    if (newStatusBarFrame.size.height == 20) {
+        CGRect frame = self.view.frame;
+        frame.size.height = _viewHeight;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.view setFrame:frame];
+        });
+    }
+    
+    
 }
 @end
 

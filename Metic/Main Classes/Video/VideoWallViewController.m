@@ -60,7 +60,8 @@
     [NotificationController visitVideoWall:_eventId needClear:YES];
     _loadingVideo = [[NSMutableSet alloc]init];
     //init tableView
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
+    self.view.autoresizesSubviews = YES;
+//    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     _Headeropen = NO;
     _Footeropen = NO;
     //初始化下拉刷新功能
@@ -437,6 +438,8 @@
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
+    NSLog(@"%f   %f   %f",scrollView.frame.size.height,self.view.frame.size.height,self.navigationController.view.frame.size.height);
+    
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -602,10 +605,18 @@
     
     [picker dismissViewControllerAnimated:YES completion:^{
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         //[self openEditor:nil];
     }];
 }
 
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }];
+}
 
 #pragma mark - private Method
 
