@@ -105,10 +105,14 @@
 {
     [super viewDidAppear:animated];
     [SVProgressHUD dismiss];
-    [_tableView setFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
+
     if (_shouldReload) {
         _shouldReload = NO;
         [_header beginRefreshing];
+    }else{
+        _shouldFlash = NO;
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(reShouldFlash) userInfo:nil repeats:NO];
+        [_tableView reloadData];
     }
     
     [MobClick beginLogPageView:@"视频墙"];
