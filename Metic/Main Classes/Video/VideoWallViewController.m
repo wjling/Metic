@@ -104,7 +104,6 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [SVProgressHUD dismiss];
 
     if (_shouldReload) {
         _shouldReload = NO;

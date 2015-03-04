@@ -50,11 +50,11 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
 
 - (void)setUp
 {
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.3];
     self.progress = 0.;
-    self.outerRadiusRatio = 0.5;
-    self.innerRadiusRatio = 0.45;
-    self.overlayColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.5];
+    self.outerRadiusRatio = 5;
+    self.innerRadiusRatio = 0.22;
+    self.overlayColor = [UIColor colorWithWhite:250.0/255.0 alpha:0.7];
     self.animationProggress = 0.;
     self.stateChangeAnimationDuration = 0.25;
     self.triggersDownloadDidFinishAnimationAutomatically = YES;
@@ -91,39 +91,48 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
     CGContextSetRGBFillColor(context, 0., 0., 0., 0.5);
     CGContextSetFillColorWithColor(context, self.overlayColor.CGColor);
     
-    CGMutablePathRef path0 = CGPathCreateMutable();
-    CGPathMoveToPoint(path0, NULL, width / 2., 0.);
-    CGPathAddLineToPoint(path0, NULL, width / 2., height / 2.);
-    CGPathAddLineToPoint(path0, NULL, -width / 2., height / 2.);
-    CGPathAddLineToPoint(path0, NULL, -width / 2., 0.);
-    CGPathAddLineToPoint(path0, NULL, (cosf(M_PI) * outerRadius), 0.);
-    CGPathAddArc(path0, NULL, 0., 0., outerRadius, M_PI, 0., 1.);
-    CGPathAddLineToPoint(path0, NULL, width / 2., 0.);
-    CGPathCloseSubpath(path0);
-    
-    CGMutablePathRef path1 = CGPathCreateMutable();
-    CGAffineTransform rotation = CGAffineTransformMakeScale(1., -1.);
-    CGPathAddPath(path1, &rotation, path0);
-    
-    CGContextAddPath(context, path0);
-    CGContextFillPath(context);
-    CGPathRelease(path0);
-    
-    CGContextAddPath(context, path1);
-    CGContextFillPath(context);
-    CGPathRelease(path1);
+//    CGMutablePathRef path0 = CGPathCreateMutable();
+//    CGPathMoveToPoint(path0, NULL, width / 2., 0.);
+//    CGPathAddLineToPoint(path0, NULL, width / 2., height / 2.);
+//    CGPathAddLineToPoint(path0, NULL, -width / 2., height / 2.);
+//    CGPathAddLineToPoint(path0, NULL, -width / 2., 0.);
+//    CGPathAddLineToPoint(path0, NULL, (cosf(M_PI) * outerRadius), 0.);
+//    CGPathAddArc(path0, NULL, 0., 0., outerRadius, M_PI, 0., 1.);
+//    CGPathAddLineToPoint(path0, NULL, width / 2., 0.);
+//    CGPathCloseSubpath(path0);
+//    
+//    CGMutablePathRef path1 = CGPathCreateMutable();
+//    CGAffineTransform rotation = CGAffineTransformMakeScale(1., -1.);
+//    CGPathAddPath(path1, &rotation, path0);
+//    
+//    CGContextAddPath(context, path0);
+//    CGContextFillPath(context);
+//    CGPathRelease(path0);
+//    
+//    CGContextAddPath(context, path1);
+//    CGContextFillPath(context);
+//    CGPathRelease(path1);
     
     if (_progress < 1.) {
-        CGFloat angle = 360. - (360. * _progress);
+        CGFloat angle = (360. * _progress);
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
         CGMutablePathRef path2 = CGPathCreateMutable();
         CGPathMoveToPoint(path2, &transform, innerRadius, 0.);
-        CGPathAddArc(path2, &transform, 0., 0., innerRadius, 0., angle / 180. * M_PI, 0.);
+        CGPathAddArc(path2, &transform, 0., 0., innerRadius, 0.,-1* angle / 180. * M_PI, YES);
         CGPathAddLineToPoint(path2, &transform, 0., 0.);
         CGPathAddLineToPoint(path2, &transform, innerRadius, 0.);
         CGContextAddPath(context, path2);
         CGContextFillPath(context);
         CGPathRelease(path2);
+        
+        CGAffineTransform transform3 = CGAffineTransformMakeRotation(M_PI_2);
+        CGMutablePathRef path3 = CGPathCreateMutable();
+        CGPathMoveToPoint(path3, &transform3, innerRadius, 0.);
+        CGPathAddArc(path3, &transform3, 0., 0., innerRadius*1.1, 0.,-2 * M_PI, YES);
+        CGPathAddArc(path3, &transform3, 0., 0., innerRadius*1, 0.,-2 * M_PI, NO);
+        CGContextAddPath(context, path3);
+        CGContextFillPath(context);
+        CGPathRelease(path3);
     }
 }
 
@@ -134,7 +143,7 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
 
 - (void)setOuterRadiusRatio:(CGFloat)outerRadiusRatio
 {
-    _outerRadiusRatio = (outerRadiusRatio < 0.) ? 0. : (outerRadiusRatio > 1.) ? 1. : outerRadiusRatio;
+    _outerRadiusRatio = (outerRadiusRatio < 0.) ? 0. : (outerRadiusRatio > 5.) ? 5. : outerRadiusRatio;
 }
 
 - (void)setProgress:(CGFloat)progress
@@ -169,6 +178,7 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
     CGFloat width = CGRectGetWidth(self.bounds);
     CGFloat height = CGRectGetHeight(self.bounds);
     CGFloat radius = MIN(width, height) / 2. * self.outerRadiusRatio;
+    return radius;
     switch (self.state) {
         case DAProgressOverlayViewStateWaiting: return radius * self.animationProggress;
         case DAProgressOverlayViewStateOperationFinished: return radius + (MAX(width, height) / sqrtf(2.) - radius) * self.animationProggress;
