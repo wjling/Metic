@@ -40,6 +40,9 @@
 
 @property (strong, nonatomic) IBOutlet UIView *tabPage3_view;
 @property (strong, nonatomic) IBOutlet UITableView *kankan_tableview;
+@property (strong, nonatomic) MJRefreshHeaderView* kankan_header;
+@property (strong, nonatomic) MJRefreshFooterView* kankan_footer;
+
 
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 

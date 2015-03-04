@@ -453,7 +453,14 @@ static MTUser *singletonInstance;
 //        NSLog(@"friend name: %@",fname_py);
         NSString *regex = @"[a-zA-Z]";
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-        NSString* first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
+        NSString* first_letter;
+        if (fname_py && ![fname_py isEqualToString:@""]) {
+            first_letter = [fname_py substringWithRange:NSMakeRange(0, 1)];
+        }
+        else
+        {
+            fname_py = @"无";
+        }
         BOOL isSpecialChar = ! [predicate evaluateWithObject:first_letter];
         if (isSpecialChar) {
             first_letter = @"#";
