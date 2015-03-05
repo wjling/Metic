@@ -599,6 +599,11 @@
             [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频文件过大，无法上传" WithDelegate:nil WithCancelTitle:@"确定"];
         }];
         return;
+    }else if (!videoURL){
+        [picker dismissViewControllerAnimated:YES completion:^{
+            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频文件异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+        }];
+        return;
     }
 
     VideoPreviewViewController* controller = [[VideoPreviewViewController alloc]init];
