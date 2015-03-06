@@ -393,7 +393,7 @@
             break;
         case 2:
         {
-            return 3;
+            return 2;
         }
             break;
         case 3:
@@ -446,16 +446,16 @@
             nSwitch2.tag = 2;
             [cell addSubview:nSwitch2];
         }
+//        else if (row == 1)
+//        {
+//            cell.textLabel.text = @"检测更新";
+//            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
+//            [activityIndicator setColor:color];
+//            activityIndicator.tag = 21;
+//            [cell.contentView addSubview:activityIndicator];
+//            
+//        }
         else if (row == 1)
-        {
-            cell.textLabel.text = @"检测更新";
-            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
-            [activityIndicator setColor:color];
-            activityIndicator.tag = 21;
-            [cell.contentView addSubview:activityIndicator];
-            
-        }
-        else if (row == 2)
         {
             cell.textLabel.text = @"关于活动宝";
         }
