@@ -393,7 +393,7 @@
             break;
         case 2:
         {
-            return 2;
+            return 1;
         }
             break;
         case 3:
@@ -438,14 +438,14 @@
     }
     else if(section == 2)
     {
-        if (row == 0) {
-            cell.textLabel.text = @"版本更新提醒";
-            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
-            [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
-            nSwitch2.on = [statusOfSwitch2 boolValue];
-            nSwitch2.tag = 2;
-            [cell addSubview:nSwitch2];
-        }
+//        if (row == 0) {
+//            cell.textLabel.text = @"版本更新提醒";
+//            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
+//            [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
+//            nSwitch2.on = [statusOfSwitch2 boolValue];
+//            nSwitch2.tag = 2;
+//            [cell addSubview:nSwitch2];
+//        }
 //        else if (row == 1)
 //        {
 //            cell.textLabel.text = @"检测更新";
@@ -455,7 +455,7 @@
 //            [cell.contentView addSubview:activityIndicator];
 //            
 //        }
-        else if (row == 1)
+        if (row == 0)
         {
             cell.textLabel.text = @"关于活动宝";
         }
@@ -523,18 +523,18 @@
     }
     else if (section == 2)
     {
-        if (row == 0) {
-            UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:2];
-            if ([mSwitch isKindOfClass:[UISwitch class]]) {
-                [mSwitch setOn:!mSwitch.on animated:YES];
-                [self switch2Clicked:mSwitch];
-            }
-        }
-        else if (row == 1)
-        {
-            [self updateCheck];
-        }
-        else if (row == 2)
+//        if (row == 0) {
+//            UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:2];
+//            if ([mSwitch isKindOfClass:[UISwitch class]]) {
+//                [mSwitch setOn:!mSwitch.on animated:YES];
+//                [self switch2Clicked:mSwitch];
+//            }
+//        }
+//        else if (row == 1)
+//        {
+//            [self updateCheck];
+//        }
+        if (row == 0)
         {
             [self aboutApp];
         }
