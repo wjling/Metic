@@ -144,7 +144,7 @@
             
         default:
             NSLog(@"昵称修改失败");
-            [SVProgressHUD dismissWithError:@"昵称修改失败" afterDelay:1];
+            [SVProgressHUD dismissWithError:@"昵称修改失败，请检查是否包含非法字符" afterDelay:1.5];
 //            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
             break;
     }
