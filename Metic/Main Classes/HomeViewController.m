@@ -485,15 +485,7 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if ([response1 valueForKey:@"name"]) {//更新用户信息
-                
-                [[MTUser sharedInstance] initWithData:response1];
-                [AppDelegate refreshMenu];
-                ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
-                NSLog(@"set homeViewController");
-            }
-            
-            else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
+            if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 if (_clearIds) [_events removeAllObjects];
                 [self.events addObjectsFromArray:[response1 valueForKey:@"event_list"]];
                 [_tableView reloadData];
@@ -502,7 +494,7 @@
                     [self updateEventToDB:[response1 valueForKey:@"event_list"]];
                 });
             }
-            else{//获取event id 号
+            else if([response1 valueForKey:@"sequence"]){//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
                 [self compareAndDeleteEventToDB:[NSArray arrayWithArray:_eventIds_all]];
                 //[self.eventIds removeAllObjects];

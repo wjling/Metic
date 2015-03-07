@@ -161,8 +161,23 @@ static MTUser *singletonInstance;
     NSLog(@"getInfo:\n%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:aDelegate];
-    [httpSender sendMessage:jsonData withOperationCode:GET_USER_INFO];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_USER_INFO finshedBlock:^(NSData *rData) {
+        if (!rData) return ;
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                if ([response1 valueForKey:@"name"]) {//更新用户信息
+                    
+                    [[MTUser sharedInstance] initWithData:response1];
+                    [AppDelegate refreshMenu];
+                }
+            }
+        }
+    }];
 
 }
 

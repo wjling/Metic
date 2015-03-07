@@ -61,6 +61,7 @@
     info_tableview.dataSource = self;
     
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
 }
 
 //返回上一层
@@ -242,7 +243,7 @@
                 [cell.contentView addSubview:label];
             }
             
-            if ([MTUser sharedInstance].location) {
+            if ([MTUser sharedInstance].location && ![[MTUser sharedInstance].location isEqual:[NSNull null]]) {
                 label.text = [MTUser sharedInstance].location;
 //                NSLog(@"所在地1:%@",[MTUser sharedInstance].location);
             }
@@ -280,7 +281,8 @@
                 [cell.contentView addSubview:label];
             }
 //            NSLog(@"个人描述:%@",[MTUser sharedInstance].sign);
-            if ([MTUser sharedInstance].sign) {
+            if ([MTUser sharedInstance].sign && ![[MTUser sharedInstance].sign isEqual:[NSNull null]]) {
+                NSLog(@"%@",[MTUser sharedInstance].sign);
                 label.text = [MTUser sharedInstance].sign;
             }
             else
