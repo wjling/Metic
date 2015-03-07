@@ -56,6 +56,7 @@
     }
     
     avatar = [UIImage imageNamed:@"默认用户头像"];
+    name = @"";
     
     info_tableview.delegate = self;
     info_tableview.dataSource = self;
@@ -105,7 +106,7 @@
 
 - (IBAction)okBtnClicked:(id)sender {
     
-    if (![MTUser sharedInstance].name || [[MTUser sharedInstance].name isEqualToString:@""]) {
+    if (!name || [name isEqualToString:@""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
@@ -186,13 +187,7 @@
                 [cell.contentView addSubview:label];
             }
 //            NSLog(@"昵称: %@",[MTUser sharedInstance].name);
-            if ([MTUser sharedInstance].name) {
-                label.text = [MTUser sharedInstance].name;
-            }
-            else
-            {
-                label.text = @"";
-            }
+            label.text = name;
         }
         else if (row == 1)
         {

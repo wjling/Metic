@@ -7,6 +7,7 @@
 //
 
 #import "NameSettingViewController.h"
+#import "FillinInfoViewController.h"
 #import "SVProgressHUD.h"
 
 @interface NameSettingViewController ()
@@ -115,6 +116,20 @@
     [SVProgressHUD dismissWithError:@"服务器未响应" afterDelay:1.5];
 }
 
+//同步修改FillinInfoViewController的name
+-(void)synName:(NSString*)name
+{
+    if (name) {
+        NSArray* vcs = self.navigationController.viewControllers;
+        if (vcs.count > 1) {
+            FillinInfoViewController* RegistVC = vcs[vcs.count - 2];
+            if ([RegistVC isKindOfClass:[FillinInfoViewController class]]) {
+                RegistVC.name = name;
+            }
+        }
+    }
+}
+
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
@@ -128,7 +143,8 @@
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].name = newName;
-            [AppDelegate refreshMenu];	
+            [AppDelegate refreshMenu];
+            [self synName:newName];
             NSLog(@"昵称修改成功");
             [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:2];
 //            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
