@@ -2807,7 +2807,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -2846,7 +2846,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2901,7 +2901,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -2955,7 +2955,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
+				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";
