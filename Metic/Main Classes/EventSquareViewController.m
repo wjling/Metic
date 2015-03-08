@@ -222,6 +222,7 @@
             NSDictionary* dict = [_posterList objectAtIndex:j];
             if (i == _posterList.count-1) {
                 UIImageView* img = [[UIImageView alloc]init];
+                img.clipsToBounds = YES;
                 [img setUserInteractionEnabled:YES];
                 [img setFrame:CGRectMake(bannerWidth*0, 0, bannerWidth, bannerHeight)];
                 [img setTag:i];
@@ -242,9 +243,9 @@
             
             
             UIImageView* img = [[UIImageView alloc]init];
+            img.clipsToBounds = YES;
             [img setUserInteractionEnabled:YES];
             [img setFrame:CGRectMake(bannerWidth*(i+1), 0, bannerWidth, bannerHeight)];
-            
             [img setContentMode:UIViewContentModeScaleAspectFill];
             [img setTag:i];
             UITapGestureRecognizer* tap  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
