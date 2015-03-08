@@ -237,7 +237,7 @@
     [sql closeMyDB];
 }
 
-+ (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId
++ (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];

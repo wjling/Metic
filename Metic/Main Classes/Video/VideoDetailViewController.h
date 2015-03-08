@@ -24,7 +24,7 @@
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSString* eventName;
-@property (nonatomic,strong) NSDictionary * videoInfo;
+@property (nonatomic,strong) NSMutableDictionary * videoInfo;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) NSIndexPath *index;
 @property (strong, nonatomic) MJRefreshFooterView* footer;

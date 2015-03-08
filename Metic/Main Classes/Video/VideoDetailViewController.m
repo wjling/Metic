@@ -180,11 +180,9 @@
     _footer.delegate = self;
     _footer.scrollView = _tableView;
     
-    if (!_videoInfo) {
-        if (![self pullVideoInfoFromDB]) {
-            [self pullVideoInfoFromAir];
-        }
-    }
+    if (!_videoInfo) [self pullVideoInfoFromDB];
+    [self pullVideoInfoFromAir];
+
 }
 
 - (void)deleteLocalData
@@ -227,11 +225,13 @@
         if(rData){
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:{
-                    _videoInfo = response1;
+                    if(_videoInfo)[_videoInfo addEntriesFromDictionary:response1];
+                    else _videoInfo = response1;
+                    [VideoWallViewController updateVideoInfoToDB:@[response1] eventId:_eventId];
                     [_tableView reloadData];
                 }
                     break;

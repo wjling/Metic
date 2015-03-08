@@ -224,8 +224,10 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
-                    [_photoInfo addEntriesFromDictionary:response1];
+                    if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
+                    else _photoInfo = response1;
                     [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
+                    [_tableView reloadData];
                 }
                     break;
                 case PHOTO_NOT_EXIST:
