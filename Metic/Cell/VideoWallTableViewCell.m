@@ -390,7 +390,6 @@
                         [_controller.loadingVideo removeObject:_videoName];
                     }
                     if (_controller) {
-                        NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
                         [self PlayingVideoAtOnce];
                     }
                 }
@@ -490,7 +489,7 @@
         if (tracks.count == 0) {
             _videoItem = nil;
             _playingVideoName = nil;
-            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频有问题" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
         }
         AVAssetTrack* videoTrack = [tracks objectAtIndex:0];
         CGFloat width = videoTrack.naturalSize.width;
@@ -525,9 +524,9 @@
 
 - (void)repeatPlaying:(NSNotification *)n
 {
-    NSLog(@"repeat");
     AVPlayerItem* item = [n valueForKey:@"object"];
     if (item != _videoItem) return;
+    NSLog(@"repeat");
     UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
     if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
         _isPlaying = NO;
@@ -543,6 +542,15 @@
 - (void)Playfrompause
 {
     if (_videoPlayer) {
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+        {
+            [_videoView.layer addSublayer:_avLayer];
+        }
+        
         [_videoPlayer play];
     }
 }
