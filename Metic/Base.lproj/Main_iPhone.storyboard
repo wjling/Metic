@@ -3611,7 +3611,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
@@ -4010,17 +4010,30 @@
                         <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="图片墙" id="emD-kW-msS">
-                        <barButtonItem key="backBarButtonItem" title=" " id="LTR-Mb-3jG"/>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="VIt-Hw-29u">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oTp-Ua-5ge">
-                                <rect key="frame" x="278" y="9" width="26" height="26"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Y5s-Zy-tCA">
+                            <view key="customView" clipsSubviews="YES" contentMode="scaleToFill" id="Hns-6y-FIj">
+                                <rect key="frame" x="0.0" y="0.0" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="头部右上角图标-排行榜"/>
-                                <state key="selected" backgroundImage="上传按钮按下效果"/>
-                                <connections>
-                                    <action selector="toBestPhotos:" destination="EfS-Jw-ePs" eventType="touchUpInside" id="fuZ-rY-CSa"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zb1-Zx-66Y">
+                                        <rect key="frame" x="40" y="0.0" width="31" height="31"/>
+                                        <state key="normal" backgroundImage="头部右上角图标-加号"/>
+                                        <state key="selected" backgroundImage="上传按钮按下效果"/>
+                                        <connections>
+                                            <action selector="addPhoto:" destination="EfS-Jw-ePs" eventType="touchUpInside" id="Kai-ui-IrP"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HsU-2J-8f1">
+                                        <rect key="frame" x="0.0" y="0.0" width="31" height="31"/>
+                                        <state key="normal" backgroundImage="头部右上角图标-排行榜"/>
+                                        <state key="selected" backgroundImage="上传按钮按下效果"/>
+                                        <connections>
+                                            <action selector="toBestPhotos:" destination="EfS-Jw-ePs" eventType="touchUpInside" id="012-m8-Ylm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -4061,10 +4074,10 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="视频墙" id="vwr-bs-2VG">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="ouA-Jh-Obu">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M3R-9z-A2g">
-                                <rect key="frame" x="278" y="9" width="26" height="26"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="M3R-9z-A2g">
+                                <rect key="frame" x="273" y="-54" width="31" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="上传按钮"/>
+                                <state key="normal" backgroundImage="头部右上角图标-加号"/>
                                 <state key="selected" backgroundImage="上传按钮按下效果"/>
                                 <connections>
                                     <action selector="uploadVideo:" destination="hz5-4h-NDx" eventType="touchUpInside" id="IYW-0G-OS3"/>
@@ -4896,7 +4909,6 @@
         <image name="ic_remove" width="31" height="31"/>
         <image name="img_about_logo" width="234" height="144"/>
         <image name="img_about_slogon" width="230" height="32"/>
-        <image name="上传按钮" width="26" height="26"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
         <image name="上传活动封面" width="320" height="150"/>
         <image name="加入活动加号icon" width="29" height="29"/>
@@ -4914,6 +4926,7 @@
         <image name="图片评论_评论图标" width="29" height="29"/>
         <image name="地图定位icon" width="17" height="17"/>
         <image name="头像-116（白色底）" width="59" height="59"/>
+        <image name="头部右上角图标-加号" width="26" height="26"/>
         <image name="头部右上角图标-排行榜" width="26" height="26"/>
         <image name="头部右上角图标-更多" width="52" height="52"/>
         <image name="头部小按钮" width="41" height="21"/>

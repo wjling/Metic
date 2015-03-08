@@ -57,6 +57,7 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     _add = [UIButton buttonWithType:UIButtonTypeCustom];
+    _add.hidden = YES;
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0]] forState:UIControlStateNormal];
     [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:170/255.0 blue:166/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
     _add.layer.masksToBounds = YES;
@@ -146,6 +147,10 @@
 
 - (void)toBestPhotos:(id)sender{
     [self performSegueWithIdentifier:@"toPhotoRanking" sender:self];
+}
+
+- (IBAction)addPhoto:(id)sender {
+    [self performSegueWithIdentifier:@"toUploadPhoto" sender:self];
 }
 
 -(void)refreshPhotoInfoFromDB:(NSMutableArray*)photoInfos
