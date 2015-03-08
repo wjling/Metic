@@ -97,6 +97,9 @@
 		04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A5F19765DDB00649DC0 /* UserInfoViewController.m */; };
 		04EF4A6319765F1400649DC0 /* UserInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */; };
 		080A7F6F196407FD003CE740 /* PhotoDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */; };
+		081570DA1AAB247D00D34F46 /* UploaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 081570D91AAB247D00D34F46 /* UploaderManager.m */; };
+		081570DE1AAB281000D34F46 /* uploaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 081570DD1AAB281000D34F46 /* uploaderOperation.m */; };
+		081570E11AAB37B900D34F46 /* photoProcesser.m in Sources */ = {isa = PBXBuildFile; fileRef = 081570E01AAB37B900D34F46 /* photoProcesser.m */; };
 		081B6DA71A7685D80044D623 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 081B6D991A7685D80044D623 /* bitstream.c */; };
 		081B6DA81A7685D80044D623 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = 081B6D9B1A7685D80044D623 /* mask.c */; };
 		081B6DA91A7685D80044D623 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = 081B6D9D1A7685D80044D623 /* qrencode.c */; };
@@ -492,6 +495,12 @@
 		04EF4A6219765F1400649DC0 /* UserInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserInfoTableViewCell.m; path = UserInfo/UserInfoTableViewCell.m; sourceTree = "<group>"; };
 		080A7F6D196407FD003CE740 /* PhotoDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDisplayViewController.h; sourceTree = "<group>"; };
 		080A7F6E196407FD003CE740 /* PhotoDisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoDisplayViewController.m; sourceTree = "<group>"; };
+		081570D81AAB247D00D34F46 /* UploaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploaderManager.h; path = MTUploader/UploaderManager.h; sourceTree = "<group>"; };
+		081570D91AAB247D00D34F46 /* UploaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploaderManager.m; path = MTUploader/UploaderManager.m; sourceTree = "<group>"; };
+		081570DC1AAB281000D34F46 /* uploaderOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uploaderOperation.h; path = MTUploader/uploaderOperation.h; sourceTree = "<group>"; };
+		081570DD1AAB281000D34F46 /* uploaderOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = uploaderOperation.m; path = MTUploader/uploaderOperation.m; sourceTree = "<group>"; };
+		081570DF1AAB37B900D34F46 /* photoProcesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = photoProcesser.h; path = MTUploader/photoProcesser.h; sourceTree = "<group>"; };
+		081570E01AAB37B900D34F46 /* photoProcesser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = photoProcesser.m; path = MTUploader/photoProcesser.m; sourceTree = "<group>"; };
 		081B6D991A7685D80044D623 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
 		081B6D9A1A7685D80044D623 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
 		081B6D9B1A7685D80044D623 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
@@ -1266,6 +1275,19 @@
 			name = UserInfo;
 			sourceTree = "<group>";
 		};
+		081570DB1AAB248500D34F46 /* MTUploader */ = {
+			isa = PBXGroup;
+			children = (
+				081570D81AAB247D00D34F46 /* UploaderManager.h */,
+				081570D91AAB247D00D34F46 /* UploaderManager.m */,
+				081570DC1AAB281000D34F46 /* uploaderOperation.h */,
+				081570DD1AAB281000D34F46 /* uploaderOperation.m */,
+				081570DF1AAB37B900D34F46 /* photoProcesser.h */,
+				081570E01AAB37B900D34F46 /* photoProcesser.m */,
+			);
+			name = MTUploader;
+			sourceTree = "<group>";
+		};
 		081B6D981A7685D80044D623 /* libqrencode */ = {
 			isa = PBXGroup;
 			children = (
@@ -1775,6 +1797,7 @@
 				08B3F7021957013F003B32B7 /* GTMBase64 */,
 				48A4DDE3194FE42D0066BF8D /* PinYin4Objc */,
 				485F47CC19494A30003AAD30 /* SocketRocket */,
+				081570DB1AAB248500D34F46 /* MTUploader */,
 				48151F15194947EB009E156E /* AppConstants.h */,
 				48151F16194947EB009E156E /* CommonUtils.h */,
 				48151F17194947EB009E156E /* CommonUtils.m */,
@@ -2521,6 +2544,7 @@
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				04B6F8AE19A25D5C00229393 /* MLEmojiLabel.m in Sources */,
+				081570E11AAB37B900D34F46 /* photoProcesser.m in Sources */,
 				08E92DDC19B2D354002499BF /* VideoWallTableViewCell.m in Sources */,
 				51F4CB1019E6307500E487F1 /* ASINetworkQueue.m in Sources */,
 				51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */,
@@ -2589,6 +2613,7 @@
 				0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */,
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
+				081570DE1AAB281000D34F46 /* uploaderOperation.m in Sources */,
 				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
 				081B6DAC1A7685D80044D623 /* rscode.c in Sources */,
 				48151F1F194947EB009E156E /* HttpSender.m in Sources */,
@@ -2659,6 +2684,7 @@
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,
 				51F4CB2019E6307500E487F1 /* HTTPDataResponse.m in Sources */,
 				51581D6719335A8700943606 /* ProfileViewController.m in Sources */,
+				081570DA1AAB247D00D34F46 /* UploaderManager.m in Sources */,
 				51F4CB1719E6307500E487F1 /* DDLog.m in Sources */,
 				51F4CB1619E6307500E487F1 /* DDFileLogger.m in Sources */,
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
@@ -2807,7 +2833,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
+				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -2831,7 +2857,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2846,7 +2872,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
+				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2901,7 +2927,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
+				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -2915,7 +2941,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2955,7 +2981,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "b818d4d7-3ab8-4d28-b96e-5dc8eebddd6e";
+				PROVISIONING_PROFILE = "d412907b-f384-43fd-89a2-f6bc3e775649";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";
