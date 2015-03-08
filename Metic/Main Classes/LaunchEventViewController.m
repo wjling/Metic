@@ -193,7 +193,7 @@
         return YES;
     }
     
-    if (![_location_text.text isEqualToString:@""]) {
+    if (![_location_text.text isEqualToString:@""] && ![_location_text.text isEqualToString:@"定位中"]) {
         return YES;
     }
     
@@ -482,7 +482,7 @@
     friends = [friends stringByAppendingString:@"]"];
     
     NSString* location = self.location_text.text;
-    if ([location isEqualToString:@""]) location = @"未定";
+    if ([location isEqualToString:@""] || [location isEqualToString:@"定位中"]) location = @"地点未定";
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     if ([self.event_text.text isEqualToString: @""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"活动发布失败" WithMessage:@"活动名不能为空" WithDelegate:nil WithCancelTitle:@"确定"];
