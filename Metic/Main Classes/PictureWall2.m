@@ -151,7 +151,7 @@
 -(void)refreshPhotoInfoFromDB:(NSMutableArray*)photoInfos
 {
     [self deleteAllPhotoInfoFromDB:_eventId];
-    [self updatePhotoInfoToDB:photoInfos];
+    [PictureWall2 updatePhotoInfoToDB:photoInfos eventId:_eventId];
 }
 
 -(void)deleteAllPhotoInfoFromDB:(NSNumber*) eventId
@@ -167,7 +167,7 @@
     [sql closeMyDB];
 }
 
-- (void)updatePhotoInfoToDB:(NSMutableArray*)photoInfos
++ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
@@ -177,7 +177,7 @@
         NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
         photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
         
         [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
     }
@@ -300,7 +300,7 @@
                         [self deleteAllPhotoInfoFromDB:_eventId];
                     }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                        [self updatePhotoInfoToDB:newphoto_list];
+                        [PictureWall2 updatePhotoInfoToDB:newphoto_list eventId:_eventId];
                     });
 
                     [NotificationController visitPhotoWall:_eventId needClear:YES];

@@ -20,8 +20,9 @@
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 
 @property BOOL shouldReloadPhoto;
-//@property (strong,nonatomic) MJRefreshFooterView *footer;
 
+//@property (strong,nonatomic) MJRefreshFooterView *footer;
++ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId;
 - (IBAction)toBestPhotos:(id)sender;
 -(void)calculateLRH;
 @end

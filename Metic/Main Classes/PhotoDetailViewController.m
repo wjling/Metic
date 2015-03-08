@@ -182,11 +182,8 @@
     _footer.delegate = self;
     _footer.scrollView = _tableView;
     
-    if (!_photoInfo) {
-        if (![self pullPhotoInfoFromDB]) {
-            [self pullPhotoInfoFromAir];
-        }
-    }
+    if (!_photoInfo) [self pullPhotoInfoFromDB];
+    [self pullPhotoInfoFromAir];
 }
 
 -(BOOL)pullPhotoInfoFromDB
@@ -227,7 +224,8 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
-                    _photoInfo = response1;
+                    [_photoInfo addEntriesFromDictionary:response1];
+                    [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
                 }
                     break;
                 case PHOTO_NOT_EXIST:
@@ -368,21 +366,9 @@
     int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [self updatePhotoInfoToDB:_photoInfo];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
-- (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
-{
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
-    NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
-    
-    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-    [sql closeMyDB];
-}
 
 - (IBAction)good:(id)sender {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
@@ -435,7 +421,7 @@
     }else good ++;
     [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-    [self updatePhotoInfoToDB:_photoInfo];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
     [self setGoodButton];
     [self.good_button setEnabled:YES];
 }
