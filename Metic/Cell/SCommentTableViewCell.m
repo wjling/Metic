@@ -10,6 +10,7 @@
 #import "FriendInfoViewController.h"
 #import "ReportViewController.h"
 #import "UserInfoViewController.h"
+#import "LCAlertView.h"
 
 @implementation SCommentTableViewCell
 
@@ -115,6 +116,49 @@
     if ([_commentid intValue]<0) {
         return;
     }
+    
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    if ([_authorid integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self deleteComment];
+            }
+        };
+        [alert show];
+    }else{
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self report];
+            }
+            
+        };
+        [alert show];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    return;
+    if ([_commentid intValue]<0) {
+        return;
+    }
     if (_controller.isKeyBoard || _controller.isEmotionOpen) {
         return;
     }
@@ -169,27 +213,26 @@
 
 -(void)report{
     NSLog(@"匿名投诉");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (_controller.optionShadowView) {
-            [self dismissOption];
-            
-            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                                     bundle: nil];
-            ReportViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"]; ;
-            viewcontroller.eventId = _controller.eventId;
-            viewcontroller.commentId = _commentid;
-            viewcontroller.comment = _originComment;
-            viewcontroller.commentAuthor = self.author;
-            viewcontroller.authorId = self.authorid;
-            viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
-            
-            viewcontroller.type = 2;
-            [self.controller.navigationController pushViewController:viewcontroller animated:YES];
-        }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                 bundle: nil];
+        ReportViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"]; ;
+        viewcontroller.eventId = _controller.eventId;
+        viewcontroller.commentId = _commentid;
+        viewcontroller.comment = _originComment;
+        viewcontroller.commentAuthor = self.author;
+        viewcontroller.authorId = self.authorid;
+        viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
+        
+        viewcontroller.type = 2;
+        [self.controller.navigationController pushViewController:viewcontroller animated:YES];
         
     });
 }
 
-
+- (void)deleteComment
+{
+    NSLog(@"删除评论");
+}
 
 @end

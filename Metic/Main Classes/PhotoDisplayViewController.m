@@ -14,6 +14,7 @@
 #import "../Utils/CommonUtils.h"
 #import "NSString+JSON.h"
 #import "Reachability.h"
+#import "LCAlertView.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -175,6 +176,32 @@
 
 -(void)showOption:(UIGestureRecognizer*)sender
 {
+    
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    int index = self.scrollView.contentOffset.x/320;
+    NSNumber* authorId = [self.photo_list[index] valueForKey:@"author_id"];
+    if ([authorId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+//        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",@"举报",nil];
+//        alert.alertAction = ^(NSInteger buttonIndex){
+//            if (buttonIndex == 1) {
+//                [self deleteComment];
+//            }
+//            if (buttonIndex == 2) {
+//                [self report];
+//            }
+//        };
+//        [alert show];
+    }else{
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self report];
+            }
+        };
+        [alert show];
+    }
+
+    return;
     if (sender.state == UIGestureRecognizerStateBegan) {
         NSLog(@"showOption");
         if (!_shadowView) {
@@ -225,12 +252,8 @@
 
 -(void)report{
     NSLog(@"匿名投诉");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (_shadowView) {
-            [self dismissOption];
-            [self performSegueWithIdentifier:@"photoToreport" sender:self];
-        }
-        
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self performSegueWithIdentifier:@"photoToreport" sender:self];
     });
 }
 -(void)displaythreePhoto:(int)photoIndex
