@@ -19,6 +19,7 @@
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSMutableDictionary * photoInfo;
+@property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
@@ -37,4 +38,6 @@
 - (IBAction)download:(id)sender;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
+- (void)commentNumMinus;
+- (void)commentNumPlus;
 @end

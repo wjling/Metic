@@ -22,6 +22,7 @@
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @property (strong, nonatomic) UIView* background;
+@property(nonatomic,strong) NSDictionary* PcommentDict;
 @property (weak, nonatomic) PhotoDetailViewController* controller;
 - (IBAction)resend:(id)sender;
 

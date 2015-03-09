@@ -163,6 +163,9 @@
         case 21:
             resultCode = @"get_pcomments";
             break;
+        case 22:
+            resultCode = @"delete_pcomment";
+            break;
         case 23:
             resultCode = @"get_photo_list";
             break;

@@ -29,47 +29,53 @@
     // Configure the view for the selected state
 }
 
-- (IBAction)delete_Comment:(id)sender {
+- (void)delete_Comment:(id)sender {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.commentid forKey:@"comment_id"];
+    [dictionary setValue:_controller.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT];
+    [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                [_McommentArr removeObject:_ScommentDict];
+                if (_McommentArr.count) {
+                    NSMutableDictionary* Mcomment = _McommentArr[0];
+                    int comN = [[Mcomment valueForKey:@"comment_num"]intValue];
+                    comN --;
+                    if (comN < 0) comN = 0;
+                    [Mcomment setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+                }
+                
+                [self.controller.tableView reloadData];
+                
+            }
+                break;
+            case SERVER_ERROR:
+            {
+                
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
+                
+            }
+                break;
+            default:{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+        }
+    }];
 }
 
-
-
-
-
-#pragma mark - HttpSenderDelegate
-
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-            [self.controller pullMainCommentFromAir];
-            
-        }
-            break;
-        case SERVER_ERROR:
-        {
-            
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
-            
-        }
-            break;
-    }
-}
 
 - (void)mlEmojiLabel:(MLEmojiLabel*)emojiLabel didSelectLink:(NSString*)link withType:(MLEmojiLabelLinkType)type
 {
@@ -122,7 +128,7 @@
         LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",nil];
         alert.alertAction = ^(NSInteger buttonIndex){
             if (buttonIndex == 1) {
-                [self deleteComment];
+                [self delete_Comment:nil];
             }
         };
         [alert show];
@@ -137,23 +143,7 @@
         [alert show];
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     return;
     if ([_commentid intValue]<0) {

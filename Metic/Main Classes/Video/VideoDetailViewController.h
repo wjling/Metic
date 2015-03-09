@@ -25,6 +25,7 @@
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSMutableDictionary * videoInfo;
+@property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) NSIndexPath *index;
 @property (strong, nonatomic) MJRefreshFooterView* footer;
@@ -39,5 +40,7 @@
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
 - (IBAction)more:(id)sender;
+- (void)commentNumMinus;
+- (void)commentNumPlus;
 @end
 

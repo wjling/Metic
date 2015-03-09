@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @property (strong, nonatomic) UIView* background;
 @property (weak, nonatomic) VideoDetailViewController* controller;
+@property (nonatomic,strong) NSDictionary* VcommentDict;
 - (IBAction)resend:(id)sender;
 
 

@@ -126,7 +126,6 @@
             [button.layer setCornerRadius:5];
             [button setAlpha:1.0];
         }
-        
     }
 }
 

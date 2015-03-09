@@ -27,7 +27,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
@@ -371,6 +370,14 @@
     [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
+- (void)commentNumMinus
+{
+    int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+    comN --;
+    if (comN < 0) comN = 0;
+    [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+}
 
 - (IBAction)good:(id)sender {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
@@ -842,6 +849,7 @@
             alias = [Pcomment valueForKey:@"author"];
         }
         
+        ((PcommentTableViewCell *)cell).PcommentDict = Pcomment;
         ((PcommentTableViewCell *)cell).author.text = alias;
         ((PcommentTableViewCell *)cell).authorName = alias;
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];

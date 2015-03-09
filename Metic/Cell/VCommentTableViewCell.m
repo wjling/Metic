@@ -59,33 +59,7 @@
         };
         [alert show];
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     return;
     
     if (_controller.isKeyBoard || _controller.isEmotionOpen) {
@@ -160,6 +134,44 @@
 - (void)deleteComment
 {
     NSLog(@"删除评论");
+    NSLog(@"删除评论");
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:self.vcomment_id forKey:@"vcomment_id"];
+    [dictionary setValue:_controller.eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:DELETE_VCOMMENT finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                [_controller.vcomment_list removeObject:_VcommentDict];
+                [self.controller.tableView reloadData];
+                [self.controller commentNumMinus];
+                
+            }
+                break;
+            case SERVER_ERROR:
+            {
+                
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
+                
+            }
+                break;
+            default:{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+        }
+    }];
 }
 
 - (IBAction)pushToFriendView:(id)sender {

@@ -31,7 +31,6 @@
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
@@ -940,6 +939,18 @@
     
 }
 
+- (void)commentNumMinus
+{
+    NSInteger comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
+    comN --;
+    if (comN < 0) comN = 0;
+    [self.videoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
+    if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
+        [_controller.tableView reloadRowsAtIndexPaths:@[_index] withRowAnimation:UITableViewRowAnimationNone];
+        [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
+    }
+}
+
 
 -(void)closeRJ
 {
@@ -1112,6 +1123,7 @@
         if (alias == nil || [alias isEqual:[NSNull null]]) {
             alias = [Vcomment valueForKey:@"author"];
         }
+        ((VcommentTableViewCell *)cell).VcommentDict = Vcomment;
         ((VcommentTableViewCell *)cell).author.text = alias;
         ((VcommentTableViewCell *)cell).authorName = alias;
         ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
