@@ -23,6 +23,7 @@
 @property (nonatomic,strong) UIImage* video_thumb;
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* eventId;
+@property (nonatomic,strong) NSNumber* eventLauncherId;
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSMutableDictionary * videoInfo;
 @property (nonatomic,strong) NSMutableArray * vcomment_list;

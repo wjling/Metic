@@ -1192,11 +1192,11 @@
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
-            if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
-                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+            if ([[mainCom valueForKey:@"author_id"]integerValue] == [[MTUser sharedInstance].userid integerValue] || [[_event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
             }
             else{
-                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
+                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             }
         }
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];

@@ -125,10 +125,22 @@
     
     if (sender.state != UIGestureRecognizerStateBegan) return;
     if ([_authorid integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+
         LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",nil];
         alert.alertAction = ^(NSInteger buttonIndex){
             if (buttonIndex == 1) {
                 [self delete_Comment:nil];
+            }
+        };
+        [alert show];
+    }else if ([[_controller.event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue])
+    {
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self delete_Comment:nil];
+            }else if (buttonIndex == 2){
+                [self report];
             }
         };
         [alert show];

@@ -17,6 +17,7 @@
 @property (nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
+@property (nonatomic,strong) NSNumber* eventLauncherId;
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSMutableDictionary * photoInfo;
 @property (nonatomic,strong) NSMutableArray * pcomment_list;
