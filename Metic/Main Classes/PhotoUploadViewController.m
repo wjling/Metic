@@ -549,6 +549,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.textInput resignFirstResponder];
     if (indexPath.row == _uploadImgs.count) {
         [self UesrImageClicked];
     }
