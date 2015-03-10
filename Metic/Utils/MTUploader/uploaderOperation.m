@@ -26,6 +26,8 @@
     if ((self = [super init])) {
         _executing = NO;
         _finished = NO;
+        _imageName = imageName;
+        _eventId = eventId;
     }
     return self;
 }
@@ -39,6 +41,13 @@
             return;
         }
     }
+    
+    NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
+    
+    
+    
+    
+    
 }
 
 

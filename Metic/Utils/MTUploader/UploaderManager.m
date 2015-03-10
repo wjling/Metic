@@ -51,13 +51,14 @@
 
 - (void)uploadImage:(UIImage *)img eventId:(NSNumber*)eventId;
 {
-    dispatch_sync(dispatch_get_global_queue(0, 0), ^{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
         NSData* compressedData = [photoProcesser compressPhoto:img maxSize:100];
         NSString* imgName = [photoProcesser generateImageName];
         [photoProcesser saveImage:compressedData fileName:imgName];
         uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithImageName:imgName eventId:eventId];
-        [_uploadQueue addOperation:newUploadTask];
-        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [_uploadQueue addOperation:newUploadTask];
+        });
     });
 }
 

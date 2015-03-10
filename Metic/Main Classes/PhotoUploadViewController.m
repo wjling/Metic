@@ -25,6 +25,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 @property (strong, nonatomic) UITextView* textInput;
 @property (strong, nonatomic) UIView* textView;
 @property (strong, nonatomic) UIView* imgView;
+@property (strong, nonatomic) UICollectionView* imgCollectionView;
+@property (strong, nonatomic) NSMutableArray* uploadImgs;
 @property (strong, nonatomic) UIImageView* img;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property (strong, nonatomic) UIButton* getPhoto;
@@ -49,44 +51,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self isFirstPage:NO];
-    [self drawLeftButton];
-    self.scrollView.delegate = self;
-    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
-    [_textView setBackgroundColor:[UIColor whiteColor]];
-    _textView.layer.cornerRadius = 5;
-    _textView.layer.masksToBounds = YES;
-    [self.scrollView addSubview:_textView];
+    [self initData];
+    [self initUI];
     
-    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, 274, 36)];
-    self.textInput.delegate = self;
-    [self.textInput setBackgroundColor:[UIColor clearColor]];
-    [self.textInput setFont:[UIFont systemFontOfSize:16]];
-    [_textView addSubview:self.textInput];
     
-    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
-    [self.preLabel setPlaceholder:@"这一刻的想法"];
-    [self.preLabel setBackgroundColor:[UIColor clearColor]];
-    [self.preLabel setEnabled:NO];
-    self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
-    [_textView addSubview:self.preLabel];
-
-    self.imgView =  [[UIView alloc] initWithFrame:CGRectMake(15, 66, 290, 78)];
-    self.imgView.layer.cornerRadius = 5;
-    self.imgView.layer.masksToBounds = YES;
-    [self.imgView setBackgroundColor:[UIColor colorWithRed:227.0/255 green:227.0/255 blue:227.0/255 alpha:1]];
-    [self.scrollView addSubview:self.imgView];
-    
-    self.getPhoto = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.getPhoto setFrame:CGRectMake(10, 9, 60 , 60)];
-    [self.getPhoto setBackgroundImage:[UIImage imageNamed:@"加图片的加号"] forState:UIControlStateNormal];
-    [self.getPhoto addTarget:self action:@selector(UesrImageClicked) forControlEvents:UIControlEventTouchUpInside];
-    [self.imgView addSubview:self.getPhoto];
-    
-    UITapGestureRecognizer *tap =
-    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
-    [self.view addGestureRecognizer:tap];
 
 }
 
@@ -122,6 +90,82 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
+
+-(void)initData
+{
+    _uploadImgs = [[NSMutableArray alloc]init];
+}
+
+-(void)initUI
+{
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+    [self drawLeftButton];
+    self.scrollView.delegate = self;
+    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
+    [_textView setBackgroundColor:[UIColor whiteColor]];
+    _textView.layer.cornerRadius = 5;
+    _textView.layer.masksToBounds = YES;
+    [self.scrollView addSubview:_textView];
+    
+    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, 274, 36)];
+    self.textInput.delegate = self;
+    [self.textInput setBackgroundColor:[UIColor clearColor]];
+    [self.textInput setFont:[UIFont systemFontOfSize:16]];
+    [_textView addSubview:self.textInput];
+    
+    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
+    [self.preLabel setPlaceholder:@"这一刻的想法"];
+    [self.preLabel setBackgroundColor:[UIColor clearColor]];
+    [self.preLabel setEnabled:NO];
+    self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
+    [_textView addSubview:self.preLabel];
+    
+    
+    
+    
+    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
+    flowLayout.itemSize=CGSizeMake(60,70);
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.minimumInteritemSpacing = 0;
+    [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
+    self.imgCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 66, 290, 80) collectionViewLayout:flowLayout];
+    self.imgCollectionView.layer.cornerRadius = 5;
+    self.imgCollectionView.layer.masksToBounds = YES;
+    [self.imgCollectionView setBackgroundColor:[UIColor colorWithRed:227.0/255 green:227.0/255 blue:227.0/255 alpha:1]];
+    self.imgCollectionView.showsVerticalScrollIndicator = NO;
+    self.imgCollectionView.dataSource = self;
+    self.imgCollectionView.delegate = self;
+    [self.imgCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"uploadImgCell"];
+    [self.scrollView addSubview:self.imgCollectionView];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //    self.imgView =  [[UIView alloc] initWithFrame:CGRectMake(15, 66, 290, 78)];
+    //    self.imgView.layer.cornerRadius = 5;
+    //    self.imgView.layer.masksToBounds = YES;
+    //    [self.imgView setBackgroundColor:[UIColor colorWithRed:227.0/255 green:227.0/255 blue:227.0/255 alpha:1]];
+    //    [self.scrollView addSubview:self.imgView];
+    //
+    //    self.getPhoto = [UIButton buttonWithType:UIButtonTypeSystem];
+    //    [self.getPhoto setFrame:CGRectMake(10, 9, 60 , 60)];
+    //    [self.getPhoto setBackgroundImage:[UIImage imageNamed:@"加图片的加号"] forState:UIControlStateNormal];
+    //    [self.getPhoto addTarget:self action:@selector(UesrImageClicked) forControlEvents:UIControlEventTouchUpInside];
+    //    [self.imgView addSubview:self.getPhoto];
+    
+    UITapGestureRecognizer *tap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+}
+
 
 - (void)alertConfirmQuit{
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要放弃上传？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -332,11 +376,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"很抱歉，不支持上传高度过大的图片，请重新选择" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
             [alert show];
         }else{
-            self.uploadImage = image;
-            [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
-            self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
+            [_uploadImgs addObject:image];
+            [_imgCollectionView reloadData];
+            [self adjustCollectionView];
+//            self.uploadImage = image;
+//            [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
+//            self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
         }
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
     }];
 
@@ -461,5 +509,69 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     }
 }
 
+#pragma mark - CollectionViewDelegate
+
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(10, 10, 0, 10);
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return _uploadImgs.count + 1;
+}
+
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"uploadImgCell" forIndexPath:indexPath];
+    [cell setHidden:NO];
+    UIImageView* imgCell = (UIImageView*)[cell viewWithTag:1];
+    if (!imgCell) {
+        imgCell = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 60, 60)];
+        imgCell.contentMode = UIViewContentModeScaleAspectFill;
+        imgCell.layer.cornerRadius = 3;
+        imgCell.layer.masksToBounds = YES;
+        imgCell.clipsToBounds = YES;
+        [imgCell setTag:1];
+        [cell addSubview:imgCell];
+    }
+    
+    if(indexPath.row != _uploadImgs.count){
+        [imgCell setImage:_uploadImgs[indexPath.row]];
+        
+    }else{
+        [imgCell setImage:[UIImage imageNamed:@"加图片的加号"]];
+    }
+    return cell;
+}
+
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == _uploadImgs.count) {
+        [self UesrImageClicked];
+    }
+}
+
+-(void)adjustCollectionView
+{
+    CGRect frame = _imgCollectionView.frame;
+    float count = _uploadImgs.count+1;
+    frame.size.height = ceilf(count/4)*70 + 10;
+    if (CGRectGetMaxY(frame) <= CGRectGetMaxY(self.scrollView.frame) ) {
+        _imgCollectionView.frame = frame;
+    }
+}
+
+#pragma mark - UIGestureRecognizer Delegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+    
+    if([touch.view.superview isKindOfClass:[UICollectionViewCell class]]){
+        return NO;
+    }
+    else return YES;
+    
+}
 
 @end
