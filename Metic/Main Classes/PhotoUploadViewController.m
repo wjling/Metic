@@ -608,9 +608,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     CGRect frame = _imgCollectionView.frame;
     float count = _uploadImgs.count+1;
     frame.size.height = ceilf(count/4)*70 + 10;
-    if (CGRectGetMaxY(frame) <= CGRectGetMaxY(self.scrollView.frame) ) {
-        _imgCollectionView.frame = frame;
+    while (CGRectGetMaxY(frame) > CGRectGetMaxY(self.scrollView.frame) ) {
+        frame.size.height -= 70;
     }
+    _imgCollectionView.frame = frame;
 }
 
 #pragma - UzysAssetsPickerController Delegate

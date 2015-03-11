@@ -1,4 +1,4 @@
-//
+ //
 //  uploaderOperation.m
 //  WeShare
 //
@@ -213,7 +213,7 @@
             case NORMAL_REPLY:
             {
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
-                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] forKey:url];
+                [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
                 
                 [self stop];
             }

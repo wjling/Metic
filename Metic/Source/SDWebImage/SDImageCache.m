@@ -213,6 +213,19 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     }
 }
 
+- (void)storeImageDataToDisk:(NSData *)imgData forKey:(NSString *)key {
+    if (!imgData || !key) {
+        return;
+    }
+    if (imgData) {
+        if (![_fileManager fileExistsAtPath:_diskCachePath]) {
+            [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
+        }
+        
+        [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:imgData attributes:nil];
+    }
+}
+
 - (BOOL)diskImageExistsWithKey:(NSString *)key {
     __block BOOL exists = NO;
     dispatch_sync(_ioQueue, ^{
