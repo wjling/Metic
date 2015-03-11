@@ -110,7 +110,10 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-        if (!rData) return ;
+        if (!rData){
+            [self stop];
+            return ;
+        }
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
@@ -125,7 +128,7 @@
                 }
                     break;
                 default:
-                    
+                    [self stop];
                     break;
                     
             }
@@ -168,6 +171,8 @@
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"上传失败");
+        _wait = NO;
+        [self performSelector:@selector(stop) onThread:_thread withObject:nil waitUntilDone:NO];
     }];
     _progress = 0;
     
@@ -196,6 +201,7 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
         if (!rData) {
+            [self stop];
             return ;
         }
         
@@ -214,7 +220,7 @@
                 break;
             default:
             {
-                
+                [self stop];
             }
         }
         
