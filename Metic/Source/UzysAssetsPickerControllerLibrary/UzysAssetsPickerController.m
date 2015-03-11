@@ -109,15 +109,16 @@
 //    picker.modalPresentationStyle = UIModalPresentationCurrentContext;
     picker.delegate = self;
     picker.allowsEditing = NO;
-    picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
+//    picker.videoQuality = UIImagePickerControllerQualityTypeHigh;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
     {
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        picker.mediaTypes =
-        [UIImagePickerController availableMediaTypesForSourceType:
-         UIImagePickerControllerSourceTypeCamera];
+        NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        picker.mediaTypes = [NSArray arrayWithObject:availableMedia[0]];
     }
     self.picker = picker;
+    
+    
 }
 - (void)initNoAssetView
 {
@@ -219,7 +220,7 @@
             self.segmentedControl.hidden = YES;
             self.labelSelectedMedia.hidden = NO;
             if(_maximumNumberOfSelection >1)
-                self.labelSelectedMedia.text = @"Choose photos";
+                self.labelSelectedMedia.text = @"选择图片";
             else
                 self.labelSelectedMedia.text = @"Choose a photo";
         }
@@ -658,10 +659,13 @@
 {
     [super setTitle:title];
     [self.btnTitle setTitle:title forState:UIControlStateNormal];
-    NSLog(@" x %f self.btnTitle.labe width %f",self.btnTitle.titleLabel.frame.origin.x,self.btnTitle.titleLabel.bounds.size.width);
-    [self.btnTitle setImageEdgeInsets:UIEdgeInsetsMake(5, self.btnTitle.titleLabel.frame.origin.x +self.btnTitle.titleLabel.frame.size.width + self.btnTitle.imageView.bounds.size.width, 0, 0)];
-    [self.btnTitle setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
-    [self.btnTitle layoutIfNeeded];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        NSLog(@" x %f self.btnTitle.labe width %f",self.btnTitle.titleLabel.frame.origin.x,self.btnTitle.titleLabel.bounds.size.width);
+        [self.btnTitle setImageEdgeInsets:UIEdgeInsetsMake(5, self.btnTitle.titleLabel.frame.origin.x +self.btnTitle.titleLabel.frame.size.width + self.btnTitle.imageView.bounds.size.width, 0, 0)];
+        [self.btnTitle setTitleEdgeInsets:UIEdgeInsetsMake(5, 0, 0, 0)];
+        [self.btnTitle layoutIfNeeded];
+    });
+    
 }
 - (void)menuArrowRotate
 {
