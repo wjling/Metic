@@ -15,6 +15,10 @@
 #import "../Utils/Reachability.h"
 #import "BOAlertController.h"
 #import "UIImage+fixOrien.h"
+#import "photoProcesser.h"
+#import "SVProgressHUD.h"
+#import "UploaderManager.h"
+
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 
@@ -27,6 +31,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 @property (strong, nonatomic) UIView* imgView;
 @property (strong, nonatomic) UICollectionView* imgCollectionView;
 @property (strong, nonatomic) NSMutableArray* uploadImgs;
+@property (strong, nonatomic) NSMutableArray* uploadImgAssets;
 @property (strong, nonatomic) UIImageView* img;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property (strong, nonatomic) UIButton* getPhoto;
@@ -94,6 +99,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 -(void)initData
 {
     _uploadImgs = [[NSMutableArray alloc]init];
+    _uploadImgAssets = [[NSMutableArray alloc]init];
 }
 
 -(void)initUI
@@ -267,7 +273,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 }
 
 - (IBAction)upload:(id)sender {
-    if (!self.uploadImage) {
+    if (_uploadImgAssets.count == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
@@ -275,16 +281,40 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
+    [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
     
-    [self showWaitingView];
-    self.upLoad = sender;
-//    [self.upLoad setEnabled:NO];
-//    [self.getPhoto setEnabled:NO];
-    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
-    getter.mDelegate = self;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [getter uploadPhoto];
-    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    if (!self.uploadImage) {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
+//        return;
+//    }
+//    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+//        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+//        return;
+//    }
+//    
+//    [self showWaitingView];
+//    self.upLoad = sender;
+////    [self.upLoad setEnabled:NO];
+////    [self.getPhoto setEnabled:NO];
+//    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+//    getter.mDelegate = self;
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [getter uploadPhoto];
+//    });
     
 }
 
@@ -551,6 +581,21 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [self.textInput resignFirstResponder];
     if (indexPath.row == _uploadImgs.count) {
+        
+        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
+        picker.delegate = self;
+        picker.maximumNumberOfSelectionVideo = 0;
+        picker.maximumNumberOfSelectionPhoto = 18;
+        
+        [self presentViewController:picker animated:YES completion:^{}];
+        
+        
+        
+        
+        
+        
+        
+        return;
         [self UesrImageClicked];
     }
 }
@@ -563,6 +608,35 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     if (CGRectGetMaxY(frame) <= CGRectGetMaxY(self.scrollView.frame) ) {
         _imgCollectionView.frame = frame;
     }
+}
+
+#pragma - UzysAssetsPickerController Delegate
+-(void)UzysAssetsPickerController:(UzysAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        __weak typeof(self) weakSelf = self;
+        [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            ALAsset *representation = obj;
+            if ([[representation valueForProperty:@"ALAssetPropertyType"] isEqualToString:@"ALAssetTypePhoto"]) {
+                UIImage *img = [UIImage imageWithCGImage:representation.thumbnail];
+                [weakSelf.uploadImgs addObject:img];
+                [self.uploadImgAssets addObject:representation];
+            }
+            
+        }];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [_imgCollectionView reloadData];
+            [self adjustCollectionView];
+        });
+    });
+    
+    
+    NSLog(@"%@",assets);
+}
+
+-(void)UzysAssetsPickerControllerDidCancel:(UzysAssetsPickerController *)picker
+{
+    
 }
 
 #pragma mark - UIGestureRecognizer Delegate

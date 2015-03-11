@@ -49,17 +49,38 @@
     return self;
 }
 
-- (void)uploadImage:(UIImage *)img eventId:(NSNumber*)eventId;
+- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
 {
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
+    [_uploadQueue addOperation:newUploadTask];
+
+    
+    return;
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIImage *img = [UIImage imageWithCGImage:imgAsset.defaultRepresentation.fullScreenImage
+                                           scale:imgAsset.defaultRepresentation.scale
+                                     orientation:(UIImageOrientation)imgAsset.defaultRepresentation.orientation];
         NSData* compressedData = [photoProcesser compressPhoto:img maxSize:100];
         NSString* imgName = [photoProcesser generateImageName];
         [photoProcesser saveImage:compressedData fileName:imgName];
-        uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithImageName:imgName eventId:eventId];
+        
+        
+        uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [_uploadQueue addOperation:newUploadTask];
         });
     });
+}
+
+- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
+{
+    if (uploadALAssets.count == 0 || !eventId) {
+        return;
+    }
+    [uploadALAssets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ALAsset *representation = obj;
+        [self uploadImage:representation eventId:eventId];
+    }];
 }
 
 @end

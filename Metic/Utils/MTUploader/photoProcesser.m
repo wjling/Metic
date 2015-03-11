@@ -11,7 +11,7 @@
 #import "MTUser.h"
 
 @implementation photoProcesser
-+ (NSData*)compressPhoto:(UIImage*)image maxSize:(NSInteger)maxSize
++ (NSDictionary*)compressPhoto:(UIImage*)image maxSize:(NSInteger)maxSize
 {
     UIImage* compressedImage = image;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
@@ -37,7 +37,11 @@
             flag = NO;
         }
     }
-    return imageData;
+    NSMutableDictionary* ImgData = [[NSMutableDictionary alloc]init];
+    [ImgData setValue:imageData forKey:@"imageData"];
+    [ImgData setValue:[NSNumber numberWithFloat:compressedImage.size.width] forKey:@"width"];
+    [ImgData setValue:[NSNumber numberWithFloat:compressedImage.size.height] forKey:@"height"];
+    return ImgData;
 }
 
 + (NSString*)generateImageName

@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface UploaderManager : NSObject
 + (UploaderManager *)sharedManager;
-- (void)uploadImage:(UIImage *)img eventId:(NSNumber*)eventId;;
+- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
+- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
+
 @end

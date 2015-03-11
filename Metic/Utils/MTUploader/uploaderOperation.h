@@ -7,10 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface uploaderOperation : NSOperation
-
-- (id)initWithImageName:(NSString *)imageName eventId:(NSNumber*)eventId;
-
-
+- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
 @end
