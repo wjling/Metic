@@ -273,7 +273,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 }
 
 - (IBAction)upload:(id)sender {
-    if (_uploadImgAssets.count == 0) {
+    
+    
+    //多图上传
+    if (_uploadImgs.count == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
@@ -299,7 +302,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     
     
-    
+//    //单图上传
 //    if (!self.uploadImage) {
 //        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
 //        return;
@@ -390,7 +393,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
-    
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     if (image) image = [UIImage fixOrientation:image];
 //    self.uploadImage = image;
@@ -412,7 +414,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             [_uploadImgs addObject:image];
             [_imgCollectionView reloadData];
             [self adjustCollectionView];
-//            self.uploadImage = image;
+            self.uploadImage = image;
 //            [self.getPhoto setBackgroundImage:image forState:UIControlStateNormal];
 //            self.getPhoto.imageView.contentMode = UIViewContentModeScaleAspectFill;
         }
@@ -551,6 +553,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+//    //单图上传
+//    return 1;
+    //多图上传
     return _uploadImgs.count + 1;
 }
 
@@ -584,22 +589,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [self.textInput resignFirstResponder];
     if (indexPath.row == _uploadImgs.count) {
-        
+        //多图上传
         UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
         picker.delegate = self;
         picker.maximumNumberOfSelectionVideo = 0;
         picker.maximumNumberOfSelectionPhoto = 18;
         
         [self presentViewController:picker animated:YES completion:^{}];
-        
-        
-        
-        
-        
-        
-        
-        return;
-        [self UesrImageClicked];
+//        //单图上传
+//        [self UesrImageClicked];
     }
 }
 
