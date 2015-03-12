@@ -18,6 +18,7 @@
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
 @property(nonatomic,strong) NSNumber* selete_Eventid;
+@property(nonatomic,strong) NSNumber* selete_EventLauncherId;
 
 @end
 
@@ -302,6 +303,8 @@ enum pos{
         NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
         _selete_Eventid = [atMeInfo valueForKey:@"event_id"];
+        _selete_EventLauncherId = [atMeInfo valueForKey:@"launcher_id"];
+//        NSNumber* launcher_id = [atMeInfo valueForKey:@"launcher_id"];
         switch (cmd) {
             case 986:{
                 UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -310,6 +313,7 @@ enum pos{
                 
                 viewcontroller.videoId = [atMeInfo valueForKey:@"video_id"];
                 viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                viewcontroller.eventLauncherId = _selete_EventLauncherId;
                 viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                 viewcontroller.controller = nil;
                 [self.navigationController pushViewController:viewcontroller animated:YES];
@@ -322,6 +326,7 @@ enum pos{
                 
                 viewcontroller.photoId = [atMeInfo valueForKey:@"photo_id"];
                 viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                viewcontroller.eventLauncherId = _selete_EventLauncherId;
                 viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                 viewcontroller.controller = nil;
                 viewcontroller.type = 2;
@@ -349,6 +354,7 @@ enum pos{
                         
                         viewcontroller.photoId = [atMeInfo valueForKey:@"photo_id"];
                         viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                        viewcontroller.eventLauncherId = [atMeInfo valueForKey:@"launcher_id"];
                         viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                         viewcontroller.controller = nil;
                         viewcontroller.type = 2;
@@ -364,6 +370,7 @@ enum pos{
                         
                         viewcontroller.videoId = [atMeInfo valueForKey:@"video_id"];
                         viewcontroller.eventId = [atMeInfo valueForKey:@"event_id"];
+                        viewcontroller.eventLauncherId = [atMeInfo valueForKey:@"launcher_id"];
                         viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                         viewcontroller.controller = nil;
                         [self.navigationController pushViewController:viewcontroller animated:YES];
@@ -411,13 +418,11 @@ enum pos{
 #pragma mark 用segue跳转时传递参数eventid
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-
     if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
         EventDetailViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
+        nextViewController.eventLauncherId = self.selete_EventLauncherId;
     }
-
-    
 }
 
 #pragma mark scrollView Delegate

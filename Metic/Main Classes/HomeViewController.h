@@ -48,6 +48,7 @@
 
 
 @property (nonatomic,strong)NSNumber *selete_Eventid;
+@property (nonatomic,strong)NSNumber *selete_EventLauncherid;
 @property (nonatomic,strong)NSString *selete_EventName;
 //@property(nonatomic,strong)NSMutableArray *eventIds;
 @property(nonatomic,strong)NSMutableArray *eventIds_all;

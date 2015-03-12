@@ -37,7 +37,6 @@
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
-
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
 
@@ -484,6 +483,7 @@
         NSString *tmpa = [result[0] valueForKey:@"event_info"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         self.event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+        if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
     }
     [self.sql closeMyDB];
 }
@@ -519,6 +519,9 @@
                         [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
                     }
                 }
+                if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
+                if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
+                
                 [self replaceItemfromArray:_event newArr:dist];
                 [_tableView endUpdates];
                 self.event = dist;
@@ -1495,11 +1498,13 @@
             PictureWall2 *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
         }
         if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
             VideoWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
         }
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;

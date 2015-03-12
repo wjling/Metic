@@ -20,6 +20,7 @@
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate,PhotoGetterDelegate>
 
 @property(nonatomic,strong)NSNumber *eventId;
+@property(nonatomic,strong)NSNumber* eventLauncherId;
 @property(nonatomic,strong)MySqlite *sql;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;

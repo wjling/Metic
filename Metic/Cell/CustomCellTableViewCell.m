@@ -26,6 +26,7 @@
 @synthesize location;
 @synthesize launcherinfo;
 @synthesize member_count;
+@synthesize launcherId;
 
 
 #define widthspace 10
@@ -92,12 +93,14 @@
 
 - (IBAction)jumpToPictureWall:(id)sender {
     self.homeController.selete_Eventid = self.eventId;
+    self.homeController.selete_EventLauncherid = self.launcherId;
     self.homeController.selete_EventName = _event;
     [self.homeController performSegueWithIdentifier:@"HomeToPictureWall" sender:self.homeController];
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
     self.homeController.selete_Eventid = self.eventId;
+    self.homeController.selete_EventLauncherid = self.launcherId;
     self.homeController.selete_EventName = _event;
     [self.homeController performSegueWithIdentifier:@"HomeToVideoWall" sender:self.homeController];
 }

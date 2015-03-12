@@ -390,6 +390,7 @@
             int index = self.scrollView.contentOffset.x/320;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;

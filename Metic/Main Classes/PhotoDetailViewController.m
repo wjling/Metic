@@ -802,7 +802,7 @@
         [specification setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:specification];
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
             [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];

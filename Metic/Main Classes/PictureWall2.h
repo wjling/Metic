@@ -12,6 +12,7 @@
 @interface PictureWall2 : TMQuiltViewController<MJRefreshBaseViewDelegate>
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSString* eventName;
+@property(nonatomic,strong)NSNumber* eventLauncherId;
 @property(nonatomic,strong)NSNumber *sequence;
 
 @property NSInteger showPhoNum;

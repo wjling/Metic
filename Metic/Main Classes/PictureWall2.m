@@ -488,6 +488,7 @@
     photoDisplay.photo_list = [NSMutableArray arrayWithArray:[self.photo_list subarrayWithRange:NSMakeRange(0, _showPhoNum)]];
     photoDisplay.photoIndex = indexPath.row;
     photoDisplay.eventId = self.eventId;
+    photoDisplay.eventLauncherId = self.eventLauncherId;
     photoDisplay.eventName = self.eventName;
     photoDisplay.controller = self;
     

@@ -574,6 +574,7 @@
             nextViewController.index = [_tableView indexPathForCell:_SeleVcell];
             nextViewController.controller = self;
             nextViewController.eventId = self.eventId;
+            nextViewController.eventLauncherId = self.eventLauncherId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
             nextViewController.video_thumb = self.seleted_videoThumb;

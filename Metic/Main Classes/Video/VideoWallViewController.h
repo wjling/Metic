@@ -16,6 +16,7 @@
 
 @interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) NSNumber* eventId;
+@property(nonatomic,strong) NSNumber* eventLauncherId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) IBOutlet UITableView* tableView;
 @property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;

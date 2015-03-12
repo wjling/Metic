@@ -290,13 +290,6 @@
     _controller.seleted_videoThumb = _videoThumb;
     [self clearVideoRequest];
     [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
-    return;
-    
-    
-    
-    _controller.seleted_videoInfo = _videoInfo;
-    _controller.seleted_videoThumb = _videoThumb;
-    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
 }
 
 - (void)pushToFriendView:(id)sender {

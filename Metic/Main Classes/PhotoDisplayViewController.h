@@ -20,6 +20,7 @@
 @property(nonatomic,strong)NSMutableArray *photo_list;//存放图片信息数据
 @property(nonatomic,strong)NSNumber* photoId;
 @property(nonatomic,strong)NSNumber* eventId;
+@property(nonatomic,strong)NSNumber* eventLauncherId;
 @property(nonatomic,strong)NSString* eventName;
 @property (strong, nonatomic) PictureWall2* controller;
 @property long photoIndex;

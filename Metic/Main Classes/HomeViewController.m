@@ -644,10 +644,8 @@
     
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
-    
-    
-    
-    ;
+    self.selete_EventLauncherid = cell.launcherId;
+
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
 }
 
@@ -661,16 +659,19 @@
     if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
         EventDetailViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[PictureWall2 class]]) {
         PictureWall2 *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
         nextViewController.eventName = self.selete_EventName;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
         VideoWallViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
         nextViewController.eventName = self.selete_EventName;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[LaunchEventViewController class]]) {
         LaunchEventViewController *nextViewController = segue.destinationViewController;
