@@ -24,7 +24,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 
 
-
 @interface PhotoUploadViewController ()
 @property (strong, nonatomic) UITextView* textInput;
 @property (strong, nonatomic) UIView* textView;
@@ -67,6 +66,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片上传"];
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated

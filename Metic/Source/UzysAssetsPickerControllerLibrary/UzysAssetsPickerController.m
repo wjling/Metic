@@ -162,7 +162,7 @@
 }
 - (void)setupLayout
 {
-    self.btnDone.layer.cornerRadius = 15;
+    self.btnDone.layer.cornerRadius = 14;
     self.btnDone.clipsToBounds = YES;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bottomView.bounds.size.width, 0.5)];
@@ -220,9 +220,9 @@
             self.segmentedControl.hidden = YES;
             self.labelSelectedMedia.hidden = NO;
             if(_maximumNumberOfSelection >1)
-                self.labelSelectedMedia.text = @"选择图片";
+                self.labelSelectedMedia.text = @"";
             else
-                self.labelSelectedMedia.text = @"Choose a photo";
+                self.labelSelectedMedia.text = @"";
         }
         else
         {

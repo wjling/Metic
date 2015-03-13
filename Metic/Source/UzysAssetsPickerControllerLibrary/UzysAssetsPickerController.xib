@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UzysAssetsPickerController">
             <connections>
                 <outlet property="bottomView" destination="kxD-PY-Oat" id="fmO-n5-9uB"/>
                 <outlet property="btnCamera" destination="8h0-kN-iqH" id="BN1-UZ-Qbu"/>
-                <outlet property="btnDone" destination="abt-dZ-axW" id="2rA-uc-JhG"/>
+                <outlet property="btnDone" destination="fF2-hh-1Ou" id="jtf-Xu-pWH"/>
                 <outlet property="btnTitle" destination="rd5-Z7-vdI" id="cgS-pE-KEI"/>
                 <outlet property="labelSelectedMedia" destination="HUE-lo-MS3" id="SFl-yr-V8h"/>
                 <outlet property="navigationTop" destination="eF0-Xh-u5U" id="gxF-h7-gEE"/>
@@ -64,19 +65,29 @@
                                 <action selector="btnAction:" destination="-1" eventType="touchUpInside" id="2aB-DM-9M6"/>
                             </connections>
                         </button>
-                        <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="abt-dZ-axW">
-                            <rect key="frame" x="249" y="9" width="55" height="30"/>
+                        <button autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fF2-hh-1Ou">
+                            <rect key="frame" x="240" y="10" width="28" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.88235294117647056" green="0.24313725490196078" blue="0.24313725490196078" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.96862751250000001" green="0.4156863093" blue="0.25098040700000002" alpha="1" colorSpace="deviceRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" title="0">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="n94-cx-ce1" userLabel="发送">
+                            <rect key="frame" x="240" y="9" width="70" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <inset key="titleEdgeInsets" minX="-32" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="32" minY="1" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="0" image="UzysAssetPickerController.bundle/uzysAP_ico_upload_done.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" title="               发送">
+                                <color key="titleColor" red="0.96862751245498657" green="0.41568630933761597" blue="0.25098040699958801" alpha="1" colorSpace="deviceRGB"/>
                             </state>
                             <connections>
-                                <action selector="btnAction:" destination="-1" eventType="touchUpInside" id="sbl-ar-Pla"/>
+                                <action selector="btnAction:" destination="-1" eventType="touchUpInside" id="GRV-q2-ICw"/>
                             </connections>
                         </button>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="44q-K1-3XI">
@@ -106,14 +117,16 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
         <image name="UzysAssetPickerController.bundle/uzysAP_ico_arrow_upload_album_d.png" width="15" height="15"/>
         <image name="UzysAssetPickerController.bundle/uzysAP_ico_upload_camera.png" width="15" height="15"/>
-        <image name="UzysAssetPickerController.bundle/uzysAP_ico_upload_done.png" width="15" height="15"/>
         <image name="UzysAssetPickerController.bundle/uzysAP_navi_icon_close.png" width="15" height="15"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>
