@@ -238,6 +238,30 @@
                         img.image = [UIImage imageNamed:@"加载失败"];
                     }
                 }];
+                
+                id extra = [dict valueForKey:@"extra"];
+                if (extra && ![extra isEqual:[NSNull null]]) {
+                    //显示活动标题
+                    
+                    NSData *extraData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+                    NSDictionary *extraDict =  [NSJSONSerialization JSONObjectWithData:extraData options:NSJSONReadingMutableLeaves error:nil];
+                    NSString* title = [extraDict valueForKey:@"title"];
+                    if (title) {
+                        UIView* shadow = [[UIView alloc]initWithFrame:CGRectMake(-10, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7 + 10, 40)];
+                        shadow.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+                        shadow.layer.cornerRadius = 8;
+                        shadow.layer.masksToBounds = YES;
+                        [img addSubview:shadow];
+                        
+                        
+                        UILabel* titleLab = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7, 30)];
+                        titleLab.text = [NSString stringWithFormat:@"   %@",title];
+                        titleLab.font = [UIFont systemFontOfSize:14];
+                        titleLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0f];
+                        titleLab.backgroundColor = [UIColor clearColor];
+                        [img addSubview:titleLab];
+                    }
+                }
                 [_scrollView addSubview:img];
             }
             
@@ -260,12 +284,37 @@
                     img.image = [UIImage imageNamed:@"加载失败"];
                 }
             }];
+            
+            id extra = [dict valueForKey:@"extra"];
+            if (extra && ![extra isEqual:[NSNull null]]) {
+                //显示活动标题
+
+                NSData *extraData = [extra dataUsingEncoding:NSUTF8StringEncoding];
+                NSDictionary *extraDict =  [NSJSONSerialization JSONObjectWithData:extraData options:NSJSONReadingMutableLeaves error:nil];
+                NSString* title = [extraDict valueForKey:@"title"];
+                if (title) {
+                    UIView* shadow = [[UIView alloc]initWithFrame:CGRectMake(-10, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7 + 10, 40)];
+                    shadow.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+                    shadow.layer.cornerRadius = 8;
+                    shadow.layer.masksToBounds = YES;
+                    [img addSubview:shadow];
+                    
+                    
+                    UILabel* titleLab = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7, 30)];
+                    titleLab.text = [NSString stringWithFormat:@"   %@",title];
+                    titleLab.font = [UIFont systemFontOfSize:14];
+                    titleLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0f];
+                    titleLab.backgroundColor = [UIColor clearColor];
+                    [img addSubview:titleLab];
+                }
+            }
+
             [_scrollView addSubview:img];
             i++;
         }
         
         if (_posterList.count == 1) return;
-        _pagecontrol = [[UIPageControl alloc] initWithFrame:CGRectMake(bannerWidth*0.3,bannerHeight*0.8, bannerWidth*0.4, bannerHeight*0.2)];
+        _pagecontrol = [[UIPageControl alloc] initWithFrame:CGRectMake(bannerWidth*0.7,bannerHeight*0.8, bannerWidth*0.3, bannerHeight*0.2)];
         _pagecontrol.backgroundColor = [UIColor clearColor];
         _pagecontrol.hidesForSinglePage = YES;
         _pagecontrol.userInteractionEnabled = NO;
