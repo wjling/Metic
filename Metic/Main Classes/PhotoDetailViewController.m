@@ -484,8 +484,8 @@
         cell = [cell superview];
     }
     NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
-    int row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _pcomment_list[row-1];
+    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSMutableDictionary *waitingComment = _pcomment_list[_pcomment_list.count - row];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -841,7 +841,7 @@
             nibsRegistered = YES;
         }
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        NSDictionary* Pcomment = self.pcomment_list[self.pcomment_list.count - indexPath.row ];
         //NSString* commentText = [Pcomment valueForKey:@"content"];
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
@@ -944,7 +944,7 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        NSDictionary* Pcomment = self.pcomment_list[_pcomment_list.count - indexPath.row ];
         float commentWidth = 0;
         NSString* commentText = [Pcomment valueForKey:@"content"];
         

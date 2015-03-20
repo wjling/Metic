@@ -777,8 +777,8 @@
         cell = [cell superview];
     }
     NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
-    int row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _vcomment_list[row-1];
+    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSMutableDictionary *waitingComment = _vcomment_list[_vcomment_list.count - row];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -1117,7 +1117,7 @@
             nibsRegistered = YES;
         }
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
+        NSDictionary* Vcomment = self.vcomment_list[_vcomment_list.count - indexPath.row];
 //        NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -1214,7 +1214,7 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
+        NSDictionary* Vcomment = self.vcomment_list[_vcomment_list.count - indexPath.row];
         float commentWidth = 0;
         NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString*alias2;
