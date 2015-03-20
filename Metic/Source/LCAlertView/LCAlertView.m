@@ -443,13 +443,13 @@
         
         [UIView animateWithDuration:0.23f delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
             
-            [self roate:orientation sacle:1.2];
+            [self roate:orientation sacle:1.05];
             
         } completion:^(BOOL finished) {
             
             [UIView animateWithDuration:.09f delay:0.02 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 
-                [self roate:orientation sacle:0.9];
+                [self roate:orientation sacle:0.95];
                 
             } completion:^(BOOL finished) {
                 
