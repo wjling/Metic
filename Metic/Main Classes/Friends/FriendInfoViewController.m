@@ -630,6 +630,8 @@
     NSString* remark = [event objectForKey:@"remark"];
     if (![remark isEqualToString:@""]) {
         cell.remark_textView.text = remark;
+    }else{
+        cell.remark_textView.text = @"主人好懒都懒得描述的说～";
     }
     cell.numOfMember_label.text = [CommonUtils NSStringWithNSNumber:[event objectForKey:@"member_count"]];
     
