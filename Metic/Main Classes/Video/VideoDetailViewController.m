@@ -41,6 +41,7 @@
 @property __block unsigned long long receivedBytes;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
+@property BOOL isLoading;
 @property long Selete_section;
 @end
 
@@ -112,7 +113,7 @@
 - (void)dealloc
 
 {
-    [_footer free];
+//    [_footer free];
 }
 
 -(void)initUI
@@ -170,14 +171,15 @@
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
+    self.isLoading = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.vcomment_list = [[NSMutableArray alloc]init];
     
     //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
+//    _footer = [[MJRefreshFooterView alloc]init];
+//    _footer.delegate = self;
+//    _footer.scrollView = _tableView;
     
     if (!_videoInfo) [self pullVideoInfoFromDB];
     [self pullVideoInfoFromAir];
@@ -707,6 +709,7 @@
 
 - (void)pullMainCommentFromAir
 {
+    _isLoading = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     long sequence = [self.sequence longValue];
@@ -729,9 +732,12 @@
                         if ([_sequence longValue] == sequence) {
                             if (sequence == 0) [self.vcomment_list removeAllObjects];
                             [self.vcomment_list addObjectsFromArray:newComments] ;
-                            self.sequence = [response1 valueForKey:@"sequence"];
+                            if (newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                            else self.sequence = [response1 valueForKey:@"sequence"];
                         }
-                        [self closeRJ];
+//                        [self closeRJ];
+                        _isLoading = NO;
+                        [self.tableView reloadData];
                     }
                 }
                     break;
@@ -751,6 +757,7 @@
                 }
             }
         }
+        _isLoading = NO;
     }];
 }
 
@@ -958,10 +965,10 @@
     //        _Headeropen = NO;
     //        [_header endRefreshing];
     //    }
-    if (_Footeropen) {
-        _Footeropen = NO;
-        [_footer endRefreshing];
-    }
+//    if (_Footeropen) {
+//        _Footeropen = NO;
+//        [_footer endRefreshing];
+//    }
     [self.tableView reloadData];
 }
 
@@ -1004,6 +1011,9 @@
     NSInteger comment_num = 0;
     if (self.vcomment_list) {
         comment_num = [self.vcomment_list count];
+        if ([_sequence integerValue] != -1) {
+            comment_num ++;
+        }
     }
     return 1 + comment_num;
 }
@@ -1108,6 +1118,22 @@
         
         
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            
+            UITableViewCell* cell = [[UITableViewCell alloc]init];
+            cell.backgroundColor = [UIColor clearColor];
+            
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
+            label.text = _isLoading? @"正在加载...":@"查看更早的评论";
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+            label.font = [UIFont systemFontOfSize:13];
+            label.backgroundColor = (_vcomment_list.count == 0)? [UIColor clearColor]:[UIColor colorWithWhite:230.0f/255.0 alpha:1.0f];
+            label.tag = 555;
+            [cell addSubview:label];
+            return cell;
+        }
+
         //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"vCommentCell";
         BOOL nibsRegistered = NO;
@@ -1117,7 +1143,7 @@
             nibsRegistered = YES;
         }
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Vcomment = self.vcomment_list[_vcomment_list.count - indexPath.row];
+        NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
 //        NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -1214,7 +1240,11 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Vcomment = self.vcomment_list[_vcomment_list.count - indexPath.row];
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            return 45;
+        }
+        NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
+
         float commentWidth = 0;
         NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString*alias2;
@@ -1246,6 +1276,23 @@
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (_isLoading) return;
+            if (!_videoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+                NSLog(@"没有网络");
+                return;
+            }
+            
+            [self pullMainCommentFromAir];
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            if (label) {
+                label.text = @"正在加载...";
+            }
+            
+            return ;
+        }
+
         VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

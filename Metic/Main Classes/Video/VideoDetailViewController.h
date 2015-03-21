@@ -29,7 +29,7 @@
 @property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) NSIndexPath *index;
-@property (strong, nonatomic) MJRefreshFooterView* footer;
+//@property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (weak, nonatomic) VideoWallViewController* controller;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;

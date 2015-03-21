@@ -33,6 +33,7 @@
 @property (nonatomic,strong) NSString* herName;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
+@property BOOL isLoading;
 @property long Selete_section;
 
 @end
@@ -102,7 +103,7 @@
 - (void)dealloc
 
 {
-    [_footer free];
+//    [_footer free];
 }
 
 -(void) initButtons
@@ -171,15 +172,16 @@
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
+    self.isLoading = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
+//    //初始化上拉加载更多
+//    _footer = [[MJRefreshFooterView alloc]init];
+//    _footer.delegate = self;
+//    _footer.scrollView = _tableView;
     
     if (!_photoInfo) [self pullPhotoInfoFromDB];
     [self pullPhotoInfoFromAir];
@@ -313,6 +315,7 @@
 
 - (void)pullMainCommentFromAir
 {
+    _isLoading = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     long sequence = [self.sequence longValue];
@@ -334,10 +337,13 @@
                         NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
                         if ([_sequence longValue] == sequence) {
                             if (sequence == 0) [_pcomment_list removeAllObjects];
-                            [self.pcomment_list addObjectsFromArray:newComments] ;
-                            self.sequence = [response1 valueForKey:@"sequence"];
+                            [self.pcomment_list addObjectsFromArray:newComments];
+                            if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                            else self.sequence = [response1 valueForKey:@"sequence"];
                         }
-                        [self closeRJ];
+                        _isLoading = NO;
+                        [self.tableView reloadData];
+//                        [self closeRJ];
                         //
                     }
                 }
@@ -359,6 +365,7 @@
                 }
             }
         }
+        _isLoading = NO;
     }];
 }
 
@@ -676,10 +683,10 @@
 //        _Headeropen = NO;
 //        [_header endRefreshing];
 //    }
-    if (_Footeropen) {
-        _Footeropen = NO;
-        [_footer endRefreshing];
-    }
+//    if (_Footeropen) {
+//        _Footeropen = NO;
+//        [_footer endRefreshing];
+//    }
     [self.tableView reloadData];
 }
 
@@ -742,6 +749,9 @@
     NSInteger comment_num = 0;
     if (self.pcomment_list) {
         comment_num = [self.pcomment_list count];
+        if ([_sequence integerValue] != -1) {
+            comment_num ++;
+        }
     }
     return 1 + comment_num;
 }
@@ -832,6 +842,22 @@
     
     
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            
+            UITableViewCell* cell = [[UITableViewCell alloc]init];
+            cell.backgroundColor = [UIColor clearColor];
+            
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
+            label.text = _isLoading? @"正在加载...":@"查看更早的评论";
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+            label.font = [UIFont systemFontOfSize:13];
+            label.backgroundColor = (_pcomment_list.count == 0)? [UIColor clearColor]:[UIColor colorWithWhite:230.0f/255.0 alpha:1.0f];
+            label.tag = 555;
+            [cell addSubview:label];
+            return cell;
+        }
+
         //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"pCommentCell";
         BOOL nibsRegistered = NO;
@@ -841,7 +867,8 @@
             nibsRegistered = YES;
         }
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Pcomment = self.pcomment_list[self.pcomment_list.count - indexPath.row ];
+        
+        NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
         //NSString* commentText = [Pcomment valueForKey:@"content"];
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
@@ -944,7 +971,10 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Pcomment = self.pcomment_list[_pcomment_list.count - indexPath.row ];
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            return 45;
+        }
+        NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
         float commentWidth = 0;
         NSString* commentText = [Pcomment valueForKey:@"content"];
         
@@ -984,6 +1014,22 @@
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (_isLoading) return;
+            if (!_photoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+                NSLog(@"没有网络");
+                return;
+            }
+            
+            [self pullMainCommentFromAir];
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            if (label) {
+                label.text = @"正在加载...";
+            }
+            
+            return ;
+        }
         NSLog(@"aaa");
         PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];

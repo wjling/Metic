@@ -24,7 +24,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
-@property (strong, nonatomic) MJRefreshFooterView* footer;
+//@property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
