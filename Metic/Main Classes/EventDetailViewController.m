@@ -498,41 +498,52 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            NSLog(@"%@", response1);
-            if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
-                NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
-                
-                if (![[dist valueForKey:@"isIn"] boolValue]) {
-                    [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
-                    [self removeEventFromDB];
-                    [self deleteItemfromHomeArray];
-                    [NotificationController clearEventInfo:_eventId];
-                    return ;
-                }
-                
-                if (_event) {
-                    NSString* updatetime1 = [_event valueForKey:@"updatetime"];
-                    NSString* updatetime2 = [dist valueForKey:@"updatetime"];
-                    
-                    if (![updatetime1 isEqualToString:updatetime2]) {
-                        [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                        NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                        
+                        if (![[dist valueForKey:@"isIn"] boolValue]) {
+                            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
+                            [self removeEventFromDB];
+                            [self deleteItemfromHomeArray];
+                            [NotificationController clearEventInfo:_eventId];
+                            return ;
+                        }
+                        
+                        if (_event) {
+                            NSString* updatetime1 = [_event valueForKey:@"updatetime"];
+                            NSString* updatetime2 = [dist valueForKey:@"updatetime"];
+                            
+                            if (![updatetime1 isEqualToString:updatetime2]) {
+                                [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
+                            }
+                        }
+                        if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
+                        if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
+                        
+                        [self replaceItemfromArray:_event newArr:dist];
+                        [_tableView endUpdates];
+                        self.event = dist;
+                        [_tableView reloadData];
+                        if(_event)[self updateEventToDB:_event];
+                    }else{
+                        [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
+                        [self removeEventFromDB];
+                        [self deleteItemfromHomeArray];
+                        [NotificationController clearEventInfo:_eventId];
                     }
                 }
-                if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
-                if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
-                
-                [self replaceItemfromArray:_event newArr:dist];
-                [_tableView endUpdates];
-                self.event = dist;
-                [_tableView reloadData];
-                if(_event)[self updateEventToDB:_event];
-            }else{
-                [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
-                [self removeEventFromDB];
-                [self deleteItemfromHomeArray];
-                [NotificationController clearEventInfo:_eventId];
+                    break;
+                default:
+                    break;
             }
+        
+            
             
         }
         
@@ -545,9 +556,10 @@
     [self.sql openMyDB:path];
     NSString *eventData = [NSString jsonStringWithDictionary:_event];
     eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",eventData], nil];
-    
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
     [self.sql insertToTable:@"event" withColumns:columns andValues:values];
     [self.sql closeMyDB];
 }
