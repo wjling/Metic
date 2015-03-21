@@ -66,13 +66,25 @@
     
     if (sender.state != UIGestureRecognizerStateBegan) return;
     if ([_authorId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
-//        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",nil];
-//        alert.alertAction = ^(NSInteger buttonIndex){
-//            if (buttonIndex == 1) {
-//                [self deleteComment];
-//            }
-//        };
-//        [alert show];
+        
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self delete_Comment:self];
+            }
+        };
+        [alert show];
+    }else if ([[_controller.event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue])
+    {
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self delete_Comment:self];
+            }else if (buttonIndex == 2){
+                [self report];
+            }
+        };
+        [alert show];
     }else{
         LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
         alert.alertAction = ^(NSInteger buttonIndex){
@@ -83,11 +95,7 @@
         };
         [alert show];
     }
-    
-    
-    
-    
-    
+
     return;
     if ([_commentid intValue]<0) {
         return;

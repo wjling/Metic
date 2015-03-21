@@ -623,7 +623,7 @@
 
 - (void)delete_Comment:(id)sender {
     
-    id cell = [sender superview];
+    id cell = sender;
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
     }
@@ -1190,14 +1190,14 @@
             [cell.good_button setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
         }else [cell.good_button setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if ([[mainCom valueForKey:@"comment_id"] intValue] == -1 ) {
-            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView startAnimating];
             [cell.resend_Button setHidden:YES];
             
             
         }else if([[mainCom valueForKey:@"comment_id"] intValue] == -2){
-            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:NO];
@@ -1207,12 +1207,12 @@
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
-            if ([[mainCom valueForKey:@"author_id"]integerValue] == [[MTUser sharedInstance].userid integerValue] || [[_event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue]) {
-                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
-            }
-            else{
-                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
-            }
+//            if ([[mainCom valueForKey:@"author_id"]integerValue] == [[MTUser sharedInstance].userid integerValue] || [[_event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+//                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
+//            }
+//            else{
+//                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            }
         }
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
