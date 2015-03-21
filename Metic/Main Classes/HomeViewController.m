@@ -213,13 +213,13 @@
         [userDfs synchronize];
     }else{
         _type = [sortType integerValue];
-        
-        for (int i = 0; i < _arrangementButtons.count; i++) {
-            UIButton* button = [_arrangementButtons objectAtIndex:i];
-            [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
-        }
-        [_arrangementButtons[(_type == 0)?0:1] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
     }
+    for (int i = 0; i < _arrangementButtons.count; i++) {
+        UIButton* button = [_arrangementButtons objectAtIndex:i];
+        [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
+    }
+    [_arrangementButtons[(_type == 0)?0:1] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+    
 }
 
 //reloadEvent
