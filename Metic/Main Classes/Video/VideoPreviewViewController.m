@@ -172,10 +172,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
-//    [sender setEnabled:NO];
+    
+    [sender setEnabled:NO];
     if (!_hasEncode) {
+        NSLog(@"开始转码");
         [self encodeVideo];
-    }else [self upload];
+    }else{
+        NSLog(@"开始上传");
+        [self upload];
+    }
     
 }
 
@@ -359,6 +364,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
         _waitingView = nil;
     }
+    _confirmBtn.enabled = YES;
 }
 
 -(void)modifyProgress:(id)sender
