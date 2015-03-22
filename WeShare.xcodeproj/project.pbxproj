@@ -354,6 +354,7 @@
 		51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0319E6307500E487F1 /* HTTPRedirectResponse.m */; };
 		51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0619E6307500E487F1 /* HTTPServer.m */; };
 		51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0819E6307500E487F1 /* WebSocket.m */; };
+		F83C341A1ABEE47300084CB0 /* MTAutoHideButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1051,6 +1052,8 @@
 		51F4CB0619E6307500E487F1 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		51F4CB0719E6307500E487F1 /* WebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket.h; sourceTree = "<group>"; };
 		51F4CB0819E6307500E487F1 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
+		F83C34181ABEE47300084CB0 /* MTAutoHideButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoHideButton.h; sourceTree = "<group>"; };
+		F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoHideButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1844,6 +1847,8 @@
 			children = (
 				08F7989E19AE449D002BA684 /* MTMessageTextView.h */,
 				08F7989F19AE449D002BA684 /* MTMessageTextView.m */,
+				F83C34181ABEE47300084CB0 /* MTAutoHideButton.h */,
+				F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -2010,7 +2015,8 @@
 				514812131937064E00DBBED7 /* MJRefreshHeaderView.h */,
 				514812141937064E00DBBED7 /* MJRefreshHeaderView.m */,
 			);
-			path = MJRefresh;
+			name = MJRefresh;
+			path = ../MJRefresh;
 			sourceTree = "<group>";
 		};
 		51581D171933575300943606 = {
@@ -2077,7 +2083,6 @@
 				48151F14194947EB009E156E /* Utils */,
 				51581D5B19335A8700943606 /* Main Classes */,
 				51581D6B19335CDD00943606 /* Source */,
-				5148120A1937064D00DBBED7 /* MJRefresh */,
 				519C658C1989F61B00710B26 /* Resource */,
 				51581D321933575300943606 /* AppDelegate.h */,
 				51581D331933575300943606 /* AppDelegate.m */,
@@ -2179,6 +2184,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5148120A1937064D00DBBED7 /* MJRefresh */,
 				08C97F181AAF2C7000ABA19C /* UzysAssetsPickerControllerLibrary */,
 				08700C7E1AADBA8F00396463 /* LCAlertView */,
 				081B6D981A7685D80044D623 /* libqrencode */,
@@ -2205,10 +2211,8 @@
 				510D4575196E8A960081672A /* SDWebImage */,
 				51581D6C19335CDD00943606 /* Assets */,
 				0878E85E1A3AC78E00E3C18C /* BOAlertController */,
-				519100EE19651388005DF607 /* MRZoomScrollView.h */,
-				519100EF19651388005DF607 /* MRZoomScrollView.m */,
-				51581D6F19335CDD00943606 /* SlideNavigationController.h */,
-				51581D7019335CDD00943606 /* SlideNavigationController.m */,
+				F83C341B1ABEE49C00084CB0 /* MRZoomScrollView */,
+				F83C341C1ABEE4A900084CB0 /* SlideNavigationController */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -2389,6 +2393,24 @@
 				51F4CB0819E6307500E487F1 /* WebSocket.m */,
 			);
 			path = HttpServer;
+			sourceTree = "<group>";
+		};
+		F83C341B1ABEE49C00084CB0 /* MRZoomScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				519100EE19651388005DF607 /* MRZoomScrollView.h */,
+				519100EF19651388005DF607 /* MRZoomScrollView.m */,
+			);
+			name = MRZoomScrollView;
+			sourceTree = "<group>";
+		};
+		F83C341C1ABEE4A900084CB0 /* SlideNavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				51581D6F19335CDD00943606 /* SlideNavigationController.h */,
+				51581D7019335CDD00943606 /* SlideNavigationController.m */,
+			);
+			name = SlideNavigationController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2765,6 +2787,7 @@
 				510D459E196E8A960081672A /* SDWebImageManager.m in Sources */,
 				04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */,
 				510D459D196E8A960081672A /* SDWebImageDownloaderOperation.m in Sources */,
+				F83C341A1ABEE47300084CB0 /* MTAutoHideButton.m in Sources */,
 				04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */,
 				0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */,
 				08C97F2D1AAF2C7000ABA19C /* UzysGroupPickerViewController.m in Sources */,

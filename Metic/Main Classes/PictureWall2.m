@@ -19,12 +19,13 @@
 #import "PhotoUploadViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 #import "NotificationController.h"
+#import "MTAutoHideButton.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
 
 @interface PictureWall2 ()
-@property (nonatomic,strong) UIButton* add;
+@property (nonatomic,strong) MTAutoHideButton* add;
 @property float h1;
 @property BOOL nibsRegistered;
 
@@ -45,6 +46,7 @@
 -(void)dealloc
 {
     [_header free];
+    [_add free];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -55,24 +57,9 @@
 {
     self.view.backgroundColor = [UIColor colorWithWhite:242.0/255.0 alpha:1.0f];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
-    _add = [UIButton buttonWithType:UIButtonTypeCustom];
-    _add.hidden = YES;
-    [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0]] forState:UIControlStateNormal];
-    [_add setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85/255.0 green:170/255.0 blue:166/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
-    _add.layer.masksToBounds = YES;
-    _add.layer.cornerRadius = CGRectGetWidth(self.view.frame)*0.1;
+
+    _add = [[MTAutoHideButton alloc]initWithScrollView:(UIScrollView*)self.view];
     [_add addTarget:self action:@selector(toUploadPhoto:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel* addLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-    [addLabel setTag:12];
-    [addLabel setBackgroundColor:[UIColor clearColor]];
-    [addLabel setFont:[UIFont systemFontOfSize:50]];
-    [addLabel setTextAlignment:NSTextAlignmentCenter];
-    [addLabel setText:@"+"];
-    [addLabel setTextColor:[UIColor whiteColor]];
-    [_add addSubview:addLabel];
-    
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
@@ -110,12 +97,7 @@
     [super viewDidAppear:animated];
     [SVProgressHUD dismiss];
     [MobClick beginLogPageView:@"图片墙"];
-    CGRect frame = self.navigationController.view.window.frame;
-    [_add setFrame:CGRectMake(CGRectGetWidth(frame)*0.7, CGRectGetHeight(frame) - CGRectGetWidth(frame)*0.3 , CGRectGetWidth(frame)*0.2, CGRectGetWidth(frame)*0.2)];
-    [[_add viewWithTag:12] setFrame:CGRectMake(0, 0, CGRectGetWidth(frame)*0.2, CGRectGetWidth(frame)*0.17)];
-    _add.layer.cornerRadius = CGRectGetWidth(_add.frame)/2;
-    _add.layer.masksToBounds = YES;
-    [self.navigationController.view.window addSubview:_add];
+    [_add appear];
     
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
@@ -127,7 +109,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_add removeFromSuperview];
+    [_add disappear];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
