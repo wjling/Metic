@@ -256,7 +256,7 @@
                         
                         UILabel* titleLab = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7, 30)];
                         titleLab.text = [NSString stringWithFormat:@"   %@",title];
-                        titleLab.font = [UIFont systemFontOfSize:14];
+                        titleLab.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
                         titleLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0f];
                         titleLab.backgroundColor = [UIColor clearColor];
                         [img addSubview:titleLab];
@@ -302,7 +302,7 @@
                     
                     UILabel* titleLab = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(img.frame) - 30, CGRectGetWidth(img.frame)*0.7, 30)];
                     titleLab.text = [NSString stringWithFormat:@"   %@",title];
-                    titleLab.font = [UIFont systemFontOfSize:14];
+                    titleLab.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14];
                     titleLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0f];
                     titleLab.backgroundColor = [UIColor clearColor];
                     [img addSubview:titleLab];
