@@ -7,9 +7,10 @@
 //
 
 #import "BannerViewController.h"
+#import "MRZoomScrollView.h"
 
 @interface BannerViewController ()
-
+@property (nonatomic,strong)MRZoomScrollView* zoomScrollview;
 @end
 
 @implementation BannerViewController
@@ -28,14 +29,21 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor blackColor]];
     if (_banner) {
-        float width = _banner.size.width;
-        float height = _banner.size.height * (self.view.frame.size.width / width);
-        _imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, (self.view.frame.size.height -  height)/2, self.view.frame.size.width, height)];
-        _imageView.image = _banner;
-        [self.view addSubview:_imageView];
+        _zoomScrollview = [[MRZoomScrollView alloc]initWithFrame:self.view.bounds];
+        _zoomScrollview.imageView.image = _banner;
+        [_zoomScrollview fitImageView];
+        [self.view addSubview:_zoomScrollview];
+        _zoomScrollview.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin |UIViewAutoresizingFlexibleRightMargin;
+
     }
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(back)];
+    tapRecognizer.numberOfTapsRequired=1;
     [self.view addGestureRecognizer:tapRecognizer];
+    UITapGestureRecognizer* doubleTapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTap)];
+    doubleTapRecognizer.numberOfTapsRequired=2;
+    [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+    [self.view addGestureRecognizer:doubleTapRecognizer];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -47,11 +55,34 @@
 
 -(BOOL)shouldAutorotate
 {
-    return NO;
+    return YES;
+}
+
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    _zoomScrollview.frame=self.view.bounds;
+    [_zoomScrollview fitImageView];
+    
+    
+    return;
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        _zoomScrollview.frame=self.view.bounds;
+        [_zoomScrollview fitImageView];
+    }
+    else
+    {
+        _zoomScrollview.frame=self.view.bounds;
+        [_zoomScrollview fitImageView];
+    }
 }
 
 -(void)back{
     [self dismissViewControllerAnimated:YES completion:^{}];
+}
+
+-(void)doubleTap{
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "UMSocialSinaHandler.h"
 #import "Source/security/SFHFKeychainUtils.h"
 #import "Main Classes/MTMPMoviePlayerViewController.h"
+#import "Main Classes/BannerViewController.h"
 #import "Main Classes/MTUser.h"
 #import "MobClick.h"
 #import "HttpSender.h"
@@ -1661,7 +1662,7 @@
 
 - (NSUInteger)application:(UIApplication *)application
 supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if ([[self.window.rootViewController presentedViewController] isKindOfClass:[MTMPMoviePlayerViewController class]])
+    if ([[self.window.rootViewController presentedViewController] isKindOfClass:[MTMPMoviePlayerViewController class]]||[[self.window.rootViewController presentedViewController] isKindOfClass:[BannerViewController class]])
     {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     } else {
