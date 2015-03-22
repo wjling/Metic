@@ -119,8 +119,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     _videoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_videoBtn setFrame:CGRectMake(0, 0, 300,300)];
     if (_preViewImage) {
-        [_videoBtn setFrame:CGRectMake(0, 0, 300,_preViewImage.size.height * 300/_preViewImage.size.width)];
+//        [_videoBtn setFrame:CGRectMake(0, 0, 300,_preViewImage.size.height * 300/_preViewImage.size.width)];
         [_videoBtn setImage:_preViewImage forState:UIControlStateNormal];
+        [_videoBtn.imageView setContentMode:UIViewContentModeScaleAspectFill];
     }else{
         [_videoBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
         [_videoBtn setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
