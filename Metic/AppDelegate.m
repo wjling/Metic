@@ -257,6 +257,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
                                                       userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"playTheMPMoviePlayer"
+                                                        object:nil
+                                                      userInfo:nil];
     isInBackground = NO;
     
     //同步推送消息

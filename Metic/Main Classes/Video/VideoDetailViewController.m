@@ -27,6 +27,7 @@
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
+@property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
 @property BOOL isVideoReady;
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
@@ -460,20 +461,21 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
         
-        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        _playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
-        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-        [self presentMoviePlayerViewControllerAnimated:playerViewController];
-        [[NSNotificationCenter defaultCenter] removeObserver:playerViewController
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:playerViewController.moviePlayer];
+        _playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [self presentMoviePlayerViewControllerAnimated:_playerViewController];
+        [[NSNotificationCenter defaultCenter] removeObserver:_playerViewController
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self
          
                                                 selector:@selector(movieFinishedCallback:)
          
                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
-                                                  object:playerViewController.moviePlayer];
-        
+                                                  object:_playerViewController.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playTheMPMoviePlayer:) name: @"playTheMPMoviePlayer" object:nil];
+
         videoRequest = nil;
     }else{
         if (videoRequest){
@@ -1484,6 +1486,11 @@
 }
 #pragma mark - MPlayer Delegate
 
+-(void)playTheMPMoviePlayer:(NSNotification*)notify{
+    MPMoviePlayerController* theMovie = _playerViewController.moviePlayer;
+    [theMovie play];
+}
+
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     MPMoviePlayerController* theMovie = [notify object];
@@ -1496,6 +1503,9 @@
                                                        name:MPMoviePlayerPlaybackDidFinishNotification
          
                                                      object:theMovie];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"playTheMPMoviePlayer"
+                                                      object:nil];
         
         
         //    planb

@@ -25,6 +25,7 @@
 
 @interface VideoWallTableViewCell ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
+@property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
 @property (nonatomic, retain) VideoPlayerViewController *myPlayerViewController;
 @property __block unsigned long long receivedBytes;
@@ -324,12 +325,13 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
-        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-        [[NSNotificationCenter defaultCenter] removeObserver:playerViewController
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:playerViewController.moviePlayer];
+        _playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        
+        _playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [self.controller presentMoviePlayerViewControllerAnimated:_playerViewController];
+        [[NSNotificationCenter defaultCenter] removeObserver:_playerViewController
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
          
@@ -337,7 +339,8 @@
          
                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
-                                                  object:playerViewController.moviePlayer];
+                                                  object:_playerViewController.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playTheMPMoviePlayer:) name: @"playTheMPMoviePlayer" object:nil];
         
         videoRequest = nil;
     }else{
@@ -545,6 +548,11 @@
     }
 }
 
+-(void)playTheMPMoviePlayer:(NSNotification*)notify{
+    MPMoviePlayerController* theMovie = _playerViewController.moviePlayer;
+    [theMovie play];
+}
+
 - (void)pauseVideo
 {
     if (_videoPlayer) {
@@ -585,6 +593,9 @@
                                                        name:MPMoviePlayerPlaybackDidFinishNotification
          
                                                      object:theMovie];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"playTheMPMoviePlayer"
+                                                      object:nil];
         
         [videoRequest clearDelegatesAndCancel];
         videoRequest = nil;
