@@ -145,63 +145,95 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participatorCell" forIndexPath:indexPath];
-    if(indexPath.row < _participants.count){
-        NSDictionary* participant = _participants[indexPath.row];
-        UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
-        UILabel* name = (UILabel*)[cell viewWithTag:2];
-        avatar.image = nil;
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
-        [getter getAvatar];
-        //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[participant valueForKey:@"id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]]) {
-            alias = [participant valueForKey:@"name"];
+    NSInteger addition = 0;
+    if(_isManaging){
+        if (_isMine) {
+            addition = 2;
+            if (indexPath.row == 0) {
+                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                [add setImage:[UIImage imageNamed:@"添加图标"]];
+                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                name.text = @"";
+                [[cell viewWithTag:4] setHidden:YES];//delete icon
+                [[cell viewWithTag:3] setHidden:YES];//mask
+                return cell;
+            }
+            if (indexPath.row == 1) {
+                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                [add setImage:[UIImage imageNamed:@"删除图标"]];
+                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                name.text = @"";
+                [[cell viewWithTag:4] setHidden:YES];//delete icon
+                [[cell viewWithTag:3] setHidden:YES];//mask
+                return cell;
+            }
+        }else if (_visibility){
+            addition = 1;
+            if (indexPath.row == 0) {
+                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                [add setImage:[UIImage imageNamed:@"添加图标"]];
+                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                name.text = @"";
+                [[cell viewWithTag:4] setHidden:YES];//delete icon
+                [[cell viewWithTag:3] setHidden:YES];//mask
+                return cell;
+            }
         }
-        name.text = alias;
-        [[cell viewWithTag:3] setHidden:NO];
-        BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
-        if (_isRemoving && !isMe) {
-            [[cell viewWithTag:4] setHidden:NO];
-        }else [[cell viewWithTag:4] setHidden:YES];
-
-    }else if (indexPath.row == _participants.count){
-        UIImageView* add = (UIImageView*)[cell viewWithTag:1];
-        [add setImage:[UIImage imageNamed:@"添加图标"]];
-        UILabel* name = (UILabel*)[cell viewWithTag:2];
-        name.text = @"";
-        [[cell viewWithTag:4] setHidden:YES];//delete icon
-        [[cell viewWithTag:3] setHidden:YES];//mask
-    }else{
-        UIImageView* add = (UIImageView*)[cell viewWithTag:1];
-        [add setImage:[UIImage imageNamed:@"删除图标"]];
-        UILabel* name = (UILabel*)[cell viewWithTag:2];
-        name.text = @"";
-        [[cell viewWithTag:4] setHidden:YES];//delete icon
-        [[cell viewWithTag:3] setHidden:YES];//mask
     }
+    
+    NSDictionary* participant = _participants[indexPath.row - addition];
+    UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
+    UILabel* name = (UILabel*)[cell viewWithTag:2];
+    avatar.image = nil;
+    PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
+    [getter getAvatar];
+    //显示备注名
+    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[participant valueForKey:@"id"]]];
+    if (alias == nil || [alias isEqual:[NSNull null]]) {
+        alias = [participant valueForKey:@"name"];
+    }
+    name.text = alias;
+    [[cell viewWithTag:3] setHidden:NO];
+    BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+    if (_isRemoving && !isMe) {
+        [[cell viewWithTag:4] setHidden:NO];
+    }else [[cell viewWithTag:4] setHidden:YES];
+    
     return cell;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_isManaging) {
-        NSDictionary* participant = _participants[indexPath.row];
-        [self pushToFriendView:[participant valueForKey:@"id"]];
-        return;
+    NSInteger addition = 0;
+    if(_isManaging){
+        if (_isMine) {
+            addition = 2;
+            if (indexPath.row == 0) {
+                [self performSegueWithIdentifier:@"inviteFriends" sender:self];
+                return;
+            }
+            if (indexPath.row == 1) {
+                self.isRemoving = !_isRemoving;
+                [self.collectionView reloadData];
+                return;
+            }
+        }else if (_visibility){
+            addition = 1;
+            if (indexPath.row == 0) {
+                [self performSegueWithIdentifier:@"inviteFriends" sender:self];
+                return;
+            }
+        }
     }
-
-    if (indexPath.row == _participants.count) {
-        [self performSegueWithIdentifier:@"inviteFriends" sender:self];
-    }else if(indexPath.row == _participants.count + 1){
-        self.isRemoving = !_isRemoving;
-        [self.collectionView reloadData];
-    }else{
-        NSDictionary* participant = _participants[indexPath.row];
-        BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
-        
-        
-        if (_isRemoving && !isMe) {
+    
+    NSDictionary* participant = _participants[indexPath.row - addition];
+    BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
+    
+    
+    if (_isRemoving) {
+        if (!isMe) {
             NSString* message = [NSString stringWithFormat:@"确定要将用户 %@ 请出此活动？",[participant valueForKey:@"name"]];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -209,6 +241,8 @@
             [alert setTag:1];
             _kickingId = [participant valueForKey:@"id"];
         }
+    }else{
+        [self pushToFriendView:[participant valueForKey:@"id"]];
     }
 }
 
