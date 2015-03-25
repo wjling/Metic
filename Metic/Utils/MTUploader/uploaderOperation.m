@@ -11,6 +11,7 @@
 #import "CloudOperation.h"
 #import "MTUser.h"
 #import "SDWebImageManager.h"
+#import "NSString+JSON.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -19,6 +20,7 @@
 @property (nonatomic,strong) NSString* imageName;
 @property (nonatomic,strong) NSString* uploadURL;
 @property (nonatomic,strong) ALAsset* imageALAsset;
+@property (nonatomic,strong) NSString* imageALAssetStr;
 @property (nonatomic,strong) NSData* imgData;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSThread* thread;
@@ -42,6 +44,21 @@
         _finished = NO;
         _imageALAsset = imgAsset;
         _eventId = eventId;
+        _imageName = [photoProcesser generateImageName];
+        [self saveToDB:imgAsset imageName:_imageName];
+    }
+    return self;
+}
+
+- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName
+{
+    if ((self = [super init])) {
+        _progress = 0;
+        _executing = NO;
+        _finished = NO;
+        _imageALAssetStr = imgAssetStr;
+        _eventId = eventId;
+        _imageName = imageName;
     }
     return self;
 }
@@ -68,6 +85,47 @@
     return _executing;
 }
 
+- (void)saveToDB:(ALAsset*)alasset imageName:(NSString*)imageName
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSURL* aLAssetsURL = [alasset valueForProperty:ALAssetPropertyAssetURL];
+    NSString *aLAssetsStr = [aLAssetsURL absoluteString];
+
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr], nil];
+    
+    [sql insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values];
+    [sql closeMyDB];
+}
+
+- (void)removeuploadTaskInDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
+    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+    [sql closeMyDB];
+}
+
+- (void)insertPhotoInfoToDB:(NSDictionary*)photoInfo eventId:(NSNumber*)eventId
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+
+    NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
+    photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
+    
+    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    
+    [sql closeMyDB];
+}
+
 - (void)start
 {
     @synchronized (self) {
@@ -77,22 +135,63 @@
             return;
         }
     }
-
-    UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullScreenImage
-                                       scale:_imageALAsset.defaultRepresentation.scale
-                                 orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
-    NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
     
-    NSData* compressedData = [imgData valueForKey:@"imageData"];
-    _width = [imgData valueForKey:@"width"];
-    _height = [imgData valueForKey:@"height"];
-    _imageName = [photoProcesser generateImageName];
-    _imgData = compressedData;
-    NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
-    NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
-    [self getCloudFileURL:Subpath];
+    if (_imageALAsset) {
+        UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullScreenImage
+                                           scale:_imageALAsset.defaultRepresentation.scale
+                                     orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
+        NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
+        
+        NSData* compressedData = [imgData valueForKey:@"imageData"];
+        _width = [imgData valueForKey:@"width"];
+        _height = [imgData valueForKey:@"height"];
+        _imageName = [photoProcesser generateImageName];
+        _imgData = compressedData;
+        NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
+        NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
+        [self getCloudFileURL:Subpath];
+        _wait = YES;
+        _thread = [NSThread currentThread];
+    }else if(_imageALAssetStr){
+
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        NSURL *imageFileURL = [NSURL URLWithString:_imageALAssetStr];
+        [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
+            
+            if (!asset) {
+                NSLog(@"图片已不存在");
+                [self removeuploadTaskInDB];
+                [self stop];
+                return ;
+            }
+            
+            UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage
+                                               scale:asset.defaultRepresentation.scale
+                                         orientation:(UIImageOrientation)asset.defaultRepresentation.orientation];
+            NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
+            
+            NSData* compressedData = [imgData valueForKey:@"imageData"];
+            _width = [imgData valueForKey:@"width"];
+            _height = [imgData valueForKey:@"height"];
+            _imgData = compressedData;
+            NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
+            NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
+            [self getCloudFileURL:Subpath];
+            _wait = YES;
+            _thread = [NSThread currentThread];
+            while(_wait) {
+                
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+                
+            }
+
+        } failureBlock:^(NSError *error) {
+            NSLog(@"error : %@", error);
+            [self removeuploadTaskInDB];
+            [self stop];
+        }];
+    }
     _wait = YES;
-    _thread = [NSThread currentThread];
     while(_wait) {
         
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
@@ -212,8 +311,11 @@
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
             {
+                [self removeuploadTaskInDB];
+                [self insertPhotoInfoToDB:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
+                
                 
                 [self stop];
             }

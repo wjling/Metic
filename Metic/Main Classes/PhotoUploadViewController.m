@@ -275,35 +275,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (IBAction)upload:(id)sender {
     
     
-//    //多图上传
-//    if (_uploadImgs.count == 0) {
-//        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
-//        return;
-//    }
-//    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
-//        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
-//        return;
-//    }
-//    [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
-//    
-//    [SVProgressHUD showSuccessWithStatus:@"图片已加入到上传队列" duration:2];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.navigationController popViewControllerAnimated:YES];
-//    });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //单图上传
-    if (!self.uploadImage) {
+    //多图上传
+    if (_uploadImgs.count == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
@@ -311,16 +284,43 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
         return;
     }
+    [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
     
-    [self showWaitingView];
-    self.upLoad = sender;
-//    [self.upLoad setEnabled:NO];
-//    [self.getPhoto setEnabled:NO];
-    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
-    getter.mDelegate = self;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [getter uploadPhoto];
+    [SVProgressHUD showSuccessWithStatus:@"图片已加入到上传队列" duration:2];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.navigationController popViewControllerAnimated:YES];
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    //单图上传
+//    if (!self.uploadImage) {
+//        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
+//        return;
+//    }
+//    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+//        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+//        return;
+//    }
+//    
+//    [self showWaitingView];
+//    self.upLoad = sender;
+////    [self.upLoad setEnabled:NO];
+////    [self.getPhoto setEnabled:NO];
+//    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+//    getter.mDelegate = self;
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [getter uploadPhoto];
+//    });
     
 }
 
@@ -553,10 +553,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    //单图上传
-    return 1;
-//    //多图上传
-//    return _uploadImgs.count + 1;
+//    //单图上传
+//    return 1;
+    //多图上传
+    return _uploadImgs.count + 1;
 }
 
 
@@ -589,15 +589,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [self.textInput resignFirstResponder];
     if (indexPath.row == _uploadImgs.count) {
-//        //多图上传
-//        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
-//        picker.delegate = self;
-//        picker.maximumNumberOfSelectionVideo = 0;
-//        picker.maximumNumberOfSelectionPhoto = 18;
-//        
-//        [self presentViewController:picker animated:YES completion:^{}];
-        //单图上传
-        [self UesrImageClicked];
+        //多图上传
+        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
+        picker.delegate = self;
+        picker.maximumNumberOfSelectionVideo = 0;
+        picker.maximumNumberOfSelectionPhoto = 18;
+        
+        [self presentViewController:picker animated:YES completion:^{}];
+//        //单图上传
+//        [self UesrImageClicked];
     }
 }
 

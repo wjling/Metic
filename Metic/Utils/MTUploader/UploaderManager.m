@@ -9,9 +9,14 @@
 #import "UploaderManager.h"
 #import "uploaderOperation.h"
 #import "photoProcesser.h"
+#import "CommonUtils.h"
+#import "MTUser.h"
+#import "BOAlertController.h"
+#import "SlideNavigationController.h"
 
 @interface UploaderManager ()
 @property (strong, nonatomic) NSOperationQueue *uploadQueue;
+
 @end
 
 @implementation UploaderManager
@@ -44,35 +49,87 @@
 - (id)init {
     if ((self = [super init])) {
         _uploadQueue = [[NSOperationQueue alloc]init];
+        _taskswithEventId = [[NSMutableDictionary alloc]init];
         [_uploadQueue setMaxConcurrentOperationCount:3];
     }
     return self;
 }
 
-- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
+- (void)checkUnfinishedTasks
 {
-    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
-    [_uploadQueue addOperation:newUploadTask];
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
 
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
+        
+    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+    [sql closeMyDB];
     
-    return;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        UIImage *img = [UIImage imageWithCGImage:imgAsset.defaultRepresentation.fullScreenImage
-                                           scale:imgAsset.defaultRepresentation.scale
-                                     orientation:(UIImageOrientation)imgAsset.defaultRepresentation.orientation];
-        NSData* compressedData = [photoProcesser compressPhoto:img maxSize:100];
-        NSString* imgName = [photoProcesser generateImageName];
-        [photoProcesser saveImage:compressedData fileName:imgName];
-        
-        
-        uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [_uploadQueue addOperation:newUploadTask];
-        });
-    });
+    if (result.count == 0) return;
+    
+    NSString* message = [NSString stringWithFormat:@"发现您有 %lu 张图片未上传成功",(unsigned long)result.count];
+    
+    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
+    
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"放弃上传" action:^{
+        [self removeAlluploadTaskInDB];
+    }];
+    [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"马上上传" action:^{
+        NSLog(@"%@",result);
+        for (int i = 0; i < result.count; i++) {
+            NSDictionary *task = result[i];
+            NSString* alassetStr = [task valueForKey:@"alasset"];
+            NSString* eventId = [task valueForKey:@"event_id"];
+            NSString* imgName = [task valueForKey:@"imgName"];
+            [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+        }
+    }];
+    [alertView addButton:okItem type:RIButtonItemType_Other];
+    [alertView show];
 }
 
-- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
+- (void)removeAlluploadTaskInDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"1", nil];
+    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+    [sql closeMyDB];
+}
+
+- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId
+{
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
+//    NSMutableArray* tasksArraywithEventID = [_taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:eventId]];
+//    if (!tasksArraywithEventID) {
+//        tasksArraywithEventID = [[NSMutableArray alloc]init];
+//        [_taskswithEventId setValue:tasksArraywithEventID forKey:[CommonUtils NSStringWithNSNumber:eventId]];
+//    }
+//    [tasksArraywithEventID addObject:newUploadTask];
+    [_uploadQueue addOperation:newUploadTask];
+
+}
+
+- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName
+{
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAssetStr:imgAssetStr eventId:eventId imageName:imageName];
+//    NSMutableArray* tasksArraywithEventID = [_taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:eventId]];
+//    if (!tasksArraywithEventID) {
+//        tasksArraywithEventID = [[NSMutableArray alloc]init];
+//        [_taskswithEventId setValue:tasksArraywithEventID forKey:[CommonUtils NSStringWithNSNumber:eventId]];
+//    }
+//    [tasksArraywithEventID addObject:newUploadTask];
+    [_uploadQueue addOperation:newUploadTask];
+    
+    
+}
+
+- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId
 {
     if (uploadALAssets.count == 0 || !eventId) {
         return;
@@ -82,6 +139,19 @@
         [self uploadImage:representation eventId:eventId];
     }];
 }
+
+//- (void)uploadALAssetsStr:(NSArray *)uploadALAssetsStr eventId:(NSNumber*)eventId
+//{
+//    if (uploadALAssetsStr.count == 0 || !eventId) {
+//        return;
+//    }
+//    [uploadALAssetsStr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        ALAsset *aLAsset = obj;
+//        NSURL* aLAssetsURL = [aLAsset valueForProperty:ALAssetPropertyAssetURL];
+//        NSString *aLAssetsStr = [aLAssetsURL absoluteString];
+//        [self uploadImageStr:aLAssetsStr eventId:eventId];
+//    }];
+//}
 
 @end
 

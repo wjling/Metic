@@ -10,8 +10,11 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @interface UploaderManager : NSObject
+@property (strong, nonatomic) NSDictionary* taskswithEventId;
 + (UploaderManager *)sharedManager;
+- (void)checkUnfinishedTasks;
 - (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
 - (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
+- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:imageName;
 
 @end

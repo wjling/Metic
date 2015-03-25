@@ -20,6 +20,8 @@
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 
+@property (nonatomic,strong) NSMutableArray* uploadingPhotos;
+
 @property BOOL shouldReloadPhoto;
 
 //@property (strong,nonatomic) MJRefreshFooterView *footer;

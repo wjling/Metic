@@ -11,4 +11,5 @@
 
 @interface uploaderOperation : NSOperation
 - (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
+- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName;
 @end

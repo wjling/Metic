@@ -20,6 +20,7 @@
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTAutoHideButton.h"
+#import "UploaderManager.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -28,10 +29,10 @@
 @property (nonatomic,strong) MTAutoHideButton* add;
 @property float h1;
 @property BOOL nibsRegistered;
-
 @property BOOL shouldLoadPhoto;
 @property BOOL haveLoadedPhoto;
 @property BOOL isLoading;
+@property (nonatomic,strong) NSMutableArray* dataArray;
 @end
 
 @implementation PictureWall2
@@ -86,10 +87,15 @@
                 [_header beginRefreshing];
             });
             
-            
         }
     });
-    
+    _uploadingPhotos = [[UploaderManager sharedManager].taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:_eventId]];
+    if (!_uploadingPhotos) {
+        NSMutableArray* tmp = [[NSMutableArray alloc]init];
+        [[UploaderManager sharedManager].taskswithEventId setValue:tmp forKey:[CommonUtils NSStringWithNSNumber:_eventId]];
+        _uploadingPhotos = tmp;
+        
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -99,11 +105,14 @@
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
     
+    
+    
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
         [_header beginRefreshing];
 
     }
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated

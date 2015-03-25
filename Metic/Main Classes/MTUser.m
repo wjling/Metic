@@ -339,6 +339,7 @@ static MTUser *singletonInstance;
                 MySqlite * sql = [[MySqlite alloc]init];
                 NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
                 [sql openMyDB:path];
+                [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
                 [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
                 [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
                 [sql closeMyDB];
@@ -371,6 +372,7 @@ static MTUser *singletonInstance;
     [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
     [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
     [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
+    [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
     
     [sql closeMyDB];
     //self.logined = YES;
