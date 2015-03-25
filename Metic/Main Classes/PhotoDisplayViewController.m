@@ -223,6 +223,7 @@
 {
     if(self.navigationController.navigationBarHidden){
         [self.navigationController setNavigationBarHidden:NO];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self rotation:0.0];
         [self loadPictureDescription];
         [self.scrollView setFrame:CGRectMake(0, self.movedown, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
@@ -230,6 +231,7 @@
         [self.view bringSubviewToFront:self.InfoView];
     }else{
         [self.navigationController setNavigationBarHidden:YES];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         [self.scrollView setFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
         [self.InfoView setHidden:YES];
 
