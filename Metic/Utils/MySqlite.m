@@ -334,7 +334,7 @@
         NSString* value =[wheres objectForKey:key];
         [sql appendFormat:@"%@ = %@",key, value];
         if (i != wheresCount-1) {
-            [sql appendString:@", "];
+            [sql appendString:@" and "];
         }
     }
     NSLog(@"delete sql: %@",sql);
