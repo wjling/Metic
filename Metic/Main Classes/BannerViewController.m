@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self.view setBackgroundColor:[UIColor blackColor]];
     if (_banner) {
         _zoomScrollview = [[MRZoomScrollView alloc]initWithFrame:self.view.bounds];
