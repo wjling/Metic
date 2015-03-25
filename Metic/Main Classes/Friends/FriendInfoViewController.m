@@ -332,9 +332,7 @@
         if (!image) {
             image = [UIImage imageNamed:@"默认用户头像"];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
-        });
+        [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
         
     }];
     NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
