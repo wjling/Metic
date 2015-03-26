@@ -72,22 +72,22 @@
                 text = [NSString stringWithFormat:@"举报用户：%@ \n\n",_userName];
                 break;
             case 1:
-                text = [NSString stringWithFormat:@"举报：%@ 活动\n\n",_event];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动\n\n",_event];
                 break;
             case 2:
-                text = [NSString stringWithFormat:@"举报：%@ 活动评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
             case 3:
-                text = [NSString stringWithFormat:@"举报：%@ 活动图片\n\n",_event];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动图片\n\n",_event];
                 break;
             case 4:
-                text = [NSString stringWithFormat:@"举报：%@ 活动图片评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动图片评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
             case 5:
-                text = [NSString stringWithFormat:@"举报：%@ 活动视频\n\n",_event];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动视频\n\n",_event];
                 break;
             case 6:
-                text = [NSString stringWithFormat:@"举报：%@ 活动视频评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
+                text = [NSString stringWithFormat:@"举报：⎡%@⎦ 活动视频评论\n\n评论人：%@\n\n评论：%@\n\n",_event,_commentAuthor,_comment];
                 break;
             default:
                 break;

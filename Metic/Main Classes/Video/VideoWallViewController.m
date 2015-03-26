@@ -22,6 +22,7 @@
 #import "../../Source/SVProgressHUD/SVProgressHUD.h"
 #import "NotificationController.h"
 #import "BOAlertController.h"
+#import "MTAutoHideButton.h"
 
 
 @interface VideoWallViewController ()
@@ -33,6 +34,7 @@
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 @property(nonatomic,strong) UILabel* promt;
+@property (nonatomic,strong) MTAutoHideButton* add;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
 @property NSTimer* timer;
@@ -64,6 +66,8 @@
 //    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width - 20, self.view.frame.size.height)];
     _Headeropen = NO;
     _Footeropen = NO;
+    _add = [[MTAutoHideButton alloc]initWithScrollView:self.tableView];
+    [_add addTarget:self action:@selector(uploadVideo:) forControlEvents:UIControlEventTouchUpInside];
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
@@ -124,6 +128,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
                                                       userInfo:nil];
+    [_add appear];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -133,6 +138,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_add disappear];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -144,6 +154,7 @@
     for (AVPlayer*  player in [_AVPlayers objectEnumerator]) {
         [player replaceCurrentItemWithPlayerItem:nil];
     }
+    [_add free];
     [_header free];
     [_footer free];
 }
@@ -237,7 +248,7 @@
     [sql closeMyDB];
 }
 
-+ (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId
++ (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
@@ -388,12 +399,14 @@
 }
 
 - (IBAction)uploadVideo:(id)sender {
+    [_add disappear];
     
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择视频" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
         NSLog(@"cancel");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
+        [_add appear];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
@@ -574,6 +587,7 @@
             nextViewController.index = [_tableView indexPathForCell:_SeleVcell];
             nextViewController.controller = self;
             nextViewController.eventId = self.eventId;
+            nextViewController.eventLauncherId = self.eventLauncherId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
             nextViewController.video_thumb = self.seleted_videoThumb;

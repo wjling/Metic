@@ -12,6 +12,7 @@
 @interface PictureWall2 : TMQuiltViewController<MJRefreshBaseViewDelegate>
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSString* eventName;
+@property(nonatomic,strong)NSNumber* eventLauncherId;
 @property(nonatomic,strong)NSNumber *sequence;
 
 @property NSInteger showPhoNum;
@@ -19,9 +20,13 @@
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 
-@property BOOL shouldReloadPhoto;
-//@property (strong,nonatomic) MJRefreshFooterView *footer;
+@property (nonatomic,strong) NSMutableArray* uploadingPhotos;
 
+@property BOOL shouldReloadPhoto;
+
+//@property (strong,nonatomic) MJRefreshFooterView *footer;
++ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId;
 - (IBAction)toBestPhotos:(id)sender;
+- (IBAction)addPhoto:(id)sender;
 -(void)calculateLRH;
 @end

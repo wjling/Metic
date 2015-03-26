@@ -161,8 +161,23 @@ static MTUser *singletonInstance;
     NSLog(@"getInfo:\n%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:aDelegate];
-    [httpSender sendMessage:jsonData withOperationCode:GET_USER_INFO];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_USER_INFO finshedBlock:^(NSData *rData) {
+        if (!rData) return ;
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                if ([response1 valueForKey:@"name"]) {//更新用户信息
+                    
+                    [[MTUser sharedInstance] initWithData:response1];
+                    [AppDelegate refreshMenu];
+                }
+            }
+        }
+    }];
 
 }
 
@@ -287,32 +302,55 @@ static MTUser *singletonInstance;
     {
         
         NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
-        NSString* version = [userDfs objectForKey:@"DB_version"];
+        NSString* version = [userDfs objectForKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
         int result;
         if (!version) {
             version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-            [userDfs setObject:version forKey:@"DB_version"];
+            [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
             [userDfs synchronize];
             result = -1;
-        }
-        else
-        {
-            result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
             
-            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-            [userDfs setObject:version forKey:@"DB_version"];
-            [userDfs synchronize];
-        }
-        
-        
-        if (result == -1) {
-            NSLog(@"升级数据库，原数据库版本：%@",version);
+            
+            NSLog(@"升级数据库，添加所有补丁");
             MySqlite * sql = [[MySqlite alloc]init];
             NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
             [sql openMyDB:path];
             [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
+            [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
+            [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
             [sql closeMyDB];
+            
+        }else{
+            result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
+            
+            if (result == -1) {
+                NSLog(@"升级数据库，原数据库版本：%@",version);
+                MySqlite * sql = [[MySqlite alloc]init];
+                NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+                [sql openMyDB:path];
+                [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
+                [sql closeMyDB];
+            }
+            
+            result = [CommonUtils compareVersion1:version andVersion2:@"1.0.3"];
+            
+            if (result <= 0) {
+                NSLog(@"升级数据库，原数据库版本：%@",version);
+                MySqlite * sql = [[MySqlite alloc]init];
+                NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
+                [sql openMyDB:path];
+                [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
+                [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
+                [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
+                [sql closeMyDB];
+            }
+            
+            
+            version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+            [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
+            [userDfs synchronize];
         }
+
     }
     
     
@@ -323,17 +361,18 @@ static MTUser *singletonInstance;
     NSLog(@"初始化数据库");
     NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [userDfs setObject:version forKey:@"DB_version"];
+    [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
     [userDfs synchronize];
     MySqlite * sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
     [sql openMyDB:path];
-    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"event_info",nil];
+    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info",nil];
     [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
     [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias",nil];
     [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
     [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
     [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
+    [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
     
     [sql closeMyDB];
     //self.logined = YES;

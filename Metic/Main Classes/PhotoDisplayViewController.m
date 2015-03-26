@@ -14,6 +14,7 @@
 #import "../Utils/CommonUtils.h"
 #import "NSString+JSON.h"
 #import "Reachability.h"
+#import "LCAlertView.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -86,8 +87,19 @@
     [super viewDidAppear:animated];
     self.commentImg.image = [UIImage imageNamed:@"评论icon"];
     [self refreshGood];
+    UIDevice *device = [UIDevice currentDevice]; //Get the device object
+    [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
+    [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
     
 }
+-(void)viewWillDisappear:(BOOL)animated {
+    
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    UIDevice *device = [UIDevice currentDevice]; //Get the device object
+    [nc removeObserver:self name:UIDeviceOrientationDidChangeNotification object:device];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -99,6 +111,57 @@
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+-(void)rotation:(float)n {
+    NSLog(@"%dth",_lastViewIndex);
+    float offsetX = (int)n%180 == 0? self.view.bounds.size.width:self.view.bounds.size.height;
+    CGPoint contentOffset = CGPointMake(_lastViewIndex*offsetX, 0);
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        NSLog(@"aft %f  %f",self.view.frame.size.width,self.view.bounds.size.width);
+        
+        _scrollView.transform = CGAffineTransformMakeRotation(n*M_PI/180.0);
+        _scrollView.frame = self.view.bounds;
+        _scrollView.contentOffset = contentOffset;
+        for (NSString* key in [_photos keyEnumerator]) {
+            MRZoomScrollView* zoomView = [_photos valueForKey:key];
+            if (zoomView) {
+                [zoomView fitImageView];
+            }
+        }
+        
+    } completion:^(BOOL finished) {
+        [self.scrollView setContentSize:CGSizeMake(_scrollView.bounds.size.width*self.photo_list.count, _scrollView.bounds.size.height)];
+        
+    }];
+    
+}
+
+- (void)orientationChanged:(NSNotification *)note  {
+    if (!self.navigationController.navigationBarHidden) return;
+    UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
+    switch (o) {
+        case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
+            NSLog(@"UIDeviceOrientationPortrait");
+            [self rotation:0.0];
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
+            NSLog(@"UIDeviceOrientationPortraitUpsideDown");
+            [self rotation:180.0];
+            break;
+        case UIDeviceOrientationLandscapeLeft:      // Device oriented horizontally, home button on the right
+            NSLog(@"UIDeviceOrientationLandscapeLeft");
+            [self rotation:90.0];
+            break;
+        case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
+            NSLog(@"UIDeviceOrientationLandscapeRight");
+            [self rotation:90.0*3];
+            break;
+        default:
+            break;
+    }
+}
+
 
 - (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
 {
@@ -115,6 +178,7 @@
 
 -(void)refreshGood
 {
+    if (self.navigationController.navigationBarHidden) return;
     int index = self.scrollView.contentOffset.x/320;
     NSDictionary* dict = self.photo_list[index];
     self.zan_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"good"]];
@@ -125,6 +189,7 @@
 }
 -(void)loadPictureDescription
 {
+    if (self.navigationController.navigationBarHidden) return;
     int index = self.scrollView.contentOffset.x/320;
     
     NSDictionary* dict = self.photo_list[index];
@@ -158,11 +223,15 @@
 {
     if(self.navigationController.navigationBarHidden){
         [self.navigationController setNavigationBarHidden:NO];
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        [self rotation:0.0];
+        [self loadPictureDescription];
         [self.scrollView setFrame:CGRectMake(0, self.movedown, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
         [self.InfoView setHidden:NO];
         [self.view bringSubviewToFront:self.InfoView];
     }else{
         [self.navigationController setNavigationBarHidden:YES];
+        [[UIApplication sharedApplication] setStatusBarHidden:YES];
         [self.scrollView setFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
         [self.InfoView setHidden:YES];
 
@@ -175,6 +244,32 @@
 
 -(void)showOption:(UIGestureRecognizer*)sender
 {
+    if (!self.navigationController.navigationBarHidden) return;
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    int index = self.scrollView.contentOffset.x/320;
+    NSNumber* authorId = [self.photo_list[index] valueForKey:@"author_id"];
+    if ([authorId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+//        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",@"举报",nil];
+//        alert.alertAction = ^(NSInteger buttonIndex){
+//            if (buttonIndex == 1) {
+//                [self deleteComment];
+//            }
+//            if (buttonIndex == 2) {
+//                [self report];
+//            }
+//        };
+//        [alert show];
+    }else{
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self report];
+            }
+        };
+        [alert show];
+    }
+
+    return;
     if (sender.state == UIGestureRecognizerStateBegan) {
         NSLog(@"showOption");
         if (!_shadowView) {
@@ -225,12 +320,8 @@
 
 -(void)report{
     NSLog(@"匿名投诉");
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (_shadowView) {
-            [self dismissOption];
-            [self performSegueWithIdentifier:@"photoToreport" sender:self];
-        }
-        
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self performSegueWithIdentifier:@"photoToreport" sender:self];
     });
 }
 -(void)displaythreePhoto:(int)photoIndex
@@ -254,7 +345,10 @@
         return;
     }
     MRZoomScrollView* zoomScrollView = [[MRZoomScrollView alloc]init];
-    [zoomScrollView setFrame:CGRectMake(320*photoIndex+2,0,316, self.scrollView.frame.size.height)];
+    zoomScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin;
+    float containerWidth = _scrollView.bounds.size.width;
+    float containerHeight = _scrollView.bounds.size.height;
+    [zoomScrollView setFrame:CGRectMake(containerWidth*photoIndex+2,0,containerWidth - 4, containerHeight)];
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
     NSString *url = [_photo_list[photoIndex] valueForKey:@"url"];
@@ -281,7 +375,8 @@
 #pragma mark - UiScrollViewDelegate
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    int position = self.scrollView.contentOffset.x/320;
+    float containerWidth = _scrollView.bounds.size.width;
+    int position = self.scrollView.contentOffset.x/containerWidth;
     if (self.lastViewIndex != position) {
         MRZoomScrollView *photoScrollView = [self.photos valueForKey:[NSString stringWithFormat:@"%d",self.lastViewIndex]];
         [photoScrollView zoomToNormal];
@@ -367,6 +462,7 @@
             int index = self.scrollView.contentOffset.x/320;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
             nextViewController.eventId = _eventId;
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;
@@ -383,7 +479,6 @@
             nextViewController.eventId = _eventId;
             nextViewController.event = self.eventName;
             nextViewController.type = 3;
-
         }
         
     }

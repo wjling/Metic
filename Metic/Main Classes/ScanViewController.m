@@ -231,7 +231,14 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT];
+    [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            [self finishWithReceivedData:rData];
+        }else{
+            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            [alertView setTag:10];
+        }
+    }];
 }
 
 - (void) searchUser: (NSNumber *)userid
@@ -242,7 +249,14 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
+    [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND finshedBlock:^(NSData *rData) {
+        if (rData) {
+            [self finishWithReceivedData:rData];
+        }else{
+            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            [alertView setTag:10];
+        }
+    }];
 }
 
 -(void)showResult
@@ -551,7 +565,14 @@
                     NSLog(@"%@",dictionary);
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+                    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+                        if (rData) {
+                            [self finishWithReceivedData:rData];
+                        }else{
+                            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                            [alertView setTag:10];
+                        }
+                    }];
                     
                 }
             }else if ([_type isEqualToString: @"user"]){
@@ -568,7 +589,14 @@
                     NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
+                    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND finshedBlock:^(NSData *rData) {
+                        if (rData) {
+                            [self finishWithReceivedData:rData];
+                        }else {
+                            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                            [alertView setTag:10];
+                        }
+                    }];
                     NSLog(@"add friend apply: %@",json);
                     
                 }

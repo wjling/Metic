@@ -17,12 +17,14 @@
 @property (nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
+@property (nonatomic,strong) NSNumber* eventLauncherId;
 @property (nonatomic,strong) NSString* eventName;
 @property (nonatomic,strong) NSMutableDictionary * photoInfo;
+@property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
-@property (strong, nonatomic) MJRefreshFooterView* footer;
+//@property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
@@ -37,4 +39,6 @@
 - (IBAction)download:(id)sender;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
+- (void)commentNumMinus;
+- (void)commentNumPlus;
 @end

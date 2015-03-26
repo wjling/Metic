@@ -57,7 +57,7 @@
 
 -(void)fitImageView
 {
-    float containerWidth = 316;
+    float containerWidth = self.frame.size.width - 4;
     float containerHeight = self.frame.size.height;
     [self setContentSize:CGSizeMake(containerWidth, containerHeight)];
     if (containerWidth/containerHeight < self.imageView.image.size.width / self.imageView.image.size.height) {

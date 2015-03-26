@@ -91,6 +91,7 @@
         
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
         cell.eventId = [a valueForKey:@"event_id"];
+        cell.launcherId = [a valueForKey:@"launcher_id"];
         //cell.avatar.layer.masksToBounds = YES;
         [cell.avatar.layer setCornerRadius:15];
         

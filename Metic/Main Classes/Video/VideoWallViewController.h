@@ -16,6 +16,7 @@
 
 @interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) NSNumber* eventId;
+@property(nonatomic,strong) NSNumber* eventLauncherId;
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) IBOutlet UITableView* tableView;
 @property(nonatomic,strong) NSMutableDictionary* seleted_videoInfo;
@@ -29,6 +30,6 @@
 @property(nonatomic,strong) NSMutableDictionary* AVPlayerItems;
 @property(nonatomic,strong) NSMutableDictionary* AVPlayerLayers;
 @property(nonatomic,strong) NSMutableSet* loadingVideo;
-+ (void)updateVideoInfoToDB:(NSMutableArray*)videoInfos eventId:(NSNumber*)eventId;
++ (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId;
 - (IBAction)uploadVideo:(id)sender;
 @end

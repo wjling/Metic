@@ -27,13 +27,13 @@
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSMutableArray * pcomment_list;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
+@property BOOL isLoading;
 @property long Selete_section;
 
 @end
@@ -103,7 +103,7 @@
 - (void)dealloc
 
 {
-    [_footer free];
+//    [_footer free];
 }
 
 -(void) initButtons
@@ -172,21 +172,19 @@
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
+    self.isLoading = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
+//    //初始化上拉加载更多
+//    _footer = [[MJRefreshFooterView alloc]init];
+//    _footer.delegate = self;
+//    _footer.scrollView = _tableView;
     
-    if (!_photoInfo) {
-        if (![self pullPhotoInfoFromDB]) {
-            [self pullPhotoInfoFromAir];
-        }
-    }
+    if (!_photoInfo) [self pullPhotoInfoFromDB];
+    [self pullPhotoInfoFromAir];
 }
 
 -(BOOL)pullPhotoInfoFromDB
@@ -227,7 +225,10 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
-                    _photoInfo = response1;
+                    if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
+                    else _photoInfo = response1;
+                    [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
+                    [_tableView reloadData];
                 }
                     break;
                 case PHOTO_NOT_EXIST:
@@ -314,6 +315,7 @@
 
 - (void)pullMainCommentFromAir
 {
+    _isLoading = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     long sequence = [self.sequence longValue];
@@ -335,10 +337,13 @@
                         NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
                         if ([_sequence longValue] == sequence) {
                             if (sequence == 0) [_pcomment_list removeAllObjects];
-                            [self.pcomment_list addObjectsFromArray:newComments] ;
-                            self.sequence = [response1 valueForKey:@"sequence"];
+                            [self.pcomment_list addObjectsFromArray:newComments];
+                            if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                            else self.sequence = [response1 valueForKey:@"sequence"];
                         }
-                        [self closeRJ];
+                        _isLoading = NO;
+                        [self.tableView reloadData];
+//                        [self closeRJ];
                         //
                     }
                 }
@@ -360,6 +365,7 @@
                 }
             }
         }
+        _isLoading = NO;
     }];
 }
 
@@ -368,20 +374,16 @@
     int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [self updatePhotoInfoToDB:_photoInfo];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
-- (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
+- (void)commentNumMinus
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
-    NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
-    
-    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-    [sql closeMyDB];
+    int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+    comN --;
+    if (comN < 0) comN = 0;
+    [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (IBAction)good:(id)sender {
@@ -435,7 +437,7 @@
     }else good ++;
     [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-    [self updatePhotoInfoToDB:_photoInfo];
+    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
     [self setGoodButton];
     [self.good_button setEnabled:YES];
 }
@@ -489,8 +491,8 @@
         cell = [cell superview];
     }
     NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
-    int row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _pcomment_list[row-1];
+    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSMutableDictionary *waitingComment = _pcomment_list[_pcomment_list.count - row];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -681,10 +683,10 @@
 //        _Headeropen = NO;
 //        [_header endRefreshing];
 //    }
-    if (_Footeropen) {
-        _Footeropen = NO;
-        [_footer endRefreshing];
-    }
+//    if (_Footeropen) {
+//        _Footeropen = NO;
+//        [_footer endRefreshing];
+//    }
     [self.tableView reloadData];
 }
 
@@ -747,6 +749,9 @@
     NSInteger comment_num = 0;
     if (self.pcomment_list) {
         comment_num = [self.pcomment_list count];
+        if ([_sequence integerValue] != -1) {
+            comment_num ++;
+        }
     }
     return 1 + comment_num;
 }
@@ -807,7 +812,7 @@
         [specification setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:specification];
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
             [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];
@@ -837,6 +842,22 @@
     
     
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            
+            UITableViewCell* cell = [[UITableViewCell alloc]init];
+            cell.backgroundColor = [UIColor clearColor];
+            
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
+            label.text = _isLoading? @"正在加载...":@"查看更早的评论";
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+            label.font = [UIFont systemFontOfSize:13];
+            label.backgroundColor = (_pcomment_list.count == 0)? [UIColor clearColor]:[UIColor colorWithWhite:230.0f/255.0 alpha:1.0f];
+            label.tag = 555;
+            [cell addSubview:label];
+            return cell;
+        }
+
         //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"pCommentCell";
         BOOL nibsRegistered = NO;
@@ -846,7 +867,8 @@
             nibsRegistered = YES;
         }
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        
+        NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
         //NSString* commentText = [Pcomment valueForKey:@"content"];
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
@@ -854,6 +876,7 @@
             alias = [Pcomment valueForKey:@"author"];
         }
         
+        ((PcommentTableViewCell *)cell).PcommentDict = Pcomment;
         ((PcommentTableViewCell *)cell).author.text = alias;
         ((PcommentTableViewCell *)cell).authorName = alias;
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
@@ -948,7 +971,10 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Pcomment = self.pcomment_list[indexPath.row - 1];
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            return 45;
+        }
+        NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
         float commentWidth = 0;
         NSString* commentText = [Pcomment valueForKey:@"content"];
         
@@ -988,6 +1014,22 @@
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (_isLoading) return;
+            if (!_photoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+                NSLog(@"没有网络");
+                return;
+            }
+            
+            [self pullMainCommentFromAir];
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            if (label) {
+                label.text = @"正在加载...";
+            }
+            
+            return ;
+        }
         NSLog(@"aaa");
         PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];

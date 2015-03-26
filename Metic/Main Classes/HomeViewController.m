@@ -18,6 +18,7 @@
 #import "AdViewController.h"
 #import "MobClick.h"
 #import "PictureWall2.h"
+#import "UploaderManager.h"
 
 @interface HomeViewController ()
 
@@ -28,7 +29,7 @@
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
 @property (nonatomic,strong) UIAlertView *Alert;
 @property (nonatomic,strong) NSString *AdUrl;
-@property int type;
+@property NSInteger type;
 @property BOOL clearIds;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
@@ -53,7 +54,8 @@
    
     [self initUI];
     [CommonUtils addLeftButton:self isFirstPage:YES];
-    _type = 0;
+    
+    [self setSortType];
     _clearIds = NO;
     _Headeropen = NO;
     _Footeropen = NO;
@@ -68,11 +70,7 @@
     [_ArrangementView.layer setCornerRadius:6];
     _ArrangementView.
     clipsToBounds = YES;
-    for (int i = 0; i < _arrangementButtons.count; i++) {
-        UIButton* button = [_arrangementButtons objectAtIndex:i];
-        [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
-    }
-    [_arrangementButtons[0] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+    
     [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
     [[MTUser sharedInstance] updateAvatarList];
     
@@ -105,7 +103,9 @@
     
     self.sql = [[MySqlite alloc]init];
     
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[UploaderManager sharedManager] checkUnfinishedTasks];
+    });
 }
 
 
@@ -206,6 +206,24 @@
     
 }
 
+-(void)setSortType
+{
+    NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+    NSNumber* sortType = [userDfs objectForKey:[NSString stringWithFormat:@"%@sortType",[MTUser sharedInstance].userid]];
+    if (!sortType) {
+        _type = 0;
+        [userDfs setObject:[NSNumber numberWithInteger:0] forKey:[NSString stringWithFormat:@"%@sortType",[MTUser sharedInstance].userid]];
+        [userDfs synchronize];
+    }else{
+        _type = [sortType integerValue];
+    }
+    for (int i = 0; i < _arrangementButtons.count; i++) {
+        UIButton* button = [_arrangementButtons objectAtIndex:i];
+        [button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateHighlighted];
+    }
+    [_arrangementButtons[(_type == 0)?0:1] setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
+    
+}
 
 //reloadEvent
 -(void)reloadEvent:(id)sender
@@ -485,15 +503,7 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if ([response1 valueForKey:@"name"]) {//更新用户信息
-                
-                [[MTUser sharedInstance] initWithData:response1];
-                [AppDelegate refreshMenu];
-                ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController = self;
-                NSLog(@"set homeViewController");
-            }
-            
-            else if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
+            if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
                 if (_clearIds) [_events removeAllObjects];
                 [self.events addObjectsFromArray:[response1 valueForKey:@"event_list"]];
                 [_tableView reloadData];
@@ -502,7 +512,7 @@
                     [self updateEventToDB:[response1 valueForKey:@"event_list"]];
                 });
             }
-            else{//获取event id 号
+            else if([response1 valueForKey:@"sequence"]){//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
                 [self compareAndDeleteEventToDB:[NSArray arrayWithArray:_eventIds_all]];
                 //[self.eventIds removeAllObjects];
@@ -568,8 +578,10 @@
         NSMutableDictionary* event = [self.events objectAtIndex:i];
         NSString *eventData = [NSString jsonStringWithDictionary:event];
         eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",eventData], nil];
+        NSString *beginTime = [event valueForKey:@"time"];
+        NSString *joinTime = [event valueForKey:@"jointime"];
+        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
         
         [self.sql insertToTable:@"event" withColumns:columns andValues:values];
     }
@@ -586,8 +598,10 @@
     self.events = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
-    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
+    NSDictionary *wheres1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by beginTime desc",@"1", nil];
+    NSDictionary *wheres2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by joinTime desc",@"1", nil];
+    
+    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2];
     for (int i = 0; i < result.count; i++) {
         NSDictionary* temp = [result objectAtIndex:i];
         NSString *tmpa = [temp valueForKey:@"event_info"];
@@ -611,7 +625,7 @@
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
+    [dictionary setValue:[NSNumber numberWithInteger:_type] forKey:@"type"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_MY_EVENTS];
@@ -621,7 +635,7 @@
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventids forKey:@"sequence"];
-    
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
@@ -652,10 +666,8 @@
     
     CustomCellTableViewCell *cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     self.selete_Eventid = cell.eventId;
-    
-    
-    
-    ;
+    self.selete_EventLauncherid = cell.launcherId;
+
     [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
 }
 
@@ -669,16 +681,19 @@
     if ([segue.destinationViewController isKindOfClass:[EventDetailViewController class]]) {
         EventDetailViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[PictureWall2 class]]) {
         PictureWall2 *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
         nextViewController.eventName = self.selete_EventName;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
         VideoWallViewController *nextViewController = segue.destinationViewController;
         nextViewController.eventId = self.selete_Eventid;
         nextViewController.eventName = self.selete_EventName;
+        nextViewController.eventLauncherId = self.selete_EventLauncherid;
     }
     if ([segue.destinationViewController isKindOfClass:[LaunchEventViewController class]]) {
         LaunchEventViewController *nextViewController = segue.destinationViewController;
@@ -876,6 +891,11 @@
         [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
         [_arrangementButtons[1] setBackgroundImage:nil forState:UIControlStateNormal];
         _type = 0;
+        NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+        [userDfs setObject:[NSNumber numberWithInteger:_type] forKey:[NSString stringWithFormat:@"%@sortType",[MTUser sharedInstance].userid]];
+        [userDfs synchronize];
+
+
         [_header beginRefreshing];
     }
 }
@@ -891,6 +911,9 @@
         [sender setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:232/255.0 green:232/255.0 blue:232/255.0 alpha:1.0]] forState:UIControlStateNormal];
         [_arrangementButtons[0] setBackgroundImage:nil forState:UIControlStateNormal];
         _type = 4;
+        NSUserDefaults* userDfs = [NSUserDefaults standardUserDefaults];
+        [userDfs setObject:[NSNumber numberWithInteger:_type] forKey:[NSString stringWithFormat:@"%@sortType",[MTUser sharedInstance].userid]];
+        [userDfs synchronize];
         [_header beginRefreshing];
     }
     

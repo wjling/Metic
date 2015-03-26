@@ -37,7 +37,6 @@
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
-
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
 
@@ -484,6 +483,7 @@
         NSString *tmpa = [result[0] valueForKey:@"event_info"];
         NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
         self.event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+        if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
     }
     [self.sql closeMyDB];
 }
@@ -498,38 +498,52 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            NSLog(@"%@", response1);
-            if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
-                NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
-                
-                if (![[dist valueForKey:@"isIn"] boolValue]) {
-                    [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
-                    [self removeEventFromDB];
-                    [self deleteItemfromHomeArray];
-                    [NotificationController clearEventInfo:_eventId];
-                    return ;
-                }
-                
-                if (_event) {
-                    NSString* updatetime1 = [_event valueForKey:@"updatetime"];
-                    NSString* updatetime2 = [dist valueForKey:@"updatetime"];
-                    
-                    if (![updatetime1 isEqualToString:updatetime2]) {
-                        [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                        NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                        
+                        if (![[dist valueForKey:@"isIn"] boolValue]) {
+                            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
+                            [self removeEventFromDB];
+                            [self deleteItemfromHomeArray];
+                            [NotificationController clearEventInfo:_eventId];
+                            return ;
+                        }
+                        
+                        if (_event) {
+                            NSString* updatetime1 = [_event valueForKey:@"updatetime"];
+                            NSString* updatetime2 = [dist valueForKey:@"updatetime"];
+                            
+                            if (![updatetime1 isEqualToString:updatetime2]) {
+                                [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
+                            }
+                        }
+                        if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
+                        if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
+                        
+                        [self replaceItemfromArray:_event newArr:dist];
+                        [_tableView endUpdates];
+                        self.event = dist;
+                        [_tableView reloadData];
+                        if(_event)[self updateEventToDB:_event];
+                    }else{
+                        [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
+                        [self removeEventFromDB];
+                        [self deleteItemfromHomeArray];
+                        [NotificationController clearEventInfo:_eventId];
                     }
                 }
-                [self replaceItemfromArray:_event newArr:dist];
-                [_tableView endUpdates];
-                self.event = dist;
-                [_tableView reloadData];
-                if(_event)[self updateEventToDB:_event];
-            }else{
-                [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
-                [self removeEventFromDB];
-                [self deleteItemfromHomeArray];
-                [NotificationController clearEventInfo:_eventId];
+                    break;
+                default:
+                    break;
             }
+        
+            
             
         }
         
@@ -542,9 +556,10 @@
     [self.sql openMyDB:path];
     NSString *eventData = [NSString jsonStringWithDictionary:_event];
     eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'event_info'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",eventData], nil];
-    
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
     [self.sql insertToTable:@"event" withColumns:columns andValues:values];
     [self.sql closeMyDB];
 }
@@ -608,7 +623,7 @@
 
 - (void)delete_Comment:(id)sender {
     
-    id cell = [sender superview];
+    id cell = sender;
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
     }
@@ -624,8 +639,32 @@
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT finshedBlock:^(NSData *rData) {
-        [_comment_list removeObject:comments];
-        [_tableView reloadData];
+        if (!rData) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        NSLog(@"received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                [_comment_list removeObject:comments];
+                [_tableView reloadData];
+                
+            }
+                break;
+            case SERVER_ERROR:
+            {
+                
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
+                
+            }
+                break;
+            default:{
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            }
+        }
     }];
 }
 
@@ -1151,14 +1190,14 @@
             [cell.good_button setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
         }else [cell.good_button setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if ([[mainCom valueForKey:@"comment_id"] intValue] == -1 ) {
-            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView startAnimating];
             [cell.resend_Button setHidden:YES];
             
             
         }else if([[mainCom valueForKey:@"comment_id"] intValue] == -2){
-            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:NO];
@@ -1168,12 +1207,12 @@
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
-            if (![[mainCom valueForKey:@"author"] isEqualToString:[MTUser sharedInstance].name]) {
-                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
-            }
-            else{
-                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
-            }
+//            if ([[mainCom valueForKey:@"author_id"]integerValue] == [[MTUser sharedInstance].userid integerValue] || [[_event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+//                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
+//            }
+//            else{
+//                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
+//            }
         }
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
@@ -1210,6 +1249,8 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
+        cell.McommentArr = self.comment_list[indexPath.section - 1];
+        cell.ScommentDict = subCom;
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
         if (author == nil || [author isEqual:[NSNull null]]) {
@@ -1469,11 +1510,13 @@
             PictureWall2 *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
         }
         if ([segue.destinationViewController isKindOfClass:[VideoWallViewController class]]) {
             VideoWallViewController *nextViewController = segue.destinationViewController;
             nextViewController.eventId = self.eventId;
             nextViewController.eventName = [self.event valueForKey:@"subject"];
+            nextViewController.eventLauncherId = self.eventLauncherId;
         }
         if ([segue.destinationViewController isKindOfClass:[showParticipatorsViewController class]]) {
             showParticipatorsViewController *nextViewController = segue.destinationViewController;

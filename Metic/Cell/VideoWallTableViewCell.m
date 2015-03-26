@@ -25,6 +25,7 @@
 
 @interface VideoWallTableViewCell ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
+@property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
 @property (nonatomic, retain) VideoPlayerViewController *myPlayerViewController;
 @property __block unsigned long long receivedBytes;
@@ -290,13 +291,6 @@
     _controller.seleted_videoThumb = _videoThumb;
     [self clearVideoRequest];
     [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
-    return;
-    
-    
-    
-    _controller.seleted_videoInfo = _videoInfo;
-    _controller.seleted_videoThumb = _videoThumb;
-    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
 }
 
 - (void)pushToFriendView:(id)sender {
@@ -331,12 +325,13 @@
         [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
-        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-        [self.controller presentMoviePlayerViewControllerAnimated:playerViewController];
-        [[NSNotificationCenter defaultCenter] removeObserver:playerViewController
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:playerViewController.moviePlayer];
+        _playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        
+        _playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [self.controller presentMoviePlayerViewControllerAnimated:_playerViewController];
+        [[NSNotificationCenter defaultCenter] removeObserver:_playerViewController
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self
          
@@ -344,7 +339,8 @@
          
                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
-                                                  object:playerViewController.moviePlayer];
+                                                  object:_playerViewController.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playTheMPMoviePlayer:) name: @"playTheMPMoviePlayer" object:nil];
         
         videoRequest = nil;
     }else{
@@ -390,7 +386,6 @@
                         [_controller.loadingVideo removeObject:_videoName];
                     }
                     if (_controller) {
-                        NSURL* url = [NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:VideoName]];
                         [self PlayingVideoAtOnce];
                     }
                 }
@@ -438,10 +433,7 @@
     
     if(_isPlaying) return;
     NSLog(@"play");
-    
-    
-    
-    
+
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
     
@@ -490,7 +482,7 @@
         if (tracks.count == 0) {
             _videoItem = nil;
             _playingVideoName = nil;
-            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频有问题" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
         }
         AVAssetTrack* videoTrack = [tracks objectAtIndex:0];
         CGFloat width = videoTrack.naturalSize.width;
@@ -525,9 +517,9 @@
 
 - (void)repeatPlaying:(NSNotification *)n
 {
-    NSLog(@"repeat");
     AVPlayerItem* item = [n valueForKey:@"object"];
     if (item != _videoItem) return;
+    NSLog(@"repeat");
     UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
     if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
         _isPlaying = NO;
@@ -543,8 +535,22 @@
 - (void)Playfrompause
 {
     if (_videoPlayer) {
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if( _videoInfo && [fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:_videoName]])
+        {
+            [_videoView.layer addSublayer:_avLayer];
+        }
+        
         [_videoPlayer play];
     }
+}
+
+-(void)playTheMPMoviePlayer:(NSNotification*)notify{
+    MPMoviePlayerController* theMovie = _playerViewController.moviePlayer;
+    [theMovie play];
 }
 
 - (void)pauseVideo
@@ -587,6 +593,9 @@
                                                        name:MPMoviePlayerPlaybackDidFinishNotification
          
                                                      object:theMovie];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"playTheMPMoviePlayer"
+                                                      object:nil];
         
         [videoRequest clearDelegatesAndCancel];
         videoRequest = nil;

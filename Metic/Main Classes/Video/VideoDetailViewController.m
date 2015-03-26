@@ -27,11 +27,11 @@
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
+@property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
 @property BOOL isVideoReady;
 @property (nonatomic,strong)NSNumber* sequence;
 @property (nonatomic,strong)UIButton * delete_button;
 @property float specificationHeight;
-@property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
@@ -42,6 +42,7 @@
 @property __block unsigned long long receivedBytes;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
+@property BOOL isLoading;
 @property long Selete_section;
 @end
 
@@ -113,7 +114,7 @@
 - (void)dealloc
 
 {
-    [_footer free];
+//    [_footer free];
 }
 
 -(void)initUI
@@ -171,20 +172,19 @@
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
+    self.isLoading = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.vcomment_list = [[NSMutableArray alloc]init];
     
     //初始化上拉加载更多
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = _tableView;
+//    _footer = [[MJRefreshFooterView alloc]init];
+//    _footer.delegate = self;
+//    _footer.scrollView = _tableView;
     
-    if (!_videoInfo) {
-        if (![self pullVideoInfoFromDB]) {
-            [self pullVideoInfoFromAir];
-        }
-    }
+    if (!_videoInfo) [self pullVideoInfoFromDB];
+    [self pullVideoInfoFromAir];
+
 }
 
 - (void)deleteLocalData
@@ -227,11 +227,13 @@
         if(rData){
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSLog(@"received Data: %@",temp);
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:{
-                    _videoInfo = response1;
+                    if(_videoInfo)[_videoInfo addEntriesFromDictionary:response1];
+                    else _videoInfo = response1;
+                    [VideoWallViewController updateVideoInfoToDB:@[response1] eventId:_eventId];
                     [_tableView reloadData];
                 }
                     break;
@@ -459,20 +461,21 @@
     }
     if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
         
-        MTMPMoviePlayerViewController *playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
+        _playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
-        playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-        [self presentMoviePlayerViewControllerAnimated:playerViewController];
-        [[NSNotificationCenter defaultCenter] removeObserver:playerViewController
-                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:playerViewController.moviePlayer];
+        _playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+        [self presentMoviePlayerViewControllerAnimated:_playerViewController];
+        [[NSNotificationCenter defaultCenter] removeObserver:_playerViewController
+                                                        name:MPMoviePlayerPlaybackDidFinishNotification object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self
          
                                                 selector:@selector(movieFinishedCallback:)
          
                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
-                                                  object:playerViewController.moviePlayer];
-        
+                                                  object:_playerViewController.moviePlayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playTheMPMoviePlayer:) name: @"playTheMPMoviePlayer" object:nil];
+
         videoRequest = nil;
     }else{
         if (videoRequest){
@@ -708,6 +711,7 @@
 
 - (void)pullMainCommentFromAir
 {
+    _isLoading = YES;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     long sequence = [self.sequence longValue];
@@ -730,9 +734,12 @@
                         if ([_sequence longValue] == sequence) {
                             if (sequence == 0) [self.vcomment_list removeAllObjects];
                             [self.vcomment_list addObjectsFromArray:newComments] ;
-                            self.sequence = [response1 valueForKey:@"sequence"];
+                            if (newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                            else self.sequence = [response1 valueForKey:@"sequence"];
                         }
-                        [self closeRJ];
+//                        [self closeRJ];
+                        _isLoading = NO;
+                        [self.tableView reloadData];
                     }
                 }
                     break;
@@ -752,6 +759,7 @@
                 }
             }
         }
+        _isLoading = NO;
     }];
 }
 
@@ -778,8 +786,8 @@
         cell = [cell superview];
     }
     NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
-    int row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _vcomment_list[row-1];
+    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSMutableDictionary *waitingComment = _vcomment_list[_vcomment_list.count - row];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -940,6 +948,18 @@
     
 }
 
+- (void)commentNumMinus
+{
+    NSInteger comN = [[_videoInfo valueForKey:@"comment_num"]intValue];
+    comN --;
+    if (comN < 0) comN = 0;
+    [self.videoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
+    if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
+        [_controller.tableView reloadRowsAtIndexPaths:@[_index] withRowAnimation:UITableViewRowAnimationNone];
+        [VideoWallViewController updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
+    }
+}
+
 
 -(void)closeRJ
 {
@@ -947,10 +967,10 @@
     //        _Headeropen = NO;
     //        [_header endRefreshing];
     //    }
-    if (_Footeropen) {
-        _Footeropen = NO;
-        [_footer endRefreshing];
-    }
+//    if (_Footeropen) {
+//        _Footeropen = NO;
+//        [_footer endRefreshing];
+//    }
     [self.tableView reloadData];
 }
 
@@ -993,6 +1013,9 @@
     NSInteger comment_num = 0;
     if (self.vcomment_list) {
         comment_num = [self.vcomment_list count];
+        if ([_sequence integerValue] != -1) {
+            comment_num ++;
+        }
     }
     return 1 + comment_num;
 }
@@ -1067,7 +1090,7 @@
         [specification setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:specification];
         
-        if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
             [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
             [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];
@@ -1097,6 +1120,22 @@
         
         
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            
+            UITableViewCell* cell = [[UITableViewCell alloc]init];
+            cell.backgroundColor = [UIColor clearColor];
+            
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
+            label.text = _isLoading? @"正在加载...":@"查看更早的评论";
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
+            label.font = [UIFont systemFontOfSize:13];
+            label.backgroundColor = (_vcomment_list.count == 0)? [UIColor clearColor]:[UIColor colorWithWhite:230.0f/255.0 alpha:1.0f];
+            label.tag = 555;
+            [cell addSubview:label];
+            return cell;
+        }
+
         //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"vCommentCell";
         BOOL nibsRegistered = NO;
@@ -1106,12 +1145,13 @@
             nibsRegistered = YES;
         }
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
+        NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
 //        NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]]) {
             alias = [Vcomment valueForKey:@"author"];
         }
+        ((VcommentTableViewCell *)cell).VcommentDict = Vcomment;
         ((VcommentTableViewCell *)cell).author.text = alias;
         ((VcommentTableViewCell *)cell).authorName = alias;
         ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
@@ -1202,7 +1242,11 @@
         height += self.specificationHeight;
         
     }else{
-        NSDictionary* Vcomment = self.vcomment_list[indexPath.row - 1];
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            return 45;
+        }
+        NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
+
         float commentWidth = 0;
         NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString*alias2;
@@ -1234,6 +1278,23 @@
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (_isLoading) return;
+            if (!_videoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+                NSLog(@"没有网络");
+                return;
+            }
+            
+            [self pullMainCommentFromAir];
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            if (label) {
+                label.text = @"正在加载...";
+            }
+            
+            return ;
+        }
+
         VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1425,6 +1486,11 @@
 }
 #pragma mark - MPlayer Delegate
 
+-(void)playTheMPMoviePlayer:(NSNotification*)notify{
+    MPMoviePlayerController* theMovie = _playerViewController.moviePlayer;
+    [theMovie play];
+}
+
 -(void)movieFinishedCallback:(NSNotification*)notify{
     // 视频播放完或者在presentMoviePlayerViewControllerAnimated下的Done按钮被点击响应的通知。
     MPMoviePlayerController* theMovie = [notify object];
@@ -1437,6 +1503,9 @@
                                                        name:MPMoviePlayerPlaybackDidFinishNotification
          
                                                      object:theMovie];
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"playTheMPMoviePlayer"
+                                                      object:nil];
         
         
         //    planb

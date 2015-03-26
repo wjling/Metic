@@ -118,7 +118,7 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
         CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_2);
         CGMutablePathRef path2 = CGPathCreateMutable();
         CGPathMoveToPoint(path2, &transform, innerRadius, 0.);
-        CGPathAddArc(path2, &transform, 0., 0., innerRadius, 0.,-1* angle / 180. * M_PI, YES);
+        CGPathAddArc(path2, &transform, 0., 0., innerRadius*0.9, 0.,-1* angle / 180. * M_PI, YES);
         CGPathAddLineToPoint(path2, &transform, 0., 0.);
         CGPathAddLineToPoint(path2, &transform, innerRadius, 0.);
         CGContextAddPath(context, path2);

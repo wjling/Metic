@@ -23,11 +23,13 @@
 @property (nonatomic,strong) UIImage* video_thumb;
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* eventId;
+@property (nonatomic,strong) NSNumber* eventLauncherId;
 @property (nonatomic,strong) NSString* eventName;
-@property (nonatomic,strong) NSDictionary * videoInfo;
+@property (nonatomic,strong) NSMutableDictionary * videoInfo;
+@property (nonatomic,strong) NSMutableArray * vcomment_list;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong,nonatomic) NSIndexPath *index;
-@property (strong, nonatomic) MJRefreshFooterView* footer;
+//@property (strong, nonatomic) MJRefreshFooterView* footer;
 @property (weak, nonatomic) VideoWallViewController* controller;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
@@ -39,5 +41,7 @@
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
 - (IBAction)more:(id)sender;
+- (void)commentNumMinus;
+- (void)commentNumPlus;
 @end
 

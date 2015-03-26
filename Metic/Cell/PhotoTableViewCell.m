@@ -67,6 +67,7 @@
     
     viewcontroller.photoId = self.photo_id;
     viewcontroller.eventId = self.PhotoWall.eventId;
+    viewcontroller.eventLauncherId = _PhotoWall.eventLauncherId;
     viewcontroller.photoInfo = self.photoInfo;
     viewcontroller.eventName = _PhotoWall.eventName;
     viewcontroller.controller = self.PhotoWall;

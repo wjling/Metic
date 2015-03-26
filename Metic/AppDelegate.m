@@ -11,6 +11,7 @@
 #import "UMSocialSinaHandler.h"
 #import "Source/security/SFHFKeychainUtils.h"
 #import "Main Classes/MTMPMoviePlayerViewController.h"
+#import "Main Classes/BannerViewController.h"
 #import "Main Classes/MTUser.h"
 #import "MobClick.h"
 #import "HttpSender.h"
@@ -126,7 +127,7 @@
     [hostReach startNotifier];
     
     //开启本地视频服务
-    [self initLocalVideoServer];
+//    [self initLocalVideoServer];
     
     //判断是否由远程消息通知触发应用程序启动
 //    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
@@ -254,6 +255,9 @@
     NSLog(@"app will enter foreground==================");
     application.applicationIconBadgeNumber = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
+                                                        object:nil
+                                                      userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"playTheMPMoviePlayer"
                                                         object:nil
                                                       userInfo:nil];
     isInBackground = NO;
@@ -1472,9 +1476,9 @@
 //    NSString* str = @"ws://115.29.103.9:10088/";
 //    NSString* str = @"ws://localhost:9000/chat";
     
-//    NSString* str = @"ws://42.96.203.86:10088/";//阿里 测试服
+//    NSString* str = @"ws://182.254.176.64:10088/";//阿里 测试服
 //    NSString* str = @"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/";//腾讯 正式服
-    NSString* str = @[@"ws://42.96.203.86:10088/",@"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/"][Server];
+    NSString* str = @[@"ws://182.254.176.64:10088/",@"ws://whatsact.gz.1251096186.clb.myqcloud.com:10088/"][Server];
     NSURL* url = [[NSURL alloc]initWithString:str];
     
     NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
@@ -1613,55 +1617,55 @@
 
 
 //=============================================================================================
-//视频缓存相关
-- (void)startServer
-{
-    // Start the server (and check for problems)
-	
-	NSError *error;
-	if([httpServer start:&error])
-	{
-		NSLog(@"Started HTTP Server on port %hu", [httpServer listeningPort]);
-	}
-	else
-	{
-		NSLog(@"Error starting HTTP Server: %@", error);
-	}
-}
-
-- (void)initLocalVideoServer
-{
-
-	// Create server using our custom MyHTTPServer class
-	httpServer = [[HTTPServer alloc] init];
-	
-	// Tell the server to broadcast its presence via Bonjour.
-	// This allows browsers such as Safari to automatically discover our service.
-	[httpServer setType:@"_http._tcp."];
-	
-	// Normally there's no need to run our server on any specific port.
-	// Technologies like Bonjour allow clients to dynamically discover the server's port at runtime.
-	// However, for easy testing you may want force a certain port so you can just hit the refresh button.
-    [httpServer setPort:12345];
-    
-    // Serve files from our embedded Web folder
-    
-    NSString* webPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    webPath = [webPath stringByAppendingPathComponent:@"VideoTemp"];
-    
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if(![fileManager fileExistsAtPath:webPath])
-    {
-        [fileManager createDirectoryAtPath:webPath withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-	[httpServer setDocumentRoot:webPath];
-    
-    [self startServer];
-}
+////视频缓存相关
+//- (void)startServer
+//{
+//    // Start the server (and check for problems)
+//	
+//	NSError *error;
+//	if([httpServer start:&error])
+//	{
+//		NSLog(@"Started HTTP Server on port %hu", [httpServer listeningPort]);
+//	}
+//	else
+//	{
+//		NSLog(@"Error starting HTTP Server: %@", error);
+//	}
+//}
+//
+//- (void)initLocalVideoServer
+//{
+//
+//	// Create server using our custom MyHTTPServer class
+//	httpServer = [[HTTPServer alloc] init];
+//	
+//	// Tell the server to broadcast its presence via Bonjour.
+//	// This allows browsers such as Safari to automatically discover our service.
+//	[httpServer setType:@"_http._tcp."];
+//	
+//	// Normally there's no need to run our server on any specific port.
+//	// Technologies like Bonjour allow clients to dynamically discover the server's port at runtime.
+//	// However, for easy testing you may want force a certain port so you can just hit the refresh button.
+//    [httpServer setPort:12345];
+//    
+//    // Serve files from our embedded Web folder
+//    
+//    NSString* webPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+//    webPath = [webPath stringByAppendingPathComponent:@"VideoTemp"];
+//    
+//    NSFileManager *fileManager=[NSFileManager defaultManager];
+//    if(![fileManager fileExistsAtPath:webPath])
+//    {
+//        [fileManager createDirectoryAtPath:webPath withIntermediateDirectories:YES attributes:nil error:nil];
+//    }
+//	[httpServer setDocumentRoot:webPath];
+//    
+//    [self startServer];
+//}
 
 - (NSUInteger)application:(UIApplication *)application
 supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if ([[self.window.rootViewController presentedViewController] isKindOfClass:[MTMPMoviePlayerViewController class]])
+    if ([[self.window.rootViewController presentedViewController] isKindOfClass:[MTMPMoviePlayerViewController class]]||[[self.window.rootViewController presentedViewController] isKindOfClass:[BannerViewController class]])
     {
         return UIInterfaceOrientationMaskAllButUpsideDown;
     } else {

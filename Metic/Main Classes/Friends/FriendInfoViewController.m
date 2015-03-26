@@ -332,9 +332,7 @@
         if (!image) {
             image = [UIImage imageNamed:@"默认用户头像"];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
-        });
+        [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
         
     }];
     NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
@@ -630,6 +628,8 @@
     NSString* remark = [event objectForKey:@"remark"];
     if (![remark isEqualToString:@""]) {
         cell.remark_textView.text = remark;
+    }else{
+        cell.remark_textView.text = @"主人好懒都懒得描述的说～";
     }
     cell.numOfMember_label.text = [CommonUtils NSStringWithNSNumber:[event objectForKey:@"member_count"]];
     

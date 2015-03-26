@@ -56,11 +56,13 @@
     }
     
     avatar = [UIImage imageNamed:@"默认用户头像"];
+    name = @"";
     
     info_tableview.delegate = self;
     info_tableview.dataSource = self;
     
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
 }
 
 //返回上一层
@@ -104,7 +106,7 @@
 
 - (IBAction)okBtnClicked:(id)sender {
     
-    if (![MTUser sharedInstance].name || [[MTUser sharedInstance].name isEqualToString:@""]) {
+    if (!name || [name isEqualToString:@""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
@@ -185,13 +187,7 @@
                 [cell.contentView addSubview:label];
             }
 //            NSLog(@"昵称: %@",[MTUser sharedInstance].name);
-            if ([MTUser sharedInstance].name) {
-                label.text = [MTUser sharedInstance].name;
-            }
-            else
-            {
-                label.text = @"";
-            }
+            label.text = name;
         }
         else if (row == 1)
         {
@@ -242,7 +238,7 @@
                 [cell.contentView addSubview:label];
             }
             
-            if ([MTUser sharedInstance].location) {
+            if ([MTUser sharedInstance].location && ![[MTUser sharedInstance].location isEqual:[NSNull null]]) {
                 label.text = [MTUser sharedInstance].location;
 //                NSLog(@"所在地1:%@",[MTUser sharedInstance].location);
             }
@@ -280,7 +276,8 @@
                 [cell.contentView addSubview:label];
             }
 //            NSLog(@"个人描述:%@",[MTUser sharedInstance].sign);
-            if ([MTUser sharedInstance].sign) {
+            if ([MTUser sharedInstance].sign && ![[MTUser sharedInstance].sign isEqual:[NSNull null]]) {
+                NSLog(@"%@",[MTUser sharedInstance].sign);
                 label.text = [MTUser sharedInstance].sign;
             }
             else
