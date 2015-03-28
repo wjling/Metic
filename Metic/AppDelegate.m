@@ -965,12 +965,13 @@
 //    label.center = networkStatusNotifier_view.center;
     label.tag = 110;
     [networkStatusNotifier_view addSubview:label];
+    networkStatusNotifier_view.tag = 0;
 //    [self.window addSubview:networkStatusNotifier_view];
 //    [self.window.rootViewController.view addSubview:networkStatusNotifier_view];
 //    [self.window bringSubviewToFront:networkStatusNotifier_view];
 //    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:networkStatusNotifier_view];
 //    networkStatusNotifier_view.hidden = YES;
-    CGRect f = networkStatusNotifier_view.frame;
+//    CGRect f = networkStatusNotifier_view.frame;
 //    NSLog(@"network view: x: %f, y: %f, width: %f, height: %f",f.origin.x,f.origin.y,f.size.width,f.size.height);
 }
 
@@ -1024,15 +1025,16 @@
 
 -(void)showNetworkNotification:(NSString*)message
 {
-    NSLog(@"show network notification");
+    NSLog(@"显示 network notification, tag: %ld", networkStatusNotifier_view.tag);
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
 //    NSLog(@"screen bounds.height: %f",[UIScreen mainScreen].bounds.size.height);
 //    NSLog(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
 //    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
-    if ([networkStatusNotifier_view superview]) {
+    if ([networkStatusNotifier_view superview] != nil || [networkStatusNotifier_view tag] == 1) {
 //        NSLog(@"没有执行");
         return;
     }
+    networkStatusNotifier_view.tag = 1;
     UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
     label.text = message;
     
@@ -1054,15 +1056,16 @@
 -(void)hideNetworkNotification
 {
     CGRect frame = [UIScreen mainScreen].bounds;
-    NSLog(@"hide network notification");
+    NSLog(@"隐藏 network notification, tag: %ld", networkStatusNotifier_view.tag);
 //    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
-    if (![networkStatusNotifier_view superview]) {
-//        NSLog(@"没有执行");
+    if ([networkStatusNotifier_view superview] == nil || [networkStatusNotifier_view tag] == 0) {
+        NSLog(@"没有执行");
         return;
     }
+    networkStatusNotifier_view.tag = 0;
     [UIView beginAnimations:@"hideNetworkStatus" context:nil];
     //    networkStatusNotifier_view.hidden = NO;
-    [UIView setAnimationDelay:5];
+//    [UIView setAnimationDelay:5];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     
     
@@ -1071,13 +1074,14 @@
 //    [UIView setAnimationRepeatCount:1];
     [UIView setAnimationDelegate:self];
     
-    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height + 1, frame.size.width, networkStatusNotifier_view.frame.size.height)];
+    [networkStatusNotifier_view setFrame:CGRectMake(0, frame.size.height, frame.size.width, networkStatusNotifier_view.frame.size.height)];
     [UIView commitAnimations];
 }
 
 -(void)NetworkNotificationDidHide
 {
     [networkStatusNotifier_view removeFromSuperview];
+    NSLog(@"superview: %@", [networkStatusNotifier_view superview]);
 }
 
 //==========================================================================================
