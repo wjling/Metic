@@ -15,26 +15,11 @@
 #import "SlideNavigationController.h"
 
 @interface UploaderManager ()
-@property (strong, nonatomic) NSOperationQueue *uploadQueue;
+
 
 @end
 
 @implementation UploaderManager
-
-
-/*
-功能：
- 1.线程池管理上传队列，最多3个线程同时进行上传
- 2.每个线程能够记录上传的进度
- 3.控制上传队列全部暂停、继续
- 
- 
- 
- 
- 
- */
-
-
 
 
 + (id)sharedManager {
@@ -49,7 +34,7 @@
 - (id)init {
     if ((self = [super init])) {
         _uploadQueue = [[NSOperationQueue alloc]init];
-        _taskswithEventId = [[NSMutableDictionary alloc]init];
+        _taskswithPhotoName = [[NSMutableDictionary alloc]init];
         [_uploadQueue setMaxConcurrentOperationCount:3];
     }
     return self;
@@ -104,13 +89,9 @@
 
 - (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId
 {
-    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId];
-//    NSMutableArray* tasksArraywithEventID = [_taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:eventId]];
-//    if (!tasksArraywithEventID) {
-//        tasksArraywithEventID = [[NSMutableArray alloc]init];
-//        [_taskswithEventId setValue:tasksArraywithEventID forKey:[CommonUtils NSStringWithNSNumber:eventId]];
-//    }
-//    [tasksArraywithEventID addObject:newUploadTask];
+    NSString* imageName = [photoProcesser generateImageName];
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId imageName:imageName];
+    [_taskswithPhotoName setValue:newUploadTask forKey:imageName];
     [_uploadQueue addOperation:newUploadTask];
 
 }
@@ -118,12 +99,7 @@
 - (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName
 {
     uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAssetStr:imgAssetStr eventId:eventId imageName:imageName];
-//    NSMutableArray* tasksArraywithEventID = [_taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:eventId]];
-//    if (!tasksArraywithEventID) {
-//        tasksArraywithEventID = [[NSMutableArray alloc]init];
-//        [_taskswithEventId setValue:tasksArraywithEventID forKey:[CommonUtils NSStringWithNSNumber:eventId]];
-//    }
-//    [tasksArraywithEventID addObject:newUploadTask];
+    [_taskswithPhotoName setValue:newUploadTask forKey:imageName];
     [_uploadQueue addOperation:newUploadTask];
     
     
@@ -139,19 +115,6 @@
         [self uploadImage:representation eventId:eventId];
     }];
 }
-
-//- (void)uploadALAssetsStr:(NSArray *)uploadALAssetsStr eventId:(NSNumber*)eventId
-//{
-//    if (uploadALAssetsStr.count == 0 || !eventId) {
-//        return;
-//    }
-//    [uploadALAssetsStr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        ALAsset *aLAsset = obj;
-//        NSURL* aLAssetsURL = [aLAsset valueForProperty:ALAssetPropertyAssetURL];
-//        NSString *aLAssetsStr = [aLAssetsURL absoluteString];
-//        [self uploadImageStr:aLAssetsStr eventId:eventId];
-//    }];
-//}
 
 @end
 

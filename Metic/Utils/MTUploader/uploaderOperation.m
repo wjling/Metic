@@ -12,6 +12,7 @@
 #import "MTUser.h"
 #import "SDWebImageManager.h"
 #import "NSString+JSON.h"
+#import "UIImage+fixOrien.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -26,7 +27,6 @@
 @property (nonatomic,strong) NSThread* thread;
 @property (nonatomic,strong) NSNumber* width;
 @property (nonatomic,strong) NSNumber* height;
-@property float progress;
 @property BOOL wait;
 @property (assign, nonatomic, getter = isExecuting) BOOL executing;
 @property (assign, nonatomic, getter = isFinished) BOOL finished;
@@ -37,14 +37,14 @@
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
-- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId{
+- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName{
     if ((self = [super init])) {
         _progress = 0;
         _executing = NO;
         _finished = NO;
         _imageALAsset = imgAsset;
         _eventId = eventId;
-        _imageName = [photoProcesser generateImageName];
+        _imageName = imageName;
         [self saveToDB:imgAsset imageName:_imageName];
     }
     return self;
@@ -92,9 +92,11 @@
     [sql openMyDB:path];
     NSURL* aLAssetsURL = [alasset valueForProperty:ALAssetPropertyAssetURL];
     NSString *aLAssetsStr = [aLAssetsURL absoluteString];
+    float width = [[alasset defaultRepresentation]dimensions].width;
+    float height = [[alasset defaultRepresentation]dimensions].height;;
 
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr], nil];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'",@"'width'",@"'height'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr],[NSString stringWithFormat:@"%f",width],[NSString stringWithFormat:@"%f",height], nil];
     
     [sql insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values];
     [sql closeMyDB];
@@ -137,15 +139,15 @@
     }
     
     if (_imageALAsset) {
-        UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullScreenImage
+        UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullResolutionImage
                                            scale:_imageALAsset.defaultRepresentation.scale
                                      orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
+//        img = [UIImage fixOrientation:img];
         NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
         
         NSData* compressedData = [imgData valueForKey:@"imageData"];
         _width = [imgData valueForKey:@"width"];
         _height = [imgData valueForKey:@"height"];
-        _imageName = [photoProcesser generateImageName];
         _imgData = compressedData;
         NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
         NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
@@ -315,8 +317,7 @@
                 [self insertPhotoInfoToDB:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
-                
-                
+                self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
                 [self stop];
             }
                 break;

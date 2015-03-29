@@ -8,6 +8,16 @@
 
 #import "PhotoTableViewCell.h"
 #import "PhotoDetailViewController.h"
+#import "UploaderManager.h"
+#import "uploaderOperation.h"
+#import "TMQuiltView.h"
+
+@interface PhotoTableViewCell ()
+@property (nonatomic,strong) UIView* progressView;
+@property (nonatomic,weak) uploaderOperation *uploadTask;
+@property (nonatomic,strong) NSTimer* timer;
+
+@end
 
 @implementation PhotoTableViewCell
 
@@ -85,5 +95,103 @@
     [UIView setAnimationDelegate:self];
     self.alpha = 1;
     [UIView commitAnimations];
+}
+
+-(void)beginUpdateProgress
+{
+    if (_isUploading) {
+        _uploadTask = [[UploaderManager sharedManager].taskswithPhotoName valueForKey:_photoName];
+        if (_timer) {
+            [_timer invalidate];
+            _timer = nil;
+        }
+        if (_uploadTask) {
+            _timer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
+        }
+        int width = [[_photoInfo valueForKey:@"width"] intValue];
+        int height = [[_photoInfo valueForKey:@"height"] intValue];
+        float RealHeight = height * 145.0f / width + 33;
+        
+        if (!_progressView) {
+            _progressView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 145, RealHeight)];
+            _progressView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+            UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮的大小
+            activity.transform = CGAffineTransformMakeScale(1.6, 1.6);
+            activity.layer.borderColor = [UIColor greenColor].CGColor;
+            activity.layer.borderWidth = 2;
+            [activity setTag:320];
+            [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];//设置进度轮显示类型
+            [_progressView addSubview:activity];
+            [activity startAnimating];
+            
+            UILabel* progress_numLab = [[UILabel alloc]initWithFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
+            progress_numLab.layer.borderColor = [UIColor blueColor].CGColor;
+            progress_numLab.layer.borderWidth = 2;
+            [progress_numLab setTag:330];
+            progress_numLab.font = [UIFont systemFontOfSize:12];
+            progress_numLab.text = @"0%";
+            progress_numLab.textAlignment = NSTextAlignmentCenter;
+            progress_numLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+            [self.progressView addSubview:progress_numLab];
+            [self addSubview:_progressView];
+        }
+        [_progressView setFrame:CGRectMake(0, 0, 145, RealHeight)];
+        UIActivityIndicatorView* activity = (UIActivityIndicatorView*)[_progressView viewWithTag:320];
+        [activity setFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮中心点
+        UILabel* progress_numLab = (UILabel*)[_progressView viewWithTag:330];
+        [progress_numLab setFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
+        NSNumber* progress = [_photoInfo valueForKey:@"progress"];
+        
+        progress_numLab.text = progress? [NSString stringWithFormat:@"%.0f%%",[progress floatValue]*100] : @"0%";
+        
+        
+    }
+}
+
+-(void)stopUpdateProgress
+{
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    if (_uploadTask) {
+        _uploadTask = nil;
+    }
+    if (_progressView) {
+        [_progressView removeFromSuperview];
+        _progressView = nil;
+    }
+}
+
+-(void)updateProgress
+{
+    if (!self.PhotoWall) {
+        [self stopUpdateProgress];
+        return;
+    }
+    if (_uploadTask) {
+        float progress = _uploadTask.progress;
+        NSLog(@"updateProgress: %f", progress);
+        [_photoInfo setValue:[NSNumber numberWithFloat:progress] forKey:@"progress"];
+        if (_progressView) {
+            UILabel* progress_numLab = (UILabel*)[_progressView viewWithTag:330];
+            if (progress_numLab) {
+                progress_numLab.text = [NSString stringWithFormat:@"%.0f%%",_uploadTask.progress*100];
+            }
+        }
+        NSMutableDictionary* realPhotoInfo = _uploadTask.photoInfo;
+        if (realPhotoInfo) {
+            [self stopUpdateProgress];
+            [_photoInfo setDictionary:realPhotoInfo];
+            [self.PhotoWall.quiltView reloadData] ;
+            
+        }
+    }else NSLog(@"error");
+    
+}
+
+-(void)dealloc
+{
+    NSLog(@"dealloc");
 }
 @end

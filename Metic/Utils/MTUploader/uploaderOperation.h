@@ -10,6 +10,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @interface uploaderOperation : NSOperation
-- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
+@property float progress;
+@property (nonatomic,strong) NSMutableDictionary* photoInfo;
+
+- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName;
 - (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName;
 @end

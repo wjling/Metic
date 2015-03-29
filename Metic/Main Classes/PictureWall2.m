@@ -27,12 +27,13 @@
 
 @interface PictureWall2 ()
 @property (nonatomic,strong) MTAutoHideButton* add;
+@property NSInteger uploadingTaskCount;
 @property float h1;
 @property BOOL nibsRegistered;
 @property BOOL shouldLoadPhoto;
 @property BOOL haveLoadedPhoto;
 @property BOOL isLoading;
-@property (nonatomic,strong) NSMutableArray* dataArray;
+
 @end
 
 @implementation PictureWall2
@@ -74,6 +75,7 @@
     _shouldReloadPhoto = NO;
     _shouldLoadPhoto = NO;
     _haveLoadedPhoto = NO;
+    _uploadingTaskCount = 0;
     _showPhoNum = 0;
     _h1 = 0;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
@@ -89,28 +91,23 @@
             
         }
     });
-    _uploadingPhotos = [[UploaderManager sharedManager].taskswithEventId valueForKey:[CommonUtils NSStringWithNSNumber:_eventId]];
-    if (!_uploadingPhotos) {
-        NSMutableArray* tmp = [[NSMutableArray alloc]init];
-        [[UploaderManager sharedManager].taskswithEventId setValue:tmp forKey:[CommonUtils NSStringWithNSNumber:_eventId]];
-        _uploadingPhotos = tmp;
-        
-    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [SVProgressHUD dismiss];
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self pullPhotoInfosFromDB];
+        [self pullUploadTasksfromDB];
+    });
     
     
     
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
         [_header beginRefreshing];
-
     }
     
 }
@@ -190,6 +187,8 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
     NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
+    [self.photo_list_all removeAllObjects];
+    [self.photo_list removeAllObjects];
     for (int i = 0; i < result.count; i++) {
         NSDictionary* temp = [result objectAtIndex:i];
         NSString *tmpa = [temp valueForKey:@"photoInfo"];
@@ -209,9 +208,56 @@
     _haveLoadedPhoto = YES;
     [self resetPhoNum];
     [self calculateLRH];
+    _uploadingTaskCount = 0;
     dispatch_sync(dispatch_get_main_queue(), ^{
         [self.quiltView reloadData];
     });
+    
+}
+
+- (void)pullUploadTasksfromDB
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by id desc",_eventId],@"event_id", nil];
+    
+    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+    [sql closeMyDB];
+    
+    for (int i = 0; i < result.count; i++) {
+        NSDictionary *task = result[i];
+        NSMutableDictionary *uploadTask = [[NSMutableDictionary alloc]initWithDictionary:task];
+        [uploadTask setValue:[NSNumber numberWithInteger:0] forKey:@"photo_id"];
+        [result replaceObjectAtIndex:i withObject:uploadTask];
+    }
+    
+    if(!_uploadingPhotos) _uploadingPhotos = [[NSMutableArray alloc]init];
+    [_uploadingPhotos removeAllObjects];
+    [_uploadingPhotos addObjectsFromArray:result];
+    
+    NSMutableArray* newPhotolist = [[NSMutableArray alloc]initWithArray:_uploadingPhotos];
+    NSMutableArray* newPhotolist_all = [[NSMutableArray alloc]initWithArray:_uploadingPhotos];
+    
+    if (_photo_list.count > _uploadingTaskCount) {
+        [newPhotolist addObjectsFromArray:[_photo_list subarrayWithRange:NSMakeRange(_uploadingTaskCount, _photo_list.count - _uploadingTaskCount)]];
+    }
+    if (_photo_list_all.count > _uploadingTaskCount) {
+        [newPhotolist_all addObjectsFromArray:[_photo_list_all subarrayWithRange:NSMakeRange(_uploadingTaskCount, _photo_list_all.count - _uploadingTaskCount)]];
+    }
+    _photo_list = newPhotolist;
+    _photo_list_all = newPhotolist_all;
+    _uploadingTaskCount = _uploadingPhotos.count;
+    
+    [self resetPhoNum];
+    [self calculateLRH];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [self.quiltView reloadData];
+    });
+    
+  
     
 }
 
@@ -303,6 +349,9 @@
                     [self.photo_list removeAllObjects];
                     [self.photo_list addObjectsFromArray:_photo_list_all];
                     if([_sequence integerValue] == 0){
+                        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                            [self pullUploadTasksfromDB];
+                        });
                         [self resetPhoNum];
                     }
                     
@@ -335,7 +384,7 @@
         NSDictionary* dict = [tmp objectAtIndex:i];
         float width = [[dict valueForKey:@"width"] floatValue];
         float height = [[dict valueForKey:@"height"] floatValue];
-        float RealHeight = height * 150.0f / width + 43;
+        float RealHeight = height * 145.0f / width + 43;
         if (lH <= rH) {
             lH += RealHeight;
         }else{
@@ -403,7 +452,56 @@
     }
     
     NSMutableDictionary *a = _photo_list[indexPath.row];
-    
+    if ([a valueForKey:@"alasset"]) {
+        cell.isUploading = YES;
+        cell.layer.borderColor = [UIColor redColor].CGColor;
+        cell.layer.borderWidth = 2;
+        cell.author.text = [MTUser sharedInstance].name ;
+        cell.publish_date.text = @"正在上传";
+        cell.photoName = [a valueForKey:@"imgName"];
+        cell.avatar.layer.masksToBounds = YES;
+        [cell.avatar.layer setCornerRadius:5];
+        cell.photoInfo = a;
+        cell.PhotoWall = self;
+        cell.photo_id = nil;
+        
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[MTUser sharedInstance].userid];
+        [avatarGetter getAvatar];
+        UIImageView* photo = cell.imgView;
+        [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
+        [photo setContentMode:UIViewContentModeScaleAspectFit];
+        photo.image = [UIImage imageNamed:@"活动图片的默认图片"];
+        
+        NSString* alassetStr = [a valueForKey:@"alasset"];
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        NSURL *imageFileURL = [NSURL URLWithString:alassetStr];
+        [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
+            if (!asset) {
+                NSLog(@"图片已不存在");
+                photo.image = [UIImage imageNamed:@"加载失败"];
+                return ;
+            }else{
+                photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+                [photo setContentMode:UIViewContentModeScaleToFill];
+                
+            }
+        } failureBlock:^(NSError *error) {
+            photo.image = [UIImage imageNamed:@"加载失败"];
+        }];
+        
+        int width = [[a valueForKey:@"width"] intValue];
+        int height = [[a valueForKey:@"height"] intValue];
+        float RealHeight = height * 145.0f / width;
+        
+        [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
+        [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
+        [cell beginUpdateProgress];
+        return cell;
+    }
+    [cell stopUpdateProgress];
+    cell.isUploading = NO;
+    cell.layer.borderColor = [UIColor clearColor].CGColor;
+    cell.layer.borderWidth = 0;
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"author_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {
@@ -437,7 +535,7 @@
     
     int width = [[a valueForKey:@"width"] intValue];
     int height = [[a valueForKey:@"height"] intValue];
-    float RealHeight = height * 150.0f / width;
+    float RealHeight = height * 145.0f / width;
     
     [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
     [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
@@ -462,7 +560,7 @@
     
     float width = [[a valueForKey:@"width"] floatValue];
     float height = [[a valueForKey:@"height"] floatValue];
-    float RealHeight = height * 150.0f / width;
+    float RealHeight = height * 145.0f / width;
     
     return RealHeight + 33;
 }
@@ -470,6 +568,10 @@
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row >= _photo_list.count) {
+        return;
+    }
+    PhotoTableViewCell* cell = [quiltView cellAtIndexPath:indexPath];
+    if (cell.isUploading) {
         return;
     }
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -517,9 +619,7 @@
     self.sequence = [[NSNumber alloc]initWithInt:0];
     [_photo_list_all removeAllObjects];
     [self getPhotolist];
-    
-    
-    
+
 }
 
 
