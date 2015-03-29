@@ -43,15 +43,20 @@
 
 - (BOOL)closeMyDB
 {
+    
     if (sqlite3_close(self.myDB) != SQLITE_OK)
     {
         NSLog(@"close myDB failed");
+        isLocked = false;
         return NO;
     }
-    NSLog(@"close myDB succeeded");
+    else
+    {
+        isLocked = false;
+        NSLog(@"close myDB succeeded");
+        return YES;
+    }
     NSLog(@"database is unLocked--");
-    isLocked = false;
-    return YES;
 }
 
 - (BOOL)execSql:(NSString *)sql
