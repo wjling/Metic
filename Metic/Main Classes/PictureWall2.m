@@ -164,17 +164,17 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
     for (int i = 0; i < photoInfos.count; i++) {
         NSDictionary* photoInfo = [photoInfos objectAtIndex:i];
         NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
         photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
-        
+        [sql openMyDB:path];
         [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+        [sql closeMyDB];
     }
-    [sql closeMyDB];
+    
 }
 
 - (void)pullPhotoInfosFromDB
@@ -209,6 +209,7 @@
     [self resetPhoNum];
     [self calculateLRH];
     _uploadingTaskCount = 0;
+    self.sequence = [[NSNumber alloc]initWithInt:-1];
     dispatch_sync(dispatch_get_main_queue(), ^{
         [self.quiltView reloadData];
     });
@@ -301,8 +302,9 @@
 -(void)getPhotolist
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSNumber* sequence = _sequence;
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.sequence forKey:@"sequence"];
+    [dictionary setValue:sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:[NSNumber numberWithInt:photoNumToGet] forKey:@"number"];
     NSLog(@"%@",dictionary);
@@ -310,6 +312,11 @@
     _isLoading = YES;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
+        if ([sequence integerValue] != [_sequence integerValue])
+        {
+            if(_header.refreshing) [_header endRefreshing];
+            return ;
+        }
         if (rData) {
             if (!([self.navigationController.viewControllers containsObject:self])) {
                 _isLoading = NO;
@@ -338,7 +345,7 @@
                     
                     [self.photo_list_all addObjectsFromArray:newphoto_list];
                     
-                    if([_sequence integerValue] == 0){
+                    if([sequence integerValue] == 0){
                         [self deleteAllPhotoInfoFromDB:_eventId];
                     }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
@@ -348,7 +355,7 @@
                     [NotificationController visitPhotoWall:_eventId needClear:YES];
                     [self.photo_list removeAllObjects];
                     [self.photo_list addObjectsFromArray:_photo_list_all];
-                    if([_sequence integerValue] == 0){
+                    if([sequence integerValue] == 0){
                         dispatch_async(dispatch_get_global_queue(0, 0), ^{
                             [self pullUploadTasksfromDB];
                         });
@@ -454,8 +461,8 @@
     NSMutableDictionary *a = _photo_list[indexPath.row];
     if ([a valueForKey:@"alasset"]) {
         cell.isUploading = YES;
-        cell.layer.borderColor = [UIColor redColor].CGColor;
-        cell.layer.borderWidth = 2;
+//        cell.layer.borderColor = [UIColor redColor].CGColor;
+//        cell.layer.borderWidth = 2;
         cell.author.text = [MTUser sharedInstance].name ;
         cell.publish_date.text = @"正在上传";
         cell.photoName = [a valueForKey:@"imgName"];
@@ -567,10 +574,10 @@
 
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row >= _photo_list.count) {
+    if (indexPath.row >= _showPhoNum) {
         return;
     }
-    PhotoTableViewCell* cell = [quiltView cellAtIndexPath:indexPath];
+    PhotoTableViewCell* cell = (PhotoTableViewCell*)[quiltView cellAtIndexPath:indexPath];
     if (cell.isUploading) {
         return;
     }

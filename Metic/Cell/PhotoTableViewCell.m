@@ -117,16 +117,16 @@
             _progressView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
             UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮的大小
             activity.transform = CGAffineTransformMakeScale(1.6, 1.6);
-            activity.layer.borderColor = [UIColor greenColor].CGColor;
-            activity.layer.borderWidth = 2;
+//            activity.layer.borderColor = [UIColor greenColor].CGColor;
+//            activity.layer.borderWidth = 2;
             [activity setTag:320];
             [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];//设置进度轮显示类型
             [_progressView addSubview:activity];
             [activity startAnimating];
             
             UILabel* progress_numLab = [[UILabel alloc]initWithFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
-            progress_numLab.layer.borderColor = [UIColor blueColor].CGColor;
-            progress_numLab.layer.borderWidth = 2;
+//            progress_numLab.layer.borderColor = [UIColor blueColor].CGColor;
+//            progress_numLab.layer.borderWidth = 2;
             [progress_numLab setTag:330];
             progress_numLab.font = [UIFont systemFontOfSize:12];
             progress_numLab.text = @"0%";
@@ -183,7 +183,7 @@
         if (realPhotoInfo) {
             [self stopUpdateProgress];
             [_photoInfo setDictionary:realPhotoInfo];
-            [self.PhotoWall.quiltView reloadData] ;
+            self.isUploading = NO;
             
         }
     }else NSLog(@"error");
