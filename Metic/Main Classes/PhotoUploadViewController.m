@@ -593,7 +593,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
         picker.delegate = self;
         picker.maximumNumberOfSelectionVideo = 0;
-        picker.maximumNumberOfSelectionPhoto = 18;
+        picker.maximumNumberOfSelectionPhoto = 20;
         
         [self presentViewController:picker animated:YES completion:^{}];
 //        //单图上传

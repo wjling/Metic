@@ -133,18 +133,59 @@
             progress_numLab.textAlignment = NSTextAlignmentCenter;
             progress_numLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
             [self.progressView addSubview:progress_numLab];
+            
+            UIButton* cancel = [UIButton buttonWithType:UIButtonTypeCustom];
+            [cancel setFrame:CGRectMake(17, RealHeight/2 - 23.5, 47, 47)];
+            cancel.layer.borderColor = [UIColor redColor].CGColor;
+            cancel.layer.borderWidth = 2;
+            [cancel setTag:340];
+            [cancel setHidden:YES];
+            [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
+            [_progressView addSubview:cancel];
+            
+            UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
+            [retry setFrame:CGRectMake(17*2+47, RealHeight/2 - 23.5, 47, 47)];
+            retry.layer.borderColor = [UIColor redColor].CGColor;
+            retry.layer.borderWidth = 2;
+            [retry setTag:350];
+            [retry setHidden:YES];
+            [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
+            [_progressView addSubview:retry];
+            
             [self addSubview:_progressView];
         }
         [_progressView setFrame:CGRectMake(0, 0, 145, RealHeight)];
         UIActivityIndicatorView* activity = (UIActivityIndicatorView*)[_progressView viewWithTag:320];
         [activity setFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮中心点
+        
         UILabel* progress_numLab = (UILabel*)[_progressView viewWithTag:330];
         [progress_numLab setFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
         NSNumber* progress = [_photoInfo valueForKey:@"progress"];
-        
         progress_numLab.text = progress? [NSString stringWithFormat:@"%.0f%%",[progress floatValue]*100] : @"0%";
         
+        UIButton* cancel = (UIButton*)[_progressView viewWithTag:340];
+        [cancel setFrame:CGRectMake(17, RealHeight/2 - 23.5, 47, 47)];
         
+        UIButton* retry = (UIButton*)[_progressView viewWithTag:350];
+        [retry setFrame:CGRectMake(17*2+47, RealHeight/2 - 23.5, 47, 47)];
+        
+        NSNumber* isFailed = [_photoInfo valueForKey:@"isFailed"];
+        
+        if (isFailed && [isFailed boolValue]) {
+            [cancel setHidden:NO];
+            [retry setHidden:NO];
+            [activity stopAnimating];
+            [progress_numLab setHidden:YES];
+            if (_timer) {
+                [_timer invalidate];
+                _timer = nil;
+            }
+        }else{
+            [cancel setHidden:YES];
+            [retry setHidden:YES];
+            [activity startAnimating];
+            [progress_numLab setHidden:NO];
+        }
     }
 }
 
@@ -180,14 +221,37 @@
             }
         }
         NSMutableDictionary* realPhotoInfo = _uploadTask.photoInfo;
+        BOOL isFinished = _uploadTask.isFinished;
         if (realPhotoInfo) {
             [self stopUpdateProgress];
             [_photoInfo setDictionary:realPhotoInfo];
             self.isUploading = NO;
             
+        }else if (isFinished){
+            NSLog(@"上传失败");
+            if (_progressView) {
+                if (_photoInfo) {
+                    [_photoInfo setValue:[NSNumber numberWithBool:YES] forKey:@"isFailed"];
+                }
+                if (_timer) {
+                    [_timer invalidate];
+                    _timer = nil;
+                }
+                [self beginUpdateProgress];
+            }
         }
     }else NSLog(@"error");
     
+}
+
+-(void)cancelUploadTask
+{
+    NSLog(@"取消上传任务");
+}
+
+-(void)retryUploadTask
+{
+    NSLog(@"重试上传任务");
 }
 
 -(void)dealloc

@@ -193,12 +193,16 @@
     int index = self.scrollView.contentOffset.x/320;
     
     NSDictionary* dict = self.photo_list[index];
-    self.zan_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"good"]];
+    if ([dict valueForKey:@"good"]) {
+        self.zan_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"good"]];
+    }else self.zan_num.text = @"";
     BOOL iszan = [[self.photo_list[index] valueForKey:@"isZan"]boolValue];
     UIImage* zanImage = !iszan? [UIImage imageNamed:@"点赞icon"]:[UIImage imageNamed:@"实心点赞图"];
     self.commentImg.image = [UIImage imageNamed:@"评论icon"];
     self.goodImg.image = zanImage;
-    self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
+    if ([dict valueForKey:@"comment_num"]) {
+        self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
+    }else self.comment_num.text = @"";
     self.pictureDescription.text = [dict valueForKey:@"specification"];
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]]];
@@ -395,6 +399,7 @@
     self.goodindex = self.scrollView.contentOffset.x/320;
     BOOL isZan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    if ([dictionary valueForKey:@"alasset"]) return;
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
@@ -428,6 +433,13 @@
 }
 
 - (IBAction)comment:(id)sender {
+    self.commentImg.image = [UIImage imageNamed:@"评论icon"];
+
+    int index = self.scrollView.contentOffset.x/320;
+    NSDictionary* photoInfo = self.photo_list[index];
+    if ([photoInfo valueForKey:@"alasset"]) return;
+    [self performSegueWithIdentifier:@"displayTophotoDetail" sender:self];
+    
 }
 
 - (IBAction)comment_buttonDown:(id)sender {

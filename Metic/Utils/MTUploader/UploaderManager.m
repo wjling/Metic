@@ -35,7 +35,7 @@
     if ((self = [super init])) {
         _uploadQueue = [[NSOperationQueue alloc]init];
         _taskswithPhotoName = [[NSMutableDictionary alloc]init];
-        [_uploadQueue setMaxConcurrentOperationCount:3];
+        [_uploadQueue setMaxConcurrentOperationCount:1];
     }
     return self;
 }
@@ -65,13 +65,16 @@
     
     RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"马上上传" action:^{
         NSLog(@"%@",result);
-        for (int i = 0; i < result.count; i++) {
-            NSDictionary *task = result[i];
-            NSString* alassetStr = [task valueForKey:@"alasset"];
-            NSString* eventId = [task valueForKey:@"event_id"];
-            NSString* imgName = [task valueForKey:@"imgName"];
-            [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
-        }
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            for (int i = 0; i < result.count; i++) {
+                NSDictionary *task = result[i];
+                NSString* alassetStr = [task valueForKey:@"alasset"];
+                NSString* eventId = [task valueForKey:@"event_id"];
+                NSString* imgName = [task valueForKey:@"imgName"];
+                [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+            }
+        });
+        
     }];
     [alertView addButton:okItem type:RIButtonItemType_Other];
     [alertView show];

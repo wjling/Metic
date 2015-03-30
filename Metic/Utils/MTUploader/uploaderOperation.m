@@ -13,6 +13,7 @@
 #import "SDWebImageManager.h"
 #import "NSString+JSON.h"
 #import "UIImage+fixOrien.h"
+#import "SDImageCache.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -46,6 +47,7 @@
         _eventId = eventId;
         _imageName = imageName;
         [self saveToDB:imgAsset imageName:_imageName];
+        [self saveThumbnail];
     }
     return self;
 }
@@ -83,6 +85,14 @@
 - (BOOL)isExecuting
 {
     return _executing;
+}
+
+- (void)saveThumbnail
+{
+    if (_imageALAsset && _imageName) {
+        UIImage* thumbnail = [UIImage imageWithCGImage:_imageALAsset.aspectRatioThumbnail];
+        [[SDImageCache sharedImageCache] storeImage:thumbnail forKey:_imageName];
+    }
 }
 
 - (void)saveToDB:(ALAsset*)alasset imageName:(NSString*)imageName
@@ -217,6 +227,7 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         
     }
+    self.finished = YES;
 }
 
 -(void)getCloudFileURL:(NSString*)path
