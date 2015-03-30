@@ -33,6 +33,7 @@
 @property BOOL shouldLoadPhoto;
 @property BOOL haveLoadedPhoto;
 @property BOOL isLoading;
+@property BOOL isFirstIn;
 
 @end
 
@@ -78,13 +79,14 @@
     _uploadingTaskCount = 0;
     _showPhoNum = 0;
     _h1 = 0;
+    _isFirstIn = YES;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self pullPhotoInfosFromDB];
+        [self pullUploadTasksfromDB];
         if ([NotificationController visitPhotoWall:_eventId needClear:YES] || ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0)) {
-            self.sequence = [[NSNumber alloc]initWithInt:0];
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [_header beginRefreshing];
             });
@@ -98,18 +100,18 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self pullPhotoInfosFromDB];
-        [self pullUploadTasksfromDB];
-    });
-    
-    
+    if (!_isFirstIn) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [self pullPhotoInfosFromDB];
+            [self pullUploadTasksfromDB];
+        });
+    }
     
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
         [_header beginRefreshing];
     }
-    
+    _isFirstIn = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated

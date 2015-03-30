@@ -128,6 +128,24 @@
     [sql closeMyDB];
 }
 
+- (void)DBprocessionAfterUpload:(NSDictionary*)photoInfo eventId:(NSNumber*)eventId
+{
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
+    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+    
+    NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
+    photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
+    
+    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    
+    [sql closeMyDB];
+}
+
 - (void)start
 {
     @synchronized (self) {
@@ -313,8 +331,7 @@
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
             {
-                [self removeuploadTaskInDB];
-                [self insertPhotoInfoToDB:response1 eventId:_eventId];
+                [self DBprocessionAfterUpload:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
                 self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
