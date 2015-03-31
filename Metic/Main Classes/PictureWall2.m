@@ -27,7 +27,6 @@
 
 @interface PictureWall2 ()
 @property (nonatomic,strong) MTAutoHideButton* add;
-@property NSInteger uploadingTaskCount;
 @property float h1;
 @property BOOL nibsRegistered;
 @property BOOL shouldLoadPhoto;
@@ -51,6 +50,7 @@
     [_header free];
     [_add free];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -212,7 +212,7 @@
     [self calculateLRH];
     _uploadingTaskCount = 0;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self.quiltView reloadData];
     });
     
@@ -258,7 +258,7 @@
     
     [self resetPhoNum];
     [self calculateLRH];
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self.quiltView reloadData];
     });
     

@@ -11,6 +11,7 @@
 #import "UploaderManager.h"
 #import "uploaderOperation.h"
 #import "TMQuiltView.h"
+#import "UploaderManager.h"
 
 @interface PhotoTableViewCell ()
 @property (nonatomic,strong) UIView* progressView;
@@ -136,8 +137,9 @@
             
             UIButton* cancel = [UIButton buttonWithType:UIButtonTypeCustom];
             [cancel setFrame:CGRectMake(17, RealHeight/2 - 23.5, 47, 47)];
-            cancel.layer.borderColor = [UIColor redColor].CGColor;
-            cancel.layer.borderWidth = 2;
+            [cancel setImage:[UIImage imageNamed:@"cancelUploadPhoto"] forState:UIControlStateNormal];
+//            cancel.layer.borderColor = [UIColor redColor].CGColor;
+//            cancel.layer.borderWidth = 2;
             [cancel setTag:340];
             [cancel setHidden:YES];
             [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
@@ -145,8 +147,9 @@
             
             UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
             [retry setFrame:CGRectMake(17*2+47, RealHeight/2 - 23.5, 47, 47)];
-            retry.layer.borderColor = [UIColor redColor].CGColor;
-            retry.layer.borderWidth = 2;
+            [retry setImage:[UIImage imageNamed:@"retryUploadPhoto"] forState:UIControlStateNormal];
+//            retry.layer.borderColor = [UIColor redColor].CGColor;
+//            retry.layer.borderWidth = 2;
             [retry setTag:350];
             [retry setHidden:YES];
             [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
@@ -222,12 +225,14 @@
         }
         NSMutableDictionary* realPhotoInfo = _uploadTask.photoInfo;
         BOOL isFinished = _uploadTask.isFinished;
+        BOOL wait = _uploadTask.wait;
         if (realPhotoInfo) {
             [self stopUpdateProgress];
             [_photoInfo setDictionary:realPhotoInfo];
+            self.publish_date.text = [[_photoInfo valueForKey:@"time"] substringToIndex:10];
             self.isUploading = NO;
             
-        }else if (isFinished){
+        }else if (isFinished || !wait){
             NSLog(@"上传失败");
             if (_progressView) {
                 if (_photoInfo) {
@@ -247,11 +252,38 @@
 -(void)cancelUploadTask
 {
     NSLog(@"取消上传任务");
+    if (_uploadTask && [_photoInfo valueForKey:@"alasset"]) {
+        [_uploadTask removeuploadTaskInDB];
+        NSInteger index = [self.PhotoWall.photo_list indexOfObject:_photoInfo];
+        [self.PhotoWall.photo_list removeObject:_photoInfo];
+        [self.PhotoWall.photo_list_all removeObject:_photoInfo];
+        self.PhotoWall.uploadingTaskCount --;
+        self.PhotoWall.showPhoNum --;
+        [self.PhotoWall calculateLRH];
+        [self.PhotoWall.quiltView beginUpdates];
+        [self.PhotoWall.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        [self.PhotoWall.quiltView endUpdates];
+        
+        
+        
+        return;
+        [self.PhotoWall pullPhotoInfosFromDB];
+        [self.PhotoWall pullUploadTasksfromDB];
+    }
 }
 
 -(void)retryUploadTask
 {
     NSLog(@"重试上传任务");
+    if ([_photoInfo valueForKey:@"alasset"]) {
+        NSString* alassetStr = [_photoInfo valueForKey:@"alasset"];
+        NSString* eventId = [_photoInfo valueForKey:@"event_id"];
+        NSString* imgName = [_photoInfo valueForKey:@"imgName"];
+        [[UploaderManager sharedManager] uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+        [_photoInfo setValue:[NSNumber numberWithBool:NO] forKey:@"isFailed"];
+        [self beginUpdateProgress];
+    }
+    
 }
 
 -(void)dealloc

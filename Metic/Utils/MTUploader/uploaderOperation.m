@@ -28,7 +28,6 @@
 @property (nonatomic,strong) NSThread* thread;
 @property (nonatomic,strong) NSNumber* width;
 @property (nonatomic,strong) NSNumber* height;
-@property BOOL wait;
 @property (assign, nonatomic, getter = isExecuting) BOOL executing;
 @property (assign, nonatomic, getter = isFinished) BOOL finished;
 @end
@@ -46,6 +45,7 @@
         _imageALAsset = imgAsset;
         _eventId = eventId;
         _imageName = imageName;
+        _wait = YES;
         [self saveToDB:imgAsset imageName:_imageName];
         [self saveThumbnail];
     }
@@ -61,6 +61,7 @@
         _imageALAssetStr = imgAssetStr;
         _eventId = eventId;
         _imageName = imageName;
+        _wait = YES;
     }
     return self;
 }
@@ -114,12 +115,14 @@
 
 - (void)removeuploadTaskInDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
-    [sql closeMyDB];
+    if (_imageName && _eventId) {
+        NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+        MySqlite* sql = [[MySqlite alloc]init];
+        [sql openMyDB:path];
+        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
+        [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+        [sql closeMyDB];
+    }
 }
 
 - (void)insertPhotoInfoToDB:(NSDictionary*)photoInfo eventId:(NSNumber*)eventId
@@ -195,7 +198,7 @@
                 return ;
             }
             
-            UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage
+            UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage
                                                scale:asset.defaultRepresentation.scale
                                          orientation:(UIImageOrientation)asset.defaultRepresentation.orientation];
             NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
@@ -277,7 +280,6 @@
 {
     NSLog(@"清理数据 && 退出线程");
     _thread = nil;
-    _imageName = nil;
     _uploadURL = nil;
     _imageALAsset = nil;
     _imgData = nil;

@@ -182,11 +182,14 @@
     int index = self.scrollView.contentOffset.x/320;
     NSDictionary* dict = self.photo_list[index];
     self.zan_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"good"]];
-    self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
+    if ([dict valueForKey:@"comment_num"]) {
+        self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
+    }else self.comment_num.text = @"";
     BOOL iszan = [[self.photo_list[index] valueForKey:@"isZan"]boolValue];
     UIImage* zanImage = !iszan? [UIImage imageNamed:@"点赞icon"]:[UIImage imageNamed:@"实心点赞图"];
     self.goodImg.image = zanImage;
 }
+
 -(void)loadPictureDescription
 {
     if (self.navigationController.navigationBarHidden) return;
