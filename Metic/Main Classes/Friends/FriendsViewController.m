@@ -140,6 +140,13 @@
     self.friendSearchDisplayController.searchResultsDelegate = self;
     self.friendSearchDisplayController.searchResultsDataSource = self;
     self.friendSearchDisplayController.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    UILabel* friendCount_label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
+    friendCount_label.textAlignment = NSTextAlignmentCenter;
+    friendCount_label.text = @"好友数量";
+    friendCount_label.textColor = [UIColor grayColor];
+    
+    self.friendTableView.tableFooterView = friendCount_label;
 //    self.searchDisplayController.delegate = self;
 //    self.searchDisplayController.searchResultsDelegate = self;
 //    self.searchDisplayController.searchResultsDataSource = self;
@@ -164,7 +171,7 @@
                                                   {
                                                       self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                       self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                                                      [self.friendTableView reloadData];
+                                                      [self friendTableviewReload];
                                                   });
                                });
                 
@@ -178,7 +185,7 @@
                 self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                 self.sectionArray = [[MTUser sharedInstance] sectionArray];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.friendTableView reloadData];
+                    [self friendTableviewReload];;
                 });
             }
             
@@ -206,7 +213,7 @@
                                                               self.friendList = [[MTUser sharedInstance] friendList];
                                                               self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                               self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                                                              [self.friendTableView reloadData];
+                                                              [self friendTableviewReload];
                                                           });
                                        });
                     }
@@ -217,7 +224,7 @@
                         self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                         self.sectionArray = [[MTUser sharedInstance] sectionArray];
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.friendTableView reloadData];
+                            [self friendTableviewReload];
                         });
                         
                     }
@@ -229,7 +236,7 @@
                     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                     self.sectionArray = [[MTUser sharedInstance] sectionArray];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.friendTableView reloadData];
+                        [self friendTableviewReload];
                     });
                     
                 }
@@ -246,7 +253,7 @@
                                                       self.friendList = [[MTUser sharedInstance] friendList];
                                                       self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                       self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                                                      [self.friendTableView reloadData];
+                                                      [self friendTableviewReload];
                                                   });
                                });
                 
@@ -268,6 +275,12 @@
         
     }
     
+}
+
+- (void)friendTableviewReload
+{
+    [self.friendTableView reloadData];
+    ((UILabel*)self.friendTableView.tableFooterView).text = [NSString stringWithFormat:@"%lu位好友", (unsigned long)self.friendList.count];
 }
 
 -(void)getRangesOfText:(NSString*)text withKeyWord:(NSString*)keyWord
