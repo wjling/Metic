@@ -21,7 +21,7 @@
 
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
-
+static const NSInteger MaxUploadCount = 20;
 
 
 @interface PhotoUploadViewController ()
@@ -556,6 +556,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 //    //单图上传
 //    return 1;
     //多图上传
+    if (_uploadImgs.count >= MaxUploadCount) {
+        return _uploadImgs.count;
+    }
     return _uploadImgs.count + 1;
 }
 
@@ -592,8 +595,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         //多图上传
         UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
         picker.delegate = self;
+        NSInteger maximumNumber = _uploadImgAssets.count >= MaxUploadCount? 0:MaxUploadCount - _uploadImgAssets.count;
         picker.maximumNumberOfSelectionVideo = 0;
-        picker.maximumNumberOfSelectionPhoto = 20;
+        picker.maximumNumberOfSelectionPhoto = maximumNumber;
         
         [self presentViewController:picker animated:YES completion:^{}];
 //        //单图上传
@@ -605,6 +609,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     CGRect frame = _imgCollectionView.frame;
     float count = _uploadImgs.count+1;
+    if (count > MaxUploadCount) count = MaxUploadCount;
     frame.size.height = ceilf(count/4)*70 + 10;
     while (CGRectGetMaxY(frame) > CGRectGetMaxY(self.scrollView.frame) ) {
         frame.size.height -= 70;
