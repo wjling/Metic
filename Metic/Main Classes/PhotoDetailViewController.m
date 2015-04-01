@@ -695,9 +695,9 @@
     if (_photoId) {
         [self deletePhotoInfoFromDB];
     }
-    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
-        NSInteger index = -1;
-        index = [self.controller.photo_list indexOfObject:_photoInfo];
+//    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
+//        NSInteger index = -1;
+//        index = [self.controller.photo_list indexOfObject:_photoInfo];
         if (index >= 0 && index < self.controller.photo_list.count) {
             [self.controller.photo_list removeObject:_photoInfo];
             self.controller.showPhoNum --;
@@ -706,11 +706,11 @@
             [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
             [self.controller.quiltView endUpdates];
         }
-        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
-        if (index >= 0 && index < self.controller.photo_list_all.count) {
-            [self.controller.photo_list_all removeObject:_photoInfo];
-        }
-    }
+//        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
+//        if (index >= 0 && index < self.controller.photo_list_all.count) {
+//            [self.controller.photo_list_all removeObject:_photoInfo];
+//        }
+//    }
 }
 
 - (void)deletePhotoInfoFromDB

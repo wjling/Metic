@@ -19,7 +19,7 @@
 #import "Reachability.h"
 #import "WelcomePageViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
-//#import "Source/HttpServer/HTTPServer.h"
+#import "Source/HttpServer/HTTPServer.h"
 
 @class MenuViewController;
 @class NotificationsViewController;
@@ -45,7 +45,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate,BMKGeneralDelegate>
 {
-//    HTTPServer *httpServer;
+    HTTPServer *httpServer;
 }
 
 @property (strong, nonatomic) UIWindow *window;

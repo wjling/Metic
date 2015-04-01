@@ -35,6 +35,8 @@
 {
     [super viewDidLoad];
     [_manage_Button setHidden:YES];
+    _isManaging = NO;
+    _isRemoving = NO;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     _fids = [[NSMutableArray alloc]init];
     _participants = [[NSMutableArray alloc]init];
@@ -48,9 +50,11 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _isManaging = NO;
-    [self.manage_Button setTitle:@"       管理" forState:UIControlStateNormal];
-    _isRemoving = NO;
+    if (!_canManage) {
+        _isManaging = NO;
+        _isRemoving = NO;
+    }
+    
     [_collectionView reloadData];
 }
 
@@ -116,8 +120,13 @@
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
-            if(_canManage) [_manage_Button setHidden:NO];
-            else [_manage_Button setHidden:YES];
+            if(_canManage) {
+                _isManaging = YES;
+                _isRemoving = NO;
+            }else {
+                _isManaging = NO;
+                _isRemoving = NO;
+            }
             [_participants removeAllObjects];
             [_participants addObjectsFromArray:(NSArray*)[response1 valueForKey:@"participant"]];
             [_fids removeAllObjects];
