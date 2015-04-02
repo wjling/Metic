@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initData];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
@@ -45,6 +46,14 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)initData
+{
+    if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
+        self.comfirm_textField.text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+    }
+    
 }
 
 -(void)dismissHUD

@@ -699,6 +699,9 @@
     UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入申请加入信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     confirmAlert.tag = 0;
+    if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
+        [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+    }
     [confirmAlert show];
 
 }
