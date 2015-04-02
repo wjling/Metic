@@ -14,7 +14,7 @@
 #import "MapViewController.h"
 #import "MTUser.h"
 #import "CommonUtils.h"
-
+#import "SVProgressHUD.h"
 
 
 
@@ -519,8 +519,7 @@
         }
     }
 
-    
-    [self showWaitingView];
+    [SVProgressHUD showWithStatus:@"正在发布..." maskType:SVProgressHUDMaskTypeGradient];
     [sender setEnabled:NO];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
@@ -551,16 +550,19 @@
                     getter.mDelegate = self;
                     [getter uploadBanner:[response1 valueForKey:@"event_id"]];
                 }else{
-                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+                    [SVProgressHUD dismissWithSuccess:@"活动发布成功" afterDelay:1];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        ((HomeViewController*)self.controller).shouldRefresh = YES;
+                        self.canLeave = YES;
+                        [self.navigationController popViewControllerAnimated:YES];
+                    });
                 }
             }else{
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布失败" WithDelegate:nil WithCancelTitle:@"确定"];
-                [self removeWaitingView];
+                [SVProgressHUD dismissWithError:@"活动发布失败" afterDelay:1];
                 [sender setEnabled:YES];
             }
         }else{
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
-            [self removeWaitingView];
+            [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
             [sender setEnabled:YES];
         }
         
@@ -757,9 +759,19 @@
         NSFileManager *fileManager=[NSFileManager defaultManager];
         if ([fileManager fileExistsAtPath:bannerPath])
             [fileManager removeItemAtPath:bannerPath error:nil];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功" WithDelegate:self WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithSuccess:@"活动发布成功" afterDelay:1];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            ((HomeViewController*)self.controller).shouldRefresh = YES;
+            self.canLeave = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        });
     }else if (type == 106){
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"活动发布成功，图片上传失败" WithDelegate:self WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithSuccess:@"活动发布成功，图片上传失败" afterDelay:1];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            ((HomeViewController*)self.controller).shouldRefresh = YES;
+            self.canLeave = YES;
+            [self.navigationController popViewControllerAnimated:YES];
+        });
     }
 }
 

@@ -9,6 +9,7 @@
 #import "InviteFriendViewController.h"
 #import "LaunchEventViewController.h"
 #import "showParticipatorsViewController.h"
+#import "SVProgressHUD.h"
 
 @interface InviteFriendViewController ()
 @property (nonatomic,strong) NSMutableSet *tmp_fids;
@@ -106,6 +107,7 @@
 
 
 - (IBAction)confirm:(id)sender {
+    [sender setEnabled:NO];
     if ([self.controller isKindOfClass:[LaunchEventViewController class]]) {
         [_FriendsIds removeAllObjects];
         for (NSNumber* f in _tmp_fids) {
@@ -119,6 +121,7 @@
                 [_tmp_fids removeObject:f];
             }
         }
+        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
 
         NSString *friends = @"[";
         BOOL flag = YES;
@@ -136,7 +139,6 @@
         NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:INVITE_FRIENDS finshedBlock:^(NSData *rData) {
-            [self removeWaitingView];
             if (rData) {
                 NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                 NSLog(@"received Data: %@",temp);
@@ -145,44 +147,29 @@
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {
-                        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"邀请信息已经发送，等待对方处理" WithDelegate:self WithCancelTitle:@"确定"];
+                        [SVProgressHUD showSuccessWithStatus:@"邀请信息已经发送" duration:1];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popToViewController:self.controller animated:YES];
+                            [sender setEnabled:YES];
+                        });
                     }
                         break;
                     default:
                     {
-                        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                        [SVProgressHUD showErrorWithStatus:@"网络异常，请重试" duration:1];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [sender setEnabled:YES];
+                        });
                     }
                 }
 
             }else{
-                [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                [SVProgressHUD showErrorWithStatus:@"网络异常，请重试" duration:1];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [sender setEnabled:YES];
+                });
             }
         }];
-        [self showWaitingView];
-        
-        
-        
-        
-        
-    }
-    
-}
-
-
-#pragma mark - HttpSenderDelegate
-
--(void)finishWithReceivedData:(NSData *)rData
-{
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"邀请信息已经发送，等待对方处理" WithDelegate:self WithCancelTitle:@"确定"];
-        }
-            break;
     }
 }
 
