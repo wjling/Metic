@@ -250,7 +250,7 @@
     if (groupOfFriends) {
         NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
         NSString* label = [aFriend objectForKey:@"name"];
-        NSNumber* fid = [aFriend objectForKey:@"id"];
+        NSNumber* fid = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
 
         FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
         if (nil == cell) {
