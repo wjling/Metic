@@ -27,7 +27,7 @@
     IBOutlet UIButton *comment;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
-    IBOutlet UILabel *member_count;
+    IBOutlet TTTAttributedLabel *member_count;
     IBOutlet UIView *commentInputView;
     IBOutlet UIButton *addPaticipator;
     
@@ -57,7 +57,7 @@
 @property(nonatomic,strong) UIButton *videoWall;
 @property(nonatomic,strong) UIButton *imgWall;
 @property(nonatomic,strong) UIButton *comment;
-@property(nonatomic,strong) UILabel *member_count;
+@property(nonatomic,strong) TTTAttributedLabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIView *commentInputView;
 @property(nonatomic,weak) EventDetailViewController * eventController;

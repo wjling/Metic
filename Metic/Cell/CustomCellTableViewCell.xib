@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -204,7 +205,7 @@
                         <rect key="frame" x="0.0" y="160" width="300" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ouC-OU-HOl">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ouC-OU-HOl" customClass="TTTAttributedLabel">
                                 <rect key="frame" x="169" y="5" width="121" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -270,11 +271,11 @@
         <image name="IOS版本照片墙图标-绿色" width="20" height="20"/>
         <image name="IOS版本视频墙图标-白色" width="20" height="20"/>
         <image name="IOS版本视频墙图标-绿色" width="20" height="20"/>
-        <image name="发起人icon" width="7" height="7"/>
+        <image name="发起人icon" width="10" height="10"/>
         <image name="头像蒙板-42(白色底）" width="22" height="22"/>
         <image name="活主头像蒙板" width="33" height="33"/>
-        <image name="活动地点icon" width="7" height="7"/>
-        <image name="活动时间icon" width="6" height="6"/>
+        <image name="活动地点icon" width="10" height="10"/>
+        <image name="活动时间icon" width="10" height="10"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
