@@ -69,11 +69,6 @@
     return self;
 }
 
--(void)dealloc
-{
-    NSLog(@"photoGetter Dealloc");
-}
-
 -(void)getAvatar
 {
     NSString *url = [self getLocalAvatarUrl];
