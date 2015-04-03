@@ -208,7 +208,7 @@
     float adjustWidth = 640.0;
     while (flag) {
         if (compressedImage.size.width> adjustWidth) {
-            CGSize imagesize=CGSizeMake(adjustWidth, compressedImage.size.height * adjustWidth/compressedImage.size.width);
+            CGSize imagesize=CGSizeMake((NSInteger)adjustWidth, (NSInteger)(compressedImage.size.height * adjustWidth/compressedImage.size.width));
             compressedImage = [compressedImage imageByScalingToSize:imagesize];
             imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
         }
@@ -268,13 +268,13 @@
     NSData* imageData2 = UIImageJPEGRepresentation(compressedImage2, 1.0);
     
     if (compressedImage1.size.width> 640) {
-        CGSize imagesize=CGSizeMake(640.0, compressedImage1.size.height * 640.0/compressedImage1.size.width);
+        CGSize imagesize=CGSizeMake(640.0, (NSInteger)(compressedImage1.size.height * 640.0/compressedImage1.size.width));
         compressedImage1 = [compressedImage1 imageByScalingToSize:imagesize];
         imageData1 = UIImageJPEGRepresentation(compressedImage1, 1.0);
     }
     
     if (compressedImage2.size.width> 300) {
-        CGSize imagesize=CGSizeMake(300.0, compressedImage2.size.height * 300.0/compressedImage2.size.width);
+        CGSize imagesize=CGSizeMake(300.0, (NSInteger)(compressedImage2.size.height * 300.0/compressedImage2.size.width));
         compressedImage2 = [compressedImage2 imageByScalingToSize:imagesize];
         imageData2 = UIImageJPEGRepresentation(compressedImage2, 1.0);
     }
@@ -345,7 +345,7 @@
     float adjustWidth = 640.0;
     while (flag) {
         if (compressedImage.size.width> adjustWidth) {
-            CGSize imagesize=CGSizeMake(adjustWidth, compressedImage.size.height * adjustWidth/compressedImage.size.width);
+            CGSize imagesize=CGSizeMake((NSInteger)adjustWidth, (NSInteger)(compressedImage.size.height * adjustWidth/compressedImage.size.width));
             compressedImage = [compressedImage imageByScalingToSize:imagesize];
             imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
         }
@@ -436,6 +436,7 @@
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
     if (self.isUpload) {
+        self.uploadImage = nil;
         if (status){
             if (self.type == 21) { //上传头像
 //                SDImageCache* cache = [SDImageCache sharedImageCache];
@@ -464,6 +465,7 @@
                             if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[UserInfoViewController class]]) {
                                 NSLog(@"上传头像后个人信息刷新");
                                 [(UserInfoViewController*)updateAvatarViewController refresh];
+                                updateAvatarViewController = nil;
                                 
                             }
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
@@ -471,7 +473,7 @@
                             
                             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                             [alertView show];
-                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
+                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }
@@ -504,6 +506,7 @@
                             if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[FillinInfoViewController class]]) {
 //                                [(UserInfoViewController*)updateAvatarViewController refresh];
                                 [[(FillinInfoViewController*)updateAvatarViewController info_tableview] reloadData];
+                                updateAvatarViewController = nil;
                                 
                             }
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
@@ -511,7 +514,7 @@
                             
                             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                             [alertView show];
-                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:YES];
+                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }

@@ -8,6 +8,17 @@
 
 #import "PhotoTableViewCell.h"
 #import "PhotoDetailViewController.h"
+#import "UploaderManager.h"
+#import "uploaderOperation.h"
+#import "TMQuiltView.h"
+#import "UploaderManager.h"
+
+@interface PhotoTableViewCell ()
+@property (nonatomic,strong) UIView* progressView;
+@property (nonatomic,weak) uploaderOperation *uploadTask;
+@property (nonatomic,strong) NSTimer* timer;
+
+@end
 
 @implementation PhotoTableViewCell
 
@@ -85,5 +96,198 @@
     [UIView setAnimationDelegate:self];
     self.alpha = 1;
     [UIView commitAnimations];
+}
+
+-(void)beginUpdateProgress
+{
+    if (_isUploading) {
+        _uploadTask = [[UploaderManager sharedManager].taskswithPhotoName valueForKey:_photoName];
+        if (_timer) {
+            [_timer invalidate];
+            _timer = nil;
+        }
+        if (_uploadTask) {
+            _timer = [NSTimer scheduledTimerWithTimeInterval:0.2f target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
+        }
+        int width = [[_photoInfo valueForKey:@"width"] intValue];
+        int height = [[_photoInfo valueForKey:@"height"] intValue];
+        float RealHeight = height * 145.0f / width + 33;
+        
+        if (!_progressView) {
+            _progressView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 145, RealHeight)];
+            _progressView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
+            UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮的大小
+            activity.transform = CGAffineTransformMakeScale(1.6, 1.6);
+//            activity.layer.borderColor = [UIColor greenColor].CGColor;
+//            activity.layer.borderWidth = 2;
+            [activity setTag:320];
+            [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhiteLarge];//设置进度轮显示类型
+            [_progressView addSubview:activity];
+            [activity startAnimating];
+            
+            UILabel* progress_numLab = [[UILabel alloc]initWithFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
+//            progress_numLab.layer.borderColor = [UIColor blueColor].CGColor;
+//            progress_numLab.layer.borderWidth = 2;
+            [progress_numLab setTag:330];
+            progress_numLab.font = [UIFont systemFontOfSize:12];
+            progress_numLab.text = @"0%";
+            progress_numLab.textAlignment = NSTextAlignmentCenter;
+            progress_numLab.textColor = [UIColor colorWithWhite:0.9 alpha:1.0];
+            [self.progressView addSubview:progress_numLab];
+            
+            UIButton* cancel = [UIButton buttonWithType:UIButtonTypeCustom];
+            [cancel setFrame:CGRectMake(17, RealHeight/2 - 23.5, 47, 47)];
+            [cancel setImage:[UIImage imageNamed:@"cancelUploadPhoto"] forState:UIControlStateNormal];
+//            cancel.layer.borderColor = [UIColor redColor].CGColor;
+//            cancel.layer.borderWidth = 2;
+            [cancel setTag:340];
+            [cancel setHidden:YES];
+            [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
+            [_progressView addSubview:cancel];
+            
+            UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
+            [retry setFrame:CGRectMake(17*2+47, RealHeight/2 - 23.5, 47, 47)];
+            [retry setImage:[UIImage imageNamed:@"retryUploadPhoto"] forState:UIControlStateNormal];
+//            retry.layer.borderColor = [UIColor redColor].CGColor;
+//            retry.layer.borderWidth = 2;
+            [retry setTag:350];
+            [retry setHidden:YES];
+            [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
+            [_progressView addSubview:retry];
+            
+            [self addSubview:_progressView];
+        }
+        [_progressView setFrame:CGRectMake(0, 0, 145, RealHeight)];
+        UIActivityIndicatorView* activity = (UIActivityIndicatorView*)[_progressView viewWithTag:320];
+        [activity setFrame:CGRectMake(42.5, RealHeight/2 - 30, 60, 60)];//指定进度轮中心点
+        
+        UILabel* progress_numLab = (UILabel*)[_progressView viewWithTag:330];
+        [progress_numLab setFrame:CGRectMake(50, RealHeight/2 - 22.5, 45, 45)];
+        NSNumber* progress = [_photoInfo valueForKey:@"progress"];
+        progress_numLab.text = progress? [NSString stringWithFormat:@"%.0f%%",[progress floatValue]*100] : @"0%";
+        
+        UIButton* cancel = (UIButton*)[_progressView viewWithTag:340];
+        [cancel setFrame:CGRectMake(17, RealHeight/2 - 23.5, 47, 47)];
+        
+        UIButton* retry = (UIButton*)[_progressView viewWithTag:350];
+        [retry setFrame:CGRectMake(17*2+47, RealHeight/2 - 23.5, 47, 47)];
+        
+        NSNumber* isFailed = [_photoInfo valueForKey:@"isFailed"];
+        
+        if (isFailed && [isFailed boolValue]) {
+            [cancel setHidden:NO];
+            [retry setHidden:NO];
+            [activity stopAnimating];
+            [progress_numLab setHidden:YES];
+            if (_timer) {
+                [_timer invalidate];
+                _timer = nil;
+            }
+        }else{
+            [cancel setHidden:YES];
+            [retry setHidden:YES];
+            [activity startAnimating];
+            [progress_numLab setHidden:NO];
+        }
+    }
+}
+
+-(void)stopUpdateProgress
+{
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    if (_uploadTask) {
+        _uploadTask = nil;
+    }
+    if (_progressView) {
+        [_progressView removeFromSuperview];
+        _progressView = nil;
+    }
+}
+
+-(void)updateProgress
+{
+    if (!self.PhotoWall) {
+        [self stopUpdateProgress];
+        return;
+    }
+    if (_uploadTask) {
+        float progress = _uploadTask.progress;
+        NSLog(@"updateProgress: %f", progress);
+        [_photoInfo setValue:[NSNumber numberWithFloat:progress] forKey:@"progress"];
+        if (_progressView) {
+            UILabel* progress_numLab = (UILabel*)[_progressView viewWithTag:330];
+            if (progress_numLab) {
+                progress_numLab.text = [NSString stringWithFormat:@"%.0f%%",_uploadTask.progress*100];
+            }
+        }
+        NSMutableDictionary* realPhotoInfo = _uploadTask.photoInfo;
+        BOOL isFinished = _uploadTask.isFinished;
+        BOOL wait = _uploadTask.wait;
+        if (realPhotoInfo) {
+            [self stopUpdateProgress];
+            [_photoInfo setDictionary:realPhotoInfo];
+            self.publish_date.text = [[_photoInfo valueForKey:@"time"] substringToIndex:10];
+            self.isUploading = NO;
+            
+        }else if (isFinished || !wait){
+            NSLog(@"上传失败");
+            if (_progressView) {
+                if (_photoInfo) {
+                    [_photoInfo setValue:[NSNumber numberWithBool:YES] forKey:@"isFailed"];
+                }
+                if (_timer) {
+                    [_timer invalidate];
+                    _timer = nil;
+                }
+                [self beginUpdateProgress];
+            }
+        }
+    }else NSLog(@"error");
+    
+}
+
+-(void)cancelUploadTask
+{
+    NSLog(@"取消上传任务");
+    if (_uploadTask && [_photoInfo valueForKey:@"alasset"]) {
+        [_uploadTask removeuploadTaskInDB];
+        NSInteger index = [self.PhotoWall.photo_list indexOfObject:_photoInfo];
+        [self.PhotoWall.photo_list removeObject:_photoInfo];
+        [self.PhotoWall.photo_list_all removeObject:_photoInfo];
+        self.PhotoWall.uploadingTaskCount --;
+        self.PhotoWall.showPhoNum --;
+        [self.PhotoWall calculateLRH];
+        [self.PhotoWall.quiltView beginUpdates];
+        [self.PhotoWall.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        [self.PhotoWall.quiltView endUpdates];
+        
+        
+        
+        return;
+        [self.PhotoWall pullPhotoInfosFromDB];
+        [self.PhotoWall pullUploadTasksfromDB];
+    }
+}
+
+-(void)retryUploadTask
+{
+    NSLog(@"重试上传任务");
+    if ([_photoInfo valueForKey:@"alasset"]) {
+        NSString* alassetStr = [_photoInfo valueForKey:@"alasset"];
+        NSString* eventId = [_photoInfo valueForKey:@"event_id"];
+        NSString* imgName = [_photoInfo valueForKey:@"imgName"];
+        [[UploaderManager sharedManager] uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+        [_photoInfo setValue:[NSNumber numberWithBool:NO] forKey:@"isFailed"];
+        [self beginUpdateProgress];
+    }
+    
+}
+
+-(void)dealloc
+{
+    NSLog(@"dealloc");
 }
 @end

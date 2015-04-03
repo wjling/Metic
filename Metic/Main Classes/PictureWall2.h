@@ -16,6 +16,7 @@
 @property(nonatomic,strong)NSNumber *sequence;
 
 @property NSInteger showPhoNum;
+@property NSInteger uploadingTaskCount;
 @property(nonatomic,strong)NSMutableArray *photo_list;//部分
 @property(nonatomic,strong)NSMutableArray *photo_list_all;//总
 @property (strong,nonatomic) MJRefreshHeaderView *header;
@@ -29,4 +30,6 @@
 - (IBAction)toBestPhotos:(id)sender;
 - (IBAction)addPhoto:(id)sender;
 -(void)calculateLRH;
+- (void)pullPhotoInfosFromDB;
+- (void)pullUploadTasksfromDB;
 @end

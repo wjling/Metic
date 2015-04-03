@@ -21,8 +21,12 @@
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (weak, nonatomic) PictureWall2* PhotoWall;
+@property (strong, nonatomic) NSString* photoName;
+@property BOOL isUploading;
 @property BOOL isloading;
 @property BOOL isLeft;
 - (void)button_DetailPressed:(id)sender;
 -(void)animationBegin;
+-(void)beginUpdateProgress;
+-(void)stopUpdateProgress;
 @end

@@ -13,6 +13,7 @@
 
 @implementation EventCellTableViewCell
 
+@synthesize launcherImg;
 @synthesize themePhoto;
 @synthesize eventName;
 @synthesize eventDetail;

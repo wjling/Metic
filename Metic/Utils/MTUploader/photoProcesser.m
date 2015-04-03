@@ -19,7 +19,7 @@
     float adjustWidth = 640.0;
     while (flag) {
         if (compressedImage.size.width> adjustWidth) {
-            CGSize imagesize=CGSizeMake(adjustWidth, compressedImage.size.height * adjustWidth/compressedImage.size.width);
+            CGSize imagesize=CGSizeMake((NSInteger)adjustWidth, (NSInteger)(compressedImage.size.height * adjustWidth/compressedImage.size.width));
             compressedImage = [compressedImage imageByScalingToSize:imagesize];
             imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
         }
