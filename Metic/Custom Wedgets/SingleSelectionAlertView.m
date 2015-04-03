@@ -79,10 +79,11 @@
     for (int i = 0; i< numberOfOptions; i++) {
         UIView* itemView = [[UIView alloc]initWithFrame:CGRectMake(0, i*30, content_width, 30)];
         UILabel* option_label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, content_width-40, 30)];
-        UIButton* option_button = [[UIButton alloc]initWithFrame:CGRectMake(content_width-35, 5, 20, 20)];
+        UIButton* option_button = [[UIButton alloc]initWithFrame:CGRectMake(0, 5, content_width, 20)];
+        option_button.imageEdgeInsets = UIEdgeInsetsMake(0, content_width - 35, 0, 15);
         
-        UIColor* color1 = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.9];
-        UIColor* color2 = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.9];
+        UIColor* color1 = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
+        UIColor* color2 = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
         if (i%2 == 0) {
             [itemView setBackgroundColor:color1];
         }
@@ -95,8 +96,8 @@
         option_label.text = [self.options objectAtIndex:i];
         [option_label setBackgroundColor:[UIColor clearColor]];
         option_button.tag = i;
-        [option_button setBackgroundImage:[UIImage imageNamed:@"勾选前icon"] forState:UIControlStateNormal];
-        [option_button setBackgroundImage:[UIImage imageNamed:@"勾选后icon"] forState:UIControlStateSelected];
+        [option_button setImage:[UIImage imageNamed:@"勾选前icon"] forState:UIControlStateNormal];
+        [option_button setImage:[UIImage imageNamed:@"勾选后icon"] forState:UIControlStateSelected];
         [option_button setSelected:NO];
        
         [option_button  addTarget:self action:@selector(changeButtonStateAfterClicked:) forControlEvents:UIControlEventTouchUpInside];
