@@ -100,7 +100,7 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
-    if (!_isFirstIn) {
+    if (!_isFirstIn && !_shouldReloadPhoto) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             [self pullPhotoInfosFromDB];
             [self pullUploadTasksfromDB];
@@ -220,6 +220,10 @@
 
 - (void)pullUploadTasksfromDB
 {
+    
+    //单图上传
+    return;
+    //多图上传
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
     [sql openMyDB:path];
@@ -610,6 +614,8 @@
         return abs(_h1) + defaultHeight;
     }else if(indexPath.row == _showPhoNum + 1) return defaultHeight;
     
+    
+    if(indexPath.row >= _photo_list.count) return 0;
     NSDictionary *a = _photo_list[indexPath.row];
     
     float width = [[a valueForKey:@"width"] floatValue];
