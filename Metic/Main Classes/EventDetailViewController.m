@@ -1095,8 +1095,15 @@
         frame.size.height = commentHeight;
         [cell.eventDetail setFrame:frame];
         frame = cell.frame;
-        frame.size.height = 248 + commentHeight;
+        frame.size.height = 303 + commentHeight;
+        cell.frame = frame;
         
+        NSNumber* launcherId = [_event valueForKey:@"launcher_id"];
+        PhotoGetter* authorImgGetter = [[PhotoGetter alloc]initWithData:cell.launcherImg authorId:launcherId];
+        UIImageView* launcherImg = cell.launcherImg;
+        launcherImg.layer.masksToBounds = YES;
+        launcherImg.layer.cornerRadius = 4;
+        [authorImgGetter getAvatar];
         cell.eventId = [_event valueForKey:@"event_id"];
         cell.eventController = self;
         [cell drawOfficialFlag:[[_event valueForKey:@"verify"] boolValue]];
@@ -1109,7 +1116,7 @@
         for (int i =0; i<4; i++) {
             UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
             //tmp.layer.masksToBounds = YES;
-            [tmp.layer setCornerRadius:5];
+            //[tmp.layer setCornerRadius:5];
             if (i < participator_count) {
                 PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
                 [miniGetter getAvatar];
@@ -1118,7 +1125,6 @@
         }
         [cell setImgWallpoint];
         [cell setVideoWallpoint];
-
         return cell;
     }
     else if (indexPath.row == 0) {
@@ -1353,7 +1359,7 @@
         if (text && [text isEqualToString:@""]) {
             commentHeight = 10;
         }else if(text) commentHeight += 5;
-        return 248.0 + commentHeight;
+        return 303.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];

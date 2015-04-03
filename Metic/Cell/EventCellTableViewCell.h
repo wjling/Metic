@@ -13,6 +13,7 @@
 
 {
     
+    IBOutlet UIImageView *launcherImg;
     IBOutlet UIImageView *themePhoto;
     IBOutlet UILabel *eventName;
     IBOutlet UILabel *beginDate;
@@ -42,6 +43,7 @@
 -(void)setVideoWallpoint;
 
 @property(nonatomic,strong) UIImageView* officialFlag;
+@property(nonatomic,strong) UIImageView* launcherImg;
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UILabel *beginDate;
