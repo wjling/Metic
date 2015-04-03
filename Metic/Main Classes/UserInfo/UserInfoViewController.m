@@ -228,8 +228,8 @@
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
     controller.image = newAvatar;
-    
     UIImage *image = newAvatar;
+    newAvatar = nil;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
     CGFloat length = MIN(width, height);
@@ -644,7 +644,6 @@
     [controller dismissViewControllerAnimated:YES completion:^{
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
-    newAvatar = croppedImage;
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:21 viewController:self];
     [getter uploadAvatar];
 }

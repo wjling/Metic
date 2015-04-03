@@ -8,6 +8,7 @@
 
 #import "FillinInfoViewController.h"
 #import "UIImage+fixOrien.h"
+#import "UIImage+squareThumbail.h"
 
 @interface FillinInfoViewController ()
 {
@@ -427,13 +428,13 @@
     [sheet showInView:self.view];
 }
 
-- (IBAction)openEditor:(id)sender
+- (IBAction)openEditor:(UIImage*)img
 {
     PECropViewController *controller = [[PECropViewController alloc] init];
     controller.delegate = self;
-    controller.image = avatar;
+    controller.image = img;
     
-    UIImage *image = avatar;
+    UIImage *image = img;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
     CGFloat length = MIN(width, height);
@@ -496,9 +497,9 @@
 	//[picker dismissViewControllerAnimated:YES completion:^{}];
     UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
     if (image) image = [UIImage fixOrientation:image];
-    avatar = image;
+    avatar = [image squareAndSmall];
     [picker dismissViewControllerAnimated:YES completion:^{
-        [self openEditor:nil];
+        [self openEditor:image];
     }];
     
 }
@@ -508,7 +509,6 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
-    avatar = croppedImage;
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:22 viewController:self];
     [getter uploadAvatar];
 }

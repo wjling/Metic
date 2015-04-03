@@ -355,6 +355,7 @@
 		51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0619E6307500E487F1 /* HTTPServer.m */; };
 		51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0819E6307500E487F1 /* WebSocket.m */; };
 		F83C341A1ABEE47300084CB0 /* MTAutoHideButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */; };
+		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1054,6 +1055,8 @@
 		51F4CB0819E6307500E487F1 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
 		F83C34181ABEE47300084CB0 /* MTAutoHideButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoHideButton.h; sourceTree = "<group>"; };
 		F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoHideButton.m; sourceTree = "<group>"; };
+		F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+squareThumbail.h"; sourceTree = "<group>"; };
+		F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+squareThumbail.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1573,6 +1576,8 @@
 				0896AAD619E90C2200A93A1B /* UINavigationController+Vertical.m */,
 				085B358C1A9CA8E900881778 /* UIImage+fixOrien.h */,
 				085B358D1A9CA8E900881778 /* UIImage+fixOrien.m */,
+				F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */,
+				F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2641,6 +2646,7 @@
 				51F4CB0A19E6307500E487F1 /* ASIDataCompressor.m in Sources */,
 				0838E7AF1969030A004E4655 /* PcommentTableViewCell.m in Sources */,
 				04AC64011AA1C8D500A863D6 /* GetBackPasswordViewController.m in Sources */,
+				F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */,
 				51F4CB2419E6307500E487F1 /* HTTPMessage.m in Sources */,
 				04B6F8BC19A2F98A00229393 /* ContactsRecommendTableViewCell.m in Sources */,
 				086A5AB2193D6E7500880F2F /* MainView.m in Sources */,
