@@ -7,8 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="eventcell" rowHeight="269" id="KGk-i7-Jjw" customClass="EventCellTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="269"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="eventcell" rowHeight="284" id="KGk-i7-Jjw" customClass="EventCellTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="284"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" placeholderIntrinsicWidth="300" placeholderIntrinsicHeight="350" restorationIdentifier="CustomCellIdentifier" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="272"/>
@@ -213,7 +213,7 @@
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WaL-N2-884">
-                        <rect key="frame" x="10" y="222" width="145" height="31"/>
+                        <rect key="frame" x="10" y="233" width="145" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="       图片墙" backgroundImage="中按钮-默认">
@@ -225,7 +225,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iDx-Vs-ivA">
-                        <rect key="frame" x="165" y="222" width="145" height="31"/>
+                        <rect key="frame" x="165" y="233" width="145" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="     视频墙" backgroundImage="中按钮-默认">
@@ -237,11 +237,11 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-白色" id="bvB-py-yVi">
-                        <rect key="frame" x="50" y="227" width="21" height="21"/>
+                        <rect key="frame" x="50" y="238" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-白色" id="5dg-IF-isa">
-                        <rect key="frame" x="200" y="227" width="21" height="21"/>
+                        <rect key="frame" x="200" y="238" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                 </subviews>
@@ -265,7 +265,7 @@
                 <outlet property="timeInfo" destination="WWW-ty-peW" id="a5A-7Y-rYu"/>
                 <outlet property="videoWall" destination="iDx-Vs-ivA" id="w3U-k9-6Ig"/>
             </connections>
-            <point key="canvasLocation" x="254" y="195.5"/>
+            <point key="canvasLocation" x="254" y="212"/>
         </tableViewCell>
     </objects>
     <resources>
