@@ -10,6 +10,8 @@
 #import "UzysWrapperPickerController.h"
 #import "UzysGroupPickerView.h"
 #import "UzysGroupPickerViewController.h"
+#import "MJPhotoBrowser.h"
+#import "MJPhoto.h"
 
 
 @interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -716,13 +718,27 @@
         case kTagButtonGallery:
         {
             NSLog(@"showPhotos");
-            NSMutableArray *assets = [[NSMutableArray alloc] init];
+            NSInteger count = self.collectionView.indexPathsForSelectedItems.count;
+            if (count == 0) return;
+            NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
             for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems)
             {
-                [assets addObject:[self.assets objectAtIndex:indexPath.item]];
+
+                
+                ALAsset *asset = [self.assets objectAtIndex:indexPath.item];
+                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+                MJPhoto *photo = [[MJPhoto alloc] init];
+                photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+                photo.srcImageView = (UIImageView*) cell; // 来源于哪个UIImageView
+                [photos addObject:photo];
                 
             }
-            
+
+            // 2.显示相册
+            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+            browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+            browser.photos = photos; // 设置所有的图片
+            [browser show];
         }
             break;
         case kTagButtonClose:
