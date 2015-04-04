@@ -162,7 +162,7 @@
 }
 - (void)setupLayout
 {
-    self.btnDone.layer.cornerRadius = 14;
+    self.btnDone.layer.cornerRadius = 13;
     self.btnDone.clipsToBounds = YES;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bottomView.bounds.size.width, 0.5)];
@@ -617,7 +617,6 @@
                             [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
                             [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
                         }
-                        
                     });
 
                 } failureBlock:nil];
@@ -712,6 +711,18 @@
                     }
                 }];
             }
+        }
+            break;
+        case kTagButtonGallery:
+        {
+            NSLog(@"showPhotos");
+            NSMutableArray *assets = [[NSMutableArray alloc] init];
+            for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems)
+            {
+                [assets addObject:[self.assets objectAtIndex:indexPath.item]];
+                
+            }
+            
         }
             break;
         case kTagButtonClose:
