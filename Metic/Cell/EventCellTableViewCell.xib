@@ -99,6 +99,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.58823531870000001" green="0.58823531870000001" blue="0.58823531870000001" alpha="1" colorSpace="deviceRGB"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RMM-bV-JGN">
                                 <rect key="frame" x="8" y="5" width="25" height="25"/>
@@ -212,7 +213,7 @@
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WaL-N2-884">
-                        <rect key="frame" x="10" y="226" width="145" height="31"/>
+                        <rect key="frame" x="10" y="222" width="145" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="       图片墙" backgroundImage="中按钮-默认">
@@ -224,7 +225,7 @@
                         </connections>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iDx-Vs-ivA">
-                        <rect key="frame" x="165" y="226" width="145" height="31"/>
+                        <rect key="frame" x="165" y="222" width="145" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="     视频墙" backgroundImage="中按钮-默认">
@@ -236,11 +237,11 @@
                         </connections>
                     </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-白色" id="bvB-py-yVi">
-                        <rect key="frame" x="50" y="231" width="21" height="21"/>
+                        <rect key="frame" x="50" y="227" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-白色" id="5dg-IF-isa">
-                        <rect key="frame" x="200" y="231" width="21" height="21"/>
+                        <rect key="frame" x="200" y="227" width="21" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </imageView>
                 </subviews>
