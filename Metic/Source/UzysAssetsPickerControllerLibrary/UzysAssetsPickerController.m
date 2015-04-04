@@ -451,9 +451,9 @@
         imgView.image = [UIImage imageNamed:@"UzysAssetPickerController.bundle/uzysAP_ico_no_image"];
         
         UILabel *title = (UILabel *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewTitleLabel];
-        title.text = NSLocalizedStringFromTable(@"No Photos", @"UzysAssetsPickerController",nil);
+        title.text = NSLocalizedStringFromTable(@"暂无图片", @"UzysAssetsPickerController",nil);
         UILabel *msg = (UILabel *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewMsgLabel];
-        msg.text = NSLocalizedStringFromTable(@"You can sync photos onto your iPhone using iTunes.",@"UzysAssetsPickerController", nil);
+        msg.text = NSLocalizedStringFromTable(@"您可以通过iTunes同步图片",@"UzysAssetsPickerController", nil);
     };
     voidBlock setNoVideo = ^{
         UIImageView *imgView = (UIImageView *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewImageView];
@@ -607,11 +607,11 @@
                 return;
             }
             
-            if(updatedAssets.count  <2 && updatedAssetGroup.count ==0 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0) //이미지픽커에서 앨범에 저장할 경우.
+            if(updatedAssets.count != 0 && updatedAssetGroup.count == 1 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0) //이미지픽커에서 앨범에 저장할 경우.
             {
                 [self.assetsLibrary assetForURL:[updatedAssets allObjects][0] resultBlock:^(ALAsset *asset) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if([[[self.assets[0] valueForProperty:ALAssetPropertyAssetURL] absoluteString] isEqualToString:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
+                        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && [[[self.assets[0] valueForProperty:ALAssetPropertyAssetURL] absoluteString] isEqualToString:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
                         {
                             NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
                             [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];

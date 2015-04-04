@@ -39,23 +39,23 @@
                         <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" id="rd5-Z7-vdI" userLabel="Button - Title">
                             <rect key="frame" x="50" y="23" width="220" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AppleSDGothicNeo-Bold" family="Apple SD Gothic Neo" pointSize="16"/>
-                            <state key="normal" title="." image="UzysAssetPickerController.bundle/uzysAP_ico_arrow_upload_album_d.png">
-                                <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                            <state key="normal" image="UzysAssetPickerController.bundle/uzysAP_ico_arrow_upload_album_d.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="btnAction:" destination="-1" eventType="touchUpInside" id="9iB-BX-fxc"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.90588235294117647" green="0.90588235294117647" blue="0.90588235294117647" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.33333333333333331" green="0.79607843137254897" blue="0.6705882352941176" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view tag="201" contentMode="scaleToFill" id="kxD-PY-Oat" userLabel="BottomView">
                     <rect key="frame" x="0.0" y="520" width="320" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8h0-kN-iqH" userLabel="Button - Camera">
-                            <rect key="frame" x="22" y="5" width="40" height="40"/>
+                        <button opaque="NO" tag="102" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8h0-kN-iqH" userLabel="Button - Camera">
+                            <rect key="frame" x="142" y="9" width="40" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <state key="normal" image="UzysAssetPickerController.bundle/uzysAP_ico_upload_camera.png">
@@ -66,7 +66,7 @@
                             </connections>
                         </button>
                         <button autoresizesSubviews="NO" opaque="NO" userInteractionEnabled="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fF2-hh-1Ou">
-                            <rect key="frame" x="240" y="10" width="28" height="28"/>
+                            <rect key="frame" x="240" y="11" width="26" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.96862751250000001" green="0.4156863093" blue="0.25098040700000002" alpha="1" colorSpace="deviceRGB"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

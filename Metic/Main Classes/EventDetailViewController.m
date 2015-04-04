@@ -1082,13 +1082,13 @@
         cell.member_count.tintColor = [UIColor lightGrayColor];
         [cell.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
             NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
-            UIFont *italicSystemFont = [UIFont italicSystemFontOfSize:18];
+            UIFont *systemFont = [UIFont systemFontOfSize:18];
 
             if (redRange.location != NSNotFound) {
                 // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
                 [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[UIColor redColor].CGColor range:redRange];
                 
-                CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)italicSystemFont.fontName, italicSystemFont.pointSize, NULL);
+                CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
                 [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
                 CFRelease(italicFont);
             }
