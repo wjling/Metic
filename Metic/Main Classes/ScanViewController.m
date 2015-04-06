@@ -19,6 +19,7 @@
 @property(nonatomic,strong)NSDictionary* friend;
 @property (nonatomic, strong) UIImageView * line;
 @property (nonatomic, strong) NSTimer * timer;
+@property NSInteger operationNum;
 @property BOOL upOrdown;
 @property BOOL isScaning;
 @end
@@ -39,6 +40,7 @@
 {
     [super viewDidLoad];
     [self initUI];
+    _operationNum = 0;
     readerView = [[ZBarReaderView alloc]init];
     readerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:readerView];
@@ -227,6 +229,24 @@
 
 }
 
+- (IBAction)scanLocalPhoto:(id)sender {
+    
+    [_resultView setHidden:YES];
+    [_controlView setHidden:YES];
+    [_showView setHidden:YES];
+    [readerView stop];
+    _isScaning = NO;
+    
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.delegate = self;
+    imagePickerController.allowsEditing = NO;
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
+        imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
+    }else imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
+    [self presentViewController:imagePickerController animated:YES completion:^{}];
+}
+
 
 
 - (void) searchEvent: (NSNumber *)eventid
@@ -237,7 +257,9 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    NSInteger operNum = ++_operationNum;
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
+        if (operNum != _operationNum) return ;
         if (rData) {
             [self finishWithReceivedData:rData];
         }else{
@@ -255,7 +277,9 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    NSInteger operNum = ++_operationNum;
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND finshedBlock:^(NSData *rData) {
+        if (operNum != _operationNum) return ;
         if (rData) {
             [self finishWithReceivedData:rData];
         }else{
@@ -571,7 +595,9 @@
                     NSLog(@"%@",dictionary);
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                    NSInteger operNum = ++_operationNum;
                     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+                        if (operNum != _operationNum) return ;
                         if (rData) {
                             [self finishWithReceivedData:rData];
                         }else{
@@ -595,7 +621,9 @@
                     NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                    NSInteger operNum = ++_operationNum;
                     [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND finshedBlock:^(NSData *rData) {
+                        if (operNum != _operationNum) return ;
                         if (rData) {
                             [self finishWithReceivedData:rData];
                         }else {
@@ -620,6 +648,37 @@
         default:
             break;
     }
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    id<NSFastEnumeration> results = [info objectForKey:ZBarReaderControllerResults];
+
+    ZBarSymbol *symbol = nil;
+    for (symbol in results) break;
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        if (symbol) {
+            _result = symbol.data;
+            if (_isScaning) {
+                _isScaning = NO;
+                [readerView stop];
+            }
+            [_showView setHidden:NO];
+            [self resultAnalysis];
+        }
+    }];
+    
+}
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    [_resultView setHidden:YES];
+    [_controlView setHidden:YES];
+    [_showView setHidden:YES];
+    [readerView start];
+    _isScaning = YES;
 }
 
 @end

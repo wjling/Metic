@@ -12,7 +12,7 @@
 #import "HttpSender.h"
 #import "MenuViewController.h"
 
-@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
+@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *showView;
@@ -26,5 +26,6 @@
 @property BOOL needPopBack;
 - (IBAction)back:(id)sender;
 - (IBAction)wantIn:(id)sender;
+- (IBAction)scanLocalPhoto:(id)sender;
 
 @end
