@@ -278,35 +278,8 @@ static const NSInteger MaxUploadCount = 20;
 - (IBAction)upload:(id)sender {
     
     
-    //多图上传
-    if (_uploadImgs.count == 0) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
-        return;
-    }
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
-        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
-        return;
-    }
-    [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
-    
-    [SVProgressHUD showSuccessWithStatus:@"图片已加入到上传队列" duration:2];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.navigationController popViewControllerAnimated:YES];
-    });
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//    //单图上传
-//    if (!self.uploadImage) {
+//    //多图上传
+//    if (_uploadImgs.count == 0) {
 //        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
 //        return;
 //    }
@@ -314,16 +287,43 @@ static const NSInteger MaxUploadCount = 20;
 //        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
 //        return;
 //    }
+//    [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
 //    
-//    [self showWaitingView];
-//    self.upLoad = sender;
-////    [self.upLoad setEnabled:NO];
-////    [self.getPhoto setEnabled:NO];
-//    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
-//    getter.mDelegate = self;
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        [getter uploadPhoto];
+//    [SVProgressHUD showSuccessWithStatus:@"图片已加入到上传队列" duration:2];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.navigationController popViewControllerAnimated:YES];
 //    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //单图上传
+    if (!self.uploadImage) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
+        [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
+    
+    [self showWaitingView];
+    self.upLoad = sender;
+//    [self.upLoad setEnabled:NO];
+//    [self.getPhoto setEnabled:NO];
+    PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+    getter.mDelegate = self;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [getter uploadPhoto];
+    });
     
 }
 
@@ -556,13 +556,13 @@ static const NSInteger MaxUploadCount = 20;
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-//    //单图上传
-//    return 1;
-    //多图上传
-    if (_uploadImgs.count >= MaxUploadCount) {
-        return _uploadImgs.count;
-    }
-    return _uploadImgs.count + 1;
+    //单图上传
+    return 1;
+//    //多图上传
+//    if (_uploadImgs.count >= MaxUploadCount) {
+//        return _uploadImgs.count;
+//    }
+//    return _uploadImgs.count + 1;
 }
 
 
@@ -595,44 +595,44 @@ static const NSInteger MaxUploadCount = 20;
 {
     [self.textInput resignFirstResponder];
     if (indexPath.row == _uploadImgs.count) {
-        //多图上传
-        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
-        picker.delegate = self;
-        NSInteger maximumNumber = _uploadImgAssets.count >= MaxUploadCount? 0:MaxUploadCount - _uploadImgAssets.count;
-        picker.maximumNumberOfSelectionVideo = 0;
-        picker.maximumNumberOfSelectionPhoto = maximumNumber;
-        
-        [self presentViewController:picker animated:YES completion:^{}];
-//        //单图上传
-//        [self UesrImageClicked];
+//        //多图上传
+//        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
+//        picker.delegate = self;
+//        NSInteger maximumNumber = _uploadImgAssets.count >= MaxUploadCount? 0:MaxUploadCount - _uploadImgAssets.count;
+//        picker.maximumNumberOfSelectionVideo = 0;
+//        picker.maximumNumberOfSelectionPhoto = maximumNumber;
+//        
+//        [self presentViewController:picker animated:YES completion:^{}];
+        //单图上传
+        [self UesrImageClicked];
     }
-    //多图上传
-    else{
-        NSLog(@"showPhotos");
-        NSInteger count = self.uploadImgs.count;
-        _deleteIndexs = [[NSMutableSet alloc]init];
-        if (count == 0) return;
-        NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
-        for (int i = 0; i < self.uploadImgs.count; i++)
-        {
-
-            UICollectionViewCell* cell = [self.imgCollectionView cellForItemAtIndexPath:indexPath];
-            MJPhoto *photo = [[MJPhoto alloc] init];
-            UIImage* img = _uploadImgs[i];
-            photo.image = img;
-            photo.srcImageView = (UIImageView*)[cell viewWithTag:1]; // 来源于哪个UIImageView
-            photo.isSelected = YES;
-            [photos addObject:photo];
-            
-        }
-        
-        // 2.显示相册
-        MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
-        browser.currentPhotoIndex = indexPath.row; // 弹出相册时显示的第一张图片是？
-        browser.photos = photos; // 设置所有的图片
-        browser.delegate = self;
-        [browser show];
-    }
+//    //多图上传
+//    else{
+//        NSLog(@"showPhotos");
+//        NSInteger count = self.uploadImgs.count;
+//        _deleteIndexs = [[NSMutableSet alloc]init];
+//        if (count == 0) return;
+//        NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+//        for (int i = 0; i < self.uploadImgs.count; i++)
+//        {
+//
+//            UICollectionViewCell* cell = [self.imgCollectionView cellForItemAtIndexPath:indexPath];
+//            MJPhoto *photo = [[MJPhoto alloc] init];
+//            UIImage* img = _uploadImgs[i];
+//            photo.image = img;
+//            photo.srcImageView = (UIImageView*)[cell viewWithTag:1]; // 来源于哪个UIImageView
+//            photo.isSelected = YES;
+//            [photos addObject:photo];
+//            
+//        }
+//        
+//        // 2.显示相册
+//        MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
+//        browser.currentPhotoIndex = indexPath.row; // 弹出相册时显示的第一张图片是？
+//        browser.photos = photos; // 设置所有的图片
+//        browser.delegate = self;
+//        [browser show];
+//    }
 }
 
 -(void)adjustCollectionView
