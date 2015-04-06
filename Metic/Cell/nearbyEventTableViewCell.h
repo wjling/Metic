@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TTTAttributedLabel.h"
 @interface nearbyEventTableViewCell : UITableViewCell<UIAlertViewDelegate>
 {
     IBOutlet UIImageView *avatar;
@@ -21,7 +21,7 @@
     IBOutlet UILabel *timeInfo;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
-    IBOutlet UILabel *member_count;
+    IBOutlet TTTAttributedLabel *member_count;
     IBOutlet UILabel *statusLabel;
     IBOutlet UIButton *wantInBtn;
 }
@@ -39,7 +39,7 @@
 @property(nonatomic,strong) UILabel *location;
 @property(nonatomic,strong) UILabel *launcherinfo;
 //@property(nonatomic,strong) UILabel *eventDetail;
-@property(nonatomic,strong) UILabel *member_count;
+@property(nonatomic,strong) TTTAttributedLabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIViewController* nearbyEventViewController;
 @property(nonatomic,strong) UILabel* statusLabel;

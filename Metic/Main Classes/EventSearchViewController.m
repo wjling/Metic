@@ -290,8 +290,31 @@
     cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
     cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
     cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-    int participator_count = [[a valueForKey:@"member_count"] intValue];
-    cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
+    
+    
+    NSInteger participator_count = [[a valueForKey:@"member_count"] integerValue];
+    NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
+    NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
+    
+    cell.member_count.font = [UIFont systemFontOfSize:15];
+    cell.member_count.numberOfLines = 0;
+    cell.member_count.lineBreakMode = NSLineBreakByCharWrapping;
+    cell.member_count.tintColor = [UIColor lightGrayColor];
+    [cell.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
+        NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
+        UIFont *systemFont = [UIFont systemFontOfSize:18];
+        
+        if (redRange.location != NSNotFound) {
+            // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
+            [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
+            
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
+            CFRelease(italicFont);
+        }
+        return mutableAttributedString;
+    }];
+
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
     if (alias == nil || [alias isEqual:[NSNull null]]) {

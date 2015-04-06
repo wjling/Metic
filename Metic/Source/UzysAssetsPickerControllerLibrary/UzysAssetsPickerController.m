@@ -10,9 +10,11 @@
 #import "UzysWrapperPickerController.h"
 #import "UzysGroupPickerView.h"
 #import "UzysGroupPickerViewController.h"
+#import "MTPhotoBrowser.h"
+#import "MJPhoto.h"
 
 
-@interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MTPhotoBrowserDelegate>
 //View
 @property (weak, nonatomic) IBOutlet UIButton *btnTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
@@ -36,6 +38,8 @@
 @property (nonatomic, assign) NSInteger numberOfPhotos;
 @property (nonatomic, assign) NSInteger numberOfVideos;
 @property (nonatomic, assign) NSInteger maximumNumberOfSelection;
+
+@property (nonatomic, strong) NSArray *seletedPhotos;
 
 - (IBAction)btnAction:(id)sender;
 - (IBAction)indexDidChangeForSegmentedControl:(id)sender;
@@ -162,7 +166,7 @@
 }
 - (void)setupLayout
 {
-    self.btnDone.layer.cornerRadius = 14;
+    self.btnDone.layer.cornerRadius = 13;
     self.btnDone.clipsToBounds = YES;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bottomView.bounds.size.width, 0.5)];
@@ -451,9 +455,9 @@
         imgView.image = [UIImage imageNamed:@"UzysAssetPickerController.bundle/uzysAP_ico_no_image"];
         
         UILabel *title = (UILabel *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewTitleLabel];
-        title.text = NSLocalizedStringFromTable(@"No Photos", @"UzysAssetsPickerController",nil);
+        title.text = NSLocalizedStringFromTable(@"暂无图片", @"UzysAssetsPickerController",nil);
         UILabel *msg = (UILabel *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewMsgLabel];
-        msg.text = NSLocalizedStringFromTable(@"You can sync photos onto your iPhone using iTunes.",@"UzysAssetsPickerController", nil);
+        msg.text = NSLocalizedStringFromTable(@"您可以通过iTunes同步图片",@"UzysAssetsPickerController", nil);
     };
     voidBlock setNoVideo = ^{
         UIImageView *imgView = (UIImageView *)[weakSelf.noAssetView viewWithTag:kTagNoAssetViewImageView];
@@ -607,17 +611,16 @@
                 return;
             }
             
-            if(updatedAssets.count  <2 && updatedAssetGroup.count ==0 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0) //이미지픽커에서 앨범에 저장할 경우.
+            if(updatedAssets.count != 0 && updatedAssetGroup.count == 1 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0) //이미지픽커에서 앨범에 저장할 경우.
             {
                 [self.assetsLibrary assetForURL:[updatedAssets allObjects][0] resultBlock:^(ALAsset *asset) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if([[[self.assets[0] valueForProperty:ALAssetPropertyAssetURL] absoluteString] isEqualToString:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
+                        if([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && [[[self.assets[0] valueForProperty:ALAssetPropertyAssetURL] absoluteString] isEqualToString:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
                         {
                             NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
                             [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
                             [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
                         }
-                        
                     });
 
                 } failureBlock:nil];
@@ -714,6 +717,44 @@
             }
         }
             break;
+        case kTagButtonGallery:
+        {
+            NSLog(@"showPhotos");
+            NSInteger count = self.collectionView.indexPathsForSelectedItems.count;
+            if (count == 0) return;
+            NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+            _seletedPhotos = self.collectionView.indexPathsForSelectedItems;
+            _seletedPhotos = [_seletedPhotos sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                NSIndexPath* a = obj1;
+                NSIndexPath* b = obj2;
+                if (a.row < b.row) {
+                    return NSOrderedAscending;
+                }
+                if (a.row > b.row) {
+                    return NSOrderedDescending;
+                }
+                return NSOrderedSame;
+            }];
+            for (int i = 0; i < _seletedPhotos.count; i++)
+            {
+                NSIndexPath *indexPath = _seletedPhotos[i];
+                ALAsset *asset = [self.assets objectAtIndex:indexPath.item];
+                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+                MJPhoto *photo = [[MJPhoto alloc] init];
+                photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+                photo.srcImageView = (UIImageView*) cell; // 来源于哪个UIImageView
+                photo.isSelected = YES;
+                [photos addObject:photo];
+            }
+
+            // 2.显示相册
+            MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
+            browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+            browser.photos = photos; // 设置所有的图片
+            browser.delegate = self;
+            [browser show];
+        }
+            break;
         case kTagButtonClose:
         {
             if([self.delegate respondsToSelector:@selector(UzysAssetsPickerControllerDidCancel:)])
@@ -752,6 +793,22 @@
     }
 }
 
+#pragma mark - MTPhotoBrowserDelegate
+-(void)photoBrowser:(MTPhotoBrowser *)photoBrowser didSelectPageAtIndex:(NSUInteger)index
+{
+    if (index >= _seletedPhotos.count) return;
+    NSIndexPath* indexPath = _seletedPhotos[index];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    if (cell) {
+        if (cell.isSelected) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        }else{
+            [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        }
+    }
+
+
+}
 
 #pragma mark - UIImagerPickerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "../Main Classes/HomeViewController.h"
+#import "TTTAttributedLabel.h"
 
 @interface CustomCellTableViewCell : UITableViewCell
 
@@ -26,7 +27,7 @@
     IBOutlet UIButton *videoWall;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
-    IBOutlet UILabel *member_count;
+    IBOutlet TTTAttributedLabel *member_count;
     
 }
 
@@ -50,7 +51,7 @@
 //@property(nonatomic,strong) UILabel *eventDetail;
 @property(nonatomic,strong) UIButton *videoWall;
 @property(nonatomic,strong) UIButton *imgWall;
-@property(nonatomic,strong) UILabel *member_count;
+@property(nonatomic,strong) TTTAttributedLabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) NSNumber *launcherId;
 @property(nonatomic,strong) NSString *event;

@@ -20,6 +20,7 @@ typedef void (^voidBlock)(void);
 #define kTagButtonCamera 102
 #define kTagButtonGroupPicker 103
 #define kTagButtonDone 104
+#define kTagButtonGallery 105
 #define kTagNoAssetViewImageView 30
 #define kTagNoAssetViewTitleLabel 31
 #define kTagNoAssetViewMsgLabel 32

@@ -18,13 +18,15 @@
 #import "photoProcesser.h"
 #import "SVProgressHUD.h"
 #import "UploaderManager.h"
+#import "MTPhotoBrowser.h"
+#import "MJPhoto.h"
 
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 static const NSInteger MaxUploadCount = 20;
 
 
-@interface PhotoUploadViewController ()
+@interface PhotoUploadViewController ()<MTPhotoBrowserDelegate>
 @property (strong, nonatomic) UITextView* textInput;
 @property (strong, nonatomic) UIView* textView;
 @property (strong, nonatomic) UIView* imgView;
@@ -38,6 +40,7 @@ static const NSInteger MaxUploadCount = 20;
 @property (strong, nonatomic) UITextField* preLabel;
 @property (strong, nonatomic) UIView* waitingView;
 @property (strong, nonatomic) THProgressView *progressView;
+@property (strong, nonatomic) NSMutableSet *deleteIndexs;
 
 @end
 
@@ -603,6 +606,33 @@ static const NSInteger MaxUploadCount = 20;
         //单图上传
         [self UesrImageClicked];
     }
+//    //多图上传
+//    else{
+//        NSLog(@"showPhotos");
+//        NSInteger count = self.uploadImgs.count;
+//        _deleteIndexs = [[NSMutableSet alloc]init];
+//        if (count == 0) return;
+//        NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+//        for (int i = 0; i < self.uploadImgs.count; i++)
+//        {
+//
+//            UICollectionViewCell* cell = [self.imgCollectionView cellForItemAtIndexPath:indexPath];
+//            MJPhoto *photo = [[MJPhoto alloc] init];
+//            UIImage* img = _uploadImgs[i];
+//            photo.image = img;
+//            photo.srcImageView = (UIImageView*)[cell viewWithTag:1]; // 来源于哪个UIImageView
+//            photo.isSelected = YES;
+//            [photos addObject:photo];
+//            
+//        }
+//        
+//        // 2.显示相册
+//        MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
+//        browser.currentPhotoIndex = indexPath.row; // 弹出相册时显示的第一张图片是？
+//        browser.photos = photos; // 设置所有的图片
+//        browser.delegate = self;
+//        [browser show];
+//    }
 }
 
 -(void)adjustCollectionView
@@ -625,7 +655,7 @@ static const NSInteger MaxUploadCount = 20;
         [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             ALAsset *representation = obj;
             if ([[representation valueForProperty:@"ALAssetPropertyType"] isEqualToString:@"ALAssetTypePhoto"]) {
-                UIImage *img = [UIImage imageWithCGImage:representation.thumbnail];
+                UIImage *img = [UIImage imageWithCGImage:representation.aspectRatioThumbnail];
                 [weakSelf.uploadImgs addObject:img];
                 [self.uploadImgAssets addObject:representation];
             }
@@ -654,6 +684,41 @@ static const NSInteger MaxUploadCount = 20;
     }
     else return YES;
     
+}
+
+#pragma mark - MTPhotoBrowserDelegate
+-(void)photoBrowser:(MTPhotoBrowser *)photoBrowser didSelectPageAtIndex:(NSUInteger)index
+{
+    if ([_deleteIndexs containsObject:[NSNumber numberWithInteger:index]]) {
+        [_deleteIndexs removeObject:[NSNumber numberWithInteger:index]];
+    }else [_deleteIndexs addObject:[NSNumber numberWithInteger:index]];
+}
+
+-(void)willDismissBrowser:(MTPhotoBrowser *)photoBrowser
+{
+    NSLog(@"reloadCollectionView");
+    NSMutableArray* delIndexs = [[NSMutableArray alloc]init];
+    for(NSNumber* index in _deleteIndexs) [delIndexs addObject:index];
+    _deleteIndexs = nil;
+    NSArray* tmp = [delIndexs sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSInteger a = [obj1 integerValue];
+        NSInteger b = [obj2 integerValue];
+        if (a < b) {
+            return NSOrderedDescending;
+        }
+        if (a > b) {
+            return NSOrderedAscending;
+        }
+        return NSOrderedSame;
+    }];
+    for (NSNumber *num in tmp) {
+        [_uploadImgAssets removeObjectAtIndex:[num integerValue]];
+        [_uploadImgs removeObjectAtIndex:[num integerValue]];
+    }
+    if (tmp.count) {
+        [_imgCollectionView reloadData];
+        [self adjustCollectionView];
+    }
 }
 
 @end
