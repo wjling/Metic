@@ -10,11 +10,11 @@
 #import "UzysWrapperPickerController.h"
 #import "UzysGroupPickerView.h"
 #import "UzysGroupPickerViewController.h"
-#import "MJPhotoBrowser.h"
+#import "MTPhotoBrowser.h"
 #import "MJPhoto.h"
 
 
-@interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MTPhotoBrowserDelegate>
 //View
 @property (weak, nonatomic) IBOutlet UIButton *btnTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnDone;
@@ -38,6 +38,8 @@
 @property (nonatomic, assign) NSInteger numberOfPhotos;
 @property (nonatomic, assign) NSInteger numberOfVideos;
 @property (nonatomic, assign) NSInteger maximumNumberOfSelection;
+
+@property (nonatomic, strong) NSArray *seletedPhotos;
 
 - (IBAction)btnAction:(id)sender;
 - (IBAction)indexDidChangeForSegmentedControl:(id)sender;
@@ -721,23 +723,35 @@
             NSInteger count = self.collectionView.indexPathsForSelectedItems.count;
             if (count == 0) return;
             NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
-            for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems)
+            _seletedPhotos = self.collectionView.indexPathsForSelectedItems;
+            _seletedPhotos = [_seletedPhotos sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                NSIndexPath* a = obj1;
+                NSIndexPath* b = obj2;
+                if (a.row < b.row) {
+                    return NSOrderedAscending;
+                }
+                if (a.row > b.row) {
+                    return NSOrderedDescending;
+                }
+                return NSOrderedSame;
+            }];
+            for (int i = 0; i < _seletedPhotos.count; i++)
             {
-
-                
+                NSIndexPath *indexPath = _seletedPhotos[i];
                 ALAsset *asset = [self.assets objectAtIndex:indexPath.item];
                 UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
                 MJPhoto *photo = [[MJPhoto alloc] init];
                 photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
                 photo.srcImageView = (UIImageView*) cell; // 来源于哪个UIImageView
+                photo.isSelected = YES;
                 [photos addObject:photo];
-                
             }
 
             // 2.显示相册
-            MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+            MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
             browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
             browser.photos = photos; // 设置所有的图片
+            browser.delegate = self;
             [browser show];
         }
             break;
@@ -779,6 +793,22 @@
     }
 }
 
+#pragma mark - MTPhotoBrowserDelegate
+-(void)photoBrowser:(MTPhotoBrowser *)photoBrowser didSelectPageAtIndex:(NSUInteger)index
+{
+    if (index >= _seletedPhotos.count) return;
+    NSIndexPath* indexPath = _seletedPhotos[index];
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    if (cell) {
+        if (cell.isSelected) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        }else{
+            [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        }
+    }
+
+
+}
 
 #pragma mark - UIImagerPickerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info

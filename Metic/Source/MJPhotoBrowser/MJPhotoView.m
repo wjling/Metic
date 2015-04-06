@@ -199,6 +199,14 @@
 {
     if (_doubleTap) return;
     
+    //JJ modified
+    if ([self.photoViewDelegate respondsToSelector:@selector(photoViewSingleTap:)]) {
+        [self.photoViewDelegate photoViewSingleTap:self];
+        return;
+    }
+    
+    
+    
     // 移除进度条
     [_photoLoadingView removeFromSuperview];
     self.contentOffset = CGPointZero;

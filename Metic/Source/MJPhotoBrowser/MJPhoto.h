@@ -18,5 +18,6 @@
 
 // 是否已经保存到相册
 @property (nonatomic, assign) BOOL save;
+@property (nonatomic, assign) BOOL isSelected;
 @property (nonatomic, assign) int index; // 索引
 @end
