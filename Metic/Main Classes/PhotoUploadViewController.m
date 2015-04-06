@@ -605,7 +605,9 @@ static const NSInteger MaxUploadCount = 20;
         [self presentViewController:picker animated:YES completion:^{}];
 //        //单图上传
 //        [self UesrImageClicked];
-    }else{
+    }
+    //多图上传
+    else{
         NSLog(@"showPhotos");
         NSInteger count = self.uploadImgs.count;
         _deleteIndexs = [[NSMutableSet alloc]init];
