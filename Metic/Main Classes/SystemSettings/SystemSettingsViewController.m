@@ -10,8 +10,9 @@
 #import "MenuViewController.h"
 #import "../../Source/security/SFHFKeychainUtils.h"
 #import "XGPush.h"
+#import "UMSocial.h"
 
-@interface SystemSettingsViewController ()
+@interface SystemSettingsViewController ()<UMSocialUIDelegate>
 {
     NSString* currentVersion;
     NSIndexPath* clickedIndexPath;
@@ -393,7 +394,7 @@
             break;
         case 2:
         {
-            return 1;
+            return 2;
         }
             break;
         case 3:
@@ -456,6 +457,10 @@
 //            
 //        }
         if (row == 0)
+        {
+            cell.textLabel.text = @"推荐给好友";
+        }
+        else if (row == 1)
         {
             cell.textLabel.text = @"关于活动宝";
         }
@@ -534,7 +539,16 @@
 //        {
 //            [self updateCheck];
 //        }
-        if (row == 0)
+        if (row == 0) {
+            [UMSocialSnsService presentSnsIconSheetView:self
+                                                 appKey:@"wx6f7ea17b99ab01e7" 
+                                              shareText:@"活动宝，是一款以“活动”为主题提倡用户进行线上线下活动的社交管理工具。"
+                                             shareImage:[UIImage imageNamed:@"AppIcon57x57"]
+                                        shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                               delegate:self];
+            [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
+        }
+        else if (row == 1)
         {
             [self aboutApp];
         }
@@ -564,6 +578,18 @@
 //    }
 //    return nil;
 //}
+
+#pragma mark - UMSocialUIDelegate 友盟推荐回调
+//实现回调方法（可选）：
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
+}
 
 #pragma mark - SlideNavigationControllerDelegate
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
