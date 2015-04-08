@@ -11,6 +11,7 @@
 #import "../../Source/security/SFHFKeychainUtils.h"
 #import "XGPush.h"
 #import "UMSocial.h"
+#import "BOAlertController.h"
 
 @interface SystemSettingsViewController ()<UMSocialUIDelegate>
 {
@@ -485,7 +486,18 @@
                 [self switch1Clicked:mSwitch];
             }
         }else if (row == 1){
-            [self clearBuffers:indexPath];
+            BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:@"确定要清除缓存？" viewController:[SlideNavigationController sharedInstance]];
+            
+            RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+            }];
+            [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
+            
+            RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
+                [self clearBuffers:indexPath];
+            }];
+            [alertView addButton:okItem type:RIButtonItemType_Other];
+            [alertView show];
+
         }else if (row == 2){
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:@"wx6f7ea17b99ab01e7"
