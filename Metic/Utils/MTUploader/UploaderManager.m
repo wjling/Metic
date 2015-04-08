@@ -119,6 +119,17 @@
     }];
 }
 
+- (NSInteger)uploadTaskCountWithEventId:(NSNumber*)eventId
+{
+    if (!eventId || [eventId integerValue] == 0) return 0;
+    NSInteger count = 0;
+    for (int i = 0; i < _uploadQueue.operations.count; i++) {
+        uploaderOperation* task = _uploadQueue.operations[i];
+        if ([task.eventId integerValue] == [eventId integerValue]) count ++;
+    }
+    return count;
+}
+
 @end
 
 

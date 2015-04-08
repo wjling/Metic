@@ -263,9 +263,7 @@
         [self.PhotoWall.quiltView beginUpdates];
         [self.PhotoWall.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
         [self.PhotoWall.quiltView endUpdates];
-        
-        
-        
+
         return;
         [self.PhotoWall pullPhotoInfosFromDB];
         [self.PhotoWall pullUploadTasksfromDB];

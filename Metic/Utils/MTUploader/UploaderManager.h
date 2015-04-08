@@ -17,5 +17,6 @@
 - (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
 - (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
 - (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:imageName;
+- (NSInteger)uploadTaskCountWithEventId:(NSNumber*)eventId;
 
 @end

@@ -25,8 +25,10 @@
 #define photoNumPP 60
 #define photoNumToGet 100
 
-@interface PictureWall2 ()
+@interface PictureWall2 ()<TMQuiltViewDataSource,TMQuiltViewDelegate>
+
 @property (nonatomic,strong) MTAutoHideButton* add;
+@property (nonatomic,strong) UIButton* uploadManageBtn;
 @property float h1;
 @property BOOL nibsRegistered;
 @property BOOL shouldLoadPhoto;
@@ -37,7 +39,7 @@
 @end
 
 @implementation PictureWall2
-
+@synthesize quiltView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
@@ -58,15 +60,25 @@
 
 - (void)initUI
 {
+    quiltView = [[TMQuiltView alloc] initWithFrame:self.view.bounds];
+    quiltView.delegate = self;
+    quiltView.dataSource = self;
+    quiltView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+
+    [self.view addSubview:quiltView];
+    [quiltView reloadData];
+    
+    
+    
     self.view.backgroundColor = [UIColor colorWithWhite:242.0/255.0 alpha:1.0f];
     [CommonUtils addLeftButton:self isFirstPage:NO];
 
-    _add = [[MTAutoHideButton alloc]initWithScrollView:(UIScrollView*)self.view];
+    _add = [[MTAutoHideButton alloc]initWithScrollView:quiltView];
     [_add addTarget:self action:@selector(toUploadPhoto:) forControlEvents:UIControlEventTouchUpInside];
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
-    _header.scrollView = (UIScrollView*)self.view;
+    _header.scrollView = (UIScrollView*)quiltView;
     
 }
 
@@ -100,6 +112,7 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
+    [self checkUploadStatus];
     if (!_isFirstIn && !_shouldReloadPhoto) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             [self pullPhotoInfosFromDB];
@@ -213,7 +226,7 @@
     _uploadingTaskCount = 0;
     self.sequence = [[NSNumber alloc]initWithInt:-1];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.quiltView reloadData];
+        [quiltView reloadData];
     });
     
 }
@@ -263,7 +276,7 @@
     [self resetPhoNum];
     [self calculateLRH];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.quiltView reloadData];
+        [quiltView reloadData];
     });
     
   
@@ -304,6 +317,51 @@
     }else{
         _showPhoNum += photoNumPP;
         _shouldLoadPhoto = YES;
+    }
+}
+
+-(void)checkUploadStatus
+{
+    NSInteger uploadTaskCount = 0;
+    uploadTaskCount = [[UploaderManager sharedManager] uploadTaskCountWithEventId:_eventId];
+    [self setupUploadBtn:uploadTaskCount];
+}
+
+-(void)setupUploadBtn:(NSInteger)uploadTaskCount
+{
+    if (uploadTaskCount > 0) {
+        if(!_uploadManageBtn){
+            _uploadManageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 50);
+            _uploadManageBtn.layer.borderColor = [UIColor redColor].CGColor;
+            _uploadManageBtn.layer.borderWidth = 2;
+            _uploadManageBtn.titleLabel.font = [UIFont systemFontOfSize:10];
+            _uploadManageBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
+            _uploadManageBtn.titleLabel.textColor = [CommonUtils colorWithValue:0x939393];
+            [_uploadManageBtn setAlpha:0.6];
+        }
+        [UIView animateWithDuration:1 animations:^{
+            [self.view addSubview:_uploadManageBtn];
+            [self.view bringSubviewToFront:_uploadManageBtn];
+            _uploadManageBtn.titleLabel.text = [NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount];
+            CGRect frame = quiltView.frame;
+            if (CGRectGetMinY(frame) != 50) {
+                frame.size.height -=50;
+                frame.origin.y = 50;
+                [quiltView setFrame:frame];
+            }
+        }];
+        
+    }else{
+        [UIView animateWithDuration:1 animations:^{
+            [_uploadManageBtn removeFromSuperview];
+            CGRect frame = quiltView.frame;
+            if (CGRectGetMinY(frame) != 0) {
+                frame.size.height +=50;
+                frame.origin.y = 0;
+                [quiltView setFrame:frame];
+            }
+        }];
     }
 }
 
@@ -374,7 +432,7 @@
                     [self calculateLRH];
                     self.sequence = [response1 valueForKey:@"sequence"];
                     _haveLoadedPhoto = YES;
-                    [self.quiltView reloadData];
+                    [quiltView reloadData];
                     if(_header.refreshing) [_header endRefreshing];
                     
                 }
@@ -443,7 +501,7 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self addPhoNum];
                         [self calculateLRH];
-                        [self.quiltView reloadData];
+                        [quiltView reloadData];
                     });
                 }else{
                     label.text = _showPhoNum > 0? @"没有更多了哦，去上传吧~":@"还没有图片哦，快去上传吧";
@@ -681,6 +739,5 @@
     [self getPhotolist];
 
 }
-
 
 @end

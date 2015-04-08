@@ -12,6 +12,7 @@
 @interface uploaderOperation : NSOperation
 @property float progress;
 @property (nonatomic,strong) NSMutableDictionary* photoInfo;
+@property (nonatomic,strong) NSNumber* eventId;
 @property BOOL wait;
 
 - (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName;

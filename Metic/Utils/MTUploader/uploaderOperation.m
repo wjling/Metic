@@ -24,7 +24,6 @@
 @property (nonatomic,strong) ALAsset* imageALAsset;
 @property (nonatomic,strong) NSString* imageALAssetStr;
 @property (nonatomic,strong) NSData* imgData;
-@property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSThread* thread;
 @property (nonatomic,strong) NSNumber* width;
 @property (nonatomic,strong) NSNumber* height;

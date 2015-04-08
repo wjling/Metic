@@ -9,7 +9,8 @@
 #import "TMQuiltViewController.h"
 #import "MJRefreshHeaderView.h"
 
-@interface PictureWall2 : TMQuiltViewController<MJRefreshBaseViewDelegate>
+@interface PictureWall2 : UIViewController<MJRefreshBaseViewDelegate>
+@property(nonatomic,strong)TMQuiltView* quiltView;
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSString* eventName;
 @property(nonatomic,strong)NSNumber* eventLauncherId;
