@@ -384,25 +384,25 @@
     switch (section) {
         case 0:
         {
-            return 1;
+            return 4;
         }
             break;
         case 1:
         {
             return 1;
         }
-            break;
-        case 2:
-        {
-            return 2;
-        }
-            break;
-        case 3:
-        {
-            return 1;
-        }
-            break;
-            
+//            break;
+//        case 2:
+//        {
+//            return 2;
+//        }
+//            break;
+//        case 3:
+//        {
+//            return 1;
+//        }
+//            break;
+//            
         default:
             return 0;
             break;
@@ -422,64 +422,28 @@
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     if (section == 0) {
-        cell.textLabel.text = @"通知栏提醒";
-        UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
-        [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
-        nSwitch1.on = [statusOfSwitch1 boolValue];
-        nSwitch1.tag = 1;
-        [cell addSubview:nSwitch1];
+        if (row == 0) {
+            cell.textLabel.text = @"通知栏提醒";
+            UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
+            [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
+            nSwitch1.on = [statusOfSwitch1 boolValue];
+            nSwitch1.tag = 1;
+            [cell addSubview:nSwitch1];
+        }else if (row == 1){
+            cell.textLabel.text = @"清空缓存";
+            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
+            [activityIndicator setColor:color];
+            activityIndicator.tag = 10;
+            [cell.contentView addSubview:activityIndicator];
+        }else if (row == 2){
+            cell.textLabel.text = @"推荐给好友";
+        }else if (row == 3){
+            cell.textLabel.text = @"关于活动宝";
+        }
+        
     }
     else if(section == 1)
     {
-        cell.textLabel.text = @"清空缓存";
-        UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
-        [activityIndicator setColor:color];
-        activityIndicator.tag = 10;
-        [cell.contentView addSubview:activityIndicator];
-    }
-    else if(section == 2)
-    {
-//        if (row == 0) {
-//            cell.textLabel.text = @"版本更新提醒";
-//            UISwitch* nSwitch2 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
-//            [nSwitch2 addTarget:self action:@selector(switch2Clicked:) forControlEvents:UIControlEventValueChanged];
-//            nSwitch2.on = [statusOfSwitch2 boolValue];
-//            nSwitch2.tag = 2;
-//            [cell addSubview:nSwitch2];
-//        }
-//        else if (row == 1)
-//        {
-//            cell.textLabel.text = @"检测更新";
-//            UIActivityIndicatorView* activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(230, 7, 28, 28)];
-//            [activityIndicator setColor:color];
-//            activityIndicator.tag = 21;
-//            [cell.contentView addSubview:activityIndicator];
-//            
-//        }
-        if (row == 0)
-        {
-            cell.textLabel.text = @"推荐给好友";
-        }
-        else if (row == 1)
-        {
-            cell.textLabel.text = @"关于活动宝";
-        }
-    }
-    else if (section == 3)
-    {
-//        UIView* view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height)];
-//        [view setBackgroundColor:[UIColor clearColor]];
-//         UIButton* button = [[UIButton alloc]initWithFrame:CGRectMake(10, 0, 100, 40)];
-////        UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-////        button.frame = CGRectMake(10, 0, 100, 40);
-////        button.center = view.center;
-//        button.titleLabel.text = @"退出";
-//        [button setBackgroundColor:[UIColor yellowColor]];
-//        
-////        [button setBackgroundImage:[UIImage imageNamed:@"登陆界面按钮"] forState:UIControlStateNormal];
-////        [button setBackgroundImage:[UIImage imageNamed:@"登陆界面按钮按下效果"] forState:UIControlStateSelected];
-//        
-//        [cell addSubview:button];
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
         [label setBackgroundColor:[UIColor clearColor]];
         label.textAlignment = NSTextAlignmentCenter;
@@ -487,10 +451,8 @@
         [cell setBackgroundColor:[UIColor redColor]];
         label.center = cell.center;
         [cell.contentView addSubview:label];
-//        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-//        [cell setHighlighted:YES animated:YES];
     }
-    
+
     return cell;
 }
 
@@ -516,49 +478,31 @@
     NSInteger row = indexPath.row;
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     if (section == 0) {
-        UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:1];
-        if ([mSwitch isKindOfClass:[UISwitch class]]) {
-            [mSwitch setOn:!mSwitch.on animated:YES];
-            [self switch1Clicked:mSwitch];
-        }
-    }
-    else if (section == 1)
-    {
-        [self clearBuffers:indexPath];
-    }
-    else if (section == 2)
-    {
-//        if (row == 0) {
-//            UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:2];
-//            if ([mSwitch isKindOfClass:[UISwitch class]]) {
-//                [mSwitch setOn:!mSwitch.on animated:YES];
-//                [self switch2Clicked:mSwitch];
-//            }
-//        }
-//        else if (row == 1)
-//        {
-//            [self updateCheck];
-//        }
         if (row == 0) {
+            UISwitch* mSwitch = (UISwitch*)[cell viewWithTag:1];
+            if ([mSwitch isKindOfClass:[UISwitch class]]) {
+                [mSwitch setOn:!mSwitch.on animated:YES];
+                [self switch1Clicked:mSwitch];
+            }
+        }else if (row == 1){
+            [self clearBuffers:indexPath];
+        }else if (row == 2){
             [UMSocialSnsService presentSnsIconSheetView:self
-                                                 appKey:@"wx6f7ea17b99ab01e7" 
+                                                 appKey:@"wx6f7ea17b99ab01e7"
                                               shareText:@"活动宝，是一款以“活动”为主题提倡用户进行线上线下活动的社交管理工具。"
                                              shareImage:[UIImage imageNamed:@"AppIcon57x57"]
                                         shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
                                                delegate:self];
             [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
-        }
-        else if (row == 1)
-        {
+        }else if (row == 3){
             [self aboutApp];
         }
-    }
-    else if (section == 3)
-    {
+        
+    }else if (section == 1){
         [self quit];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

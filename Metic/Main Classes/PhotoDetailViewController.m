@@ -698,14 +698,14 @@
 //    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
 //        NSInteger index = -1;
 //        index = [self.controller.photo_list indexOfObject:_photoInfo];
-        if (index >= 0 && index < self.controller.photo_list.count) {
-            [self.controller.photo_list removeObject:_photoInfo];
-            self.controller.showPhoNum --;
-            [self.controller calculateLRH];
-            [self.controller.quiltView beginUpdates];
-            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-            [self.controller.quiltView endUpdates];
-        }
+//        if (index >= 0 && index < self.controller.photo_list.count) {
+//            [self.controller.photo_list removeObject:_photoInfo];
+//            self.controller.showPhoNum --;
+//            [self.controller calculateLRH];
+//            [self.controller.quiltView beginUpdates];
+//            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+//            [self.controller.quiltView endUpdates];
+//        }
 //        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
 //        if (index >= 0 && index < self.controller.photo_list_all.count) {
 //            [self.controller.photo_list_all removeObject:_photoInfo];
