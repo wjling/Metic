@@ -340,7 +340,6 @@
 
 -(void)checkUploadStatus
 {
-    NSLog(@"checkUploadStatus");
     NSInteger uploadTaskCount = 0;
     uploadTaskCount = [[UploaderManager sharedManager] uploadTaskCountWithEventId:_eventId];
     [self setupUploadBtn:uploadTaskCount];
@@ -360,6 +359,7 @@
             _uploadManageBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
             [_uploadManageBtn addTarget:self action:@selector(toUploadManage) forControlEvents:UIControlEventTouchUpInside];
             [_uploadManageBtn setAlpha:0];
+            _uploadManageBtn.clipsToBounds = YES;
             [self.view addSubview:_uploadManageBtn];
             
             UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(285, 2.5f, 25, 25)];//指定进度轮的大小
@@ -387,7 +387,7 @@
             [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成"] forState:UIControlStateNormal];
             CGRect frame = quiltView.frame;
             if (CGRectGetMinY(frame) != 0) {
-                frame.size.height +=50;
+                frame.size.height +=30;
                 frame.origin.y = 0;
                 [quiltView setFrame:frame];
             }
