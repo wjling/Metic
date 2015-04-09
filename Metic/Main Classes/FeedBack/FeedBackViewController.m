@@ -33,15 +33,23 @@
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:YES];
     // Do any additional setup after loading the view.
-    self.content_textView.font = [UIFont systemFontOfSize:15];
+    self.content_textView.font = [UIFont systemFontOfSize:13];
     self.content_textView.delegate = self.rootView;
-    UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+    UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
     self.content_textView.layer.borderColor = color.CGColor;
-    self.content_textView.layer.borderWidth = 2;
-    self.contact2_textField.text = [MTUser sharedInstance].email;
+    self.content_textView.layer.borderWidth = 1;
+    self.content_textView.layer.cornerRadius = 3.5;
+    self.content_textView.layer.masksToBounds = YES;
+//    self.content_textView.text = @"意见反馈";
+//    [self.content_textView selectAll:self];
     
     self.contact1_textField.delegate = rootView;
-    self.contact2_textField.delegate = rootView;
+    self.contact1_textField.font = [UIFont systemFontOfSize:13];
+    self.contact1_textField.layer.borderColor = color.CGColor;
+    self.contact1_textField.layer.borderWidth = 1;
+    self.contact1_textField.placeholder = @"联系方式、手机或邮箱（选填）";
+    self.contact1_textField.layer.cornerRadius = 3.5;
+    self.contact1_textField.layer.masksToBounds = YES;
     rootView.myDelegate = self;
     
 }
@@ -94,11 +102,10 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请输入你的宝贵意见" WithDelegate:self WithCancelTitle:@"OK"];
         return;
     }
-    NSString* contact_qq = self.contact1_textField.text;
-    NSString* contact_mail = self.contact2_textField.text;
+    NSString* contact = self.contact1_textField.text;
     
-    NSString* message = [NSString stringWithFormat:@"%@\n\nQQ: %@\nE-mail: %@\nUID: %@\nUser Name: %@\n(FROM IOS CLIENT)",
-                         content,contact_qq,contact_mail,[MTUser sharedInstance].userid,[MTUser sharedInstance].name];
+    NSString* message = [NSString stringWithFormat:@"%@\n\nContact: %@\nUID: %@\nUser Name: %@\n(FROM IOS CLIENT)",
+                         content,contact,[MTUser sharedInstance].userid,[MTUser sharedInstance].name];
     NSDictionary* json = [CommonUtils packParamsInDictionary:
                           [MTUser sharedInstance].userid,@"id",
                           message,@"content",
@@ -116,7 +123,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UIFont *font = [UIFont systemFontOfSize:13.0];
     CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(mFrame.size.width-16, 9999) lineBreakMode:NSLineBreakByWordWrapping];
     [textView setFrame:CGRectMake(mFrame.origin.x, mFrame.origin.y, mFrame.size.width, size.height+font.capHeight+16)];
 //    NSLog(@"char height : %f",size.height);

@@ -17,7 +17,6 @@
 
 @property (strong, nonatomic) IBOutlet UITextView *content_textView;
 @property (strong, nonatomic) IBOutlet UITextField *contact1_textField;
-@property (strong, nonatomic) IBOutlet UITextField *contact2_textField;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 
