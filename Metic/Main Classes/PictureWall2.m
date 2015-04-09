@@ -29,6 +29,7 @@
 
 @property (nonatomic,strong) MTAutoHideButton* add;
 @property (nonatomic,strong) UIButton* uploadManageBtn;
+@property (nonatomic,strong) NSTimer* uploadStatusTimer;
 @property float h1;
 @property BOOL nibsRegistered;
 @property BOOL shouldLoadPhoto;
@@ -112,7 +113,7 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [_add appear];
-    [self checkUploadStatus];
+    [self UploadStatusTimerStart];
     if (!_isFirstIn && !_shouldReloadPhoto) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             [self pullPhotoInfosFromDB];
@@ -131,6 +132,7 @@
 {
     [super viewWillDisappear:animated];
     [_add disappear];
+    [self UploadStatusTimerEnd];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -320,8 +322,25 @@
     }
 }
 
+-(void)UploadStatusTimerStart
+{
+    if (!_uploadStatusTimer) {
+        _uploadStatusTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(checkUploadStatus) userInfo:nil repeats:YES];
+    }
+    [_uploadStatusTimer fire];
+}
+
+-(void)UploadStatusTimerEnd
+{
+    if (_uploadStatusTimer) {
+        [_uploadStatusTimer invalidate];
+        _uploadStatusTimer = nil;
+    }
+}
+
 -(void)checkUploadStatus
 {
+    NSLog(@"checkUploadStatus");
     NSInteger uploadTaskCount = 0;
     uploadTaskCount = [[UploaderManager sharedManager] uploadTaskCountWithEventId:_eventId];
     [self setupUploadBtn:uploadTaskCount];
@@ -332,29 +351,40 @@
     if (uploadTaskCount > 0) {
         if(!_uploadManageBtn){
             _uploadManageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 50);
-            _uploadManageBtn.layer.borderColor = [UIColor redColor].CGColor;
-            _uploadManageBtn.layer.borderWidth = 2;
-            _uploadManageBtn.titleLabel.font = [UIFont systemFontOfSize:10];
-            _uploadManageBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
-            _uploadManageBtn.titleLabel.textColor = [CommonUtils colorWithValue:0x939393];
-            [_uploadManageBtn setAlpha:0.6];
+            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
+            [_uploadManageBtn setBackgroundColor:[UIColor whiteColor]];
+            [_uploadManageBtn setTitle:@"" forState:UIControlStateNormal];
+            [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
+            _uploadManageBtn.titleLabel.font = [UIFont systemFontOfSize:11];
+            _uploadManageBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            _uploadManageBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+            [_uploadManageBtn addTarget:self action:@selector(toUploadManage) forControlEvents:UIControlEventTouchUpInside];
+            [_uploadManageBtn setAlpha:0];
+            [self.view addSubview:_uploadManageBtn];
+            
+            UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(285, 2.5f, 25, 25)];//指定进度轮的大小
+            activity.transform = CGAffineTransformMakeScale(1, 1);
+            [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];//设置进度轮显示类型
+            [activity startAnimating];
+            [_uploadManageBtn addSubview:activity];
         }
         [UIView animateWithDuration:1 animations:^{
-            [self.view addSubview:_uploadManageBtn];
-            [self.view bringSubviewToFront:_uploadManageBtn];
-            _uploadManageBtn.titleLabel.text = [NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount];
+            [_uploadManageBtn setAlpha:1.0f];
+            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+            [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
             CGRect frame = quiltView.frame;
-            if (CGRectGetMinY(frame) != 50) {
-                frame.size.height -=50;
-                frame.origin.y = 50;
+            if (CGRectGetMinY(frame) != 30) {
+                frame.size.height -=30;
+                frame.origin.y = 30;
                 [quiltView setFrame:frame];
             }
         }];
         
     }else{
         [UIView animateWithDuration:1 animations:^{
-            [_uploadManageBtn removeFromSuperview];
+            [_uploadManageBtn setAlpha:0.0f];
+            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
+            [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成"] forState:UIControlStateNormal];
             CGRect frame = quiltView.frame;
             if (CGRectGetMinY(frame) != 0) {
                 frame.size.height +=50;
@@ -363,6 +393,11 @@
             }
         }];
     }
+}
+
+-(void)toUploadManage
+{
+    NSLog(@"toUploadManage");
 }
 
 -(void)getPhotolist
