@@ -395,7 +395,6 @@
             [request setAllowResumeForFileDownloads:YES];
             [request startAsynchronous];
             videoRequest = request;
-            
         }
         
     }
@@ -421,10 +420,8 @@
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [_progressOverlayView removeFromSuperview];
             _progressOverlayView = nil;
-
         });
     }
-    
 }
 
 -(void)PlayingVideoAtOnce

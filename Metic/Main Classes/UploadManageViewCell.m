@@ -13,6 +13,7 @@
 #import "UploaderManager.h"
 #import "CommonUtils.h"
 #import "MTprogressView.h"
+#import "LCAlertView.h"
 
 typedef enum {
     UPLOAD_UNKNOWN = -1,        ///<状态未知
@@ -31,6 +32,7 @@ typedef enum {
 @property (nonatomic,strong) NSTimer* timer;
 @property uploadState uploadState;
 @property float progress;
+@property (nonatomic,strong) UILongPressGestureRecognizer* longpressGR;
 @end
 
 
@@ -38,6 +40,10 @@ typedef enum {
 
 - (void)applyData:(NSMutableDictionary *)photoInfo
 {
+    if (!_longpressGR) {
+        _longpressGR = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longpressAction:)];
+        [self addGestureRecognizer:_longpressGR];
+    }
     self.hidden = NO;
     self.alpha = 1.0f;
     _photoInfo = photoInfo;
@@ -203,8 +209,32 @@ typedef enum {
         [_timer invalidate];
         _timer = nil;
     }
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
     [_timer fire];
+}
+
+-(void)longpressAction:(UIGestureRecognizer*)sender
+{
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    if (self.uploadState != UPLOAD_WAITING) return;
+    LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"返回" otherButtonTitles:@"取消上传",nil];
+    alert.alertAction = ^(NSInteger buttonIndex){
+        if (buttonIndex == 1) {
+            [self cancelUploading];
+        }
+    };
+    [alert show];
+}
+
+- (void)cancelUploading
+{
+    NSLog(@"cancelUploading");
+    if (self.uploadState == UPLOAD_WAITING) {
+        if(_uploadTask){
+            [_uploadTask cancel];
+        }
+        [self cancelUploadTask];
+    }
 }
 
 @end
