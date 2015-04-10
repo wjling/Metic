@@ -60,8 +60,7 @@ static const NSInteger MaxUploadCount = 20;
     [super viewDidLoad];
     [self initData];
     [self initUI];
-    
-    
+    [self pickPhotos];
 
 }
 
@@ -325,6 +324,17 @@ static const NSInteger MaxUploadCount = 20;
 //        [getter uploadPhoto];
 //    });
     
+}
+
+-(void)pickPhotos
+{
+    UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
+    picker.delegate = self;
+    NSInteger maximumNumber = _uploadImgAssets.count >= MaxUploadCount? 0:MaxUploadCount - _uploadImgAssets.count;
+    picker.maximumNumberOfSelectionVideo = 0;
+    picker.maximumNumberOfSelectionPhoto = maximumNumber;
+    
+    [self presentViewController:picker animated:YES completion:^{}];
 }
 
 -(void)showWaitingView
