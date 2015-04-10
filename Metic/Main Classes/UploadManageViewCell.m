@@ -38,6 +38,8 @@ typedef enum {
 
 - (void)applyData:(NSMutableDictionary *)photoInfo
 {
+    self.hidden = NO;
+    self.alpha = 1.0f;
     _photoInfo = photoInfo;
     _photoName = [photoInfo valueForKey:@"imgName"];
     NSString* url = [photoInfo valueForKey:@"url"];
@@ -105,33 +107,34 @@ typedef enum {
 
         MTprogressView* progreView = [[MTprogressView alloc]initWithFrame:self.bounds];
         progreView.triggersDownloadDidFinishAnimationAutomatically = NO;
-        progreView.layer.borderColor = [UIColor greenColor].CGColor;
-        progreView.layer.borderWidth = 2;
         [progreView setTag:330];
         [progreView setHidden:YES];
         progreView.progress = 0;
         [_progressView addSubview:progreView];
         [progreView displayOperationWillTriggerAnimation];
         
+        UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
+        [retry setFrame:CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 40, 50, 70)];
+        [retry setImage:[UIImage imageNamed:@"重新上传"] forState:UIControlStateNormal];
+        [retry setTag:350];
+        [retry setHidden:YES];
+        [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
+        [_progressView addSubview:retry];
+        
         UIButton* cancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancel setFrame:CGRectMake(self.bounds.size.width - 40, 0, 40, 40)];
+        [cancel setFrame:CGRectMake(self.bounds.size.width - 40, -10, 50, 50)];
         [cancel setImage:[UIImage imageNamed:@"上传任务删除"] forState:UIControlStateNormal];
-        cancel.layer.borderColor = [UIColor redColor].CGColor;
-        cancel.layer.borderWidth = 2;
         [cancel setTag:340];
         [cancel setHidden:YES];
         [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
         [_progressView addSubview:cancel];
         
-        UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
-        [retry setFrame:CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 25, 50, 50)];
-        [retry setImage:[UIImage imageNamed:@"重新上传"] forState:UIControlStateNormal];
-        retry.layer.borderColor = [UIColor redColor].CGColor;
-        retry.layer.borderWidth = 2;
-        [retry setTag:350];
-        [retry setHidden:YES];
-        [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
-        [_progressView addSubview:retry];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, 50, 20)];
+        [label setText:@"重新上传"];
+        [label setFont:[UIFont systemFontOfSize:12]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setTextAlignment:NSTextAlignmentCenter];
+        [retry addSubview:label];
         [self addSubview:_progressView];
     }
     MTprogressView* progreView = (MTprogressView*)[_progressView viewWithTag:330];
@@ -173,11 +176,18 @@ typedef enum {
         [_timer invalidate];
         _timer = nil;
     }
-    if (_uploadTask && [_photoInfo valueForKey:@"alasset"]) {
-        [_uploadTask removeuploadTaskInDB];
-    }
-    [_uploadManagerView.uploadingPhotos removeObject:self.photoInfo];
-    [_uploadManagerView.collelctionView reloadData];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
+        self.alpha = 1.0f;
+        if (_uploadTask && [_photoInfo valueForKey:@"alasset"]) {
+            [_uploadTask removeuploadTaskInDB];
+        }
+        [_uploadManagerView.uploadingPhotos removeObject:self.photoInfo];
+        [_uploadManagerView.collelctionView reloadData];
+    }];
 }
 
 -(void)retryUploadTask

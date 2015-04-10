@@ -113,8 +113,6 @@
     if (!cell) {
         cell = [[UploadManageViewCell alloc] init];
     }
-    cell.layer.borderColor = [UIColor redColor].CGColor;
-    cell.layer.borderWidth = 2;
     NSMutableDictionary* dict = _uploadingPhotos[indexPath.row];
     cell.uploadManagerView = self;
     [cell applyData:dict];
