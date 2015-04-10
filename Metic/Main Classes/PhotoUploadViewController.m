@@ -638,6 +638,7 @@ static const NSInteger MaxUploadCount = 20;
         
         // 2.显示相册
         MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
+        browser.shouldDelete = YES;
         browser.currentPhotoIndex = indexPath.row; // 弹出相册时显示的第一张图片是？
         browser.photos = photos; // 设置所有的图片
         browser.delegate = self;
@@ -699,36 +700,41 @@ static const NSInteger MaxUploadCount = 20;
 #pragma mark - MTPhotoBrowserDelegate
 -(void)photoBrowser:(MTPhotoBrowser *)photoBrowser didSelectPageAtIndex:(NSUInteger)index
 {
-    if ([_deleteIndexs containsObject:[NSNumber numberWithInteger:index]]) {
-        [_deleteIndexs removeObject:[NSNumber numberWithInteger:index]];
-    }else [_deleteIndexs addObject:[NSNumber numberWithInteger:index]];
+    if (index < _uploadImgs.count) {
+        [_uploadImgs removeObjectAtIndex:index];
+    }
+    if (index < _uploadImgAssets.count) {
+        [_uploadImgAssets removeObjectAtIndex:index];
+    }
+    [_imgCollectionView reloadData];
+    [self adjustCollectionView];
 }
 
 -(void)willDismissBrowser:(MTPhotoBrowser *)photoBrowser
 {
-    NSLog(@"reloadCollectionView");
-    NSMutableArray* delIndexs = [[NSMutableArray alloc]init];
-    for(NSNumber* index in _deleteIndexs) [delIndexs addObject:index];
-    _deleteIndexs = nil;
-    NSArray* tmp = [delIndexs sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSInteger a = [obj1 integerValue];
-        NSInteger b = [obj2 integerValue];
-        if (a < b) {
-            return NSOrderedDescending;
-        }
-        if (a > b) {
-            return NSOrderedAscending;
-        }
-        return NSOrderedSame;
-    }];
-    for (NSNumber *num in tmp) {
-        [_uploadImgAssets removeObjectAtIndex:[num integerValue]];
-        [_uploadImgs removeObjectAtIndex:[num integerValue]];
-    }
-    if (tmp.count) {
-        [_imgCollectionView reloadData];
-        [self adjustCollectionView];
-    }
+//    NSLog(@"reloadCollectionView");
+//    NSMutableArray* delIndexs = [[NSMutableArray alloc]init];
+//    for(NSNumber* index in _deleteIndexs) [delIndexs addObject:index];
+//    _deleteIndexs = nil;
+//    NSArray* tmp = [delIndexs sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+//        NSInteger a = [obj1 integerValue];
+//        NSInteger b = [obj2 integerValue];
+//        if (a < b) {
+//            return NSOrderedDescending;
+//        }
+//        if (a > b) {
+//            return NSOrderedAscending;
+//        }
+//        return NSOrderedSame;
+//    }];
+//    for (NSNumber *num in tmp) {
+//        [_uploadImgAssets removeObjectAtIndex:[num integerValue]];
+//        [_uploadImgs removeObjectAtIndex:[num integerValue]];
+//    }
+//    if (tmp.count) {
+//        [_imgCollectionView reloadData];
+//        [self adjustCollectionView];
+//    }
 }
 
 @end

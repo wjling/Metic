@@ -16,4 +16,6 @@
 @property (nonatomic, assign) NSUInteger currentPhotoIndex;
 
 @property (nonatomic,weak) MTPhotoBrowser* browser;
+
+@property (nonatomic, assign) BOOL shouldDelete;
 @end

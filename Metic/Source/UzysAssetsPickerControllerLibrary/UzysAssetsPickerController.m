@@ -166,8 +166,9 @@
 }
 - (void)setupLayout
 {
-    self.btnDone.layer.cornerRadius = 13;
-    self.btnDone.clipsToBounds = YES;
+    [self.btnDone setBackgroundImage:[UIImage imageNamed:@"UzysAssetPickerController.bundle/发送数字显示"] forState:UIControlStateNormal];
+//    self.btnDone.layer.cornerRadius = 12;
+//    self.btnDone.clipsToBounds = YES;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bottomView.bounds.size.width, 0.5)];
     lineView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.15f];
@@ -749,6 +750,7 @@
 
             // 2.显示相册
             MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
+            browser.shouldDelete = NO;
             browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
             browser.photos = photos; // 设置所有的图片
             browser.delegate = self;

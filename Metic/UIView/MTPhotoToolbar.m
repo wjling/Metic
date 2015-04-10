@@ -36,7 +36,7 @@
 {
     _photos = photos;
     
-    if (_photos.count > 1) {
+    if (_photos.count > 1 && !_indexLabel) {
         CGRect frame = self.bounds;
         frame.origin.y += 20;
         frame.size.height -= 20;
@@ -64,8 +64,7 @@
     _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _backBtn.frame = CGRectMake(0, 20, 70, btnWidth - 20);
     _backBtn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [_backBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon.png"] forState:UIControlStateNormal];
-    [_backBtn setImage:[UIImage imageNamed:@"MJPhotoBrowser.bundle/save_icon_highlighted.png"] forState:UIControlStateHighlighted];
+    [_backBtn setImage:[UIImage imageNamed:@"头部左上角图标-返回"] forState:UIControlStateNormal];
     [_backBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_backBtn];
     
@@ -73,8 +72,13 @@
     _selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _selectBtn.frame = CGRectMake(250, 20, 70, btnWidth - 20);
     _selectBtn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [_selectBtn setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
-    [_selectBtn setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateHighlighted];
+    if (_shouldDelete) {
+        [_selectBtn setImage:[UIImage imageNamed:@"删除图标"] forState:UIControlStateNormal];
+    }else{
+        [_selectBtn setImage:[UIImage imageNamed:@"预览效果选中"] forState:UIControlStateNormal];
+        [_selectBtn setImage:[UIImage imageNamed:@"预览效果未选中"] forState:UIControlStateHighlighted];
+    }
+    
     [_selectBtn addTarget:self action:@selector(selectPhoto) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_selectBtn];
 }
@@ -97,12 +101,22 @@
 
 - (void)selectPhoto
 {
+    
     if (self.browser) {
         if ([self.browser.delegate respondsToSelector:@selector(photoBrowser:didSelectPageAtIndex:)]) {
             [self.browser.delegate photoBrowser:self.browser didSelectPageAtIndex:_currentPhotoIndex];
         }
     }
     MJPhoto* photo = _photos[_currentPhotoIndex];
+    if (self.shouldDelete && photo.isSelected) {
+        if (self.browser.photos.count > 1) {
+            [self.browser removePhotoViewAtIndex:_currentPhotoIndex];
+        }else{
+            //退出
+            [self back];
+        }
+        return;
+    }
     if (photo) {
         photo.isSelected = !photo.isSelected;
         [self refreshSelectBtn];
@@ -113,11 +127,11 @@
 - (void)refreshSelectBtn
 {
     MJPhoto* photo = _photos[_currentPhotoIndex];
-    if (photo) {
+    if (photo && !self.shouldDelete) {
         if (photo.isSelected) {
-            [_selectBtn setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
+            [_selectBtn setImage:[UIImage imageNamed:@"预览效果选中"] forState:UIControlStateNormal];
         }else{
-            [_selectBtn setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
+            [_selectBtn setImage:[UIImage imageNamed:@"预览效果未选中"] forState:UIControlStateNormal];
         }
     }
 }

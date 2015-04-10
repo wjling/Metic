@@ -88,11 +88,12 @@
     CGFloat barHeight = 64;
 //    CGFloat barY = self.view.frame.size.height - barHeight;
     _toolbar = [[MTPhotoToolbar alloc] init];
+    _toolbar.shouldDelete = self.shouldDelete;
     _toolbar.browser = self;
     _toolbar.frame = CGRectMake(0, 0, self.view.frame.size.width, barHeight);
     _toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _toolbar.photos = _photos;
-    _toolbar.backgroundColor = [UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:0.8];
+    _toolbar.backgroundColor = [UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];
     [self.view addSubview:_toolbar];
     
     [self updateTollbarState];
@@ -237,6 +238,29 @@
     [_photoScrollView addSubview:photoView];
     
     [self loadImageNearIndex:index];
+}
+
+#pragma mark 移除一个图片view
+- (void)removePhotoViewAtIndex:(NSInteger)index
+{
+    NSInteger photoViewIndex;
+    for (MJPhotoView *photoView in _visiblePhotoViews) {
+        photoViewIndex = kPhotoViewIndex(photoView);
+        if (photoViewIndex == index) {
+            [_visiblePhotoViews removeObject:photoView];
+            [photoView removeFromSuperview];
+        }else if(photoViewIndex > index){
+            [photoView setTag:photoViewIndex - 1];
+        }
+    }
+    NSMutableArray* tmp = [NSMutableArray arrayWithArray:self.photos];
+    [tmp removeObjectAtIndex:index];
+    self.photos = tmp;
+    _toolbar.photos = tmp;
+    CGRect frame = self.view.bounds;
+    _photoScrollView.contentSize = CGSizeMake((frame.size.width + 20) * _photos.count, 0);
+    [self updateTollbarState];
+    [self showPhotos];
 }
 
 #pragma mark 加载index附近的图片
