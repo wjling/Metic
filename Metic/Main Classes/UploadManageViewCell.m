@@ -69,6 +69,12 @@ typedef enum {
 
 -(void)checkState
 {
+    if (!self.uploadManagerView) {
+        if (_timer) {
+            [_timer invalidate];
+            _timer = nil;
+        }
+    }
     self.uploadState = UPLOAD_UNKNOWN;
     _uploadTask = [[UploaderManager sharedManager].taskswithPhotoName valueForKey:_photoName];
     NSMutableDictionary* realPhotoInfo;
