@@ -21,6 +21,7 @@
 #import "NotificationController.h"
 #import "MTAutoHideButton.h"
 #import "UploaderManager.h"
+#import "UploadManageViewController.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -341,7 +342,17 @@
 -(void)checkUploadStatus
 {
     NSInteger uploadTaskCount = 0;
-    uploadTaskCount = [[UploaderManager sharedManager] uploadTaskCountWithEventId:_eventId];
+    
+    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+    MySqlite* sql = [[MySqlite alloc]init];
+    [sql openMyDB:path];
+    
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
+    
+    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+    [sql closeMyDB];
+    uploadTaskCount = result.count;
     [self setupUploadBtn:uploadTaskCount];
 }
 
@@ -397,7 +408,11 @@
 
 -(void)toUploadManage
 {
-    NSLog(@"toUploadManage");
+//    NSLog(@"toUploadManage");
+    UploadManageViewController* uploadManager = [[UploadManageViewController alloc]init];
+    uploadManager.eventId = self.eventId;
+    [self.navigationController pushViewController:uploadManager animated:YES];
+    
 }
 
 -(void)getPhotolist

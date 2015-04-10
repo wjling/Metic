@@ -167,7 +167,7 @@
             return;
         }
     }
-    
+    self.executing = YES;
     if (_imageALAsset) {
         UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullResolutionImage
                                            scale:_imageALAsset.defaultRepresentation.scale
@@ -229,6 +229,7 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
         
     }
+    self.executing = NO;
     self.finished = YES;
 }
 
@@ -310,7 +311,7 @@
     [op setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
                                  long long totalBytesWritten,
                                  long long totalBytesExpectedToWrite) {
-        _progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite;
+        _progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite*0.8f;
         NSLog(@"图片:%@ 进度:%f ",fileName,_progress);
     }];
     [op start];
@@ -343,6 +344,7 @@
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
             {
+                _progress = 0.99f;
                 [self DBprocessionAfterUpload:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];

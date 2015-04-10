@@ -65,7 +65,7 @@
     
     
     [_emotionCollection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"emotionCell"];
-    [_emotionCollection setBackgroundColor:[UIColor lightGrayColor]];
+    [_emotionCollection setBackgroundColor:[UIColor colorWithWhite:250.0/255.0 alpha:1.0f]];
     [self addSubview:_emotionCollection];
     [_emotionCollection reloadData];
 }

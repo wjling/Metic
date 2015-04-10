@@ -54,10 +54,6 @@
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(button_DetailPressed:)];
     [self.infoView addGestureRecognizer:tapRecognizer];
     
-    
-    
-    
-    
     return self;
 }
 
