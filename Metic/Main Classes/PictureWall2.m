@@ -27,6 +27,9 @@
 #define photoNumToGet 100
 
 @interface PictureWall2 ()<TMQuiltViewDataSource,TMQuiltViewDelegate>
+{
+    dispatch_queue_t sync_queue;
+}
 
 @property (nonatomic,strong) MTAutoHideButton* add;
 @property (nonatomic,strong) UIButton* uploadManageBtn;
@@ -70,8 +73,6 @@
     [self.view addSubview:quiltView];
     [quiltView reloadData];
     
-    
-    
     self.view.backgroundColor = [UIColor colorWithWhite:242.0/255.0 alpha:1.0f];
     [CommonUtils addLeftButton:self isFirstPage:NO];
 
@@ -94,6 +95,7 @@
     _showPhoNum = 0;
     _h1 = 0;
     _isFirstIn = YES;
+    sync_queue = dispatch_queue_create("imgWallRefresh_syncueue", NULL);
     self.sequence = [[NSNumber alloc]initWithInt:-1];
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
@@ -113,6 +115,7 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
     [_add appear];
     [self UploadStatusTimerStart];
     if (!_isFirstIn && !_shouldReloadPhoto) {
@@ -132,6 +135,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
     [_add disappear];
     [self UploadStatusTimerEnd];
 }
@@ -413,6 +417,25 @@
     uploadManager.eventId = self.eventId;
     [self.navigationController pushViewController:uploadManager animated:YES];
     
+}
+
+-(void)photoUploadFinished:(id)sender
+{
+    NSLog(@"photoUploadFinished receive: %@",sender);
+    NSMutableDictionary* newPhotoInfo = (NSMutableDictionary*)[sender userInfo];
+    if (newPhotoInfo) {
+        dispatch_sync(sync_queue, ^{
+            [_photo_list insertObject:newPhotoInfo atIndex:0];
+            [_photo_list_all insertObject:newPhotoInfo atIndex:0];
+            [self resetPhoNum];
+            [self calculateLRH];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [quiltView reloadData];
+            });
+        });
+        
+    }
 }
 
 -(void)getPhotolist

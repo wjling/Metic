@@ -344,11 +344,12 @@
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
             {
-                _progress = 0.99f;
+                self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
+                _progress = 0.9f;
                 [self DBprocessionAfterUpload:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
-                self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
                 [self stop];
             }
                 break;
