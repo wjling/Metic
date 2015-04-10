@@ -40,6 +40,7 @@
 @property (nonatomic, assign) NSInteger maximumNumberOfSelection;
 
 @property (nonatomic, strong) NSArray *seletedPhotos;
+@property (nonatomic, strong) NSMutableArray *seletedAssets;
 
 - (IBAction)btnAction:(id)sender;
 - (IBAction)indexDidChangeForSegmentedControl:(id)sender;
@@ -257,6 +258,7 @@
     self.collectionView.alwaysBounceVertical = YES;
     
     [self.view insertSubview:self.collectionView atIndex:0];
+    self.seletedAssets = [[NSMutableArray alloc]init];
 }
 
 - (void)changeGroup:(NSInteger)item filter:(ALAssetsFilter *)filter
@@ -547,11 +549,19 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ALAsset* asset = [self.assets objectAtIndex:indexPath.item];
+    if (![self.seletedAssets containsObject:asset]) {
+        [self.seletedAssets addObject:asset];
+    }
     [self setAssetsCountWithSelectedIndexPaths:collectionView.indexPathsForSelectedItems];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ALAsset* asset = [self.assets objectAtIndex:indexPath.item];
+    if ([self.seletedAssets containsObject:asset]) {
+        [self.seletedAssets removeObject:asset];
+    }
     [self setAssetsCountWithSelectedIndexPaths:collectionView.indexPathsForSelectedItems];
 }
 
@@ -560,19 +570,19 @@
 
 - (void)finishPickingAssets
 {
-    NSMutableArray *assets = [[NSMutableArray alloc] init];
+//    NSMutableArray *assets = [[NSMutableArray alloc] init];
+//    
+//    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems)
+//    {
+//        [assets addObject:[self.assets objectAtIndex:indexPath.item]];
+//    }
     
-    for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems)
-    {
-        [assets addObject:[self.assets objectAtIndex:indexPath.item]];
-    }
-    
-    if([assets count]>0)
+    if([_seletedAssets count]>0)
     {
         UzysAssetsPickerController *picker = (UzysAssetsPickerController *)self;
         
         if([picker.delegate respondsToSelector:@selector(UzysAssetsPickerController:didFinishPickingAssets:)])
-            [picker.delegate UzysAssetsPickerController:picker didFinishPickingAssets:assets];
+            [picker.delegate UzysAssetsPickerController:picker didFinishPickingAssets:_seletedAssets];
         
         [self dismissViewControllerAnimated:YES completion:^{
             
@@ -612,7 +622,7 @@
                 return;
             }
             
-            if(updatedAssets.count != 0 && updatedAssetGroup.count == 1 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0) //이미지픽커에서 앨범에 저장할 경우.
+            if(updatedAssets.count != 0 && updatedAssetGroup.count == 1 && deletedAssetGroup.count == 0 && insertedAssetGroup.count == 0)
             {
                 [self.assetsLibrary assetForURL:[updatedAssets allObjects][0] resultBlock:^(ALAsset *asset) {
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -620,6 +630,9 @@
                         {
                             NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
                             [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                            if (![self.seletedAssets containsObject:asset]) {
+                                [self.seletedAssets addObject:asset];
+                            }
                             [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
                         }
                     });
