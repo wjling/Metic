@@ -68,6 +68,7 @@ static const NSInteger MaxUploadCount = 20;
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片上传"];
+    [_imgCollectionView reloadData];
     
 }
 
@@ -700,6 +701,7 @@ static const NSInteger MaxUploadCount = 20;
 #pragma mark - MTPhotoBrowserDelegate
 -(void)photoBrowser:(MTPhotoBrowser *)photoBrowser didSelectPageAtIndex:(NSUInteger)index
 {
+    NSLog(@"%d",index);
     if (index < _uploadImgs.count) {
         [_uploadImgs removeObjectAtIndex:index];
     }
@@ -712,29 +714,8 @@ static const NSInteger MaxUploadCount = 20;
 
 -(void)willDismissBrowser:(MTPhotoBrowser *)photoBrowser
 {
-//    NSLog(@"reloadCollectionView");
-//    NSMutableArray* delIndexs = [[NSMutableArray alloc]init];
-//    for(NSNumber* index in _deleteIndexs) [delIndexs addObject:index];
-//    _deleteIndexs = nil;
-//    NSArray* tmp = [delIndexs sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-//        NSInteger a = [obj1 integerValue];
-//        NSInteger b = [obj2 integerValue];
-//        if (a < b) {
-//            return NSOrderedDescending;
-//        }
-//        if (a > b) {
-//            return NSOrderedAscending;
-//        }
-//        return NSOrderedSame;
-//    }];
-//    for (NSNumber *num in tmp) {
-//        [_uploadImgAssets removeObjectAtIndex:[num integerValue]];
-//        [_uploadImgs removeObjectAtIndex:[num integerValue]];
-//    }
-//    if (tmp.count) {
-//        [_imgCollectionView reloadData];
-//        [self adjustCollectionView];
-//    }
+    [_imgCollectionView reloadData];
+    [self adjustCollectionView];
 }
 
 @end
