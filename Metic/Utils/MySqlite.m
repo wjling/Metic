@@ -5,6 +5,8 @@
 //  Created by ligang5 on 14-5-28.
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
+static dispatch_queue_t mysqlite_queue;
+static dispatch_group_t mysqlite_group;
 
 #import "MySqlite.h"
 
@@ -13,6 +15,11 @@
 
 - (BOOL)openMyDB:(NSString*)DBname
 {
+    mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
+    mysqlite_group = dispatch_group_create();
+    if (isLocked) {
+        return NO;
+    }
     NSArray* path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* DB_path = [(NSString*)[path objectAtIndex:0] stringByAppendingPathComponent:DBname];
     
@@ -25,10 +32,10 @@
 //    } else {
 //        NSLog(@"setting sqlite thread safe mode to serialized failed!!! return code: %d", err);
 //    }
-    while (isLocked) {
-        NSLog(@"loop: isLocked");
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+//    while (isLocked) {
+//        NSLog(@"loop: isLocked");
+//        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+//    }
     
     if (sqlite3_open([DB_path UTF8String], &myDB) != SQLITE_OK) {
         sqlite3_close(self.myDB);
@@ -38,7 +45,15 @@
     NSLog(@"database open succeeded");
     NSLog(@"database is locked++");
     isLocked = true;
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(groupDone) userInfo:nil repeats:NO];
     return YES;
+}
+
+- (void)groupDone
+{
+    dispatch_group_notify(mysqlite_group, mysqlite_queue, ^{
+        [self closeMyDB];
+    });
 }
 
 - (BOOL)closeMyDB
@@ -119,8 +134,8 @@
 
 - (BOOL)insertToTable:(NSString *)tableName withColumns:(NSArray *)columns andValues:(NSArray *)values
 {
-    int columnsCount = columns.count;
-    int valuesCount = values.count;
+    NSInteger columnsCount = columns.count;
+    NSInteger valuesCount = values.count;
     if (!tableName || !columnsCount || !valuesCount) {
         NSLog(@"data input error");
         return NO;
@@ -169,8 +184,8 @@
 - (BOOL)updateDataWitTableName:(NSString *)tableName andWhere:(NSString *)primaryKey andItsValue:(NSString*)value withColumns:(NSArray *)columns andValues:(NSArray *)values
 {
 //    char* sql = "UPDATE ? SET ? = ? ";
-    int columnsCount = columns.count;
-    int valuesCount = values.count;
+    NSInteger columnsCount = columns.count;
+    NSInteger valuesCount = values.count;
     if (!tableName || !columnsCount || !valuesCount) {
         NSLog(@"data input error");
         sqlite3_close(self.myDB);
@@ -220,8 +235,8 @@
 
 - (BOOL)updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary *)wheres andSet:(NSDictionary *)sets
 {
-    int wheresCount = wheres.count;
-    int setsCount = sets.count;
+    NSInteger wheresCount = wheres.count;
+    NSInteger setsCount = sets.count;
     if (!tableName || !wheresCount || !setsCount) {
         NSLog(@"input data error");
         return NO;
@@ -267,11 +282,11 @@
 {
     NSMutableArray* results = [[NSMutableArray alloc]init];
     
-    int selectsCount = selects.count;
-    int wheresCount = wheres.count;
+    NSInteger selectsCount = selects.count;
+    NSInteger wheresCount = wheres.count;
     if (!tableName || !selectsCount /*|| !wheresCount*/) {
         NSLog(@"input data error");
-        return NO;
+        return nil;
     }
     NSMutableString* sql = [[NSMutableString alloc]initWithString:@"SELECT "];
     NSArray* wheresKeys = wheres.allKeys;
@@ -327,7 +342,7 @@
 
 - (BOOL)deleteTurpleFromTable:(NSString *)tableName withWhere:(NSDictionary *)wheres
 {
-    int wheresCount = wheres.count;
+    NSInteger wheresCount = wheres.count;
     if (!tableName || !wheresCount) {
         NSLog(@"input data error");
         return NO;
