@@ -110,25 +110,26 @@ static const NSInteger MaxUploadCount = 20;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self drawLeftButton];
     self.scrollView.delegate = self;
-    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
-    [_textView setBackgroundColor:[UIColor whiteColor]];
-    _textView.layer.cornerRadius = 5;
-    _textView.layer.masksToBounds = YES;
-    [self.scrollView addSubview:_textView];
     
-    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, 274, 36)];
-    self.textInput.delegate = self;
-    [self.textInput setBackgroundColor:[UIColor clearColor]];
-    [self.textInput setFont:[UIFont systemFontOfSize:16]];
-    [_textView addSubview:self.textInput];
-    
-    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
-    [self.preLabel setPlaceholder:@"这一刻的想法"];
-    [self.preLabel setBackgroundColor:[UIColor clearColor]];
-    [self.preLabel setEnabled:NO];
-    self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
-    [_textView addSubview:self.preLabel];
+//    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
+//    [_textView setBackgroundColor:[UIColor whiteColor]];
+//    _textView.layer.cornerRadius = 5;
+//    _textView.layer.masksToBounds = YES;
+//    [self.scrollView addSubview:_textView];
+//    
+//    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, 274, 36)];
+//    self.textInput.delegate = self;
+//    [self.textInput setBackgroundColor:[UIColor clearColor]];
+//    [self.textInput setFont:[UIFont systemFontOfSize:16]];
+//    [_textView addSubview:self.textInput];
+//    
+//    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
+//    [self.preLabel setPlaceholder:@"这一刻的想法"];
+//    [self.preLabel setBackgroundColor:[UIColor clearColor]];
+//    [self.preLabel setEnabled:NO];
+//    self.preLabel.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//    [self.preLabel setFont:[UIFont systemFontOfSize:18]];
+//    [_textView addSubview:self.preLabel];
     
     
     
@@ -138,7 +139,7 @@ static const NSInteger MaxUploadCount = 20;
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    self.imgCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 66, 290, 80) collectionViewLayout:flowLayout];
+    self.imgCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, 15, 290, 80) collectionViewLayout:flowLayout];
     self.imgCollectionView.layer.cornerRadius = 5;
     self.imgCollectionView.layer.masksToBounds = YES;
     [self.imgCollectionView setBackgroundColor:[UIColor colorWithRed:227.0/255 green:227.0/255 blue:227.0/255 alpha:1]];
