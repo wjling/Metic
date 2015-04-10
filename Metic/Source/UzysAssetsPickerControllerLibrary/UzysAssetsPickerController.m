@@ -630,9 +630,7 @@
                         {
                             NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
                             [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                            if (![self.seletedAssets containsObject:asset]) {
-                                [self.seletedAssets addObject:asset];
-                            }
+                            [self collectionView:self.collectionView didSelectItemAtIndexPath:newPath];
                             [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
                         }
                     });
