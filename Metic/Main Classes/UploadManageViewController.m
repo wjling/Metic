@@ -11,6 +11,7 @@
 #import "MTUser.h"
 
 @interface UploadManageViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+@property(nonatomic,strong) UILabel* emptyAlert;
 
 
 @end
@@ -89,9 +90,25 @@
     [_uploadingPhotos addObjectsFromArray:result];
 
     [self.collelctionView reloadData];
-    
 }
 
+-(void)refreshEmptyAlert
+{
+    if(!_emptyAlert){
+        _emptyAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
+        [_emptyAlert setFont:[UIFont systemFontOfSize:15]];
+        [_emptyAlert setTextAlignment:NSTextAlignmentCenter];
+        [_emptyAlert setTextColor:[UIColor colorWithRed:145.0/255.0 green:145.0/255.0 blue:145.0/255.0 alpha:1]];
+        _emptyAlert.text = @"没有上传任务了哦～";
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_uploadingPhotos.count) {
+            [_emptyAlert removeFromSuperview];
+        }else{
+            [self.view addSubview:_emptyAlert];
+        }
+    });
+}
 
 #pragma mark - CollectionViewDelegate
 
@@ -102,6 +119,7 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    [self refreshEmptyAlert];
     return _uploadingPhotos.count;
 }
 
