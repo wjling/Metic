@@ -367,11 +367,6 @@
 		F83369541AD00AE100B41435 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369511AD00AE100B41435 /* MBProgressHUD.m */; };
 		F83369581AD11FE600B41435 /* MTPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369571AD11FE600B41435 /* MTPhotoBrowser.m */; };
 		F833695B1AD1241800B41435 /* MTPhotoToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F833695A1AD1241800B41435 /* MTPhotoToolbar.m */; };
-		F83614591AD8C861004CDEA1 /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F83614561AD8C861004CDEA1 /* SDBaseProgressView.m */; };
-		F836145A1AD8C861004CDEA1 /* SDLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F83614581AD8C861004CDEA1 /* SDLoopProgressView.m */; };
-		F839DF1B1AD6DB040018CA72 /* UploadManageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F839DF1A1AD6DB040018CA72 /* UploadManageViewController.m */; };
-		F839DF1E1AD768160018CA72 /* UploadManageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F839DF1D1AD768160018CA72 /* UploadManageViewCell.m */; };
-		F839DF211AD7A8830018CA72 /* MTprogressView.m in Sources */ = {isa = PBXBuildFile; fileRef = F839DF201AD7A8830018CA72 /* MTprogressView.m */; };
 		F83C341A1ABEE47300084CB0 /* MTAutoHideButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */; };
 		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
 /* End PBXBuildFile section */
@@ -1095,16 +1090,6 @@
 		F83369571AD11FE600B41435 /* MTPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPhotoBrowser.m; sourceTree = "<group>"; };
 		F83369591AD1241800B41435 /* MTPhotoToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPhotoToolbar.h; sourceTree = "<group>"; };
 		F833695A1AD1241800B41435 /* MTPhotoToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPhotoToolbar.m; sourceTree = "<group>"; };
-		F83614551AD8C861004CDEA1 /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDBaseProgressView.h; sourceTree = "<group>"; };
-		F83614561AD8C861004CDEA1 /* SDBaseProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDBaseProgressView.m; sourceTree = "<group>"; };
-		F83614571AD8C861004CDEA1 /* SDLoopProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLoopProgressView.h; sourceTree = "<group>"; };
-		F83614581AD8C861004CDEA1 /* SDLoopProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLoopProgressView.m; sourceTree = "<group>"; };
-		F839DF191AD6DB040018CA72 /* UploadManageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadManageViewController.h; sourceTree = "<group>"; };
-		F839DF1A1AD6DB040018CA72 /* UploadManageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadManageViewController.m; sourceTree = "<group>"; };
-		F839DF1C1AD768160018CA72 /* UploadManageViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadManageViewCell.h; sourceTree = "<group>"; };
-		F839DF1D1AD768160018CA72 /* UploadManageViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadManageViewCell.m; sourceTree = "<group>"; };
-		F839DF1F1AD7A8820018CA72 /* MTprogressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTprogressView.h; path = "Custom Wedgets/MTprogressView.h"; sourceTree = "<group>"; };
-		F839DF201AD7A8830018CA72 /* MTprogressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTprogressView.m; path = "Custom Wedgets/MTprogressView.m"; sourceTree = "<group>"; };
 		F83C34181ABEE47300084CB0 /* MTAutoHideButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAutoHideButton.h; sourceTree = "<group>"; };
 		F83C34191ABEE47300084CB0 /* MTAutoHideButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAutoHideButton.m; sourceTree = "<group>"; };
 		F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+squareThumbail.h"; sourceTree = "<group>"; };
@@ -1319,8 +1304,6 @@
 				04BAF6A0199BCF7500BF00E1 /* myScrollView.m */,
 				5192530319FA2BBF00CF6BB3 /* myInputView.h */,
 				5192530419FA2BBF00CF6BB3 /* myInputView.m */,
-				F839DF1F1AD7A8820018CA72 /* MTprogressView.h */,
-				F839DF201AD7A8830018CA72 /* MTprogressView.m */,
 			);
 			name = "Custom Wedgets";
 			sourceTree = "<group>";
@@ -1429,10 +1412,6 @@
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
 				08905A701A2E096B0089CF08 /* PictureWall2.h */,
 				08905A711A2E096B0089CF08 /* PictureWall2.m */,
-				F839DF191AD6DB040018CA72 /* UploadManageViewController.h */,
-				F839DF1A1AD6DB040018CA72 /* UploadManageViewController.m */,
-				F839DF1C1AD768160018CA72 /* UploadManageViewCell.h */,
-				F839DF1D1AD768160018CA72 /* UploadManageViewCell.m */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -2253,7 +2232,6 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				F83614541AD8C861004CDEA1 /* SDProgessView */,
 				F833694C1AD00AE100B41435 /* MBProgressHUD */,
 				F83369341ACFF01E00B41435 /* MJPhotoBrowser */,
 				5148120A1937064D00DBBED7 /* MJRefresh */,
@@ -2499,17 +2477,6 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
-		F83614541AD8C861004CDEA1 /* SDProgessView */ = {
-			isa = PBXGroup;
-			children = (
-				F83614551AD8C861004CDEA1 /* SDBaseProgressView.h */,
-				F83614561AD8C861004CDEA1 /* SDBaseProgressView.m */,
-				F83614571AD8C861004CDEA1 /* SDLoopProgressView.h */,
-				F83614581AD8C861004CDEA1 /* SDLoopProgressView.m */,
-			);
-			path = SDProgessView;
-			sourceTree = "<group>";
-		};
 		F83C341B1ABEE49C00084CB0 /* MRZoomScrollView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2715,7 +2682,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F836145A1AD8C861004CDEA1 /* SDLoopProgressView.m in Sources */,
 				0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */,
 				085B358E1A9CA8E900881778 /* UIImage+fixOrien.m in Sources */,
 				F833694B1AD0097600B41435 /* SDWebImageManager+MJ.m in Sources */,
@@ -2733,7 +2699,6 @@
 				51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */,
 				F83369581AD11FE600B41435 /* MTPhotoBrowser.m in Sources */,
 				51F4CB2319E6307500E487F1 /* HTTPFileResponse.m in Sources */,
-				F839DF211AD7A8830018CA72 /* MTprogressView.m in Sources */,
 				519C6602198B8E8000710B26 /* EventInvitationTableViewCell.m in Sources */,
 				51F4CB1F19E6307500E487F1 /* HTTPConnection.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
@@ -2751,7 +2716,6 @@
 				04B6F8AE19A25D5C00229393 /* MLEmojiLabel.m in Sources */,
 				081570E11AAB37B900D34F46 /* photoProcesser.m in Sources */,
 				08E92DDC19B2D354002499BF /* VideoWallTableViewCell.m in Sources */,
-				F839DF1E1AD768160018CA72 /* UploadManageViewCell.m in Sources */,
 				51F4CB1019E6307500E487F1 /* ASINetworkQueue.m in Sources */,
 				51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
@@ -2798,7 +2762,6 @@
 				51F4CB0C19E6307500E487F1 /* ASIDownloadCache.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				083FF6A319D06048001BB61E /* photoRankingViewController.m in Sources */,
-				F839DF1B1AD6DB040018CA72 /* UploadManageViewController.m in Sources */,
 				084EC7261965B5C300E9B48F /* PhotoDetailViewController.m in Sources */,
 				04E657C7197A4EA20091524F /* InputHandleView.m in Sources */,
 				086AE6DB19B5C32800EDF629 /* VcommentTableViewCell.m in Sources */,
@@ -2813,7 +2776,6 @@
 				0821828C1AA6DEED00EBD156 /* UIImage+PECrop.m in Sources */,
 				510D459A196E8A960081672A /* SDWebImageCompat.m in Sources */,
 				08C97F2C1AAF2C7000ABA19C /* UzysGroupPickerView.m in Sources */,
-				F83614591AD8C861004CDEA1 /* SDBaseProgressView.m in Sources */,
 				51F4CB1E19E6307500E487F1 /* HTTPAuthenticationRequest.m in Sources */,
 				08DB69B519541F3A00F80F3F /* UIProgressView+AFNetworking.m in Sources */,
 				F83369541AD00AE100B41435 /* MBProgressHUD.m in Sources */,
@@ -3058,7 +3020,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "9d239157-dbe5-4299-8520-f399d7374f71";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -3097,7 +3059,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "9d239157-dbe5-4299-8520-f399d7374f71";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3152,7 +3114,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "9d239157-dbe5-4299-8520-f399d7374f71";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
@@ -3206,7 +3168,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-all_load";
 				PRODUCT_NAME = WeShare;
-				PROVISIONING_PROFILE = "9d239157-dbe5-4299-8520-f399d7374f71";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = NO;
 				VALID_ARCHS = "armv7 armv7s arm64";

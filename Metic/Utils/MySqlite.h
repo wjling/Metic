@@ -62,6 +62,7 @@ static BOOL isLocked = false;
 //删除方法。wheres是WHERE语句的键值对，对应的说明如上的“查询方法”
 - (BOOL)deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres;
 
+
 //判断数据库中一个表是否存在
 - (BOOL)isExistTable:(NSString*)tableName;
 
@@ -70,5 +71,42 @@ static BOOL isLocked = false;
 //1. column可以是单纯的字段名，如：@"name"，也可以是带有额外属性的字符串，如：@"item_id INTEGER"等。
 //2. defaultValue为nil时，表中等字段默认值为空（NULL）
 -(BOOL)table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue;
+
+
+/*-------------------------2015.04.11更新新方法（基本用法见上面）------------------------------*/
+/* 以下的方法自动加入队列顺序执行，并且使用下面方法的时候不用再加上打开数据库和关闭数据库的操作
+ * 使用范例（以查询为例）:
+ * 直接使用：
+ * [mysqlite database:DBname query...];
+ * 而不再是：
+ * [mysqlite openMyDB];
+ * [mysqlite database:DBname query...];
+ * [mysqlite closeMyDB];
+ *
+ * block为方法执行完之后的回调
+ *
+ * (NSString*)DBname为数据库文件的路径
+ */
+
+//直接执行sql
+- (void)execSql:(NSString*)sql completion:(void(^)(BOOL result))block;
+
+//创建数据库的表（改成将字段和属性放在数组indexes里）
+- (void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;
+
+//插入操作
+- (void)database:(NSString*)DBname insertToTable:(NSString*)tableName withColumns:(NSArray*)columns andValues:(NSArray*)values completion:(void(^)(BOOL result))block;
+
+//更新操作
+- (void)database:(NSString*)DBname updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary*)wheres andSet:(NSDictionary*)sets completion:(void (^)(BOOL result)) block;
+
+//查询操作
+- (void)database:(NSString*)DBname queryTable:(NSString*)tableName withSelect:(NSArray*)selects andWhere:(NSDictionary*)wheres completion:(void(^)(NSMutableArray* resultsArray))block;
+
+//删除操作
+- (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres completion:(void(^)(BOOL result))block;
+
+//增加表的列属性
+-(void)database:(NSString*)DBname table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue completion:(void(^)(BOOL result))block;
 
 @end
