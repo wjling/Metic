@@ -12,7 +12,8 @@
 #import "uploaderOperation.h"
 #import "UploaderManager.h"
 #import "CommonUtils.h"
-#import "MTprogressView.h"
+//#import "MTprogressView.h"
+#import "SDLoopProgressView.h"
 #import "LCAlertView.h"
 
 typedef enum {
@@ -44,6 +45,10 @@ typedef enum {
         _longpressGR = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longpressAction:)];
         [self addGestureRecognizer:_longpressGR];
     }
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
     self.hidden = NO;
     self.alpha = 1.0f;
     _photoInfo = photoInfo;
@@ -63,8 +68,18 @@ typedef enum {
             _imgView.image = [UIImage imageNamed:@"加载失败"];
         }
     }];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
-    [_timer fire];
+    NSNumber* finishedB = [_photoInfo valueForKey:@"finished"];
+    NSNumber* failedB = [_photoInfo valueForKey:@"failed"];
+    if (finishedB && [finishedB boolValue]) {
+        _uploadState = UPLOAD_FINISH;
+        [_progressView setHidden:YES];
+    }else if(failedB && [failedB boolValue]){
+        _uploadState = UPLOAD_FAIL;
+        [self refreshUI];
+    }else{
+        _timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
+        [_timer fire];
+    }
 }
 
 -(void)checkState
@@ -92,9 +107,11 @@ typedef enum {
     if (!_uploadTask || (!realPhotoInfo && (isFinished || !wait))) {
         //上传失败
         self.uploadState = UPLOAD_FAIL;
+        [_photoInfo setValue:[NSNumber numberWithBool:YES] forKey:@"failed"];
     }else if(realPhotoInfo){
         //上传完成
         self.uploadState = UPLOAD_FINISH;
+        [_photoInfo setValue:[NSNumber numberWithBool:YES] forKey:@"finished"];
     }else if(isExecuting){
         //正在上传
         self.uploadState = UPLOAD_EXECUTING;
@@ -117,13 +134,12 @@ typedef enum {
         _progressView = [[UIView alloc]initWithFrame:self.bounds];
         _progressView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
 
-        MTprogressView* progreView = [[MTprogressView alloc]initWithFrame:self.bounds];
-        progreView.triggersDownloadDidFinishAnimationAutomatically = NO;
+        SDLoopProgressView* progreView = [SDLoopProgressView progressView];
+        progreView.frame = CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 25, 50, 50);
         [progreView setTag:330];
         [progreView setHidden:YES];
         progreView.progress = 0;
         [_progressView addSubview:progreView];
-        [progreView displayOperationWillTriggerAnimation];
         
         UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
         [retry setFrame:CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 40, 50, 70)];
@@ -149,7 +165,7 @@ typedef enum {
         [retry addSubview:label];
         [self addSubview:_progressView];
     }
-    MTprogressView* progreView = (MTprogressView*)[_progressView viewWithTag:330];
+    SDLoopProgressView* progreView = (SDLoopProgressView*)[_progressView viewWithTag:330];
     UIButton* cancel = (UIButton*)[_progressView viewWithTag:340];
     UIButton* retry = (UIButton*)[_progressView viewWithTag:350];
     
@@ -157,21 +173,23 @@ typedef enum {
         [progreView setHidden:YES];
         [cancel setHidden:YES];
         [retry setHidden:YES];
+        _progressView.alpha = 1.0f;
         [_progressView setHidden:NO];
     }else if(_uploadState == UPLOAD_FAIL){
         [progreView setHidden:YES];
         [cancel setHidden:NO];
         [retry setHidden:NO];
+        _progressView.alpha = 1.0f;
         [_progressView setHidden:NO];
     }else if(_uploadState == UPLOAD_EXECUTING){
         progreView.progress = _progress;
         [progreView setHidden:NO];
         [cancel setHidden:YES];
         [retry setHidden:YES];
+        _progressView.alpha = 1.0f;
         [_progressView setHidden:NO];
     }else{
         progreView.progress = 1.0f;
-        [progreView setHidden:NO];
         [UIView animateWithDuration:1 animations:^{
             _progressView.alpha = 0;
         } completion:^(BOOL finished) {
@@ -205,6 +223,7 @@ typedef enum {
 -(void)retryUploadTask
 {
     NSLog(@"重试上传任务");
+    [_photoInfo setValue:nil forKey:@"failed"];
     if ([_photoInfo valueForKey:@"alasset"]) {
         NSString* alassetStr = [_photoInfo valueForKey:@"alasset"];
         NSString* eventId = [_photoInfo valueForKey:@"event_id"];
@@ -215,7 +234,7 @@ typedef enum {
         [_timer invalidate];
         _timer = nil;
     }
-    _timer = [NSTimer scheduledTimerWithTimeInterval:0.25f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(checkState) userInfo:nil repeats:YES];
     [_timer fire];
 }
 

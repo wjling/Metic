@@ -277,15 +277,17 @@ static const NSInteger MaxUploadCount = 20;
 }
 
 - (IBAction)upload:(id)sender {
-    
+    [sender setEnabled:NO];
     
     //多图上传
     if (_uploadImgs.count == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"消息" WithMessage:@"请选择图片" WithDelegate:nil WithCancelTitle:@"确定"];
+        [sender setEnabled:YES];
         return;
     }
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+        [sender setEnabled:YES];
         return;
     }
     [[UploaderManager sharedManager] uploadALAssets:_uploadImgAssets eventId:_eventId];
