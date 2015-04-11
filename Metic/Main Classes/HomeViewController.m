@@ -541,39 +541,69 @@
     }
     
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
-
+//    [self.sql openMyDB:path];
+//
+//    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
+//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
+//    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
+////    NSLog(@"%@",result);
+//    
+//    [self.sql closeMyDB];
+    
+    
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
-    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-//    NSLog(@"%@",result);
     
-    [self.sql closeMyDB];
+    [self.sql database:path queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        NSMutableArray *result = resultsArray;
+        
+        //比较
+        NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
+        for (int i = 0; i < result.count; i++) {
+            NSDictionary* res = [result objectAtIndex:i];
+            NSString* sequence_S = [res valueForKey:@"event_id"];
+            NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
+            if (!sequence) continue;
+            if (![eventIds containsObject:sequence]) {
+                //删除
+                NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+                MySqlite *sql0 = [[MySqlite alloc]init];
+//                [sql0 openMyDB:path0];
+                NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
+                [sql0 database:path0 deleteTurpleFromTable:@"event" withWhere:wheres0 completion:nil];
+//                [sql0 closeMyDB];
+            }
+        }
+
+    }];
+    //    NSLog(@"%@",result);
+    
+//    [self.sql closeMyDB];
     
     //比较
-    NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary* res = [result objectAtIndex:i];
-        NSString* sequence_S = [res valueForKey:@"event_id"];
-        NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
-        if (!sequence) continue;
-        if (![eventIds containsObject:sequence]) {
-            //删除
-            NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-            MySqlite *sql0 = [[MySqlite alloc]init];
-            [sql0 openMyDB:path0];
-            NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
-            [sql0 deleteTurpleFromTable:@"event" withWhere:wheres0];
-            [sql0 closeMyDB];
-        }
-    }
+//    NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
+//    for (int i = 0; i < result.count; i++) {
+//        NSDictionary* res = [result objectAtIndex:i];
+//        NSString* sequence_S = [res valueForKey:@"event_id"];
+//        NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
+//        if (!sequence) continue;
+//        if (![eventIds containsObject:sequence]) {
+//            //删除
+//            NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
+//            MySqlite *sql0 = [[MySqlite alloc]init];
+//            [sql0 openMyDB:path0];
+//            NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
+//            [sql0 deleteTurpleFromTable:@"event" withWhere:wheres0];
+//            [sql0 closeMyDB];
+//        }
+//    }
 }
 
 
 - (void)updateEventToDB:(NSArray*)events
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
+//    [self.sql openMyDB:path];
     for (NSInteger i = 0; i < self.events.count; i++) {
         NSMutableDictionary* event = [self.events objectAtIndex:i];
         NSString *eventData = [NSString jsonStringWithDictionary:event];
@@ -583,17 +613,19 @@
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
         
-        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
+//        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
+        
+        [self.sql database:path insertToTable:@"event" withColumns:columns andValues:values completion:nil];
     }
     
-    [self.sql closeMyDB];
+//    [self.sql closeMyDB];
 }
 
 
 - (void)pullEventsFromDB
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
+//    [self.sql openMyDB:path];
     
     self.events = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
@@ -601,17 +633,31 @@
     NSDictionary *wheres1 = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by beginTime desc",@"1", nil];
     NSDictionary *wheres2 = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by joinTime desc",@"1", nil];
     
-    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2];
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary* temp = [result objectAtIndex:i];
-        NSString *tmpa = [temp valueForKey:@"event_info"];
-        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
-        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
-        [self.events addObject:event];
-    }
+//    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2];
+//    for (int i = 0; i < result.count; i++) {
+//        NSDictionary* temp = [result objectAtIndex:i];
+//        NSString *tmpa = [temp valueForKey:@"event_info"];
+//        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+//        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+//        [self.events addObject:event];
+//    }
     
-    [self.sql closeMyDB];
+    [self.sql database:path queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2 completion:^(NSMutableArray *resultsArray) {
+        NSMutableArray *result = resultsArray;
+        for (int i = 0; i < result.count; i++) {
+            NSDictionary* temp = [result objectAtIndex:i];
+            NSString *tmpa = [temp valueForKey:@"event_info"];
+            tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+            NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
+            [self.events addObject:event];
+        }
+
+    }];
+    
+    
+//    [self.sql closeMyDB];
 }
 
 

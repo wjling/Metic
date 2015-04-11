@@ -6,54 +6,49 @@
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 static dispatch_queue_t mysqlite_queue;
-static dispatch_group_t mysqlite_group;
 
 #import "MySqlite.h"
 
 @implementation MySqlite
 @synthesize myDB;
 
+-(instancetype)init
+{
+    if (self = [super init]) {
+        mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
+
+    }
+    return self;
+}
+
 - (BOOL)openMyDB:(NSString*)DBname
 {
-    mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
-    mysqlite_group = dispatch_group_create();
-    if (isLocked) {
-        return NO;
-    }
     NSArray* path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* DB_path = [(NSString*)[path objectAtIndex:0] stringByAppendingPathComponent:DBname];
     
     NSLog(@"array path: %@",path);
     NSLog(@"DB_path: %@",DB_path);
-    NSLog(@"sqlite3 lib version: %s", sqlite3_libversion());
+//    NSLog(@"sqlite3 lib version: %s", sqlite3_libversion());
 //    int err=sqlite3_config(SQLITE_CONFIG_SERIALIZED);
 //    if (err == SQLITE_OK) {
 //        NSLog(@"Can now use sqlite on multiple threads, using the same connection");
 //    } else {
 //        NSLog(@"setting sqlite thread safe mode to serialized failed!!! return code: %d", err);
 //    }
-//    while (isLocked) {
-//        NSLog(@"loop: isLocked");
-//        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-//    }
+    
+    while (isLocked) {
+        NSLog(@"loop: isLocked");
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+    }
     
     if (sqlite3_open([DB_path UTF8String], &myDB) != SQLITE_OK) {
-        sqlite3_close(self.myDB);
-        NSLog(@"database open failed");
+        NSLog(@"myDB open failed");
         return NO;
     }
-    NSLog(@"database open succeeded");
+    NSLog(@"myDB open succeeded");
     NSLog(@"database is locked++");
     isLocked = true;
-    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(groupDone) userInfo:nil repeats:NO];
     return YES;
-}
-
-- (void)groupDone
-{
-    dispatch_group_notify(mysqlite_group, mysqlite_queue, ^{
-        [self closeMyDB];
-    });
 }
 
 - (BOOL)closeMyDB
@@ -88,6 +83,28 @@ static dispatch_group_t mysqlite_group;
         return YES;
     }
     
+}
+
+
+- (void)execSql:(NSString *)sql completion:(void (^)(BOOL))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        char* error;
+        if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
+            NSLog(@"executing sql failed. error: %s", error);
+            if (block) {
+                block(NO);
+            }
+        }
+        else
+        {
+            NSLog(@"executing sql succeeded");
+            if (block) {
+                block(YES);
+            }
+        }
+
+    });
 }
 
 - (BOOL)createTableWithTableName:(NSString*)tableName andIndexWithProperties:(NSString*)index_properties, ...
@@ -132,6 +149,56 @@ static dispatch_group_t mysqlite_group;
 
 }
 
+-(void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        NSMutableString* sql = [[NSMutableString alloc]initWithString:@"CREATE TABLE IF NOT EXISTS "];
+        [sql appendString:[NSString stringWithFormat:@"%@%@",tableName,@" ("]];
+        
+        if (indexes && indexes.count > 0) {
+            NSString* item = [indexes objectAtIndex:0];
+            [sql appendString:item];
+            for (NSInteger i = 1; i < indexes.count; i++) {
+                [sql appendString:@","];
+                item = [indexes objectAtIndex:i];
+                [sql appendString:item];
+            }
+
+            [sql appendString:@")"];
+            NSLog(@"create table sql: %@",sql);
+            
+            char* error;
+            if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
+                NSLog(@"creating table failed. error: %s", error);
+                [self closeMyDB];
+                if (block) {
+                    block(NO);
+                }
+            }
+            else
+            {
+                
+                NSLog(@"creating table succeeded");
+                [self closeMyDB];
+                if (block) {
+                    block(YES);
+                }
+            }
+
+        }
+        else
+        {
+            NSLog(@"index input error");
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            }
+        }
+
+    });
+}
+
 - (BOOL)insertToTable:(NSString *)tableName withColumns:(NSArray *)columns andValues:(NSArray *)values
 {
     NSInteger columnsCount = columns.count;
@@ -164,10 +231,10 @@ static dispatch_group_t mysqlite_group;
     }
     [sql appendString:@")"];
     NSLog(@"sql: %@",sql);
-
+    
     char* error;
     if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
-//        sqlite3_close(self.myDB);
+        //        sqlite3_close(self.myDB);
         NSLog(@"insert table failed. error: %s", error);
         return NO;
     }
@@ -176,8 +243,66 @@ static dispatch_group_t mysqlite_group;
         NSLog(@"insert table succeeded");
         return YES;
     }
-
     
+}
+
+- (void)database:(NSString*)DBname insertToTable:(NSString *)tableName withColumns:(NSArray *)columns andValues:(NSArray *)values completion:(void (^)(BOOL))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        NSInteger columnsCount = columns.count;
+        NSInteger valuesCount = values.count;
+        if (!tableName || !columnsCount || !valuesCount) {
+            NSLog(@"data input error");
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            }
+            return;
+        }
+        NSMutableString* sql = [NSMutableString stringWithFormat:@"INSERT OR REPLACE INTO '%@'(",tableName];
+        
+        for (int i = 0; i < columnsCount; i++) {
+            [sql appendString:[columns objectAtIndex:i]];
+            if (i != columnsCount - 1) {
+                [sql appendString:@","];
+            }
+        }
+        [sql appendString:@")VALUES("];
+        for (int i = 0; i < valuesCount; i++) {
+            NSString* value = [values objectAtIndex:i];
+            if (value && ![value isEqual:[NSNull null]]) {
+                [sql appendString:value];
+            }
+            else if ([value isEqual:[NSNull null]])
+            {
+                [sql appendString:@"NULL"];
+            }
+            if (i != valuesCount - 1) {
+                [sql appendString:@","];
+            }
+        }
+        [sql appendString:@")"];
+        NSLog(@"insert into table sql: %@",sql);
+        
+        char* error;
+        if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
+            NSLog(@"insert table failed. error: %s", error);
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            }
+        }
+        else
+        {
+            NSLog(@"insert table succeeded");
+            [self closeMyDB];
+            if (block) {
+                block(YES);
+            }
+        }
+
+    });
 }
 
 //abandoned
@@ -278,6 +403,64 @@ static dispatch_group_t mysqlite_group;
 
 }
 
+- (void)database:(NSString*)DBname updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary *)wheres andSet:(NSDictionary *)sets completion:(void (^)(BOOL))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        NSInteger wheresCount = wheres.count;
+        NSInteger setsCount = sets.count;
+        if (!tableName || !wheresCount || !setsCount) {
+            NSLog(@"input data error");
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            }
+            return ;
+        }
+        
+        NSMutableString* sql = [[NSMutableString alloc]initWithFormat:@"UPDATE %@ SET ",tableName];
+        NSArray* wheresKeys = wheres.allKeys;
+        NSArray* setsKeys = sets.allKeys;
+        for (int i = 0; i < setsCount; i++) {
+            NSString* key = [setsKeys objectAtIndex:i];
+            NSString* value = [sets objectForKey:key];
+            [sql appendFormat:@"%@ = %@ ",key,value];
+            if (i != setsCount-1) {
+                [sql appendString:@", "];
+            }
+        }
+        [sql appendString:@"WHERE "];
+        for (int i = 0; i < wheresCount; i++) {
+            NSString* key = [wheresKeys objectAtIndex:i];
+            NSString* value = [wheres objectForKey:key];
+            [sql appendFormat:@"%@ = %@ ",key,value];
+            if (i != wheresCount-1) {
+                [sql appendString:@", "];
+            }
+        }
+        NSLog(@"update sql: %@",sql);
+        
+        char* error;
+        if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
+            NSLog(@"update table failed. error: %s", error);
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            }
+        }
+        else
+        {
+            NSLog(@"update table succeeded");
+            [self closeMyDB];
+            if (block) {
+                block(YES);
+            }
+        }
+
+    });
+}
+
+
 - (NSMutableArray*)queryTable:(NSString*)tableName withSelect:(NSArray*)selects andWhere:(NSDictionary *)wheres
 {
     NSMutableArray* results = [[NSMutableArray alloc]init];
@@ -340,6 +523,83 @@ static dispatch_group_t mysqlite_group;
     
 }
 
+- (void)database:(NSString*)DBname queryTable:(NSString *)tableName withSelect:(NSArray *)selects andWhere:(NSDictionary *)wheres completion:(void (^)(NSMutableArray *))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        NSMutableArray* results = [[NSMutableArray alloc]init];
+        
+        NSInteger selectsCount = selects.count;
+        NSInteger wheresCount = wheres.count;
+        if (!tableName || !selectsCount /*|| !wheresCount*/) {
+            NSLog(@"input data error");
+            [self closeMyDB];
+            if (block) {
+                block(nil);
+            };
+            
+            return ;
+        }
+        NSMutableString* sql = [[NSMutableString alloc]initWithString:@"SELECT "];
+        NSArray* wheresKeys = wheres.allKeys;
+        for (int i = 0; i < selectsCount; i++) {
+            NSString* value = [selects objectAtIndex:i];
+            [sql appendString:value];
+            if (i != selectsCount - 1) {
+                [sql appendString:@", "];
+            }
+        }
+        [sql appendFormat:@" FROM %@ ",tableName];
+        for (int i = 0; i < wheresCount; i++) {
+            if (i==0) {
+                [sql appendString:@"WHERE "];
+            }
+            NSString* key = [wheresKeys objectAtIndex:i];
+            NSString* value = [wheres objectForKey:key];
+            [sql appendFormat:@"%@ LIKE %@",key,value];
+            if (i != wheresCount - 1) {
+                [sql appendString:@", "];
+            }
+        }
+        NSLog(@"query sql: %@",sql);
+        
+        char* sql_c = (char*)[sql UTF8String];
+        //    char* error_msg;
+        sqlite3_stmt* sql_stmt;
+        int state1 = sqlite3_prepare_v2(self.myDB, sql_c, -1, &sql_stmt, nil);
+        if (state1 != SQLITE_OK) {
+            NSLog(@"transforming sql to sqlite3_stmt failed, state: %d",state1);
+            [self closeMyDB];
+            if (block) {
+                block(nil);
+            };
+            return;
+        }
+        
+        
+        while (sqlite3_step(sql_stmt) == SQLITE_ROW) {
+            NSMutableDictionary* result = [[NSMutableDictionary alloc]init];
+            int columnCount = sqlite3_column_count(sql_stmt);
+            for (int i = 0; i < columnCount; i++) {
+                char* columnName = (char*)sqlite3_column_name(sql_stmt, i);
+                char* columnContent = (char*)sqlite3_column_text(sql_stmt, i);
+                [result
+                 setValue: (columnContent? [NSString stringWithCString:columnContent encoding:NSUTF8StringEncoding] : [NSNull null])
+                 forKey:[NSString stringWithCString:columnName encoding:NSUTF8StringEncoding]];
+            }
+            [results addObject:result];
+        }
+        sqlite3_finalize(sql_stmt);
+        [self closeMyDB];
+        //    NSLog(@"query result: %@",results);
+        if (block) {
+            block(results);
+        }
+        
+
+    });
+}
+
 - (BOOL)deleteTurpleFromTable:(NSString *)tableName withWhere:(NSDictionary *)wheres
 {
     NSInteger wheresCount = wheres.count;
@@ -371,6 +631,51 @@ static dispatch_group_t mysqlite_group;
         return YES;
     }
     
+}
+
+- (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString *)tableName withWhere:(NSDictionary *)wheres completion:(void (^)(BOOL))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        NSInteger wheresCount = wheres.count;
+        if (!tableName || !wheresCount) {
+            NSLog(@"input data error");
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            };
+            return ;
+        }
+        NSMutableString* sql = [[NSMutableString alloc]initWithFormat:@"DELETE FROM %@ WHERE ",tableName];
+        NSArray* wheresKeys = wheres.allKeys;
+        for (int i = 0; i < wheresCount; i++) {
+            NSString* key = [wheresKeys objectAtIndex:i];
+            NSString* value =[wheres objectForKey:key];
+            [sql appendFormat:@"%@ = %@",key, value];
+            if (i != wheresCount-1) {
+                [sql appendString:@" and "];
+            }
+        }
+        NSLog(@"delete sql: %@",sql);
+        
+        char* error;
+        if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
+            NSLog(@"delete table failed. error: %s", error);
+            [self closeMyDB];
+            if (block) {
+                block(NO);
+            };
+        }
+        else
+        {
+            NSLog(@"delete table succeeded");
+            [self closeMyDB];
+            if (block) {
+                block(YES);
+            }
+        }
+
+    });
 }
 
 - (BOOL)isExistTable:(NSString *)tableName
@@ -432,6 +737,47 @@ static dispatch_group_t mysqlite_group;
     return result;
 }
 
+-(void)database:(NSString*)DBname table:(NSString *)tableName addsColumn:(NSString *)column withDefault:(id)defaultValue completion:(void (^)(BOOL))block
+{
+    dispatch_sync(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        char *errMsg;
+        int result = 1;
+        NSLog(@"表: %@ 增加字段", tableName);
+        NSString* searchSql = [NSString stringWithFormat:@"select sql from sqlite_master where tbl_name = ? and type = 'table'"];
+        sqlite3_stmt *statement;
+        if (sqlite3_prepare_v2(self.myDB, [searchSql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+            sqlite3_bind_text(statement, 1, [tableName UTF8String], -1, nil);
+        }
+        
+        if (sqlite3_step(statement) == SQLITE_ROW) {
+            char *text_chr = (char*)sqlite3_column_text(statement, 0);
+            NSLog(@"获取创建表%@的SQL语句: %s",tableName,text_chr);
+            NSString* sqlStr = [[NSString alloc]initWithUTF8String:text_chr];
+            
+            if ([sqlStr rangeOfString: column].length <= 0) {
+                NSLog(@"没有字段: %@", column);
+                const char *sql_add = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ DEFAULT %@", tableName, column, defaultValue] UTF8String];
+                NSLog(@"插入字段sql: %s",sql_add);
+                if (sqlite3_exec(self.myDB, sql_add, nil, nil, &errMsg) == SQLITE_OK) {
+                    NSLog(@"表 %@ 成功插入字段 %@ ", tableName, column);
+                }
+                else
+                {
+                    NSLog(@"表 %@ 插入字段 %@ 不成功，错误信息: %s", tableName, column, errMsg);
+                    result = 0;
+                }
+            }
+            
+        }
+        sqlite3_finalize(statement);
+        [self closeMyDB];
+        if (block) {
+            block(result);
+        };
+
+    });
+}
 
 
 @end

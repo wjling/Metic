@@ -166,6 +166,7 @@ static MTUser *singletonInstance;
         if (!rData) return ;
         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"getInfo result:\n%@",response1);
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
@@ -214,33 +215,67 @@ static MTUser *singletonInstance;
 {
     MySqlite *sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
 //    NSLog(@"%@",self.avatarInfo);
+//    for (NSInteger i = 0;i < self.avatarInfo.count; i++) {
+//        NSDictionary *dictionary = [self.avatarInfo objectAtIndex:i];
+//        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
+//        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
+//        NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
+//        
+//        if (!results.count) {
+//            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+//            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+//            [sql insertToTable:@"avatar" withColumns:columns andValues:values];
+//        }else{
+//            NSDictionary* result = results[0];
+//            NSString *local_update = [result valueForKey:@"updatetime"];
+//            NSString *net_update = [dictionary valueForKey:@"updatetime"];
+//            if (![local_update isEqualToString:net_update]) {
+//                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+//                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+//                [sql insertToTable:@"avatar" withColumns:columns andValues:values];
+//                NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
+//                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
+////                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
+//                }];
+//            }
+//        }
+//    }
+    
+    
+    
     for (NSInteger i = 0;i < self.avatarInfo.count; i++) {
         NSDictionary *dictionary = [self.avatarInfo objectAtIndex:i];
         NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
-        NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
-        if (!results.count) {
-            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-            [sql insertToTable:@"avatar" withColumns:columns andValues:values];
-        }else{
-            NSDictionary* result = results[0];
-            NSString *local_update = [result valueForKey:@"updatetime"];
-            NSString *net_update = [dictionary valueForKey:@"updatetime"];
-            if (![local_update isEqualToString:net_update]) {
+//        NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
+        [sql database:path queryTable:@"avatar" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+            NSMutableArray *results = resultsArray;
+            if (!results.count) {
                 NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
                 NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-                [sql insertToTable:@"avatar" withColumns:columns andValues:values];
-                NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
-                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-//                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
-                }];
+                [sql database:path insertToTable:@"avatar" withColumns:columns andValues:values completion:nil];
+            }else{
+                NSDictionary* result = results[0];
+                NSString *local_update = [result valueForKey:@"updatetime"];
+                NSString *net_update = [dictionary valueForKey:@"updatetime"];
+                if (![local_update isEqualToString:net_update]) {
+                    NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+                    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
+                    [sql database:path insertToTable:@"avatar" withColumns:columns andValues:values completion:nil];
+                    NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
+                    [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
+                        //                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
+                    }];
+                }
             }
-        }
+        }];
+
+        
     }
-    [sql closeMyDB];
+    
+//    [sql closeMyDB];
 }
 
 - (void)setUid:(NSNumber*) user_id
@@ -314,11 +349,17 @@ static MTUser *singletonInstance;
             NSLog(@"升级数据库，添加所有补丁");
             MySqlite * sql = [[MySqlite alloc]init];
             NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-            [sql openMyDB:path];
-            [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
-            [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
-            [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
-            [sql closeMyDB];
+//            [sql openMyDB:path];
+//            [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
+//            [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
+//            [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
+//            [sql closeMyDB];
+            
+            
+            [sql database:path table:@"friend" addsColumn:@"alias" withDefault:nil completion:nil];
+            [sql database:path table:@"event" addsColumn:@"beginTime" withDefault:nil completion:nil];
+            [sql database:path table:@"event" addsColumn:@"joinTime" withDefault:nil completion:nil];
+            
             
         }else{
             result = [CommonUtils compareVersion1:version andVersion2:@"0.1.18"];
@@ -327,9 +368,12 @@ static MTUser *singletonInstance;
                 NSLog(@"升级数据库，原数据库版本：%@",version);
                 MySqlite * sql = [[MySqlite alloc]init];
                 NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-                [sql openMyDB:path];
-                [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
-                [sql closeMyDB];
+//                [sql openMyDB:path];
+//                [sql table:@"friend" addsColumn:@"alias" withDefault:nil];
+//                [sql closeMyDB];
+                
+                [sql database:path table:@"friend" addsColumn:@"alias" withDefault:nil completion:nil];
+
             }
             
             result = [CommonUtils compareVersion1:version andVersion2:@"1.0.3"];
@@ -338,13 +382,20 @@ static MTUser *singletonInstance;
                 NSLog(@"升级数据库，原数据库版本：%@",version);
                 MySqlite * sql = [[MySqlite alloc]init];
                 NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-                [sql openMyDB:path];
-                [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
-                [sql table:@"uploadIMGtasks" addsColumn:@"width" withDefault:nil];
-                [sql table:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil];
-                [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
-                [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
-                [sql closeMyDB];
+//                [sql openMyDB:path];
+//                [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
+//                [sql table:@"uploadIMGtasks" addsColumn:@"width" withDefault:nil];
+//                [sql table:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil];
+//                [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
+//                [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
+//                [sql closeMyDB];
+                
+                [sql database:path createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset"] completion:nil];
+                [sql database:path table:@"uploadIMGtasks" addsColumn:@"width" withDefault:nil completion:nil];
+                [sql database:path table:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil completion:nil];
+                [sql database:path table:@"event" addsColumn:@"beginTime" withDefault:nil completion:nil];
+                [sql database:path table:@"event" addsColumn:@"joinTime" withDefault:nil completion:nil];
+                
             }
             
             
@@ -367,16 +418,35 @@ static MTUser *singletonInstance;
     [userDfs synchronize];
     MySqlite * sql = [[MySqlite alloc]init];
     NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-    [sql openMyDB:path];
-    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info",nil];
-    [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
-    [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias",nil];
-    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
-    [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
-    [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
-    [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"width",@"height",nil];
+//    [sql openMyDB:path];
+//    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info",nil];
+//    [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
+//    [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias",nil];
+//    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
+//    [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
+//    [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
+//    [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"width",@"height",nil];
+//    
+//    [sql closeMyDB];
     
-    [sql closeMyDB];
+    
+    
+    
+    [sql database:path createTableWithTableName:@"event" indexesWithProperties:@[@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"notification" indexesWithProperties:@[@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"friend" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"avatar" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"eventPhotos" indexesWithProperties:@[@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"eventVideo" indexesWithProperties:@[@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo"] completion:nil];
+    
+    [sql database:path createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"width",@"height"] completion:nil];
+    
+
     //self.logined = YES;
 }
 
@@ -461,6 +531,7 @@ static MTUser *singletonInstance;
     [db openMyDB:DB_path];
     friends = [db queryTable:@"friend" withSelect:[[NSArray alloc]initWithObjects:@"*", nil] andWhere:nil];
     [db closeMyDB];
+    NSLog(@"getFriendsFromDB: %@", friends);
     return friends;
 }
 
@@ -598,7 +669,7 @@ static MTUser *singletonInstance;
     //    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
     NSLog(@"insertToFriendTable begin");
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:DB_path];
+//    [sql openMyDB:DB_path];
     for (int i = 0; i < friends.count; i++) {
         NSDictionary* friend = [friends objectAtIndex:i];
         NSString* friendEmail = [friend objectForKey:@"email"];
@@ -628,9 +699,11 @@ static MTUser *singletonInstance;
                       [NSString stringWithFormat:@"%@",friendGender],
                       [NSString stringWithFormat:@"'%@'",friendAlias], nil];
         }
-        [sql insertToTable:@"friend" withColumns:columns andValues:values];
+//        [sql insertToTable:@"friend" withColumns:columns andValues:values];
+        
+        [sql database:DB_path insertToTable:@"friend" withColumns:columns andValues:values completion:nil];
     }
-    [sql closeMyDB];
+//    [sql closeMyDB];
     
     NSLog(@"好友列表更新完成！");
     NSLog(@"insertToFriendTable end");
@@ -721,7 +794,7 @@ static MTUser *singletonInstance;
 {
     NSArray* keys = [self.alias_dic allKeys];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:DB_path];
+//    [sql openMyDB:DB_path];
     for (int i = 0; i < keys.count; i++) {
         NSNumber* fid = [CommonUtils NSNumberWithNSString:keys[i]];
         NSString* alias = [self.alias_dic objectForKey:keys[i]];
@@ -737,9 +810,11 @@ static MTUser *singletonInstance;
             sets = [CommonUtils packParamsInDictionary:
                [NSString stringWithFormat:@"'%@'", alias],@"alias",nil];
         }
-        [sql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
+//        [sql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
+        
+        [sql database:DB_path updateDataWitTableName:@"friend" andWhere:wheres andSet:sets completion:nil];
     }
-    [sql closeMyDB];
+//    [sql closeMyDB];
     NSLog(@"更新好友备注名完成");
 }
 
@@ -801,63 +876,125 @@ static MTUser *singletonInstance;
     [self.systemMsg removeAllObjects];
     [self.historicalMsg removeAllObjects];
     MySqlite* mySql = [[MySqlite alloc]init];
-    [mySql openMyDB:DB_path];
-    self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
-    [mySql closeMyDB];
-//    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
-    //    [self.notificationsTable reloadData];
-    NSInteger count = self.msgFromDB.count;
-    for (NSInteger i = count - 1; i >= 0; i--) {
-        NSDictionary* msg = [msgFromDB objectAtIndex:i];
-        NSString* msg_str = [msg objectForKey:@"msg"];
-        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
-        NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
-        NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
-//        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
-//            NSLog(@"seq is string");
+//    [mySql openMyDB:DB_path];
+//    self.msgFromDB = [mySql queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil];
+//    [mySql closeMyDB];
+////    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
+//    //    [self.notificationsTable reloadData];
+//    NSInteger count = self.msgFromDB.count;
+//    for (NSInteger i = count - 1; i >= 0; i--) {
+//        NSDictionary* msg = [msgFromDB objectAtIndex:i];
+//        NSString* msg_str = [msg objectForKey:@"msg"];
+//        NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+//        NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
+//        NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
+////        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
+////            NSLog(@"seq is string");
+////        }
+////        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+////        {
+////            NSLog(@"seq is number");
+////        }
+//
+//        
+//        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
+//        [msg_dic setValue:ishandled forKey:@"ishandled"];
+//        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+//        if ([ishandled integerValue] == -1) {
+//            switch (cmd) {
+//                case ADD_FRIEND_NOTIFICATION:
+//                case ADD_FRIEND_RESULT:
+//                {
+//                    [self.friendRequestMsg addObject:msg_dic];
+//                }
+//                    break;
+//                case EVENT_INVITE_RESPONSE:
+//                case REQUEST_EVENT_RESPONSE:
+//                case QUIT_EVENT_NOTIFICATION:
+//                case KICK_EVENT_NOTIFICATION:
+//                {
+//                    [self.systemMsg addObject:msg_dic];
+//                }
+//                    break;
+//                case NEW_EVENT_NOTIFICATION:
+//                case REQUEST_EVENT:
+//                {
+//                    [self.eventRequestMsg addObject:msg_dic];
+//                }
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            
 //        }
-//        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+//        else
 //        {
-//            NSLog(@"seq is number");
+//            [self.historicalMsg addObject:msg_dic];
 //        }
-
-        
-        [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
-        [msg_dic setValue:ishandled forKey:@"ishandled"];
-        NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
-        if ([ishandled integerValue] == -1) {
-            switch (cmd) {
-                case ADD_FRIEND_NOTIFICATION:
-                case ADD_FRIEND_RESULT:
-                {
-                    [self.friendRequestMsg addObject:msg_dic];
-                }
-                    break;
-                case EVENT_INVITE_RESPONSE:
-                case REQUEST_EVENT_RESPONSE:
-                case QUIT_EVENT_NOTIFICATION:
-                case KICK_EVENT_NOTIFICATION:
-                {
-                    [self.systemMsg addObject:msg_dic];
-                }
-                    break;
-                case NEW_EVENT_NOTIFICATION:
-                case REQUEST_EVENT:
-                {
-                    [self.eventRequestMsg addObject:msg_dic];
-                }
-                    break;
-                    
-                default:
-                    break;
-            }
+//    }
+    
+    [mySql database:DB_path queryTable:@"notification" withSelect:[[NSArray alloc]initWithObjects:@"msg",@"seq",@"ishandled", nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+        self.msgFromDB = resultsArray;
+        NSInteger count = self.msgFromDB.count;
+        for (NSInteger i = count - 1; i >= 0; i--) {
+            NSDictionary* msg = [msgFromDB objectAtIndex:i];
+            NSString* msg_str = [msg objectForKey:@"msg"];
+            NSMutableDictionary* msg_dic = [[NSMutableDictionary alloc]initWithDictionary:[CommonUtils NSDictionaryWithNSString:msg_str]];
+            NSNumber* seq = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"seq"]];
+            NSNumber* ishandled = [CommonUtils NSNumberWithNSString:(NSString *)[msg objectForKey:@"ishandled"]];
+            //        if ([[msg objectForKey:@"seq"] isKindOfClass:[NSString class]]) {
+            //            NSLog(@"seq is string");
+            //        }
+            //        else if ([[msg objectForKey:@"seq"] isKindOfClass:[NSNumber class]])
+            //        {
+            //            NSLog(@"seq is number");
+            //        }
             
+            
+            [msg_dic setValue:seq forKey:@"seq"]; //将seq放进消息里
+            [msg_dic setValue:ishandled forKey:@"ishandled"];
+            NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
+            if ([ishandled integerValue] == -1) {
+                switch (cmd) {
+                    case ADD_FRIEND_NOTIFICATION:
+                    case ADD_FRIEND_RESULT:
+                    {
+                        [self.friendRequestMsg addObject:msg_dic];
+                    }
+                        break;
+                    case EVENT_INVITE_RESPONSE:
+                    case REQUEST_EVENT_RESPONSE:
+                    case QUIT_EVENT_NOTIFICATION:
+                    case KICK_EVENT_NOTIFICATION:
+                    {
+                        [self.systemMsg addObject:msg_dic];
+                    }
+                        break;
+                    case NEW_EVENT_NOTIFICATION:
+                    case REQUEST_EVENT:
+                    {
+                        [self.eventRequestMsg addObject:msg_dic];
+                    }
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+            }
+            else
+            {
+                [self.historicalMsg addObject:msg_dic];
+            }
         }
-        else
-        {
-            [self.historicalMsg addObject:msg_dic];
-        }
-    }
+
+    }];
+
+    //    NSLog(@"msg count: %d \nmsg from db: %@",msgFromDB.count, msgFromDB);
+    //    [self.notificationsTable reloadData];
+    
+    
 //    self.hasInitNotification = YES;
 //    [self performSelectorOnMainThread:@selector(getMsgFromDataBaseDone) withObject:nil waitUntilDone:YES];
     NSLog(@"getMsgFromDataBase end");
