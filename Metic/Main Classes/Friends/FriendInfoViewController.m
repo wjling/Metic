@@ -12,7 +12,7 @@
 #import "BannerViewController.h"
 #import "AddFriendConfirmViewController.h"
 
-@interface FriendInfoViewController ()<UIAlertViewDelegate>
+@interface FriendInfoViewController ()<UIAlertViewDelegate, UITextFieldDelegate>
 {
     NSInteger kNumberOfPages;
     NSNumber* addEventID;
@@ -702,9 +702,8 @@
     if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
         [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
     }
+    [confirmAlert textFieldAtIndex:0].delegate = self;
     [confirmAlert show];
-    [confirmAlert selectAll:self];
-
 }
 
 
@@ -738,6 +737,18 @@
     }
 }
 
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if ([textField.text containsString:@"我是"] && textField.text.length > 2) {
+        NSRange range = NSMakeRange(2, textField.text.length - 2);
+        UITextRange* trange = [[UITextRange alloc]init];
+        UITextPosition* pos = [[UITextPosition alloc]init];
+        [textField selectAll:textField];
+    }
+    NSLog(@"yayyayayayayyayayyayayayyy");
+}
+
 
 #pragma mark - Navigation
 
@@ -758,58 +769,6 @@
         vc.userName = [friendInfo_dic objectForKey:@"name"];
     }
 }
-
-
-
-
-//- (IBAction)testingClicked:(id)sender
-//{
-////    NSString* sql_CreateTable = @"CREATE TABLE IF NOT EXISTS USERINFO (user_id INTEGER PRIMARY KEY, user_name TEXT, gender INTEGER)";
-//    MySqlite* mine = [[MySqlite alloc]init];
-//    NSLog(@"db testing");
-//    [mine openMyDB:@"Metis.sqlite"];
-////    [mine execSql:sql_CreateTable];
-//    
-//    [mine createTableWithTableName:@"USERINFO" andIndexWithProperties:@"user_id INTEGER PRIMARY KEY UNIQUE",@"user_name TEXT",@"gender INTEGER",nil];
-//    
-//    NSArray* columns1 = [[NSArray alloc]initWithObjects:@"'user_id'", @"'user_name'", @"'gender'", nil];
-//    NSArray* values1 = [[NSArray alloc]initWithObjects:@"2",@"'sb1'",@"0",nil];
-//    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values1];
-//    
-//    NSArray* values2 = [[NSArray alloc]initWithObjects:@"5",@"'sbhhh'",@"0",nil];
-//    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values2];
-//    
-//    NSArray* values3 = [[NSArray alloc]initWithObjects:@"3",@"'xxxxf'",@"1",nil];
-//    [mine insertToTable:@"USERINFO" withColumns:columns1 andValues:values3];
-//
-//    
-////    NSArray* columns2 = [[NSArray alloc]initWithObjects:@"'user_name'", @"'gender'", nil];
-////    NSArray* values4 = [[NSArray alloc]initWithObjects:@"'hi,sbb'",@"0",nil];
-////    [mine updateDataWitTableName:@"USERINFO" andWhere:@"user_id" andItsValue:@"5" withColumns:columns2 andValues:values4];
-//    
-////    NSArray* columns3 = [[NSArray alloc]initWithObjects:@"'user_id'", @"'user_name'", nil];
-////    NSArray* values5 = [[NSArray alloc]initWithObjects:@"5",@"'hello,sbb'",nil];
-////    [mine insertToTable:@"USERINFO" withColumns:columns3 andValues:values5];
-//    
-//    NSDictionary* wheres = [[NSDictionary alloc]initWithObjectsAndKeys:@"5",@"user_id", nil];
-//    NSDictionary* sets = [[NSDictionary alloc]initWithObjectsAndKeys:@"'yooooosb'",@"user_name",@"1",@"gender", nil];
-//    [mine updateDataWitTableName:@"'USERINFO'" andWhere:wheres andSet:sets];
-//    
-//    NSArray* columns4 = [[NSArray alloc]initWithObjects:@"user_id", @"user_name", nil];
-//    NSDictionary* wheres1 = [[NSDictionary alloc]initWithObjectsAndKeys:@"'%sb%'",@"user_name", nil];
-//    NSMutableArray* results;
-//    results = [mine queryTable:@"USERINFO" withSelect:columns4 andWhere:wheres1];
-//    int count = results.count;
-//    for (int i = 0; i<count; i++) {
-//        NSLog(@"%d: %@\n",i,[results objectAtIndex:i]);
-//    }
-//    
-//     NSDictionary* wheres2 = [[NSDictionary alloc]initWithObjectsAndKeys:@"'sb1'",@"user_name", nil];
-//    [mine deleteTurpleFromTable:@"USERINFO" withWhere:wheres2];
-//
-//
-//    [mine closeMyDB];
-//}
 
 - (IBAction)rightBarBtnClicked:(id)sender {
     [moreFunction_view setHidden:!moreFunction_view.hidden];
