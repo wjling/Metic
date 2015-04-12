@@ -102,6 +102,16 @@
     [self setupGroupPickerview];
     [self initNoAssetView];
 }
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self fixUI];
+}
+
+-(void)fixUI
+{
+    [self.collectionView setFrame:CGRectMake(0, 64, 320, self.view.bounds.size.height - 64 -48)];
+}
+
 - (void)initVariable
 {
     self.assetsFilter = [ALAssetsFilter allPhotos];
