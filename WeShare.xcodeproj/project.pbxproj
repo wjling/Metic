@@ -28,6 +28,10 @@
 		0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF4C19B49DA2003BB2F6 /* NotificationsViewController.m */; };
 		0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */; };
 		0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */; };
+		043E1A6B1ADA23AA00D1D39F /* UploadManageViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 043E1A681ADA23AA00D1D39F /* UploadManageViewCell.m */; };
+		043E1A6C1ADA23AA00D1D39F /* UploadManageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043E1A6A1ADA23AA00D1D39F /* UploadManageViewController.m */; };
+		043E1A751ADA24B400D1D39F /* SDBaseProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043E1A721ADA24B400D1D39F /* SDBaseProgressView.m */; };
+		043E1A761ADA24B400D1D39F /* SDLoopProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043E1A741ADA24B400D1D39F /* SDLoopProgressView.m */; };
 		045A77B31A807DF10036BDC4 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 045A77B21A807DF10036BDC4 /* libbaidumapapi.a */; };
 		045A77B51A807E4E0036BDC4 /* libzbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 045A77B41A807E4E0036BDC4 /* libzbar.a */; };
 		04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04A531851A222947002FDDC1 /* UIImageView+LBBlurredImage.m */; };
@@ -423,6 +427,14 @@
 		0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModifyPasswordViewController.m; path = UserInfo/ModifyPasswordViewController.m; sourceTree = "<group>"; };
 		0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindingPhoneViewController.h; path = UserInfo/BindingPhoneViewController.h; sourceTree = "<group>"; };
 		0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindingPhoneViewController.m; path = UserInfo/BindingPhoneViewController.m; sourceTree = "<group>"; };
+		043E1A671ADA23AA00D1D39F /* UploadManageViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadManageViewCell.h; sourceTree = "<group>"; };
+		043E1A681ADA23AA00D1D39F /* UploadManageViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadManageViewCell.m; sourceTree = "<group>"; };
+		043E1A691ADA23AA00D1D39F /* UploadManageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadManageViewController.h; sourceTree = "<group>"; };
+		043E1A6A1ADA23AA00D1D39F /* UploadManageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadManageViewController.m; sourceTree = "<group>"; };
+		043E1A711ADA24B400D1D39F /* SDBaseProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDBaseProgressView.h; path = SDProgessView/SDBaseProgressView.h; sourceTree = "<group>"; };
+		043E1A721ADA24B400D1D39F /* SDBaseProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDBaseProgressView.m; path = SDProgessView/SDBaseProgressView.m; sourceTree = "<group>"; };
+		043E1A731ADA24B400D1D39F /* SDLoopProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLoopProgressView.h; path = SDProgessView/SDLoopProgressView.h; sourceTree = "<group>"; };
+		043E1A741ADA24B400D1D39F /* SDLoopProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLoopProgressView.m; path = SDProgessView/SDLoopProgressView.m; sourceTree = "<group>"; };
 		045A77B21A807DF10036BDC4 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		045A77B41A807E4E0036BDC4 /* libzbar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzbar.a; sourceTree = "<group>"; };
 		04A531841A222947002FDDC1 /* UIImageView+LBBlurredImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+LBBlurredImage.h"; sourceTree = "<group>"; };
@@ -1164,6 +1176,17 @@
 				04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */,
 			);
 			name = "Login&Register";
+			sourceTree = "<group>";
+		};
+		043E1A701ADA248300D1D39F /* SDProgressView */ = {
+			isa = PBXGroup;
+			children = (
+				043E1A711ADA24B400D1D39F /* SDBaseProgressView.h */,
+				043E1A721ADA24B400D1D39F /* SDBaseProgressView.m */,
+				043E1A731ADA24B400D1D39F /* SDLoopProgressView.h */,
+				043E1A741ADA24B400D1D39F /* SDLoopProgressView.m */,
+			);
+			name = SDProgressView;
 			sourceTree = "<group>";
 		};
 		04A531831A222947002FDDC1 /* LBBlurredImage */ = {
@@ -2225,6 +2248,10 @@
 				04B6F8B119A25FCC00229393 /* BannerViewController.m */,
 				51DDBF7819A328010051B88C /* AdViewController.h */,
 				51DDBF7919A328010051B88C /* AdViewController.m */,
+				043E1A671ADA23AA00D1D39F /* UploadManageViewCell.h */,
+				043E1A681ADA23AA00D1D39F /* UploadManageViewCell.m */,
+				043E1A691ADA23AA00D1D39F /* UploadManageViewController.h */,
+				043E1A6A1ADA23AA00D1D39F /* UploadManageViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -2232,6 +2259,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				043E1A701ADA248300D1D39F /* SDProgressView */,
 				F833694C1AD00AE100B41435 /* MBProgressHUD */,
 				F83369341ACFF01E00B41435 /* MJPhotoBrowser */,
 				5148120A1937064D00DBBED7 /* MJRefresh */,
@@ -2723,6 +2751,7 @@
 				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
+				043E1A6B1ADA23AA00D1D39F /* UploadManageViewCell.m in Sources */,
 				04BAF689199A569F00BF00E1 /* WelcomePageViewController.m in Sources */,
 				08C97F2B1AAF2C7000ABA19C /* UzysAssetsViewCell.m in Sources */,
 				51F4CB0A19E6307500E487F1 /* ASIDataCompressor.m in Sources */,
@@ -2809,6 +2838,7 @@
 				51F4CB2119E6307500E487F1 /* HTTPDynamicFileResponse.m in Sources */,
 				04B22C451984F43400B33B7C /* SystemSettingsViewController.m in Sources */,
 				08DB69A519541F3A00F80F3F /* AFURLRequestSerialization.m in Sources */,
+				043E1A6C1ADA23AA00D1D39F /* UploadManageViewController.m in Sources */,
 				F833695B1AD1241800B41435 /* MTPhotoToolbar.m in Sources */,
 				51581D7319335CDD00943606 /* SlideNavigationController.m in Sources */,
 				08DB69A619541F3A00F80F3F /* AFURLResponseSerialization.m in Sources */,
@@ -2864,6 +2894,7 @@
 				51F4CB1419E6307500E487F1 /* DDASLLogger.m in Sources */,
 				51F4CB2219E6307500E487F1 /* HTTPErrorResponse.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
+				043E1A761ADA24B400D1D39F /* SDLoopProgressView.m in Sources */,
 				51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */,
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,
 				51F4CB2019E6307500E487F1 /* HTTPDataResponse.m in Sources */,
@@ -2904,6 +2935,7 @@
 				0435EF3D19B45C54003BB2F6 /* FriendTableViewCell.m in Sources */,
 				5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */,
 				510D4598196E8A960081672A /* NSData+ImageContentType.m in Sources */,
+				043E1A751ADA24B400D1D39F /* SDBaseProgressView.m in Sources */,
 				510D4599196E8A960081672A /* SDImageCache.m in Sources */,
 				51F4CB1D19E6307500E487F1 /* HTTPAsyncFileResponse.m in Sources */,
 				0435EF3919B45C54003BB2F6 /* AddFriendViewController.m in Sources */,
@@ -3127,7 +3159,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

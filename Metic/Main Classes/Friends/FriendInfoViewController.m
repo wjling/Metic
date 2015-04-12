@@ -703,6 +703,7 @@
         [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
     }
     [confirmAlert show];
+    [confirmAlert selectAll:self];
 
 }
 
