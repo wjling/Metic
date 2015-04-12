@@ -597,7 +597,12 @@
     if (!cell) {
         cell = [[PhotoTableViewCell alloc] initWithReuseIdentifier:CellIdentifier];
     }
-    
+    if(indexPath.row >= _photo_list.count){
+        cell.hidden = YES;
+        return cell;
+    }else{
+        cell.hidden = NO;
+    }
     NSMutableDictionary *a = _photo_list[indexPath.row];
     if ([a valueForKey:@"alasset"]) {
         cell.isUploading = YES;
