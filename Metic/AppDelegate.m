@@ -536,15 +536,19 @@
             NSNumber* fid = [msg_dic objectForKey:@"id"];
             NSNumber* gender = [msg_dic objectForKey:@"gender"];
             NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-            [sql openMyDB:path];
-            [sql insertToTable:@"friend"
+//            [sql openMyDB:path];
+            [sql      database:path
+                 insertToTable:@"friend"
                    withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
                      andValues:[[NSArray alloc] initWithObjects:
                                 [NSString stringWithFormat:@"%@",fid],
                                 [NSString stringWithFormat:@"'%@'",name],
                                 [NSString stringWithFormat:@"'%@'",email],
-                                [NSString stringWithFormat:@"%@",gender], nil]];
-            [sql closeMyDB];
+                                [NSString stringWithFormat:@"%@",gender], nil]
+                    completion:^(BOOL result) {
+                        
+                    }];
+//            [sql closeMyDB];
             
             NSDictionary* newFriend = [CommonUtils packParamsInDictionary:fid,@"id",name,@"name",gender,@"gender",email,@"email",nil];
             [[MTUser sharedInstance].friendList addObject:newFriend];
@@ -640,11 +644,11 @@
         type = 2;
         
         NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-        [sql openMyDB:path];
+//        [sql openMyDB:path];
         NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
-        [sql deleteTurpleFromTable:@"event" withWhere:wheres];
-        [sql closeMyDB];
+        [sql database:path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
+//        [sql closeMyDB];
         
         NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
@@ -657,11 +661,11 @@
         type = 2;
         
         NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-        [sql openMyDB:path];
+//        [sql openMyDB:path];
         NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
-        [sql deleteTurpleFromTable:@"event" withWhere:wheres];
-        [sql closeMyDB];
+        [sql database:path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
+//        [sql closeMyDB];
         
         NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
@@ -688,10 +692,12 @@
     }
     
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
+    MySqlite* sql1 = [[MySqlite alloc]init];
+    [sql1 openMyDB:path];
     while (![self.sql isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
+    [sql1 closeMyDB];
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
 //    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
     NSArray* values = [[NSArray alloc]initWithObjects:
@@ -699,8 +705,8 @@
                        [NSString stringWithFormat:@"'%@'",content_str],
                        [NSString stringWithFormat:@"%d",-1],
                        nil];
-    [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
-    [self.sql closeMyDB];
+    [self.sql database: path insertToTable:@"notification" withColumns:columns andValues:values completion:nil];
+//    [self.sql closeMyDB];
     
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
@@ -1201,15 +1207,17 @@
                 NSNumber* fid = [msg_dic objectForKey:@"id"];
                 NSNumber* gender = [msg_dic objectForKey:@"gender"];
                 NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-                [sql openMyDB:path];
-                [sql insertToTable:@"friend"
+//                [sql openMyDB:path];
+                [sql      database:path
+                     insertToTable:@"friend"
                        withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender", nil]
                          andValues:[[NSArray alloc] initWithObjects:
                                     [NSString stringWithFormat:@"%@",fid],
                                     [NSString stringWithFormat:@"'%@'",name],
                                     [NSString stringWithFormat:@"'%@'",email],
-                                    [NSString stringWithFormat:@"%@",gender], nil]];
-                [sql closeMyDB];
+                                    [NSString stringWithFormat:@"%@",gender], nil]
+                        completion:nil];
+//                [sql closeMyDB];
                 //                [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
                 NSDictionary* newFriend = [CommonUtils packParamsInDictionary:fid,@"id",name,@"name",gender,@"gender",email,@"email",nil];
                 [[MTUser sharedInstance].friendList addObject:newFriend];
@@ -1269,11 +1277,11 @@
             }
             
             NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-            [sql openMyDB:path];
+//            [sql openMyDB:path];
             NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
             NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
-            [sql deleteTurpleFromTable:@"event" withWhere:wheres];
-            [sql closeMyDB];
+            [sql database:path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
+//            [sql closeMyDB];
             
             NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
@@ -1288,11 +1296,11 @@
             }
             
             NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-            [sql openMyDB:path];
+//            [sql openMyDB:path];
             NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
             NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",event_id1],@"event_id", nil];
-            [sql deleteTurpleFromTable:@"event" withWhere:wheres];
-            [sql closeMyDB];
+            [sql database:path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
+//            [sql closeMyDB];
             
             NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
@@ -1376,10 +1384,12 @@
 - (void)handleReceivedNotifications:(NSMutableArray*)syn_messges withCount:(NSInteger)numOfMsg
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    [self.sql openMyDB:path];
+    MySqlite* sql1 = [[MySqlite alloc]init];
+    [sql1 openMyDB:path];
     while (![self.sql isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
+    [sql1 closeMyDB];
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
     for (NSInteger i = 0; i < syn_messges.count; i++) {
@@ -1393,9 +1403,8 @@
                            [NSString stringWithFormat:@"'%@'",msg],
                            [NSString stringWithFormat:@"%d",-1],
                            nil];
-        [self.sql insertToTable:@"notification" withColumns:columns andValues:values];
+        [self.sql database:path insertToTable:@"notification" withColumns:columns andValues:values completion:nil];
     }
-    [self.sql closeMyDB];
     
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];

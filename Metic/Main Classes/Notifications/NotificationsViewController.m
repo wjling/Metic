@@ -738,12 +738,11 @@ enum Response_Type
 
 -(void)clearCurrentPage
 {
-    [mySql openMyDB:DB_path];
+//    [mySql openMyDB:DB_path];
     if (tab_index == 0) {
         for (NSDictionary* msg in MTUser_eventRequestMsg) {
             NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
-                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+            [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil] completion:nil];
         }
         [eventRequestMsg removeAllObjects];
         [MTUser_eventRequestMsg removeAllObjects];
@@ -754,8 +753,7 @@ enum Response_Type
     {
         for (NSDictionary* msg in MTUser_friendRequestMsg) {
             NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
-                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+            [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil] completion:nil];
         }
         [friendRequestMsg removeAllObjects];
         [MTUser_friendRequestMsg removeAllObjects];
@@ -766,15 +764,14 @@ enum Response_Type
     {
         for (NSDictionary* msg in MTUser_systemMsg) {
             NSNumber* seq = [msg objectForKey:@"seq"];
-            [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
-                                                                    [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+            [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil] completion:nil];
         }
         [systemMsg removeAllObjects];
         [MTUser_systemMsg removeAllObjects];
         [self.systemMessage_tableView reloadData];
         label2.hidden = NO;
     }
-    [mySql closeMyDB];
+//    [mySql closeMyDB];
 
 }
 
@@ -1549,9 +1546,9 @@ enum Response_Type
     NSDictionary* msg_dic = [systemMsg objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
     NSLog(@"del cell seq: %@, row: %d",seq,selectedPath.row);
-    [mySql openMyDB:DB_path];
-    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-    [mySql closeMyDB];
+//    [mySql openMyDB:DB_path];
+    [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil] completion:nil];
+//    [mySql closeMyDB];
     [systemMsg removeObjectAtIndex:selectedPath.row];
     cell = nil;
     [self.systemMessage_tableView reloadData];
@@ -1672,23 +1669,28 @@ enum Response_Type
                     NSString* femail = [msg_dic objectForKey:@"email"];
                     NSNumber* fgender = [msg_dic objectForKey:@"gender"];
                     int fid1 = [[msg_dic objectForKey:@"id"]intValue];
-                    [mySql openMyDB:DB_path];
-                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq1],@"seq", nil]];
-                    [mySql insertToTable:@"friend"
-                             withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender",@"alias", nil]
-                               andValues:[[NSArray alloc] initWithObjects:
-                                          [NSString stringWithFormat:@"%d",fid1],
-                                          [NSString stringWithFormat:@"'%@'",fname],
-                                          [NSString stringWithFormat:@"'%@'",femail],
-                                          [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]],
-                                          [NSNull null],nil]];
-                    [mySql updateDataWitTableName:@"notification"
-                                         andWhere:[CommonUtils packParamsInDictionary:
-                                                   [NSString stringWithFormat:@"%d",seq1],@"seq",
-                                                   nil]
-                                           andSet:[CommonUtils packParamsInDictionary:
-                                                   [NSString stringWithFormat:@"%d",1],@"ishandled",
-                                                   nil]];
+//                    [mySql openMyDB:DB_path];
+                    [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq1],@"seq", nil] completion:nil];
+                    
+                    [mySql database:DB_path
+                      insertToTable:@"friend"
+                     
+                        withColumns:[[NSArray alloc]initWithObjects:@"id",@"name",@"email",@"gender",@"alias", nil]
+                          andValues:[[NSArray alloc] initWithObjects:
+                                     [NSString stringWithFormat:@"%d",fid1],
+                                     [NSString stringWithFormat:@"'%@'",fname],
+                                     [NSString stringWithFormat:@"'%@'",femail],
+                                     [NSString stringWithFormat:@"%@",[CommonUtils NSStringWithNSNumber:fgender]],
+                                     [NSNull null],nil]
+                         completion:nil];
+                    
+                    [mySql database:DB_path
+             updateDataWitTableName:@"notification"
+                           andWhere:[CommonUtils packParamsInDictionary:
+                                     [NSString stringWithFormat:@"%d",seq1],@"seq",nil]
+                             andSet:[CommonUtils packParamsInDictionary:
+                                     [NSString stringWithFormat:@"%d",1],@"ishandled",nil]
+                         completion:nil];
                     for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
                         NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
                         NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
@@ -1703,7 +1705,7 @@ enum Response_Type
                         }
                     }
                     
-                    [mySql closeMyDB];
+//                    [mySql closeMyDB];
                     
                     NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
                                                 fname,@"name",
@@ -1730,14 +1732,14 @@ enum Response_Type
                     NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
                     NSString* fname = [msg_dic objectForKey:@"name"];
                     NSLog(@"response friend, seq: %d, fid: %d",seq1,fid1);
-                    [mySql openMyDB:DB_path];
-                    [mySql updateDataWitTableName:@"notification"
-                                         andWhere:[CommonUtils packParamsInDictionary:
-                                                   [NSString stringWithFormat:@"%d",seq1],@"seq",
-                                                   nil]
-                                           andSet:[CommonUtils packParamsInDictionary:
-                                                   [NSString stringWithFormat:@"%d",0],@"ishandled",
-                                                   nil]];
+//                    [mySql openMyDB:DB_path];
+                    [mySql database:DB_path
+             updateDataWitTableName:@"notification"
+                           andWhere:[CommonUtils packParamsInDictionary:
+                                     [NSString stringWithFormat:@"%d",seq1],@"seq", nil]
+                             andSet:[CommonUtils packParamsInDictionary:
+                                     [NSString stringWithFormat:@"%d",0],@"ishandled", nil]
+                         completion:nil];
                     
                     for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
                         NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
@@ -1746,14 +1748,14 @@ enum Response_Type
                             int fid2 = [[msg objectForKey:@"id"]intValue];
                             int seq2 = [[msg objectForKey:@"seq"]intValue];
                             if (fid1 == fid2 && seq1 != seq2) {
-                                [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                                [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil] completion:nil];
                                 [MTUser_friendRequestMsg removeObject:msg];
                                 i--;
                             }
                         }
                     }
 
-                    [mySql closeMyDB];
+//                    [mySql closeMyDB];
 
                     [MTUser_friendRequestMsg removeObject:msg_dic];
                     NSLog(@"（拒绝）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
@@ -1775,14 +1777,14 @@ enum Response_Type
                 NSLog(@"response event, seq: %d",seq1);
                 NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
                 NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
-                [mySql openMyDB:DB_path];
-                [mySql updateDataWitTableName:@"notification"
-                                     andWhere:[CommonUtils packParamsInDictionary:
-                                               [NSString stringWithFormat:@"%d",seq1],@"seq",
-                                               nil]
-                                       andSet:[CommonUtils packParamsInDictionary:
-                                               [NSString stringWithFormat:@"%@",result],@"ishandled",
-                                               nil]];
+//                [mySql openMyDB:DB_path];
+                [mySql database:DB_path
+         updateDataWitTableName:@"notification"
+                       andWhere:[CommonUtils packParamsInDictionary:
+                                 [NSString stringWithFormat:@"%d",seq1],@"seq", nil]
+                         andSet:[CommonUtils packParamsInDictionary:
+                                 [NSString stringWithFormat:@"%@",result],@"ishandled", nil]
+                     completion:nil];
                 
                 for (int i = 0; i < MTUser_eventRequestMsg.count; i++) {
                     NSMutableDictionary* msg  = [MTUser_eventRequestMsg objectAtIndex:i];
@@ -1790,12 +1792,12 @@ enum Response_Type
                     NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
                     NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                     if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
-                        [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                        [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil] completion:nil];
                         [MTUser_eventRequestMsg removeObject:msg];
                         continue;
                     }
                 }
-                [mySql closeMyDB];
+//                [mySql closeMyDB];
                 
                 
                 [MTUser_eventRequestMsg removeObject:msg_dic];
@@ -1820,14 +1822,13 @@ enum Response_Type
             NSLog(@"response already friend, seq: %d, fid: %d",seq1, fid1);
             
             //!已经是好友的情况下修改数据库的用户操作字段ishandled，有可能会造成数据错误。当然，只是有可能。我需要修改ishandled的值使这条消息标记为已处理!
-            [mySql openMyDB:DB_path];
-            [mySql updateDataWitTableName:@"notification"
-                                 andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
-                                           nil]
-                                   andSet:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
-                                           nil]];
+//            [mySql openMyDB:DB_path];
+            [mySql database:DB_path updateDataWitTableName:@"notification"
+                   andWhere:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%d",seq1],@"seq", nil]
+                     andSet:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%@",response_result],@"ishandled",nil]
+                 completion:nil];
             
             
             for (int i = 0; i < self.friendRequestMsg.count; i++) {
@@ -1851,7 +1852,7 @@ enum Response_Type
                     NSInteger fid2 = [[msg objectForKey:@"id"]integerValue];
                     NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                     if (fid1 == fid2 && seq1 != seq2) {
-                        [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                        [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil] completion:nil];
                         [MTUser_friendRequestMsg removeObject:msg];
                         i--;
                     }
@@ -1860,7 +1861,7 @@ enum Response_Type
                 
             }
             
-            [mySql closeMyDB];
+//            [mySql closeMyDB];
 
             [MTUser_friendRequestMsg removeObject:msg_dic];
             [self.friendRequest_tableView reloadData];
@@ -1891,15 +1892,15 @@ enum Response_Type
             NSNumber* seq = [msg_dic objectForKey:@"seq"];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
             
-            [mySql openMyDB:DB_path];
-            [mySql updateDataWitTableName:@"notification"
-                                 andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",seq],@"seq",
-                                           nil]
-                                   andSet:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
-                                           nil]];
-            [mySql closeMyDB];
+//            [mySql openMyDB:DB_path];
+            [mySql database:DB_path
+     updateDataWitTableName:@"notification"
+                   andWhere:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%@",seq],@"seq", nil]
+                     andSet:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%@",response_result],@"ishandled",nil]
+                 completion:nil];
+//            [mySql closeMyDB];
 
             [MTUser_eventRequestMsg removeObject:msg_dic];
             [eventRequestMsg removeObjectAtIndex:row];
@@ -1928,14 +1929,14 @@ enum Response_Type
             NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
             
-            [mySql openMyDB:DB_path];
-            [mySql updateDataWitTableName:@"notification"
-                                 andWhere:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%d",seq1],@"seq",
-                                           nil]
-                                   andSet:[CommonUtils packParamsInDictionary:
-                                           [NSString stringWithFormat:@"%@",response_result],@"ishandled",
-                                           nil]];
+//            [mySql openMyDB:DB_path];
+            [mySql database:DB_path
+     updateDataWitTableName:@"notification"
+                   andWhere:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%d",seq1],@"seq", nil]
+                     andSet:[CommonUtils packParamsInDictionary:
+                             [NSString stringWithFormat:@"%@",response_result],@"ishandled", nil]
+                 completion:nil];
             
             for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
                 NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
@@ -1943,13 +1944,13 @@ enum Response_Type
                 NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
                 NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
                 if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
-                    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                    [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil] completion:nil];
                     [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
                     continue;
                 }
             }
             
-            [mySql closeMyDB];
+//            [mySql closeMyDB];
             
             [MTUser_eventRequestMsg removeObject:msg_dic];
             [self.eventRequestMsg removeObjectAtIndex:row];

@@ -572,10 +572,10 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite *sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-    [sql deleteTurpleFromTable:@"event" withWhere:wheres];
-    [sql closeMyDB];
+    [sql database: path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
+//    [sql closeMyDB];
 }
 
 -(void)deleteItemfromHomeArray

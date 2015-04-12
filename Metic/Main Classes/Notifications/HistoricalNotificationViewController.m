@@ -123,14 +123,13 @@
     [UIView commitAnimations];
     
     MySqlite* mySql = [[MySqlite alloc]init];
-    [mySql openMyDB:DB_path];
+//    [mySql openMyDB:DB_path];
     for (int i = 0; i < self.historicalMsgs.count; i++) {
         NSDictionary* msg = [self.historicalMsgs objectAtIndex:i];
         NSNumber* seq = [msg objectForKey:@"seq"];
-        [mySql deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:
-                                                                [NSString stringWithFormat:@"%@",seq],@"seq",nil]];
+        [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil] completion:nil];
     }
-    [mySql closeMyDB];
+//    [mySql closeMyDB];
     [[MTUser sharedInstance].historicalMsg removeAllObjects];
     [self.historicalNF_tableview reloadData];
 

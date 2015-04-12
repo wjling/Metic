@@ -384,12 +384,17 @@
 
 -(void)getfriendInfoFromDB
 {
-    NSArray* alias_arr;
+    
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:DB_path];
-    alias_arr = [sql queryTable:@"friend" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@",fid], @"id", nil]];
-    [sql closeMyDB];
-    NSLog(@"get alias from DB: %@",alias_arr);
+//    [sql openMyDB:DB_path];
+    [sql database:DB_path queryTable:@"friend" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@",fid], @"id", nil] completion:^(NSMutableArray *resultsArray) {
+        NSArray* alias_arr;
+        alias_arr = resultsArray;
+        if(alias_arr.count > 0) self.friendInfo_dic = alias_arr[0];
+        NSLog(@"get alias from DB: %@",alias_arr);
+    }];
+//    [sql closeMyDB];
+    
 //    for (NSDictionary* temp in alias_arr) {
 //        NSString* fid = [temp objectForKey:@"id"];
 //        NSString* email = [temp objectForKey:@"email"];
@@ -397,7 +402,7 @@
 //        NSNumber* gender = [temp objectForKey:@"gender"];
 //        
 //    }
-    if(alias_arr.count > 0) self.friendInfo_dic = alias_arr[0];
+    
 }
 
 -(IBAction)changeAlias:(id)sender
@@ -460,9 +465,9 @@
                           [NSString stringWithFormat:@"%@",gender],@"gender",
                           nil];
     MySqlite* mySql = [[MySqlite alloc]init];
-    [mySql openMyDB:DB_path];
-    [mySql updateDataWitTableName:@"friend" andWhere:wheres andSet:sets];
-    [mySql closeMyDB];
+//    [mySql openMyDB:DB_path];
+    [mySql database: DB_path updateDataWitTableName:@"friend" andWhere:wheres andSet:sets completion:nil];
+//    [mySql closeMyDB];
     [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
     [[MTUser sharedInstance] friendListDidChanged];
 //    NSLog(@"event_list: %@",events);
