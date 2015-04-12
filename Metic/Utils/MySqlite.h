@@ -106,6 +106,9 @@ static BOOL isLocked = false;
 //删除操作
 - (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres completion:(void(^)(BOOL result))block;
 
+//查询一个表是否存在
+- (void)database:(NSString*)DBname isExistTable:(NSString*)tableName completion:(void(^)(BOOL result))block;
+
 //增加表的列属性
 -(void)database:(NSString*)DBname table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue completion:(void(^)(BOOL result))block;
 

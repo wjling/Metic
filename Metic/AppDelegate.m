@@ -694,7 +694,8 @@
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql1 = [[MySqlite alloc]init];
     [sql1 openMyDB:path];
-    while (![self.sql isExistTable:@"notification"]) {
+    BOOL f = NO;
+    while (![sql1 isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
     [sql1 closeMyDB];
@@ -1386,7 +1387,7 @@
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql1 = [[MySqlite alloc]init];
     [sql1 openMyDB:path];
-    while (![self.sql isExistTable:@"notification"]) {
+    while (![sql1 isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
     [sql1 closeMyDB];

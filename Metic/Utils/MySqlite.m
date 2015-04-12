@@ -173,7 +173,10 @@ static dispatch_queue_t mysqlite_queue;
                 NSLog(@"creating table failed. error: %s", error);
                 [self closeMyDB];
                 if (block) {
-                    block(NO);
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(NO);
+                    });
+                    
                 }
             }
             else
@@ -182,7 +185,9 @@ static dispatch_queue_t mysqlite_queue;
                 NSLog(@"creating table succeeded");
                 [self closeMyDB];
                 if (block) {
-                    block(YES);
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(YES);
+                    });
                 }
             }
 
@@ -192,7 +197,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"index input error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
 
@@ -256,7 +263,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"data input error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
             return;
         }
@@ -290,7 +299,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"insert table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
@@ -298,7 +309,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"insert table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -413,7 +426,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
             return ;
         }
@@ -445,7 +460,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"update table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
@@ -453,7 +470,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"update table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -535,7 +554,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(nil);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(nil);
+                });
             };
             
             return ;
@@ -571,7 +592,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"transforming sql to sqlite3_stmt failed, state: %d",state1);
             [self closeMyDB];
             if (block) {
-                block(nil);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(nil);
+                });
             };
             return;
         }
@@ -593,7 +616,9 @@ static dispatch_queue_t mysqlite_queue;
         [self closeMyDB];
         //    NSLog(@"query result: %@",results);
         if (block) {
-            block(results);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                block(results);
+            });
         }
         
 
@@ -642,7 +667,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             };
             return ;
         }
@@ -663,7 +690,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"delete table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             };
         }
         else
@@ -671,7 +700,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"delete table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -701,6 +732,33 @@ static dispatch_queue_t mysqlite_queue;
     }
     
 }
+
+- (void)database:(NSString*)DBname isExistTable:(NSString *)tableName completion:(void (^)(BOOL))block
+{
+    [self database:DBname queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+        NSMutableArray* state = resultsArray;
+        if (state) {
+            NSLog(@"table: %@ found",tableName);
+            if (block) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
+            }
+        }
+        else
+        {
+            NSLog(@"No table: %@  found",tableName);
+            if (block) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
+            }
+        }
+
+    }];
+    
+}
+
 
 -(BOOL)table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue
 {
@@ -773,7 +831,9 @@ static dispatch_queue_t mysqlite_queue;
         sqlite3_finalize(statement);
         [self closeMyDB];
         if (block) {
-            block(result);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                block(result);
+            });
         };
 
     });
