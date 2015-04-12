@@ -44,50 +44,53 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
 
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
         
-    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-    [sql closeMyDB];
-    
-    if (result.count == 0) return;
-    
-    NSString* message = [NSString stringWithFormat:@"发现您有 %lu 张图片未上传成功",(unsigned long)result.count];
-    
-    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
-    
-    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"放弃上传" action:^{
-        [self removeAlluploadTaskInDB];
-    }];
-    [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
-    
-    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"马上上传" action:^{
-        NSLog(@"%@",result);
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            for (int i = 0; i < result.count; i++) {
-                NSDictionary *task = result[i];
-                NSString* alassetStr = [task valueForKey:@"alasset"];
-                NSString* eventId = [task valueForKey:@"event_id"];
-                NSString* imgName = [task valueForKey:@"imgName"];
-                [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
-            }
-        });
+//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+//    [sql closeMyDB];
+    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray.count == 0) return;
         
+        NSString* message = [NSString stringWithFormat:@"发现您有 %lu 张图片未上传成功",(unsigned long)resultsArray.count];
+        
+        BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
+        
+        RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"放弃上传" action:^{
+            [self removeAlluploadTaskInDB];
+        }];
+        [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
+        
+        RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"马上上传" action:^{
+            NSLog(@"%@",resultsArray);
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                for (int i = 0; i < resultsArray.count; i++) {
+                    NSDictionary *task = resultsArray[i];
+                    NSString* alassetStr = [task valueForKey:@"alasset"];
+                    NSString* eventId = [task valueForKey:@"event_id"];
+                    NSString* imgName = [task valueForKey:@"imgName"];
+                    [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+                }
+            });
+            
+        }];
+        [alertView addButton:okItem type:RIButtonItemType_Other];
+        [alertView show];
     }];
-    [alertView addButton:okItem type:RIButtonItemType_Other];
-    [alertView show];
+    
 }
 
 - (void)removeAlluploadTaskInDB
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"1", nil];
-    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
-    [sql closeMyDB];
+    [sql database:path deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres completion:nil];
+//    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+//    [sql closeMyDB];
 }
 
 - (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId
