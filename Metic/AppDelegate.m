@@ -694,11 +694,13 @@
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql1 = [[MySqlite alloc]init];
     [sql1 openMyDB:path];
-    BOOL f = NO;
     while (![sql1 isExistTable:@"notification"]) {
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
     }
     [sql1 closeMyDB];
+    
+    
+    
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
 //    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
     NSArray* values = [[NSArray alloc]initWithObjects:

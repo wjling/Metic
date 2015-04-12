@@ -151,7 +151,7 @@ static dispatch_queue_t mysqlite_queue;
 
 -(void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSMutableString* sql = [[NSMutableString alloc]initWithString:@"CREATE TABLE IF NOT EXISTS "];
         [sql appendString:[NSString stringWithFormat:@"%@%@",tableName,@" ("]];
@@ -255,7 +255,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname insertToTable:(NSString *)tableName withColumns:(NSArray *)columns andValues:(NSArray *)values completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger columnsCount = columns.count;
         NSInteger valuesCount = values.count;
@@ -418,7 +418,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary *)wheres andSet:(NSDictionary *)sets completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger wheresCount = wheres.count;
         NSInteger setsCount = sets.count;
@@ -544,7 +544,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname queryTable:(NSString *)tableName withSelect:(NSArray *)selects andWhere:(NSDictionary *)wheres completion:(void (^)(NSMutableArray *))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSMutableArray* results = [[NSMutableArray alloc]init];
         
@@ -660,7 +660,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString *)tableName withWhere:(NSDictionary *)wheres completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger wheresCount = wheres.count;
         if (!tableName || !wheresCount) {
@@ -797,7 +797,7 @@ static dispatch_queue_t mysqlite_queue;
 
 -(void)database:(NSString*)DBname table:(NSString *)tableName addsColumn:(NSString *)column withDefault:(id)defaultValue completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         char *errMsg;
         int result = 1;
