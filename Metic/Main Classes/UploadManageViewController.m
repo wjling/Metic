@@ -68,28 +68,33 @@
     //多图上传
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by id",_eventId],@"event_id", nil];
     
-    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-    [sql closeMyDB];
+//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+//    [sql closeMyDB];
+    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        for (int i = 0; i < resultsArray.count; i++) {
+            NSDictionary *task = resultsArray[i];
+            NSString* imageName = [task valueForKey:@"imgName"];
+            NSMutableDictionary *uploadTask = [[NSMutableDictionary alloc]initWithDictionary:task];
+            [uploadTask setValue:[NSNumber numberWithInteger:0] forKey:@"photo_id"];
+            [uploadTask setValue:imageName forKey:@"url"];
+            [resultsArray replaceObjectAtIndex:i withObject:uploadTask];
+        }
+        
+        if(!_uploadingPhotos) _uploadingPhotos = [[NSMutableArray alloc]init];
+        [_uploadingPhotos removeAllObjects];
+        [_uploadingPhotos addObjectsFromArray:resultsArray];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.collelctionView reloadData];
+        });
+        
+    }];
     
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary *task = result[i];
-        NSString* imageName = [task valueForKey:@"imgName"];
-        NSMutableDictionary *uploadTask = [[NSMutableDictionary alloc]initWithDictionary:task];
-        [uploadTask setValue:[NSNumber numberWithInteger:0] forKey:@"photo_id"];
-        [uploadTask setValue:imageName forKey:@"url"];
-        [result replaceObjectAtIndex:i withObject:uploadTask];
-    }
     
-    if(!_uploadingPhotos) _uploadingPhotos = [[NSMutableArray alloc]init];
-    [_uploadingPhotos removeAllObjects];
-    [_uploadingPhotos addObjectsFromArray:result];
-
-    [self.collelctionView reloadData];
 }
 
 -(void)refreshEmptyAlert

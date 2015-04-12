@@ -176,10 +176,11 @@
     }
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite *sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
-    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-    [sql closeMyDB];
+    [sql database:path deleteTurpleFromTable:@"eventPhotos" withWhere:wheres completion:nil];
+//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
+//    [sql closeMyDB];
 }
 
 + (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId
@@ -192,9 +193,10 @@
         photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
-        [sql openMyDB:path];
-        [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-        [sql closeMyDB];
+        [sql database:path insertToTable:@"eventPhotos" withColumns:columns andValues:values completion:nil];
+//        [sql openMyDB:path];
+//        [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+//        [sql closeMyDB];
     }
     
 }
@@ -203,91 +205,52 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     
     //self.events = [[NSMutableArray alloc]init];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
-    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
-    [self.photo_list_all removeAllObjects];
-    [self.photo_list removeAllObjects];
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary* temp = [result objectAtIndex:i];
-        NSString *tmpa = [temp valueForKey:@"photoInfo"];
-        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
-        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-        if ([photoInfo valueForKey:@"width"] && [photoInfo valueForKey:@"height"]) {
-            if ([[photoInfo valueForKey:@"width"] floatValue] == 0 || [[photoInfo valueForKey:@"height"] floatValue] == 0) {
-                continue;
+    
+    [sql database:path queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        NSMutableArray* photo_list_all_Tmp = [[NSMutableArray alloc]init];
+        NSMutableArray* photo_list_Tmp = [[NSMutableArray alloc]init];
+//        [self.photo_list_all removeAllObjects];
+//        [self.photo_list removeAllObjects];
+        for (int i = 0; i < resultsArray.count; i++) {
+            NSDictionary* temp = [resultsArray objectAtIndex:i];
+            NSString *tmpa = [temp valueForKey:@"photoInfo"];
+            tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+            NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+            if ([photoInfo valueForKey:@"width"] && [photoInfo valueForKey:@"height"]) {
+                if ([[photoInfo valueForKey:@"width"] floatValue] == 0 || [[photoInfo valueForKey:@"height"] floatValue] == 0) {
+                    continue;
+                }
+                [photo_list_all_Tmp addObject:photoInfo];
+                [photo_list_Tmp addObject:photoInfo];
             }
-            [self.photo_list_all addObject:photoInfo];
-            [self.photo_list addObject:photoInfo];
+            
         }
-        
-    }
-    [sql closeMyDB];
-    _haveLoadedPhoto = YES;
-    [self resetPhoNum];
-    [self calculateLRH];
-    _uploadingTaskCount = 0;
-    self.sequence = [[NSNumber alloc]initWithInt:-1];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [quiltView reloadData];
-    });
+        //    [sql closeMyDB];
+        _haveLoadedPhoto = YES;
+        [self resetPhoNum];
+        [self calculateLRH];
+        _uploadingTaskCount = 0;
+        self.sequence = [[NSNumber alloc]initWithInt:-1];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _photo_list = photo_list_Tmp;
+            _photo_list_all = photo_list_all_Tmp;
+            [quiltView reloadData];
+        });
+    }];
+//    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
+    
     
 }
 
 - (void)pullUploadTasksfromDB
 {
-    
-    //单图上传
-    return;
-    //多图上传
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
-    
-    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height", nil];
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by id desc",_eventId],@"event_id", nil];
-    
-    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-    [sql closeMyDB];
-    
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary *task = result[i];
-        NSString* imageName = [task valueForKey:@"imgName"];
-        NSMutableDictionary *uploadTask = [[NSMutableDictionary alloc]initWithDictionary:task];
-        [uploadTask setValue:[NSNumber numberWithInteger:0] forKey:@"photo_id"];
-        [uploadTask setValue:imageName forKey:@"url"];
-        [result replaceObjectAtIndex:i withObject:uploadTask];
-    }
-    
-    if(!_uploadingPhotos) _uploadingPhotos = [[NSMutableArray alloc]init];
-    [_uploadingPhotos removeAllObjects];
-    [_uploadingPhotos addObjectsFromArray:result];
-    
-    NSMutableArray* newPhotolist = [[NSMutableArray alloc]initWithArray:_uploadingPhotos];
-    NSMutableArray* newPhotolist_all = [[NSMutableArray alloc]initWithArray:_uploadingPhotos];
-    
-    if (_photo_list.count > _uploadingTaskCount) {
-        [newPhotolist addObjectsFromArray:[_photo_list subarrayWithRange:NSMakeRange(_uploadingTaskCount, _photo_list.count - _uploadingTaskCount)]];
-    }
-    if (_photo_list_all.count > _uploadingTaskCount) {
-        [newPhotolist_all addObjectsFromArray:[_photo_list_all subarrayWithRange:NSMakeRange(_uploadingTaskCount, _photo_list_all.count - _uploadingTaskCount)]];
-    }
-    _photo_list = newPhotolist;
-    _photo_list_all = newPhotolist_all;
-    _uploadingTaskCount = _uploadingPhotos.count;
-    
-    [self resetPhoNum];
-    [self calculateLRH];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [quiltView reloadData];
-    });
-    
-  
-    
+
 }
 
 -(void)resetPhoNum
@@ -345,19 +308,21 @@
 
 -(void)checkUploadStatus
 {
-    NSInteger uploadTaskCount = 0;
-    
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
     
-    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-    [sql closeMyDB];
-    uploadTaskCount = result.count;
-    [self setupUploadBtn:uploadTaskCount];
+//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
+    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        NSInteger uploadTaskCount = 0;
+        uploadTaskCount = resultsArray.count;
+        [self setupUploadBtn:uploadTaskCount];
+    }];
+//    [sql closeMyDB];
+    
 }
 
 -(void)setupUploadBtn:(NSInteger)uploadTaskCount

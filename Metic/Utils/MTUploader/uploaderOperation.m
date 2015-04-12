@@ -99,7 +99,7 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSURL* aLAssetsURL = [alasset valueForProperty:ALAssetPropertyAssetURL];
     NSString *aLAssetsStr = [aLAssetsURL absoluteString];
     float width = [[alasset defaultRepresentation]dimensions].width;
@@ -108,8 +108,9 @@
     NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'",@"'width'",@"'height'", nil];
     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr],[NSString stringWithFormat:@"%f",width],[NSString stringWithFormat:@"%f",height], nil];
     
-    [sql insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values];
-    [sql closeMyDB];
+    [sql database:path insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values completion:nil];
+//    [sql insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values];
+//    [sql closeMyDB];
 }
 
 - (void)removeuploadTaskInDB
@@ -117,10 +118,11 @@
     if (_imageName && _eventId) {
         NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
         MySqlite* sql = [[MySqlite alloc]init];
-        [sql openMyDB:path];
+//        [sql openMyDB:path];
         NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-        [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
-        [sql closeMyDB];
+        [sql database:path deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres completion:nil];
+//        [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+//        [sql closeMyDB];
     }
 }
 
@@ -128,34 +130,35 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
 
     NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
     photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
+    [sql database:path insertToTable:@"eventPhotos" withColumns:columns andValues:values completion:nil];
+//    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
     
-    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-    
-    [sql closeMyDB];
+//    [sql closeMyDB];
 }
 
 - (void)DBprocessionAfterUpload:(NSDictionary*)photoInfo eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"'%@'",_imageName],@"imgName",[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+//    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
+    [sql database:path deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres completion:nil];
     
     NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
     photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
     
-    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-    
-    [sql closeMyDB];
+//    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+    [sql database:path insertToTable:@"eventPhotos" withColumns:columns andValues:values completion:nil];
+//    [sql closeMyDB];
 }
 
 - (void)start

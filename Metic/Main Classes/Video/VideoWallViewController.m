@@ -242,50 +242,54 @@
     }
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite *sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
-    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
-    [sql closeMyDB];
+    [sql database:path deleteTurpleFromTable:@"eventVideo" withWhere:wheres completion:nil];
+//    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
+//    [sql closeMyDB];
 }
 
 + (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     for (int i = 0; i < videoInfos.count; i++) {
         NSDictionary* videoInfo = [videoInfos objectAtIndex:i];
         NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
         videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
-        
-        [sql insertToTable:@"eventVideo" withColumns:columns andValues:values];
+        [sql database:path insertToTable:@"eventVideo" withColumns:columns andValues:values completion:nil];
+//        [sql insertToTable:@"eventVideo" withColumns:columns andValues:values];
     }
-    [sql closeMyDB];
+//    [sql closeMyDB];
 }
 
 - (void)pullVideosInfosFromDB
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     
     //self.events = [[NSMutableArray alloc]init];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by video_id desc",_eventId],@"event_id", nil];
-    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
-    for (int i = 0; i < result.count; i++) {
-        NSDictionary* temp = [result objectAtIndex:i];
-        NSString *tmpa = [temp valueForKey:@"videoInfo"];
-        tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
-        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-        [self.videoInfos addObject:videoInfo];
-        [self.videoInfos_all addObject:videoInfo];
-    }
+    [sql database:path queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        for (int i = 0; i < resultsArray.count; i++) {
+            NSDictionary* temp = [resultsArray objectAtIndex:i];
+            NSString *tmpa = [temp valueForKey:@"videoInfo"];
+            tmpa = [tmpa stringByReplacingOccurrencesOfString:@"''" withString:@"'"];
+            NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+            [self.videoInfos addObject:videoInfo];
+            [self.videoInfos_all addObject:videoInfo];
+        }
+    }];
+//    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
     
-    [sql closeMyDB];
+    
+//    [sql closeMyDB];
     
 //    [self initAVPlayers];
 }

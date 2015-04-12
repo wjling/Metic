@@ -187,23 +187,26 @@
     [self pullPhotoInfoFromAir];
 }
 
--(BOOL)pullPhotoInfoFromDB
+-(void)pullPhotoInfoFromDB
 {
-    BOOL ret = NO;
+//    BOOL ret = NO;
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.photoId],@"photo_id", nil];
-    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
-    if (result.count) {
-        NSString *tmpa = [result[0] valueForKey:@"photoInfo"];
-        NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
-        self.photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-        ret = YES;
-    }
-    [sql closeMyDB];
-    return ret;
+//    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
+    [sql database:path queryTable:@"photoInfo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray.count) {
+            NSString *tmpa = [resultsArray[0] valueForKey:@"photoInfo"];
+            NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
+            self.photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
+//            ret = YES;
+        }
+    }];
+    
+//    [sql closeMyDB];
+//    return ret;
 }
 
 -(void)pullPhotoInfoFromAir
@@ -717,10 +720,11 @@
 {
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite *sql = [[MySqlite alloc]init];
-    [sql openMyDB:path];
+//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
-    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-    [sql closeMyDB];
+    [sql database:path deleteTurpleFromTable:@"eventPhotos" withWhere:wheres completion:nil];
+//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
+//    [sql closeMyDB];
 }
 
 
