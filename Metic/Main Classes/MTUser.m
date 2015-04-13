@@ -589,11 +589,11 @@ static MTUser *singletonInstance;
             first_letter = @"#";
             hasSpecialChar = YES;
         }
-        NSMutableArray* groupOfFriends = [sorted objectForKey:[first_letter uppercaseString]];
+        NSMutableArray* groupOfFriends = [NSMutableArray arrayWithArray:[sorted objectForKey:[first_letter uppercaseString]]];
         
         if (groupOfFriends) {
             [groupOfFriends addObject:aFriend];
-            //            NSLog(@"a friend: %@",aFriend);
+//            NSLog(@"a friend: %@",aFriend);
         }
         else
         {
