@@ -15,8 +15,11 @@ static dispatch_queue_t mysqlite_queue;
 -(instancetype)init
 {
     if (self = [super init]) {
-        mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
-
+        static dispatch_once_t predicate;
+        dispatch_once(&predicate, ^{
+            mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
+            mlock = [[NSLock alloc]init];
+        });
     }
     return self;
 }
@@ -36,10 +39,11 @@ static dispatch_queue_t mysqlite_queue;
 //        NSLog(@"setting sqlite thread safe mode to serialized failed!!! return code: %d", err);
 //    }
     
-    while (isLocked) {
-        NSLog(@"loop: isLocked");
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+//    while (isLocked) {
+//        NSLog(@"loop: isLocked");
+//        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
+//    }
+    [mlock lock];
     
     if (sqlite3_open([DB_path UTF8String], &myDB) != SQLITE_OK) {
         NSLog(@"myDB open failed");
@@ -58,12 +62,14 @@ static dispatch_queue_t mysqlite_queue;
     {
         NSLog(@"close myDB failed");
         isLocked = false;
+        [mlock unlock];
         return NO;
     }
     else
     {
         isLocked = false;
         NSLog(@"close myDB succeeded");
+        [mlock unlock];
         return YES;
     }
     NSLog(@"database is unLocked--");
@@ -86,21 +92,28 @@ static dispatch_queue_t mysqlite_queue;
 }
 
 
-- (void)execSql:(NSString *)sql completion:(void (^)(BOOL))block
+- (void)database:(NSString*)DBname execSql:(NSString *)sql completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
+        [self openMyDB:DBname];
         char* error;
         if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
             NSLog(@"executing sql failed. error: %s", error);
+            [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
         {
             NSLog(@"executing sql succeeded");
+            [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -151,7 +164,7 @@ static dispatch_queue_t mysqlite_queue;
 
 -(void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSMutableString* sql = [[NSMutableString alloc]initWithString:@"CREATE TABLE IF NOT EXISTS "];
         [sql appendString:[NSString stringWithFormat:@"%@%@",tableName,@" ("]];
@@ -173,7 +186,10 @@ static dispatch_queue_t mysqlite_queue;
                 NSLog(@"creating table failed. error: %s", error);
                 [self closeMyDB];
                 if (block) {
-                    block(NO);
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(NO);
+                    });
+                    
                 }
             }
             else
@@ -182,7 +198,9 @@ static dispatch_queue_t mysqlite_queue;
                 NSLog(@"creating table succeeded");
                 [self closeMyDB];
                 if (block) {
-                    block(YES);
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(YES);
+                    });
                 }
             }
 
@@ -192,7 +210,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"index input error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
 
@@ -248,7 +268,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname insertToTable:(NSString *)tableName withColumns:(NSArray *)columns andValues:(NSArray *)values completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger columnsCount = columns.count;
         NSInteger valuesCount = values.count;
@@ -256,7 +276,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"data input error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
             return;
         }
@@ -290,7 +312,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"insert table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
@@ -298,7 +322,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"insert table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -405,7 +431,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname updateDataWitTableName:(NSString *)tableName andWhere:(NSDictionary *)wheres andSet:(NSDictionary *)sets completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger wheresCount = wheres.count;
         NSInteger setsCount = sets.count;
@@ -413,7 +439,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
             return ;
         }
@@ -445,7 +473,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"update table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
@@ -453,7 +483,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"update table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -525,7 +557,7 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname queryTable:(NSString *)tableName withSelect:(NSArray *)selects andWhere:(NSDictionary *)wheres completion:(void (^)(NSMutableArray *))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSMutableArray* results = [[NSMutableArray alloc]init];
         
@@ -535,7 +567,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(nil);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(nil);
+                });
             };
             
             return ;
@@ -571,7 +605,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"transforming sql to sqlite3_stmt failed, state: %d",state1);
             [self closeMyDB];
             if (block) {
-                block(nil);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(nil);
+                });
             };
             return;
         }
@@ -593,7 +629,9 @@ static dispatch_queue_t mysqlite_queue;
         [self closeMyDB];
         //    NSLog(@"query result: %@",results);
         if (block) {
-            block(results);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                block(results);
+            });
         }
         
 
@@ -621,7 +659,7 @@ static dispatch_queue_t mysqlite_queue;
     
     char* error;
     if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
-        sqlite3_close(self.myDB);
+        [self closeMyDB];
         NSLog(@"delete table failed. error: %s", error);
         return NO;
     }
@@ -635,14 +673,16 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString *)tableName withWhere:(NSDictionary *)wheres completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         NSInteger wheresCount = wheres.count;
         if (!tableName || !wheresCount) {
             NSLog(@"input data error");
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             };
             return ;
         }
@@ -663,7 +703,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"delete table failed. error: %s", error);
             [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             };
         }
         else
@@ -671,7 +713,9 @@ static dispatch_queue_t mysqlite_queue;
             NSLog(@"delete table succeeded");
             [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -701,6 +745,37 @@ static dispatch_queue_t mysqlite_queue;
     }
     
 }
+
+- (void)database:(NSString*)DBname isExistTable:(NSString *)tableName completion:(void (^)(BOOL))block
+{
+    dispatch_async(mysqlite_queue, ^{
+        [self openMyDB:DBname];
+        [self database:DBname queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+            [self closeMyDB];
+            NSMutableArray* state = resultsArray;
+            if (state) {
+                NSLog(@"table: %@ found",tableName);
+                if (block) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(YES);
+                    });
+                }
+            }
+            else
+            {
+                NSLog(@"No table: %@  found",tableName);
+                if (block) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(NO);
+                    });
+                }
+            }
+            
+        }];
+    });
+    
+}
+
 
 -(BOOL)table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue
 {
@@ -739,7 +814,7 @@ static dispatch_queue_t mysqlite_queue;
 
 -(void)database:(NSString*)DBname table:(NSString *)tableName addsColumn:(NSString *)column withDefault:(id)defaultValue completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
         [self openMyDB:DBname];
         char *errMsg;
         int result = 1;
@@ -773,7 +848,9 @@ static dispatch_queue_t mysqlite_queue;
         sqlite3_finalize(statement);
         [self closeMyDB];
         if (block) {
-            block(result);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                block(result);
+            });
         };
 
     });

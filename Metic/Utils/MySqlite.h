@@ -12,6 +12,9 @@
 static BOOL isLocked = false;
 
 @interface MySqlite : NSObject
+{
+    NSLock* mlock;
+}
 @property(nonatomic,readwrite) sqlite3* myDB;
 
 //打开数据库。使用数据库前先执行此方法
@@ -89,7 +92,7 @@ static BOOL isLocked = false;
  */
 
 //直接执行sql
-- (void)execSql:(NSString*)sql completion:(void(^)(BOOL result))block;
+- (void)database:(NSString*)DBname execSql:(NSString*)sql completion:(void(^)(BOOL result))block;
 
 //创建数据库的表（改成将字段和属性放在数组indexes里）
 - (void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;
@@ -105,6 +108,9 @@ static BOOL isLocked = false;
 
 //删除操作
 - (void)database:(NSString*)DBname deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres completion:(void(^)(BOOL result))block;
+
+//查询一个表是否存在
+- (void)database:(NSString*)DBname isExistTable:(NSString*)tableName completion:(void(^)(BOOL result))block;
 
 //增加表的列属性
 -(void)database:(NSString*)DBname table:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue completion:(void(^)(BOOL result))block;
