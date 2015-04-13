@@ -89,7 +89,7 @@ static BOOL isLocked = false;
  */
 
 //直接执行sql
-- (void)execSql:(NSString*)sql completion:(void(^)(BOOL result))block;
+- (void)database:(NSString*)DBname execSql:(NSString*)sql completion:(void(^)(BOOL result))block;
 
 //创建数据库的表（改成将字段和属性放在数组indexes里）
 - (void)database:(NSString*)DBname createTableWithTableName:(NSString*)tableName indexesWithProperties:(NSArray*)indexes completion:(void(^)(BOOL result))block;

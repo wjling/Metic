@@ -85,21 +85,28 @@ static dispatch_queue_t mysqlite_queue;
 }
 
 
-- (void)execSql:(NSString *)sql completion:(void (^)(BOOL))block
+- (void)database:(NSString*)DBname execSql:(NSString *)sql completion:(void (^)(BOOL))block
 {
-    dispatch_sync(mysqlite_queue, ^{
+    dispatch_async(mysqlite_queue, ^{
+        [self openMyDB:DBname];
         char* error;
         if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
             NSLog(@"executing sql failed. error: %s", error);
+            [self closeMyDB];
             if (block) {
-                block(NO);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(NO);
+                });
             }
         }
         else
         {
             NSLog(@"executing sql succeeded");
+            [self closeMyDB];
             if (block) {
-                block(YES);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    block(YES);
+                });
             }
         }
 
@@ -645,7 +652,7 @@ static dispatch_queue_t mysqlite_queue;
     
     char* error;
     if (sqlite3_exec(self.myDB, [sql UTF8String], nil, nil, &error) != SQLITE_OK) {
-        sqlite3_close(self.myDB);
+        [self closeMyDB];
         NSLog(@"delete table failed. error: %s", error);
         return NO;
     }
@@ -735,7 +742,9 @@ static dispatch_queue_t mysqlite_queue;
 - (void)database:(NSString*)DBname isExistTable:(NSString *)tableName completion:(void (^)(BOOL))block
 {
     dispatch_async(mysqlite_queue, ^{
+        [self openMyDB:DBname];
         [self database:DBname queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+            [self closeMyDB];
             NSMutableArray* state = resultsArray;
             if (state) {
                 NSLog(@"table: %@ found",tableName);
