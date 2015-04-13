@@ -468,12 +468,13 @@
 //    [mySql openMyDB:DB_path];
     [mySql database: DB_path updateDataWitTableName:@"friend" andWhere:wheres andSet:sets completion:nil];
 //    [mySql closeMyDB];
-    [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
-    [[MTUser sharedInstance] friendListDidChanged];
-//    NSLog(@"event_list: %@",events);
-    
-    [self refreshFriendInfo];
-    
+//    [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+    [[MTUser sharedInstance] getFriendsFromDBwithCompletion:^(NSMutableArray *results) {
+        [MTUser sharedInstance].friendList = [NSMutableArray arrayWithArray:results];
+        [[MTUser sharedInstance] friendListDidChanged];
+        
+    }];
+   [self refreshFriendInfo];
 }
 
 #pragma mark - Touches

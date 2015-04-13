@@ -64,7 +64,7 @@
 - (void)getInfo:(NSNumber *) uid myid:(NSNumber *)myid delegateId:(id) aDelegate;
 - (void) synchronizeFriends;
 - (void) insertToFriendTable:(NSArray*)friends;
-- (NSMutableArray*)getFriendsFromDB;
+- (void)getFriendsFromDBwithCompletion:(void(^)(NSMutableArray* results))block;
 - (NSMutableDictionary*)sortFriendList;
 - (void)rankFriendsInArray:(NSMutableArray*)friends;
 //- (void)updateAvatar;

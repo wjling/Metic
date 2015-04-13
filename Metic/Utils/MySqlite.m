@@ -16,7 +16,6 @@ static dispatch_queue_t mysqlite_queue;
 {
     if (self = [super init]) {
         mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
-
     }
     return self;
 }
@@ -735,27 +734,29 @@ static dispatch_queue_t mysqlite_queue;
 
 - (void)database:(NSString*)DBname isExistTable:(NSString *)tableName completion:(void (^)(BOOL))block
 {
-    [self database:DBname queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
-        NSMutableArray* state = resultsArray;
-        if (state) {
-            NSLog(@"table: %@ found",tableName);
-            if (block) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    block(YES);
-                });
+    dispatch_async(mysqlite_queue, ^{
+        [self database:DBname queryTable:tableName withSelect:[NSArray arrayWithObjects:@"*",nil] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+            NSMutableArray* state = resultsArray;
+            if (state) {
+                NSLog(@"table: %@ found",tableName);
+                if (block) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(YES);
+                    });
+                }
             }
-        }
-        else
-        {
-            NSLog(@"No table: %@  found",tableName);
-            if (block) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    block(NO);
-                });
+            else
+            {
+                NSLog(@"No table: %@  found",tableName);
+                if (block) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        block(NO);
+                    });
+                }
             }
-        }
-
-    }];
+            
+        }];
+    });
     
 }
 

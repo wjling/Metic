@@ -35,7 +35,6 @@
 
 - (IBAction)seleteAll:(id)sender;
 - (IBAction)confirm:(id)sender;
-- (NSMutableArray*)getFriendsFromDB;
 - (NSMutableDictionary*)sortFriendList;
 - (void)rankFriendsInArray:(NSMutableArray*)friends;
 @end

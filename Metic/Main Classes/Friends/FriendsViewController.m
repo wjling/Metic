@@ -246,15 +246,19 @@
                 NSLog(@"好友列表初始化：网络不联通，直接从数据库获取friendlist");
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
-                                   [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
-                                   [[MTUser sharedInstance] friendListDidChanged];
-                                   dispatch_async(dispatch_get_main_queue(), ^
-                                                  {
-                                                      self.friendList = [[MTUser sharedInstance] friendList];
-                                                      self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-                                                      self.sectionArray = [[MTUser sharedInstance] sectionArray];
-                                                      [self friendTableviewReload];
-                                                  });
+//                                   [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+                                   [[MTUser sharedInstance] getFriendsFromDBwithCompletion:^(NSMutableArray *results) {
+                                       [MTUser sharedInstance].friendList = [NSMutableArray arrayWithArray:results];
+                                       [[MTUser sharedInstance] friendListDidChanged];
+                                       dispatch_async(dispatch_get_main_queue(), ^
+                                                      {
+                                                          self.friendList = [[MTUser sharedInstance] friendList];
+                                                          self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
+                                                          self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                                                          [self friendTableviewReload];
+                                                      });
+                                   }];
+                                   
                                });
                 
             }

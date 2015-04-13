@@ -498,25 +498,28 @@ static MTUser *singletonInstance;
     synchronizeFriendTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(synchronizeTimerDoing) userInfo:nil repeats:NO];
     [[NSRunLoop currentRunLoop]addTimer:synchronizeFriendTimer forMode:NSRunLoopCommonModes];
     
-    self.friendList = [self getFriendsFromDB];
-    self.nameFromID_dic = [[NSMutableDictionary alloc]init];
-    for (int i = 0; i < friendList.count; i++) {
-        NSDictionary* friend = [friendList objectAtIndex:i];
-        NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
-        NSString* fname = [friend objectForKey:@"name"];
-//        [friend setValue:fid forKey:@"id"];
-        [friendsIdSet addObject:fid];
-        [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
-    }
-//    NSLog(@"get friends from DB, friendList: %@",self.friendList);
-    NSDictionary* json = [CommonUtils packParamsInDictionary:
-                          self.userid,@"id",
-                          [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
-    NSLog(@"synchronize friend json: %@",json);
-    NSLog(@"synchronizeFriends end");
+    [self getFriendsFromDBwithCompletion:^(NSMutableArray* results) {
+        self.friendList = [NSMutableArray arrayWithArray:results];
+        self.nameFromID_dic = [[NSMutableDictionary alloc]init];
+        for (int i = 0; i < friendList.count; i++) {
+            NSDictionary* friend = [friendList objectAtIndex:i];
+            NSNumber* fid = [CommonUtils NSNumberWithNSString:[friend objectForKey:@"id"]];
+            NSString* fname = [friend objectForKey:@"name"];
+            //        [friend setValue:fid forKey:@"id"];
+            [friendsIdSet addObject:fid];
+            [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
+        }
+        //    NSLog(@"get friends from DB, friendList: %@",self.friendList);
+        NSDictionary* json = [CommonUtils packParamsInDictionary:
+                              self.userid,@"id",
+                              [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
+        NSLog(@"synchronize friend json: %@",json);
+        NSLog(@"synchronizeFriends end");
+    }];
+    
 }
 
 -(void)synchronizeTimerDoing
@@ -524,15 +527,23 @@ static MTUser *singletonInstance;
     doingSynchronizeFriend = NO;
 }
 
-- (NSMutableArray*)getFriendsFromDB
+- (void)getFriendsFromDBwithCompletion:(void (^)(NSMutableArray* results))block
 {
-    NSMutableArray* friends;
+    
     MySqlite* db = [[MySqlite alloc]init];
-    [db openMyDB:DB_path];
-    friends = [db queryTable:@"friend" withSelect:[[NSArray alloc]initWithObjects:@"*", nil] andWhere:nil];
-    [db closeMyDB];
-    NSLog(@"getFriendsFromDB: %@", friends);
-    return friends;
+//    [db openMyDB:DB_path];
+//    friends = [db queryTable:@"friend" withSelect:[[NSArray alloc]initWithObjects:@"*", nil] andWhere:nil];
+//    [db closeMyDB];
+    [db database:DB_path queryTable:@"friend" withSelect:@[@"*"] andWhere:nil completion:^(NSMutableArray *resultsArray) {
+        NSMutableArray* friends = resultsArray;
+        if (block) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                block(friends);
+            });
+        }
+        NSLog(@"getFriendsFromDB: %@", friends);
+
+    }];
 }
 
 - (NSMutableDictionary*)sortFriendList
@@ -779,15 +790,17 @@ static MTUser *singletonInstance;
 -(void)getAliasFromDB
 {
     [self.alias_dic removeAllObjects];
-    NSMutableArray* friends = [self getFriendsFromDB];
-    for (int i = 0; i < friends.count; i++) {
-        NSDictionary* friend = [friends objectAtIndex:i];
-        NSString* fid = [friend objectForKey:@"id"];
-        NSString* alias = [friend objectForKey:@"alias"];
-        [self.alias_dic setValue:alias forKey:fid];
-//        NSLog(@"alias from db: %@ (%@) --- %@ (%@)", fid, [fid class], alias, [alias class]);
-    }
-//    NSLog(@"get alias from db: %@",alias_dic);
+//    NSMutableArray* friends = [self getFriendsFromDB];
+    [self getFriendsFromDBwithCompletion:^(NSMutableArray *results) {
+        NSMutableArray* friends = [NSMutableArray arrayWithArray:results];
+        for (int i = 0; i < friends.count; i++) {
+            NSDictionary* friend = [friends objectAtIndex:i];
+            NSString* fid = [friend objectForKey:@"id"];
+            NSString* alias = [friend objectForKey:@"alias"];
+            [self.alias_dic setValue:alias forKey:fid];
+        }
+
+    }];
 }
 
 -(void)updateAliasInDB

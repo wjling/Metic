@@ -693,13 +693,22 @@
     
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql1 = [[MySqlite alloc]init];
-    [sql1 openMyDB:path];
-    while (![sql1 isExistTable:@"notification"]) {
+//    [sql1 openMyDB:path];
+//    while (![sql1 isExistTable:@"notification"]) {
+//        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//    }
+//    [sql1 closeMyDB];
+    
+    __block BOOL f = NO;
+    while (!f) {
+        [sql1 database:path isExistTable:@"notification" completion:^(BOOL result) {
+            if (result) {
+                f = YES;
+            }
+        }];
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+        
     }
-    [sql1 closeMyDB];
-    
-    
     
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
 //    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
@@ -1388,11 +1397,22 @@
 {
     NSString* path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     MySqlite* sql1 = [[MySqlite alloc]init];
-    [sql1 openMyDB:path];
-    while (![sql1 isExistTable:@"notification"]) {
+//    [sql1 openMyDB:path];
+//    while (![sql1 isExistTable:@"notification"]) {
+//        [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//    }
+//    [sql1 closeMyDB];
+    __block BOOL f = NO;
+    while (!f) {
+        [sql1 database:path isExistTable:@"notification" completion:^(BOOL result) {
+            if (result) {
+                f = YES;
+            }
+        }];
         [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+        
     }
-    [sql1 closeMyDB];
+
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"timestamp",@"msg",@"ishandled", nil];
     
     for (NSInteger i = 0; i < syn_messges.count; i++) {
