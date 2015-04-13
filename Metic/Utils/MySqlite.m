@@ -15,8 +15,11 @@ static dispatch_queue_t mysqlite_queue;
 -(instancetype)init
 {
     if (self = [super init]) {
-        mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
-        mlock = [[NSLock alloc]init];
+        static dispatch_once_t predicate;
+        dispatch_once(&predicate, ^{
+            mysqlite_queue = dispatch_queue_create("mysqliteQ", NULL);
+            mlock = [[NSLock alloc]init];
+        });
     }
     return self;
 }
