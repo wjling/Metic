@@ -122,10 +122,8 @@
         {
             if(_canManage) {
                 _isManaging = YES;
-                _isRemoving = NO;
             }else {
                 _isManaging = NO;
-                _isRemoving = NO;
             }
             [_participants removeAllObjects];
             [_participants addObjectsFromArray:(NSArray*)[response1 valueForKey:@"participant"]];
