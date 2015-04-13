@@ -156,6 +156,7 @@
     [commentV setBackgroundColor:[UIColor whiteColor]];
     
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendBtn setTag:520];
     [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
     [sendBtn setFrame:CGRectMake(250, 5, 65, 35)];
     [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
