@@ -12,6 +12,9 @@
 static BOOL isLocked = false;
 
 @interface MySqlite : NSObject
+{
+    NSLock* mlock;
+}
 @property(nonatomic,readwrite) sqlite3* myDB;
 
 //打开数据库。使用数据库前先执行此方法
