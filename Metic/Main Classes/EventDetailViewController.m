@@ -1110,7 +1110,7 @@
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainCFontSize isEmotion:YES];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
             commentHeight = 10;

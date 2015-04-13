@@ -257,6 +257,7 @@
                 <outlet property="eventDetail" destination="X0p-3x-5lK" id="mod-wM-wBw"/>
                 <outlet property="eventName" destination="Xs9-Vs-bte" id="AvR-zQ-nMG"/>
                 <outlet property="imgWall" destination="WaL-N2-884" id="UYx-GL-cPp"/>
+                <outlet property="imgWall_icon" destination="bvB-py-yVi" id="pLW-O5-TCK"/>
                 <outlet property="launcherImg" destination="4vr-1j-7mP" id="tSx-g9-8Vj"/>
                 <outlet property="launcherinfo" destination="O6R-da-PXJ" id="noR-Nf-qA9"/>
                 <outlet property="location" destination="j6d-87-qca" id="ZHV-uK-mHS"/>
@@ -264,6 +265,7 @@
                 <outlet property="themePhoto" destination="Guf-aF-rYK" id="ah9-ZF-AM0"/>
                 <outlet property="timeInfo" destination="WWW-ty-peW" id="a5A-7Y-rYu"/>
                 <outlet property="videoWall" destination="iDx-Vs-ivA" id="w3U-k9-6Ig"/>
+                <outlet property="videoWall_icon" destination="5dg-IF-isa" id="8Ra-mG-YBF"/>
             </connections>
             <point key="canvasLocation" x="254" y="206.5"/>
         </tableViewCell>

@@ -9,6 +9,7 @@
 #import "EventCellTableViewCell.h"
 #import "BannerViewController.h"
 #import "NotificationController.h"
+#import "showParticipatorsViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 
 @implementation EventCellTableViewCell
@@ -30,6 +31,8 @@
 @synthesize comment;
 @synthesize commentInputView;
 @synthesize addPaticipator;
+@synthesize imgWall_icon;
+@synthesize videoWall_icon;
 
 
 #define widthspace 10
@@ -98,23 +101,41 @@
 }
 
 - (IBAction)showParticipators:(id)sender {
-    if (_eventController.isKeyBoard) {
-        [_eventController.inputTextView resignFirstResponder];
-    }else if (_eventController.isEmotionOpen){
-        [_eventController button_Emotionpress:nil];
-    } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+    if ([_eventController isKindOfClass:[EventDetailViewController class]]) {
+        if (_eventController.isKeyBoard) {
+            [_eventController.inputTextView resignFirstResponder];
+        }else if (_eventController.isEmotionOpen){
+            [_eventController button_Emotionpress:nil];
+        } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+    }else{
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                                 bundle: nil];
+        showParticipatorsViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"showParticipatorsViewController"];
+
+        viewcontroller.eventId = self.eventId;
+        viewcontroller.canManage = NO;
+        [self.eventController.navigationController pushViewController:viewcontroller animated:YES];
+    }
+    
 }
 
 - (IBAction)showBanner:(id)sender {
-    if (_eventController.isKeyBoard) {
-        [_eventController.inputTextView resignFirstResponder];
-    }else if (_eventController.isEmotionOpen){
-        [_eventController button_Emotionpress:nil];
+    if ([_eventController isKindOfClass:[EventDetailViewController class]]) {
+        if (_eventController.isKeyBoard) {
+            [_eventController.inputTextView resignFirstResponder];
+        }else if (_eventController.isEmotionOpen){
+            [_eventController button_Emotionpress:nil];
+        }else{
+            BannerViewController* bannerView = [[BannerViewController alloc] init];
+            bannerView.banner = themePhoto.image;
+            [self.eventController presentViewController:bannerView animated:YES completion:^{}];
+        }
     }else{
         BannerViewController* bannerView = [[BannerViewController alloc] init];
         bannerView.banner = themePhoto.image;
         [self.eventController presentViewController:bannerView animated:YES completion:^{}];
     }
+    
 }
 
 -(void)drawOfficialFlag:(BOOL)isOfficial

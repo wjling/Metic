@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface EventPhotosTableViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UIView *imagesView;
 @property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *images;
 @property (strong, nonatomic) IBOutlet UIView *info;
 
