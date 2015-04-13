@@ -25,7 +25,7 @@
 #import "MobClick.h"
 #import "KxMenu.h"
 #import "SVProgressHUD.h"
-#import "NotificationController.h"s
+#import "NotificationController.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13

@@ -108,6 +108,10 @@
             [_eventController button_Emotionpress:nil];
         } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
     }else{
+        if (_eventController.isKeyBoard) {
+            [_eventController.inputTextView resignFirstResponder];
+            return;
+        }
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
         showParticipatorsViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"showParticipatorsViewController"];
@@ -131,6 +135,10 @@
             [self.eventController presentViewController:bannerView animated:YES completion:^{}];
         }
     }else{
+        if (_eventController.isKeyBoard) {
+            [_eventController.inputTextView resignFirstResponder];
+            return;
+        }
         BannerViewController* bannerView = [[BannerViewController alloc] init];
         bannerView.banner = themePhoto.image;
         [self.eventController presentViewController:bannerView animated:YES completion:^{}];
