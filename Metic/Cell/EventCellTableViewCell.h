@@ -24,6 +24,8 @@
     IBOutlet UILabel *timeInfo;
     IBOutlet UIButton *imgWall;
     IBOutlet UIButton *videoWall;
+    IBOutlet UIImageView *imgWall_icon;
+    IBOutlet UIImageView *videoWall_icon;
     IBOutlet UIButton *comment;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
@@ -56,6 +58,8 @@
 @property(nonatomic,strong) UILabel *eventDetail;
 @property(nonatomic,strong) UIButton *videoWall;
 @property(nonatomic,strong) UIButton *imgWall;
+@property(nonatomic,strong) UIImageView* imgWall_icon;
+@property(nonatomic,strong) UIImageView* videoWall_icon;
 @property(nonatomic,strong) UIButton *comment;
 @property(nonatomic,strong) TTTAttributedLabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;

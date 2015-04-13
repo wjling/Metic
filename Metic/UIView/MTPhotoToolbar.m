@@ -73,7 +73,7 @@
     _selectBtn.frame = CGRectMake(250, 20, 70, btnWidth - 20);
     _selectBtn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     if (_shouldDelete) {
-        [_selectBtn setImage:[UIImage imageNamed:@"删除图标"] forState:UIControlStateNormal];
+        [_selectBtn setImage:[UIImage imageNamed:@"图片选择器删除图标"] forState:UIControlStateNormal];
     }else{
         [_selectBtn setImage:[UIImage imageNamed:@"预览效果选中"] forState:UIControlStateNormal];
         [_selectBtn setImage:[UIImage imageNamed:@"预览效果未选中"] forState:UIControlStateHighlighted];

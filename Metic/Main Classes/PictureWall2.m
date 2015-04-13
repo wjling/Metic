@@ -40,7 +40,7 @@
 @property BOOL haveLoadedPhoto;
 @property BOOL isLoading;
 @property BOOL isFirstIn;
-
+@property BOOL isFirstPullDB;
 @end
 
 @implementation PictureWall2
@@ -91,6 +91,7 @@
     _shouldReloadPhoto = NO;
     _shouldLoadPhoto = NO;
     _haveLoadedPhoto = NO;
+    _isFirstPullDB = YES;
     _uploadingTaskCount = 0;
     _showPhoNum = 0;
     _h1 = 0;
@@ -102,7 +103,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self pullPhotoInfosFromDB];
         [self pullUploadTasksfromDB];
-        if ([NotificationController visitPhotoWall:_eventId needClear:YES] || ([_photo_list_all count] == 0 &&[[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0)) {
+        if ([NotificationController visitPhotoWall:_eventId needClear:YES] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [_header beginRefreshing];
             });
@@ -212,6 +213,14 @@
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
     
     [sql database:path queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (_isFirstPullDB) {
+            _isFirstPullDB = NO;
+            if (resultsArray.count == 0) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [_header beginRefreshing];
+                });
+            }
+        }
         NSMutableArray* photo_list_all_Tmp = [[NSMutableArray alloc]init];
         NSMutableArray* photo_list_Tmp = [[NSMutableArray alloc]init];
 //        [self.photo_list_all removeAllObjects];
@@ -232,14 +241,15 @@
             
         }
         //    [sql closeMyDB];
-        _haveLoadedPhoto = YES;
-        [self resetPhoNum];
-        [self calculateLRH];
-        _uploadingTaskCount = 0;
-        self.sequence = [[NSNumber alloc]initWithInt:-1];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             _photo_list = photo_list_Tmp;
             _photo_list_all = photo_list_all_Tmp;
+            _haveLoadedPhoto = YES;
+            [self resetPhoNum];
+            [self calculateLRH];
+            _uploadingTaskCount = 0;
+            self.sequence = [[NSNumber alloc]initWithInt:-1];
             [quiltView reloadData];
         });
     }];
@@ -319,7 +329,10 @@
     [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         NSInteger uploadTaskCount = 0;
         uploadTaskCount = resultsArray.count;
-        [self setupUploadBtn:uploadTaskCount];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setupUploadBtn:uploadTaskCount];
+        });
+        
     }];
 //    [sql closeMyDB];
     

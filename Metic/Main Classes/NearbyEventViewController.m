@@ -15,6 +15,7 @@
 #import "../Utils/Reachability.h"
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "EventDetailViewController.h"
+#import "EventPreviewViewController.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -412,18 +413,22 @@
     NSDictionary* dict = cell.dict;
     
     if (![[dict valueForKey:@"isIn"] boolValue]) {
-        return;
+        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+        viewcontroller.eventInfo = dict;
+        [self.navigationController pushViewController:viewcontroller animated:YES];
+    }else{
+        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+        
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        eventDetailView.eventLauncherId = eventLauncherId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
     }
     
-    NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
-    NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
     
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-    
-    EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
-    eventDetailView.eventId = eventId;
-    eventDetailView.eventLauncherId = eventLauncherId;
-    [self.navigationController pushViewController:eventDetailView animated:YES];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

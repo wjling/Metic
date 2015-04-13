@@ -14,6 +14,7 @@
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "MobClick.h"
 #import "EventDetailViewController.h"
+#import "EventPreviewViewController.h"
 #import "SVProgressHUD.h"
 
 @interface EventSearchViewController ()
@@ -366,17 +367,21 @@
     NSDictionary* dict = cell.dict;
     
     if (![[dict valueForKey:@"isIn"] boolValue]) {
-        return;
+        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+        viewcontroller.eventInfo = dict;
+        [self.navigationController pushViewController:viewcontroller animated:YES];
+    }else{
+        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+        
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        eventDetailView.eventLauncherId = eventLauncherId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
     }
     
-    NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
-    NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
     
-    EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
-    eventDetailView.eventId = eventId;
-    eventDetailView.eventLauncherId = eventLauncherId;
-    [self.navigationController pushViewController:eventDetailView animated:YES];
 }
 
 #pragma mark - 跳转前数据准备 Methods -

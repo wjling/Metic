@@ -10,6 +10,7 @@
 #import "NearbyEventViewController.h"
 #import "EventSearchViewController.h"
 #import "EventDetailViewController.h"
+#import "EventPreviewViewController.h"
 #import "MenuViewController.h"
 #import "AdViewController.h"
 #import "MobClick.h"
@@ -391,22 +392,26 @@
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"%@", response1);
             if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
-                NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
-                
-                if ([[dist valueForKey:@"isIn"] boolValue]) {
-                    [SVProgressHUD dismiss];
+                NSDictionary* dict = [response1 valueForKey:@"event_list"][0];
+                [SVProgressHUD dismiss];
+                if ([[dict valueForKey:@"isIn"] boolValue]) {
                     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
                     
                     EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
                     eventDetailView.eventId = eventId;
                     [self.navigationController pushViewController:eventDetailView animated:YES];
-                    }else{
-                        [SVProgressHUD dismiss];
-                        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"你尚未加入到此活动中" delegate:self cancelButtonTitle:@"返回" otherButtonTitles:@"立即加入", nil];
-                        _processingEventId = eventId;
-                        [alert setTag:233];
-                        [alert show];
-                    }
+                }else{
+                    EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+                    viewcontroller.eventInfo = dict;
+                    [self.navigationController pushViewController:viewcontroller animated:YES];
+
+                    return ;
+                    [SVProgressHUD dismiss];
+                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"你尚未加入到此活动中" delegate:self cancelButtonTitle:@"返回" otherButtonTitles:@"立即加入", nil];
+                    _processingEventId = eventId;
+                    [alert setTag:233];
+                    [alert show];
+                }
             }else{
                 [SVProgressHUD dismissWithError:@"此活动已经解散"];
             }
