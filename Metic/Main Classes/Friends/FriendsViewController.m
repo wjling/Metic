@@ -164,6 +164,7 @@
             NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
             if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
                 NSLog(@"好友列表初始化：好友排序未完成且不在进行好友排序");
+                
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
                                    [[MTUser sharedInstance] friendListDidChanged];
@@ -171,6 +172,7 @@
                                                   {
                                                       self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                       self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                                                      NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
                                                       [self friendTableviewReload];
                                                   });
                                });
@@ -182,7 +184,9 @@
                 while([MTUser sharedInstance].doingSynchronizeFriend) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
                 }
+                
                 self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
+                NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
                 self.sectionArray = [[MTUser sharedInstance] sectionArray];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self friendTableviewReload];;
