@@ -13,6 +13,7 @@
 #import "UserInfoViewController.h"
 #import "FillinInfoViewController.h"
 #import "MenuViewController.h"
+#import "SVProgressHUD.h"
 
 @interface PhotoGetter ()
 {
@@ -259,6 +260,7 @@
 
 -(void)uploadAvatar  //type 21
 {
+    [SVProgressHUD showWithStatus:@"正在上传头像" maskType:SVProgressHUDMaskTypeGradient];
     self.isUpload = YES;
     UIImage* compressedImage1 = self.uploadImage;
     UIImage* compressedImage2 = self.uploadImage;
@@ -471,9 +473,10 @@
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
                             NSLog(@"上传头像后刷新");
                             
-                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-                            [alertView show];
-                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
+//                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//                            [alertView show];
+//                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
+                            [SVProgressHUD dismissWithSuccess:@"修改头像上传成功" afterDelay:1.5];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }
@@ -512,9 +515,10 @@
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
                             NSLog(@"上传头像后刷新");
                             
-                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-                            [alertView show];
-                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
+//                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//                            [alertView show];
+//                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
+                            [SVProgressHUD dismissWithSuccess:@"修改头像成功" afterDelay:1.5];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }
@@ -526,6 +530,7 @@
             }else [self.mDelegate finishwithNotification:nil image:nil type:100 container:@[self.imgName,[NSNumber numberWithInt:_uploadPhotoSize.width],[NSNumber numberWithInt:_uploadPhotoSize.height]]];
         }else{
             [self.mDelegate finishwithNotification:nil image:nil type:106 container:self.imgName];
+            [SVProgressHUD dismissWithError:@"操作失败" afterDelay:1.5];
         }
         return;
     }
