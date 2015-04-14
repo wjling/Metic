@@ -15,7 +15,7 @@
 #define SDProgressViewFontScale (MIN(self.frame.size.width, self.frame.size.height) / 100.0)
 
 // 背景颜色
-#define SDProgressViewBackgroundColor SDColorMaker(255, 255, 255, 0.2)
+#define SDProgressViewBackgroundColor SDColorMaker(255, 255, 255, 0.4)
 
 @interface SDBaseProgressView : UIView
 

@@ -219,6 +219,7 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_header beginRefreshing];
                 });
+                return ;
             }
         }
         NSMutableArray* photo_list_all_Tmp = [[NSMutableArray alloc]init];
@@ -330,6 +331,7 @@
         NSInteger uploadTaskCount = 0;
         uploadTaskCount = resultsArray.count;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            if (uploadTaskCount == 0) [self UploadStatusTimerEnd];
             [self setupUploadBtn:uploadTaskCount];
         });
         

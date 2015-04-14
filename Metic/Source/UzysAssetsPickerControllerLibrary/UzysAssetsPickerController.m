@@ -39,7 +39,7 @@
 @property (nonatomic, assign) NSInteger numberOfVideos;
 @property (nonatomic, assign) NSInteger maximumNumberOfSelection;
 
-@property (nonatomic, strong) NSArray *seletedPhotos;
+@property (nonatomic, strong) NSMutableArray *seletedPhotos;
 @property (nonatomic, strong) NSMutableArray *seletedAssets;
 
 - (IBAction)btnAction:(id)sender;
@@ -745,18 +745,13 @@
             NSInteger count = self.collectionView.indexPathsForSelectedItems.count;
             if (count == 0) return;
             NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
-            _seletedPhotos = self.collectionView.indexPathsForSelectedItems;
-            _seletedPhotos = [_seletedPhotos sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                NSIndexPath* a = obj1;
-                NSIndexPath* b = obj2;
-                if (a.row < b.row) {
-                    return NSOrderedAscending;
-                }
-                if (a.row > b.row) {
-                    return NSOrderedDescending;
-                }
-                return NSOrderedSame;
-            }];
+            _seletedPhotos = [[NSMutableArray alloc]init];
+            for (int i = 0; i < _seletedAssets.count; i++) {
+                ALAsset* asset = _seletedAssets[i];
+                NSIndexPath* indexPath = [NSIndexPath indexPathForRow:[_assets indexOfObject:asset] inSection:0];
+                [_seletedPhotos addObject:indexPath];
+            }
+            
             for (int i = 0; i < _seletedPhotos.count; i++)
             {
                 NSIndexPath *indexPath = _seletedPhotos[i];
@@ -772,7 +767,7 @@
             // 2.显示相册
             MTPhotoBrowser *browser = [[MTPhotoBrowser alloc] init];
             browser.shouldDelete = NO;
-            browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+            browser.currentPhotoIndex = photos.count - 1; // 弹出相册时显示的第一张图片是？
             browser.photos = photos; // 设置所有的图片
             browser.delegate = self;
             [browser show];
@@ -825,8 +820,10 @@
     if (cell) {
         if (cell.isSelected) {
             [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+            [self collectionView:self.collectionView didDeselectItemAtIndexPath:indexPath];
         }else{
             [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+            [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
         }
     }
 
