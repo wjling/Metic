@@ -14,6 +14,7 @@
 #import "NSString+JSON.h"
 #import "UIImage+fixOrien.h"
 #import "SDImageCache.h"
+#import "UzysAssetsPickerController.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -171,25 +172,12 @@
         }
     }
     self.executing = YES;
+    _thread = [NSThread currentThread];
     if (_imageALAsset) {
-        UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullResolutionImage
-                                           scale:_imageALAsset.defaultRepresentation.scale
-                                     orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
-//        img = [UIImage fixOrientation:img];
-        NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
-        
-        NSData* compressedData = [imgData valueForKey:@"imageData"];
-        _width = [imgData valueForKey:@"width"];
-        _height = [imgData valueForKey:@"height"];
-        _imgData = compressedData;
-        NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
-        NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
-        [self getCloudFileURL:Subpath];
-        _wait = YES;
-        _thread = [NSThread currentThread];
+        [self beginUpload];
     }else if(_imageALAssetStr){
 
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        ALAssetsLibrary *library = [UzysAssetsPickerController defaultAssetsLibrary] ;
         NSURL *imageFileURL = [NSURL URLWithString:_imageALAssetStr];
         [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
             
@@ -200,25 +188,8 @@
                 return ;
             }
             
-            UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullResolutionImage
-                                               scale:asset.defaultRepresentation.scale
-                                         orientation:(UIImageOrientation)asset.defaultRepresentation.orientation];
-            NSDictionary* imgData = [photoProcesser compressPhoto:img maxSize:100];
-            
-            NSData* compressedData = [imgData valueForKey:@"imageData"];
-            _width = [imgData valueForKey:@"width"];
-            _height = [imgData valueForKey:@"height"];
-            _imgData = compressedData;
-            NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
-            NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
-            [self getCloudFileURL:Subpath];
-            _wait = YES;
-            _thread = [NSThread currentThread];
-            while(_wait) {
-                
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-                
-            }
+            _imageALAsset = asset;
+            [self performSelector:@selector(beginUpload) onThread:_thread withObject:nil waitUntilDone:NO];
 
         } failureBlock:^(NSError *error) {
             NSLog(@"error : %@", error);
@@ -234,6 +205,29 @@
     }
     self.executing = NO;
     self.finished = YES;
+}
+
+-(void)beginUpload
+{
+    if (_imageALAsset) {
+        NSDictionary* imgData;
+        @autoreleasepool {
+            UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullResolutionImage
+                                               scale:_imageALAsset.defaultRepresentation.scale
+                                         orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
+            //        img = [UIImage fixOrientation:img];
+            imgData = [photoProcesser compressPhoto:img maxSize:100];
+            _imageALAsset = nil;
+            img = nil;
+        }
+        NSData* compressedData = [imgData valueForKey:@"imageData"];
+        _width = [imgData valueForKey:@"width"];
+        _height = [imgData valueForKey:@"height"];
+        _imgData = compressedData;
+        NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
+        NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
+        [self getCloudFileURL:Subpath];
+    }
 }
 
 -(void)getCloudFileURL:(NSString*)path
@@ -302,10 +296,12 @@
         [formData appendPartWithFileData:_imgData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"上传成功");
+//        _imgData = nil;
         [self performSelector:@selector(reportToServer) onThread:_thread withObject:nil waitUntilDone:NO];
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"上传失败");
+        _imgData = nil;
         _wait = NO;
         [self performSelector:@selector(stop) onThread:_thread withObject:nil waitUntilDone:NO];
     }];
@@ -352,6 +348,7 @@
                 [self DBprocessionAfterUpload:response1 eventId:_eventId];
                 NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
                 [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
+                _imgData = nil;
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
                 [self stop];
             }
