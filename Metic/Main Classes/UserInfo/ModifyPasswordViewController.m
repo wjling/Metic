@@ -147,7 +147,7 @@
     NSString* currentPS = currentPS_textfield.text;
     NSString* modifyPS = modifyPS_textfield.text;
     NSString* conformPS = conformPS_textfield.text;
-    NSLog(@"当前密码: %@, 修改密码: %@, 确认密码: %@",currentPS,modifyPS,conformPS);
+//    NSLog(@"当前密码: %@, 修改密码: %@, 确认密码: %@",currentPS,modifyPS,conformPS);
     if (!currentPS || [currentPS isEqualToString:@""]) {
         [SVProgressHUD dismissWithError:@"请填写当前密码" afterDelay:1.5];
         return;

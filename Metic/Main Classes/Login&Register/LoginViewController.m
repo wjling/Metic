@@ -602,7 +602,7 @@
             NSString *salt = [response1 valueForKey:@"salt"];
             NSString *str = [self.logInPassword stringByAppendingString:salt];
             [MTUser sharedInstance].saltValue = salt;
-            NSLog(@"password+salt: %@",str);
+//            NSLog(@"password+salt: %@",str);
             
             //MD5 encrypt
             NSMutableString *md5_str = [NSMutableString string];
