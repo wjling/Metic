@@ -55,7 +55,7 @@
     [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count == 0) return;
         
-        NSString* message = [NSString stringWithFormat:@"发现您有 %lu 张图片未上传成功",(unsigned long)resultsArray.count];
+        NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片等待上传中，是否继续上传",(unsigned long)resultsArray.count];
         
         BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
         
