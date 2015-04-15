@@ -36,6 +36,7 @@
         _uploadQueue = [[NSOperationQueue alloc]init];
         _taskswithPhotoName = [[NSMutableDictionary alloc]init];
         [_uploadQueue setMaxConcurrentOperationCount:1];
+//        [_uploadQueue setQualityOfService:NSQualityOfServiceBackground];
     }
     return self;
 }
