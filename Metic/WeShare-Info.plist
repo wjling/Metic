@@ -32,7 +32,30 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wx6f7ea17b99ab01e7</string>
-				<string>sina.53bb542e56240ba6e80a4bfb</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>QQ41AF8357</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tencent1102021463</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wb1312051023</string>
 			</array>
 		</dict>
 	</array>

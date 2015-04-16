@@ -111,13 +111,16 @@
 
 
 - (IBAction)shareQRcode:(id)sender {
-    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
-    [UMSocialSnsService presentSnsIconSheetView:self
-                                         appKey:@"53bb542e56240ba6e80a4bfb"
-                                      shareText:@"WeShare"
-                                     shareImage:friendQRcode
-                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
-                                       delegate:self];
+    if (friendQRcode) {
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:@""
+                                         shareImage:friendQRcode
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToSina,nil]
+                                           delegate:self];
+    }
 }
 
 - (IBAction)saveQRcode:(id)sender {

@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "UMSocialWechatHandler.h"
-#import "UMSocialSinaHandler.h"
+#import "UMSocialSinaSSOHandler.h"
+#import "UMSocialQQHandler.h"
 #import "Source/security/SFHFKeychainUtils.h"
 #import "Main Classes/MTMPMoviePlayerViewController.h"
 #import "Main Classes/BannerViewController.h"
@@ -104,7 +105,8 @@
 	}
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
     [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" appSecret:@"975f26374a1ade1290b1d4dfa767ed1f" url:@"http://www.whatsact.com"];
-    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://www.whatsact.com"];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://www.sina.com"];
+    [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
 //    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
    
     //running in background
