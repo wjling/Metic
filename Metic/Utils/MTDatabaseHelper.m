@@ -195,11 +195,7 @@
         FMResultSet *s = [db executeQuery:sql];
         NSMutableArray* resultArray = [[NSMutableArray alloc]init];
         while ([s next]) {
-            NSMutableDictionary* dict = [[NSMutableDictionary alloc]init];
-            for (int i = 0; i < selectsCount; i++) {
-                NSString* value = [s stringForColumn:[selects objectAtIndex:i]];
-                [dict setValue:value forKey:[selects objectAtIndex:i]];
-            }
+            [resultArray addObject:[s resultDictionary]];
         }
         [s close];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
