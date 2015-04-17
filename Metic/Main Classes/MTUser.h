@@ -10,7 +10,6 @@
 #import "HttpSender.h"
 #import "AppConstants.h"
 #import "../Utils/HttpSender.h"
-#import "MySqlite.h"
 #import "CommonUtils.h"
 
 @interface MTUser : NSObject<HttpSenderDelegate,NSCoding>

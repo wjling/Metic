@@ -26,6 +26,7 @@
 #import "KxMenu.h"
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
+#import "MTDatabaseHelper.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -85,7 +86,6 @@
     self.mainCommentId = 0;
     self.Headeropen = NO;
     self.Footeropen = NO;
-    self.sql = [[MySqlite alloc]init];
     self.master_sequence = [NSNumber numberWithInt:0];
     self.isOpen = NO;
     self.isEmotionOpen = NO;
@@ -474,12 +474,9 @@
 
 - (void)pullEventFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [self.sql openMyDB:path];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_info", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.eventId],@"event_id", nil];
-//    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-    [self.sql database:path queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance]queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count) {
             NSString *tmpa = [resultsArray[0] valueForKey:@"event_info"];
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
@@ -487,8 +484,7 @@
             if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
         }
     }];
-    
-//    [self.sql closeMyDB];
+
 }
 
 -(void)pullEventFromAir
@@ -555,27 +551,19 @@
 
 - (void)updateEventToDB:(NSDictionary*)event
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [self.sql openMyDB:path];
     NSString *eventData = [NSString jsonStringWithDictionary:_event];
     eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSString *beginTime = [event valueForKey:@"time"];
     NSString *joinTime = [event valueForKey:@"jointime"];
     NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [self.sql database:path insertToTable:@"event" withColumns:columns andValues:values completion:nil];
-//    [self.sql insertToTable:@"event" withColumns:columns andValues:values];
-//    [self.sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 - (void)removeEventFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-    [sql database: path deleteTurpleFromTable:@"event" withWhere:wheres completion:nil];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"event" withWhere:wheres];
 }
 
 -(void)deleteItemfromHomeArray

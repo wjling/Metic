@@ -12,7 +12,7 @@
 #import "MTUser.h"
 #import "AppConstants.h"
 #import "AppDelegate.h"
-//#import "MySqlite.h"
+//
 
 @interface NameSettingViewController : UIViewController<HttpSenderDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *name_textField;

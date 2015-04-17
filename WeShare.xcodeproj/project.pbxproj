@@ -217,7 +217,6 @@
 		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
 		48151F1E194947EB009E156E /* CommonUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F17194947EB009E156E /* CommonUtils.m */; };
 		48151F1F194947EB009E156E /* HttpSender.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F19194947EB009E156E /* HttpSender.m */; };
-		48151F20194947EB009E156E /* MySqlite.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1B194947EB009E156E /* MySqlite.m */; };
 		48151F21194947EB009E156E /* NSString+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 48151F1D194947EB009E156E /* NSString+JSON.m */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
 		485F47D019494A30003AAD30 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 485F47CF19494A30003AAD30 /* SRWebSocket.m */; };
@@ -375,6 +374,12 @@
 		F864C0E71ADFB46A00E2EB23 /* libSocialSinaSSO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F864C0DA1ADFB46A00E2EB23 /* libSocialSinaSSO.a */; };
 		F864C0E81ADFB46A00E2EB23 /* libWeiboSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F864C0DB1ADFB46A00E2EB23 /* libWeiboSDK.a */; };
 		F864C0E91ADFB46A00E2EB23 /* WeiboSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F864C0E41ADFB46A00E2EB23 /* WeiboSDK.bundle */; };
+		F864C0F61AE0EC1A00E2EB23 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */; };
+		F864C0F71AE0EC1A00E2EB23 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */; };
+		F864C0F81AE0EC1A00E2EB23 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F01AE0EC1A00E2EB23 /* FMDatabasePool.m */; };
+		F864C0F91AE0EC1A00E2EB23 /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F21AE0EC1A00E2EB23 /* FMDatabaseQueue.m */; };
+		F864C0FA1AE0EC1A00E2EB23 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F51AE0EC1A00E2EB23 /* FMResultSet.m */; };
+		F864C0FD1AE0EE1100E2EB23 /* MTDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */; };
 		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
 /* End PBXBuildFile section */
 
@@ -807,8 +812,6 @@
 		48151F17194947EB009E156E /* CommonUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtils.m; sourceTree = "<group>"; };
 		48151F18194947EB009E156E /* HttpSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpSender.h; sourceTree = "<group>"; };
 		48151F19194947EB009E156E /* HttpSender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpSender.m; sourceTree = "<group>"; };
-		48151F1A194947EB009E156E /* MySqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySqlite.h; sourceTree = "<group>"; };
-		48151F1B194947EB009E156E /* MySqlite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySqlite.m; sourceTree = "<group>"; };
 		48151F1C194947EB009E156E /* NSString+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+JSON.h"; sourceTree = "<group>"; };
 		48151F1D194947EB009E156E /* NSString+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JSON.m"; sourceTree = "<group>"; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1120,6 +1123,19 @@
 		F864C0E41ADFB46A00E2EB23 /* WeiboSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WeiboSDK.bundle; sourceTree = "<group>"; };
 		F864C0E51ADFB46A00E2EB23 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
 		F864C0E61ADFB46A00E2EB23 /* WeiboUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboUser.h; sourceTree = "<group>"; };
+		F864C0EB1AE0EC1A00E2EB23 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
+		F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
+		F864C0ED1AE0EC1A00E2EB23 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
+		F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseAdditions.m; sourceTree = "<group>"; };
+		F864C0EF1AE0EC1A00E2EB23 /* FMDatabasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabasePool.h; sourceTree = "<group>"; };
+		F864C0F01AE0EC1A00E2EB23 /* FMDatabasePool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabasePool.m; sourceTree = "<group>"; };
+		F864C0F11AE0EC1A00E2EB23 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
+		F864C0F21AE0EC1A00E2EB23 /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
+		F864C0F31AE0EC1A00E2EB23 /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		F864C0F41AE0EC1A00E2EB23 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
+		F864C0F51AE0EC1A00E2EB23 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
+		F864C0FB1AE0EE1100E2EB23 /* MTDatabaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseHelper.h; sourceTree = "<group>"; };
+		F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseHelper.m; sourceTree = "<group>"; };
 		F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+squareThumbail.h"; sourceTree = "<group>"; };
 		F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+squareThumbail.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1865,8 +1881,6 @@
 				48151F19194947EB009E156E /* HttpSender.m */,
 				08B3F707195711A3003B32B7 /* CloudOperation.h */,
 				08B3F708195711A3003B32B7 /* CloudOperation.m */,
-				48151F1A194947EB009E156E /* MySqlite.h */,
-				48151F1B194947EB009E156E /* MySqlite.m */,
 				48151F1C194947EB009E156E /* NSString+JSON.h */,
 				48151F1D194947EB009E156E /* NSString+JSON.m */,
 				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
@@ -1877,6 +1891,8 @@
 				04BAF6561993644F00BF00E1 /* Reachability.m */,
 				083411811A6A75B600EEB584 /* NotificationController.h */,
 				083411821A6A75B600EEB584 /* NotificationController.m */,
+				F864C0FB1AE0EE1100E2EB23 /* MTDatabaseHelper.h */,
+				F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2190,6 +2206,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F864C0EA1AE0EC1A00E2EB23 /* fmdb */,
 				043E1A701ADA248300D1D39F /* SDProgressView */,
 				F833694C1AD00AE100B41435 /* MBProgressHUD */,
 				F83369341ACFF01E00B41435 /* MJPhotoBrowser */,
@@ -2553,6 +2570,24 @@
 			path = SinaSSO;
 			sourceTree = "<group>";
 		};
+		F864C0EA1AE0EC1A00E2EB23 /* fmdb */ = {
+			isa = PBXGroup;
+			children = (
+				F864C0EB1AE0EC1A00E2EB23 /* FMDatabase.h */,
+				F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */,
+				F864C0ED1AE0EC1A00E2EB23 /* FMDatabaseAdditions.h */,
+				F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */,
+				F864C0EF1AE0EC1A00E2EB23 /* FMDatabasePool.h */,
+				F864C0F01AE0EC1A00E2EB23 /* FMDatabasePool.m */,
+				F864C0F11AE0EC1A00E2EB23 /* FMDatabaseQueue.h */,
+				F864C0F21AE0EC1A00E2EB23 /* FMDatabaseQueue.m */,
+				F864C0F31AE0EC1A00E2EB23 /* FMDB.h */,
+				F864C0F41AE0EC1A00E2EB23 /* FMResultSet.h */,
+				F864C0F51AE0EC1A00E2EB23 /* FMResultSet.m */,
+			);
+			path = fmdb;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2768,6 +2803,7 @@
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
 				51F4CB1519E6307500E487F1 /* DDData.m in Sources */,
 				08293F8219C5DC3A009B637A /* THProgressView.m in Sources */,
+				F864C0F81AE0EC1A00E2EB23 /* FMDatabasePool.m in Sources */,
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				51F4CB1A19E6307500E487F1 /* DDTTYLogger.m in Sources */,
 				088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */,
@@ -2780,7 +2816,6 @@
 				51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */,
 				510D45A3196E8A960081672A /* UIImage+WebP.m in Sources */,
 				516DD98F19864B5F0088FE69 /* EventInvitationViewController.m in Sources */,
-				48151F20194947EB009E156E /* MySqlite.m in Sources */,
 				08DB69B319541F3A00F80F3F /* UIButton+AFNetworking.m in Sources */,
 				48A4DDF3194FE42D0066BF8D /* HanyuPinyinOutputFormat.m in Sources */,
 				043E1A6B1ADA23AA00D1D39F /* UploadManageViewCell.m in Sources */,
@@ -2804,10 +2839,13 @@
 				F83369481ACFF01E00B41435 /* MJPhotoView.m in Sources */,
 				08C97F2E1AAF2C7000ABA19C /* UzysGroupViewCell.m in Sources */,
 				083411831A6A75B600EEB584 /* NotificationController.m in Sources */,
+				F864C0F61AE0EC1A00E2EB23 /* FMDatabase.m in Sources */,
+				F864C0FD1AE0EE1100E2EB23 /* MTDatabaseHelper.m in Sources */,
 				0435EF3F19B45C54003BB2F6 /* SearchedFriendTableViewCell.m in Sources */,
 				51581D76193361A500943606 /* MenuViewController.m in Sources */,
 				0435EF3A19B45C54003BB2F6 /* FriendInfoEventsTableViewCell.m in Sources */,
 				0878E85B1A3AC76F00E3C18C /* UIActionSheet+Blocks.m in Sources */,
+				F864C0F71AE0EC1A00E2EB23 /* FMDatabaseAdditions.m in Sources */,
 				08C7EE0419DABAA400FF54C2 /* MTMPMoviePlayerViewController.m in Sources */,
 				510D45A6196E8A960081672A /* UIView+WebCacheOperation.m in Sources */,
 				51F4CB0E19E6307500E487F1 /* ASIHTTPRequest.m in Sources */,
@@ -2848,6 +2886,7 @@
 				04D6129A197BD40000159190 /* FlatDatePicker.m in Sources */,
 				08DB69B019541F3A00F80F3F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				08B3F7061957013F003B32B7 /* GTMBase64.m in Sources */,
+				F864C0FA1AE0EC1A00E2EB23 /* FMResultSet.m in Sources */,
 				082182891AA6DEED00EBD156 /* PECropView.m in Sources */,
 				088DCEB019FF97D70036BE82 /* VideoPlayerView.m in Sources */,
 				0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */,
@@ -2899,6 +2938,7 @@
 				51F4CB1219E6307500E487F1 /* ContextFilterLogFormatter.m in Sources */,
 				04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */,
 				510D45A1196E8A960081672A /* UIImage+GIF.m in Sources */,
+				F864C0F91AE0EC1A00E2EB23 /* FMDatabaseQueue.m in Sources */,
 				515F9FF419736D58009D96BA /* MapViewController.mm in Sources */,
 				48A4DDF2194FE42D0066BF8D /* ChineseToPinyinResource.m in Sources */,
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,

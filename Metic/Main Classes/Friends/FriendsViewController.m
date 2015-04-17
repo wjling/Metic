@@ -22,7 +22,6 @@
 //#endif
 @implementation FriendsViewController
 {
-    NSString* DB_path;
     NSInteger initialSectionForFriendList;
     NSNumber* selectedFriendID;
 }
@@ -32,7 +31,6 @@
 @synthesize sectionTitlesArray;
 @synthesize searchFriendList;
 @synthesize searchFriendKeyWordRangeArr;
-@synthesize DB;
 @synthesize addFriendBtn;
 @synthesize friendTableView;
 @synthesize friendSearchBar;
@@ -118,12 +116,10 @@
 
 - (void) initParams
 {
-    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     initialSectionForFriendList = 1;
     self.friendList = [[NSMutableArray alloc]init];
     self.sortedFriendDic = [[NSMutableDictionary alloc]init];
     self.sectionArray = [[NSMutableArray alloc]init];
-    self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
     self.searchFriendList = [[NSMutableArray alloc]init];

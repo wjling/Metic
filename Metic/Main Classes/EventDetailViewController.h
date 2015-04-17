@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MySqlite.h"
+
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "MJRefreshHeaderView.h"
@@ -21,7 +21,6 @@
 
 @property(nonatomic,strong)NSNumber *eventId;
 @property(nonatomic,strong)NSNumber* eventLauncherId;
-@property(nonatomic,strong)MySqlite *sql;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 @property (strong, nonatomic) UIButton *comment_button;

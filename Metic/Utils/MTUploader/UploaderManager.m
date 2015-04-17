@@ -13,6 +13,7 @@
 #import "MTUser.h"
 #import "BOAlertController.h"
 #import "SlideNavigationController.h"
+#import "MTDatabaseHelper.h"
 
 @interface UploaderManager ()
 
@@ -43,16 +44,10 @@
 
 - (void)checkUnfinishedTasks
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
-        
-//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-//    [sql closeMyDB];
-    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    
+    [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count == 0) return;
         
         NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片等待上传中，是否继续上传",(unsigned long)resultsArray.count];
@@ -85,13 +80,8 @@
 
 - (void)removeAlluploadTaskInDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1",@"1", nil];
-    [sql database:path deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres completion:nil];
-//    [sql deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
 }
 
 - (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId

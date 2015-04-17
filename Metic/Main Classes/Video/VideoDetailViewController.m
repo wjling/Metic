@@ -22,6 +22,7 @@
 #import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "MTVideoPlayerViewController.h"
 #import "UIButton+WebCache.h"
+#import "MTDatabaseHelper.h"
 
 
 #define chooseArray @[@[@"举报视频"]]
@@ -197,22 +198,17 @@
 -(BOOL)pullVideoInfoFromDB
 {
     BOOL ret = NO;
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.videoId],@"video_id", nil];
 //    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
-    [sql database:path queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count) {
             NSString *tmpa = [resultsArray[0] valueForKey:@"videoInfo"];
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
             self.videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-//            ret = YES;
+            [self.tableView reloadData];
         }
     }];
-    
-//    [sql closeMyDB];
     return ret;
 }
 
@@ -979,13 +975,8 @@
 
 - (void)deleteVideoInfoFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_videoId],@"video_id", nil];
-    [sql database:path deleteTurpleFromTable:@"eventVideo" withWhere:wheres completion:nil];
-//    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
 }
 
 

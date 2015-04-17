@@ -17,7 +17,7 @@
 #import "MJRefreshHeaderView.h"
 #import "FriendTableViewCell.h"
 #import "NotificationCenterCell.h"
-#import "MySqlite.h"
+
 #import "PhotoGetter.h"
 #import "FriendInfoViewController.h"
 #import "TTTAttributedLabel.h"
@@ -32,7 +32,6 @@
 @property (strong, nonatomic) NSMutableArray* sectionTitlesArray;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
 @property (strong, nonatomic) IBOutlet UISearchBar *friendSearchBar;
-@property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) IBOutlet UIButton *addFriendBtn;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UISearchDisplayController *friendSearchDisplayController;

@@ -17,7 +17,7 @@
 #import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "MJRefreshFooterView.h"
-#import "MySqlite.h"
+
 #import "AppDelegate.h"
 #import "../Utils/CloudOperation.h"
 #import "../Cell/MTTableView.h"
@@ -54,7 +54,6 @@
 @property(nonatomic,strong)NSMutableArray *eventIds_all;
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property(atomic,strong)NSMutableArray *events;
-@property(nonatomic,strong)MySqlite *sql;
 @property BOOL shouldRefresh;
 @property(strong,nonatomic)AppDelegate* listenerDelegate;
 
