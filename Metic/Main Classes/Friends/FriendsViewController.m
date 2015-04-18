@@ -41,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     NSLog(@"friendviewcontroller viewdidload");
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
@@ -84,6 +85,11 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touches begin");
 }
 
 //返回本页并跳转到消息页
@@ -196,7 +202,7 @@
         }
         else //如果好友列表为空，可能是同步好友失败，也有可能真为空
         {
-            NSLog(@"好友列表初始不存在好友：friendlist count: %d",friendList.count);
+            NSLog(@"好友列表初始不存在好友：friendlist count: %ld",friendList.count);
             AppDelegate* app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             
             if (app.isNetworkConnected) { //为防万一，再进行一次好友同步，前提是网络已连接
@@ -686,6 +692,35 @@
     }
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"can Edit row");
+    if (indexPath.section != 0) {
+        return YES;
+    }
+    else{
+        return NO;
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
 #pragma mark - UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar                     // return NO to not become first responder
 {
@@ -816,6 +851,11 @@
 //    }
 //    
 //    [self.friendTableView reloadData];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    NSLog(@"scroll begin dragging"); 
 }
 
 #pragma mark - SlideNavigationControllerDelegate

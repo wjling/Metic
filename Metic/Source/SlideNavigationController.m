@@ -576,33 +576,6 @@ static SlideNavigationController *singletonInstance;
     }];
 }
 
-//- (void)reconnect
-//{
-//    mySocket.delegate = nil;
-//    [mySocket close];
-//    
-//    NSString* str = @"http://222.200.182.183:10088/";
-//    NSURL* url = [[NSURL alloc]initWithString:str];
-//    
-//    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
-//    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
-//    mySocket.delegate = self;
-//    NSLog(@"Connecting...");
-//    [mySocket open];
-//}
-//
-//#pragma mark - SRWebSocketDelegate
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
-//{
-//    NSLog(@"Get message: %@",message);
-//}
-//
-//- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-//{
-//    NSLog(@"Websocket Connected");
-//}
-
 #pragma mark - Private API
 
 // This is confirmed to be App Store safe.
