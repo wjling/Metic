@@ -11,11 +11,13 @@
 #import "FMDatabase.h"
 #import "MTUser.h"
 
-@implementation MTDatabaseHelper
+static MTDatabaseHelper *singleInstance = nil;
 
+@implementation MTDatabaseHelper
 {
     FMDatabaseQueue* queue;
 }
+
 
 -(id) init
 {
@@ -31,12 +33,9 @@
 
 +(MTDatabaseHelper*) sharedInstance
 {
-    static dispatch_once_t pred = 0;
-    __strong static id _sharedObject = nil;
-    dispatch_once(&pred, ^{
-        _sharedObject = [[self alloc] init];
-    });
-    return _sharedObject;
+    if(singleInstance == nil)
+        singleInstance = [[self alloc] init];
+    return singleInstance;
 }
 
 -(void) inDatabase:(void(^)(FMDatabase*))block
@@ -48,6 +47,8 @@
 
 +(void) refreshDatabaseFile
 {
+    singleInstance = nil;
+    return;
     MTDatabaseHelper *instance = [self sharedInstance];
     [instance doRefresh];
 }

@@ -275,8 +275,8 @@ static MTUser *singletonInstance;
 {
     userid = user_id;
 //    NSLog(@"set user id: %@", self.userid);
-//    [MTDatabaseHelper refreshDatabaseFile];
 //    DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
+    [MTDatabaseHelper refreshDatabaseFile];
     [self initUserDir];
     
     
