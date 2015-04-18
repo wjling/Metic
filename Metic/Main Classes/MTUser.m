@@ -275,11 +275,12 @@ static MTUser *singletonInstance;
 {
     userid = user_id;
 //    NSLog(@"set user id: %@", self.userid);
-    DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
+//    [MTDatabaseHelper refreshDatabaseFile];
+//    DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [self initUserDir];
     
+    
     NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
-//    NSLog(@"设置别名: %@",account);
     [XGPush setAccount:account];
     
     
@@ -514,7 +515,8 @@ static MTUser *singletonInstance;
     doingSortingFriends = YES;
     sortingFriendsDone = NO;
     BOOL hasSpecialChar = NO;
-    [self.sectionArray removeAllObjects];
+    NSMutableArray* sectionArr = [[NSMutableArray alloc]initWithCapacity:0];
+//    [self.sectionArray removeAllObjects];
     NSMutableDictionary* sorted = [[NSMutableDictionary alloc]init];
 //    NSLog(@"before sort, friendlist: %@",friendList);
     for (int i = 0; i < self.friendList.count; i++) {
@@ -564,19 +566,19 @@ static MTUser *singletonInstance;
             [groupOfFriends addObject:aFriend];
             [sorted setObject:groupOfFriends forKey:[first_letter uppercaseString]];
             if (!isSpecialChar) {
-                [self.sectionArray addObject:[first_letter uppercaseString]];
+                [sectionArr addObject:[first_letter uppercaseString]];
             }
             
         }
     }
     
-    for (NSInteger i = 0; i < sectionArray.count; i++) {
-        NSString* key = [sectionArray objectAtIndex:i];
+    for (NSInteger i = 0; i < sectionArr.count; i++) {
+        NSString* key = [sectionArr objectAtIndex:i];
         NSMutableArray* arr = [sorted objectForKey:key];
         [self rankFriendsInArray:arr];
 //        NSLog(@"sorted array: %@",arr);
     }
-    [self.sectionArray sortUsingComparator:^(id obj1, id obj2)
+    [sectionArr sortUsingComparator:^(id obj1, id obj2)
      {
          return [(NSString*)obj1 compare:(NSString*)obj2];
      }];
@@ -585,10 +587,11 @@ static MTUser *singletonInstance;
     NSArray* temp_arr = [[NSArray alloc]initWithObjects:temp_dic, nil];
     [sorted setObject:temp_arr forKey:@"★"];
     
-    [sectionArray insertObject:@"★" atIndex:0];
+    [sectionArr insertObject:@"★" atIndex:0];
     if (hasSpecialChar) {
-        [sectionArray addObject:@"#"];
+        [sectionArr addObject:@"#"];
     }
+    self.sectionArray = sectionArr;
 //    NSLog(@"sorted friends dictionary: %@",sorted);
 //    NSLog(@"section array: %@",self.sectionArray);
     sortingFriendsDone = YES;
