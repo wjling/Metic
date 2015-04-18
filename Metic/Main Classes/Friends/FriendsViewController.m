@@ -315,65 +315,78 @@
     NSInteger location = 0;
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
 //    NSLog(@"PINYIN head: %@",temp_text_head);
-    NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-    if (range_head.length > 0) {
-        NSValue* value = [NSValue valueWithRange:range_head];
+    NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+    
+    if (range_text.length > 0) {
+        NSValue* value = [NSValue valueWithRange:range_text];
         [ranges_arr addObject:value];
 //        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
     }
     else
     {
-        NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
-        NSInteger checkStringEnd = 0;
-//        NSLog(@"PINYIN all: %@",temp_text_all);
-        for (NSInteger i = 0; i < text.length; i++) {
-            NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
-            NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
-            [textCharRange_arr addObject:value];
-            location = location + char_str.length;
+        NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+        if (range_head.length > 0) {
+            NSValue* value = [NSValue valueWithRange:range_head];
+            [ranges_arr addObject:value];
         }
-        NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-//        NSInteger range_all_begin = range_all.location;
-        NSInteger range_all_end = range_all.length + range_all.location - 1;
-//        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
-        NSInteger begin = -1, end = -1;
-        BOOL beginSet = NO;
-        for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
-            NSRange range = [textCharRange_arr[i] rangeValue];
-            if (!beginSet) {
-                if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
-                    begin = i;
-                    beginSet = YES;
-                }
-//                else if (range.location == range_all.location)
-//                {
-//                    begin = i;
-//                    beginSet = YES;
-//                }
+        else
+        {
+            NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
+            NSInteger checkStringEnd = 0;
+            //        NSLog(@"PINYIN all: %@",temp_text_all);
+            for (NSInteger i = 0; i < text.length; i++) {
+                NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
+                NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
+                [textCharRange_arr addObject:value];
+                location = location + char_str.length;
             }
-            else
-            {
-                if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
-                    end = i;
-                    break;
+            NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+            if (range_all.location >= temp_text_all.length) {
+                return;
+            }
+            //        NSInteger range_all_begin = range_all.location;
+            NSInteger range_all_end = range_all.length + range_all.location - 1;
+            //        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
+            NSInteger begin = -1, end = -1;
+            BOOL beginSet = NO;
+            for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
+                NSRange range = [textCharRange_arr[i] rangeValue];
+                if (!beginSet) {
+                    if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
+                        begin = i;
+                        beginSet = YES;
+                    }
+                    //                else if (range.location == range_all.location)
+                    //                {
+                    //                    begin = i;
+                    //                    beginSet = YES;
+                    //                }
                 }
-                else if (checkStringEnd > range_all_end)
+                else
                 {
-                    end = i - 1;
-                    break;
+                    if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
+                        end = i;
+                        break;
+                    }
+                    else if (checkStringEnd > range_all_end)
+                    {
+                        end = i - 1;
+                        break;
+                    }
                 }
+                checkStringEnd += range.length;
+                
             }
-            checkStringEnd += range.length;
+            //        if (end == -1) {
+            //            end = textCharRange_arr.count - 1;
+            //        }
+            //        NSLog(@"colored begin: %d, end: %d",begin,end);
+            NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
+            [ranges_arr addObject:value];
+//                    NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
             
         }
-//        if (end == -1) {
-//            end = textCharRange_arr.count - 1;
-//        }
-//        NSLog(@"colored begin: %d, end: %d",begin,end);
-        NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
-        [ranges_arr addObject:value];
-//        NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
-
+        
     }
     [self.searchFriendKeyWordRangeArr addObject:ranges_arr];
     
@@ -625,8 +638,8 @@
         NSMutableArray* rangeArr = [self.searchFriendKeyWordRangeArr objectAtIndex:indexPath.row];
         for (NSInteger i = 0; i < rangeArr.count; i++) {
             NSRange range = [[rangeArr objectAtIndex:i] rangeValue];
-            [attrStr addAttribute:(NSString *)kCTForegroundColorAttributeName
-                            value:(id)color.CGColor
+            [attrStr addAttribute:NSForegroundColorAttributeName
+                            value:color
                             range:range];
 
         }

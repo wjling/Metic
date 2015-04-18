@@ -478,14 +478,17 @@ static MTUser *singletonInstance;
             [nameFromID_dic setValue:fname forKey:[NSString stringWithFormat:@"%@",fid]];
         }
         //    NSLog(@"get friends from DB, friendList: %@",self.friendList);
-        NSDictionary* json = [CommonUtils packParamsInDictionary:
-                              self.userid,@"id",
-                              [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
-        NSLog(@"synchronize friend json: %@",json);
-        NSLog(@"synchronizeFriends end");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary* json = [CommonUtils packParamsInDictionary:
+                                  self.userid,@"id",
+                                  [NSNumber numberWithInteger:self.friendList.count],@"friends_number",nil];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:SYNCHRONIZE_FRIEND];
+            NSLog(@"synchronize friend json: %@",json);
+            NSLog(@"synchronizeFriends end");
+        });
+        
     }];
     
 }
@@ -792,7 +795,7 @@ static MTUser *singletonInstance;
 //    NSLog(@"before insert alias to friendlist, alias: %@", self.alias_dic);
     for (int i = 0; i < friendList.count; i++) {
 //        NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
-        NSMutableDictionary* friend = [friendList objectAtIndex:i];
+        NSMutableDictionary* friend = [[NSMutableDictionary alloc]initWithDictionary:[friendList objectAtIndex:i]];
         NSNumber* fid = [friend objectForKey:@"id"];
        
         NSString* alias = [self.alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
@@ -1003,6 +1006,7 @@ static MTUser *singletonInstance;
                     NSArray* backupFriendList = [[NSArray alloc]initWithArray:self.friendList copyItems:YES];
                     NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:backupFriendList];
                     [thread start];
+                    NSLog(@"同步好友，从服务器得到好友列表: %@", self.friendList);
                 }
                 else
                 {
@@ -1030,10 +1034,16 @@ static MTUser *singletonInstance;
             else
             {
                 NSLog(@"不是同步好友的操作");
+                dispatch_async(dispatch_get_global_queue(0, 0), ^
+                               {
+                                   [self friendListDidChanged];
+                                   dispatch_async(dispatch_get_main_queue(), ^
+                                                  {
+                                                      doingSynchronizeFriend = NO;
+                                                      synchronizeFriendDone = YES;
+                                                  });
+                               });
             }
-            
-            
-            
         }
             break;
         default:
