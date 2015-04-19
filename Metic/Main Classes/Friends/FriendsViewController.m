@@ -316,11 +316,11 @@
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
 //    NSLog(@"PINYIN head: %@",temp_text_head);
     NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-    
+    NSLog(@"text: %@, keyword: %@", text, keyWord);
     if (range_text.length > 0) {
         NSValue* value = [NSValue valueWithRange:range_text];
         [ranges_arr addObject:value];
-//        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
     }
     else
     {
@@ -429,7 +429,15 @@
     if (tableView == self.friendSearchDisplayController.searchResultsTableView) {
         [self.friendSearchDisplayController setActive:NO animated:YES];
         NSMutableDictionary* aFriend = [searchFriendList objectAtIndex:indexPath.row];
-        NSString* fname = [aFriend objectForKey:@"name"];
+        NSString* fname;
+        NSString* falias = [aFriend objectForKey:@"alias"];
+        if (falias && ![falias isEqual:[NSNull null]]) {
+            fname = falias;
+        }
+        else
+        {
+            fname = [aFriend objectForKey:@"name"];
+        }
         NSString* fname_head = [CommonUtils pinyinHeadFromNSString:[fname substringToIndex:1]].uppercaseString;
         NSLog(@"fname head: %@",fname_head);
         NSInteger section = [sectionArray indexOfObject:fname_head];
@@ -437,7 +445,15 @@
         NSMutableArray* friends = [sortedFriendDic objectForKey:fname_head];
         for (NSInteger i = 0; i < friends.count; i++) {
             NSMutableDictionary* friend = [friends objectAtIndex:i];
-            NSString* name = [friend objectForKey:@"name"];
+            NSString* name;
+            NSString* alias = [friend objectForKey:@"alias"];
+            if (alias && ![alias isEqual:[NSNull null]]) {
+                name = alias;
+            }
+            else
+            {
+                name = [friend objectForKey:@"name"];
+            }
             if ([name isEqualToString:fname]) {
                 row = i;
                 break;
@@ -617,7 +633,11 @@
         }
         NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
         NSString* name = [friend_dic objectForKey:@"name"];
+        NSString* alias = [friend_dic objectForKey:@"alias"];
         NSNumber* fid = [friend_dic objectForKey:@"id"];
+        if (alias && ![alias isEqual:[NSNull null]]) {
+            name = [NSString stringWithFormat:@"%@ (%@)", alias, name];
+        }
 //        for(UIView * elem in [cell.contentView subviews])
 //        {
 //            if([elem isKindOfClass:[BDSuggestLabel class]])
@@ -743,6 +763,10 @@
         for (int i=0; i<friendList.count; i++) {
             NSMutableDictionary* aFriend = [friendList objectAtIndex:i];
             NSString* fname = [aFriend objectForKey:@"name"];
+            NSString* falias = [aFriend objectForKey:@"alias"];
+            if (falias && ![falias isEqual:[NSNull null]]) {
+                fname = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
+            }
             if ([CommonUtils isIncludeChineseInString:fname]) {
                 NSString *tempPinYinStr = [CommonUtils pinyinFromNSString:fname];
                 NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
@@ -773,6 +797,10 @@
         for (int i = 0; i < friendList.count; i++) {
             NSMutableDictionary* tempDic = [friendList objectAtIndex:i];
             NSString* fname = [tempDic objectForKey:@"name"];
+            NSString* falias = [tempDic objectForKey:@"alias"];
+            if (falias && ![falias isEqual:[NSNull null]]) {
+                fname = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
+            }
             NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
             if (titleResult.length>0) {
                 [searchFriendList addObject:tempDic];
