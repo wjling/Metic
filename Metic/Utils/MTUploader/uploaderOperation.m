@@ -16,6 +16,10 @@
 #import "SDImageCache.h"
 #import "UzysAssetsPickerController.h"
 #import "MTDatabaseHelper.h"
+#import "UploaderManager.h"
+#import "BOAlertController.h"
+#import "SlideNavigationController.h"
+#import "UploadManageViewController.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -182,6 +186,10 @@
     }
     self.executing = NO;
     self.finished = YES;
+    if([UploaderManager sharedManager].uploadQueue.operations.count == 0)
+    {
+        [self postFinishNotification];
+    }
 }
 
 -(void)beginUpload
@@ -342,6 +350,62 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
         
     }
+}
+
+- (void)postFinishNotification
+{
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
+    
+    [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray.count == 0) return;
+        
+        UIApplicationState applicationState = [[UIApplication sharedApplication]applicationState];
+        
+        switch (applicationState) {
+            case UIApplicationStateActive:
+            {
+                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]]){
+                    return;
+                }
+                NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片上传失败 ，是否重新上传",(unsigned long)resultsArray.count];
+                [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+            }
+                
+                break;
+            default:
+            {
+                NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片上传失败 ，是否重新上传",(unsigned long)resultsArray.count];
+                UILocalNotification *notification=[[UILocalNotification alloc] init];
+                if (notification!=nil) {
+                    NSDate *now = [NSDate date];
+                    //从现在开始，10秒以后通知
+                    notification.fireDate=[now dateByAddingTimeInterval:1];
+                    //使用本地时区
+                    notification.timeZone=[NSTimeZone defaultTimeZone];
+                    notification.alertBody=message;
+                    //通知提示音 使用默认的
+                    notification.soundName= UILocalNotificationDefaultSoundName;
+                    notification.alertAction=NSLocalizedString(@" 马上处理", nil);
+                    //这个通知到时间时，你的应用程序右上角显示的数字。
+                    notification.applicationIconBadgeNumber = 1;
+                    //add key  给这个通知增加key 便于半路取消。nfkey这个key是我自己随便起的。
+                    // 假如你的通知不会在还没到时间的时候手动取消 那下面的两行代码你可以不用写了。
+                    NSDictionary *dict =[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInteger:resultsArray.count],@"uploadStateNotification",nil];
+                    [notification setUserInfo:dict];
+                    //启动这个通知
+                    [[UIApplication sharedApplication]   scheduleLocalNotification:notification];
+                    //这句真的特别特别重要。如果不加这一句，通知到时间了，发现顶部通知栏提示的地方有了，然后你通过通知栏进去，然后你发现通知栏里边还有这个提示
+                    //除非你手动清除，这当然不是我们希望的。加上这一句就好了。网上很多代码都没有，就比较郁闷了。
+                }
+                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]]){
+                    return;
+                }
+                [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+            }
+                break;
+        }
+    }];
 }
 
 @end
