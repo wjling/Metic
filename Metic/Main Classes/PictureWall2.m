@@ -307,18 +307,21 @@
     [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         NSInteger uploadTaskCount = 0;
         uploadTaskCount = resultsArray.count;
+        NSInteger uploadingTask = 0;
+        uploadingTask = [UploaderManager sharedManager].uploadQueue.operations.count;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (uploadTaskCount == 0) [self UploadStatusTimerEnd];
-            [self setupUploadBtn:uploadTaskCount];
+            if (uploadTaskCount == 0 || uploadingTask == 0) [self UploadStatusTimerEnd];
+            [self setupUploadBtn:uploadTaskCount uploadingTask:uploadingTask];
         });
         
     }];
     
 }
 
--(void)setupUploadBtn:(NSInteger)uploadTaskCount
+-(void)setupUploadBtn:(NSInteger)uploadTaskCount uploadingTask:(NSInteger)uploadingTask
 {
     if (uploadTaskCount > 0) {
+        
         if(!_uploadManageBtn){
             _uploadManageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
@@ -339,19 +342,37 @@
             [activity startAnimating];
             [_uploadManageBtn addSubview:activity];
         }
-        [UIView animateWithDuration:1 animations:^{
-            [_uploadManageBtn setAlpha:1.0f];
-            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
-            [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
-            CGRect frame = quiltView.frame;
-            if (CGRectGetMinY(frame) != 30) {
-                frame.size.height -=30;
-                frame.origin.y = 30;
-                [quiltView setFrame:frame];
-            }
-        }];
+        if (uploadingTask == 0) {
+            [_uploadManageBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [UIView animateWithDuration:1 animations:^{
+                [_uploadManageBtn setAlpha:1.0f];
+                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成，有%ld张图片上传失败",(long)uploadTaskCount] forState:UIControlStateNormal];
+                CGRect frame = quiltView.frame;
+                if (CGRectGetMinY(frame) != 30) {
+                    frame.size.height -=30;
+                    frame.origin.y = 30;
+                    [quiltView setFrame:frame];
+                }
+            }];
+        }else{
+            [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
+            [UIView animateWithDuration:1 animations:^{
+                [_uploadManageBtn setAlpha:1.0f];
+                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
+                CGRect frame = quiltView.frame;
+                if (CGRectGetMinY(frame) != 30) {
+                    frame.size.height -=30;
+                    frame.origin.y = 30;
+                    [quiltView setFrame:frame];
+                }
+            }];
+        }
+        
         
     }else{
+        [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
         [UIView animateWithDuration:1 animations:^{
             [_uploadManageBtn setAlpha:0.0f];
             _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);

@@ -20,6 +20,7 @@
 #import "BOAlertController.h"
 #import "SlideNavigationController.h"
 #import "UploadManageViewController.h"
+#import "PictureWall2.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -365,7 +366,7 @@
         switch (applicationState) {
             case UIApplicationStateActive:
             {
-                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]]){
+                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]] || [[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[PictureWall2 class]]){
                     return;
                 }
                 NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片上传失败 ，是否重新上传",(unsigned long)resultsArray.count];
@@ -398,7 +399,7 @@
                     //这句真的特别特别重要。如果不加这一句，通知到时间了，发现顶部通知栏提示的地方有了，然后你通过通知栏进去，然后你发现通知栏里边还有这个提示
                     //除非你手动清除，这当然不是我们希望的。加上这一句就好了。网上很多代码都没有，就比较郁闷了。
                 }
-                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]]){
+                if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]] || [[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[PictureWall2 class]]){
                     return;
                 }
                 [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
