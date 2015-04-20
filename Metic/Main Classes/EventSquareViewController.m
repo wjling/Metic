@@ -25,6 +25,7 @@
 
 
 @interface EventSquareViewController ()
+@property (nonatomic,strong) UIView* contentView;
 @property (nonatomic,strong) UIScrollView* scrollView;
 @property (nonatomic,strong) UIPageControl* pagecontrol;
 @property (nonatomic,strong) NSTimer* timer;
@@ -130,6 +131,12 @@
 
 -(void)initUI
 {
+    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 260)];
+    [_contentView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
+    _contentView.layer.borderColor = [UIColor redColor].CGColor;
+    _contentView.layer.borderWidth = 2;
+    [self.view addSubview:_contentView];
+    
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
     
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, bannerWidth, bannerHeight)];
@@ -140,7 +147,7 @@
     [_scrollView setContentOffset:CGPointMake(bannerWidth * 1, 0)];
     _scrollView.delegate = self;
 
-    [self.view addSubview:_scrollView];
+    [_contentView addSubview:_scrollView];
     
     CGRect frame = self.view.frame;
     float originY = CGRectGetHeight(_scrollView.frame) + 20;
@@ -164,7 +171,7 @@
     [label1 setFont:[UIFont systemFontOfSize:14]];
     [button1 addSubview:label1];
     [button1 addTarget:self action:@selector(toNearby:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button1];
+    [_contentView addSubview:button1];
     
     UIButton* button2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [button2 setFrame:CGRectMake(interval*2 + height*1, originY, height, height)];
@@ -183,7 +190,7 @@
     [label2 setFont:[UIFont systemFontOfSize:14]];
     [button2 addSubview:label2];
     [button2 addTarget:self action:@selector(toHot:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button2];
+    [_contentView addSubview:button2];
     
     UIButton* button3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [button3 setFrame:CGRectMake(interval*3 + height*2, originY, height, height)];
@@ -202,7 +209,7 @@
     [label3 setFont:[UIFont systemFontOfSize:14]];
     [button3 addSubview:label3];
     [button3 addTarget:self action:@selector(toSearch:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button3];
+    [_contentView addSubview:button3];
 
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _shadowView = [[UIView alloc]initWithFrame:self.view.bounds];
@@ -320,7 +327,7 @@
         _pagecontrol.hidesForSinglePage = YES;
         _pagecontrol.userInteractionEnabled = NO;
         _pagecontrol.numberOfPages = _posterList.count;
-        [self.view addSubview:_pagecontrol];
+        [_contentView addSubview:_pagecontrol];
         
         _timer = [NSTimer scheduledTimerWithTimeInterval:2.5f target:self selector:@selector(showBanner) userInfo:nil repeats:YES];
 
