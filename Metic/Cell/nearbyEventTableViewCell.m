@@ -64,15 +64,16 @@
 }
 
 - (IBAction)showParticipant:(id)sender {
-    ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;//searchToshowparticipant
+    
     NSString* segueName;
     if ([self.nearbyEventViewController isKindOfClass:[NearbyEventViewController class]]) {
+        ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;//searchToshowparticipant
         segueName = @"nearbyToshowparticipant";
     }else if ([self.nearbyEventViewController isKindOfClass:[EventSearchViewController class]]){
+        ((NearbyEventViewController*)_nearbyEventViewController).selectedEventId = _eventId;//searchToshowparticipant
         segueName = @"searchToshowparticipant";
     }
-    
-    [self.nearbyEventViewController performSegueWithIdentifier:segueName sender:self.nearbyEventViewController];
+    if (segueName) [self.nearbyEventViewController performSegueWithIdentifier:segueName sender:self.nearbyEventViewController];
 }
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
