@@ -887,11 +887,18 @@
             NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
             if(localMaxSeq){
                 if ([localMaxSeq integerValue] > [max_seq integerValue] && [max_seq integerValue] != 0 && [min_seq integerValue]!= 0) {
+                    //更新本地消息最大序号
                     maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
                     [maxSeqDict setObject:min_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                     [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
                     [[NSUserDefaults standardUserDefaults] synchronize];
-                }else {
+                }else if([localMaxSeq integerValue] > [min_seq integerValue] && [max_seq integerValue] == 0 && [min_seq integerValue]!= 0){
+                    //更新本地消息最大序号
+                    maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+                    [maxSeqDict setObject:min_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                    [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }else{
                     min_seq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
                 }
             }
