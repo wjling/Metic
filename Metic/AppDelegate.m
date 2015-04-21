@@ -886,7 +886,7 @@
         if (maxSeqDict) {
             NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
             if(localMaxSeq){
-                if ([localMaxSeq integerValue] > [max_seq integerValue]) {
+                if ([localMaxSeq integerValue] > [max_seq integerValue] && [max_seq integerValue] != 0 && [min_seq integerValue]!= 0) {
                     maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
                     [maxSeqDict setObject:min_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
                     [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
