@@ -803,6 +803,7 @@
                               [NSNumber numberWithInt:0], @"min_seq",
                               [NSNumber numberWithInt:0], @"max_seq",
                               nil];
+    NSLog(@"发送同步序号请求：%@",json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:returnResult];
@@ -885,7 +886,14 @@
         if (maxSeqDict) {
             NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
             if(localMaxSeq){
-                min_seq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
+                if ([localMaxSeq integerValue] > [max_seq integerValue]) {
+                    maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+                    [maxSeqDict setObject:min_seq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                    [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }else {
+                    min_seq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
+                }
             }
         }
     }
