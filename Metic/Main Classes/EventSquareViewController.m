@@ -132,7 +132,7 @@
     _isAuto = YES;
     _eventArray = [[NSMutableArray alloc]init];
     [self getPoster];
-//    [self getNearbyEventIdsFromAir];
+//    [self getNearbyEventIdsFromAir:@0];
 }
 
 -(void)initUI
@@ -528,12 +528,13 @@
     [self performSegueWithIdentifier:@"toSearchEvent" sender:self];
 }
 #pragma mark - 获取最新活动资料 -
--(void)getNearbyEventIdsFromAir
+-(void)getNearbyEventIdsFromAir:(NSNumber*)sequence
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[NSNumber numberWithInt:1] forKey:@"type"];
+    [dictionary setValue:[NSNumber numberWithInt:2] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithBool:YES] forKey:@"all"];
+    [dictionary setValue:sequence forKey:@"sequence"];
+//    [dictionary setValue:[NSNumber numberWithBool:YES] forKey:@"all"];
     
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -694,9 +695,6 @@
             }
         }
         [cell setBackgroundColor:[UIColor whiteColor]];
-        CGRect frame = cell.frame;
-        frame.origin.x = 10;
-        [cell setFrame:frame];
         return cell;
     }
 }
