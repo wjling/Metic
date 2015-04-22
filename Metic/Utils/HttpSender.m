@@ -71,6 +71,7 @@
 {
     if (self.finishBlock) {
         self.finishBlock(nil);
+        self.finishBlock = nil;
     }
 }
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
@@ -85,6 +86,7 @@
 //    NSLog(@"connectionDidFinishLoading");
     if (self.finishBlock) {
         self.finishBlock(responseData);
+        self.finishBlock = nil;
     }else
     {
         if ([(UIViewController*)self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)])
