@@ -163,8 +163,10 @@
         self.sectionArray = [[MTUser sharedInstance] sectionArray];
         self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
         NSLog(@"sectionarray: %@ \nsortedFriendDic: %@", self.sectionArray, self.sortedFriendDic);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self friendTableviewReload];
+        });
         
-        [self friendTableviewReload];
         if (self.friendList.count > 0) {
             NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
             if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
@@ -362,7 +364,7 @@
                     //                    beginSet = YES;
                     //                }
                 }
-                else
+                if(beginSet)
                 {
                     if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
                         end = i;
