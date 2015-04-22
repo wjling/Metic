@@ -132,7 +132,7 @@
     _isAuto = YES;
     _eventArray = [[NSMutableArray alloc]init];
     [self getPoster];
-    [self getNearbyEventIdsFromAir];
+//    [self getNearbyEventIdsFromAir];
 }
 
 -(void)initUI
