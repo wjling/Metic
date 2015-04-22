@@ -25,7 +25,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@interface UINavigationController (SlideNavigationController)
+@interface UINavigationController (SlideNavigationController)<UIGestureRecognizerDelegate>
 
 - (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
@@ -550,6 +550,7 @@ static SlideNavigationController *singletonInstance;
 	if (!panRecognizer)
 	{
 		panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panDetected:)];
+        panRecognizer.delegate = self;
 	}
 	
 	return panRecognizer;
@@ -601,6 +602,15 @@ static SlideNavigationController *singletonInstance;
     }
     
     
+}
+
+#pragma mark - UIGestureRecognizer Delegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+    CGPoint currentPoint = [touch locationInView:self.view];
+    if (currentPoint.x < 50) {
+        return YES;
+    }
+    return NO;
 }
 @end
 

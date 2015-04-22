@@ -41,7 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:NO];
+//    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     NSLog(@"friendviewcontroller viewdidload");
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
