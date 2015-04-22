@@ -419,12 +419,34 @@
     NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-        NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
-        if (!users || users.count == 0) {
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:MtuserPath])
+        {
+            NSArray* users;
+            @try {
+                users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
+            }
+            @catch (NSException *exception) {
+            }
+            @finally {
+                if (!users || users.count == 0) {
+                    [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [[MTUser alloc]init];
+                }
+            }
+//            NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
+//            if (!users || users.count == 0) {
+//                [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+//                [[NSUserDefaults standardUserDefaults] synchronize];
+//                [[MTUser alloc]init];
+//            }
+        }else{
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [[MTUser alloc]init];
         }
+        
     }else{
         [[MTUser alloc]init];
     }
