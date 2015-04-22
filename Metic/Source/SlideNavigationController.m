@@ -607,7 +607,7 @@ static SlideNavigationController *singletonInstance;
 #pragma mark - UIGestureRecognizer Delegate
 -(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
     CGPoint currentPoint = [touch locationInView:self.view];
-    if (currentPoint.x < 50) {
+    if (currentPoint.x < MENU_OFFSET) {
         return YES;
     }
     return NO;
