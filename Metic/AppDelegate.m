@@ -435,12 +435,6 @@
                     [[MTUser alloc]init];
                 }
             }
-//            NSArray* users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
-//            if (!users || users.count == 0) {
-//                [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-//                [[NSUserDefaults standardUserDefaults] synchronize];
-//                [[MTUser alloc]init];
-//            }
         }else{
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
