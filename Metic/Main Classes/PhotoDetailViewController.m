@@ -20,6 +20,7 @@
 #import "UIImageView+WebCache.h"
 #import "NSString+JSON.h"
 #import "../Source/TMQuiltView/TMQuiltView.h"
+#import "MTDatabaseHelper.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -72,13 +73,14 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"图片主页"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
         return;
@@ -189,24 +191,19 @@
 
 -(void)pullPhotoInfoFromDB
 {
-//    BOOL ret = NO;
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.photoId],@"photo_id", nil];
-//    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
-    [sql database:path queryTable:@"photoInfo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance]queryTable:@"photoInfo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count) {
             NSString *tmpa = [resultsArray[0] valueForKey:@"photoInfo"];
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
             self.photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-//            ret = YES;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [_tableView reloadData];
+            });
         }
     }];
-    
-//    [sql closeMyDB];
-//    return ret;
+
 }
 
 -(void)pullPhotoInfoFromAir
@@ -455,11 +452,12 @@
 - (IBAction)share:(id)sender {
     if (_photo) {
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
-                                          shareText:@"WeShare"
+                                          shareText:@""
                                          shareImage:self.photo
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToSina,nil]
                                            delegate:self];
     }
 }
@@ -718,13 +716,8 @@
 
 - (void)deletePhotoInfoFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_photoId],@"photo_id", nil];
-    [sql database:path deleteTurpleFromTable:@"eventPhotos" withWhere:wheres completion:nil];
-//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
 }
 
 

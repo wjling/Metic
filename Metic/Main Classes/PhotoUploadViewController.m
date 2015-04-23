@@ -667,18 +667,26 @@ static const NSInteger MaxUploadCount = 20;
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         __weak typeof(self) weakSelf = self;
+        __block NSInteger invalidPhotos = 0;
         [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             ALAsset *representation = obj;
             if ([[representation valueForProperty:@"ALAssetPropertyType"] isEqualToString:@"ALAssetTypePhoto"]) {
                 UIImage *img = [UIImage imageWithCGImage:representation.aspectRatioThumbnail];
-                [weakSelf.uploadImgs addObject:img];
-                [self.uploadImgAssets addObject:representation];
+                float ratio = img.size.width / img.size.height;
+                if(ratio > 1.0/3.0 && ratio < 3){
+                    [weakSelf.uploadImgs addObject:img];
+                    [self.uploadImgAssets addObject:representation];
+                }else  invalidPhotos++;
             }
             
         }];
         dispatch_sync(dispatch_get_main_queue(), ^{
             [_imgCollectionView reloadData];
             [self adjustCollectionView];
+            if (invalidPhotos > 0) {
+                [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:[NSString stringWithFormat:@"很抱歉，检测到 %ld 张图片的长宽比过大或者文件不存在，请重新选择",(long)invalidPhotos] WithDelegate:nil WithCancelTitle:@"确定"];
+            }
+            
         });
     });
     

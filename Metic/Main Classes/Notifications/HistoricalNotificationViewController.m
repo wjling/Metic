@@ -9,6 +9,7 @@
 #import "HistoricalNotificationViewController.h"
 #import "MobClick.h"
 #import "KxMenu.h"
+#import "MTDatabaseHelper.h"
 
 @interface HistoricalNotificationViewController ()
 {
@@ -121,13 +122,11 @@
     [UIView  setAnimationCurve: UIViewAnimationCurveEaseIn];
     [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.self.functions_view  cache:YES];
     [UIView commitAnimations];
-    
-    MySqlite* mySql = [[MySqlite alloc]init];
-//    [mySql openMyDB:DB_path];
+
     for (int i = 0; i < self.historicalMsgs.count; i++) {
         NSDictionary* msg = [self.historicalMsgs objectAtIndex:i];
         NSNumber* seq = [msg objectForKey:@"seq"];
-        [mySql database:DB_path deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil] completion:nil];
+        [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"notification" withWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",seq],@"seq",nil]];
     }
 //    [mySql closeMyDB];
     [[MTUser sharedInstance].historicalMsg removeAllObjects];

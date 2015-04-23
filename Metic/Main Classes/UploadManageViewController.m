@@ -8,6 +8,7 @@
 
 #import "UploadManageViewController.h"
 #import "UploadManageViewCell.h"
+#import "MTDatabaseHelper.h"
 #import "MTUser.h"
 
 @interface UploadManageViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
@@ -66,16 +67,10 @@
 - (void)pullUploadTasksfromDB
 {
     //多图上传
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by id",_eventId],@"event_id", nil];
-    
-//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-//    [sql closeMyDB];
-    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance]queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         for (int i = 0; i < resultsArray.count; i++) {
             NSDictionary *task = resultsArray[i];
             NSString* imageName = [task valueForKey:@"imgName"];
@@ -91,7 +86,6 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.collelctionView reloadData];
         });
-        
     }];
     
     

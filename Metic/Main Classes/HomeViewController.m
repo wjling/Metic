@@ -19,6 +19,7 @@
 #import "MobClick.h"
 #import "PictureWall2.h"
 #import "UploaderManager.h"
+#import "MTDatabaseHelper.h"
 
 @interface HomeViewController ()
 
@@ -80,7 +81,6 @@
     self.events = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
     
-    self.sql = [[MySqlite alloc]init];
     [self pullEventsFromDB];
     [_tableView reloadData];
     
@@ -100,8 +100,6 @@
     
     self.listenerDelegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 //    [self.listenerDelegate connect];
-    
-    self.sql = [[MySqlite alloc]init];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [[UploaderManager sharedManager] checkUnfinishedTasks];
@@ -554,7 +552,7 @@
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
     
-    [self.sql database:path queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         NSMutableArray *result = resultsArray;
         
         //比较
@@ -566,12 +564,8 @@
             if (!sequence) continue;
             if (![eventIds containsObject:sequence]) {
                 //删除
-                NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-                MySqlite *sql0 = [[MySqlite alloc]init];
-//                [sql0 openMyDB:path0];
                 NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
-                [sql0 database:path0 deleteTurpleFromTable:@"event" withWhere:wheres0 completion:nil];
-//                [sql0 closeMyDB];
+                [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"event" withWhere:wheres0];
             }
         }
 
@@ -613,9 +607,7 @@
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
         
-//        [self.sql insertToTable:@"event" withColumns:columns andValues:values];
-        
-        [self.sql database:path insertToTable:@"event" withColumns:columns andValues:values completion:nil];
+        [[MTDatabaseHelper sharedInstance] insertToTable:@"event" withColumns:columns andValues:values];
     }
     
 //    [self.sql closeMyDB];
@@ -643,7 +635,7 @@
 //        [self.events addObject:event];
 //    }
     
-    [self.sql database:path queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2 completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"event" withSelect:seletes andWhere:(_type == 4)?wheres1:wheres2 completion:^(NSMutableArray *resultsArray) {
         NSMutableArray *result = resultsArray;
         for (int i = 0; i < result.count; i++) {
             NSDictionary* temp = [result objectAtIndex:i];
@@ -653,11 +645,12 @@
             NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
             [self.events addObject:event];
         }
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+        });
 
     }];
     
-    
-//    [self.sql closeMyDB];
 }
 
 

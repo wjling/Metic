@@ -9,7 +9,7 @@
 #import "CloudOperation.h"
 #import "HttpSender.h"
 #import "UIImageView+WebCache.h"
-#import "MySqlite.h"
+
 #import "../Main Classes/MTUser.h"
 @interface CloudOperation()
 @property BOOL shouldExit;

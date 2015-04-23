@@ -499,11 +499,14 @@
             [alertView show];
 
         }else if (row == 2){
+            
+            [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+            [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:@"wx6f7ea17b99ab01e7"
                                               shareText:@"活动宝，是一款以“活动”为主题提倡用户进行线上线下活动的社交管理工具。"
                                              shareImage:[UIImage imageNamed:@"AppIcon57x57"]
-                                        shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                        shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToSina]
                                                delegate:self];
             [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
         }else if (row == 3){

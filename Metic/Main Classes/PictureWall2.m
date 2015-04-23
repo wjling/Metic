@@ -22,6 +22,7 @@
 #import "MTAutoHideButton.h"
 #import "UploaderManager.h"
 #import "UploadManageViewController.h"
+#import "MTDatabaseHelper.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -175,44 +176,30 @@
     if (!eventId) {
         return;
     }
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
-    [sql database:path deleteTurpleFromTable:@"eventPhotos" withWhere:wheres completion:nil];
-//    [sql deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
 }
 
 + (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
     for (int i = 0; i < photoInfos.count; i++) {
         NSDictionary* photoInfo = [photoInfos objectAtIndex:i];
         NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
         photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
-        [sql database:path insertToTable:@"eventPhotos" withColumns:columns andValues:values completion:nil];
-//        [sql openMyDB:path];
-//        [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-//        [sql closeMyDB];
+        [[MTDatabaseHelper sharedInstance] insertToTable:@"eventPhotos" withColumns:columns andValues:values];
+        
     }
     
 }
 
 - (void)pullPhotoInfosFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-    
-    //self.events = [[NSMutableArray alloc]init];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by photo_id desc",_eventId],@"event_id", nil];
     
-    [sql database:path queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (_isFirstPullDB) {
             _isFirstPullDB = NO;
             if (resultsArray.count == 0) {
@@ -241,8 +228,6 @@
             }
             
         }
-        //    [sql closeMyDB];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             _photo_list = photo_list_Tmp;
             _photo_list_all = photo_list_all_Tmp;
@@ -254,8 +239,6 @@
             [quiltView reloadData];
         });
     }];
-//    NSMutableArray *result = [sql queryTable:@"eventPhotos" withSelect:seletes andWhere:wheres];
-    
     
 }
 
@@ -319,30 +302,26 @@
 
 -(void)checkUploadStatus
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-    
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
-    
-//    NSMutableArray *result = [sql queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres];
-    [sql database:path queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         NSInteger uploadTaskCount = 0;
         uploadTaskCount = resultsArray.count;
+        NSInteger uploadingTask = 0;
+        uploadingTask = [UploaderManager sharedManager].uploadQueue.operations.count;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (uploadTaskCount == 0) [self UploadStatusTimerEnd];
-            [self setupUploadBtn:uploadTaskCount];
+            if (uploadTaskCount == 0 || uploadingTask == 0) [self UploadStatusTimerEnd];
+            [self setupUploadBtn:uploadTaskCount uploadingTask:uploadingTask];
         });
         
     }];
-//    [sql closeMyDB];
     
 }
 
--(void)setupUploadBtn:(NSInteger)uploadTaskCount
+-(void)setupUploadBtn:(NSInteger)uploadTaskCount uploadingTask:(NSInteger)uploadingTask
 {
     if (uploadTaskCount > 0) {
+        
         if(!_uploadManageBtn){
             _uploadManageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
@@ -363,19 +342,37 @@
             [activity startAnimating];
             [_uploadManageBtn addSubview:activity];
         }
-        [UIView animateWithDuration:1 animations:^{
-            [_uploadManageBtn setAlpha:1.0f];
-            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
-            [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
-            CGRect frame = quiltView.frame;
-            if (CGRectGetMinY(frame) != 30) {
-                frame.size.height -=30;
-                frame.origin.y = 30;
-                [quiltView setFrame:frame];
-            }
-        }];
+        if (uploadingTask == 0) {
+            [_uploadManageBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            [UIView animateWithDuration:1 animations:^{
+                [_uploadManageBtn setAlpha:1.0f];
+                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成，有%ld张图片上传失败",(long)uploadTaskCount] forState:UIControlStateNormal];
+                CGRect frame = quiltView.frame;
+                if (CGRectGetMinY(frame) != 30) {
+                    frame.size.height -=30;
+                    frame.origin.y = 30;
+                    [quiltView setFrame:frame];
+                }
+            }];
+        }else{
+            [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
+            [UIView animateWithDuration:1 animations:^{
+                [_uploadManageBtn setAlpha:1.0f];
+                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
+                CGRect frame = quiltView.frame;
+                if (CGRectGetMinY(frame) != 30) {
+                    frame.size.height -=30;
+                    frame.origin.y = 30;
+                    [quiltView setFrame:frame];
+                }
+            }];
+        }
+        
         
     }else{
+        [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
         [UIView animateWithDuration:1 animations:^{
             [_uploadManageBtn setAlpha:0.0f];
             _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);

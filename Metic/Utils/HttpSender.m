@@ -71,6 +71,7 @@
 {
     if (self.finishBlock) {
         self.finishBlock(nil);
+        self.finishBlock = nil;
     }
 }
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
@@ -85,6 +86,7 @@
 //    NSLog(@"connectionDidFinishLoading");
     if (self.finishBlock) {
         self.finishBlock(responseData);
+        self.finishBlock = nil;
     }else
     {
         if ([(UIViewController*)self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)])
@@ -240,6 +242,9 @@
             break;
         case 49:
             resultCode = @"find_back_password";
+            break;
+        case 50:
+            resultCode = @"qrcode_invite";
             break;
         default:
             resultCode = @"json";

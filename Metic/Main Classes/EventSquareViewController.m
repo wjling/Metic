@@ -11,6 +11,7 @@
 #import "EventSearchViewController.h"
 #import "EventDetailViewController.h"
 #import "EventPreviewViewController.h"
+#import "nearbyEventTableViewCell.h"
 #import "MenuViewController.h"
 #import "AdViewController.h"
 #import "MobClick.h"
@@ -24,12 +25,17 @@
 #define bannerHeight self.view.bounds.size.width*300/640
 
 
-@interface EventSquareViewController ()
+@interface EventSquareViewController ()<UITableViewDataSource,UITableViewDelegate>
+@property (nonatomic,strong) UIView* contentView;
 @property (nonatomic,strong) UIScrollView* scrollView;
 @property (nonatomic,strong) UIPageControl* pagecontrol;
 @property (nonatomic,strong) NSTimer* timer;
 @property (nonatomic,strong) NSMutableArray* posterList;
 @property (nonatomic,strong) NSNumber* processingEventId;
+
+@property (nonatomic,strong) UITableView* tableView;
+@property (nonatomic,strong) NSMutableArray* eventArray;
+@property(nonatomic,strong) NSMutableArray* eventIds_all;
 
 @property int firstIndex;
 @property int type;
@@ -64,9 +70,8 @@
 {
     [super viewDidAppear:animated];
     _firstIndex = 1;
-    [_shadowView setFrame:self.view.bounds];
+    [self fixUI];
     [MobClick beginLogPageView:@"活动广场"];
-    [self.shadowView setAlpha:0];
     if (_timer) [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2]];
 }
 
@@ -125,11 +130,33 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     _isAuto = YES;
+    _eventArray = [[NSMutableArray alloc]init];
     [self getPoster];
+//    [self getNearbyEventIdsFromAir:@0];
 }
 
 -(void)initUI
 {
+    CGRect frame = self.view.bounds;
+    frame.origin.x +=10;
+    frame.size.width -= 20;
+    _tableView = [[UITableView alloc]initWithFrame:frame];
+    _tableView.clipsToBounds = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [_tableView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
+    _tableView.showsVerticalScrollIndicator = NO;
+//    _tableView.layer.borderWidth = 2;
+//    _tableView.layer.borderColor = [UIColor greenColor].CGColor;
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [self.view addSubview:_tableView];
+    
+    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 260)];
+    [_contentView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
+//    _contentView.layer.borderColor = [UIColor redColor].CGColor;
+//    _contentView.layer.borderWidth = 2;
+    [self.view addSubview:_contentView];
+    
     [self.view setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
     
     _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, bannerWidth, bannerHeight)];
@@ -140,9 +167,9 @@
     [_scrollView setContentOffset:CGPointMake(bannerWidth * 1, 0)];
     _scrollView.delegate = self;
 
-    [self.view addSubview:_scrollView];
+    [_contentView addSubview:_scrollView];
     
-    CGRect frame = self.view.frame;
+    frame = self.view.frame;
     float originY = CGRectGetHeight(_scrollView.frame) + 20;
     float height = CGRectGetWidth(frame)/4;
     float interval = height / 4;
@@ -164,7 +191,7 @@
     [label1 setFont:[UIFont systemFontOfSize:14]];
     [button1 addSubview:label1];
     [button1 addTarget:self action:@selector(toNearby:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button1];
+    [_contentView addSubview:button1];
     
     UIButton* button2 = [UIButton buttonWithType:UIButtonTypeCustom];
     [button2 setFrame:CGRectMake(interval*2 + height*1, originY, height, height)];
@@ -183,7 +210,7 @@
     [label2 setFont:[UIFont systemFontOfSize:14]];
     [button2 addSubview:label2];
     [button2 addTarget:self action:@selector(toHot:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button2];
+    [_contentView addSubview:button2];
     
     UIButton* button3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [button3 setFrame:CGRectMake(interval*3 + height*2, originY, height, height)];
@@ -202,7 +229,7 @@
     [label3 setFont:[UIFont systemFontOfSize:14]];
     [button3 addSubview:label3];
     [button3 addTarget:self action:@selector(toSearch:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button3];
+    [_contentView addSubview:button3];
 
     [CommonUtils addLeftButton:self isFirstPage:YES];
     _shadowView = [[UIView alloc]initWithFrame:self.view.bounds];
@@ -210,6 +237,17 @@
     [_shadowView setAlpha:0];
     [_shadowView setTag:101];
     [self.view addSubview:_shadowView];
+    
+}
+
+-(void)fixUI
+{
+    CGRect frame = self.view.bounds;
+    frame.origin.x +=10;
+    frame.size.width -= 20;
+    [_tableView setFrame:frame];
+    [_shadowView setFrame:self.view.bounds];
+    [self.shadowView setAlpha:0];
 }
 
 -(void)initScrollView
@@ -320,7 +358,7 @@
         _pagecontrol.hidesForSinglePage = YES;
         _pagecontrol.userInteractionEnabled = NO;
         _pagecontrol.numberOfPages = _posterList.count;
-        [self.view addSubview:_pagecontrol];
+        [_contentView addSubview:_pagecontrol];
         
         _timer = [NSTimer scheduledTimerWithTimeInterval:2.5f target:self selector:@selector(showBanner) userInfo:nil repeats:YES];
 
@@ -489,46 +527,252 @@
 {
     [self performSegueWithIdentifier:@"toSearchEvent" sender:self];
 }
+#pragma mark - 获取最新活动资料 -
+-(void)getNearbyEventIdsFromAir:(NSNumber*)sequence
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[NSNumber numberWithInt:2] forKey:@"type"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:sequence forKey:@"sequence"];
+//    [dictionary setValue:[NSNumber numberWithBool:YES] forKey:@"all"];
+    
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND];
+    
+}
 
+- (void) getEvents: (NSArray *)eventids
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:eventids forKey:@"sequence"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
+}
 
+#pragma mark - HttpSenderDelegate
+
+-(void)finishWithReceivedData:(NSData *)rData
+{
+    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+    NSLog(@"received Data: %@",temp);
+    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+    switch ([cmd intValue]) {
+        case NORMAL_REPLY:
+        {
+            if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
+                [_eventArray addObjectsFromArray:[response1 valueForKey:@"event_list"]];
+                [_tableView reloadData];
+            }
+            else{//获取event id 号
+                self.eventIds_all = [response1 valueForKey:@"sequence"];
+                if (self.eventIds_all) {
+                    NSInteger rangeLen = 10;
+                    if (self.eventIds_all.count< rangeLen) {
+                        rangeLen = self.eventIds_all.count;
+                    }
+                    [self getEvents:[_eventIds_all subarrayWithRange:NSMakeRange(0, rangeLen)]];
+                }
+            }
+        }
+            break;
+    }
+}
+
+#pragma mark - UITableView Delegate -
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _eventArray.count+1;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        return 260;
+    }else return 258;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        UITableViewCell*cell = [[UITableViewCell alloc]init];
+        if (_contentView) {
+            [_contentView removeFromSuperview];
+            CGRect frame = _contentView.frame;
+            frame.origin.x = -10;
+            [_contentView setFrame:frame];
+            [cell addSubview:_contentView];
+        }
+        return cell;
+    }else{
+        static NSString *CellIdentifier = @"nearbyEventCell";
+        BOOL nibsRegistered = NO;
+        if (!nibsRegistered) {
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([nearbyEventTableViewCell class]) bundle:nil];
+            [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+            nibsRegistered = YES;
+        }
+        nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        NSDictionary *a = _eventArray[indexPath.row-1];
+        cell.dict = a;
+        cell.eventName.text = [a valueForKey:@"subject"];
+        NSString* beginT = [a valueForKey:@"time"];
+        NSString* endT = [a valueForKey:@"endTime"];
+        cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
+        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
+        cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
+        
+        NSInteger participator_count = [[a valueForKey:@"member_count"] integerValue];
+        NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
+        NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
+        
+        cell.member_count.font = [UIFont systemFontOfSize:15];
+        cell.member_count.numberOfLines = 0;
+        cell.member_count.lineBreakMode = NSLineBreakByCharWrapping;
+        cell.member_count.tintColor = [UIColor lightGrayColor];
+        [cell.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
+            NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
+            UIFont *systemFont = [UIFont systemFontOfSize:18];
+            
+            if (redRange.location != NSNotFound) {
+                // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
+                [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
+                
+                CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
+                [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
+                CFRelease(italicFont);
+            }
+            return mutableAttributedString;
+        }];
+        
+        
+        
+        //显示备注名
+        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
+        if (alias == nil || [alias isEqual:[NSNull null]]) {
+            alias = [a valueForKey:@"launcher"];
+        }
+        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
+        cell.eventId = [a valueForKey:@"event_id"];
+        cell.nearbyEventViewController = self;
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
+        [avatarGetter getAvatar];
+        [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
+        PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
+        NSString* bannerURL = [a valueForKey:@"banner"];
+        [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
+        if ([[a valueForKey:@"isIn"] boolValue]) {
+            [cell.statusLabel setHidden:NO];
+            cell.statusLabel.text = @"已加入活动";
+            [cell.wantInBtn setHidden:YES];
+        }else if ([[a valueForKey:@"visibility"] boolValue]) {
+            [cell.statusLabel setHidden:YES];
+            [cell.wantInBtn setHidden:NO];
+        }else{
+            [cell.statusLabel setHidden:NO];
+            cell.statusLabel.text = @"非公开活动";
+            [cell.wantInBtn setHidden:YES];
+        }
+        
+        NSArray *memberids = [a valueForKey:@"member"];
+        
+        for (int i =3; i>=0; i--) {
+            UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
+            if (i < participator_count) {
+                PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+                [miniGetter getAvatar];
+            }else{
+                [tmp sd_cancelCurrentImageLoad];
+                tmp.image = nil;
+            }
+        }
+        [cell setBackgroundColor:[UIColor whiteColor]];
+        return cell;
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) return;
+    nearbyEventTableViewCell* cell = (nearbyEventTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    NSDictionary* dict = cell.dict;
+    
+    if (![[dict valueForKey:@"isIn"] boolValue]) {
+        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+        viewcontroller.eventInfo = dict;
+        [self.navigationController pushViewController:viewcontroller animated:YES];
+    }else{
+        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+        
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        eventDetailView.eventLauncherId = eventLauncherId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
+    }
+    
+    
+}
 
 #pragma mark - UIScrollView Delegate -
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _isAuto = NO;
-    [_timer setFireDate:[NSDate distantFuture]];
+    if (scrollView == _scrollView) {
+        _isAuto = NO;
+        [_timer setFireDate:[NSDate distantFuture]];
+    }else if (scrollView == _tableView){
+        
+    }
+    
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    _isAuto = YES;
-    [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-    float x = scrollView.contentOffset.x;
-    int page = x/bannerWidth - 1;
-    if (page < 0) page += _posterList.count;
-//    NSLog(@"page:%d",page);
-    if (page < _posterList.count && page != _pagecontrol.currentPage) {
-        [_pagecontrol setCurrentPage:page];
+    if (scrollView == _scrollView) {
+        _isAuto = YES;
+        [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+        float x = scrollView.contentOffset.x;
+        int page = x/bannerWidth - 1;
+        if (page < 0) page += _posterList.count;
+        //    NSLog(@"page:%d",page);
+        if (page < _posterList.count && page != _pagecontrol.currentPage) {
+            [_pagecontrol setCurrentPage:page];
+        }
+    }else if (scrollView == _tableView){
+        
     }
+    
 }
 
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    float x = scrollView.contentOffset.x;
-    if (x > bannerWidth* _posterList.count) {
-        [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
-    }else if(x < 0){
-        [_scrollView setContentOffset:CGPointMake(bannerWidth*_posterList.count, 0) animated:NO];
-    }
-    if (_isAuto) {
+    if (scrollView == _scrollView) {
         float x = scrollView.contentOffset.x;
-        int page = x/bannerWidth - 1;
-        if (page < 0) page += _posterList.count;
-//        NSLog(@"page:%d",page);
-        if (page < _posterList.count && page != _pagecontrol.currentPage) {
-            [_pagecontrol setCurrentPage:page];
+        if (x > bannerWidth* _posterList.count) {
+            [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+        }else if(x < 0){
+            [_scrollView setContentOffset:CGPointMake(bannerWidth*_posterList.count, 0) animated:NO];
+        }
+        if (_isAuto) {
+            float x = scrollView.contentOffset.x;
+            int page = x/bannerWidth - 1;
+            if (page < 0) page += _posterList.count;
+            //        NSLog(@"page:%d",page);
+            if (page < _posterList.count && page != _pagecontrol.currentPage) {
+                [_pagecontrol setCurrentPage:page];
+            }
         }
     }
 }

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "CloudOperation.h"
 #import "MTUser.h"
-#import "MySqlite.h"
 #import "SDImageCache.h"
 
 
@@ -34,7 +33,6 @@
 @property BOOL isCircle;
 @property UIColor *borderColor;
 @property CGFloat borderWidth;
-@property (nonatomic,strong) MySqlite* sql;
 
 -(instancetype)initWithData:(UIImageView*)animageView authorId:(NSNumber*)authorId;
 - (instancetype)initUploadMethod:(UIImage*)aImage type:(int)type;

@@ -18,7 +18,6 @@
 @end
 @implementation InviteFriendViewController
 {
-    NSString* DB_path;
     NSInteger initialSectionForFriendList;
 }
 @synthesize friendList;
@@ -26,7 +25,6 @@
 @synthesize sectionArray;
 @synthesize sectionTitlesArray;
 @synthesize searchFriendList;
-@synthesize DB;
 
 - (void)viewDidLoad
 {
@@ -57,10 +55,8 @@
 
 - (void) initParams
 {
-    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     initialSectionForFriendList = 1;
     self.sectionArray = [[NSMutableArray alloc]init];
-    self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
 }

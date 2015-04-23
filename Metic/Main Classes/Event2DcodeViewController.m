@@ -93,11 +93,12 @@
 - (IBAction)shareQRcode:(id)sender {
     if (_event2Dcode) {
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
-                                          shareText:@"WeShare"
+                                          shareText:@""
                                          shareImage:_event2Dcode
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,nil]
+                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToSina,nil]
                                            delegate:self];
     }
 }

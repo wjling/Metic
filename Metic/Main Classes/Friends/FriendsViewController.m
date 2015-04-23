@@ -22,7 +22,6 @@
 //#endif
 @implementation FriendsViewController
 {
-    NSString* DB_path;
     NSInteger initialSectionForFriendList;
     NSNumber* selectedFriendID;
 }
@@ -32,7 +31,6 @@
 @synthesize sectionTitlesArray;
 @synthesize searchFriendList;
 @synthesize searchFriendKeyWordRangeArr;
-@synthesize DB;
 @synthesize addFriendBtn;
 @synthesize friendTableView;
 @synthesize friendSearchBar;
@@ -124,12 +122,10 @@
 
 - (void) initParams
 {
-    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     initialSectionForFriendList = 1;
     self.friendList = [[NSMutableArray alloc]init];
     self.sortedFriendDic = [[NSMutableDictionary alloc]init];
     self.sectionArray = [[NSMutableArray alloc]init];
-    self.DB = [[MySqlite alloc]init];
     self.friendTableView.delegate = self;
     self.friendTableView.dataSource = self;
     self.searchFriendList = [[NSMutableArray alloc]init];
@@ -149,9 +145,13 @@
     
     UILabel* friendCount_label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
     friendCount_label.textAlignment = NSTextAlignmentCenter;
-    friendCount_label.text = @"好友数量";
+    friendCount_label.text = @"";
     friendCount_label.textColor = [UIColor grayColor];
-    
+//    UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]init];
+//    indicator.center = friendCount_label.center;
+//    indicator.tag = 111;
+//    [friendCount_label addSubview:indicator];
+//    [indicator startAnimating];
     self.friendTableView.tableFooterView = friendCount_label;
 //    self.searchDisplayController.delegate = self;
 //    self.searchDisplayController.searchResultsDelegate = self;
@@ -166,6 +166,13 @@
 {
     @try {
         self.friendList = [[MTUser sharedInstance] friendList];
+        self.sectionArray = [[MTUser sharedInstance] sectionArray];
+        self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
+        NSLog(@"sectionarray: %@ \nsortedFriendDic: %@", self.sectionArray, self.sortedFriendDic);
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self friendTableviewReload];
+        });
+        
         if (self.friendList.count > 0) {
             NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
             if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
@@ -176,8 +183,8 @@
                                    [[MTUser sharedInstance] friendListDidChanged];
                                    dispatch_async(dispatch_get_main_queue(), ^
                                                   {
-                                                      self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                       self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                                                      self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                       NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
                                                       [self friendTableviewReload];
                                                   });
@@ -190,10 +197,10 @@
                 while([MTUser sharedInstance].doingSynchronizeFriend) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
                 }
-                
+                self.sectionArray = [[MTUser sharedInstance] sectionArray];
                 self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                 NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
-                self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self friendTableviewReload];;
                 });
@@ -221,8 +228,8 @@
                                            dispatch_async(dispatch_get_main_queue(), ^
                                                           {
                                                               self.friendList = [[MTUser sharedInstance] friendList];
-                                                              self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                               self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                                                              self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                               [self friendTableviewReload];
                                                           });
                                        });
@@ -243,8 +250,8 @@
                 {
                     NSLog(@"好友列表初始化：该用户暂时没有好友");
                     self.friendList = [[MTUser sharedInstance] friendList];
-                    self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                     self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                    self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self friendTableviewReload];
                     });
@@ -263,8 +270,8 @@
                                        dispatch_async(dispatch_get_main_queue(), ^
                                                       {
                                                           self.friendList = [[MTUser sharedInstance] friendList];
-                                                          self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                           self.sectionArray = [[MTUser sharedInstance] sectionArray];
+                                                          self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                                                           [self friendTableviewReload];
                                                       });
                                    }];
@@ -294,7 +301,18 @@
 - (void)friendTableviewReload
 {
     [self.friendTableView reloadData];
-    ((UILabel*)self.friendTableView.tableFooterView).text = [NSString stringWithFormat:@"%lu位好友", (unsigned long)self.friendList.count];
+//    UIActivityIndicatorView* indicator = (UIActivityIndicatorView*)[self.friendTableView.tableFooterView viewWithTag:111];
+//    if (indicator) {
+//        [indicator stopAnimating];
+//    }
+    @autoreleasepool {
+        UILabel* lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
+        lab.textAlignment = NSTextAlignmentCenter;
+        lab.textColor = [UIColor grayColor];
+        lab.text = [NSString stringWithFormat:@"%lu位好友", (unsigned long)self.friendList.count];
+        [self.friendTableView setTableFooterView:lab];
+        NSLog(@"刷新好友列表");
+    }
 }
 
 -(void)getRangesOfText:(NSString*)text withKeyWord:(NSString*)keyWord
@@ -304,66 +322,79 @@
     NSMutableArray* textCharRange_arr = [[NSMutableArray alloc]init];
     NSInteger location = 0;
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
-    NSLog(@"PINYIN head: %@",temp_text_head);
-    NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-    if (range_head.length > 0) {
-        NSValue* value = [NSValue valueWithRange:range_head];
+//    NSLog(@"PINYIN head: %@",temp_text_head);
+    NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+    NSLog(@"text: %@, keyword: %@", text, keyWord);
+    if (range_text.length > 0) {
+        NSValue* value = [NSValue valueWithRange:range_text];
         [ranges_arr addObject:value];
         NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
     }
     else
     {
-        NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
-        NSInteger checkStringEnd = 0;
-        NSLog(@"PINYIN all: %@",temp_text_all);
-        for (NSInteger i = 0; i < text.length; i++) {
-            NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
-            NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
-            [textCharRange_arr addObject:value];
-            location = location + char_str.length;
+        NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+        if (range_head.length > 0) {
+            NSValue* value = [NSValue valueWithRange:range_head];
+            [ranges_arr addObject:value];
         }
-        NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-//        NSInteger range_all_begin = range_all.location;
-        NSInteger range_all_end = range_all.length + range_all.location - 1;
-        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
-        NSInteger begin = -1, end = -1;
-        BOOL beginSet = NO;
-        for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
-            NSRange range = [textCharRange_arr[i] rangeValue];
-            if (!beginSet) {
-                if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
-                    begin = i;
-                    beginSet = YES;
-                }
-//                else if (range.location == range_all.location)
-//                {
-//                    begin = i;
-//                    beginSet = YES;
-//                }
+        else
+        {
+            NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
+            NSInteger checkStringEnd = 0;
+            //        NSLog(@"PINYIN all: %@",temp_text_all);
+            for (NSInteger i = 0; i < text.length; i++) {
+                NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
+                NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
+                [textCharRange_arr addObject:value];
+                location = location + char_str.length;
             }
-            else
-            {
-                if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
-                    end = i;
-                    break;
+            NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+            if (range_all.location >= temp_text_all.length) {
+                return;
+            }
+            //        NSInteger range_all_begin = range_all.location;
+            NSInteger range_all_end = range_all.length + range_all.location - 1;
+            //        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
+            NSInteger begin = -1, end = -1;
+            BOOL beginSet = NO;
+            for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
+                NSRange range = [textCharRange_arr[i] rangeValue];
+                if (!beginSet) {
+                    if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
+                        begin = i;
+                        beginSet = YES;
+                    }
+                    //                else if (range.location == range_all.location)
+                    //                {
+                    //                    begin = i;
+                    //                    beginSet = YES;
+                    //                }
                 }
-                else if (checkStringEnd > range_all_end)
+                if(beginSet)
                 {
-                    end = i - 1;
-                    break;
+                    if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
+                        end = i;
+                        break;
+                    }
+                    else if (checkStringEnd > range_all_end)
+                    {
+                        end = i - 1;
+                        break;
+                    }
                 }
+                checkStringEnd += range.length;
+                
             }
-            checkStringEnd += range.length;
+            //        if (end == -1) {
+            //            end = textCharRange_arr.count - 1;
+            //        }
+            //        NSLog(@"colored begin: %d, end: %d",begin,end);
+            NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
+            [ranges_arr addObject:value];
+//                    NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
             
         }
-//        if (end == -1) {
-//            end = textCharRange_arr.count - 1;
-//        }
-        NSLog(@"colored begin: %d, end: %d",begin,end);
-        NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
-        [ranges_arr addObject:value];
-        NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
-
+        
     }
     [self.searchFriendKeyWordRangeArr addObject:ranges_arr];
     
@@ -406,7 +437,15 @@
     if (tableView == self.friendSearchDisplayController.searchResultsTableView) {
         [self.friendSearchDisplayController setActive:NO animated:YES];
         NSMutableDictionary* aFriend = [searchFriendList objectAtIndex:indexPath.row];
-        NSString* fname = [aFriend objectForKey:@"name"];
+        NSString* fname;
+        NSString* falias = [aFriend objectForKey:@"alias"];
+        if (falias && ![falias isEqual:[NSNull null]]) {
+            fname = falias;
+        }
+        else
+        {
+            fname = [aFriend objectForKey:@"name"];
+        }
         NSString* fname_head = [CommonUtils pinyinHeadFromNSString:[fname substringToIndex:1]].uppercaseString;
         NSLog(@"fname head: %@",fname_head);
         NSInteger section = [sectionArray indexOfObject:fname_head];
@@ -414,7 +453,15 @@
         NSMutableArray* friends = [sortedFriendDic objectForKey:fname_head];
         for (NSInteger i = 0; i < friends.count; i++) {
             NSMutableDictionary* friend = [friends objectAtIndex:i];
-            NSString* name = [friend objectForKey:@"name"];
+            NSString* name;
+            NSString* alias = [friend objectForKey:@"alias"];
+            if (alias && ![alias isEqual:[NSNull null]]) {
+                name = alias;
+            }
+            else
+            {
+                name = [friend objectForKey:@"name"];
+            }
             if ([name isEqualToString:fname]) {
                 row = i;
                 break;
@@ -538,6 +585,9 @@
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     if (tableView == friendTableView) {
+        if (section >= self.sectionArray.count) {
+            return nil;
+        }
         NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
         if (groupOfFriends) {
             NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
@@ -591,7 +641,11 @@
         }
         NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
         NSString* name = [friend_dic objectForKey:@"name"];
+        NSString* alias = [friend_dic objectForKey:@"alias"];
         NSNumber* fid = [friend_dic objectForKey:@"id"];
+        if (alias && ![alias isEqual:[NSNull null]]) {
+            name = [NSString stringWithFormat:@"%@ (%@)", alias, name];
+        }
 //        for(UIView * elem in [cell.contentView subviews])
 //        {
 //            if([elem isKindOfClass:[BDSuggestLabel class]])
@@ -612,8 +666,8 @@
         NSMutableArray* rangeArr = [self.searchFriendKeyWordRangeArr objectAtIndex:indexPath.row];
         for (NSInteger i = 0; i < rangeArr.count; i++) {
             NSRange range = [[rangeArr objectAtIndex:i] rangeValue];
-            [attrStr addAttribute:(NSString *)kCTForegroundColorAttributeName
-                            value:(id)color.CGColor
+            [attrStr addAttribute:NSForegroundColorAttributeName
+                            value:color
                             range:range];
 
         }
@@ -746,6 +800,10 @@
         for (int i=0; i<friendList.count; i++) {
             NSMutableDictionary* aFriend = [friendList objectAtIndex:i];
             NSString* fname = [aFriend objectForKey:@"name"];
+            NSString* falias = [aFriend objectForKey:@"alias"];
+            if (falias && ![falias isEqual:[NSNull null]]) {
+                fname = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
+            }
             if ([CommonUtils isIncludeChineseInString:fname]) {
                 NSString *tempPinYinStr = [CommonUtils pinyinFromNSString:fname];
                 NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
@@ -776,6 +834,10 @@
         for (int i = 0; i < friendList.count; i++) {
             NSMutableDictionary* tempDic = [friendList objectAtIndex:i];
             NSString* fname = [tempDic objectForKey:@"name"];
+            NSString* falias = [tempDic objectForKey:@"alias"];
+            if (falias && ![falias isEqual:[NSNull null]]) {
+                fname = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
+            }
             NSRange titleResult=[fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
             if (titleResult.length>0) {
                 [searchFriendList addObject:tempDic];

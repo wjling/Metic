@@ -12,12 +12,10 @@
 #import "CommonUtils.h"
 #import "AppConstants.h"
 #import "MTUser.h"
-//#import "MTEvent.h"
 #import "AppDelegate.h"
-//#import "MTEvent.h"
 #import "MJRefreshHeaderView.h"
 #import "FriendTableViewCell.h"
-#import "MySqlite.h"
+
 
 @interface InviteFriendViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 
@@ -27,7 +25,6 @@
 @property (strong,nonatomic) NSMutableArray* sectionArray;
 @property (strong, nonatomic) NSMutableArray* sectionTitlesArray;
 @property (strong, nonatomic) IBOutlet UITableView *friendTableView;
-@property (strong, nonatomic) MySqlite* DB;
 @property (strong, nonatomic) NSMutableSet *FriendsIds;
 @property (strong, nonatomic) NSMutableSet *ExistedIds;
 @property (strong, nonatomic) UIViewController* controller;

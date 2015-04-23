@@ -11,12 +11,12 @@
 #import "UIImageView+LBBlurredImage.h"
 #import "BannerViewController.h"
 #import "AddFriendConfirmViewController.h"
+#import "MTDatabaseHelper.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate, UITextFieldDelegate>
 {
     NSInteger kNumberOfPages;
     NSNumber* addEventID;
-    NSString* DB_path;
 }
 
 @end
@@ -64,8 +64,7 @@
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
     kNumberOfPages = 2;
-    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    
+
     [self initViews];
     [self getUserInfo];
     [self.view bringSubviewToFront:moreFunction_view];
@@ -384,25 +383,12 @@
 
 -(void)getfriendInfoFromDB
 {
-    
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:DB_path];
-    [sql database:DB_path queryTable:@"friend" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@",fid], @"id", nil] completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"friend" withSelect:[NSArray arrayWithObjects:@"*", nil] andWhere:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@",fid], @"id", nil] completion:^(NSMutableArray *resultsArray) {
         NSArray* alias_arr;
         alias_arr = resultsArray;
         if(alias_arr.count > 0) self.friendInfo_dic = alias_arr[0];
         NSLog(@"get alias from DB: %@",alias_arr);
     }];
-//    [sql closeMyDB];
-    
-//    for (NSDictionary* temp in alias_arr) {
-//        NSString* fid = [temp objectForKey:@"id"];
-//        NSString* email = [temp objectForKey:@"email"];
-//        NSString* location = [temp objectForKey:@"location"];
-//        NSNumber* gender = [temp objectForKey:@"gender"];
-//        
-//    }
-    
 }
 
 -(IBAction)changeAlias:(id)sender
@@ -464,15 +450,11 @@
                           [NSString stringWithFormat:@"%@",fid],@"id",
                           [NSString stringWithFormat:@"%@",gender],@"gender",
                           nil];
-    MySqlite* mySql = [[MySqlite alloc]init];
-//    [mySql openMyDB:DB_path];
-    [mySql database: DB_path updateDataWitTableName:@"friend" andWhere:wheres andSet:sets completion:nil];
-//    [mySql closeMyDB];
-//    [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
+
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"friend" andWhere:wheres andSet:sets];
     [[MTUser sharedInstance] getFriendsFromDBwithCompletion:^(NSMutableArray *results) {
         [MTUser sharedInstance].friendList = [NSMutableArray arrayWithArray:results];
         [[MTUser sharedInstance] friendListDidChanged];
-        
     }];
    [self refreshFriendInfo];
 }

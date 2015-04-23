@@ -23,6 +23,7 @@
 #import "NotificationController.h"
 #import "BOAlertController.h"
 #import "MTAutoHideButton.h"
+#import "MTDatabaseHelper.h"
 
 
 @interface VideoWallViewController ()
@@ -240,42 +241,29 @@
     if (!eventId) {
         return;
     }
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite *sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
+
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
-    [sql database:path deleteTurpleFromTable:@"eventVideo" withWhere:wheres completion:nil];
-//    [sql deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
 }
 
 + (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     for (int i = 0; i < videoInfos.count; i++) {
         NSDictionary* videoInfo = [videoInfos objectAtIndex:i];
         NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
         videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
         NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
-        [sql database:path insertToTable:@"eventVideo" withColumns:columns andValues:values completion:nil];
-//        [sql insertToTable:@"eventVideo" withColumns:columns andValues:values];
+        [[MTDatabaseHelper sharedInstance] insertToTable:@"eventVideo" withColumns:columns andValues:values];
     }
 //    [sql closeMyDB];
 }
 
 - (void)pullVideosInfosFromDB
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
-    
-    //self.events = [[NSMutableArray alloc]init];
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by video_id desc",_eventId],@"event_id", nil];
-    [sql database:path queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+    [[MTDatabaseHelper sharedInstance] queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         for (int i = 0; i < resultsArray.count; i++) {
             NSDictionary* temp = [resultsArray objectAtIndex:i];
             NSString *tmpa = [temp valueForKey:@"videoInfo"];
@@ -284,14 +272,9 @@
             NSDictionary *videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
             [self.videoInfos addObject:videoInfo];
             [self.videoInfos_all addObject:videoInfo];
+            [_tableView reloadData];
         }
     }];
-//    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
-    
-    
-//    [sql closeMyDB];
-    
-//    [self initAVPlayers];
 }
 
 -(void)initAVPlayers

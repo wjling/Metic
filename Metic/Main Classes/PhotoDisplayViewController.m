@@ -15,6 +15,7 @@
 #import "NSString+JSON.h"
 #import "Reachability.h"
 #import "LCAlertView.h"
+#import "MTDatabaseHelper.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -165,15 +166,10 @@
 
 - (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-    MySqlite* sql = [[MySqlite alloc]init];
-//    [sql openMyDB:path];
     NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
     NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
-    [sql database:path insertToTable:@"eventPhotos" withColumns:columns andValues:values completion:nil];
-//    [sql insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-//    [sql closeMyDB];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"eventPhotos" withColumns:columns andValues:values];
 }
 
 -(void)refreshGood

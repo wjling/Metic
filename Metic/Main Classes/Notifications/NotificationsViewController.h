@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppConstants.h"
 #import "AppDelegate.h"
-#import "MySqlite.h"
+
 #import "HttpSender.h"
 #import "MTUser.h"
 #import "CommonUtils.h"

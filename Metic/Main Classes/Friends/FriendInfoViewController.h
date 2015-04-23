@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "MySqlite.h"
+
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "MTUser.h"
