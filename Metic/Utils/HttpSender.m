@@ -243,6 +243,9 @@
         case 49:
             resultCode = @"find_back_password";
             break;
+        case 50:
+            resultCode = @"qrcode_invite";
+            break;
         default:
             resultCode = @"json";
             break;

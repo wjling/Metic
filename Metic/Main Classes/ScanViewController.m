@@ -10,6 +10,7 @@
 #import "../Utils/CommonUtils.h"
 #import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/UserTableViewCell.h"
+#import "SVProgressHUD.h"
 
 @interface ScanViewController ()
 @property(nonatomic,strong)NSString* result;
@@ -22,6 +23,7 @@
 @property NSInteger operationNum;
 @property BOOL upOrdown;
 @property BOOL isScaning;
+@property BOOL need_auth;
 @end
 
 @implementation ScanViewController
@@ -40,6 +42,7 @@
 {
     [super viewDidLoad];
     [self initUI];
+    _need_auth = YES;
     _operationNum = 0;
     readerView = [[ZBarReaderView alloc]init];
     readerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
@@ -212,12 +215,80 @@
 
 - (IBAction)wantIn:(id)sender {
     if ([_type isEqualToString: @"event"]) {
-        UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-        confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-            [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+        if (_need_auth) {
+            UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+            confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
+                [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+            }
+            [confirmAlert show];
+        }else{
+            [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_efid forKey:@"event_id"];
+            [dictionary setValue:@0 forKey:@"type"];
+            [dictionary setValue:_result forKey:@"qrcode"];
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSLog(@"%@",dictionary);
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            NSInteger operNum = ++_operationNum;
+            [httpSender sendMessage:jsonData withOperationCode:QRCODE_INVITE finshedBlock:^(NSData *rData) {
+                if (operNum != _operationNum) return ;
+                if (rData) {
+                    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    NSLog(@"received Data: %@",temp);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY:
+                        {
+                            NSLog(@"NORMAL_REPLY");
+                            [SVProgressHUD dismissWithSuccess:@"成功加入活动"];
+                            //更新活动中心列表：
+                            [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
+                        }
+                            break;
+                        case EVENT_NOT_EXIST:
+                        {
+                            NSLog(@"EVENT_NOT_EXIST");
+                            [SVProgressHUD dismissWithError:@"活动不存在，加入失败"];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
+                        }
+                            break;
+                        case ALREADY_IN_EVENT:
+                        {
+                            NSLog(@"ALREADY_IN_EVENT");
+                            [SVProgressHUD dismissWithError:@"你已在活动中"];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
+                        }
+                            break;
+                        default:
+                        {
+                            NSLog(@"error");
+                            NSLog(@"ALREADY_IN_EVENT");
+                            [SVProgressHUD dismissWithError:@"服务器异常"];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
+                        }
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [_showView setHidden:YES];
+                    [readerView start];
+                    _isScaning = YES;
+                }
+            }];
         }
-        [confirmAlert show];
+        
     }else if ([_type isEqualToString: @"user"]){
         UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入验证信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
         confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -263,8 +334,10 @@
         if (rData) {
             [self finishWithReceivedData:rData];
         }else{
-            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-            [alertView setTag:10];
+            [SVProgressHUD dismissWithError:@"网络异常"];
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
         }
     }];
 }
@@ -283,8 +356,10 @@
         if (rData) {
             [self finishWithReceivedData:rData];
         }else{
-            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-            [alertView setTag:10];
+            [SVProgressHUD dismissWithError:@"网络异常"];
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
         }
     }];
 }
@@ -486,23 +561,39 @@
         case NORMAL_REPLY:
         {
             if ([response1 valueForKey:@"isIn"]) {
+                _need_auth = YES;
+                if ([response1 valueForKey:@"qr_needauth"]) {
+                    _need_auth = [[response1 valueForKey:@"qr_needauth"] boolValue];
+                }
                 self.events = response1;
                 [self showResult];
+                if ([[response1 valueForKey:@"isIn"] boolValue]) {
+                    [SVProgressHUD showErrorWithStatus:@"你已在活动中" duration:1];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [_showView setHidden:YES];
+                        [readerView start];
+                        _isScaning = YES;
+                    });
+                    
+                }else if (!_need_auth) {
+                    [self wantIn:nil];
+                }
                 
             
             }else{
                 NSString* mesg;
-                
                 if ([_type isEqualToString: @"event"]) {
                     mesg = @"请等待发起人验证";
                 }else if ([_type isEqualToString: @"user"]){
                     mesg = @"添加好友请求已发送";
                 }
                 
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:mesg delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-                [alert show];
-                [self performSelector:@selector(dismissAlertView:) withObject:alert afterDelay:1.5];
-                [self performSelector:@selector(back:) withObject:alert afterDelay:2.0];
+                [SVProgressHUD dismissWithSuccess:mesg];
+                [_showView setHidden:YES];
+                [readerView start];
+                _isScaning = YES;
+                
+
             }
             
         }
@@ -514,20 +605,21 @@
                 self.friend = friends[0];
                 [self showResult];
             }else{
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"用户不存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                [alert setTag:10];
-                [alert show];
-                
+                NSLog(@"ALREADY_IN_EVENT");
+                [SVProgressHUD dismissWithError:@"用户不存在"];
+                [_showView setHidden:YES];
+                [readerView start];
+                _isScaning = YES;
             }
-            
-            
         }
             break;
         case USER_NOT_FOUND:
         {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"系统消息" message:@"用户不存在" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alert setTag:10];
-            [alert show];
+            NSLog(@"ALREADY_IN_EVENT");
+            [SVProgressHUD dismissWithError:@"用户不存在"];
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
         }
             break;
     }
@@ -589,6 +681,7 @@
                 }
                 else if (buttonIndex == okBtnIndex)
                 {
+                    [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
                     NSString* cm = [alertView textFieldAtIndex:0].text;
                     
                     NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
@@ -601,8 +694,10 @@
                         if (rData) {
                             [self finishWithReceivedData:rData];
                         }else{
-                            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-                            [alertView setTag:10];
+                            [SVProgressHUD dismissWithError:@"网络异常"];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
                         }
                     }];
                     
@@ -627,8 +722,11 @@
                         if (rData) {
                             [self finishWithReceivedData:rData];
                         }else {
-                            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-                            [alertView setTag:10];
+                            NSLog(@"ALREADY_IN_EVENT");
+                            [SVProgressHUD dismissWithError:@"网络异常"];
+                            [_showView setHidden:YES];
+                            [readerView start];
+                            _isScaning = YES;
                         }
                     }];
                     NSLog(@"add friend apply: %@",json);
