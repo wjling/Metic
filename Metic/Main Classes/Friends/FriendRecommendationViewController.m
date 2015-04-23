@@ -701,7 +701,7 @@
             cell.gender_imageview = [[UIImageView alloc]init];
         }
         cell.gender_imageview.frame = CGRectMake(cell.friendNameLabel.frame.origin.x + sizeOfName.width + 5, 5, 16, 16);
-        if (gender == 0) {
+        if ([gender integerValue] == 0) {
             cell.gender_imageview.image = [UIImage imageNamed:@"女icon"];
         }
         else{
@@ -769,7 +769,7 @@
             cell.gender_imageview = [[UIImageView alloc]init];
         }
         cell.gender_imageview.frame = CGRectMake(cell.friendNameLabel.frame.origin.x + sizeOfName.width + 5, 5, 16, 16);
-        if (gender == 0) {
+        if ([gender integerValue] == 0) {
             cell.gender_imageview.image = [UIImage imageNamed:@"女icon"];
         }
         else{
