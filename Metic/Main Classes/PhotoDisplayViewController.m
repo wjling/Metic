@@ -46,15 +46,12 @@
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
     //[self.InfoView setHidden:YES];
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
-        self.movedown = -44;
-    }else self.movedown = -64;
-
+    self.view.autoresizesSubviews = YES;
     self.lastViewIndex = self.photoIndex;
     self.photos = [[NSMutableDictionary alloc]init];
     CGRect frame = self.view.bounds;
-    frame.origin.y = -64;
     self.scrollView = [[UIScrollView alloc]initWithFrame:frame];
+    self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self.scrollView setPagingEnabled:YES];
     self.scrollView.delegate = self;
     [self.scrollView setClipsToBounds:YES];
@@ -92,8 +89,13 @@
     [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
     [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
-    
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self fixUI];
+}
+
 -(void)viewWillDisappear:(BOOL)animated {
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -111,6 +113,17 @@
 //返回上一层
 -(void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)fixUI
+{
+    for (NSString* key in [_photos keyEnumerator]) {
+        MRZoomScrollView* zoomView = [_photos valueForKey:key];
+        if (zoomView) {
+            [zoomView fitImageView];
+        }
+    }
+    [self.scrollView setContentSize:CGSizeMake(320*self.photo_list.count, self.view.bounds.size.height)];
 }
 
 -(void)rotation:(float)n {
@@ -224,21 +237,27 @@
 
 -(void)handleSingleTap
 {
-    if(self.navigationController.navigationBarHidden){
-        [self.navigationController setNavigationBarHidden:NO];
-        [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        [self rotation:0.0];
-        [self loadPictureDescription];
-        [self.scrollView setFrame:CGRectMake(0, self.movedown, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-        [self.InfoView setHidden:NO];
-        [self.view bringSubviewToFront:self.InfoView];
-    }else{
-        [self.navigationController setNavigationBarHidden:YES];
-        [[UIApplication sharedApplication] setStatusBarHidden:YES];
-        [self.scrollView setFrame:CGRectMake(0, 0, self.scrollView.frame.size.width, self.scrollView.frame.size.height)];
-        [self.InfoView setHidden:YES];
+    [UIView animateWithDuration:0.5 animations:^{
+        if(self.navigationController.navigationBarHidden){
+            [self.navigationController setNavigationBarHidden:NO];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            [self rotation:0.0];
+            [self loadPictureDescription];
+            [self.InfoView setHidden:NO];
+            [self.view bringSubviewToFront:self.InfoView];
+        }else{
+            [self.navigationController setNavigationBarHidden:YES];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+            [self.InfoView setHidden:YES];
 
-    }
+        }
+        for (NSString* key in [_photos keyEnumerator]) {
+            MRZoomScrollView* zoomView = [_photos valueForKey:key];
+            if (zoomView) {
+                [zoomView fitImageView];
+            }
+        }
+    }];
 }
 
 -(void)handleDoubleTap

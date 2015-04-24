@@ -112,6 +112,7 @@ static SlideNavigationController *singletonInstance;
 	self.view.layer.shouldRasterize = YES;
 	self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
 	self.navigationBar.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor blackColor];
 	[self setEnableSwipeGesture:YES];
     
     //    [self reconnect];

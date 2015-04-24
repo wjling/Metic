@@ -25,7 +25,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.autoresizesSubviews = YES;
         self.delegate = self;
         self.frame = CGRectMake(0, 0, MRScreenWidth, MRScreenHeight);
         [self setShowsHorizontalScrollIndicator:NO];
@@ -38,7 +38,7 @@
 - (void)initImageView
 {
     imageView = [[UIImageView alloc]init];
-    
+    imageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     // The imageView can be zoomed largest size
     imageView.frame = CGRectMake(0, 0, MRScreenWidth * 4, MRScreenHeight * 4);
     imageView.userInteractionEnabled = YES;
