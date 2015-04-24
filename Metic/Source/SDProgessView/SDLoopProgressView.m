@@ -45,7 +45,7 @@
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     attributes[NSFontAttributeName] = [UIFont boldSystemFontOfSize:20 * SDProgressViewFontScale];
     attributes[NSForegroundColorAttributeName] = [UIColor whiteColor];
-    [self setCenterProgressText:progressStr withAttributes:attributes];
+//    [self setCenterProgressText:progressStr withAttributes:attributes];
 }
 
 @end
