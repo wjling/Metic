@@ -412,7 +412,7 @@
             
             [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
                                                              andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq",nil]
-                                                               andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",response_result]]];
+                                                               andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",response_result],@"ishandled",nil]];
             
             for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
                 NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
