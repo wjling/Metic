@@ -40,7 +40,6 @@
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
 @property (nonatomic, assign) BOOL shouldIgnorePushingViewControllers;
-@property float viewHeight;
 
 @end
 
@@ -101,7 +100,6 @@ static SlideNavigationController *singletonInstance;
 {
 	self.avoidSwitchingToSameClassViewController = YES;
 	singletonInstance = self;
-    _viewHeight = self.view.frame.size.height;
 	self.delegate = self;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleUIApplicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
      if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
@@ -620,8 +618,7 @@ static SlideNavigationController *singletonInstance;
     CGRect newStatusBarFrame = [(NSValue*)[notification.userInfo objectForKey:UIApplicationStatusBarFrameUserInfoKey] CGRectValue];
     // 根据系统状态栏高判断热点栏的变动
     if (newStatusBarFrame.size.height == 20) {
-        CGRect frame = self.view.frame;
-        frame.size.height = _viewHeight;
+        CGRect frame = self.view.window.frame;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.view setFrame:frame];
         });
@@ -629,6 +626,7 @@ static SlideNavigationController *singletonInstance;
     
     
 }
+
 @end
 
 

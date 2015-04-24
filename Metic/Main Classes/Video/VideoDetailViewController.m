@@ -120,8 +120,10 @@
 
 -(void)initUI
 {
+    self.view.autoresizesSubviews = YES;
     //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [commentV setBackgroundColor:[UIColor whiteColor]];
     _commentView = commentV;
     
@@ -159,7 +161,8 @@
     _inputTextView.layer.cornerRadius = 6.0f;
     
     //初始化表情面板
-    _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 64, self.view.frame.size.width,200)];
+    _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width,200)];
+    _emotionKeyboard.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_emotionKeyboard];
     _emotionKeyboard.textView = _inputTextView;
     [_emotionKeyboard initCollectionView];
