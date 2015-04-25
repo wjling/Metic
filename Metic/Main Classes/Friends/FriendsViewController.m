@@ -322,11 +322,11 @@
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
 //    NSLog(@"PINYIN head: %@",temp_text_head);
     NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-    NSLog(@"text: %@, keyword: %@", text, keyWord);
+//    NSLog(@"text: %@, keyword: %@", text, keyWord);
     if (range_text.length > 0) {
         NSValue* value = [NSValue valueWithRange:range_text];
         [ranges_arr addObject:value];
-        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+//        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
     }
     else
     {
@@ -545,10 +545,14 @@
             fname = [aFriend objectForKey:@"name"];
         }
         NSString* fname_head = [CommonUtils pinyinHeadFromNSString:[fname substringToIndex:1]].uppercaseString;
-        NSLog(@"fname head: %@",fname_head);
+//        NSLog(@"fname head: %@",fname_head);
         NSInteger section = [sectionArray indexOfObject:fname_head];
+        if (section >= sectionArray.count)
+        {
+            section = sectionArray.count - 1;
+        }
         NSInteger row;
-        NSMutableArray* friends = [sortedFriendDic objectForKey:fname_head];
+        NSMutableArray* friends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
         for (NSInteger i = 0; i < friends.count; i++) {
             NSMutableDictionary* friend = [friends objectAtIndex:i];
             NSString* name;
@@ -566,6 +570,7 @@
             }
         }
         NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:section];
+//        NSLog(@"searched friend in section %d row %d", section, row);
         [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     else if (tableView == self.friendTableView)
