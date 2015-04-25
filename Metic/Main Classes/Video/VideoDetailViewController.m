@@ -23,7 +23,7 @@
 #import "MTVideoPlayerViewController.h"
 #import "UIButton+WebCache.h"
 #import "MTDatabaseHelper.h"
-
+#import "SVProgressHUD.h"
 
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
@@ -658,6 +658,18 @@
     
 }
 
+-(void)back
+{
+    NSInteger index = self.navigationController.viewControllers.count - 2;
+    NSArray * controllers = self.navigationController.viewControllers;
+    if (controllers.count > index+1 && [controllers[index] isKindOfClass:[VideoWallViewController class]]) {
+        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+        controller.shouldReload = YES;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
 - (IBAction)button_Emotionpress:(id)sender {
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
@@ -769,12 +781,7 @@
 
 -(void)deleteVideo:(UIButton*)button
 {
-    [button setEnabled:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (button) {
-            [button setEnabled:YES];
-        }
-    });
+    
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这段视频？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setTag:100];
     [alert show];
@@ -1410,6 +1417,7 @@
             }
             else if (buttonIndex == okBtnIndex)
             {
+                [SVProgressHUD showWithStatus:@"正在删除" maskType:SVProgressHUDMaskTypeClear];
                 NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
                 [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
                 [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -1433,27 +1441,21 @@
                                 [cloudOP1 deletePhoto:[NSString stringWithFormat:@"/video/%@",[self.videoInfo valueForKey:@"video_name"]]];
                                 //数据库 删除
                                 [self deleteVideoInfoFromDB];
-                                
-                                
                             }
                                 break;
                             default:
                             {
                                 [self deleteVideoInfoFromDB];
-                                [self.delete_button setEnabled:YES];
-                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-                                [alert setTag:1];
+                                [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
+                                [self back];
                             }
                         }
                         
                     }else{
-                        [self.delete_button setEnabled:YES];
-                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                        [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
                     }
-                    
                 }];
             }
-            
         }
             break;
         case 1:{
@@ -1474,12 +1476,10 @@
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
     if (status){
-        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-        [alert setTag:1];
-        [self.delete_button setEnabled:YES];
+        [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
+        [self back];
     }else{
-        [self.delete_button setEnabled:YES];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
     }
 }
 #pragma mark - MPlayer Delegate

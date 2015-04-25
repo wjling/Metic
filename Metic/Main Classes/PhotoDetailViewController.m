@@ -21,6 +21,7 @@
 #import "NSString+JSON.h"
 #import "../Source/TMQuiltView/TMQuiltView.h"
 #import "MTDatabaseHelper.h"
+#import "SVProgressHUD.H"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -363,7 +364,7 @@
                 }
                 default:
                 {
-                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
                     
                 }
             }
@@ -476,12 +477,6 @@
 
 -(void)deletePhoto:(UIButton*)button
 {
-    [button setEnabled:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (button) {
-            [button setEnabled:YES];
-        }
-    });
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这张照片？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
     
@@ -692,6 +687,15 @@
 //        [_footer endRefreshing];
 //    }
     [self.tableView reloadData];
+}
+
+-(void)back
+{
+    if (_controller) {
+        [self.navigationController popToViewController:self.controller animated:YES];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)deleteLocalData
@@ -1159,6 +1163,7 @@
             }
             else if (buttonIndex == okBtnIndex)
             {
+                [SVProgressHUD showWithStatus:@"正在删除" maskType:SVProgressHUDMaskTypeClear];
                 NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
                 [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
                 [dictionary setValue:self.eventId forKey:@"event_id"];
@@ -1182,15 +1187,13 @@
                             default:
                             {
                                 [self deleteLocalData];
-                                
-                                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-                                [alert setTag:1];
+                                [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
+                                [self back];
                             }
                         }
                         
                     }else{
-                        [self.delete_button setEnabled:YES];
-                        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+                        [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
                     }
                     
                 }];
@@ -1216,14 +1219,10 @@
 {
     if (status){
         [self deleteLocalData];
-
-
-        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"图片删除成功" WithDelegate:self WithCancelTitle:@"确定"];
-        [alert setTag:1];
-        [self.delete_button setEnabled:YES];
+        [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
+        [self back];
     }else{
-        [self.delete_button setEnabled:YES];
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常，请重试" WithDelegate:nil WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
     }
 
 }
