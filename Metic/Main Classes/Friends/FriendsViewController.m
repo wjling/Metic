@@ -9,6 +9,8 @@
 #import "FriendRecommendationViewController.h"
 #import "MenuViewController.h"
 #import "MobClick.h"
+#import "MTDatabaseHelper.h"
+#import "SVProgressHUD.h"
 
 
 
@@ -301,10 +303,6 @@
 - (void)friendTableviewReload
 {
     [self.friendTableView reloadData];
-//    UIActivityIndicatorView* indicator = (UIActivityIndicatorView*)[self.friendTableView.tableFooterView viewWithTag:111];
-//    if (indicator) {
-//        [indicator stopAnimating];
-//    }
     @autoreleasepool {
         UILabel* lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
         lab.textAlignment = NSTextAlignmentCenter;
@@ -404,6 +402,106 @@
 - (IBAction)switchToAddFriendView:(id)sender
 {
     
+}
+
+
+
+- (void)deleteFriendwithIndexPath:(NSIndexPath*)indexPath
+{
+//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+//    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
+    if (indexPath.section >= sectionArray.count) {
+        NSLog(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
+        return;
+    }
+    NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section];
+    NSMutableArray* groupFriends = [sortedFriendDic objectForKey:key];
+    if (indexPath.row < groupFriends.count) {
+        NSMutableDictionary* friend = [groupFriends objectAtIndex:indexPath.row];
+        NSNumber* fid = [friend objectForKey:@"id"];
+        HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+        NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                  fid, @"friend_id",
+                                  [MTUser sharedInstance].userid, @"id", nil];
+        NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+        [http sendMessage:json_data withOperationCode:DELETE_FRIEND finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSString* temp  = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                NSLog(@"获取到删除好友反馈：%@", temp);
+            }
+            else
+            {
+                NSLog(@"删除好友获取的rData为空");
+                return;
+            }
+            NSDictionary* response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSInteger cmd = [[response1 objectForKey:@"cmd"] integerValue];
+            switch (cmd) {
+                case NORMAL_REPLY:   //100
+                {
+                    NSInteger count = [MTUser sharedInstance].friendList.count;
+                    NSMutableArray* arraycopy = [[MTUser sharedInstance].friendList mutableCopy];
+                    for (NSInteger i = count - 1; i >= 0; i--) {
+                        NSMutableDictionary* friend_copy = [arraycopy objectAtIndex:i];
+                        NSInteger fid_copy = [[friend_copy objectForKey:@"id"]integerValue];
+                        if ([fid integerValue] == fid_copy) {
+                            [[MTUser sharedInstance].friendList removeObjectAtIndex:i];
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                [[MTUser sharedInstance] friendListDidChanged];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    friendList = [MTUser sharedInstance].friendList;
+                                    sectionArray = [MTUser sharedInstance].sectionArray;
+                                    sortedFriendDic = [MTUser sharedInstance].sortedFriendDic;
+                                    [self friendTableviewReload];
+                                });
+                            });
+                            break;
+                        }
+                    }
+                    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:@{@"id":[NSString stringWithFormat:@"%@", fid]}];
+
+                }
+                    break;
+                case SERVER_ERROR:   //106
+                case REQUEST_FAIL:  //108
+                default:
+                {
+                    NSLog(@"删除好友失败，恢复成没删除的状态");
+                    [groupFriends insertObject:friend atIndex:indexPath.row];
+                    [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                }
+                    break;
+            }
+
+        }];
+        
+        [groupFriends removeObjectAtIndex:indexPath.row];
+        [friendTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        if (groupFriends.count == 0)
+        {
+            [sortedFriendDic removeObjectForKey:key];
+            __block __weak FriendsViewController* Fvc = self;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Fvc friendTableviewReload];
+            });
+        }
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.0), dispatch_get_main_queue(), ^{
+//            [groupFriends insertObject:friend atIndex:indexPath.row];
+//            [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+//        });
+        
+    }
+    else{
+        NSLog(@"key: %@", key);
+        NSLog(@"删除好友的indexpath.row错误, row: %li \ngroupFriends: %@", (long)indexPath.row, groupFriends);
+    }
+    
+}
+
+- (void)timerCancel:(NSTimer*)timer
+{
+    [timer invalidate];
 }
 
 #pragma mark - UITableViewDelegate
@@ -602,7 +700,6 @@
                         cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
                     }
                     cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
-                    //            cell.imageView
                     cell.title.text = label;
                     
                     return cell ;
@@ -748,25 +845,29 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"can Edit row");
-    if (indexPath.section != 0) {
-        return YES;
+    if (tableView == friendTableView) {
+        if (indexPath.section != 0) {
+            return YES;
+        }
     }
-    else{
-        return NO;
-    }
+    return NO;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return UITableViewCellEditingStyleDelete;
+    if (tableView == friendTableView) {
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        
+    if (tableView == friendTableView) {
+        if (editingStyle == UITableViewCellEditingStyleDelete)
+        {
+            [self deleteFriendwithIndexPath:indexPath];
+        }
     }
 }
 

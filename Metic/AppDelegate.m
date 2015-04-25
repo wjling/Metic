@@ -851,7 +851,7 @@
                 if (list && list.count > 0) {
                     if ([MTUser sharedInstance].userid) {
                         NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-                        NSNumber* remoteMaxSeq = @MAX([min_seq integerValue], [max_seq integerValue]);
+                        NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
                         maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
                         [maxSeqDict setObject:remoteMaxSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
 
