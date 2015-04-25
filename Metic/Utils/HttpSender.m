@@ -246,6 +246,9 @@
         case 50:
             resultCode = @"qrcode_invite";
             break;
+        case 51:
+            resultCode = @"delete_friend";
+            break;
         default:
             resultCode = @"json";
             break;

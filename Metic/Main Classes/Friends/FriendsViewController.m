@@ -9,6 +9,8 @@
 #import "FriendRecommendationViewController.h"
 #import "MenuViewController.h"
 #import "MobClick.h"
+#import "MTDatabaseHelper.h"
+#import "SVProgressHUD.h"
 
 
 
@@ -39,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     NSLog(@"friendviewcontroller viewdidload");
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
@@ -82,6 +85,11 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"touches begin");
 }
 
 //返回本页并跳转到消息页
@@ -203,7 +211,7 @@
         }
         else //如果好友列表为空，可能是同步好友失败，也有可能真为空
         {
-            NSLog(@"好友列表初始不存在好友：friendlist count: %d",friendList.count);
+            NSLog(@"好友列表初始不存在好友：friendlist count: %ld",friendList.count);
             AppDelegate* app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             
             if (app.isNetworkConnected) { //为防万一，再进行一次好友同步，前提是网络已连接
@@ -295,10 +303,6 @@
 - (void)friendTableviewReload
 {
     [self.friendTableView reloadData];
-//    UIActivityIndicatorView* indicator = (UIActivityIndicatorView*)[self.friendTableView.tableFooterView viewWithTag:111];
-//    if (indicator) {
-//        [indicator stopAnimating];
-//    }
     @autoreleasepool {
         UILabel* lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
         lab.textAlignment = NSTextAlignmentCenter;
@@ -398,6 +402,106 @@
 - (IBAction)switchToAddFriendView:(id)sender
 {
     
+}
+
+
+
+- (void)deleteFriendwithIndexPath:(NSIndexPath*)indexPath
+{
+//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+//    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
+    if (indexPath.section >= sectionArray.count) {
+        NSLog(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
+        return;
+    }
+    NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section];
+    NSMutableArray* groupFriends = [sortedFriendDic objectForKey:key];
+    if (indexPath.row < groupFriends.count) {
+        NSMutableDictionary* friend = [groupFriends objectAtIndex:indexPath.row];
+        NSNumber* fid = [friend objectForKey:@"id"];
+        HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+        NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                  fid, @"friend_id",
+                                  [MTUser sharedInstance].userid, @"id", nil];
+        NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+        [http sendMessage:json_data withOperationCode:DELETE_FRIEND finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSString* temp  = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                NSLog(@"获取到删除好友反馈：%@", temp);
+            }
+            else
+            {
+                NSLog(@"删除好友获取的rData为空");
+                return;
+            }
+            NSDictionary* response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSInteger cmd = [[response1 objectForKey:@"cmd"] integerValue];
+            switch (cmd) {
+                case NORMAL_REPLY:   //100
+                {
+                    NSInteger count = [MTUser sharedInstance].friendList.count;
+                    NSMutableArray* arraycopy = [[MTUser sharedInstance].friendList mutableCopy];
+                    for (NSInteger i = count - 1; i >= 0; i--) {
+                        NSMutableDictionary* friend_copy = [arraycopy objectAtIndex:i];
+                        NSInteger fid_copy = [[friend_copy objectForKey:@"id"]integerValue];
+                        if ([fid integerValue] == fid_copy) {
+                            [[MTUser sharedInstance].friendList removeObjectAtIndex:i];
+                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                [[MTUser sharedInstance] friendListDidChanged];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    friendList = [MTUser sharedInstance].friendList;
+                                    sectionArray = [MTUser sharedInstance].sectionArray;
+                                    sortedFriendDic = [MTUser sharedInstance].sortedFriendDic;
+                                    [self friendTableviewReload];
+                                });
+                            });
+                            break;
+                        }
+                    }
+                    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:@{@"id":[NSString stringWithFormat:@"%@", fid]}];
+
+                }
+                    break;
+                case SERVER_ERROR:   //106
+                case REQUEST_FAIL:  //108
+                default:
+                {
+                    NSLog(@"删除好友失败，恢复成没删除的状态");
+                    [groupFriends insertObject:friend atIndex:indexPath.row];
+                    [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                }
+                    break;
+            }
+
+        }];
+        
+        [groupFriends removeObjectAtIndex:indexPath.row];
+        [friendTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        if (groupFriends.count == 0)
+        {
+            [sortedFriendDic removeObjectForKey:key];
+            __block __weak FriendsViewController* Fvc = self;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [Fvc friendTableviewReload];
+            });
+        }
+        
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.0), dispatch_get_main_queue(), ^{
+//            [groupFriends insertObject:friend atIndex:indexPath.row];
+//            [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+//        });
+        
+    }
+    else{
+        NSLog(@"key: %@", key);
+        NSLog(@"删除好友的indexpath.row错误, row: %li \ngroupFriends: %@", (long)indexPath.row, groupFriends);
+    }
+    
+}
+
+- (void)timerCancel:(NSTimer*)timer
+{
+    [timer invalidate];
 }
 
 #pragma mark - UITableViewDelegate
@@ -596,7 +700,6 @@
                         cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
                     }
                     cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
-                    //            cell.imageView
                     cell.title.text = label;
                     
                     return cell ;
@@ -740,6 +843,39 @@
     }
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == friendTableView) {
+        if (indexPath.section != 0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == friendTableView) {
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == friendTableView) {
+        if (editingStyle == UITableViewCellEditingStyleDelete)
+        {
+            [self deleteFriendwithIndexPath:indexPath];
+        }
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
 #pragma mark - UISearchBarDelegate
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar                     // return NO to not become first responder
 {
@@ -878,6 +1014,11 @@
 //    }
 //    
 //    [self.friendTableView reloadData];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    NSLog(@"scroll begin dragging"); 
 }
 
 #pragma mark - SlideNavigationControllerDelegate

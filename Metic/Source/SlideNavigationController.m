@@ -25,7 +25,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-@interface UINavigationController (SlideNavigationController)
+@interface UINavigationController (SlideNavigationController)<UIGestureRecognizerDelegate>
 
 - (void)didShowViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
@@ -549,6 +549,7 @@ static SlideNavigationController *singletonInstance;
 	if (!panRecognizer)
 	{
 		panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panDetected:)];
+        panRecognizer.delegate = self;
 	}
 	
 	return panRecognizer;
@@ -574,33 +575,6 @@ static SlideNavigationController *singletonInstance;
         [self switchToViewController:viewController withCompletion:completion];
     }];
 }
-
-//- (void)reconnect
-//{
-//    mySocket.delegate = nil;
-//    [mySocket close];
-//    
-//    NSString* str = @"http://222.200.182.183:10088/";
-//    NSURL* url = [[NSURL alloc]initWithString:str];
-//    
-//    NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
-//    mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
-//    mySocket.delegate = self;
-//    NSLog(@"Connecting...");
-//    [mySocket open];
-//}
-//
-//#pragma mark - SRWebSocketDelegate
-//
-//- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
-//{
-//    NSLog(@"Get message: %@",message);
-//}
-//
-//- (void)webSocketDidOpen:(SRWebSocket *)webSocket;
-//{
-//    NSLog(@"Websocket Connected");
-//}
 
 #pragma mark - Private API
 
@@ -628,6 +602,14 @@ static SlideNavigationController *singletonInstance;
     
 }
 
+#pragma mark - UIGestureRecognizer Delegate
+-(BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
+    CGPoint currentPoint = [touch locationInView:self.view];
+    if (currentPoint.x < MENU_OFFSET) {
+        return YES;
+    }
+    return NO;
+}
 @end
 
 

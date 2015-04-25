@@ -22,7 +22,7 @@
 #import "FriendInfoViewController.h"
 #import "TTTAttributedLabel.h"
 
-@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,UISearchDisplayDelegate>
+@interface FriendsViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,MJRefreshBaseViewDelegate,UISearchDisplayDelegate,UIScrollViewDelegate>
 
 @property(nonatomic,strong)NSMutableArray* friendList;
 @property (strong,nonatomic)NSMutableDictionary* sortedFriendDic;
