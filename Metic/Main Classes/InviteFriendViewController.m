@@ -68,6 +68,11 @@
     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
     self.sectionArray = [[MTUser sharedInstance] sectionArray];
     //    NSLog(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
+    UILabel* friendcount_label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, _friendTableView.frame.size.width, 30)];
+    friendcount_label.textAlignment = NSTextAlignmentCenter;
+    friendcount_label.textColor = [UIColor grayColor];
+    friendcount_label.text = [NSString stringWithFormat:@"%lu位好友",(unsigned long)friendList.count];
+    _friendTableView.tableFooterView = friendcount_label;
     [self.friendTableView reloadData];
     
     

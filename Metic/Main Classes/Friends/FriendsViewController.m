@@ -1021,10 +1021,10 @@
 //    [self.friendTableView reloadData];
 }
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    NSLog(@"scroll begin dragging"); 
-}
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+////    NSLog(@"scroll begin dragging"); 
+//}
 
 #pragma mark - SlideNavigationControllerDelegate
 - (BOOL)slideNavigationControllerShouldDisplayLeftMenu
