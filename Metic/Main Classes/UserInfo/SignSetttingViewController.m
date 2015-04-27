@@ -33,9 +33,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+//    UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
+    UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
     self.content_textView.layer.borderColor = color.CGColor;
-    self.content_textView.layer.borderWidth = 2;
+    self.content_textView.layer.borderWidth = 1;
+    self.content_textView.layer.cornerRadius = 3.5;
+    self.content_textView.layer.masksToBounds = YES;
     self.content_textView.delegate = rootView;
     [self.right_barButton addTarget:self action:@selector(rightBarBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     

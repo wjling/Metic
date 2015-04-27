@@ -39,6 +39,11 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
 //    self.name_textField.delegate = self;
+    UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
+    _name_textField.layer.borderColor = color.CGColor;
+    _name_textField.layer.borderWidth = 1;
+    _name_textField.layer.cornerRadius = 3.5;
+    _name_textField.layer.masksToBounds = YES;
     
     note = [[UILabel alloc]init];
     [note setFrame:CGRectMake(self.view.bounds.size.width / 2.0 - 75, 80, 150, 30)];
