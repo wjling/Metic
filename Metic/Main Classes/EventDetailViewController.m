@@ -618,6 +618,13 @@
 
 - (void)delete_Comment:(id)sender {
     
+    self.inputTextView.text = @"";
+    self.inputTextView.placeHolder = @"回复楼主:";
+    self.repliedId = nil;
+    self.mainCommentId = 0;
+    if (_isKeyBoard) [self.inputTextView resignFirstResponder];
+    if (_isEmotionOpen) [self button_Emotionpress:nil];
+    
     id cell = sender;
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
