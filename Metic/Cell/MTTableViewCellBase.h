@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MTTableViewCellBase : UITableViewCell
+@property(nonatomic,weak) UIViewController* controller;
 - (void)applyData:(NSDictionary*)data;
 @end

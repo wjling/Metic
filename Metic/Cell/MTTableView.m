@@ -66,6 +66,7 @@
     }
     
     MTTableViewCellBase *cell = (MTTableViewCellBase *)[tableView dequeueReusableCellWithIdentifier:_cellClassName];
+    cell.controller = self.homeController;
 
     if (self.eventsSource) {
         NSDictionary *data = self.eventsSource[indexPath.row];

@@ -85,6 +85,11 @@
     // Configure the view for the selected state
 }
 
+-(void)setController:(UIViewController *)controller
+{
+    _homeController = controller;
+}
+
 - (void)applyData:(NSDictionary*)data
 {
     self.eventName.text = [data valueForKey:@"subject"];
