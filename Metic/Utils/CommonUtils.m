@@ -280,15 +280,10 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
 + (NSString*)getUrl:(NSString*) path
 {
-//    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path];//测试服
-//    NSString* content = [NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path];//正式服
     NSString* content = @[[NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=metis201415\nObject=%@\n",path],[NSString stringWithFormat:@"MBO\nMethod=GET\nBucket=whatsact\nObject=%@\n",path]][Server];
     NSString* key = @"VWWE6aPlh4uUAhhrXytxvIXUCR27OShi";
     NSString* sign = [self hmac_sha1:key text:content];
     NSString* signencoded = [self URLEncodedString:sign];
-    
-//    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//测试服
-//    NSString* url = [NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded];//正式服
 
     NSString* url = @[[NSString stringWithFormat:@"http://bcs.duapp.com/metis201415%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded],[NSString stringWithFormat:@"http://bcs.duapp.com/whatsact%@?sign=MBO:V7M9qLLWzuCYRFRQgaHvOn3f:%@",path,signencoded]][Server];
     return url;
@@ -369,7 +364,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSDate* end = [dateFormatter dateFromString:endTime];
     NSTimeInterval begins = [begin timeIntervalSince1970];
     NSTimeInterval ends = [end timeIntervalSince1970];
-    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@日",[[launchTime substringWithRange:NSMakeRange(5, 5)] stringByReplacingOccurrencesOfString:@"-" withString:@"月"]];
+    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@",[self calculateTimeStr:launchTime]];
     int dis = ends-begins;
     if (dis > 0) {
         NSString* duration = @"";
@@ -395,6 +390,46 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     }else timeInfo = launchInfo;
     return timeInfo;
 }
+
+//根据时间生成活动时间信息简述
++(NSString*)calculateTimeStr:(NSString*)time
+{
+    
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSDate* dateTime = [dateFormatter dateFromString:time];
+    NSDate* now = [NSDate date];
+    NSTimeInterval dateTimeInterval = [dateTime timeIntervalSince1970];
+    NSTimeInterval nowInterval = [now timeIntervalSince1970];
+    
+    [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+    NSString* timeInfo = [dateFormatter stringFromDate:dateTime];
+    int dis = nowInterval - dateTimeInterval;
+    if (dis > 0) {
+        if (dis >= 31536000) {
+            [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+            timeInfo = [dateFormatter stringFromDate:dateTime];
+        }else if (dis >= 2592000) {
+            [dateFormatter setDateFormat:@"MM月dd日"];
+            timeInfo = [dateFormatter stringFromDate:dateTime];
+        }else if (dis >= 86400*2) {
+            timeInfo = [NSString stringWithFormat:@"%d天前",dis/86400];
+        }else if (dis >= 86400) {
+            timeInfo = [NSString stringWithFormat:@"昨天"];
+        }else if (dis >= 3600) {
+            timeInfo = [NSString stringWithFormat:@"%d小时前",dis/3600];
+        }else if (dis >= 60*5) {
+            timeInfo = [NSString stringWithFormat:@"%d分钟前",dis/60];
+        }else{
+            timeInfo = [NSString stringWithFormat:@"刚刚"];
+        }
+    }
+    return timeInfo;
+}
+
 
 +(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2
 {

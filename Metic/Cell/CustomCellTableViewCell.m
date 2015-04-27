@@ -9,6 +9,7 @@
 #import "CustomCellTableViewCell.h"
 #import "../Main Classes/PictureWall2.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "UIImageView+WebCache.h"
 
 @implementation CustomCellTableViewCell
 
@@ -80,15 +81,86 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    
-    
-    
     [super setSelected:selected animated:animated];
-    
-    
-    
     // Configure the view for the selected state
+}
+
+- (void)applyData:(NSDictionary*)data
+{
+    self.eventName.text = [data valueForKey:@"subject"];
+    self.event = [data valueForKey:@"subject"];
+    NSString* beginT = [data valueForKey:@"time"];
+    NSString* endT = [data valueForKey:@"endTime"];
+    self.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+    self.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
+    if (endT.length > 9) self.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
+    if (endT.length > 15) self.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+    self.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[data valueForKey:@"launch_time"]];
+    self.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[data valueForKey:@"location"] ];
     
+    NSInteger participator_count = [[data valueForKey:@"member_count"] integerValue];
+    NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
+    NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
+    
+    self.member_count.font = [UIFont systemFontOfSize:15];
+    self.member_count.numberOfLines = 0;
+    self.member_count.lineBreakMode = NSLineBreakByCharWrapping;
+    self.member_count.tintColor = [UIColor lightGrayColor];
+    [self.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
+        NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
+        UIFont *systemFont = [UIFont systemFontOfSize:18];
+        
+        if (redRange.location != NSNotFound) {
+            // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
+            [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
+            
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
+            CFRelease(italicFont);
+        }
+        return mutableAttributedString;
+    }];
+    
+    
+    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
+    if (launcher == nil || [launcher isEqual:[NSNull null]]) {
+        launcher = [data valueForKey:@"launcher"];
+    }
+    
+    
+    self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
+    self.eventId = [data valueForKey:@"event_id"];
+    self.launcherId = [data valueForKey:@"launcher_id"];
+    //cell.avatar.layer.masksToBounds = YES;
+    [self.avatar.layer setCornerRadius:15];
+    
+    [self drawOfficialFlag:[[data valueForKey:@"verify"] boolValue]];
+    
+    
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"launcher_id"]];
+    [avatarGetter getAvatar];
+    
+    PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:self.themePhoto authorId:[data valueForKey:@"event_id"]];
+    NSString* bannerURL = [data valueForKey:@"banner"];
+    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL];
+    
+    self.homeController = self.homeController;
+    
+    NSArray *memberids = [data valueForKey:@"member"];
+    
+    for (int i =3; i>=0; i--) {
+        UIImageView *tmp = ((UIImageView*)[((UIView*)[self viewWithTag:103]) viewWithTag:i+1]);
+        //tmp.layer.masksToBounds = YES;
+        //[tmp.layer setCornerRadius:5];
+        if (i < participator_count) {
+            PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+            [miniGetter getAvatar];
+        }else{
+            [tmp sd_cancelCurrentImageLoad];
+            tmp.image = nil;
+        }
+        
+    }
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
