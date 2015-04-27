@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "../Main Classes/HomeViewController.h"
 #import "TTTAttributedLabel.h"
+#import "MTTableViewCellBase.h"
 
-@interface CustomCellTableViewCell : UITableViewCell
+@interface CustomCellTableViewCell : MTTableViewCellBase
 
 {
     
@@ -33,7 +34,8 @@
 
 - (IBAction)jumpToPictureWall:(id)sender;
 - (IBAction)jumpToVideoWall:(id)sender;
--(void)drawOfficialFlag:(BOOL)isOfficial;
+- (void)drawOfficialFlag:(BOOL)isOfficial;
+- (void)applyData:(NSDictionary*)data;
 
 
 

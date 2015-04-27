@@ -381,6 +381,7 @@
 		F864C0FA1AE0EC1A00E2EB23 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F51AE0EC1A00E2EB23 /* FMResultSet.m */; };
 		F864C0FD1AE0EE1100E2EB23 /* MTDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */; };
 		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
+		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1138,6 +1139,8 @@
 		F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseHelper.m; sourceTree = "<group>"; };
 		F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+squareThumbail.h"; sourceTree = "<group>"; };
 		F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+squareThumbail.m"; sourceTree = "<group>"; };
+		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
+		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1751,6 +1754,8 @@
 		08DB698019541F3A00F80F3F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */,
+				F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */,
 				08DB698119541F3A00F80F3F /* CustomCellTableViewCell.h */,
 				08DB698219541F3A00F80F3F /* CustomCellTableViewCell.m */,
 				08DB698319541F3A00F80F3F /* CustomCellTableViewCell.xib */,
@@ -2966,6 +2971,7 @@
 				51F4CB1419E6307500E487F1 /* DDASLLogger.m in Sources */,
 				51F4CB2219E6307500E487F1 /* HTTPErrorResponse.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
+				F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */,
 				043E1A761ADA24B400D1D39F /* SDLoopProgressView.m in Sources */,
 				51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */,
 				510D45A5196E8A960081672A /* UIImageView+WebCache.m in Sources */,

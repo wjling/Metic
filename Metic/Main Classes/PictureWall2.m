@@ -98,7 +98,7 @@
     _h1 = 0;
     _isFirstIn = YES;
     sync_queue = dispatch_queue_create("imgWallRefresh_syncueue", NULL);
-    self.sequence = [[NSNumber alloc]initWithInt:-1];
+    self.sequence = @-1;
     self.photo_list = [[NSMutableArray alloc]init];
     self.photo_list_all= [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -235,8 +235,9 @@
             [self resetPhoNum];
             [self calculateLRH];
             _uploadingTaskCount = 0;
-            self.sequence = [[NSNumber alloc]initWithInt:-1];
             [quiltView reloadData];
+            self.sequence = @-1;
+            
         });
     }];
     
@@ -433,7 +434,7 @@
     _isLoading = YES;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
-        if ([sequence integerValue] != [_sequence integerValue])
+        if ([sequence integerValue] != [_sequence integerValue] && [_sequence integerValue] != -1)
         {
             NSLog(@"wuwuwuwuwu");
             if(_header.refreshing) [_header endRefreshing];
