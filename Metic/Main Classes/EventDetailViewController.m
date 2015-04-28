@@ -624,6 +624,10 @@
     self.mainCommentId = 0;
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.inputTextView.text = @"";
+        [self textChangedExt:nil];
+    });
     
     id cell = sender;
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
