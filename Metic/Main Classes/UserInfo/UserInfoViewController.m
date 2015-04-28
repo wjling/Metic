@@ -263,15 +263,15 @@
 
     [menuItems addObjectsFromArray:@[
                                      
-                                     [KxMenuItem menuItem:@"上传头像"
+                                     [KxMenuItem menuItem:@"更换头像"
                                                     image:nil
                                                    target:self
                                                    action:@selector(avatarClicked:)],
                                      
-                                     [KxMenuItem menuItem:@"二维码"
-                                                    image:nil
-                                                   target:self
-                                                   action:@selector(QRcodeBtnClicked:)],
+//                                     [KxMenuItem menuItem:@"二维码"
+//                                                    image:nil
+//                                                   target:self
+//                                                   action:@selector(QRcodeBtnClicked:)],
                                      ]];
         
         
@@ -421,6 +421,13 @@
             }
         }
             break;
+        case 3:
+        {
+            if (indexPath.row == 0) {
+                [self QRcodeBtnClicked:nil];
+            }
+        }
+            break;
             
         default:
             break;
@@ -431,7 +438,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -444,6 +451,10 @@
         return 2;
     }
     else if (section == 2)
+    {
+        return 1;
+    }
+    else if (section == 3)
     {
         return 1;
     }
@@ -577,6 +588,25 @@
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
                 }
                 cell.title_label.text = @"安全中心";
+                cell.content_label.text = @"";
+                cell.title_label.textColor = textColor2;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+                }
+                return cell;
+            }
+        }
+            break;
+        case 3:
+        {
+            if (indexPath.row == 0) {
+                UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
+                if (nil == cell) {
+                    cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
+                }
+                cell.title_label.text = @"我的二维码";
                 cell.content_label.text = @"";
                 cell.title_label.textColor = textColor2;
                 if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
