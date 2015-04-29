@@ -27,7 +27,7 @@
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTDatabaseHelper.h"
-
+//#import "ScanViewController.h"
 #define MainFontSize 14
 #define MainCFontSize 13
 #define SubCFontSize 12
@@ -77,7 +77,7 @@
 {
     [super viewDidLoad];
     [self initUI];
-    
+    [self fixStack];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [NotificationController visitEvent:_eventId];
     self.commentIds = [[NSMutableArray alloc]init];
@@ -253,6 +253,22 @@
     [_emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
     [self.view addSubview:_emotionKeyboard];
    
+}
+
+-(void)fixStack
+{
+    if (!_isFromQRCode) return;
+    NSInteger vccount = self.navigationController.viewControllers.count;
+    if (vccount > 1) {
+        NSMutableArray* newVCs = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
+        UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+        if (home) {
+            [newVCs replaceObjectAtIndex:vccount-2 withObject:home];
+            self.navigationController.viewControllers = newVCs;
+        }
+        
+    }
+    
 }
 
 -(void)showMenu

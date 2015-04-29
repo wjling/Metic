@@ -36,6 +36,7 @@
 @property (nonatomic,strong) UIImage* uploadImage;
 @property int Bannercode;
 
+@property BOOL isFromQRCode;
 @property BOOL isPublish;
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;

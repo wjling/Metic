@@ -11,6 +11,7 @@
 #import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/UserTableViewCell.h"
 #import "SVProgressHUD.h"
+#import "EventDetailViewController.h"
 
 @interface ScanViewController ()
 @property(nonatomic,strong)NSString* result;
@@ -248,8 +249,11 @@
                             //更新活动中心列表：
                             [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
                             [_showView setHidden:YES];
-                            [readerView start];
-                            _isScaning = YES;
+//                            [readerView start];
+//                            _isScaning = YES;
+                            
+                            [self toEventDetail:_efid];
+                            
                         }
                             break;
                         case EVENT_NOT_EXIST:
@@ -265,9 +269,10 @@
                         {
                             NSLog(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"你已在活动中"];
+                            [self toEventDetail:_efid];
                             [_showView setHidden:YES];
-                            [readerView start];
-                            _isScaning = YES;
+//                            [readerView start];
+//                            _isScaning = YES;
                         }
                             break;
                         default:
@@ -298,6 +303,17 @@
         [confirmAlert show];
     }
 
+}
+
+- (void)toEventDetail:(NSNumber*)eventId
+{
+    if (!eventId) return;
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    
+    EventDetailViewController* eventDetail = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+    eventDetail.eventId = eventId;
+    eventDetail.isFromQRCode = YES;
+    [self.navigationController pushViewController:eventDetail animated:YES];
 }
 
 - (IBAction)scanLocalPhoto:(id)sender {
@@ -569,11 +585,13 @@
                 [self showResult];
                 if ([[response1 valueForKey:@"isIn"] boolValue]) {
                     [SVProgressHUD showErrorWithStatus:@"你已在活动中" duration:1];
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [_showView setHidden:YES];
-                        [readerView start];
-                        _isScaning = YES;
-                    });
+                    [self toEventDetail:_efid];
+                    [_showView setHidden:YES];
+//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                        
+//                        [readerView start];
+//                        _isScaning = YES;
+//                    });
                     
                 }else if (!_need_auth) {
                     [self wantIn:nil];
