@@ -534,12 +534,9 @@
                         }
                         
                         if (_event) {
-                            NSString* updatetime1 = [_event valueForKey:@"updatetime"];
-                            NSString* updatetime2 = [dist valueForKey:@"updatetime"];
-                            
-                            if (![updatetime1 isEqualToString:updatetime2]) {
-                                [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
-                            }
+                            NSString* bannerURL = [dist valueForKey:@"banner"];
+                            NSString* updatetime = [dist valueForKey:@"updatetime"];
+                            [self checkBanner:updatetime bannerURL:bannerURL];
                         }
                         if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
                         if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
@@ -570,12 +567,13 @@
 
 - (void)updateEventToDB:(NSDictionary*)event
 {
-    NSString *eventData = [NSString jsonStringWithDictionary:_event];
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
     eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSString *beginTime = [event valueForKey:@"time"];
     NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
     [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
@@ -583,6 +581,42 @@
 {
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"event" withWhere:wheres];
+}
+
+- (void)updateUpdateTimeToDB:(NSString*)updateTime
+{
+    NSDictionary* wheres = [CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",_eventId],@"event_id",nil];
+    NSDictionary* sets = [CommonUtils packParamsInDictionary:
+                          [NSString stringWithFormat:@"'%@'",updateTime],@"updateTime",
+                          nil];
+    
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"event" andWhere:wheres andSet:sets];
+}
+
+- (void)checkBanner:(NSString*) updateTime bannerURL:(NSString*)bannerURL
+{
+    if (!updateTime || !bannerURL) {
+        return;
+    }
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"updateTime", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.eventId],@"event_id", nil];
+    [[MTDatabaseHelper sharedInstance]queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray.count) {
+            NSLog(@"%@",resultsArray);
+            NSString *oldUpdateTime = [resultsArray[0] valueForKey:@"updateTime"];
+            if ([oldUpdateTime isKindOfClass:[NSString class]] && [oldUpdateTime isEqualToString:updateTime]) {
+                NSLog(@"no need update banner");
+            }else{
+                NSLog(@"update banner");
+                [[SDImageCache sharedImageCache] removeImageForKey:bannerURL];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                });
+                [self updateUpdateTimeToDB:updateTime];
+            }
+        }
+    }];
+    
 }
 
 -(void)deleteItemfromHomeArray
