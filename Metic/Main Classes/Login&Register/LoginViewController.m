@@ -161,10 +161,6 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"login did appear, username: %@, user password: %@",text_userName, text_password);
-    
-//    textField_userName.text = text_userName;
-//    textField_password.text = text_password;
     [MobClick beginLogPageView:@"登录"];
 }
 
