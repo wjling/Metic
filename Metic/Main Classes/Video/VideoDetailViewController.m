@@ -1443,12 +1443,18 @@
                                 [self deleteVideoInfoFromDB];
                             }
                                 break;
-                            default:
+                            case VIDEO_NOT_EXIST:
                             {
                                 [self deleteVideoInfoFromDB];
                                 [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
                                 [self back];
                             }
+                                break;
+                            default:
+                            {
+                                [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:1];
+                            }
+                            
                         }
                         
                     }else{
