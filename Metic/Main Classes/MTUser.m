@@ -365,8 +365,16 @@ static MTUser *singletonInstance;
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil];
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"event" addsColumn:@"beginTime" withDefault:nil];
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"event" addsColumn:@"joinTime" withDefault:nil];
+            [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"event" addsColumn:@"updateTime" withDefault:nil];
             
         }
+        
+        result = [CommonUtils compareVersion1:version andVersion2:@"1.1.0"];
+        
+        if (result <= 0) {
+            [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"event" addsColumn:@"updateTime" withDefault:nil];
+        }
+        
 
         version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
@@ -399,7 +407,7 @@ static MTUser *singletonInstance;
     
     
     
-    [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"event" indexesWithProperties:@[@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info"]];
+    [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"event" indexesWithProperties:@[@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"updateTime",@"event_info"]];
     
     [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"notification" indexesWithProperties:@[@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled"]];
     

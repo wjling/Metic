@@ -1184,11 +1184,16 @@
                                 [cloudOP deletePhoto:[NSString stringWithFormat:@"/images/%@",[self.photoInfo valueForKey:@"photo_name"]]];
                             }
                                 break;
-                            default:
+                            case PHOTO_NOT_EXIST:
                             {
                                 [self deleteLocalData];
                                 [SVProgressHUD dismissWithSuccess:@"图片删除成功" afterDelay:1];
                                 [self back];
+                            }
+                                break;
+                            default:
+                            {
+                                [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:1];
                             }
                         }
                         

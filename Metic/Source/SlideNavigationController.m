@@ -590,14 +590,17 @@ static SlideNavigationController *singletonInstance;
 // 如有必要，需监听系统状态栏变更通知：UIApplicationWillChangeStatusBarFrameNotification
 - (void)handleUIApplicationWillChangeStatusBarFrameNotification:(NSNotification*)notification
 {
-    CGRect newStatusBarFrame = [(NSValue*)[notification.userInfo objectForKey:UIApplicationStatusBarFrameUserInfoKey] CGRectValue];
     // 根据系统状态栏高判断热点栏的变动
-    if (newStatusBarFrame.size.height == 20) {
-        CGRect frame = self.view.window.frame;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CGRect wframe = self.view.window.frame;
+        CGRect frame = self.view.frame;
+        if (CGRectGetMaxY(frame) > CGRectGetHeight(wframe)) {
+            frame.size.height = CGRectGetHeight(wframe) - CGRectGetMinY(frame);
             [self.view setFrame:frame];
-        });
-    }
+            
+        }
+    });
+    
     
     
 }

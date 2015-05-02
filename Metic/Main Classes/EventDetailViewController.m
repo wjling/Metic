@@ -27,7 +27,7 @@
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTDatabaseHelper.h"
-
+//#import "ScanViewController.h"
 #define MainFontSize 14
 #define MainCFontSize 13
 #define SubCFontSize 12
@@ -77,7 +77,7 @@
 {
     [super viewDidLoad];
     [self initUI];
-    
+    [self fixStack];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [NotificationController visitEvent:_eventId];
     self.commentIds = [[NSMutableArray alloc]init];
@@ -255,6 +255,22 @@
    
 }
 
+-(void)fixStack
+{
+    if (!_isFromQRCode) return;
+    NSInteger vccount = self.navigationController.viewControllers.count;
+    if (vccount > 1) {
+        NSMutableArray* newVCs = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
+        UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+        if (home) {
+            [newVCs replaceObjectAtIndex:vccount-2 withObject:home];
+            self.navigationController.viewControllers = newVCs;
+        }
+        
+    }
+    
+}
+
 -(void)showMenu
 {
     NSMutableArray *menuItems = [[NSMutableArray alloc]init];
@@ -404,8 +420,8 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS finshedBlock:^(NSData *rData) {
         if (rData) {
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+//            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//            NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -500,8 +516,8 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+//            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//            NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -518,12 +534,9 @@
                         }
                         
                         if (_event) {
-                            NSString* updatetime1 = [_event valueForKey:@"updatetime"];
-                            NSString* updatetime2 = [dist valueForKey:@"updatetime"];
-                            
-                            if (![updatetime1 isEqualToString:updatetime2]) {
-                                [[SDImageCache sharedImageCache] removeImageForKey:[dist valueForKey:@"banner"]];
-                            }
+                            NSString* bannerURL = [dist valueForKey:@"banner"];
+                            NSString* updatetime = [dist valueForKey:@"updatetime"];
+                            [self checkBanner:updatetime bannerURL:bannerURL];
                         }
                         if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
                         if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
@@ -554,12 +567,13 @@
 
 - (void)updateEventToDB:(NSDictionary*)event
 {
-    NSString *eventData = [NSString jsonStringWithDictionary:_event];
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
     eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
     NSString *beginTime = [event valueForKey:@"time"];
     NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
     [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
@@ -567,6 +581,41 @@
 {
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"event" withWhere:wheres];
+}
+
+- (void)updateUpdateTimeToDB:(NSString*)updateTime
+{
+    NSDictionary* wheres = [CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",_eventId],@"event_id",nil];
+    NSDictionary* sets = [CommonUtils packParamsInDictionary:
+                          [NSString stringWithFormat:@"'%@'",updateTime],@"updateTime",
+                          nil];
+    
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"event" andWhere:wheres andSet:sets];
+}
+
+- (void)checkBanner:(NSString*) updateTime bannerURL:(NSString*)bannerURL
+{
+    if (!updateTime || !bannerURL) {
+        return;
+    }
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"updateTime", nil];
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.eventId],@"event_id", nil];
+    [[MTDatabaseHelper sharedInstance]queryTable:@"event" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray.count) {
+            NSString *oldUpdateTime = [resultsArray[0] valueForKey:@"updateTime"];
+            if ([oldUpdateTime isKindOfClass:[NSString class]] && [oldUpdateTime isEqualToString:updateTime]) {
+                NSLog(@"no need update banner");
+            }else{
+                NSLog(@"update banner");
+                [[SDImageCache sharedImageCache] removeImageForKey:bannerURL];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                });
+                [self updateUpdateTimeToDB:updateTime];
+            }
+        }
+    }];
+    
 }
 
 -(void)deleteItemfromHomeArray
@@ -624,6 +673,10 @@
     self.mainCommentId = 0;
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.inputTextView.text = @"";
+        [self textChangedExt:nil];
+    });
     
     id cell = sender;
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
@@ -644,8 +697,8 @@
         if (!rData) {
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         }
-        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        NSLog(@"received Data: %@",temp);
+//        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//        NSLog(@"received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {

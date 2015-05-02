@@ -27,13 +27,14 @@
 HttpSender* httpSender;
 
 enum Server_code{
-    Server = 0,//测试服
-//    Server = 1,//正式服
+//    Server = 0,//测试服
+    Server = 1,//正式服
 };
 
 enum Enterprise_code{
 //    isEnterprise = 0,//上架版
-    isEnterprise = 1,//企业版
+//    isEnterprise = 1,//企业版
+    isEnterprise = 2,//企业版测试服
 };
 
 enum Alias_code

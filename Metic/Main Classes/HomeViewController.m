@@ -605,10 +605,10 @@
         eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
         NSString *beginTime = [event valueForKey:@"time"];
         NSString *joinTime = [event valueForKey:@"jointime"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'event_info'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],[NSString stringWithFormat:@"'%@'",eventData], nil];
-        
-        [[MTDatabaseHelper sharedInstance] insertToTable:@"event" withColumns:columns andValues:values];
+        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+        NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
+        [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
     }
     
 //    [self.sql closeMyDB];
