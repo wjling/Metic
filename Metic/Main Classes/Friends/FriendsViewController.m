@@ -408,7 +408,7 @@
 
 - (void)deleteFriendwithIndexPath:(NSIndexPath*)indexPath
 {
-//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD showWithStatus:@"正在处理..." maskType:SVProgressHUDMaskTypeClear];
 //    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
     if (indexPath.section >= sectionArray.count) {
         NSLog(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
@@ -432,6 +432,9 @@
             else
             {
                 NSLog(@"删除好友获取的rData为空");
+                [SVProgressHUD dismissWithError:@"网络异常"];
+                [groupFriends insertObject:friend atIndex:indexPath.row];
+                [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
                 return;
             }
             NSDictionary* response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -459,6 +462,7 @@
                         }
                     }
                     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:@{@"id":[NSString stringWithFormat:@"%@", fid]}];
+                    [SVProgressHUD dismissWithSuccess:@"删除好友成功" afterDelay:1.5];
 
                 }
                     break;
@@ -469,6 +473,7 @@
                     NSLog(@"删除好友失败，恢复成没删除的状态");
                     [groupFriends insertObject:friend atIndex:indexPath.row];
                     [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                    [SVProgressHUD dismissWithError:@"删除好友失败" afterDelay:1.5];
                 }
                     break;
             }
@@ -574,7 +579,7 @@
 //        [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
         NSNumber* fID = [aFriend objectForKey:@"id"];
         selectedFriendID = fID;
-        [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self];
+        [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self]; 
     }
     else if (tableView == self.friendTableView)
     {
@@ -955,6 +960,7 @@
         }
     }
 //    NSLog(@"search friend list: %@",searchFriendList);
+    NSLog(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.frame.size.width, friendSearchDisplayController.searchResultsTableView.frame.size.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
 
 }
 
