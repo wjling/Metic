@@ -96,7 +96,7 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
-                dispatch_async(dispatch_get_global_queue(0, 0), ^
+                dispatch_async(dispatch_get_main_queue(), ^
                                {
                                    [[MTUser sharedInstance].alias_dic setValue:alias_new forKey:[NSString stringWithFormat:@"%@",fid]];
                                    [[MTUser sharedInstance] aliasDicDidChanged];

@@ -815,6 +815,7 @@ static MTUser *singletonInstance;
         {
             [friend setValue:[NSNull null] forKey:@"alias"];
         }
+        [friendList replaceObjectAtIndex:i withObject:friend];
     }
 //    NSLog(@"after insert alias to friendlist: %@",self.friendList);
 }
@@ -822,24 +823,12 @@ static MTUser *singletonInstance;
 -(void)aliasDicDidChanged
 {
     dispatch_async(dispatch_get_global_queue(0, 0), ^
-                   {
-                       [self updateAliasInDB];
-                   });
+    {
+        [self updateAliasInDB];
+    });
     
-    dispatch_async(dispatch_get_global_queue(0, 0), ^
-                   {
-//                       for (NSMutableDictionary* aFriend in self.friendList) {
-//                           NSNumber* friend_id = [aFriend objectForKey:@"id"];
-//                           if ([friend_id isEqualToNumber:fid1]) {
-//                               [aFriend setValue:alias1 forKey:@"alias"];
-//                               break;
-//                           }
-//                       }
-                       [self insertAliasToFriendList];
-                       [self friendListDidChanged];
-                       
-                   });
-
+    [self insertAliasToFriendList];
+    [self friendListDidChanged];
 }
 
 
