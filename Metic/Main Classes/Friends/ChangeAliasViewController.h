@@ -15,7 +15,7 @@
 #import "myInputView.h"
 
 @interface ChangeAliasViewController : UIViewController
-@property (strong, nonatomic) myInputView *alias_view;
+@property (strong, nonatomic) UITextField *alias_view;
 @property (strong, nonatomic) UIBarButtonItem *ok_btn;
 @property (strong, nonatomic) InputHandleView *rootView;
 
