@@ -632,8 +632,10 @@ static const NSInteger MaxUploadCount = 20;
 
             UICollectionViewCell* cell = [self.imgCollectionView cellForItemAtIndexPath:indexPath];
             MJPhoto *photo = [[MJPhoto alloc] init];
-            UIImage* img = _uploadImgs[i];
-            photo.image = img;
+//            UIImage* img = _uploadImgs[i];
+//            photo.image = img;
+            ALAsset* asset = _uploadImgAssets[i];
+            photo.asset = asset;
             photo.srcImageView = (UIImageView*)[cell viewWithTag:1]; // 来源于哪个UIImageView
             photo.isSelected = YES;
             [photos addObject:photo];

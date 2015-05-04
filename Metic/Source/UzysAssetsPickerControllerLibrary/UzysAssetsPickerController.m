@@ -758,7 +758,11 @@
                 ALAsset *asset = [self.assets objectAtIndex:indexPath.item];
                 UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
                 MJPhoto *photo = [[MJPhoto alloc] init];
-                photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+//                photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+                photo.asset = asset;
+//                photo.image = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage
+//                                                  scale:asset.defaultRepresentation.scale
+//                                            orientation:(UIImageOrientation)asset.defaultRepresentation.orientation];
                 photo.srcImageView = (UIImageView*) cell; // 来源于哪个UIImageView
                 photo.isSelected = YES;
                 [photos addObject:photo];
