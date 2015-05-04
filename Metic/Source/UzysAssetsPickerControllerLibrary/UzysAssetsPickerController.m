@@ -12,6 +12,7 @@
 #import "UzysGroupPickerViewController.h"
 #import "MTPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "SVProgressHUD.H"
 
 
 @interface UzysAssetsPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MTPhotoBrowserDelegate>
@@ -638,10 +639,14 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && [[[self.assets[0] valueForProperty:ALAssetPropertyAssetURL] absoluteString] isEqualToString:[[asset valueForProperty:ALAssetPropertyAssetURL] absoluteString]])
                         {
-                            NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
-                            [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                            [self collectionView:self.collectionView didSelectItemAtIndexPath:newPath];
-                            [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
+                            if (([_collectionView indexPathsForSelectedItems].count < self.maximumNumberOfSelection)) {
+                                NSIndexPath *newPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                                [self.collectionView selectItemAtIndexPath:newPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                                [self collectionView:self.collectionView didSelectItemAtIndexPath:newPath];
+                                [self setAssetsCountWithSelectedIndexPaths:self.collectionView.indexPathsForSelectedItems];
+                            }
+                            
+                            [SVProgressHUD dismiss];
                         }
                     });
 
@@ -866,15 +871,18 @@
 
             }];
     }
-    [picker dismissViewControllerAnimated:YES completion:^{}];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
 
     
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [picker dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [picker dismissViewControllerAnimated:YES completion:^{}];
 }
 
 #pragma mark - UIViewController Property
