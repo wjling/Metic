@@ -960,7 +960,7 @@
         }
     }
 //    NSLog(@"search friend list: %@",searchFriendList);
-    NSLog(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.frame.size.width, friendSearchDisplayController.searchResultsTableView.frame.size.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
+    NSLog(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.contentSize.width, friendSearchDisplayController.searchResultsTableView.contentSize.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
 
 }
 
@@ -984,6 +984,12 @@
 //    [self search_friends];
     [searchBar resignFirstResponder];
 //    [self.friendTableView reloadData];
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
+{
+    [tableView setContentInset:UIEdgeInsetsZero];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
 
