@@ -157,7 +157,7 @@
     
     MJPhoto *photo = _photos[_currentPhotoIndex];
     // 按钮
-    _saveImageBtn.enabled = photo.image != nil && !photo.save;
+//    _saveImageBtn.enabled = photo.image != nil && !photo.save;
     
     //更新选择按钮
     [self refreshSelectBtn];

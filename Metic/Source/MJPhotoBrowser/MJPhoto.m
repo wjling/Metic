@@ -28,4 +28,17 @@
     }
 }
 
+-(UIImage *)image
+{
+    if (_image) {
+        return _image;
+    }else if(_asset){
+        UIImage* img = [UIImage imageWithCGImage:_asset.defaultRepresentation.fullScreenImage
+                                                         scale:_asset.defaultRepresentation.scale
+                                                   orientation:UIImageOrientationUp];
+        _image = img;
+        return _image;
+    }else return nil;
+}
+
 @end

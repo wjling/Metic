@@ -61,6 +61,11 @@
     [self showImage];
 }
 
+#pragma mark - 清除图片
+- (void)removeImg{
+    _imageView.image = nil;
+}
+
 #pragma mark 显示图片
 - (void)showImage
 {
@@ -89,25 +94,33 @@
 #pragma mark 开始加载图片
 - (void)photoStartLoad
 {
-    if (_photo.image) {
-        self.scrollEnabled = YES;
-        _imageView.image = _photo.image;
-    } else if(_photo.url){
-        self.scrollEnabled = NO;
-        // 直接显示进度条
-        [_photoLoadingView showLoading];
-        [self addSubview:_photoLoadingView];
-        
-        __weak MJPhotoView *photoView = self;
-        __weak MJPhotoLoadingView *loading = _photoLoadingView;
-        [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-            if (receivedSize > kMinProgress) {
-                loading.progress = (float)receivedSize/expectedSize;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        UIImage* img = _photo.image;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_photo.image) {
+                self.scrollEnabled = YES;
+                _imageView.image = _photo.image;
+                [self adjustFrame];
+            } else if(_photo.url){
+                self.scrollEnabled = NO;
+                // 直接显示进度条
+                [_photoLoadingView showLoading];
+                [self addSubview:_photoLoadingView];
+                
+                __weak MJPhotoView *photoView = self;
+                __weak MJPhotoLoadingView *loading = _photoLoadingView;
+                [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                    if (receivedSize > kMinProgress) {
+                        loading.progress = (float)receivedSize/expectedSize;
+                    }
+                } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [photoView photoDidFinishLoadWithImage:image];
+                }];
             }
-        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            [photoView photoDidFinishLoadWithImage:image];
-        }];
-    }
+        });
+    });
+    
+    
 }
 
 #pragma mark 加载完毕

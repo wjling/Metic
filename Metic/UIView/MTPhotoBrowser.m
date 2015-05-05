@@ -115,6 +115,7 @@
     _photoScrollView.contentSize = CGSizeMake(frame.size.width * _photos.count, 0);
     [self.view addSubview:_photoScrollView];
     _photoScrollView.contentOffset = CGPointMake(_currentPhotoIndex * frame.size.width, 0);
+    [self showPhotos];
 }
 
 - (void)setPhotos:(NSArray *)photos
@@ -187,6 +188,7 @@
     CGRect visibleBounds = _photoScrollView.bounds;
     NSInteger firstIndex = (int)floorf((CGRectGetMinX(visibleBounds)+kPadding*2) / CGRectGetWidth(visibleBounds));
     NSInteger lastIndex  = (int)floorf((CGRectGetMaxX(visibleBounds)-kPadding*2-1) / CGRectGetWidth(visibleBounds));
+    
     if (firstIndex < 0) firstIndex = 0;
     if (firstIndex >= _photos.count) firstIndex = _photos.count - 1;
     if (lastIndex < 0) lastIndex = 0;
@@ -207,6 +209,13 @@
         [_reusablePhotoViews removeObject:[_reusablePhotoViews anyObject]];
     }
     
+    firstIndex --;
+    lastIndex ++;
+    if (firstIndex < 0) firstIndex = 0;
+    if (firstIndex >= _photos.count) firstIndex = _photos.count - 1;
+    if (lastIndex < 0) lastIndex = 0;
+    if (lastIndex >= _photos.count) lastIndex = _photos.count - 1;
+    
     for (NSInteger index = firstIndex; index <= lastIndex; index++) {
         if (![self isShowingPhotoViewAtIndex:index]) {
             [self showPhotoViewAtIndex:index];
@@ -221,7 +230,10 @@
     if (!photoView) { // 添加新的图片view
         photoView = [[MJPhotoView alloc] init];
         photoView.photoViewDelegate = self;
+    }else{
+        [photoView removeImg];
     }
+
     
     // 调整当期页的frame
     CGRect bounds = _photoScrollView.bounds;
@@ -244,15 +256,20 @@
 - (void)removePhotoViewAtIndex:(NSInteger)index
 {
     NSInteger photoViewIndex;
+    MJPhotoView *selePhotoView;
     for (MJPhotoView *photoView in _visiblePhotoViews) {
         photoViewIndex = kPhotoViewIndex(photoView);
         if (photoViewIndex == index) {
-            [_visiblePhotoViews removeObject:photoView];
-            [photoView removeFromSuperview];
+            selePhotoView = photoView;
         }else if(photoViewIndex > index){
             [photoView setTag:photoViewIndex - 1];
         }
     }
+    if (selePhotoView) {
+        [_visiblePhotoViews removeObject:selePhotoView];
+        [selePhotoView removeFromSuperview];
+    }
+    
     NSMutableArray* tmp = [NSMutableArray arrayWithArray:self.photos];
     [tmp removeObjectAtIndex:index];
     self.photos = tmp;
@@ -310,7 +327,11 @@
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self showPhotos];
     [self updateTollbarState];
 }
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self showPhotos];
+}
+
 @end

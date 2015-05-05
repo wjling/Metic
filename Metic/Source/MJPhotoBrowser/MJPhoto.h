@@ -5,11 +5,12 @@
 //  Copyright (c) 2013年 itcast. All rights reserved.
 
 #import <Foundation/Foundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface MJPhoto : NSObject
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic, strong) UIImage *image; // 完整的图片
-
+@property (nonatomic, strong) ALAsset *asset;
 @property (nonatomic, strong) UIImageView *srcImageView; // 来源view
 @property (nonatomic, strong, readonly) UIImage *placeholder;
 @property (nonatomic, strong, readonly) UIImage *capture;
