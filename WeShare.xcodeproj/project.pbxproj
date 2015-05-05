@@ -340,6 +340,9 @@
 		51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0319E6307500E487F1 /* HTTPRedirectResponse.m */; };
 		51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0619E6307500E487F1 /* HTTPServer.m */; };
 		51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0819E6307500E487F1 /* WebSocket.m */; };
+		F80DD1A11AF7A36000DC1CA3 /* SquareTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F80DD1A01AF7A36000DC1CA3 /* SquareTableView.m */; };
+		F80DD1A51AF7A4A000DC1CA3 /* SquareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F80DD1A31AF7A4A000DC1CA3 /* SquareTableViewCell.m */; };
+		F80DD1A61AF7A4A000DC1CA3 /* SquareTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F80DD1A41AF7A4A000DC1CA3 /* SquareTableViewCell.xib */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -1051,6 +1054,11 @@
 		51F4CB0619E6307500E487F1 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		51F4CB0719E6307500E487F1 /* WebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket.h; sourceTree = "<group>"; };
 		51F4CB0819E6307500E487F1 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
+		F80DD19F1AF7A36000DC1CA3 /* SquareTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareTableView.h; sourceTree = "<group>"; };
+		F80DD1A01AF7A36000DC1CA3 /* SquareTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareTableView.m; sourceTree = "<group>"; };
+		F80DD1A21AF7A4A000DC1CA3 /* SquareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareTableViewCell.h; sourceTree = "<group>"; };
+		F80DD1A31AF7A4A000DC1CA3 /* SquareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareTableViewCell.m; sourceTree = "<group>"; };
+		F80DD1A41AF7A4A000DC1CA3 /* SquareTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquareTableViewCell.xib; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -1833,6 +1841,11 @@
 				5127DEDA198F21A100FB5A41 /* NearbyEventViewController.m */,
 				083FF69119CF003A001BB61E /* EventSearchViewController.h */,
 				083FF69219CF003A001BB61E /* EventSearchViewController.m */,
+				F80DD19F1AF7A36000DC1CA3 /* SquareTableView.h */,
+				F80DD1A01AF7A36000DC1CA3 /* SquareTableView.m */,
+				F80DD1A21AF7A4A000DC1CA3 /* SquareTableViewCell.h */,
+				F80DD1A31AF7A4A000DC1CA3 /* SquareTableViewCell.m */,
+				F80DD1A41AF7A4A000DC1CA3 /* SquareTableViewCell.xib */,
 			);
 			name = EventSquare;
 			sourceTree = "<group>";
@@ -2690,6 +2703,7 @@
 				04B6F8A419A25D5C00229393 /* face21.png in Resources */,
 				04B6F8A919A25D5C00229393 /* face26.png in Resources */,
 				04B6F89319A25D5C00229393 /* face04.png in Resources */,
+				F80DD1A61AF7A4A000DC1CA3 /* SquareTableViewCell.xib in Resources */,
 				F83369531AD00AE100B41435 /* MBProgressHUD.bundle in Resources */,
 				F864C0B21ADF858E00E2EB23 /* UMSocialSDKResourcesNew.bundle in Resources */,
 				04B6F8AD19A25D5C00229393 /* expressionImage.plist in Resources */,
@@ -2965,10 +2979,12 @@
 				08BEE9C51A2DEFAA00132F18 /* TMQuiltViewCell.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
+				F80DD1A51AF7A4A000DC1CA3 /* SquareTableViewCell.m in Sources */,
 				512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */,
 				F83369471ACFF01E00B41435 /* MJPhotoToolbar.m in Sources */,
 				08E92DD519B2CCD0002499BF /* VideoWallViewController.m in Sources */,
 				51F4CB1419E6307500E487F1 /* DDASLLogger.m in Sources */,
+				F80DD1A11AF7A36000DC1CA3 /* SquareTableView.m in Sources */,
 				51F4CB2219E6307500E487F1 /* HTTPErrorResponse.m in Sources */,
 				48A4DDF5194FE42D0066BF8D /* PinyinFormatter.m in Sources */,
 				F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */,
