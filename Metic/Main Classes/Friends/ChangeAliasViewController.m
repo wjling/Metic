@@ -51,10 +51,17 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];  //不设背景会有一种视觉上的违和感
     self.navigationItem.title = @"修改好友备注";
     
-    alias_view = [[myInputView alloc]init];
+    UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
+    alias_view = [[UITextField alloc]init];
     [alias_view setFrame:CGRectMake(20, 60, 280, 40)];
-    alias_view.prefix_label.text = @"备注名";
-    alias_view.textField.delegate = rootView;
+    alias_view.layer.borderWidth = 1.5;
+    alias_view.layer.borderColor = color.CGColor;
+    alias_view.layer.cornerRadius = 3.5;
+    alias_view.layer.masksToBounds = YES;
+    alias_view.placeholder = @"输入好友备注";
+    [alias_view setValue:[NSNumber numberWithInt:10] forKey:@"paddingLeft"];
+//    alias_view.prefix_label.text = @"备注名";
+//    alias_view.textField.delegate = rootView;
     
     ok_btn = [[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(okBtnClick)];
     
@@ -65,7 +72,7 @@
 
 -(void)okBtnClick
 {
-    alias_new = alias_view.textField.text? alias_view.textField.text:@"";
+    alias_new = alias_view.text? alias_view.text:@"";
     NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                      [MTUser sharedInstance].userid, @"id",
                                      fid, @"friend_id",
@@ -96,7 +103,7 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
-                dispatch_async(dispatch_get_global_queue(0, 0), ^
+                dispatch_async(dispatch_get_main_queue(), ^
                                {
                                    [[MTUser sharedInstance].alias_dic setValue:alias_new forKey:[NSString stringWithFormat:@"%@",fid]];
                                    [[MTUser sharedInstance] aliasDicDidChanged];

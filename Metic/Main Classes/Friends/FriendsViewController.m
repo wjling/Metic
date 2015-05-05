@@ -408,14 +408,14 @@
 
 - (void)deleteFriendwithIndexPath:(NSIndexPath*)indexPath
 {
-//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD showWithStatus:@"正在处理..." maskType:SVProgressHUDMaskTypeClear];
 //    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
     if (indexPath.section >= sectionArray.count) {
         NSLog(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
         return;
     }
     NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section];
-    NSMutableArray* groupFriends = [sortedFriendDic objectForKey:key];
+    __block NSMutableArray* groupFriends = [sortedFriendDic objectForKey:key];
     if (indexPath.row < groupFriends.count) {
         NSMutableDictionary* friend = [groupFriends objectAtIndex:indexPath.row];
         NSNumber* fid = [friend objectForKey:@"id"];
@@ -431,7 +431,10 @@
             }
             else
             {
-                NSLog(@"删除好友获取的rData为空");
+                NSLog(@"删除好友获取的rData为空, indexPath.section: %d, indexPath.row: %d", indexPath.section, indexPath.row);
+                [SVProgressHUD dismissWithError:@"网络异常"];
+//                [groupFriends insertObject:friend atIndex:indexPath.row];
+//                [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
                 return;
             }
             NSDictionary* response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -441,6 +444,16 @@
                 {
                     NSInteger count = [MTUser sharedInstance].friendList.count;
                     NSMutableArray* arraycopy = [[MTUser sharedInstance].friendList mutableCopy];
+                    [groupFriends removeObjectAtIndex:indexPath.row];
+                    [friendTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+                    if (groupFriends.count == 0)
+                    {
+                        [sortedFriendDic removeObjectForKey:key];
+                        __block __weak FriendsViewController* Fvc = self;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [Fvc friendTableviewReload];
+                        });
+                    }
                     for (NSInteger i = count - 1; i >= 0; i--) {
                         NSMutableDictionary* friend_copy = [arraycopy objectAtIndex:i];
                         NSInteger fid_copy = [[friend_copy objectForKey:@"id"]integerValue];
@@ -459,6 +472,7 @@
                         }
                     }
                     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:@{@"id":[NSString stringWithFormat:@"%@", fid]}];
+                    [SVProgressHUD dismissWithSuccess:@"删除好友成功" afterDelay:1.5];
 
                 }
                     break;
@@ -467,24 +481,25 @@
                 default:
                 {
                     NSLog(@"删除好友失败，恢复成没删除的状态");
-                    [groupFriends insertObject:friend atIndex:indexPath.row];
-                    [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+//                    [groupFriends insertObject:friend atIndex:indexPath.row];
+//                    [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+                    [SVProgressHUD dismissWithError:@"删除好友失败" afterDelay:1.5];
                 }
                     break;
             }
 
         }];
         
-        [groupFriends removeObjectAtIndex:indexPath.row];
-        [friendTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-        if (groupFriends.count == 0)
-        {
-            [sortedFriendDic removeObjectForKey:key];
-            __block __weak FriendsViewController* Fvc = self;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [Fvc friendTableviewReload];
-            });
-        }
+//        [groupFriends removeObjectAtIndex:indexPath.row];
+//        [friendTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+//        if (groupFriends.count == 0)
+//        {
+//            [sortedFriendDic removeObjectForKey:key];
+//            __block __weak FriendsViewController* Fvc = self;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [Fvc friendTableviewReload];
+//            });
+//        }
         
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 2.0), dispatch_get_main_queue(), ^{
 //            [groupFriends insertObject:friend atIndex:indexPath.row];
@@ -574,7 +589,7 @@
 //        [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
         NSNumber* fID = [aFriend objectForKey:@"id"];
         selectedFriendID = fID;
-        [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self];
+        [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self]; 
     }
     else if (tableView == self.friendTableView)
     {
@@ -955,6 +970,7 @@
         }
     }
 //    NSLog(@"search friend list: %@",searchFriendList);
+    NSLog(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.contentSize.width, friendSearchDisplayController.searchResultsTableView.contentSize.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
 
 }
 
@@ -978,6 +994,12 @@
 //    [self search_friends];
     [searchBar resignFirstResponder];
 //    [self.friendTableView reloadData];
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView
+{
+    [tableView setContentInset:UIEdgeInsetsZero];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
 }
 
 
