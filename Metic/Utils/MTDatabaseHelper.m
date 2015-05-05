@@ -234,7 +234,7 @@ static MTDatabaseHelper *singleInstance = nil;
 -(void)addsColumntoTable:(NSString*)tableName addsColumn:(NSString*)column withDefault:(id)defaultValue
 {
     if (!tableName || !column) return;
-    NSMutableString* sql = [[NSMutableString alloc]initWithFormat:@"ALTER TABLE %@ ADD COLUMN placeName %@",tableName,column];
+    NSMutableString* sql = [[NSMutableString alloc]initWithFormat:@"ALTER TABLE %@ ADD COLUMN %@",tableName,column];
     [queue inDatabase:^(FMDatabase *db) {
         [db executeUpdate:sql];
     }];
