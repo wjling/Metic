@@ -215,6 +215,14 @@
     if ([dict valueForKey:@"comment_num"]) {
         self.comment_num.text = [NSString stringWithFormat:@"%@",[dict valueForKey:@"comment_num"]];
     }else self.comment_num.text = @"";
+    NSString* specification = [dict valueForKey:@"specification"];
+    if (specification && ![specification isEqualToString:@""]) {
+        self.pictureDescription.hidden = NO;
+        self.pictureDescription.text = specification;
+    }else{
+        self.pictureDescription.hidden = YES;
+        self.pictureDescription.text = @"";
+    }
     self.pictureDescription.text = [dict valueForKey:@"specification"];
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]]];
