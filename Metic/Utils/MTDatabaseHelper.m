@@ -208,20 +208,27 @@ static MTDatabaseHelper *singleInstance = nil;
 //删除操作
 - (void)deleteTurpleFromTable:(NSString*)tableName withWhere:(NSDictionary*)wheres
 {
-    NSInteger wheresCount = wheres.count;
-    if (!tableName || !wheresCount) {
+    if (!tableName || [tableName isEqualToString:@""]) {
         NSLog(@"input data error");
         return ;
     }
-    NSMutableString* sql = [[NSMutableString alloc]initWithFormat:@"DELETE FROM %@ WHERE ",tableName];
-    NSArray* wheresKeys = wheres.allKeys;
-    for (int i = 0; i < wheresCount; i++) {
-        NSString* key = [wheresKeys objectAtIndex:i];
-        NSString* value =[wheres objectForKey:key];
-        [sql appendFormat:@"%@ = %@",key, value];
-        if (i != wheresCount-1) {
-            [sql appendString:@" and "];
+    NSMutableString* sql;
+    if (wheres && wheres.count > 0) {
+        sql = [[NSMutableString alloc]initWithFormat:@"DELETE FROM %@ WHERE ",tableName];
+        NSInteger wheresCount = wheres.count;
+        NSArray* wheresKeys = wheres.allKeys;
+        for (int i = 0; i < wheresCount; i++) {
+            NSString* key = [wheresKeys objectAtIndex:i];
+            NSString* value =[wheres objectForKey:key];
+            [sql appendFormat:@"%@ = %@",key, value];
+            if (i != wheresCount-1) {
+                [sql appendString:@" and "];
+            }
         }
+
+    }
+    else{
+        sql = [[NSMutableString alloc] initWithFormat:@"DELETE * FROM %@",tableName];
     }
     NSLog(@"delete sql: %@",sql);
     [queue inDatabase:^(FMDatabase *db) {

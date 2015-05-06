@@ -58,6 +58,8 @@ typedef  enum{
 - (void)switchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
 - (void)openMenuAndSwitchToViewController:(UIViewController *)viewController withCompletion:(void (^)())completion;
 - (void)setEnableSwipeGesture:(BOOL)markEnableSwipeGesture;
+- (void)showLeftBarButtonDian;
+- (void)hideLeftBarButtonDian;
 
 //- (void)reconnect;
 

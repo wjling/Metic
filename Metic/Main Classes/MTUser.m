@@ -656,6 +656,7 @@ static MTUser *singletonInstance;
 {
     //    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
     NSLog(@"insertToFriendTable begin");
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:nil];
 
     for (int i = 0; i < friends.count; i++) {
         NSDictionary* friend = [friends objectAtIndex:i];

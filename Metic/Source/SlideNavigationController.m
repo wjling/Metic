@@ -35,6 +35,9 @@
 #import "../Main Classes/LaunchEventViewController.h"
 
 @interface SlideNavigationController()
+{
+    UIImageView* dian;
+}
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
@@ -250,17 +253,51 @@ static SlideNavigationController *singletonInstance;
     return nil;
 }
 
+- (void)showLeftBarButtonDian
+{
+//    if (self.leftbarButtonItem)
+    {
+        dian.hidden = NO;
+        NSLog(@"显示左上角的红点");
+    }
+    
+}
+
+- (void)hideLeftBarButtonDian
+{
+//    if (self.leftbarButtonItem)
+    {
+        dian.hidden = YES;
+    }
+    NSLog(@"隐藏左上角的红点");
+}
+
 #pragma mark - Private Methods -
 
 - (UIBarButtonItem *)barButtonItemForMenu:(Menu)menu
 {
+    if (!dian) {
+        dian = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+        dian.image = [UIImage imageNamed:@"选择点图标"];
+        dian.tag = 111;
+        
+        NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+        NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+        NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+        int flag = [[[userSettings objectForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"] integerValue];
+        if (flag < 0) {
+            dian.hidden = YES;
+        }
+    }
+    
 	SEL selector = (menu == MenuLeft) ? @selector(leftMenuSelected:) : @selector(righttMenuSelected:);
 	UIBarButtonItem *customButton = (menu == MenuLeft) ? self.leftbarButtonItem : self.rightBarButtonItem;
-	
+	NSLog(@"+++++++++++barButtonItemForMenu");
 	if (customButton)
 	{
 		customButton.action = selector;
 		customButton.target = self;
+        NSLog(@"111111");
 		return customButton;
 	}
 	else
@@ -273,10 +310,26 @@ static SlideNavigationController *singletonInstance;
             [leftButton setTitle:@"        " forState:UIControlStateNormal];
             [leftButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
             [leftButton addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+            [dian removeFromSuperview];
+            [leftButton addSubview:dian];
             UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
+            NSLog(@"222222");
             return leftButtonItem;
-        }else return [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:selector];
+        }else
+        {
+            UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [leftButton setFrame:CGRectMake(0, 0, 30, 30)];
+            [leftButton setImage:image forState:UIControlStateNormal];
+            [leftButton addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
+            [dian removeFromSuperview];
+            [leftButton addSubview:dian];
+            UIBarButtonItem* leftButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+            NSLog(@"3333333");
+//            [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:selector];
+            return leftButtonItem;
+        }
 	}
+    
 }
 
 - (BOOL)isMenuOpen
