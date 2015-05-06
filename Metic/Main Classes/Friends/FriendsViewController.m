@@ -179,7 +179,6 @@
             NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
             if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
                 NSLog(@"好友列表初始化：好友排序未完成且不在进行好友排序");
-                
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
                                    [[MTUser sharedInstance] friendListDidChanged];
@@ -207,6 +206,19 @@
                     [self friendTableviewReload];;
                 });
             }
+            
+            [[MTUser sharedInstance] synchronizeFriends]; //进行一次好友同步
+            while([MTUser sharedInstance].doingSynchronizeFriend) {
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+            }
+            self.sectionArray = [[MTUser sharedInstance] sectionArray];
+            self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
+            NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self friendTableviewReload];;
+            });
+
             
         }
         else //如果好友列表为空，可能是同步好友失败，也有可能真为空

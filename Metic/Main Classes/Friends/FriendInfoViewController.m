@@ -12,6 +12,7 @@
 #import "BannerViewController.h"
 #import "AddFriendConfirmViewController.h"
 #import "MTDatabaseHelper.h"
+#import "SVProgressHUD.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate, UITextFieldDelegate>
 {
@@ -67,10 +68,10 @@
 
     [self initViews];
     [self getUserInfo];
+    [self checkAvatarUpdate];
     [self.view bringSubviewToFront:moreFunction_view];
      NSLog(@"friend info fid: %@",fid);
     
-    [self refreshFriendInfo];
 }
 
 //返回上一层
@@ -315,25 +316,106 @@
     return scaledImage; 
 }
 
+-(void)updateAvatartoDB:(NSDictionary*)avatarInfo
+{
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[avatarInfo valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[avatarInfo valueForKey:@"updatetime"]], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
+}
+
+-(void)checkAvatarUpdate
+{
+    [SVProgressHUD showWithStatus:nil maskType:SVProgressHUDMaskTypeClear];
+    self.fInfoView_imgV.contentMode = UIViewContentModeScaleAspectFill;
+    self.fInfoView_imgV.clipsToBounds = YES;
+    self.fInfoView_imgV.image = [UIImage imageNamed:@"默认用户头像"];
+    
+    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
+    [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!image) {
+            image = [UIImage imageNamed:@"默认用户头像"];
+        }
+        [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
+    }];
+    
+    [[MTDatabaseHelper sharedInstance] queryTable:@"avatar" withSelect:@[@"*"] andWhere:@{@"id":fid} completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray && resultsArray.count > 0) {
+            NSDictionary* temp_dic = [resultsArray objectAtIndex:0];
+            NSNumber* f_id = [temp_dic objectForKey:@"id"];
+            if ([f_id integerValue] == [fid integerValue]) {
+                NSString* local_updatetime = [temp_dic objectForKey:@"updatetime"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid, @"id", nil];
+                    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                    [http sendMessage:json_data withOperationCode:GET_AVATAR_UPDATETIME finshedBlock:^(NSData *rData) {
+                        NSString* temp;
+                        if (rData)
+                        {
+                            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        }
+                        else
+                        {
+                            [SVProgressHUD dismissWithError:@"网络异常" afterDelay:1.5];
+                            return;
+                        }
+                        NSLog(@"查看好友头像更新时间,Received Data: %@",temp);
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
+                        switch (cmd) {
+                            case NORMAL_REPLY:
+                            {
+                                NSArray* friends_updatetime_arr = [response1 objectForKey:@"list"];
+                                for (int i = 0; i < friends_updatetime_arr.count; i++) {
+                                    NSDictionary* friend_update_time_dic = [friends_updatetime_arr objectAtIndex:i];
+                                    NSString* server_updatetime = [friend_update_time_dic objectForKey:@"updatetime"];
+                                    NSNumber* friend_id = [friend_update_time_dic objectForKey:@"id"];
+                                    if ([friend_id integerValue] == [fid integerValue]) {
+                                        if (![server_updatetime isEqualToString:local_updatetime]) {
+                                            dispatch_async(dispatch_get_main_queue(), ^{
+                                                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
+                                                [self.fInfoView_imgV setImageToBlur:[UIImage imageNamed:@"默认用户头像"] blurRadius:6 brightness:-0.1 completionBlock:nil];
+                                                [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                                                    if (!image) {
+                                                        image = [UIImage imageNamed:@"默认用户头像"];
+                                                    }
+                                                    [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
+                                                    
+                                                }];
+                                                
+                                            });
+                                            [self updateAvatartoDB:friend_update_time_dic];
+                                            
+                                        }
+                                        break;
+                                    }
+                                }
+                                [SVProgressHUD dismiss];
+                            }
+                                break;
+                                
+                            default:
+                                [SVProgressHUD dismissWithError:@"获取头像异常" afterDelay:1.5];
+                                break;
+                        }
+                    }];
+                });
+            }
+        }else [SVProgressHUD dismiss];
+    }];
+}
+
 -(void)refreshFriendInfo
 {
+    
     NSString* name = [friendInfo_dic objectForKey:@"name"];
     NSString* location = [friendInfo_dic objectForKey:@"location"];
     NSNumber* gender = [friendInfo_dic objectForKey:@"gender"];
 //    NSString* email = [friendInfo_dic objectForKey:@"email"];
     NSString* sign = [friendInfo_dic objectForKey:@"sign"];
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-    self.fInfoView_imgV.contentMode = UIViewContentModeScaleAspectFill;
-    self.fInfoView_imgV.clipsToBounds = YES;
-    self.fInfoView_imgV.image = [UIImage imageNamed:@"默认用户头像"];
-    PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
-    [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (!image) {
-            image = [UIImage imageNamed:@"默认用户头像"];
-        }
-        [self.fInfoView_imgV setImageToBlur:image blurRadius:6 brightness:-0.1 completionBlock:nil];
-        
-    }];
+    
     NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
     name_label.text = name;
     if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
