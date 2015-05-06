@@ -94,10 +94,12 @@ static MenuViewController *singletonInstance;
     NSLog(@"user %@ menu dianReset, tab_show： %ld", [MTUser sharedInstance].userid,(long)tab_show);
     if (tab_show >= 0) {
         [self showUpdateInRow:4];
+        [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
     }
     else
     {
         [self hideUpdateInRow:4];
+        [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
     }
 }
 
@@ -112,6 +114,7 @@ static MenuViewController *singletonInstance;
     NSLog(@"侧边栏，viewWillAppear, hasUnreadNotification1: %@", flag);
     if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
+        [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
     }
 }
 
@@ -387,6 +390,7 @@ static MenuViewController *singletonInstance;
                 notificationsViewController = (NotificationsViewController*)vc;
             }else vc = notificationsViewController;
             [self hideUpdateInRow:4];
+            [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
 			break;
         
         case 5:

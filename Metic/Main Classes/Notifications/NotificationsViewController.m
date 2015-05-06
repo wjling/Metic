@@ -194,6 +194,7 @@ enum Response_Type
     [userDfs synchronize];
     
     [self.appListener.leftMenu hideUpdateInRow:4];
+    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
     
 }
 
@@ -318,6 +319,7 @@ enum Response_Type
 
     NSLog(@"消息中心收到推送，隐藏消息中心红点");
     [[MenuViewController sharedInstance] hideUpdateInRow:4];
+    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
 }
 
 #pragma mark - Navigation
@@ -996,7 +998,7 @@ enum Response_Type
     [userDfs synchronize];
     
     [[MenuViewController sharedInstance] hideUpdateInRow:4];
-
+    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
 }
 
 

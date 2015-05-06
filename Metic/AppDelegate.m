@@ -755,6 +755,7 @@
     if (flag >= 0) {
 //        NSLog(@"收到新推送，显示消息中心红点");
         [self.leftMenu showUpdateInRow:4];
+        [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
     }
     
     if (isInBackground) {
@@ -1412,6 +1413,7 @@
     int flag = [[[userSettings objectForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"] integerValue];
     if (flag >= 0) {
         [self.leftMenu showUpdateInRow:4];
+        [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
     }
     
 //    numOfSyncMessages = -1;

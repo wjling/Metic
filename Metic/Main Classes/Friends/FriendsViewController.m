@@ -471,8 +471,9 @@
                         NSInteger fid_copy = [[friend_copy objectForKey:@"id"]integerValue];
                         if ([fid integerValue] == fid_copy) {
                             [[MTUser sharedInstance].friendList removeObjectAtIndex:i];
+                            [[MTUser sharedInstance].alias_dic removeObjectForKey:[NSString stringWithFormat:@"%@",fid]];
                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                [[MTUser sharedInstance] friendListDidChanged];
+                                [[MTUser sharedInstance] aliasDicDidChanged];
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     friendList = [MTUser sharedInstance].friendList;
                                     sectionArray = [MTUser sharedInstance].sectionArray;
