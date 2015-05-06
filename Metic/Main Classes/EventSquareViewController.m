@@ -155,6 +155,7 @@
     
     _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 260)];
     [_contentView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
+    [_contentView setTag:112];
 //    _contentView.layer.borderColor = [UIColor redColor].CGColor;
 //    _contentView.layer.borderWidth = 2;
     [self.view addSubview:_contentView];
@@ -596,6 +597,8 @@
 {
     if (indexPath.row == 0) {
         return 260;
+    }else if(indexPath.row == _eventArray.count){
+        return CGRectGetHeight(self.view.frame) - 215;
     }else return 123;
 }
 
@@ -603,6 +606,8 @@
 {
     if (indexPath.row == 0) {
         UITableViewCell*cell = [[UITableViewCell alloc]init];
+        cell.backgroundColor = [UIColor clearColor];
+//        cell.contentView.backgroundColor = [UIColor clearColor];
         [cell setTag:110];
         if (_contentView) {
             [_contentView removeFromSuperview];
@@ -634,25 +639,16 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.row == 0) return;
-//    nearbyEventTableViewCell* cell = (nearbyEventTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-//    NSDictionary* dict = cell.dict;
-//    
-//    if (![[dict valueForKey:@"isIn"] boolValue]) {
-//        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
-//        viewcontroller.eventInfo = dict;
-//        [self.navigationController pushViewController:viewcontroller animated:YES];
-//    }else{
-//        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
-//        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
-//        
-//        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-//        
-//        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
-//        eventDetailView.eventId = eventId;
-//        eventDetailView.eventLauncherId = eventLauncherId;
-//        [self.navigationController pushViewController:eventDetailView animated:YES];
-//    }
+    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell && [cell isKindOfClass:[SquareTableViewCell class]]) {
+        CGRect frame = cell.frame;
+        if (CGRectGetMinY(frame) < tableView.contentOffset.y) {
+            frame.origin.y += 123;
+        }
+        [tableView setContentOffset:CGPointMake(0, frame.origin.y - 92) animated:YES];
+    }
     
     
 }
