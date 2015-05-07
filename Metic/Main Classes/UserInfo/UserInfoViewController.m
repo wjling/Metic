@@ -254,6 +254,7 @@
 {
     BannerViewController* bannerView = [[BannerViewController alloc] init];
     bannerView.banner = self.avatar_imageView.image;
+    bannerView.url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid]];
     [self presentViewController:bannerView animated:YES completion:^{}];
 }
 

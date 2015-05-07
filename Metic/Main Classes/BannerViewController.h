@@ -11,4 +11,5 @@
 @interface BannerViewController : UIViewController
 @property (nonatomic,strong) UIImageView* imageView;
 @property (nonatomic,strong) UIImage* banner;
+@property (nonatomic,strong) NSString* url;
 @end
