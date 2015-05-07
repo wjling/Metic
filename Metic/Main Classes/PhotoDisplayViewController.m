@@ -274,7 +274,7 @@
 
 -(void)showOption:(UIGestureRecognizer*)sender
 {
-    if (!self.navigationController.navigationBarHidden) return;
+    if (self.navigationController.navigationBarHidden) return;
     if (sender.state != UIGestureRecognizerStateBegan) return;
     int index = self.scrollView.contentOffset.x/320;
     NSNumber* authorId = [self.photo_list[index] valueForKey:@"author_id"];
