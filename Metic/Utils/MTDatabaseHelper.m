@@ -228,7 +228,7 @@ static MTDatabaseHelper *singleInstance = nil;
 
     }
     else{
-        sql = [[NSMutableString alloc] initWithFormat:@"DELETE * FROM %@",tableName];
+        sql = [[NSMutableString alloc] initWithFormat:@"DELETE FROM %@",tableName];
     }
     NSLog(@"delete sql: %@",sql);
     [queue inDatabase:^(FMDatabase *db) {
