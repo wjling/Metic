@@ -657,7 +657,6 @@ static MTUser *singletonInstance;
     //    NSString* path = [NSString stringWithFormat:@"%@/db",user.userid];
     NSLog(@"insertToFriendTable begin");
     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"friend" withWhere:nil];
-
     for (int i = 0; i < friends.count; i++) {
         NSDictionary* friend = [friends objectAtIndex:i];
         NSString* friendEmail = [friend objectForKey:@"email"];
@@ -994,12 +993,14 @@ static MTUser *singletonInstance;
             NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
             if (tempFriends) {
                 if (tempFriends.count) {
-                    [self.friendList removeAllObjects];
+//                    [self.friendList removeAllObjects];
+                    NSMutableArray* temp_friendlist = [[NSMutableArray alloc]init];
                     for (int i = 0; i < tempFriends.count; i++) {
                         NSDictionary* friend = [tempFriends objectAtIndex:i];
                         NSMutableDictionary* friend1 = [[NSMutableDictionary alloc]initWithDictionary:friend];
-                        [self.friendList addObject:friend1];
+                        [temp_friendlist addObject:friend1];
                     }
+                    self.friendList = temp_friendlist;
                     [self insertAliasToFriendList];
                     NSArray* backupFriendList = [[NSArray alloc]initWithArray:self.friendList copyItems:YES];
                     NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(insertToFriendTable:) object:backupFriendList];
