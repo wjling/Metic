@@ -213,36 +213,6 @@ static MTUser *singletonInstance;
 
 -(void)updateAvatar
 {
-//    [sql openMyDB:path];
-//    NSLog(@"%@",self.avatarInfo);
-//    for (NSInteger i = 0;i < self.avatarInfo.count; i++) {
-//        NSDictionary *dictionary = [self.avatarInfo objectAtIndex:i];
-//        NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
-//        NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[dictionary valueForKey:@"id"],@"id", nil];
-//        NSMutableArray *results = [sql queryTable:@"avatar" withSelect:seletes andWhere:wheres];
-//        
-//        if (!results.count) {
-//            NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-//            NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-//            [sql insertToTable:@"avatar" withColumns:columns andValues:values];
-//        }else{
-//            NSDictionary* result = results[0];
-//            NSString *local_update = [result valueForKey:@"updatetime"];
-//            NSString *net_update = [dictionary valueForKey:@"updatetime"];
-//            if (![local_update isEqualToString:net_update]) {
-//                NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
-//                NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
-//                [sql insertToTable:@"avatar" withColumns:columns andValues:values];
-//                NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
-//                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-////                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
-//                }];
-//            }
-//        }
-//    }
-    
-    
-    
     for (NSInteger i = 0;i < self.avatarInfo.count; i++) {
         NSDictionary *dictionary = [self.avatarInfo objectAtIndex:i];
         NSArray *seletes = [[NSArray alloc]initWithObjects:@"updatetime", nil];
@@ -262,9 +232,9 @@ static MTUser *singletonInstance;
                     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
                     [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
                     NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
-                    [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-                        //                    NSLog(@"删除 id号：%@ 用户的头像",[dictionary valueForKey:@"id"]);
-                    }];
+                    [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl];
+                    NSString* avatarHDUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[dictionary valueForKey:@"id"]]];
+                    [[SDImageCache sharedImageCache] removeImageForKey:avatarHDUrl];
                 }
             }
         }];

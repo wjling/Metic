@@ -673,7 +673,7 @@
         case USER_NOT_FOUND:
         {
             [_timer invalidate];
-            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户名不存在" WithDelegate:self WithCancelTitle:@"确定"];
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此用户不存在，请先注册" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
             NSLog(@"user not found");
         }

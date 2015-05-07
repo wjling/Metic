@@ -18,6 +18,7 @@
 @interface MJPhotoView : UIScrollView <UIScrollViewDelegate>
 // 图片
 @property (nonatomic, strong) MJPhoto *photo;
+- (void)removeImg;
 // 代理
 @property (nonatomic, weak) id<MJPhotoViewDelegate> photoViewDelegate;
 @end

@@ -8,6 +8,10 @@
 
 #import "BannerViewController.h"
 #import "MRZoomScrollView.h"
+#import "SVProgressHUD.h"
+#import "SDImageCache.h"
+#import "SDWebImageDownloader.h"
+#import "SDImageCache.h"
 
 @interface BannerViewController ()
 @property (nonatomic,strong)MRZoomScrollView* zoomScrollview;
@@ -29,14 +33,8 @@
     [super viewDidLoad];
     self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self.view setBackgroundColor:[UIColor blackColor]];
-    if (_banner) {
-        _zoomScrollview = [[MRZoomScrollView alloc]initWithFrame:self.view.bounds];
-        _zoomScrollview.imageView.image = _banner;
-        [_zoomScrollview fitImageView];
-        [self.view addSubview:_zoomScrollview];
-        _zoomScrollview.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin |UIViewAutoresizingFlexibleRightMargin;
-
-    }
+    [self initIMG];
+    [self downloadHQphoto];
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(back)];
     tapRecognizer.numberOfTapsRequired=1;
     [self.view addGestureRecognizer:tapRecognizer];
@@ -46,6 +44,12 @@
     [self.view addGestureRecognizer:doubleTapRecognizer];
     
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [SVProgressHUD dismiss];
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,6 +88,50 @@
 }
 
 -(void)doubleTap{
+}
+
+-(void)initIMG
+{
+    if (_banner) {
+        if (!_zoomScrollview) {
+            _zoomScrollview = [[MRZoomScrollView alloc]initWithFrame:self.view.bounds];
+            [self.view addSubview:_zoomScrollview];
+            _zoomScrollview.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin |UIViewAutoresizingFlexibleRightMargin;
+        }
+        
+        _zoomScrollview.imageView.image = _banner;
+        [_zoomScrollview fitImageView];
+        
+    }
+}
+
+- (void)downloadHQphoto
+{
+    if (_url) {
+        if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:_url]) {
+            _banner = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_url];
+            [self initIMG];
+        }else{
+            __weak typeof(self) wself = self;
+            NSString* locURL = [NSString stringWithString:_url];
+            [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
+            [[SDWebImageDownloader sharedDownloader]downloadImageWithURL:[NSURL URLWithString:_url] options:SDWebImageDownloaderHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                //
+            } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                if (image) {
+                    if (wself) {
+                        wself.banner = image;
+                        [wself initIMG];
+                        [SVProgressHUD dismiss];
+                    }
+                    [[SDImageCache sharedImageCache]storeImage:image forKey:locURL];
+                }else{
+                    [SVProgressHUD dismiss];
+                }
+                
+            }];
+        }
+    }
 }
 
 @end
