@@ -125,6 +125,8 @@
                         [SVProgressHUD dismiss];
                     }
                     [[SDImageCache sharedImageCache]storeImage:image forKey:locURL];
+                }else{
+                    [SVProgressHUD dismiss];
                 }
                 
             }];

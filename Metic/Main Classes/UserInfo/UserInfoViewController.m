@@ -15,6 +15,7 @@
 #import "../BannerViewController.h"
 #import "KxMenu.h"
 #import "UIImage+fixOrien.h"
+#import "MTDatabaseHelper.h"
 
 
 @interface UserInfoViewController ()
@@ -79,6 +80,8 @@
     [MobClick beginLogPageView:@"用户主页"];
     [self.view bringSubviewToFront:_shadowView];
     _shadowView.hidden = NO;
+    
+    [self checkAvatarUpdate];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -289,7 +292,7 @@
     self.email_label.text = [MTUser sharedInstance].email;
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_barrier_async(dispatch_get_main_queue(), ^{
             [self.banner_imageView setImageToBlur:self.avatar_imageView.image blurRadius:1.7 brightness: -0.07 completionBlock:nil];
             
 //            UIImage* img1 = [image brightness:0.5];
@@ -323,6 +326,79 @@
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
     [self.info_tableView reloadData];
+}
+
+-(void)checkAvatarUpdate
+{
+    if (![MTUser sharedInstance].userid) return;
+    [[MTDatabaseHelper sharedInstance] queryTable:@"avatar" withSelect:@[@"*"] andWhere:@{@"id":[MTUser sharedInstance].userid} completion:^(NSMutableArray *resultsArray) {
+        if (resultsArray && resultsArray.count > 0) {
+            NSDictionary* temp_dic = [resultsArray objectAtIndex:0];
+            NSNumber* account_id = [temp_dic objectForKey:@"id"];
+            if ([account_id integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+                NSString* local_updatetime = [temp_dic objectForKey:@"updatetime"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid, @"id", nil];
+                    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                    [http sendMessage:json_data withOperationCode:GET_AVATAR_UPDATETIME finshedBlock:^(NSData *rData) {
+                        NSString* temp;
+                        if (rData)
+                        {
+                            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        NSLog(@"查看自己头像更新时间,Received Data: %@",temp);
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
+                        switch (cmd) {
+                            case NORMAL_REPLY:
+                            {
+                                NSArray* friends_updatetime_arr = [response1 objectForKey:@"list"];
+                                for (int i = 0; i < friends_updatetime_arr.count; i++) {
+                                    NSDictionary* friend_update_time_dic = [friends_updatetime_arr objectAtIndex:i];
+                                    NSString* server_updatetime = [friend_update_time_dic objectForKey:@"updatetime"];
+                                    NSNumber* friend_id = [friend_update_time_dic objectForKey:@"id"];
+                                    if ([friend_id integerValue] == [account_id integerValue]) {
+                                        if (![server_updatetime isEqualToString:local_updatetime]) {
+                                            [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",account_id]]];
+                                            [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",account_id]]];
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                [self refresh];
+                                                [[MenuViewController sharedInstance] refresh];
+                                            });
+                                            [self updateAvatartoDB:friend_update_time_dic];
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:self.avatar_imageView authorId:[MTUser sharedInstance].userid];
+                                                [getter getAvatar];
+                                            });
+                                            
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }];
+                });
+            }
+        }
+    }];
+}
+
+-(void)updateAvatartoDB:(NSDictionary*)avatarInfo
+{
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[avatarInfo valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[avatarInfo valueForKey:@"updatetime"]], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
 }
 
 #pragma mark - Touches

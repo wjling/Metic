@@ -379,6 +379,7 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
                                                 [self.fInfoView_imgV setImageToBlur:[UIImage imageNamed:@"默认用户头像"] blurRadius:6 brightness:-0.1 completionBlock:nil];
+                                                [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid]]];
                                                 [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                     if (!image) {
                                                         image = [UIImage imageNamed:@"默认用户头像"];
