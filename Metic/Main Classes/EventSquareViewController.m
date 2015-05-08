@@ -42,6 +42,7 @@
 @property int firstIndex;
 @property int type;
 @property BOOL isAuto;
+@property BOOL isFirstIN;
 
 @end
 
@@ -75,6 +76,12 @@
     [self fixUI];
     [MobClick beginLogPageView:@"活动广场"];
     if (_timer) [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+    if (!_isFirstIN) {
+        _isFirstIN = NO;
+    }else{
+        [self getNearbyEventIdsFromAir:@0];
+    }
+    
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -132,6 +139,7 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     _isAuto = YES;
+    _isFirstIN = YES;
     _eventArray = [[NSMutableArray alloc]init];
     [self getPoster];
     [self getNearbyEventIdsFromAir:@0];
@@ -140,8 +148,6 @@
 -(void)initUI
 {
     CGRect frame = self.view.bounds;
-    frame.origin.x += 5;
-    frame.size.width -= 10;
     _tableView = [[SquareTableView alloc]initWithFrame:frame];
     _tableView.clipsToBounds = NO;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -153,7 +159,7 @@
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
     
-    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 260)];
+    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 270)];
     [_contentView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
     [_contentView setTag:112];
 //    _contentView.layer.borderColor = [UIColor redColor].CGColor;
@@ -241,13 +247,13 @@
     [_shadowView setTag:101];
     [self.view addSubview:_shadowView];
     
+    [self initScrollView];
+    
 }
 
 -(void)fixUI
 {
     CGRect frame = self.view.bounds;
-    frame.origin.x +=5;
-    frame.size.width -= 10;
     [_tableView setFrame:frame];
     [_shadowView setFrame:self.view.bounds];
     [self.shadowView setAlpha:0];
@@ -256,6 +262,11 @@
 -(void)initScrollView
 {
     if (_posterList && _posterList.count>0) {
+        
+        UIView* tmp = [_contentView viewWithTag:115];
+        if (tmp) {
+            [tmp removeFromSuperview];
+        }
 
         [_scrollView setBackgroundColor:[UIColor colorWithWhite:204.0/255.0 alpha:1.0f]];
         [_scrollView setContentSize:CGSizeMake(bannerWidth*(_posterList.count+1), bannerHeight)];
@@ -369,9 +380,10 @@
     }else{
         [_scrollView setBackgroundColor:[UIColor colorWithWhite:204/255.0 alpha:1.0]];
         UIImageView* tmp = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_scrollView.frame), CGRectGetHeight(_scrollView.frame))];
+        [tmp setTag:115];
         [tmp setContentMode:UIViewContentModeScaleAspectFit];
         tmp.image = [UIImage imageNamed:@"活动图片的默认图片"];
-        [self.view addSubview:tmp];
+        [_contentView addSubview:tmp];
     }
 }
 
@@ -531,6 +543,14 @@
     [self performSegueWithIdentifier:@"toSearchEvent" sender:self];
 }
 
+-(void)refreshTable
+{
+    NSLog(@"refreshTable");
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
+    [self getNearbyEventIdsFromAir:@0];
+}
+
+
 #pragma mark - 获取最新活动资料 -
 -(void)getNearbyEventIdsFromAir:(NSNumber*)sequence
 {
@@ -543,7 +563,14 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }else{
+            [self finishWithReceivedData:rData];
+            [SVProgressHUD dismiss];
+        }
+    }];
     
 }
 
@@ -554,7 +581,14 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }else{
+            [self finishWithReceivedData:rData];
+            [SVProgressHUD dismiss];
+        }
+    }];
 }
 
 #pragma mark - HttpSenderDelegate
@@ -569,7 +603,7 @@
         case NORMAL_REPLY:
         {
             if ([response1 valueForKey:@"event_list"]) { //获取event具体信息
-                [_eventArray addObjectsFromArray:[response1 valueForKey:@"event_list"]];
+                _eventArray = [response1 valueForKey:@"event_list"];
                 [_tableView reloadData];
             }
             else{//获取event id 号
@@ -588,36 +622,96 @@
 }
 
 #pragma mark - UITableView Delegate -
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    if (_eventArray && _eventArray.count) {
+        return 2;
+    }else return 1;
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _eventArray.count+1;
+    switch (section) {
+        case 0:
+            return 1;
+            break;
+        case 1:
+            return _eventArray.count > 0? _eventArray.count+1:0;
+            break;
+        default:
+            return 0;
+            break;
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        return 260;
-    }else if(indexPath.row == _eventArray.count){
-        return CGRectGetHeight(self.view.frame) - 215;
-    }else return 123;
+    switch (indexPath.section) {
+        case 0:
+            return 270;
+            break;
+        case 1:
+        {
+            switch (indexPath.row) {
+                case 0:
+                    return 32;
+                    break;
+                    
+                default:
+                    return 185;
+                    break;
+            }
+        }
+            break;
+        default:
+            return 0;
+            break;
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
+    if (indexPath.section == 0) {
         UITableViewCell*cell = [[UITableViewCell alloc]init];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = [UIColor clearColor];
 //        cell.contentView.backgroundColor = [UIColor clearColor];
         [cell setTag:110];
         if (_contentView) {
             [_contentView removeFromSuperview];
-            CGRect frame = _contentView.frame;
-            frame.origin.x = -5;
-            [_contentView setFrame:frame];
             [cell addSubview:_contentView];
         }
         return cell;
     }else{
+        if (indexPath.row == 0) {
+            UITableViewCell*cell = [[UITableViewCell alloc]init];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, 100, 23)];
+            label.text = @"热门活动";
+            label.font = [UIFont systemFontOfSize:16];
+            label.textAlignment = NSTextAlignmentLeft;
+            label.textColor = [UIColor colorWithWhite:0.2f alpha:1.0];
+            [cell addSubview:label];
+            
+            UIButton* refreshBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+            [refreshBtn setFrame:CGRectMake(240, 0, 80, 31)];
+            refreshBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            refreshBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+            [refreshBtn setTitle:@"刷新" forState:UIControlStateNormal];
+            [refreshBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+            [refreshBtn setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateNormal];
+            [refreshBtn addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:refreshBtn];
+            
+            
+            UILabel* line = [[UILabel alloc]initWithFrame:CGRectMake(10, 31, CGRectGetWidth(tableView.frame) - 20, 1)];
+            line.text = @"";
+            line.backgroundColor = [UIColor colorWithWhite:0.94f alpha:1.0];
+            [cell addSubview:line];
+            
+            return cell;
+        }
         static NSString *CellIdentifier = @"SquareTableViewCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
@@ -641,16 +735,26 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if (indexPath.row == 0) return;
-    UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell && [cell isKindOfClass:[SquareTableViewCell class]]) {
-        CGRect frame = cell.frame;
-        if (CGRectGetMinY(frame) < tableView.contentOffset.y) {
-            frame.origin.y += 123;
-        }
-        [tableView setContentOffset:CGPointMake(0, frame.origin.y - 92) animated:YES];
+    
+    SquareTableViewCell* cell = (SquareTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    NSDictionary* dict = cell.eventInfo;
+    
+    if (![[dict valueForKey:@"isIn"] boolValue]) {
+        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+        viewcontroller.eventInfo = dict;
+        [self.navigationController pushViewController:viewcontroller animated:YES];
+    }else{
+        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"event_id"]];
+        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[dict valueForKey:@"launcher_id"]];
+        
+        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+        
+        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+        eventDetailView.eventId = eventId;
+        eventDetailView.eventLauncherId = eventLauncherId;
+        [self.navigationController pushViewController:eventDetailView animated:YES];
     }
-    
-    
+
 }
 
 #pragma mark - UIScrollView Delegate -

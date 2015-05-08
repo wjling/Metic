@@ -10,11 +10,9 @@
 
 @interface SquareTableViewCell : UITableViewCell
 @property (nonatomic,strong) IBOutlet UIImageView *themePhoto;
-@property (nonatomic,strong) IBOutlet UILabel *timeInfo;
-@property (nonatomic,strong) IBOutlet UILabel *location;
-@property (nonatomic,strong) IBOutlet UILabel *launcherinfo;
-@property (nonatomic,strong) IBOutlet UILabel *remark;
-@property (nonatomic,strong) IBOutlet UIView *detailView;
+@property (nonatomic,strong) IBOutlet UIImageView *avatar;
+@property (nonatomic,strong) IBOutlet UILabel *subject;
+
 
 @property (nonatomic,strong) NSDictionary *eventInfo;
 - (void)applyData:(NSDictionary*)data;
