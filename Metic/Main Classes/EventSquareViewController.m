@@ -160,7 +160,7 @@
     [self.view addSubview:_tableView];
     
     _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 270)];
-    [_contentView setBackgroundColor:[UIColor colorWithWhite:0.94 alpha:1.0]];
+    [_contentView setBackgroundColor:[UIColor colorWithWhite:0.99 alpha:1.0]];
     [_contentView setTag:112];
 //    _contentView.layer.borderColor = [UIColor redColor].CGColor;
 //    _contentView.layer.borderWidth = 2;
@@ -188,7 +188,7 @@
     [button1.layer setCornerRadius:5];
     button1.layer.masksToBounds = YES;
     button1.layer.borderWidth = 1;
-    button1.layer.borderColor = [UIColor colorWithWhite:0.82 alpha:1.0].CGColor;
+    button1.layer.borderColor = [UIColor colorWithWhite:0.92 alpha:1.0].CGColor;
     [button1 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button1 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon1 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
@@ -207,7 +207,7 @@
     [button2.layer setCornerRadius:5];
     button2.layer.masksToBounds = YES;
     button2.layer.borderWidth = 1;
-    button2.layer.borderColor = [UIColor colorWithWhite:0.82 alpha:1.0].CGColor;
+    button2.layer.borderColor = [UIColor colorWithWhite:0.92 alpha:1.0].CGColor;
     [button2 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button2 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon2 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
@@ -226,7 +226,7 @@
     [button3.layer setCornerRadius:5];
     button3.layer.masksToBounds = YES;
     button3.layer.borderWidth = 1;
-    button3.layer.borderColor = [UIColor colorWithWhite:0.82 alpha:1.0].CGColor;
+    button3.layer.borderColor = [UIColor colorWithWhite:0.92 alpha:1.0].CGColor;
     [button3 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button3 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon3 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
@@ -648,7 +648,7 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 270;
+            return 280;
             break;
         case 1:
         {
@@ -674,7 +674,7 @@
     if (indexPath.section == 0) {
         UITableViewCell*cell = [[UITableViewCell alloc]init];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.0f];
 //        cell.contentView.backgroundColor = [UIColor clearColor];
         [cell setTag:110];
         if (_contentView) {
