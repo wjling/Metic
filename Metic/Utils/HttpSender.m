@@ -249,6 +249,9 @@
         case 51:
             resultCode = @"delete_friend";
             break;
+        case 52:
+            resultCode = @"view_event";
+            break;
         default:
             resultCode = @"json";
             break;

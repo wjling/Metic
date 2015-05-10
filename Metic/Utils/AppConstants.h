@@ -97,6 +97,7 @@ enum Operation_Code
     FIND_BACK_PASSWORD = 49,
     QRCODE_INVITE = 50,
     DELETE_FRIEND = 51,
+    VIEW_EVENT = 52,
 };
 
 enum CloudOperation_Code
