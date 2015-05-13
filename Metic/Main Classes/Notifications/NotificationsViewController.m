@@ -1218,7 +1218,7 @@ enum Response_Type
                     cell.okBtn.hidden = YES;
                     cell.noBtn.hidden = YES;
                     cell.remark_label.hidden = NO;
-                    cell.remark_label.text = @"已拒绝";
+                    cell.remark_label.text = @"已忽略";
                 }
                 else if (ishandled == 1)
                 {
@@ -1285,7 +1285,7 @@ enum Response_Type
                     cell.okBtn.hidden = YES;
                     cell.noBtn.hidden = YES;
                     cell.remark_label.hidden = NO;
-                    cell.remark_label.text = @"已拒绝";
+                    cell.remark_label.text = @"已忽略";
                 }
                 else if (ishandled == 1)
                 {
@@ -1496,45 +1496,70 @@ enum Response_Type
 - (IBAction)friend_request_noBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.friendRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+//    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsFriendRequestTableViewCell class]]) {
         cell = [cell superview];
     }
 //    cell.tag = 1;
-    ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
+    ((NotificationsFriendRequestTableViewCell*)cell).remark_label.text = @"已忽略";
     selectedPath = [self.friendRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
     
-    NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"friend, no button row: %d, seq: %@",selectedPath.row,seq);
-    NSNumber* userid = [MTUser sharedInstance].userid;
-    NSNumber* friendid = [msg_dic objectForKey:@"id"];
-    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
-                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
-                                 [NSNumber numberWithInteger:0],@"response_result",
-                                 nil];
-
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:998],@"cmd",
-                                 [NSNumber numberWithInt:0],@"result",
-                                 friendid,@"friend_id",
-                                 userid,@"id",
-                                 item_id_dic,@"item_id",
-                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
-                                 nil];
-    NSLog(@"reject json: %@",json);
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
+//    NSDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
+//    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+//    NSLog(@"friend, no button row: %d, seq: %@",selectedPath.row,seq);
+//    NSNumber* userid = [MTUser sharedInstance].userid;
+//    NSNumber* friendid = [msg_dic objectForKey:@"id"];
+//    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+//                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+//                                 [NSNumber numberWithInteger:0],@"response_result",
+//                                 nil];
+//
+//    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInt:998],@"cmd",
+//                                 [NSNumber numberWithInt:0],@"result",
+//                                 friendid,@"friend_id",
+//                                 userid,@"id",
+//                                 item_id_dic,@"item_id",
+//                                 [NSNumber numberWithInt:RESPONSE_FRIEND],@"response_type",
+//                                 nil];
+//    NSLog(@"reject json: %@",json);
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+//    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
     
-//    [self.msgFromDB removeObjectAtIndex:selectedPath.row];
-//    [mySql openMyDB:DB_path];
-//    [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
-//    [mySql closeMyDB];
-
+    [self.friendRequest_tableView reloadData];
+    NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:selectedPath.row];
+    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+    NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+//    NSString* fname = [msg_dic objectForKey:@"name"];
+    NSLog(@"response friend, seq: %ld, fid: %ld",(long)seq1,(long)fid1);
+    
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
+                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq", nil]
+                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled", nil]];
+    
+    for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
+        NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
+        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+        if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+            int fid2 = [[msg objectForKey:@"id"]intValue];
+            int seq2 = [[msg objectForKey:@"seq"]intValue];
+            if (fid1 == fid2 && seq1 != seq2) {
+                [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+                [MTUser_friendRequestMsg removeObject:msg];
+                i--;
+            }
+        }
+    }
+    
+    [MTUser_friendRequestMsg removeObject:msg_dic];
+    NSLog(@"（拒绝）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
+    [msg_dic setValue:[NSNumber numberWithInteger:0] forKey:@"ishandled"];
+    
+    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
     
 }
 
@@ -1596,38 +1621,70 @@ enum Response_Type
 - (IBAction)event_request_noBtnClicked:(id)sender
 {
 //    [self waitingViewShow:self.eventRequest_tableView];
-    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
-    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
+//    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeGradient];
+//    waitingTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[NotificationsEventRequestTableViewCell class]]) {
         cell = [cell superview];
     }
 //    cell.tag = 1;
-    ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已拒绝";
+    ((NotificationsEventRequestTableViewCell*)cell).remark_label.text = @"已忽略";
     selectedPath = [self.eventRequest_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
-    NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"event request cell seq: %@, row: %ld",seq,(long)selectedPath.row);
     
-    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
-    NSNumber* requester_id = [msg_dic valueForKey:@"id"];
-    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
-                                 [NSNumber numberWithInt:RESPONSE_EVENT_REQUEST],@"response_type",
-                                 [NSNumber numberWithInteger:0],@"response_result",
-                                 nil];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:994],@"cmd",
-                                 [NSNumber numberWithInt:0],@"result",
-                                 [MTUser sharedInstance].userid,@"id",
-                                 requester_id,@"requester_id",
-                                 eventid,@"event_id",
-                                 item_id_dic,@"item_id",
-                                 nil];
-    NSLog(@"event request event noBtn, http json : %@",json );
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+//    NSDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
+//    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+//    NSLog(@"event request cell seq: %@, row: %ld",seq,(long)selectedPath.row);
+//    
+//    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+//    NSNumber* requester_id = [msg_dic valueForKey:@"id"];
+//    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+//                                 [NSNumber numberWithInt:RESPONSE_EVENT_REQUEST],@"response_type",
+//                                 [NSNumber numberWithInteger:0],@"response_result",
+//                                 nil];
+//    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInt:994],@"cmd",
+//                                 [NSNumber numberWithInt:0],@"result",
+//                                 [MTUser sharedInstance].userid,@"id",
+//                                 requester_id,@"requester_id",
+//                                 eventid,@"event_id",
+//                                 item_id_dic,@"item_id",
+//                                 nil];
+//    NSLog(@"event request event noBtn, http json : %@",json );
+//    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+//    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
+    
+    [self.eventRequest_tableView reloadData];
+    NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:selectedPath.row];
+    
+    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+    NSLog(@"response event, seq: %d",seq1);
+    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+    [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
+                                                     andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",seq1],@"seq", nil]
+                                                       andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",0],@"ishandled", nil]];
+    
+    
+    for (int i = 0; i < MTUser_eventRequestMsg.count; i++) {
+        NSMutableDictionary* msg  = [MTUser_eventRequestMsg objectAtIndex:i];
+        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+            [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+            [MTUser_eventRequestMsg removeObject:msg];
+            continue;
+        }
+    }
+    //                [mySql closeMyDB];
+    
+    
+    [MTUser_eventRequestMsg removeObject:msg_dic];
+    [msg_dic setValue:[NSNumber numberWithInteger:0] forKey:@"ishandled"];
+    
+    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
 }
 
 -(void)eventBtnClicked:(id)sender
@@ -1716,40 +1773,39 @@ enum Response_Type
                 }
                 else
                 {
-                    [self.friendRequest_tableView reloadData];
-                    NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
-                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-                    NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
-                    NSString* fname = [msg_dic objectForKey:@"name"];
-                    NSLog(@"response friend, seq: %ld, fid: %ld",(long)seq1,(long)fid1);
-                    
-                    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
-                                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq", nil]
-                                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled", nil]];
-                    
-                    for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
-                        NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
-                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
-                        if (cmd2 == ADD_FRIEND_NOTIFICATION) {
-                            int fid2 = [[msg objectForKey:@"id"]intValue];
-                            int seq2 = [[msg objectForKey:@"seq"]intValue];
-                            if (fid1 == fid2 && seq1 != seq2) {
-                                [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
-                                [MTUser_friendRequestMsg removeObject:msg];
-                                i--;
-                            }
-                        }
-                    }
-
-//                    [mySql closeMyDB];
-
-                    [MTUser_friendRequestMsg removeObject:msg_dic];
-                    NSLog(@"（拒绝）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
-                    [msg_dic setValue:result forKey:@"ishandled"];
-                    
-                    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
-                    
-                    [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功拒绝%@为好友",fname] afterDelay:2];
+//                    [self.friendRequest_tableView reloadData];
+//                    NSMutableDictionary* msg_dic = [friendRequestMsg objectAtIndex:[item_index intValue]];
+//                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+//                    NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
+//                    NSString* fname = [msg_dic objectForKey:@"name"];
+//                    NSLog(@"response friend, seq: %ld, fid: %ld",(long)seq1,(long)fid1);
+//                    
+//                    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
+//                                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq", nil]
+//                                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled", nil]];
+//                    
+//                    for (int i = 0; i < MTUser_friendRequestMsg.count; i++) {
+//                        NSMutableDictionary* msg = [MTUser_friendRequestMsg objectAtIndex:i];
+//                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+//                        if (cmd2 == ADD_FRIEND_NOTIFICATION) {
+//                            int fid2 = [[msg objectForKey:@"id"]intValue];
+//                            int seq2 = [[msg objectForKey:@"seq"]intValue];
+//                            if (fid1 == fid2 && seq1 != seq2) {
+//                                [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+//                                [MTUser_friendRequestMsg removeObject:msg];
+//                                i--;
+//                            }
+//                        }
+//                    }
+//
+//                    [MTUser_friendRequestMsg removeObject:msg_dic];
+//                    NSLog(@"（拒绝）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
+//                    [msg_dic setValue:result forKey:@"ishandled"];
+//                    
+//                    [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
+//                    
+//                    [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功拒绝%@为好友",fname] afterDelay:2];
+                    [SVProgressHUD dismiss];
                     
                 }
 

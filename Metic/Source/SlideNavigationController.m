@@ -197,7 +197,6 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -208,7 +207,7 @@ static SlideNavigationController *singletonInstance;
         {
             [super pushViewController:viewController animated:animated];
         }
-    }else //NSLog(@"nononononononononononononononononon");
+    }else
     self.shouldIgnorePushingViewControllers = YES;
 	
 }
@@ -217,7 +216,6 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -230,7 +228,7 @@ static SlideNavigationController *singletonInstance;
         }
         
         return nil;
-    }else //NSLog(@"nononononononononononononononononon");
+    }else
     self.shouldIgnorePushingViewControllers = YES;
     return nil;
 }
@@ -246,9 +244,8 @@ static SlideNavigationController *singletonInstance;
 //    }
     if (!self.shouldIgnorePushingViewControllers)
     {
-//        NSLog(@"yesyesyesyesyesyesyesyesyesyesyesyes");
         return [super popViewControllerAnimated:animated];
-    }else //NSLog(@"nononononononononononononononononon");
+    }else
     self.shouldIgnorePushingViewControllers = YES;
     return nil;
 }
@@ -292,12 +289,10 @@ static SlideNavigationController *singletonInstance;
     
 	SEL selector = (menu == MenuLeft) ? @selector(leftMenuSelected:) : @selector(righttMenuSelected:);
 	UIBarButtonItem *customButton = (menu == MenuLeft) ? self.leftbarButtonItem : self.rightBarButtonItem;
-	NSLog(@"+++++++++++barButtonItemForMenu");
 	if (customButton)
 	{
 		customButton.action = selector;
 		customButton.target = self;
-        NSLog(@"111111");
 		return customButton;
 	}
 	else
@@ -313,7 +308,6 @@ static SlideNavigationController *singletonInstance;
             [dian removeFromSuperview];
             [leftButton addSubview:dian];
             UIBarButtonItem *leftButtonItem=[[UIBarButtonItem alloc]initWithCustomView:leftButton];
-            NSLog(@"222222");
             return leftButtonItem;
         }else
         {
@@ -324,7 +318,6 @@ static SlideNavigationController *singletonInstance;
             [dian removeFromSuperview];
             [leftButton addSubview:dian];
             UIBarButtonItem* leftButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
-            NSLog(@"3333333");
 //            [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:selector];
             return leftButtonItem;
         }

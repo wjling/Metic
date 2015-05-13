@@ -293,41 +293,75 @@
 - (IBAction)participate_event_noBtnClicked:(id)sender
 {
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeBlack];
-    timer = [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
-//    [SVProgressHUD showSuccessWithStatus:@"捣乱中..." duration:3];
+//    timer = [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHud:) userInfo:nil repeats:NO];
     UIView* cell = [sender superview];
     while (![cell isKindOfClass:[EventInvitationTableViewCell class]]) {
         cell = [cell superview];
     }
     selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
-    NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
-    NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+//    NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
+//    NSNumber* seq = [msg_dic objectForKey:@"seq"];
+//    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+//    
+//    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+//    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
+////                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+//                                 [NSNumber numberWithInteger:0],@"response_result",
+//                                 nil];
+//    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+//                                 [NSNumber numberWithInt:997],@"cmd",
+//                                 [NSNumber numberWithInt:0],@"result",
+//                                 [MTUser sharedInstance].userid,@"id",
+//                                 eventid,@"event_id",
+//                                 item_id_dic,@"item_id",
+////                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
+//                                 nil];
+//    NSLog(@"participate event noBtn, http json : %@",json );
+//    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+//    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+//    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+//        if(rData)[self finishWithReceivedData:rData];
+//        else{
+//            [SVProgressHUD dismissWithError:@"网络异常"];
+//            
+//        }
+//    }];
     
-    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
-    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInteger:selectedPath.row],@"item_index",
-//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
-                                 [NSNumber numberWithInteger:0],@"response_result",
-                                 nil];
-    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:997],@"cmd",
-                                 [NSNumber numberWithInt:0],@"result",
-                                 [MTUser sharedInstance].userid,@"id",
-                                 eventid,@"event_id",
-                                 item_id_dic,@"item_id",
-//                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
-                                 nil];
-    NSLog(@"participate event noBtn, http json : %@",json );
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
-        if(rData)[self finishWithReceivedData:rData];
-        else{
-            [SVProgressHUD dismissWithError:@"网络异常"];
+    NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
+    
+    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+    NSLog(@"response event, seq: %d",seq1);
+    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
+                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",seq1],@"seq",nil]
+                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",0],@"ishandled",nil]];
+    
+    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+        NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
             
+            [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
+            
+            [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+            continue;
         }
-    }];
+    }
+    
+    
+    [msg_arr removeObject:msg_dic];
+    [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+    [msg_dic setValue:[NSNumber numberWithInteger:0] forKey:@"ishandled"];
+    
+    [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
+    [SVProgressHUD dismissWithSuccess:@"处理成功" afterDelay:0.5];
+    [self.tableView reloadData];
+    //更新活动中心列表：
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
 }
 
 -(void)dismissHud:(NSTimer*)timer

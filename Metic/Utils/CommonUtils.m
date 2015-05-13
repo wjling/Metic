@@ -142,7 +142,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 + (NSNumber*)NSNumberWithNSString:(NSString *)string
 {
     id result = string;
-    if ([result isKindOfClass:[NSNumber class]]) {
+    if (result == nil || [result isEqual:[NSNull null]] || [result isKindOfClass:[NSNumber class]]) {
         return result;
     }
     NSNumberFormatter* format = [[NSNumberFormatter alloc]init];
