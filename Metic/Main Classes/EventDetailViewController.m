@@ -9,6 +9,7 @@
 
 #import "EventDetailViewController.h"
 #import "Event2DcodeViewController.h"
+#import "EventEditViewController.h"
 #import "BannerSelectorViewController.h"
 #import "MTUser.h"
 #import "PictureWall2.h"
@@ -279,7 +280,7 @@
         if (_eventId && [_eventId intValue]!=0) {
             [menuItems addObjectsFromArray:@[
                                              
-                                             [KxMenuItem menuItem:@"二维码"
+                                             [KxMenuItem menuItem:@"查看二维码"
                                                             image:nil
                                                            target:self
                                                            action:@selector(show2Dcode:)],
@@ -293,6 +294,10 @@
         
         if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             [menuItems addObjectsFromArray:@[
+                                             [KxMenuItem menuItem:@"编辑活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(editEvent)],
                                              
                                              [KxMenuItem menuItem:@"更换封面"
                                                             image:nil
@@ -971,6 +976,16 @@
 
     [self performSegueWithIdentifier:@"EventToReport" sender:self];
 
+}
+
+- (void)editEvent
+{
+    if (_event) {
+        EventEditViewController* eventEditVc = [[EventEditViewController alloc]init];
+        eventEditVc.eventId = _eventId;
+        eventEditVc.eventInfo = _event;
+        [self.navigationController pushViewController:eventEditVc animated:YES];
+    }
 }
 
 -(void)changeBanner
