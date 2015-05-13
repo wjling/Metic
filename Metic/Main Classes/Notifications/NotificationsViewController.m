@@ -1664,7 +1664,7 @@ enum Response_Type
     NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
     [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",seq1],@"seq", nil]
-                                                       andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",0],@"ishandled", nil]];
+                                                       andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled", nil]];
     
     
     for (int i = 0; i < MTUser_eventRequestMsg.count; i++) {
@@ -1673,7 +1673,7 @@ enum Response_Type
         NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
         NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
         if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
-            [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%d", seq2],@"seq", nil]];
+            [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
             [MTUser_eventRequestMsg removeObject:msg];
             continue;
         }
@@ -1857,7 +1857,7 @@ enum Response_Type
             NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
             NSInteger fid1 = [[msg_dic objectForKey:@"id"]integerValue];
             NSNumber* response_result = [item_id_dic objectForKey:@"response_result"];
-            NSLog(@"response already friend, seq: %d, fid: %ld",seq1, (long)fid1);
+//            NSLog(@"response already friend, seq: %d, fid: %ld",seq1, (long)fid1);
             
             //!已经是好友的情况下修改数据库的用户操作字段ishandled，有可能会造成数据错误。当然，只是有可能。我需要修改ishandled的值使这条消息标记为已处理!
 //            [mySql openMyDB:DB_path];

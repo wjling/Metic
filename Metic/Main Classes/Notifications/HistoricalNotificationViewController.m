@@ -169,7 +169,7 @@
         [getter getAvatar];
 
         if ([ishandled integerValue] == 0) {
-            cell.remark_label.text = @"已拒绝";
+            cell.remark_label.text = @"已忽略";
         }
         else if ([ishandled integerValue] == 1)
         {
@@ -233,7 +233,7 @@
         
         
         if ([ishandled integerValue] == 0) {
-            cell.remark_label.text = @"已拒绝";
+            cell.remark_label.text = @"已忽略";
         }
         else if ([ishandled integerValue] == 1)
         {
@@ -296,7 +296,7 @@
         //                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
         
         if ([ishandled integerValue] == 0) {
-            cell.remark_label.text = @"已拒绝";
+            cell.remark_label.text = @"已忽略";
         }
         else if ([ishandled integerValue] == 1)
         {

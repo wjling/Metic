@@ -336,7 +336,7 @@
     NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
     [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
                                                       andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",seq1],@"seq",nil]
-                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",0],@"ishandled",nil]];
+                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled",nil]];
     
     for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
         NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
