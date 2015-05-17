@@ -609,7 +609,7 @@
             else{//获取event id 号
                 self.eventIds_all = [response1 valueForKey:@"sequence"];
                 if (self.eventIds_all) {
-                    NSInteger rangeLen = 10;
+                    NSInteger rangeLen = 20;
                     if (self.eventIds_all.count< rangeLen) {
                         rangeLen = self.eventIds_all.count;
                     }
