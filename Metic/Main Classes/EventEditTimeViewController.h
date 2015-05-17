@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventEditTimeViewController : UIViewController
-
+@property(nonatomic,strong) NSMutableDictionary* eventInfo;
 @end

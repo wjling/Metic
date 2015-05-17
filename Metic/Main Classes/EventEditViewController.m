@@ -253,6 +253,7 @@ const NSInteger rowCount = 3;
                 case 0:
                 {
                     EventEditTimeViewController* vc = [[EventEditTimeViewController alloc]init];
+                    vc.eventInfo = _eventInfo;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                     break;
