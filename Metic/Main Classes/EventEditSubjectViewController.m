@@ -48,6 +48,8 @@
     self.view.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     self.title = @"活动主题";
     
+    [self initRightBtn];
+    
     _contentField = [[UITextField alloc]initWithFrame:CGRectMake(10, 15, CGRectGetWidth(self.view.frame) - 20, 45)];
     _contentField.font = [UIFont systemFontOfSize:16];
     _contentField.textColor = [UIColor colorWithWhite:0.3 alpha:1.0f];
@@ -73,9 +75,14 @@
     [_fontCount setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:_fontCount];
     
-    [self initRightBtn];
+    UILabel* tips = [[UILabel alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(_contentField.frame) + 35, CGRectGetWidth(_contentField.frame) - 20, 60)];
     
-    
+    tips.text = @"取个有趣的活动名称吧! \n修改活动主题后会通知所有活动参与者。";
+    tips.numberOfLines = 2;
+    tips.textAlignment = NSTextAlignmentLeft;
+    tips.font = [UIFont systemFontOfSize:13];
+    tips.textColor = [UIColor colorWithWhite:0.6f alpha:1.0f];
+    [self.view addSubview:tips];
 }
 
 - (void)initRightBtn
