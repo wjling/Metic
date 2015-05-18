@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventEditRemarkViewController : UIViewController
-
+@property(nonatomic,strong) NSMutableDictionary* eventInfo;
 @end

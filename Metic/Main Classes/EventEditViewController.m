@@ -267,6 +267,7 @@ const NSInteger rowCount = 3;
                 case 2:
                 {
                     EventEditRemarkViewController* vc = [[EventEditRemarkViewController alloc]init];
+                    vc.eventInfo = _eventInfo;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                     break;

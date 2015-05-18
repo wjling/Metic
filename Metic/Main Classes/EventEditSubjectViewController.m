@@ -76,9 +76,9 @@
     [_fontCount setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:_fontCount];
     
-    UILabel* tips = [[UILabel alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(_contentField.frame) + 35, CGRectGetWidth(_contentField.frame) - 20, 60)];
+    UILabel* tips = [[UILabel alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(_contentField.frame) + 25, CGRectGetWidth(_contentField.frame) - 20, 60)];
     
-    tips.text = @"取个有趣的活动名称吧! \n修改活动主题后会通知所有活动参与者。";
+    tips.text = @"取个有趣的活动名称吧! \n修改活动名称后会通知所有活动参与者。";
     tips.numberOfLines = 2;
     tips.textAlignment = NSTextAlignmentLeft;
     tips.font = [UIFont systemFontOfSize:13];
