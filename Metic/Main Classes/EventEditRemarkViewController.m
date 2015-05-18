@@ -30,7 +30,7 @@
 {
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.view.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
-    self.title = @"活动描述";
+    self.title = @"修改活动描述";
     
 }
 

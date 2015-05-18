@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventEditLocationViewController : UIViewController
-
+@property(nonatomic,strong) NSMutableDictionary* eventInfo;
 @end

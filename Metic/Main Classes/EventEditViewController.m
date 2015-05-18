@@ -260,6 +260,7 @@ const NSInteger rowCount = 3;
                 case 1:
                 {
                     EventEditLocationViewController* vc = [[EventEditLocationViewController alloc]init];
+                    vc.eventInfo = _eventInfo;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                     break;

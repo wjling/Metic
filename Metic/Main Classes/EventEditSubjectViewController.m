@@ -46,11 +46,12 @@
 {
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.view.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
-    self.title = @"活动主题";
+    self.title = @"修改活动名称";
     
     [self initRightBtn];
     
     _contentField = [[UITextField alloc]initWithFrame:CGRectMake(10, 15, CGRectGetWidth(self.view.frame) - 20, 45)];
+    _contentField.placeholder = @"请输入活动名称";
     _contentField.font = [UIFont systemFontOfSize:16];
     _contentField.textColor = [UIColor colorWithWhite:0.3 alpha:1.0f];
     _contentField.textAlignment = NSTextAlignmentLeft;

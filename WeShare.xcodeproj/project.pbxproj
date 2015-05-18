@@ -2484,8 +2484,16 @@
 				F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */,
 				F810B7B71B01080400843AAB /* EventEditRemarkViewController.h */,
 				F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */,
+				F810B7BA1B09D96F00843AAB /* New Group */,
 			);
 			name = EventEdit;
+			sourceTree = "<group>";
+		};
+		F810B7BA1B09D96F00843AAB /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {

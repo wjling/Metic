@@ -37,7 +37,7 @@
 {
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.view.backgroundColor = [UIColor colorWithWhite:0.98f alpha:1.0f];
-    self.title = @"活动时间";
+    self.title = @"修改活动时间";
     
     [self initRightBtn];
     
