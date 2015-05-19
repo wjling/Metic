@@ -167,7 +167,7 @@
                     break;
                 case EVENT_NOT_EXIST:
                 {
-                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [SVProgressHUD dismissWithError:@"活动不存在"];
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                     break;
@@ -179,7 +179,7 @@
                     break;
                 default:
                 {
-                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [SVProgressHUD dismissWithError:@"服务器异常"];
                 }
             }
         }else{

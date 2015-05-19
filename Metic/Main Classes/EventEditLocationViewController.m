@@ -9,13 +9,24 @@
 #import "EventEditLocationViewController.h"
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
+#import "MTUser.h"
+#import "MTDatabaseHelper.h"
+#import "NSString+JSON.h"
+#import "BMapKit.h"
 
-@interface EventEditLocationViewController ()
+@interface EventEditLocationViewController ()<BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
 @property(nonatomic,strong) UITextField* contentField;
 @property(nonatomic,strong) UIView* clearLocView;
 @property(nonatomic,strong) UIButton* clearLocBtn;
 @property(nonatomic,strong) UIView* getLocView;
 @property(nonatomic,strong) UIButton* getLocBtn;
+
+@property (nonatomic) CLLocationCoordinate2D pt;
+@property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
+@property (nonatomic, strong) BMKLocationService* locService;
+@property (nonatomic, strong) CLLocationManager  *locationManager;
+
+
 @end
 
 @implementation EventEditLocationViewController
@@ -25,6 +36,13 @@
     [self initUI];
     [self initData];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    _geocodesearch.delegate = nil;
+    _locService.delegate = nil;
+    [_locService stopUserLocationService];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,10 +127,23 @@
         _contentField.text = loc;
     }
     
+    if (!_geocodesearch) {
+        _geocodesearch = [[BMKGeoCodeSearch alloc]init];
+        _geocodesearch.delegate = self;
+    }
+    
+    [self adjustView];
+    
+}
+
+-(void)adjustView
+{
     double latitude = [[_eventInfo valueForKey:@"latitude"] doubleValue];
     double longitude = [[_eventInfo valueForKey:@"longitude"] doubleValue];
+    _pt.latitude = latitude;
+    _pt.longitude = longitude;
     CGRect frame = _contentField.frame;
-    if ((latitude == 999.999999 && longitude == 999.999999)) {
+    if (!(latitude == 999.999999 && longitude == 999.999999)) {
         CGRect clearlocFrame = _clearLocView.frame;
         clearlocFrame.origin.y = CGRectGetMaxY(frame);
         [_clearLocView setFrame:clearlocFrame];
@@ -127,7 +158,6 @@
     getlocFrame.origin.y = CGRectGetMaxY(frame);
     [_getLocView setFrame:getlocFrame];
     [self.view addSubview:_getLocView];
-    
 }
 
 - (void)initRightBtn
@@ -145,20 +175,194 @@
 
 -(void)clearLoc
 {
+    [_contentField resignFirstResponder];
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
     
+    if (_pt.latitude == 999.999999 && _pt.longitude == 999.999999) {
+        [SVProgressHUD dismissWithSuccess:@"清除成功"];
+        [self adjustView];
+        return;
+    }
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
+    [dictionary setValue:@999.999999 forKey:@"latitude"];
+    [dictionary setValue:@999.999999 forKey:@"longitude"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    [_eventInfo setValue:@999.999999 forKey:@"latitude"];
+                    [_eventInfo setValue:@999.999999 forKey:@"longitude"];
+                    
+                    [self saveEventToDB:_eventInfo];
+                    [SVProgressHUD dismissWithSuccess:@"清除成功"];
+                    [self adjustView];
+                }
+                    break;
+                case EVENT_NOT_EXIST:
+                {
+                    [SVProgressHUD dismissWithError:@"活动不存在"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case REQUEST_DATA_ERROR:
+                {
+                    [SVProgressHUD dismissWithError:@"没有修改权限"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                default:
+                {
+                    [SVProgressHUD dismissWithError:@"服务器异常"];
+                }
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
 }
 
 -(void)getLoc
 {
-    [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
-    
+    [SVProgressHUD showWithStatus:@"定位中" maskType:SVProgressHUDMaskTypeClear];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
+        //由于IOS8中定位的授权机制改变 需要进行手动授权
+        _locationManager = [[CLLocationManager alloc] init];
+        //获取授权认证
+        [_locationManager requestAlwaysAuthorization];
+        [_locationManager requestWhenInUseAuthorization];
+    }
+    _locService = [[BMKLocationService alloc]init];
+    _locService.delegate = self;
+    [_locService startUserLocationService];
 }
 
 -(void)confirm
 {
+    [_contentField resignFirstResponder];
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
+    
+    NSString* content = [NSString stringWithString: _contentField.text];
+    if ([content isEqualToString:[_eventInfo valueForKey:@"location"]] && _pt.latitude == [[_eventInfo valueForKey:@"latitude"]doubleValue] && _pt.longitude == [[_eventInfo valueForKey:@"longitude"]doubleValue]) {
+        [self.navigationController popViewControllerAnimated:YES];
+        [SVProgressHUD dismissWithSuccess:@"修改成功"];
+        return;
+    }
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
+    [dictionary setValue:content forKey:@"location"];
+    [dictionary setValue:@(_pt.latitude) forKey:@"latitude"];
+    [dictionary setValue:@(_pt.longitude) forKey:@"longitude"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    [SVProgressHUD dismissWithSuccess:@"修改成功"];
+                    [_eventInfo setValue:content forKey:@"location"];
+                    [_eventInfo setValue:@(_pt.latitude) forKey:@"latitude"];
+                    [_eventInfo setValue:@(_pt.longitude) forKey:@"longitude"];
+                    [self saveEventToDB:_eventInfo];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case EVENT_NOT_EXIST:
+                {
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case REQUEST_DATA_ERROR:
+                {
+                    [SVProgressHUD dismissWithError:@"没有修改权限"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                default:
+                {
+                    [SVProgressHUD dismissWithError:@"服务器异常"];
+                }
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
     
 }
 
+-(void)saveEventToDB:(NSDictionary*)event
+{
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
+    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
+}
+
+
+#pragma mark - BMK Delegate
+/**
+ *用户位置更新后，会调用此函数
+ *@param userLocation 新的用户位置
+ */
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
+{
+    [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _locService = nil;
+    
+    BMKReverseGeoCodeOption* reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
+    
+    reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
+    NSLog(@"定位坐标为：%f %f",reverseGeocodeSearchOption.reverseGeoPoint.latitude,reverseGeocodeSearchOption.reverseGeoPoint.longitude);
+    BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
+    if(flag)
+    {
+        NSLog(@"反geo检索发送成功");
+    }
+    else
+    {
+        NSLog(@"反geo检索发送失败");
+    }
+}
+/**
+ *定位失败后，会调用此函数
+ *@param mapView 地图View
+ *@param error 错误号，参考CLError.h中定义的错误号
+ */
+-(void)didFailToLocateUserWithError:(NSError *)error
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_locService stopUserLocationService];
+        _locService.delegate = nil;
+        _locService = nil;
+        [SVProgressHUD dismissWithError:@"定位失败，请重试"];
+    });
+    
+}
+
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
+{
+    if (error == 0) {
+        self.contentField.text = result.address;
+        self.pt = result.location;
+        [SVProgressHUD dismiss];
+    }
+}
 @end
