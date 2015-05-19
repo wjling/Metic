@@ -120,6 +120,7 @@
 {
     [super viewWillAppear:animated];
     if (_shadowView) [_shadowView removeFromSuperview];
+    [_tableView reloadData];
     [self pullEventFromAir];
 }
 

@@ -10,6 +10,9 @@
 #import "SVProgressHUD.h"
 #import "CommonUtils.h"
 #import "FlatDatePicker.h"
+#import "MTUser.h"
+#import "MTDatabaseHelper.h"
+#import "NSString+JSON.h"
 
 @interface EventEditTimeViewController ()<UITextFieldDelegate,FlatDatePickerDelegate>
 @property (nonatomic,strong) UIButton* confirmBtn;
@@ -165,10 +168,106 @@
 
 -(void)confirm
 {
+    [_beginTime resignFirstResponder];
+    [_endTime resignFirstResponder];
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
+    
+    NSString*beg_Time = ([self.beginTime.text isEqualToString:@""])? self.beginTime.text:[self.beginTime.text stringByAppendingString:@":00"];
+    NSString*end_Time = ([self.endTime.text isEqualToString:@""])? self.endTime.text:[self.endTime.text stringByAppendingString:@":00"];
+    
+    if ([beg_Time isEqualToString:@""]) {
+        if (![end_Time isEqualToString:@""]) {
+            beg_Time = end_Time;
+        }else{
+//            NSDateFormatter *formate = [[NSDateFormatter alloc]init];
+//            [formate setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+//            beg_Time = [formate stringFromDate:[NSDate date]];
+//            end_Time = beg_Time;
+        }
+    } else if ([end_Time isEqualToString:@""]){
+        end_Time = beg_Time;
+    }else{
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+        NSDate* begin = [dateFormatter dateFromString:beg_Time];
+        NSDate* end = [dateFormatter dateFromString:end_Time];
+        NSTimeInterval begins = [begin timeIntervalSince1970];
+        NSTimeInterval ends = [end timeIntervalSince1970];
+        int dis = ends-begins;
+        if (dis<0) {
+            [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"结束时间必须大于开始时间" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
+        }
+    }
+    
+    if ([beg_Time isEqualToString:@""] && [end_Time isEqualToString:@""]) {
+        [SVProgressHUD dismissWithError:@"时间不能为空"];
+        return;
+    }
+    if ([beg_Time isEqualToString:[_eventInfo valueForKey:@"time"]] && [end_Time isEqualToString:[_eventInfo valueForKey:@"endTime"]]) {
+        [SVProgressHUD dismissWithSuccess:@"修改成功"];
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
+    [dictionary setValue:beg_Time forKey:@"time"];
+    [dictionary setValue:end_Time forKey:@"endTime"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    [SVProgressHUD dismissWithSuccess:@"修改成功"];
+                    [_eventInfo setValue:beg_Time forKey:@"time"];
+                    [_eventInfo setValue:end_Time forKey:@"endTime"];
+                    [self saveEventToDB:_eventInfo];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case EVENT_NOT_EXIST:
+                {
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case REQUEST_DATA_ERROR:
+                {
+                    [SVProgressHUD dismissWithError:@"没有修改权限"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                default:
+                {
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                }
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
     
 }
 
+-(void)saveEventToDB:(NSDictionary*)event
+{
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
+    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
+}
 
 #pragma mark - UITextField Delegate
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField

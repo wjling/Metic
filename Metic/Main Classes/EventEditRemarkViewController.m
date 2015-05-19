@@ -9,6 +9,9 @@
 #import "EventEditRemarkViewController.h"
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
+#import "MTUser.h"
+#import "MTDatabaseHelper.h"
+#import "NSString+JSON.h"
 
 const float textViewHeight = 120;
 const float keyboardHeight = 310;
@@ -102,8 +105,68 @@ const float keyboardleft = 0;
 
 -(void)confirm
 {
+    [_textView resignFirstResponder];
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
     
+    NSString* content = [NSString stringWithString: _textView.text];
+    if (!content || [content isEqualToString:[_eventInfo valueForKey:@"remark"]]) {
+        [self.navigationController popViewControllerAnimated:YES];
+        [SVProgressHUD dismissWithSuccess:@"修改成功"];
+        return;
+    }
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
+    [dictionary setValue:content forKey:@"remark"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    [SVProgressHUD dismissWithSuccess:@"修改成功"];
+                    [_eventInfo setValue:content forKey:@"remark"];
+                    [self saveEventToDB:_eventInfo];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case EVENT_NOT_EXIST:
+                {
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                case REQUEST_DATA_ERROR:
+                {
+                    [SVProgressHUD dismissWithError:@"没有修改权限"];
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                    break;
+                default:
+                {
+                    [SVProgressHUD dismissWithError:@"网络异常"];
+                }
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
+    
+}
+
+-(void)saveEventToDB:(NSDictionary*)event
+{
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
+    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 -(void)adjustTextView
