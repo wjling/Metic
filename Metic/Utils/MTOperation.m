@@ -38,6 +38,9 @@
 
 -(void)inviteFriends:(NSArray*)notFriendsList
 {
+    if (notFriendsList.count == 0) {
+        return;
+    }
     NSString* names = @"";
     for (int i = 0; i < notFriendsList.count; i++) {
         NSNumber* fid = notFriendsList[i];

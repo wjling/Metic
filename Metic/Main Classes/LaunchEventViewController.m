@@ -15,7 +15,7 @@
 #import "MTUser.h"
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
-
+#import "MTOperation.h"
 
 
 @interface LaunchEventViewController ()
@@ -40,7 +40,7 @@
 @property (nonatomic,strong) UIButton *isAllowStrangerButton;
 @property (strong,nonatomic) UICollectionView *collectionView;
 @property (nonatomic, strong) CLLocationManager  *locationManager;
-
+@property (nonatomic, strong) NSArray* notFriendsList;
 @end
 
 @implementation LaunchEventViewController
@@ -480,7 +480,7 @@
         friends = [NSString stringWithFormat:friends,friendid];
     }
     friends = [friends stringByAppendingString:@"]"];
-    
+    _notFriendsList = nil;
     NSString* location = self.location_text.text;
     if ([location isEqualToString:@""] || [location isEqualToString:@"定位中"]) location = @"地点未定";
     self.event_text.text = [self.event_text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -544,6 +544,8 @@
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             NSNumber *tmpid = [response1 valueForKey:@"event_id"];
+            NSArray* notFriendsList = [response1 valueForKey:@"list"];
+            _notFriendsList = notFriendsList;
             if ([cmd intValue] != SERVER_ERROR && [tmpid intValue] != -1) {
                 if (self.uploadImage) {
                     PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
@@ -555,6 +557,7 @@
                         ((HomeViewController*)self.controller).shouldRefresh = YES;
                         self.canLeave = YES;
                         [self.navigationController popViewControllerAnimated:YES];
+                        [[MTOperation sharedInstance]inviteFriends:notFriendsList];
                     });
                 }
             }else{
@@ -764,13 +767,15 @@
             ((HomeViewController*)self.controller).shouldRefresh = YES;
             self.canLeave = YES;
             [self.navigationController popViewControllerAnimated:YES];
+            [[MTOperation sharedInstance]inviteFriends:_notFriendsList];
         });
     }else if (type == 106){
-        [SVProgressHUD dismissWithSuccess:@"活动发布成功，图片上传失败" afterDelay:1];
+        [SVProgressHUD dismissWithSuccess:@"活动发布成功，封面上传失败" afterDelay:1];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             ((HomeViewController*)self.controller).shouldRefresh = YES;
             self.canLeave = YES;
             [self.navigationController popViewControllerAnimated:YES];
+            [[MTOperation sharedInstance]inviteFriends:_notFriendsList];
         });
     }
 }
