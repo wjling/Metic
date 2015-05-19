@@ -1816,7 +1816,7 @@ enum Response_Type
                 NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:[item_index intValue]];
                 
                 NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-                NSLog(@"response event, seq: %d",seq1);
+//                NSLog(@"response event, seq: %d",seq1);
                 NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
                 NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
                 [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
