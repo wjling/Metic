@@ -11,13 +11,13 @@
 #import "showParticipatorsViewController.h"
 #import "SVProgressHUD.h"
 #import "BOAlertController.h"
+#import "MTOperation.h"
 
 @interface InviteFriendViewController ()
 @property (nonatomic,strong) NSMutableSet *tmp_fids;
 @property (strong, nonatomic) UIView* waitingView;
-@property (strong, nonatomic) NSArray* notFriendsList;
-
 @end
+
 @implementation InviteFriendViewController
 {
     NSInteger initialSectionForFriendList;
@@ -108,53 +108,6 @@
     }
 }
 
--(void)inviteFriends:(NSArray*)notFriendsList
-{
-    _notFriendsList = notFriendsList;
-    NSString* names = @"";
-    for (int i = 0; i < notFriendsList.count; i++) {
-        NSNumber* fid = notFriendsList[i];
-        NSString* fname = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        if (fname == nil || [fname isEqual:[NSNull null]]) {
-            fname = [[MTUser sharedInstance].nameFromID_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        }
-        
-        if (i == 0) {
-            names = [names stringByAppendingString:[NSString stringWithFormat:@"%@",fname]];
-        }else{
-            names = [names stringByAppendingString:[NSString stringWithFormat:@",%@",fname]];
-        }
-        
-    }
-    
-    NSString* message = [NSString stringWithFormat:@"%@ 不是你的好友，无法邀请，是否申请添加好友 ？",names];
-    
-    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:self];
-    
-    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.navigationController popToViewController:self.controller animated:YES];
-        });
-    }];
-    [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
-    
-    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
-        
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"添加好友" message:@"请填写好友申请信息：" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-            [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
-        }
-        [alert setTag:120];
-        [alert show];
-
-    }];
-    [alertView addButton:okItem type:RIButtonItemType_Other];
-    [alertView show];
-    
-    
-}
-
 - (IBAction)confirm:(id)sender {
     [sender setEnabled:NO];
     if ([self.controller isKindOfClass:[LaunchEventViewController class]]) {
@@ -198,19 +151,13 @@
                     {
                         [SVProgressHUD showSuccessWithStatus:@"邀请信息已经发送" duration:1];
                         NSArray* notFriendsList = [response1 valueForKey:@"list"];
-                        if (notFriendsList.count) {
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                [sender setEnabled:YES];
-                                [self inviteFriends:notFriendsList];
-                            });
-                            
-                        }else{
-                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                [self.navigationController popToViewController:self.controller animated:YES];
-                                [sender setEnabled:YES];
-                            });
-                        }
-                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController popToViewController:self.controller animated:YES];
+                            [sender setEnabled:YES];
+                            if (notFriendsList.count) {
+                                [[MTOperation sharedInstance] inviteFriends:notFriendsList];
+                            }
+                        });
                     }
                         break;
                     default:
@@ -235,41 +182,6 @@
 #pragma mark - Alert Delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
     // the user clicked OK
-    if (alertView.tag == 120) {
-        //批量申请添加好友
-        if(buttonIndex == 0){
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popToViewController:self.controller animated:YES];
-            });
-        }else if(buttonIndex == 1){
-            NSInteger cancelBtnIndex = alertView.cancelButtonIndex;
-            NSInteger okBtnIndex = alertView.firstOtherButtonIndex;
-            if (buttonIndex == cancelBtnIndex) {
-                ;
-            }
-            else if (buttonIndex == okBtnIndex)
-            {
-                [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
-                NSString* cm = [alertView textFieldAtIndex:0].text;
-                NSNumber* userId = [MTUser sharedInstance].userid;
-                for (int i = 0; i < _notFriendsList.count; i++) {
-                    NSNumber* friendId = _notFriendsList[i];
-                    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
-                    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-                    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND finshedBlock:^(NSData *rData) {
-                    }];
-                }
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [SVProgressHUD dismissWithSuccess:@"添加好友请求已发送"];
-                    [self.navigationController popToViewController:self.controller animated:YES];
-                });
-                
-            }
-        }
-        
-        return;
-    }
     if (buttonIndex == 0)
     {
         [self.navigationController popToViewController:self.controller animated:YES];
