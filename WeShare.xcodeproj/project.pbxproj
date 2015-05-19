@@ -343,6 +343,11 @@
 		F80DD1A11AF7A36000DC1CA3 /* SquareTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F80DD1A01AF7A36000DC1CA3 /* SquareTableView.m */; };
 		F80DD1A51AF7A4A000DC1CA3 /* SquareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F80DD1A31AF7A4A000DC1CA3 /* SquareTableViewCell.m */; };
 		F80DD1A61AF7A4A000DC1CA3 /* SquareTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F80DD1A41AF7A4A000DC1CA3 /* SquareTableViewCell.xib */; };
+		F810B7AC1B00B17800843AAB /* EventEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7AB1B00B17800843AAB /* EventEditViewController.m */; };
+		F810B7AF1B01079600843AAB /* EventEditSubjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7AE1B01079600843AAB /* EventEditSubjectViewController.m */; };
+		F810B7B31B0107C600843AAB /* EventEditTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B21B0107C600843AAB /* EventEditTimeViewController.m */; };
+		F810B7B61B0107ED00843AAB /* EventEditLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */; };
+		F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -1059,6 +1064,16 @@
 		F80DD1A21AF7A4A000DC1CA3 /* SquareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareTableViewCell.h; sourceTree = "<group>"; };
 		F80DD1A31AF7A4A000DC1CA3 /* SquareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareTableViewCell.m; sourceTree = "<group>"; };
 		F80DD1A41AF7A4A000DC1CA3 /* SquareTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquareTableViewCell.xib; sourceTree = "<group>"; };
+		F810B7AA1B00B17800843AAB /* EventEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditViewController.h; sourceTree = "<group>"; };
+		F810B7AB1B00B17800843AAB /* EventEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditViewController.m; sourceTree = "<group>"; };
+		F810B7AD1B01079600843AAB /* EventEditSubjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditSubjectViewController.h; sourceTree = "<group>"; };
+		F810B7AE1B01079600843AAB /* EventEditSubjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditSubjectViewController.m; sourceTree = "<group>"; };
+		F810B7B11B0107C600843AAB /* EventEditTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditTimeViewController.h; sourceTree = "<group>"; };
+		F810B7B21B0107C600843AAB /* EventEditTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditTimeViewController.m; sourceTree = "<group>"; };
+		F810B7B41B0107ED00843AAB /* EventEditLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditLocationViewController.h; sourceTree = "<group>"; };
+		F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditLocationViewController.m; sourceTree = "<group>"; };
+		F810B7B71B01080400843AAB /* EventEditRemarkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditRemarkViewController.h; sourceTree = "<group>"; };
+		F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditRemarkViewController.m; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -2173,16 +2188,14 @@
 				483E01EF1935C6E400418A58 /* Friends */,
 				08E92DD819B2CCDE002499BF /* Video */,
 				083FF69E19D06021001BB61E /* photo */,
+				F810B7A81B00B03200843AAB /* Event */,
+				F810B7A91B00B06800843AAB /* PhotoUpload */,
 				51A01D111933A1FF0043963F /* MTUser.h */,
 				51A01D121933A1FF0043963F /* MTUser.m */,
 				51A01D141934EB270043963F /* MTEvent.h */,
 				51A01D151934EB270043963F /* MTEvent.m */,
 				51581D74193361A500943606 /* MenuViewController.h */,
 				51581D75193361A500943606 /* MenuViewController.m */,
-				51581D5E19335A8700943606 /* HomeViewController.h */,
-				51581D5F19335A8700943606 /* HomeViewController.m */,
-				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
-				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
 				516DD98D19864B5F0088FE69 /* EventInvitationViewController.h */,
 				516DD98E19864B5F0088FE69 /* EventInvitationViewController.m */,
 				08AB903D197BFA7E006E54CE /* showParticipatorsViewController.h */,
@@ -2203,20 +2216,12 @@
 				515F9FF319736D58009D96BA /* MapViewController.mm */,
 				51F06C86197FA2F3000E8428 /* ScanViewController.h */,
 				51F06C87197FA2F3000E8428 /* ScanViewController.m */,
-				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
-				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
 				51E55C721987389000D62C36 /* BannerSelectorViewController.h */,
 				51E55C731987389000D62C36 /* BannerSelectorViewController.m */,
 				04B6F8B019A25FCC00229393 /* BannerViewController.h */,
 				04B6F8B119A25FCC00229393 /* BannerViewController.m */,
 				51DDBF7819A328010051B88C /* AdViewController.h */,
 				51DDBF7919A328010051B88C /* AdViewController.m */,
-				043E1A671ADA23AA00D1D39F /* UploadManageViewCell.h */,
-				043E1A681ADA23AA00D1D39F /* UploadManageViewCell.m */,
-				043E1A691ADA23AA00D1D39F /* UploadManageViewController.h */,
-				043E1A6A1ADA23AA00D1D39F /* UploadManageViewController.m */,
-				F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */,
-				F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */,
 			);
 			path = "Main Classes";
 			sourceTree = "<group>";
@@ -2437,6 +2442,58 @@
 				51F4CB0819E6307500E487F1 /* WebSocket.m */,
 			);
 			path = HttpServer;
+			sourceTree = "<group>";
+		};
+		F810B7A81B00B03200843AAB /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
+				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
+				51581D5E19335A8700943606 /* HomeViewController.h */,
+				51581D5F19335A8700943606 /* HomeViewController.m */,
+				5148121A19372B4200DBBED7 /* EventDetailViewController.h */,
+				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
+				F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */,
+				F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */,
+				F810B7B01B0107A200843AAB /* EventEdit */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
+		F810B7A91B00B06800843AAB /* PhotoUpload */ = {
+			isa = PBXGroup;
+			children = (
+				043E1A671ADA23AA00D1D39F /* UploadManageViewCell.h */,
+				043E1A681ADA23AA00D1D39F /* UploadManageViewCell.m */,
+				043E1A691ADA23AA00D1D39F /* UploadManageViewController.h */,
+				043E1A6A1ADA23AA00D1D39F /* UploadManageViewController.m */,
+			);
+			name = PhotoUpload;
+			sourceTree = "<group>";
+		};
+		F810B7B01B0107A200843AAB /* EventEdit */ = {
+			isa = PBXGroup;
+			children = (
+				F810B7AA1B00B17800843AAB /* EventEditViewController.h */,
+				F810B7AB1B00B17800843AAB /* EventEditViewController.m */,
+				F810B7AD1B01079600843AAB /* EventEditSubjectViewController.h */,
+				F810B7AE1B01079600843AAB /* EventEditSubjectViewController.m */,
+				F810B7B11B0107C600843AAB /* EventEditTimeViewController.h */,
+				F810B7B21B0107C600843AAB /* EventEditTimeViewController.m */,
+				F810B7B41B0107ED00843AAB /* EventEditLocationViewController.h */,
+				F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */,
+				F810B7B71B01080400843AAB /* EventEditRemarkViewController.h */,
+				F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */,
+				F810B7BA1B09D96F00843AAB /* New Group */,
+			);
+			name = EventEdit;
+			sourceTree = "<group>";
+		};
+		F810B7BA1B09D96F00843AAB /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
@@ -2817,6 +2874,7 @@
 				51F4CB1F19E6307500E487F1 /* HTTPConnection.m in Sources */,
 				086A5AAF193D5B2500880F2F /* LaunchEventViewController.m in Sources */,
 				08DB69AA19541F3A00F80F3F /* EventCellTableViewCell.m in Sources */,
+				F810B7B31B0107C600843AAB /* EventEditTimeViewController.m in Sources */,
 				F83369451ACFF01E00B41435 /* MJPhotoLoadingView.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
@@ -2877,6 +2935,7 @@
 				0896AACB19E7914A00A93A1B /* MTUIImagePickerController.m in Sources */,
 				084EC7291966446500E9B48F /* PhotoUploadViewController.m in Sources */,
 				04A531861A222947002FDDC1 /* UIImageView+LBBlurredImage.m in Sources */,
+				F810B7B61B0107ED00843AAB /* EventEditLocationViewController.m in Sources */,
 				51F4CB0C19E6307500E487F1 /* ASIDownloadCache.m in Sources */,
 				5148121C19372B4200DBBED7 /* EventDetailViewController.m in Sources */,
 				083FF6A319D06048001BB61E /* photoRankingViewController.m in Sources */,
@@ -2963,6 +3022,7 @@
 				510D45A0196E8A960081672A /* UIButton+WebCache.m in Sources */,
 				081B6DAB1A7685D80044D623 /* qrspec.c in Sources */,
 				08905A731A2E096B0089CF08 /* PictureWall2.m in Sources */,
+				F810B7AF1B01079600843AAB /* EventEditSubjectViewController.m in Sources */,
 				081B6DA71A7685D80044D623 /* bitstream.c in Sources */,
 				0878E85A1A3AC76F00E3C18C /* RIButtonItem.m in Sources */,
 				0878E85C1A3AC76F00E3C18C /* UIAlertView+Blocks.m in Sources */,
@@ -2999,6 +3059,7 @@
 				08DB69B419541F3A00F80F3F /* UIImageView+AFNetworking.m in Sources */,
 				08F798A019AE449D002BA684 /* MTMessageTextView.m in Sources */,
 				081B6DA81A7685D80044D623 /* mask.c in Sources */,
+				F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */,
 				514812171937064E00DBBED7 /* MJRefreshConst.m in Sources */,
 				0821828A1AA6DEED00EBD156 /* PECropViewController.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
@@ -3038,6 +3099,7 @@
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
 				510D459C196E8A960081672A /* SDWebImageDownloader.m in Sources */,
 				51F4CB0919E6307500E487F1 /* ASIAuthenticationDialog.m in Sources */,
+				F810B7AC1B00B17800843AAB /* EventEditViewController.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 				51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */,

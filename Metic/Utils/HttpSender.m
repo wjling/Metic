@@ -252,6 +252,9 @@
         case 52:
             resultCode = @"view_event";
             break;
+        case 53:
+            resultCode = @"change_event_info";
+            break;
         default:
             resultCode = @"json";
             break;

@@ -381,14 +381,14 @@
         NSDate *date;
         if (![textField.text isEqualToString:@""]) {
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
             [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
             [dateFormatter setLocale:[NSLocale currentLocale]];
             NSLog(@"#%@#",textField.text);
             date= [dateFormatter dateFromString:textField.text];
         }else date = [NSDate date];
         self.seletedText = textField;
-        [self.flatDatePicker setMaximumDate:[NSDate dateWithTimeIntervalSinceNow:157680000]];
+        [self.flatDatePicker setMaximumDate:[NSDate dateWithTimeIntervalSinceNow:15768000000]];
         self.flatDatePicker.datePickerMode = FlatDatePickerModeDate;
         [self.flatDatePicker setDate:date animated:NO];
         [self.flatDatePicker show];

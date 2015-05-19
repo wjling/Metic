@@ -32,7 +32,7 @@
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
-@property (nonatomic,strong) NSDictionary *event;
+@property (nonatomic,strong) NSMutableDictionary *event;
 @property (nonatomic,strong) UIImage* uploadImage;
 @property int Bannercode;
 
