@@ -9,16 +9,22 @@
 #import "EventEditViewController.h"
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
+#import "Reachability.h"
+#import "MTDatabaseHelper.h"
+#import "NSString+JSON.h"
 
 #import "EventEditSubjectViewController.h"
 #import "EventEditTimeViewController.h"
 #import "EventEditLocationViewController.h"
 #import "EventEditRemarkViewController.h"
+#import "BannerSelectorViewController.h"
+
+#import "SVProgressHUD.h"
 
 const float rowHeight = 42.0f;
 const NSInteger rowCount = 3;
 
-@interface EventEditViewController () <UITableViewDataSource,UITableViewDelegate>
+@interface EventEditViewController () <UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
 @property (nonatomic,strong) UIImageView* banner;
 @property (nonatomic,strong) UITableView* tableView;
 
@@ -29,7 +35,15 @@ const NSInteger rowCount = 3;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
+    [self initData];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self checkBannerChange];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -53,7 +67,11 @@ const NSInteger rowCount = 3;
     [self.view addSubview:bannerView];
     
     _banner = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 123)];
+    _banner.userInteractionEnabled = YES;
     [_banner setContentMode:UIViewContentModeScaleAspectFill];
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeBanner)];
+    tapRecognizer.numberOfTapsRequired=1;
+    [_banner addGestureRecognizer:tapRecognizer];
     [bannerView addSubview:_banner];
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:_banner authorId:self.eventId];
@@ -74,12 +92,87 @@ const NSInteger rowCount = 3;
 
 }
 
+-(void)initData
+{
+    self.Bannercode = -1;
+}
+
 - (void)refresh
 {
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:_banner authorId:self.eventId];
     NSString* bannerURL = [_eventInfo valueForKey:@"banner"];
     [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL];
     [_tableView reloadData];
+}
+
+-(void)checkBannerChange
+{
+    if (_Bannercode>-1) {
+        [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
+        if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+            NSLog(@"没有网络");
+            _Bannercode = -1;
+            _uploadImage = nil;
+            [SVProgressHUD dismissWithError:@"网络无连接，更改封面失败" afterDelay:1];
+            return;
+        }
+        if (_Bannercode > 0 && _eventId) {
+            NSInteger bannercode = _Bannercode;
+            //上报封面修改信息
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:_eventId forKey:@"event_id"];
+            [dictionary setValue:[NSNumber numberWithInteger:bannercode] forKey:@"code"];
+            _Bannercode = -1;
+            [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSLog(@"%@",response1);
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY) {
+                        [_eventInfo setValue:@(bannercode) forKey:@"code"];
+                        [self saveEventToDB:_eventInfo];
+                        [self refresh];
+                        [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                    }else{
+                        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                    }
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }];
+            
+        }else if (_Bannercode == 0){
+            PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+            getter.mDelegate = self;
+            [getter uploadBanner:_eventId];
+        }
+        
+    }
+}
+
+-(void)changeBanner
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
+    
+    BanSelector.EEcontroller = self;
+    [self.navigationController pushViewController:BanSelector animated:YES];
+}
+
+-(void)saveEventToDB:(NSDictionary*)event
+{
+    NSString *eventData = [NSString jsonStringWithDictionary:event];
+    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+    NSString *beginTime = [event valueForKey:@"time"];
+    NSString *joinTime = [event valueForKey:@"jointime"];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
+    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
+    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 #pragma UITableView DataSource
@@ -288,6 +381,50 @@ const NSInteger rowCount = 3;
             break;
     }
 
+}
+
+#pragma mark - PhotoGetterDelegate
+-(void)finishwithNotification:(UIImageView *)imageView image:(UIImage *)image type:(int)type container:(id)container
+{
+    if (type == 100){
+        //上传封面后 删除临时文件
+        NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if ([fileManager fileExistsAtPath:bannerPath])
+            [fileManager removeItemAtPath:bannerPath error:nil];
+        [[SDImageCache sharedImageCache] removeImageForKey:[_eventInfo valueForKey:@"banner"]];
+        
+        NSInteger bannercode = _Bannercode;
+        //上报封面修改信息
+        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+        [dictionary setValue:_eventId forKey:@"event_id"];
+        [dictionary setValue:[NSNumber numberWithInteger:bannercode] forKey:@"code"];
+        _Bannercode = -1;
+        [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        NSLog(@"%@",dictionary);
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY) {
+                    [_eventInfo setValue:@(bannercode) forKey:@"code"];
+                    [self saveEventToDB:_eventInfo];
+                    [self refresh];
+                    [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
+                }else{
+                    [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+                }
+            }else{
+                [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+            }
+        }];
+        
+    }else if (type == 106){
+        [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
+    }
 }
 
 @end

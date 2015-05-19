@@ -78,6 +78,12 @@
         self.Econtroller.Bannercode = _code;
         [self.navigationController popToViewController:self.Econtroller animated:YES];
         return;
+    }else if(_EEcontroller){
+        self.EEcontroller.uploadImage = nil;
+        self.EEcontroller.Bannercode = _code;
+        [self.navigationController popToViewController:self.EEcontroller animated:YES];
+        return;
+
     }
     if (_Lcontroller) {
         if(self.Lcontroller.code!=0){
@@ -178,6 +184,12 @@
         self.Econtroller.uploadImage = croppedImage;
         self.Econtroller.Bannercode = 0;
         [self.navigationController popToViewController:self.Econtroller animated:YES];
+        return;
+    }else if (_EEcontroller){
+        [controller dismissViewControllerAnimated:YES completion:NULL];
+        self.EEcontroller.uploadImage = croppedImage;
+        self.EEcontroller.Bannercode = 0;
+        [self.navigationController popToViewController:self.EEcontroller animated:YES];
         return;
     }
     

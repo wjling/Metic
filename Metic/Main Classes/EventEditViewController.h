@@ -11,4 +11,7 @@
 @interface EventEditViewController : UIViewController
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSMutableDictionary* eventInfo;
+
+@property NSInteger Bannercode;
+@property (nonatomic,strong) UIImage* uploadImage;
 @end

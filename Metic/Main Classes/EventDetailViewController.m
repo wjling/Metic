@@ -299,11 +299,11 @@
                                                             image:nil
                                                            target:self
                                                            action:@selector(editEvent)],
-                                             
-                                             [KxMenuItem menuItem:@"更换封面"
-                                                            image:nil
-                                                           target:self
-                                                           action:@selector(changeBanner)],
+//                                             
+//                                             [KxMenuItem menuItem:@"更换封面"
+//                                                            image:nil
+//                                                           target:self
+//                                                           action:@selector(changeBanner)],
                                              
                                              [KxMenuItem menuItem:@"解散活动"
                                                             image:nil
