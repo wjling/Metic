@@ -273,6 +273,8 @@
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     [_confirmBtn setEnabled:NO];
+    _beginTime.userInteractionEnabled = NO;
+    _endTime.userInteractionEnabled = NO;
     self.flatDatePicker.title = @"请选择活动日期";
     NSDate *date;
     if (![textField.text isEqualToString:@""]) {
@@ -316,6 +318,8 @@
 - (void)flatDatePicker:(FlatDatePicker*)datePicker didCancel:(UIButton*)sender {
     self.seletedText.text = @"";
     [_confirmBtn setEnabled:YES];
+    _beginTime.userInteractionEnabled = YES;
+    _endTime.userInteractionEnabled = YES;
 }
 
 - (void)flatDatePicker:(FlatDatePicker*)datePicker didValid:(UIButton*)sender date:(NSDate*)date {
@@ -328,6 +332,8 @@
     } else if (datePicker.datePickerMode == FlatDatePickerModeTime) {
         //[datePicker setDatePickerMode:FlatDatePickerModeDate];
         [_confirmBtn setEnabled:YES];
+        _beginTime.userInteractionEnabled = YES;
+        _endTime.userInteractionEnabled = YES;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self checkTimeValid];
         });
