@@ -124,6 +124,7 @@
 {
     NSString* loc = [_eventInfo valueForKey:@"location"];
     if (loc) {
+        if([loc isEqualToString: @"地点未定"])loc = @"";
         _contentField.text = loc;
     }
     
@@ -250,6 +251,7 @@
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
     
     NSString* content = [NSString stringWithString: _contentField.text];
+    if([content isEqualToString: @""])content = @"地点未定";
     if ([content isEqualToString:[_eventInfo valueForKey:@"location"]] && _pt.latitude == [[_eventInfo valueForKey:@"latitude"]doubleValue] && _pt.longitude == [[_eventInfo valueForKey:@"longitude"]doubleValue]) {
         [self.navigationController popViewControllerAnimated:YES];
         [SVProgressHUD dismissWithSuccess:@"修改成功"];
