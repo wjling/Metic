@@ -49,11 +49,11 @@
     BOOL official = [[data valueForKey:@"verify"] boolValue];
     [self drawOfficialFlag:official];
     CGRect frame = _subject.frame;
-    if (official) {
-        frame.size.width = 200;
-    }else{
-        frame.size.width = 250;
-    }
+//    if (official) {
+//        frame.size.width = 200;
+//    }else{
+//        frame.size.width = 250;
+//    }
     [_subject setFrame:frame];
 
 }
@@ -62,18 +62,12 @@
 {
     if (isOfficial) {
         if (_officialFlag) {
-            [self addSubview:_officialFlag];
+            [_themePhoto addSubview:_officialFlag];
         }else{
-            float width = self.bounds.size.width;
-            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
-            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.text = @"官";
-            label.font = [UIFont systemFontOfSize:15];
-            label.textColor = [UIColor whiteColor];
-            [_officialFlag addSubview:label];
-            [self addSubview:_officialFlag];
+            float height = CGRectGetHeight(_themePhoto.frame)*0.6;
+            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth(_themePhoto.frame)-height, 0, height, height)];
+            _officialFlag.image = [UIImage imageNamed:@"最新活动推荐icon"];
+            [_themePhoto addSubview:_officialFlag];
         }
     }else{
         if (_officialFlag) {
