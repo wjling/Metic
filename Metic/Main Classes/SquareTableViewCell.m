@@ -35,27 +35,9 @@
 - (void)applyData:(NSDictionary*)data
 {
     self.eventInfo = data;
-//    NSString* beginT = [data valueForKey:@"time"];
-//    NSString* endT = [data valueForKey:@"endTime"];
-//
-//    self.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[data valueForKey:@"launch_time"]];
-//    self.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[data valueForKey:@"location"]];
-    
-//    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-//    if (launcher == nil || [launcher isEqual:[NSNull null]]) {
-//        launcher = [data valueForKey:@"launcher"];
-//    }
-//
-//    self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
-//
-//    NSString* remark = [data valueForKey:@"remark"];
-//    if (remark && ![remark isEqualToString:@""]) {
-//        self.remark.text = remark;
-//    }else{
-//        self.remark.text = @"";
-//    }
     
     self.subject.text = [data valueForKey:@"subject"];
+    self.viewcount.text = [NSString stringWithFormat:@"%@次浏览",[data valueForKey:@"pv"]];
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"launcher_id"]];
     [avatarGetter getAvatar];

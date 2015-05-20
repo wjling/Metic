@@ -12,6 +12,7 @@
 @property (nonatomic,strong) IBOutlet UIImageView *themePhoto;
 @property (nonatomic,strong) IBOutlet UIImageView *avatar;
 @property (nonatomic,strong) IBOutlet UILabel *subject;
+@property (strong, nonatomic) IBOutlet UILabel *viewcount;
 
 
 @property (nonatomic,strong) NSDictionary *eventInfo;
