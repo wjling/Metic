@@ -52,7 +52,7 @@
         if (i == 0) {
             names = [names stringByAppendingString:[NSString stringWithFormat:@"%@",fname]];
         }else{
-            names = [names stringByAppendingString:[NSString stringWithFormat:@",%@",fname]];
+            names = [names stringByAppendingString:[NSString stringWithFormat:@"、%@",fname]];
         }
         
     }
@@ -82,17 +82,42 @@
                 [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
                 NSString* cm = [alert textFieldAtIndex:0].text;
                 NSNumber* userId = [MTUser sharedInstance].userid;
-                for (int i = 0; i < notFriendsList.count; i++) {
-                    NSNumber* friendId = notFriendsList[i];
-                    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
-                    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
-                    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                    [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND finshedBlock:^(NSData *rData) {
-                    }];
+                
+                NSString *friendlist = @"[";
+                BOOL flag = YES;
+                for (NSNumber* friendid in notFriendsList) {
+                    friendlist = [friendlist stringByAppendingString: flag? @"%@":@",%@"];
+                    if (flag) flag = NO;
+                    friendlist = [NSString stringWithFormat:friendlist,friendid];
                 }
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [SVProgressHUD dismissWithSuccess:@"添加好友请求已发送"];
-                });
+                friendlist = [friendlist stringByAppendingString:@"]"];
+                
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendlist,@"friend_list",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND_BATCH finshedBlock:^(NSData *rData) {
+                    if (!rData) {
+                        [SVProgressHUD dismissWithError:@"网络异常"];
+                    }else{
+                        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                        NSLog(@"Received Data: %@",temp);
+                        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSNumber *cmd = [response valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case NORMAL_REPLY:
+                            {
+                                [SVProgressHUD dismissWithSuccess:@"添加好友请求已发送"];
+                            }
+                                break;
+                            default:
+                            {
+                                [SVProgressHUD dismissWithSuccess:@"添加好友请求已发送"];
+                            }
+                        }
+                    }
+                    
+                    
+                }];
             }
         };
         

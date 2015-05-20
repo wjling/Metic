@@ -255,6 +255,9 @@
         case 53:
             resultCode = @"change_event_info";
             break;
+        case 54:
+            resultCode = @"add_friend_batch";
+            break;
         default:
             resultCode = @"json";
             break;
