@@ -41,6 +41,7 @@
 -(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
 -(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
 -(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL;
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL retainOldone:(BOOL)retainOldone;
 -(void)updatePhoto;
 -(void)uploadPhoto;
 -(void)uploadAvatar;

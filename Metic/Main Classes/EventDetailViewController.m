@@ -1221,7 +1221,7 @@
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
         NSString* bannerURL = [_event valueForKey:@"banner"];
-        [bannerGetter getBanner:[_event valueForKey:@"code"] url:bannerURL];
+        [bannerGetter getBanner:[_event valueForKey:@"code"] url:bannerURL retainOldone:YES];
 
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {
