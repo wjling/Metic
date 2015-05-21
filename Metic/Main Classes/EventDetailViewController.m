@@ -994,7 +994,7 @@
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
-
+    BanSelector.code = [[_event valueForKey:@"code"] integerValue];
     BanSelector.Econtroller = self;
     [self.navigationController pushViewController:BanSelector animated:YES];
 }

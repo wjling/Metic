@@ -10,7 +10,6 @@
 #import "UIImage+fixOrien.h"
 
 @interface BannerSelectorViewController ()
-@property int code;
 @end
 
 @implementation BannerSelectorViewController
@@ -28,9 +27,16 @@
 {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    _code = 1;
-    [((UIImageView*)_selectorIndictors[0]) setHighlighted:YES];
+    if (_code >= 2 && _code <=7) {
+        [((UIImageView*)_selectorIndictors[_code-2]) setHighlighted:YES];
+    }
+    
     // Do any additional setup after loading the view.
+}
+
+-(void)dealloc
+{
+    NSLog(@"dealloc");
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,7 +55,7 @@
         UIImageView* indictor = [_selectorIndictors objectAtIndex:i];
         [indictor setHighlighted:NO];
     }
-    _code = [sender tag];
+    _code = [sender tag]+1;
     [((UIImageView*)_selectorIndictors[[sender tag] - 1]) setHighlighted:YES];
 }
 
@@ -74,22 +80,28 @@
 
 - (IBAction)confirmBanner:(id)sender {
     if (_Econtroller) {
-        self.Econtroller.uploadImage = nil;
-        self.Econtroller.Bannercode = _code;
+        if (_code >= 2) {
+            self.Econtroller.uploadImage = nil;
+            self.Econtroller.Bannercode = _code;
+        }
         [self.navigationController popToViewController:self.Econtroller animated:YES];
         return;
     }else if(_EEcontroller){
-        self.EEcontroller.uploadImage = nil;
-        self.EEcontroller.Bannercode = _code;
+        if (_code >= 2) {
+            self.EEcontroller.uploadImage = nil;
+            self.EEcontroller.Bannercode = _code;
+        }
         [self.navigationController popToViewController:self.EEcontroller animated:YES];
         return;
 
     }
     if (_Lcontroller) {
-        if(self.Lcontroller.code!=0){
+        if (_code >= 2) {
             self.Lcontroller.code = _code;
-            [self.Lcontroller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-1]).imageView.image forState:UIControlStateNormal];
+            self.Lcontroller.uploadImage = nil;
+            [self.Lcontroller.banner_button setBackgroundImage:((UIButton*)self.defaultBanners[_code-2]).imageView.image forState:UIControlStateNormal];
         }
+
         [self.navigationController popToViewController:self.Lcontroller animated:YES];
         self.Lcontroller = nil;
     }
@@ -104,6 +116,7 @@
     controller.image = self.uploadImage;
     
     UIImage *image = self.uploadImage;
+    self.uploadImage = nil;
     CGFloat width = image.size.width;
     CGFloat height = image.size.height;
     CGFloat wi = MIN(width, height*2.5);
@@ -180,27 +193,32 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     if (_Econtroller) {
-        [controller dismissViewControllerAnimated:YES completion:NULL];
-        self.Econtroller.uploadImage = croppedImage;
-        self.Econtroller.Bannercode = 0;
-        [self.navigationController popToViewController:self.Econtroller animated:YES];
+        [controller dismissViewControllerAnimated:YES completion:^{
+            self.Econtroller.uploadImage = croppedImage;
+            self.Econtroller.Bannercode = 0;
+            self.uploadImage = nil;
+            [self.navigationController popToViewController:self.Econtroller animated:YES];
+        }];
         return;
     }else if (_EEcontroller){
-        [controller dismissViewControllerAnimated:YES completion:NULL];
-        self.EEcontroller.uploadImage = croppedImage;
-        self.EEcontroller.Bannercode = 0;
-        [self.navigationController popToViewController:self.EEcontroller animated:YES];
+        [controller dismissViewControllerAnimated:YES completion:^{
+            self.EEcontroller.uploadImage = croppedImage;
+            self.EEcontroller.Bannercode = 0;
+            self.uploadImage = nil;
+            [self.navigationController popToViewController:self.EEcontroller animated:YES];
+        }];
         return;
     }
     
     if (_Lcontroller) {
-        [controller dismissViewControllerAnimated:YES completion:NULL];
-        self.Lcontroller.uploadImage =croppedImage;
-        [self.Lcontroller.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
-        self.Lcontroller.code = 0;
-        self.uploadImage = nil;
-        [self.navigationController popToViewController:self.Lcontroller animated:YES];
-        self.Lcontroller = nil;
+        [controller dismissViewControllerAnimated:YES completion:^{
+            self.Lcontroller.uploadImage =croppedImage;
+            [self.Lcontroller.banner_button setBackgroundImage:croppedImage forState:UIControlStateNormal];
+            self.Lcontroller.code = 0;
+            self.uploadImage = nil;
+            [self.navigationController popToViewController:self.Lcontroller animated:YES];
+        }];
+        
     }
     
     

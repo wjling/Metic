@@ -52,6 +52,11 @@ const NSInteger rowCount = 3;
     [self refresh];
 }
 
+-(void)dealloc
+{
+    NSLog(@"dealloc");
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -101,13 +106,14 @@ const NSInteger rowCount = 3;
 {
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:_banner authorId:self.eventId];
     NSString* bannerURL = [_eventInfo valueForKey:@"banner"];
-    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL];
+    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL retainOldone:YES];
     [_tableView reloadData];
 }
 
 -(void)checkBannerChange
 {
     if (_Bannercode>-1) {
+        if(_Bannercode >= 2 && _Bannercode == [[_eventInfo valueForKey:@"code"]integerValue])return;
         [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
         if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
             NSLog(@"没有网络");
@@ -146,6 +152,7 @@ const NSInteger rowCount = 3;
             
         }else if (_Bannercode == 0){
             PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
+            _uploadImage = nil;
             getter.mDelegate = self;
             [getter uploadBanner:_eventId];
         }
@@ -158,7 +165,7 @@ const NSInteger rowCount = 3;
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
-    
+    BanSelector.code = [[_eventInfo valueForKey:@"code"] integerValue];
     BanSelector.EEcontroller = self;
     [self.navigationController pushViewController:BanSelector animated:YES];
 }

@@ -34,7 +34,7 @@
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (nonatomic,strong) NSMutableDictionary *event;
 @property (nonatomic,strong) UIImage* uploadImage;
-@property int Bannercode;
+@property NSInteger Bannercode;
 
 @property BOOL isFromQRCode;
 @property BOOL isPublish;

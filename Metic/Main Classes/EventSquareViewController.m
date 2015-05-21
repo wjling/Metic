@@ -688,7 +688,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, 100, 23)];
-            label.text = @"热门活动";
+            label.text = @"最新活动";
             label.font = [UIFont systemFontOfSize:16];
             label.textAlignment = NSTextAlignmentLeft;
             label.textColor = [UIColor colorWithWhite:0.2f alpha:1.0];

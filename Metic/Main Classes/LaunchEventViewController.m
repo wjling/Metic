@@ -74,7 +74,7 @@
     self.detail_text.delegate = self;
     [self initInviteFriendsView];
     _visibility = 1;
-    _code = 1;
+    _code = -1;
     _canLeave = NO;
     _isKeyBoard = NO;
     _canLeave = NO;
@@ -532,7 +532,7 @@
     [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
     [dictionary setValue:[NSNumber numberWithInt:_visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
-    [dictionary setValue:[NSNumber numberWithInt:_code] forKeyPath:@"code"];
+    [dictionary setValue:(_code == -1? @(random()%6+2):@(_code)) forKeyPath:@"code"];
     [dictionary setValue:friends forKey:@"friends"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
@@ -798,6 +798,7 @@
     }
     if ([segue.destinationViewController isKindOfClass:[BannerSelectorViewController class]]) {
         BannerSelectorViewController *nextViewController = segue.destinationViewController;
+        nextViewController.code = _code;
         nextViewController.Lcontroller = self;
     }
 }
