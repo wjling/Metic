@@ -335,7 +335,7 @@ static MenuViewController *singletonInstance;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (canJump) {
         canJump = NO;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             canJump = YES;
         });
     }else return;
