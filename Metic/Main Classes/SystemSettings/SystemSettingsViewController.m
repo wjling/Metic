@@ -499,20 +499,15 @@
             [alertView show];
 
         }else if (row == 2){
-            NSMutableArray* shareDest = [[NSMutableArray alloc]init];
-            [shareDest addObjectsFromArray:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]];
-            
-            if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
-                [shareDest addObject:UMShareToQQ];
-            }
-            [shareDest addObjectsFromArray:@[UMShareToSina]];
+
             [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
             [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
+            [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:@"wx6f7ea17b99ab01e7"
                                               shareText:@"活动宝，是一款以“活动”为主题提倡用户进行线上线下活动的社交管理工具。"
                                              shareImage:[UIImage imageNamed:@"AppIcon57x57"]
-                                        shareToSnsNames:shareDest
+                                        shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSms]
                                                delegate:self];
             [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
         }else if (row == 3){

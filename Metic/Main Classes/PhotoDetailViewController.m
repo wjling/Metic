@@ -455,21 +455,14 @@
 
 - (IBAction)share:(id)sender {
     if (_photo) {
-        NSMutableArray* shareDest = [[NSMutableArray alloc]init];
-        [shareDest addObjectsFromArray:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]];
-        
-        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
-            [shareDest addObject:UMShareToQQ];
-        }
-        [shareDest addObjectsFromArray:@[UMShareToSina]];
-
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+        [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline]];
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:@""
                                          shareImage:self.photo
-                                    shareToSnsNames:shareDest
+                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSms]
                                            delegate:self];
     }
 }
