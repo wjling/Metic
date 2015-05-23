@@ -92,13 +92,20 @@
 }
 - (IBAction)shareQRcode:(id)sender {
     if (_event2Dcode) {
+        NSMutableArray* shareDest = [[NSMutableArray alloc]init];
+        [shareDest addObjectsFromArray:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]];
+        
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"mqq://"]]) {
+            [shareDest addObject:UMShareToQQ];
+        }
+        [shareDest addObjectsFromArray:@[UMShareToSina]];
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:@""
                                          shareImage:_event2Dcode
-                                    shareToSnsNames:[NSArray arrayWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite,UMShareToQQ,UMShareToSina,nil]
+                                    shareToSnsNames:shareDest
                                            delegate:self];
     }
 }
