@@ -349,6 +349,7 @@
 		F810B7B61B0107ED00843AAB /* EventEditLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */; };
 		F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */; };
 		F810B7BD1B0B996100843AAB /* MTOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7BC1B0B996100843AAB /* MTOperation.m */; };
+		F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7C01B0F679800843AAB /* EventLikeViewController.m */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -1077,6 +1078,8 @@
 		F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditRemarkViewController.m; sourceTree = "<group>"; };
 		F810B7BB1B0B996100843AAB /* MTOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTOperation.h; sourceTree = "<group>"; };
 		F810B7BC1B0B996100843AAB /* MTOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTOperation.m; sourceTree = "<group>"; };
+		F810B7BF1B0F679800843AAB /* EventLikeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLikeViewController.h; sourceTree = "<group>"; };
+		F810B7C01B0F679800843AAB /* EventLikeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLikeViewController.m; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -2182,6 +2185,7 @@
 		51581D5B19335A8700943606 /* Main Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F810B7BE1B0F675300843AAB /* EventLike */,
 				08E248AC19C740DF0042B30F /* EventSquare */,
 				0435EF1119AF6DC1003BB2F6 /* Login&Register */,
 				08775A0119A8F6E40034BB58 /* Report */,
@@ -2499,6 +2503,15 @@
 			children = (
 			);
 			name = "New Group";
+			sourceTree = "<group>";
+		};
+		F810B7BE1B0F675300843AAB /* EventLike */ = {
+			isa = PBXGroup;
+			children = (
+				F810B7BF1B0F679800843AAB /* EventLikeViewController.h */,
+				F810B7C01B0F679800843AAB /* EventLikeViewController.m */,
+			);
+			name = EventLike;
 			sourceTree = "<group>";
 		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
@@ -2983,6 +2996,7 @@
 				510D45A2196E8A960081672A /* UIImage+MultiFormat.m in Sources */,
 				08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */,
 				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
+				F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */,
 				08DB69B219541F3A00F80F3F /* UIAlertView+AFNetworking.m in Sources */,
 				510D4597196E8A960081672A /* MKAnnotationView+WebCache.m in Sources */,
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,

@@ -13,6 +13,7 @@
 #import "EventSquareViewController.h"
 #import "UserInfo/UserInfoViewController.h"
 #import "ScanViewController.h"
+#import "EventLikeViewController.h"
 #import "MTUser.h"
 
 
@@ -38,6 +39,7 @@
 @synthesize scaningViewController;
 @synthesize feedBackViewController;
 @synthesize systemSettingsViewController;
+@synthesize eventLikeViewController;
 @synthesize cellIdentifier;
 @synthesize tapRecognizer;
 @synthesize canJump;
@@ -67,7 +69,7 @@ static MenuViewController *singletonInstance;
     [self.img.layer setBorderWidth:3.0f];
     [self.img.layer setCornerRadius:28];
     
-    numberOfMenus = 8;
+    numberOfMenus = 9;
     canJump = YES;
     notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
     for (NSInteger i = 0; i < numberOfMenus; i++) {
@@ -298,6 +300,10 @@ static MenuViewController *singletonInstance;
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
 			break;
+        case 8:
+            ((UILabel*)[cell viewWithTag:2]).text = @"收藏活动";
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
+            break;
 	}
     
     UIImageView* dian = (UIImageView*)[cell viewWithTag:88];
@@ -412,6 +418,13 @@ static MenuViewController *singletonInstance;
                 vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"SystemSettingsViewController"];
                 systemSettingsViewController = vc;
             }else vc = systemSettingsViewController;
+        }
+            break;
+        case 8:
+        {
+            if (!eventLikeViewController) {
+                vc = [[EventLikeViewController alloc]init];
+            }else vc = eventLikeViewController;
         }
             break;
 

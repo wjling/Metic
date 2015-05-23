@@ -29,6 +29,7 @@
 @property(nonatomic,strong) UIViewController* feedBackViewController;
 @property(nonatomic,strong) UIViewController* systemSettingsViewController;
 @property(nonatomic,strong) UIViewController* eventSquareViewController;
+@property(nonatomic,strong) UIViewController* eventLikeViewController;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapRecognizer;
 
 + (MenuViewController *)sharedInstance;
