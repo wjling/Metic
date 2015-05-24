@@ -69,7 +69,8 @@ static MenuViewController *singletonInstance;
     [self.img.layer setBorderWidth:3.0f];
     [self.img.layer setCornerRadius:28];
     
-    numberOfMenus = 9;
+    numberOfMenus = 8;
+//    numberOfMenus = 9;
     canJump = YES;
     notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
     for (NSInteger i = 0; i < numberOfMenus; i++) {

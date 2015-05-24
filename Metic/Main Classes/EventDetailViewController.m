@@ -295,15 +295,15 @@
         
         if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             [menuItems addObjectsFromArray:@[
-                                             [KxMenuItem menuItem:@"编辑活动"
-                                                            image:nil
-                                                           target:self
-                                                           action:@selector(editEvent)],
-//                                             
-//                                             [KxMenuItem menuItem:@"更换封面"
+//                                             [KxMenuItem menuItem:@"编辑活动"
 //                                                            image:nil
 //                                                           target:self
-//                                                           action:@selector(changeBanner)],
+//                                                           action:@selector(editEvent)],
+                                             
+                                             [KxMenuItem menuItem:@"更换封面"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(changeBanner)],
                                              
                                              [KxMenuItem menuItem:@"解散活动"
                                                             image:nil
