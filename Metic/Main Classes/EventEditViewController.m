@@ -18,11 +18,12 @@
 #import "EventEditLocationViewController.h"
 #import "EventEditRemarkViewController.h"
 #import "BannerSelectorViewController.h"
+#import "EventEditTypeViewController.h"
 
 #import "SVProgressHUD.h"
 
 const float rowHeight = 42.0f;
-const NSInteger rowCount = 3;
+const NSInteger rowCount = 4;
 
 @interface EventEditViewController () <UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
 @property (nonatomic,strong) UIImageView* banner;
@@ -316,6 +317,12 @@ const NSInteger rowCount = 3;
                     title.text = @"活动描述";
 //                    content.text = [_eventInfo valueForKey:@"remark"];
                     break;
+                case 3:
+                    titleframe.size.height = rowHeight + 1;
+                    contentframe.size.height = rowHeight + 1;
+                    title.text = @"活动类型";
+//                    content.text = [_eventInfo valueForKey:@"remark"];
+                    break;
                     
                 default:
                     break;
@@ -373,6 +380,13 @@ const NSInteger rowCount = 3;
                 case 2:
                 {
                     EventEditRemarkViewController* vc = [[EventEditRemarkViewController alloc]init];
+                    vc.eventInfo = _eventInfo;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                    break;
+                case 3:
+                {
+                    EventEditTypeViewController* vc = [[EventEditTypeViewController alloc]init];
                     vc.eventInfo = _eventInfo;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
