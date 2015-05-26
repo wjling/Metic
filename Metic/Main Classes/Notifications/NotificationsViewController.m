@@ -1108,7 +1108,7 @@ enum Response_Type
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
                 CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
-                CGRect frame = CGRectMake(112, 28, 180, 16);
+                CGRect frame = CGRectMake(112, 35, 180, 16);
                 if (size.width <= 180) {
                     frame.size.width = size.width;
                 }
@@ -1195,7 +1195,7 @@ enum Response_Type
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
                 
                 if (!cell.confirm_msg_label) {
-                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(75, 45, 220, 30)];
+                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(70, 45, 220, 30)];
                     [cell.contentView addSubview:cell.confirm_msg_label];
                     [cell.contentView setClipsToBounds:YES];
                     cell.confirm_msg_label.font = [UIFont systemFontOfSize:11];
