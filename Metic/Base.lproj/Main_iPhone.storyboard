@@ -3154,7 +3154,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AD-QB-sfd">
                                         <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
-                                        <state key="normal" backgroundImage="favor">
+                                        <state key="normal" image="favor">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
