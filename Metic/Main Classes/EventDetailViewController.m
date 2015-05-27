@@ -28,6 +28,8 @@
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
+#import "MTOperation.h"
 //#import "ScanViewController.h"
 #define MainFontSize 14
 #define MainCFontSize 13
@@ -41,6 +43,7 @@
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
+@property(nonatomic,strong) IBOutlet UIButton* likeBtn;
 
 @property BOOL visibility;
 @property BOOL isMine;
@@ -256,6 +259,7 @@
     [_emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
     [self.view addSubview:_emotionKeyboard];
    
+    [self setupLikeState];
 }
 
 -(void)fixStack
@@ -569,7 +573,8 @@
                         [_tableView endUpdates];
                         self.event = dist;
                         [_tableView reloadData];
-                        if(_event)[self updateEventToDB:_event];
+                        [self setupLikeState];
+                        if(_event) [[MTDatabaseAffairs sharedInstance] saveEventToDB:_event];
                     }else{
                         [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
                         [self removeEventFromDB];
@@ -587,18 +592,6 @@
         }
         
     }];
-}
-
-- (void)updateEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 - (void)removeEventFromDB
@@ -688,6 +681,53 @@
 
 }
 
+- (void)setupLikeState
+{
+    if (_event) {
+        BOOL islike = [[_event valueForKey:@"islike"] boolValue];
+        if (islike) {
+            [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
+        }else{
+            [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
+        }
+    }
+}
+
+- (IBAction)like:(id)sender {
+    if(_eventId && _event) {
+        __weak UIButton* likeBtn = sender;
+        __weak NSMutableDictionary* eventInfo = _event;
+        
+        
+        likeBtn.enabled = NO;
+        NSMutableDictionary* dict = [[NSMutableDictionary alloc]initWithDictionary:_event];
+        BOOL islike = [[dict valueForKey:@"islike"] boolValue];
+        [[MTOperation sharedInstance] likeEventOperation:@[_eventId] like:!islike finishBlock:^(BOOL isSuccess, NSString *likeTime){
+            if (isSuccess) {
+                [dict setValue:@(!islike) forKey:@"islike"];
+                if(likeTime)[dict setValue:likeTime forKey:@"likeTime"];
+                [[MTDatabaseAffairs sharedInstance] saveEventToDB:dict];
+                
+                if (eventInfo) {
+                    [eventInfo setValue:@(!islike) forKey:@"islike"];
+                }
+                
+                if (likeBtn) {
+                    likeBtn.enabled = YES;
+                    if (isSuccess) {
+                        if (islike) {
+                            [likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
+                        }else{
+                            [likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
+                        }
+                        
+                    }
+                }
+            }
+        }];
+    }
+    
+}
 
 - (void)delete_Comment:(id)sender {
     

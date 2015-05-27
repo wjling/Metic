@@ -10,8 +10,7 @@
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
 #import "MTUser.h"
-#import "MTDatabaseHelper.h"
-#import "NSString+JSON.h"
+#import "MTDatabaseAffairs.h"
 
 const float textViewHeight = 120;
 const float keyboardHeight = 310;
@@ -129,7 +128,7 @@ const float keyboardleft = 0;
                 {
                     [SVProgressHUD dismissWithSuccess:@"修改成功"];
                     [_eventInfo setValue:content forKey:@"remark"];
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                     break;
@@ -155,18 +154,6 @@ const float keyboardleft = 0;
         }
     }];
     
-}
-
--(void)saveEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 -(void)adjustTextView

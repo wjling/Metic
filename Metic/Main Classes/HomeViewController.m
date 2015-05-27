@@ -20,6 +20,7 @@
 #import "PictureWall2.h"
 #import "UploaderManager.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 
 @interface HomeViewController ()
 
@@ -597,21 +598,10 @@
 
 - (void)updateEventToDB:(NSArray*)events
 {
-    NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [self.sql openMyDB:path];
     for (NSInteger i = 0; i < self.events.count; i++) {
         NSMutableDictionary* event = [self.events objectAtIndex:i];
-        NSString *eventData = [NSString jsonStringWithDictionary:event];
-        eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        NSString *beginTime = [event valueForKey:@"time"];
-        NSString *joinTime = [event valueForKey:@"jointime"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-        NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-        [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
+        [[MTDatabaseAffairs sharedInstance]saveEventToDB:event];
     }
-    
-//    [self.sql closeMyDB];
 }
 
 

@@ -258,6 +258,12 @@
         case 54:
             resultCode = @"add_friend_batch";
             break;
+        case 55:
+            resultCode = @"get_like_event";
+            break;
+        case 56:
+            resultCode = @"like_event";
+            break;
         default:
             resultCode = @"json";
             break;

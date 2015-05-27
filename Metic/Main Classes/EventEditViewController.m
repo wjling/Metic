@@ -10,8 +10,7 @@
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
 #import "Reachability.h"
-#import "MTDatabaseHelper.h"
-#import "NSString+JSON.h"
+#import "MTDatabaseAffairs.h"
 
 #import "EventEditSubjectViewController.h"
 #import "EventEditTimeViewController.h"
@@ -140,7 +139,7 @@ const NSInteger rowCount = 4;
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY) {
                         [_eventInfo setValue:@(bannercode) forKey:@"code"];
-                        [self saveEventToDB:_eventInfo];
+                        [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                         [self refresh];
                         [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
                     }else{
@@ -169,18 +168,6 @@ const NSInteger rowCount = 4;
     BanSelector.code = [[_eventInfo valueForKey:@"code"] integerValue];
     BanSelector.EEcontroller = self;
     [self.navigationController pushViewController:BanSelector animated:YES];
-}
-
--(void)saveEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 #pragma UITableView DataSource
@@ -432,7 +419,7 @@ const NSInteger rowCount = 4;
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 if ([cmd intValue] == NORMAL_REPLY) {
                     [_eventInfo setValue:@(bannercode) forKey:@"code"];
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [self refresh];
                     [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
                 }else{

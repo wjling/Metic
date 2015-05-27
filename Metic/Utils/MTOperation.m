@@ -11,6 +11,7 @@
 #import "BOAlertController.h"
 #import "SlideNavigationController.h"
 #import "SVProgressHUD.h"
+#import "MTDatabaseAffairs.h"
 
 #import <objc/runtime.h>
 
@@ -35,7 +36,7 @@
     return self;
 }
 
-
+#pragma 添加那些把自己删掉的好友
 -(void)inviteFriends:(NSArray*)notFriendsList
 {
     if (notFriendsList.count == 0) {
@@ -130,6 +131,88 @@
     [alertView show];
 }
 
+#pragma 处理收藏活动id数据
+-(NSArray*)processLikeEventID:(NSArray*)likeEventIdData
+{
+    NSLog(@"%@",likeEventIdData);
+    
+    NSMutableArray* eventIds = [[NSMutableArray alloc]init];
+    for (int i = 0; i < likeEventIdData.count; i++) {
+        NSDictionary* item = likeEventIdData[i];
+        NSNumber* eventId = [item valueForKey:@"event_id"];
+        [eventIds addObject:eventId];
+    }
+    return eventIds;
+}
+
+#pragma 收藏／取消收藏活动操作
+-(void)likeEventOperation:(NSArray*)eventIds like:(BOOL)islike finishBlock:(likeEventFinishBlock)finishBlock
+{
+    [SVProgressHUD showWithStatus:@"处理中.." maskType:SVProgressHUDMaskTypeGradient];
+    
+//    NSString *eventIdsStr = [CommonUtils arrayStyleStringfromNummerArray:[NSArray arrayWithArray:eventIds]];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:eventIds forKey:@"event_list"];
+    [dictionary setValue:islike? @1:@0 forKey:@"operation"];
+//    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:LIKE_EVENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    [SVProgressHUD dismissWithSuccess:islike? @"收藏成功":@"取消收藏"];
+                    NSArray* result = [response1 valueForKey:@"result"];
+                    NSArray* eventList = [response1 valueForKey:@"event_list"];
+                    
+                    BOOL normal = NO;
+                    if (result && result.count) {
+                        NSDictionary* item = result[0];
+                        NSDictionary* eventInfo = eventList[0];
+                        NSString* likeTime = [eventInfo valueForKey:@"likeTime"];
+                        NSNumber* innerCmd = [item valueForKey:@"cmd"];
+                        if (innerCmd) {
+                            if ([innerCmd integerValue] == NORMAL_REPLY) {
+                                normal = YES;
+                                if (finishBlock) {
+                                    finishBlock(YES,likeTime);
+                                }
+                                
+                            }
+                        }
+                    }
+                    if (!normal) {
+                        if (finishBlock) {
+                            finishBlock(NO,nil);
+                        }
+                    }
+                    
+                }
+                    break;
+                default:{
+                    [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+                    if (finishBlock) {
+                        finishBlock(NO,nil);
+                    }
+                }
+                    break;
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+            if (finishBlock) {
+                finishBlock(NO,nil);
+            }
+        }
+        
+    }];
+}
+
 #pragma mark - Alert Delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
     // the user clicked OK
@@ -138,8 +221,7 @@
         void (^block)(NSInteger) = objc_getAssociatedObject(alertView, @"MTinviteFriends");
         block(buttonIndex);
     }
-    
-    
 }
+
 
 @end

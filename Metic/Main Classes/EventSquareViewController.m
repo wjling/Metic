@@ -554,7 +554,6 @@
 #pragma mark - 获取最新活动资料 -
 -(void)getNearbyEventIdsFromAir:(NSNumber*)sequence
 {
-    return;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[NSNumber numberWithInt:2] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];

@@ -157,7 +157,7 @@
                     break;
             }
         }else{
-        
+            [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
         }
         
     }];

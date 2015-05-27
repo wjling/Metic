@@ -561,14 +561,8 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
     int status = 0;
-    NSString *friends = @"[";
-    BOOL flag = YES;
-    for (NSNumber* friendid in self.FriendsIds) {
-        friends = [friends stringByAppendingString: flag? @"%@":@",%@"];
-        if (flag) flag = NO;
-        friends = [NSString stringWithFormat:friends,friendid];
-    }
-    friends = [friends stringByAppendingString:@"]"];
+    NSString *friends = [CommonUtils arrayStyleStringfromNummerArray:[NSArray arrayWithArray: (NSArray*)self.FriendsIds]];
+    
     _notFriendsList = nil;
     NSString* location = self.location_text.text;
     if ([location isEqualToString:@""] || [location isEqualToString:@"定位中"]) location = @"地点未定";

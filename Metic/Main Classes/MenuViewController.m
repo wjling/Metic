@@ -77,6 +77,9 @@ static MenuViewController *singletonInstance;
         notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
     }
     homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+    
+    _tableView.scrollEnabled = YES;
+    _tableView.bounces = NO;
 }
 
 -(void)dealloc{
@@ -425,6 +428,7 @@ static MenuViewController *singletonInstance;
         {
             if (!eventLikeViewController) {
                 vc = [[EventLikeViewController alloc]init];
+                eventLikeViewController = vc;
             }else vc = eventLikeViewController;
         }
             break;

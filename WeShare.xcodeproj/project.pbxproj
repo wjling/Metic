@@ -382,6 +382,7 @@
 		F84DEE361B10B65C0083BCF1 /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84DEE2E1B10B65C0083BCF1 /* libSocialWechat.a */; };
 		F84DEE371B10B65C0083BCF1 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84DEE2F1B10B65C0083BCF1 /* libWeChatSDK.a */; };
 		F85966E51B13715F003B22EE /* EventEditTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F85966E41B13715F003B22EE /* EventEditTypeViewController.m */; };
+		F85966E81B149FD7003B22EE /* MTDatabaseAffairs.m in Sources */ = {isa = PBXBuildFile; fileRef = F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */; };
 		F864C0F61AE0EC1A00E2EB23 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */; };
 		F864C0F71AE0EC1A00E2EB23 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */; };
 		F864C0F81AE0EC1A00E2EB23 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F01AE0EC1A00E2EB23 /* FMDatabasePool.m */; };
@@ -1140,6 +1141,8 @@
 		F84DEE321B10B65C0083BCF1 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		F85966E31B13715F003B22EE /* EventEditTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditTypeViewController.h; sourceTree = "<group>"; };
 		F85966E41B13715F003B22EE /* EventEditTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditTypeViewController.m; sourceTree = "<group>"; };
+		F85966E61B149FD7003B22EE /* MTDatabaseAffairs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseAffairs.h; sourceTree = "<group>"; };
+		F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseAffairs.m; sourceTree = "<group>"; };
 		F864C0EB1AE0EC1A00E2EB23 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		F864C0ED1AE0EC1A00E2EB23 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -1919,6 +1922,8 @@
 				F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */,
 				F810B7BB1B0B996100843AAB /* MTOperation.h */,
 				F810B7BC1B0B996100843AAB /* MTOperation.m */,
+				F85966E61B149FD7003B22EE /* MTDatabaseAffairs.h */,
+				F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2859,6 +2864,7 @@
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				51F4CB1A19E6307500E487F1 /* DDTTYLogger.m in Sources */,
 				088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */,
+				F85966E81B149FD7003B22EE /* MTDatabaseAffairs.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
 				F85966E51B13715F003B22EE /* EventEditTypeViewController.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
@@ -3165,7 +3171,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: huang shiguang (6UW4C2C27E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3210,7 +3216,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3240,7 +3246,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: huang shiguang (6UW4C2C27E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -3304,7 +3310,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",

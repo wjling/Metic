@@ -27,13 +27,13 @@
 HttpSender* httpSender;
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
 };
 
 enum Enterprise_code{
-//    isEnterprise = 0,//上架版
-    isEnterprise = 1,//企业版
+    isEnterprise = 0,//上架版
+//    isEnterprise = 1,//企业版
 //    isEnterprise = 2,//企业版测试服
 };
 
@@ -100,7 +100,8 @@ enum Operation_Code
     VIEW_EVENT = 52,
     CHANGE_EVENT_INFO = 53,
     ADD_FRIEND_BATCH = 54,
-    
+    GET_LIKE_EVENT = 55,
+    LIKE_EVENT = 56,
 };
 
 enum CloudOperation_Code
