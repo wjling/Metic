@@ -16,6 +16,7 @@
 #import "MTOperation.h"
 #import "SquareTableViewCell.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 
 @interface EventLikeViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 @property (nonatomic,strong) UIView* shadowView;
@@ -200,6 +201,7 @@
                     {
                         NSMutableDictionary* tmpDic = [[NSMutableDictionary alloc]initWithDictionary:tmp[i]];
                         tmp[i] = tmpDic;
+                        [[MTDatabaseAffairs sharedInstance]saveEventToDB:tmpDic];
                     }
                     if (!_events|| needClear) {
                         _events = tmp;
