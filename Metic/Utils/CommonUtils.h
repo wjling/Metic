@@ -119,5 +119,5 @@
 +(int)compareVersion1:(NSString*)version1 andVersion2:(NSString*)version2;
 
 //将数字序列转换成数组样式的字符串
-+(NSString*)arrayStyleStringfromNummerArray:(NSArray*)numbers;
++(NSString*)arrayStyleStringfromNummerArray:(id)numbers;
 @end

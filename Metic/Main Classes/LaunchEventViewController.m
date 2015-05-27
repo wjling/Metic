@@ -561,7 +561,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
     int status = 0;
-    NSString *friends = [CommonUtils arrayStyleStringfromNummerArray:[NSArray arrayWithArray: (NSArray*)self.FriendsIds]];
+    NSString *friends = [CommonUtils arrayStyleStringfromNummerArray:self.FriendsIds];
     
     _notFriendsList = nil;
     NSString* location = self.location_text.text;

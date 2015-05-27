@@ -569,7 +569,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     }
 }
 
-+(NSString*)arrayStyleStringfromNummerArray:(NSArray*)numbers
++(NSString*)arrayStyleStringfromNummerArray:(id)numbers
 {
     NSString *arrayString = @"[";
     BOOL flag = YES;
