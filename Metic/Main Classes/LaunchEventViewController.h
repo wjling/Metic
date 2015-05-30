@@ -34,7 +34,7 @@
 @property (strong, nonatomic) UIViewController* controller;
 @property (strong, nonatomic) UIImage* uploadImage;
 @property BOOL canLeave;
-@property int code;
+@property NSInteger code;
 
 
 

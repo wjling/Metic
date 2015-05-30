@@ -98,6 +98,9 @@ enum Operation_Code
     QRCODE_INVITE = 50,
     DELETE_FRIEND = 51,
     VIEW_EVENT = 52,
+    CHANGE_EVENT_INFO = 53,
+    ADD_FRIEND_BATCH = 54,
+    
 };
 
 enum CloudOperation_Code

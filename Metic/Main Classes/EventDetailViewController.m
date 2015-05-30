@@ -9,6 +9,7 @@
 
 #import "EventDetailViewController.h"
 #import "Event2DcodeViewController.h"
+#import "EventEditViewController.h"
 #import "BannerSelectorViewController.h"
 #import "MTUser.h"
 #import "PictureWall2.h"
@@ -119,6 +120,7 @@
 {
     [super viewWillAppear:animated];
     if (_shadowView) [_shadowView removeFromSuperview];
+    [_tableView reloadData];
     [self pullEventFromAir];
 }
 
@@ -279,7 +281,7 @@
         if (_eventId && [_eventId intValue]!=0) {
             [menuItems addObjectsFromArray:@[
                                              
-                                             [KxMenuItem menuItem:@"二维码"
+                                             [KxMenuItem menuItem:@"查看二维码"
                                                             image:nil
                                                            target:self
                                                            action:@selector(show2Dcode:)],
@@ -293,6 +295,10 @@
         
         if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             [menuItems addObjectsFromArray:@[
+//                                             [KxMenuItem menuItem:@"编辑活动"
+//                                                            image:nil
+//                                                           target:self
+//                                                           action:@selector(editEvent)],
                                              
                                              [KxMenuItem menuItem:@"更换封面"
                                                             image:nil
@@ -973,12 +979,22 @@
 
 }
 
+- (void)editEvent
+{
+    if (_event) {
+        EventEditViewController* eventEditVc = [[EventEditViewController alloc]init];
+        eventEditVc.eventId = _eventId;
+        eventEditVc.eventInfo = _event;
+        [self.navigationController pushViewController:eventEditVc animated:YES];
+    }
+}
+
 -(void)changeBanner
 {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     BannerSelectorViewController * BanSelector = [mainStoryboard instantiateViewControllerWithIdentifier: @"BannerSelectorViewController"];
-
+    BanSelector.code = [[_event valueForKey:@"code"] integerValue];
     BanSelector.Econtroller = self;
     [self.navigationController pushViewController:BanSelector animated:YES];
 }
@@ -1179,10 +1195,11 @@
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:YES];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-            commentHeight = 10;
+            text = @"暂无活动描述";
+//            commentHeight = 10;
         }else if(text) commentHeight += 5;
         cell.eventDetail.text = text;
         CGRect frame = cell.eventDetail.frame;
@@ -1204,7 +1221,7 @@
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:self.eventId];
         NSString* bannerURL = [_event valueForKey:@"banner"];
-        [bannerGetter getBanner:[_event valueForKey:@"code"] url:bannerURL];
+        [bannerGetter getBanner:[_event valueForKey:@"code"] url:bannerURL retainOldone:YES];
 
         NSArray *memberids = [_event valueForKey:@"member"];
         for (int i =0; i<4; i++) {
@@ -1451,7 +1468,7 @@
         float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-            commentHeight = 10;
+//            commentHeight = 10;
         }else if(text) commentHeight += 5;
         return 303.0 + commentHeight;
     }

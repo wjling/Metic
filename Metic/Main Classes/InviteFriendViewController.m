@@ -10,12 +10,14 @@
 #import "LaunchEventViewController.h"
 #import "showParticipatorsViewController.h"
 #import "SVProgressHUD.h"
+#import "BOAlertController.h"
+#import "MTOperation.h"
 
 @interface InviteFriendViewController ()
 @property (nonatomic,strong) NSMutableSet *tmp_fids;
 @property (strong, nonatomic) UIView* waitingView;
-
 @end
+
 @implementation InviteFriendViewController
 {
     NSInteger initialSectionForFriendList;
@@ -106,7 +108,6 @@
     }
 }
 
-
 - (IBAction)confirm:(id)sender {
     [sender setEnabled:NO];
     if ([self.controller isKindOfClass:[LaunchEventViewController class]]) {
@@ -149,9 +150,13 @@
                     case NORMAL_REPLY:
                     {
                         [SVProgressHUD showSuccessWithStatus:@"邀请信息已经发送" duration:1];
+                        NSArray* notFriendsList = [response1 valueForKey:@"list"];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self.navigationController popToViewController:self.controller animated:YES];
                             [sender setEnabled:YES];
+                            if (notFriendsList.count) {
+                                [[MTOperation sharedInstance] inviteFriends:notFriendsList];
+                            }
                         });
                     }
                         break;

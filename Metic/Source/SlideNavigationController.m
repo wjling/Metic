@@ -148,13 +148,13 @@ static SlideNavigationController *singletonInstance;
 	
 	__block CGRect rect = self.view.frame;
 	
-	if ([self isMenuOpen])
+	if (YES || [self isMenuOpen])
 	{
 		[UIView animateWithDuration:MENU_SLIDE_ANIMATION_DURATION
 							  delay:0
 							options:UIViewAnimationOptionCurveEaseOut
 						 animations:^{
-                             rect.origin.x = (rect.origin.x > 0) ? rect.size.width : -1*rect.size.width;
+                             rect.origin.x = (rect.origin.x >= 0) ? rect.size.width : -1*rect.size.width;
                              self.view.frame = rect;
                          } completion:^(BOOL finished) {
                              

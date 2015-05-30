@@ -191,6 +191,13 @@
   
 }
 
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL retainOldone:(BOOL)retainOldone
+{
+    if ([code intValue] == 0 && retainOldone && self.imageView.image) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:self.imageView.image];
+    }else [self getBanner:code url:bannerURL];
+}
+
 
 
 -(void)updatePhoto

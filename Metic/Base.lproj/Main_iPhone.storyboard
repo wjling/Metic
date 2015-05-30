@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F1077" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -3185,14 +3185,14 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
                                         <rect key="frame" x="10" y="15" width="300" height="35"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="自定义封面">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
@@ -3203,15 +3203,15 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="默认封面" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xHS-W6-huD">
-                                        <rect key="frame" x="10" y="60" width="100" height="20"/>
+                                        <rect key="frame" x="10" y="63" width="100" height="20"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" red="0.39215686274509803" green="0.39215686274509803" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.47058823529411764" green="0.47058823529411764" blue="0.47058823529411764" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                         <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     </label>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nL6-Ha-a2l">
-                                        <rect key="frame" x="10" y="82" width="300" height="1"/>
-                                        <color key="backgroundColor" red="0.57647058823529407" green="0.57647058823529407" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="10" y="85" width="300" height="1"/>
+                                        <color key="backgroundColor" red="0.70588235294117641" green="0.70588235294117641" blue="0.70588235294117641" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VeA-PM-2vT">
                                         <rect key="frame" x="10" y="88" width="300" height="115"/>
@@ -3219,7 +3219,7 @@
                                             <constraint firstAttribute="width" constant="300" id="ijk-Eb-yty"/>
                                             <constraint firstAttribute="height" constant="115" id="pxu-Oo-NP4"/>
                                         </constraints>
-                                        <state key="normal" image="1星空.jpg">
+                                        <state key="normal" image="2聚餐.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3232,7 +3232,7 @@
                                             <constraint firstAttribute="width" constant="300" id="PHU-ka-XaT"/>
                                             <constraint firstAttribute="height" constant="115" id="ztw-1V-qeD"/>
                                         </constraints>
-                                        <state key="normal" image="2聚餐.jpg">
+                                        <state key="normal" image="3兜风.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3245,7 +3245,7 @@
                                             <constraint firstAttribute="height" constant="115" id="n9s-O0-Bq4"/>
                                             <constraint firstAttribute="width" constant="300" id="ulb-mL-bSO"/>
                                         </constraints>
-                                        <state key="normal" image="3兜风.jpg">
+                                        <state key="normal" image="4喝酒.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3258,7 +3258,7 @@
                                             <constraint firstAttribute="height" constant="115" id="fG4-27-rub"/>
                                             <constraint firstAttribute="width" constant="300" id="htx-lc-lFJ"/>
                                         </constraints>
-                                        <state key="normal" image="4喝酒.jpg">
+                                        <state key="normal" image="5健身.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3271,7 +3271,7 @@
                                             <constraint firstAttribute="width" constant="300" id="274-gs-ioG"/>
                                             <constraint firstAttribute="height" constant="115" id="DEY-6K-Yrb"/>
                                         </constraints>
-                                        <state key="normal" image="5健身.jpg">
+                                        <state key="normal" image="6听课.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -3284,24 +3284,11 @@
                                             <constraint firstAttribute="height" constant="115" id="d8h-0V-9Me"/>
                                             <constraint firstAttribute="width" constant="300" id="npf-Xo-qPZ"/>
                                         </constraints>
-                                        <state key="normal" image="6听课.jpg">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="aJ7-Nu-qZq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="7" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OEn-rg-8zc">
-                                        <rect key="frame" x="10" y="838" width="300" height="115"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="300" id="fAh-A0-lfQ"/>
-                                            <constraint firstAttribute="height" constant="115" id="gO9-h0-c4F"/>
-                                        </constraints>
                                         <state key="normal" image="7夜店.jpg">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="acO-d2-krI"/>
+                                            <action selector="selectBanner:" destination="Si5-o4-IJN" eventType="touchUpInside" id="aJ7-Nu-qZq"/>
                                         </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="nLV-JZ-daA">
@@ -3322,15 +3309,12 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="tAc-fn-tsd">
                                         <rect key="frame" x="282" y="718" width="23" height="23"/>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发送至图片墙对号" highlightedImage="发送至图片墙对号按下效果" translatesAutoresizingMaskIntoConstraints="NO" id="0iP-2Y-Po7">
-                                        <rect key="frame" x="282" y="843" width="23" height="23"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                                 <constraints>
+                                    <constraint firstItem="nAs-sP-gJ0" firstAttribute="top" secondItem="VeA-PM-2vT" secondAttribute="bottom" constant="510" id="5mh-Vs-j4C"/>
                                     <constraint firstItem="VeA-PM-2vT" firstAttribute="top" secondItem="TYE-6F-F8Y" secondAttribute="top" constant="88" id="BW3-5H-Z6b"/>
-                                    <constraint firstAttribute="bottom" secondItem="OEn-rg-8zc" secondAttribute="bottom" constant="10" id="dnA-f8-VsZ"/>
-                                    <constraint firstItem="OEn-rg-8zc" firstAttribute="top" secondItem="VeA-PM-2vT" secondAttribute="bottom" constant="635" id="won-2Q-cnz"/>
+                                    <constraint firstAttribute="bottom" secondItem="nAs-sP-gJ0" secondAttribute="bottom" constant="10" id="hda-2m-tZN"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -3381,8 +3365,6 @@
                         <outletCollection property="selectorIndictors" destination="1gz-QY-Esw" id="gbG-S6-89E"/>
                         <outletCollection property="selectorIndictors" destination="2Zn-zp-MbM" id="zZZ-89-GLv"/>
                         <outletCollection property="selectorIndictors" destination="tAc-fn-tsd" id="HfO-nV-Pak"/>
-                        <outletCollection property="defaultBanners" destination="OEn-rg-8zc" id="tL9-m7-4Bt"/>
-                        <outletCollection property="selectorIndictors" destination="0iP-2Y-Po7" id="qsf-RX-djb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7tN-v5-auA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4060,10 +4042,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
                                 <rect key="frame" x="0.0" y="341" width="320" height="75"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
                                         <rect key="frame" x="0.0" y="40" width="320" height="35"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c84-4Q-aVr">
@@ -4120,7 +4102,7 @@
                                             <constraint firstAttribute="height" constant="35" id="Wh5-OH-bVl"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                         <color key="backgroundColor" red="0.22352942819999999" green="0.2117647231" blue="0.1764705926" alpha="0.88" colorSpace="deviceRGB"/>
                                         <constraints>
@@ -4879,7 +4861,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="1星空.jpg" width="640" height="244"/>
         <image name="2聚餐.jpg" width="640" height="245"/>
         <image name="3兜风.jpg" width="640" height="245"/>
         <image name="4喝酒.jpg" width="640" height="245"/>

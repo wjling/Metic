@@ -62,9 +62,9 @@
     [self.navigationItem setTitle:@"活动详情"];
     if (!_tableView) {
         CGRect frame = self.view.frame;
-        frame.size.height -= 64 - frame.origin.y;
-        frame.origin.y = 0;
+        frame.size.height -= 45;
         _tableView = [[UITableView alloc]initWithFrame:frame];
+        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableView setRowHeight:289];
@@ -155,7 +155,8 @@
 
 -(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
 {
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50 - offset, self.view.bounds.size.width, 50)];
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
+    label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     label.text = content;
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = color;
@@ -169,7 +170,8 @@
 -(void)setupApplyTextView
 {
     //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45 - 64, self.view.frame.size.width,45)];
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     _commentView = commentV;
     [commentV setBackgroundColor:[UIColor whiteColor]];
     
@@ -301,10 +303,11 @@
         [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
         
         NSString* text = [_eventInfo valueForKey:@"remark"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:YES];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-            commentHeight = 10;
+//            commentHeight = 10;
+            text = @"暂无活动描述";
         }else if(text) commentHeight += 5;
         cell.eventDetail.text = text;
         CGRect frame = cell.eventDetail.frame;
@@ -388,7 +391,7 @@
         float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-            commentHeight = 10;
+//            commentHeight = 10;
         }else if(text) commentHeight += 5;
         return 262 + commentHeight;
     }

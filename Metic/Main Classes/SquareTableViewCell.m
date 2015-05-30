@@ -35,27 +35,9 @@
 - (void)applyData:(NSDictionary*)data
 {
     self.eventInfo = data;
-//    NSString* beginT = [data valueForKey:@"time"];
-//    NSString* endT = [data valueForKey:@"endTime"];
-//
-//    self.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[data valueForKey:@"launch_time"]];
-//    self.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[data valueForKey:@"location"]];
-    
-//    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-//    if (launcher == nil || [launcher isEqual:[NSNull null]]) {
-//        launcher = [data valueForKey:@"launcher"];
-//    }
-//
-//    self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
-//
-//    NSString* remark = [data valueForKey:@"remark"];
-//    if (remark && ![remark isEqualToString:@""]) {
-//        self.remark.text = remark;
-//    }else{
-//        self.remark.text = @"";
-//    }
     
     self.subject.text = [data valueForKey:@"subject"];
+    self.viewcount.text = [NSString stringWithFormat:@"%@次浏览",[data valueForKey:@"pv"]];
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"launcher_id"]];
     [avatarGetter getAvatar];
@@ -67,11 +49,11 @@
     BOOL official = [[data valueForKey:@"verify"] boolValue];
     [self drawOfficialFlag:official];
     CGRect frame = _subject.frame;
-    if (official) {
-        frame.size.width = 200;
-    }else{
-        frame.size.width = 250;
-    }
+//    if (official) {
+//        frame.size.width = 200;
+//    }else{
+//        frame.size.width = 250;
+//    }
     [_subject setFrame:frame];
 
 }
@@ -80,18 +62,12 @@
 {
     if (isOfficial) {
         if (_officialFlag) {
-            [self addSubview:_officialFlag];
+            [_themePhoto addSubview:_officialFlag];
         }else{
-            float width = self.bounds.size.width;
-            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
-            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.text = @"官";
-            label.font = [UIFont systemFontOfSize:15];
-            label.textColor = [UIColor whiteColor];
-            [_officialFlag addSubview:label];
-            [self addSubview:_officialFlag];
+            float height = CGRectGetHeight(_themePhoto.frame)*0.6;
+            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetWidth(_themePhoto.frame)-height, 0, height, height)];
+            _officialFlag.image = [UIImage imageNamed:@"最新活动推荐icon"];
+            [_themePhoto addSubview:_officialFlag];
         }
     }else{
         if (_officialFlag) {
