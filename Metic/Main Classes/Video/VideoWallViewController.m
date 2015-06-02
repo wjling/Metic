@@ -55,6 +55,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self initUI];
     _shouldReload = YES;
     _shouldFlash = YES;
     _canPlay = YES;
@@ -129,7 +130,9 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
                                                       userInfo:nil];
-    [_add appear];
+    if (_eventInfo && [[_eventInfo valueForKey:@"isIn"]boolValue]) {
+        [_add appear];
+    }
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -180,6 +183,11 @@
         _Footeropen = NO;
         [_footer endRefreshing];
     }
+}
+
+-(void)initUI
+{
+    self.view.backgroundColor = [UIColor colorWithWhite:242.0/255.0 alpha:1.0f];
 }
 
 #pragma mark 代理方法-进入刷新状态就会调用
@@ -393,7 +401,9 @@
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
         NSLog(@"cancel");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
-        [_add appear];
+        if (_eventInfo && [[_eventInfo valueForKey:@"isIn"]boolValue]) {
+            [_add appear];
+        }
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
     
@@ -578,6 +588,7 @@
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
             nextViewController.video_thumb = self.seleted_videoThumb;
+            nextViewController.canManage = [[_eventInfo valueForKey:@"isIn"]boolValue];
         }
     }
 }

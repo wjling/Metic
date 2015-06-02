@@ -195,7 +195,7 @@
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
-    [dictionary setValue:@(lvisibility) forKey:@"code"];
+    [dictionary setValue:@(lvisibility) forKey:@"visibility"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];

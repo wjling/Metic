@@ -258,6 +258,7 @@
 }
 
 - (IBAction)button_Emotionpress:(id)sender {
+    if(!_canManage)return;
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
         
@@ -391,6 +392,7 @@
 }
 
 - (IBAction)good:(id)sender {
+    if (!_canManage) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
@@ -447,6 +449,7 @@
 }
 
 - (IBAction)comment:(id)sender {
+    if (!_canManage) return;
     //[self.commentView setHidden:NO];
     //[self.view bringSubviewToFront:self.commentView];
     self.inputTextView.placeHolder = @"说点什么吧";
@@ -478,6 +481,7 @@
 
 -(void)deletePhoto:(UIButton*)button
 {
+    if (!_canManage) return;
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这张照片？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
     
@@ -485,7 +489,7 @@
 
 -(void)resendComment:(id)sender
 {
-    
+    if (!_canManage) return;
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
@@ -1014,6 +1018,7 @@
         [self button_Emotionpress:nil];
         return;
     }
+    
     NSLog(@"kkkk");
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
@@ -1035,6 +1040,7 @@
             
             return ;
         }
+        if(!_canManage)return;
         NSLog(@"aaa");
         PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];

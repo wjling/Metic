@@ -43,6 +43,7 @@
 -(void)drawOfficialFlag:(BOOL)isOfficial;
 -(void)setImgWallpoint;
 -(void)setVideoWallpoint;
+@property(nonatomic,strong) NSDictionary* eventInfo;
 
 @property(nonatomic,strong) UIImageView* officialFlag;
 @property(nonatomic,strong) UIImageView* launcherImg;

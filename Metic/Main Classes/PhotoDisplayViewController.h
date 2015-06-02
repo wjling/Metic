@@ -24,6 +24,7 @@
 @property(nonatomic,strong)NSString* eventName;
 @property (strong, nonatomic) PictureWall2* controller;
 @property long photoIndex;
+@property BOOL canManage;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;
 

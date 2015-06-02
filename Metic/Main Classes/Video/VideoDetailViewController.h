@@ -38,6 +38,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *moreBtn;
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
+@property BOOL canManage;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
 - (IBAction)more:(id)sender;

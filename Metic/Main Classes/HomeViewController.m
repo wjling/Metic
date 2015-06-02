@@ -698,7 +698,17 @@
     self.selete_Eventid = cell.eventId;
     self.selete_EventLauncherid = cell.launcherId;
 
-    [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
+//    [self performSegueWithIdentifier:@"eventDetailIdentifier" sender:self];
+    
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    EventDetailViewController *eventVC = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+    eventVC.eventId = cell.eventId;
+    eventVC.eventLauncherId = cell.launcherId;
+    eventVC.event = cell.eventInfo;
+
+    [self.navigationController pushViewController:eventVC animated:YES];
+    
 }
 
 #pragma mark 用segue跳转时传递参数eventid
@@ -769,8 +779,12 @@
         _clearIds = NO;
         
         if (_eventIds_all.count <= _events.count) {
-            [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
-            [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self showAlert];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self performDismiss];
+                });
+            });
             return;
         }
         

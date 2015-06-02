@@ -9,6 +9,8 @@
 #import "EventCellTableViewCell.h"
 #import "BannerViewController.h"
 #import "NotificationController.h"
+#import "PictureWall2.h"
+#import "VideoWallViewController.h"
 #import "showParticipatorsViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 
@@ -81,19 +83,33 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
+    if (!_eventInfo) {
+        return;
+    }
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    PictureWall2 *pictureWall = [mainStoryboard instantiateViewControllerWithIdentifier: @"PictureWall2"];
+    pictureWall.eventId = self.eventId;
+    pictureWall.eventLauncherId = [_eventInfo valueForKey:@"launcher_id"];
+    pictureWall.eventName = [_eventInfo valueForKey:@"subject"];
+    pictureWall.eventInfo = self.eventInfo;
+    [self.eventController.navigationController pushViewController:pictureWall animated:YES];
+    return;
     [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
-//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
-//    });
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
+    if (!_eventInfo) {
+        return;
+    }
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    VideoWallViewController *videowall = [mainStoryboard instantiateViewControllerWithIdentifier: @"VideoWallViewController"];
+    videowall.eventId = self.eventId;
+    videowall.eventLauncherId = [_eventInfo valueForKey:@"launcher_id"];;
+    videowall.eventName = [_eventInfo valueForKey:@"subject"];
+    videowall.eventInfo = self.eventInfo;
+    [self.eventController.navigationController pushViewController:videowall animated:YES];
+    return;
     [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
-//    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeGradient];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
-//    });
     
 }
 

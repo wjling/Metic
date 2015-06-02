@@ -15,6 +15,7 @@
 #import "../MTUser.h"
 
 @interface VideoWallViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MJRefreshBaseViewDelegate>
+@property(nonatomic,strong) NSDictionary* eventInfo;
 @property(nonatomic,strong) NSNumber* eventId;
 @property(nonatomic,strong) NSNumber* eventLauncherId;
 @property(nonatomic,strong) NSString* eventName;

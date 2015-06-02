@@ -82,40 +82,9 @@
     [super viewDidLoad];
     [self initUI];
     [self fixStack];
+    [self initData];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    [NotificationController visitEvent:_eventId];
-    self.commentIds = [[NSMutableArray alloc]init];
-    self.comment_list = [[NSMutableArray alloc]init];
-    self.Bannercode = -1;
-    self.mainCommentId = 0;
-    self.Headeropen = NO;
-    self.Footeropen = NO;
-    self.master_sequence = [NSNumber numberWithInt:0];
-    self.isOpen = NO;
-    self.isEmotionOpen = NO;
-    self.isKeyBoard = NO;
-    _inputTextView.delegate = self;
-    _emotionKeyboard.textView = _inputTextView;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    self.inputTextView.placeHolder = @"回复楼主";
-    [self.view bringSubviewToFront:self.commentView];
-    [self.view bringSubviewToFront:self.emotionKeyboard];
-    [self pullEventFromDB];
-    [self pullMainCommentFromAir];
     
-    _header = [[MJRefreshHeaderView alloc]init];
-    _header.delegate = self;
-    _header.scrollView = self.tableView;
-    
-    _footer = [[MJRefreshFooterView alloc]init];
-    _footer.delegate = self;
-    _footer.scrollView = self.tableView;
-
-    [_emotionKeyboard initCollectionView];
-    
-    [self visitEvent];
     
 }
 
@@ -212,11 +181,89 @@
 {
     float var = 242/255.0;
     [_tableView setBackgroundColor:[UIColor colorWithRed:var green:var blue:var alpha:1]];
+    self.view.autoresizesSubviews = YES;
+    [self setupBottomView];
+    [self setupLikeState];
+    [_emotionKeyboard initCollectionView];
+}
 
+-(void)initData
+{
+    [NotificationController visitEvent:_eventId];
+    self.commentIds = [[NSMutableArray alloc]init];
+    self.comment_list = [[NSMutableArray alloc]init];
+    self.Bannercode = -1;
+    self.mainCommentId = 0;
+    self.Headeropen = NO;
+    self.Footeropen = NO;
+    self.master_sequence = [NSNumber numberWithInt:0];
+    self.isOpen = NO;
+    self.isEmotionOpen = NO;
+    self.isKeyBoard = NO;
+    _inputTextView.delegate = self;
+    _emotionKeyboard.textView = _inputTextView;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    self.inputTextView.placeHolder = @"回复楼主";
+    [self.view bringSubviewToFront:self.commentView];
+    [self.view bringSubviewToFront:self.emotionKeyboard];
+    [self pullEventFromDB];
+    [self pullMainCommentFromAir];
+    
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
+    
+    _footer = [[MJRefreshFooterView alloc]init];
+    _footer.delegate = self;
+    _footer.scrollView = self.tableView;
+    
+    
+    
+    [self visitEvent];
+}
+
+-(void)fixStack
+{
+    if (!_isFromQRCode) return;
+    NSInteger vccount = self.navigationController.viewControllers.count;
+    if (vccount > 1) {
+        NSMutableArray* newVCs = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
+        UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+        if (home) {
+            [newVCs replaceObjectAtIndex:vccount-2 withObject:home];
+            self.navigationController.viewControllers = newVCs;
+        }
+        
+    }
+    
+}
+
+-(void)setupBottomView
+{
+    if (_event) {
+        if ([[_event valueForKey:@"isIn"] boolValue] ) {
+            [self setupCommentView];
+        }else if ([[_event valueForKey:@"visibility"] integerValue] == 2){
+            [self setupApplyTextView];
+        }
+    }
+}
+
+-(void)setupCommentView
+{
+    if (_commentView && _commentView.tag != 1) {
+        [_commentView removeFromSuperview];
+    }else if(_commentView){
+        return;
+    }
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [commentV setBackgroundColor:[UIColor whiteColor]];
     _commentView = commentV;
+    _commentView.tag = 1;
     self.view.autoresizesSubviews = YES;
     [_commentView setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
     
@@ -246,8 +293,8 @@
     textView.delegate = self;
     
     [self.commentView addSubview:textView];
-	_inputTextView = textView;
-
+    _inputTextView = textView;
+    
     _inputTextView.frame = CGRectMake(38, 5, 240, 35);
     _inputTextView.backgroundColor = [UIColor clearColor];
     _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
@@ -258,23 +305,58 @@
     _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width,200)];
     [_emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
     [self.view addSubview:_emotionKeyboard];
-   
-    [self setupLikeState];
 }
 
--(void)fixStack
+-(void)setupApplyTextView
 {
-    if (!_isFromQRCode) return;
-    NSInteger vccount = self.navigationController.viewControllers.count;
-    if (vccount > 1) {
-        NSMutableArray* newVCs = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
-        UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
-        if (home) {
-            [newVCs replaceObjectAtIndex:vccount-2 withObject:home];
-            self.navigationController.viewControllers = newVCs;
-        }
-        
+    if (_commentView && _commentView.tag != 2) {
+        [_commentView removeFromSuperview];
+    }else if(_commentView){
+        return;
     }
+    //初始化评论框
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    _commentView = commentV;
+    _commentView.tag = 2;
+    [commentV setBackgroundColor:[UIColor whiteColor]];
+    
+    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendBtn setTag:520];
+    [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    [sendBtn setFrame:CGRectMake(250, 5, 65, 35)];
+    [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
+    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
+    [sendBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f]] forState:UIControlStateNormal];
+    sendBtn.layer.cornerRadius = 3;
+    sendBtn.layer.masksToBounds = YES;
+    [sendBtn addTarget:self action:@selector(apply:) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:sendBtn];
+    
+    [self.view addSubview:commentV];
+    
+    // 初始化输入框
+    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
+    _inputTextView = textView;
+    textView.font = [UIFont systemFontOfSize:16];
+    textView.textColor = [UIColor colorWithWhite:80.0/255.0 alpha:1.0f];
+    // 这个是仿微信的一个细节体验
+    textView.returnKeyType = UIReturnKeySend;
+    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
+    if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
+        textView.text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+    }else textView.placeHolder = @"请输入申请理由";
+    
+    textView.delegate = self;
+    
+    [commentV addSubview:textView];
+    
+    textView.frame = CGRectMake(5, 5, 240, 35);
+    textView.backgroundColor = [UIColor clearColor];
+    textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    textView.layer.borderWidth = 0.65f;
+    textView.layer.cornerRadius = 6.0f;
     
 }
 
@@ -314,7 +396,7 @@
                                                            target:self
                                                            action:@selector(dismissEvent)],
                                              ]];
-        }else{
+        }else if([[_event valueForKey:@"isIn"]boolValue]){
             [menuItems addObjectsFromArray:@[
                                              
                                              [KxMenuItem menuItem:@"退出活动"
@@ -529,6 +611,11 @@
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
             self.event =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableLeaves error:nil];
             if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self setupBottomView];
+                [self setupLikeState];
+            });
+            
         }
     }];
 
@@ -551,9 +638,9 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:{
                     if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
-                        NSDictionary* dist = [response1 valueForKey:@"event_list"][0];
+                        NSDictionary* dict = [response1 valueForKey:@"event_list"][0];
                         
-                        if (![[dist valueForKey:@"isIn"] boolValue]) {
+                        if (![[dict valueForKey:@"isIn"] boolValue] && [[dict valueForKey:@"visibility"] integerValue] != 2) {
                             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"你不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
                             [self removeEventFromDB];
                             [self deleteItemfromHomeArray];
@@ -562,19 +649,20 @@
                         }
                         
                         if (_event) {
-                            NSString* bannerURL = [dist valueForKey:@"banner"];
-                            NSString* updatetime = [dist valueForKey:@"updatetime"];
+                            NSString* bannerURL = [dict valueForKey:@"banner"];
+                            NSString* updatetime = [dict valueForKey:@"updatetime"];
                             [self checkBanner:updatetime bannerURL:bannerURL];
                         }
                         if ([_event valueForKey:@"event_id"]) _eventId = [_event valueForKey:@"event_id"];
                         if ([_event valueForKey:@"launcher_id"]) _eventLauncherId = [_event valueForKey:@"launcher_id"];
                         
-                        [self replaceItemfromArray:_event newArr:dist];
+                        [self replaceItemfromArray:_event newArr:dict];
                         [_tableView endUpdates];
-                        self.event = dist;
+                        self.event = dict;
                         [_tableView reloadData];
+                        [self setupBottomView];
                         [self setupLikeState];
-                        if(_event) [[MTDatabaseAffairs sharedInstance] saveEventToDB:_event];
+                        if(_event && [[dict valueForKey:@"isIn"] boolValue]) [[MTDatabaseAffairs sharedInstance] saveEventToDB:_event];
                     }else{
                         [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
                         [self removeEventFromDB];
@@ -684,12 +772,20 @@
 - (void)setupLikeState
 {
     if (_event) {
+        if (![[_event valueForKey:@"isIn"] boolValue]) {
+            _likeBtn.hidden = YES;
+            return;
+        }else{
+            _likeBtn.hidden = NO;
+        }
         BOOL islike = [[_event valueForKey:@"islike"] boolValue];
         if (islike) {
             [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
         }else{
             [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
         }
+    }else {
+        _likeBtn.hidden = YES;
     }
 }
 
@@ -788,6 +884,7 @@
 }
 
 - (void)appreciate:(id)sender {
+    if(![[_event valueForKey:@"isIn"]boolValue]) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
@@ -1139,6 +1236,11 @@
         [self button_Emotionpress:nil];
         return;
     }
+    
+    if (![[_event valueForKey:@"isIn"] boolValue] && [[_event valueForKey:@"visibility"] integerValue] == 2) {
+        return;
+    }
+    
     if (indexPath.section == 0) {
         [self.inputTextView becomeFirstResponder];
         self.inputTextView.placeHolder = @"回复楼主:";
@@ -1191,6 +1293,7 @@
             nibsRegistered = YES;
         }
         EventCellTableViewCell *cell = (EventCellTableViewCell *)[tableView dequeueReusableCellWithIdentifier:eventCellIdentifier];
+        cell.eventInfo = _event;
 //        NSLog(@"%@",_event);
         cell.eventName.text = [_event valueForKey:@"subject"];
         NSString* beginT = [_event valueForKey:@"time"];
@@ -1230,7 +1333,7 @@
         }
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
         _isMine = [[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
-        _visibility = [[_event valueForKey:@"visibility"] boolValue] || _isMine;
+        _visibility = [[_event valueForKey:@"isIn"] boolValue] && ([[_event valueForKey:@"visibility"] boolValue] || _isMine);
         if (_visibility) {
             [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
         }else [cell.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
@@ -1830,6 +1933,64 @@
     }else if (type == 106){
         [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
     }
+}
+
+@end
+
+
+@interface EventDetailViewController(apply)
+
+@end
+
+@implementation EventDetailViewController (apply)
+
+-(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
+{
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
+    label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    label.text = content;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = color;
+    label.font = [UIFont systemFontOfSize:16];
+    [self.view addSubview:label];
+    label.backgroundColor = [UIColor colorWithWhite:252.0/255.0 alpha:1.0];
+    label.layer.borderColor = [UIColor colorWithWhite:220.0/255.0 alpha:1.0].CGColor;
+    label.layer.borderWidth = 1;
+}
+
+
+
+-(void)apply:(id)sender
+{
+    if (sender) {
+        [sender setEnabled:NO];
+    }
+    NSString* confirmMsg = _inputTextView.text;
+    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
+    NSLog(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+        [sender setEnabled:YES];
+        if (!rData) {
+            return ;
+        }
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                if (_isKeyBoard) {
+                    [_inputTextView resignFirstResponder];
+                }
+                [_inputTextView removeFromSuperview];
+                [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
+                
+            }
+                break;
+        }
+    }];
 }
 
 @end
