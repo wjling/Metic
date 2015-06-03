@@ -794,6 +794,7 @@
         __weak UIButton* likeBtn = sender;
         __weak NSMutableDictionary* eventInfo = _event;
         
+        NSNumber* eventId = [_eventId copy];
         
         likeBtn.enabled = NO;
         NSMutableDictionary* dict = [[NSMutableDictionary alloc]initWithDictionary:_event];
@@ -803,6 +804,11 @@
                 [dict setValue:@(!islike) forKey:@"islike"];
                 if(likeTime)[dict setValue:likeTime forKey:@"likeTime"];
                 [[MTDatabaseAffairs sharedInstance] saveEventToDB:dict];
+                
+                if (islike) {
+                    NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:eventId,@"eventId", nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteLikeItem" object:nil userInfo:dict];
+                }
                 
                 if (eventInfo) {
                     [eventInfo setValue:@(!islike) forKey:@"islike"];

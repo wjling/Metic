@@ -42,6 +42,7 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteLikeItem" object:nil];
     [_footer free];
 }
 
@@ -93,6 +94,7 @@
 
 - (void)initData
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteLikeItem" object:nil];
     _showNum = 0;
     [self pullEventFromDB];
     [self getLikeEventIds];
@@ -122,6 +124,51 @@
     }];
 }
 
+-(void)getLikeEventIdsForSearch
+{
+    NSString* text = self.searchBar.text;
+    if ([[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
+        self.searchBar.text = @"";
+        return;
+    }
+    
+    [SVProgressHUD showWithStatus:@"正在搜索…" maskType:SVProgressHUDMaskTypeGradient];
+    
+    [self.searchBar resignFirstResponder];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:text forKey:@"subject"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:@1 forKey:@"type"];
+    NSLog(@"%@",dictionary);
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"received Data: %@",temp);
+            NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    NSArray* eventids = [response valueForKey:@"sequence"];
+                    _eventIds = [eventids mutableCopy];
+                    [self get_events:YES];
+                }
+                    break;
+                default:{
+                    [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+                }
+                    break;
+            }
+        }else{
+            [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+        }
+        
+    }];
+    
+}
+
 -(void)getLikeEventIds
 {
 //    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeGradient];
@@ -142,11 +189,6 @@
                 case NORMAL_REPLY:{
                     NSArray* eventids = [response valueForKey:@"event_list"];
                     _eventIds = [[MTOperation sharedInstance] processLikeEventID:eventids];
-                    
-//                    if (_events && _events.count > 0) {
-//                        [_events removeAllObjects];
-//                        [_tableView reloadData];
-//                    }
                     [self get_events:YES];
                 }
                     break;
@@ -171,7 +213,7 @@
         restNum = MIN(20, _eventIds.count);
     }else restNum = MIN(20, _eventIds.count - _events.count);
     
-    if (restNum <= 0){
+    if (restNum <= 0 && !needClear){
         [SVProgressHUD dismiss];
         [self closeRJ];
         return;
@@ -237,12 +279,37 @@
     });
 }
 
+//删除某个卡片
+-(void)deleteItem:(id)sender
+{
+    NSNumber* eventId = [[sender userInfo] objectForKey:@"eventId"];
+    
+    for (NSInteger i = 0; i < self.events.count; i++) {
+        NSMutableDictionary* dict = [self.events objectAtIndex:i];
+        if ([[dict valueForKey:@"event_id"] integerValue] == [eventId integerValue]) {
+            [self.events removeObject:dict];
+            [_tableView reloadData];
+            break;
+        }
+    }
+    NSMutableArray* eventIds = [_eventIds mutableCopy];
+    [eventIds removeObject:eventId];
+    _eventIds = [eventIds copy];
+    
+    NSLog(@"deleteItem %@",eventId);
+}
+
 #pragma mark - UISearchBar Delegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                     // called when keyboard search button pressed
 {
-//    [self search_eventIds];
+    [self getLikeEventIdsForSearch];
 }
 
+#pragma mark - UIScrollView Delegate
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [_searchBar resignFirstResponder];
+}
 
 #pragma UITableView Delegate & DataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -252,12 +319,33 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_events) return _events.count;
-    else return 0;
+    if (self.events && self.events.count != 0) {
+        return self.events.count;
+    }else
+        return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.events || self.events.count == 0) {
+        UITableViewCell* cell = [[UITableViewCell alloc]init];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,320,70)];
+        cell.userInteractionEnabled = NO;
+        cell.backgroundColor = [UIColor clearColor];
+        
+        
+        label.text = @"暂时没有收藏活动哦";
+        label.numberOfLines = 1;
+        label.backgroundColor = [UIColor clearColor];
+        label.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
+        label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
+        label.textAlignment = NSTextAlignmentCenter;
+        [cell addSubview:label];
+        
+        
+        return cell;
+    }
+    
     static NSString *CellIdentifier = @"eventLikeTableViewCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -278,6 +366,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [_searchBar resignFirstResponder];
     SquareTableViewCell* cell = (SquareTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     NSDictionary* dict = cell.eventInfo;
     
@@ -293,6 +382,7 @@
         EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
         eventDetailView.eventId = eventId;
         eventDetailView.eventLauncherId = eventLauncherId;
+        eventDetailView.event = [dict mutableCopy];
         [self.navigationController pushViewController:eventDetailView animated:YES];
     }
     
@@ -308,28 +398,5 @@
     [self get_events:NO];
 }
 
-//#pragma mark - SlideNavigationController Methods -
-//
-//- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
-//{
-//    return YES;
-//}
-//
-//- (BOOL)slideNavigationControllerShouldDisplayRightMenu
-//{
-//    return NO;
-//}
-//-(void)sendDistance:(float)distance
-//{
-//    if (distance > 0) {
-//        self.shadowView.hidden = NO;
-//        //[self.view bringSubviewToFront:self.shadowView];
-//        [self.shadowView setAlpha:distance/400.0];
-//        //[((SlideNavigationController*)self.navigationController) setBarAlpha:distance/400.0];
-//        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
-//    }else{
-//        //self.shadowView.hidden = YES;
-//        //[self.view sendSubviewToBack:self.shadowView];
-//    }
-//}
+
 @end
