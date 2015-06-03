@@ -79,6 +79,8 @@
     _tableView.homeController= self;
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self.tableView];
+    self.tableView.cellClassName = @"CustomCellTableViewCell";
+    self.tableView.emptyTips = @"还没有活动哦，快去发起吧";
     self.events = [[NSMutableArray alloc]init];
     self.tableView.eventsSource = self.events;
     

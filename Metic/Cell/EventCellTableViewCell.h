@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "../Main Classes/EventDetailViewController.h"
+#import "MTTableViewCellBase.h"
 
-@interface EventCellTableViewCell : UITableViewCell
+@interface EventCellTableViewCell : MTTableViewCellBase
 
 {
     
@@ -43,6 +44,7 @@
 -(void)drawOfficialFlag:(BOOL)isOfficial;
 -(void)setImgWallpoint;
 -(void)setVideoWallpoint;
+@property (strong, nonatomic) IBOutlet UIView *mediaEntrance;
 @property(nonatomic,strong) NSDictionary* eventInfo;
 
 @property(nonatomic,strong) UIImageView* officialFlag;

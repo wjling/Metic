@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="eventcell" rowHeight="273" id="KGk-i7-Jjw" customClass="EventCellTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="273"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="EventCellTableViewCell" rowHeight="299" id="KGk-i7-Jjw" customClass="EventCellTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="299"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" placeholderIntrinsicWidth="300" placeholderIntrinsicHeight="350" restorationIdentifier="CustomCellIdentifier" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="272"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="298"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" id="agK-Qa-y7i">
@@ -212,38 +212,45 @@
                         </subviews>
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WaL-N2-884">
-                        <rect key="frame" x="10" y="233" width="145" height="31"/>
+                    <view contentMode="scaleToFill" id="zy6-H8-88J">
+                        <rect key="frame" x="0.0" y="259" width="320" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <state key="normal" title="       图片墙" backgroundImage="中按钮-默认">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <state key="highlighted" backgroundImage="中按钮-按下"/>
-                        <connections>
-                            <action selector="jumpToPictureWall:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Q52-gz-TWE"/>
-                        </connections>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iDx-Vs-ivA">
-                        <rect key="frame" x="165" y="233" width="145" height="31"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <state key="normal" title="     视频墙" backgroundImage="中按钮-默认">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <state key="highlighted" backgroundImage="中按钮-按下"/>
-                        <connections>
-                            <action selector="jumpToVideoWall:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="9eo-aE-TLU"/>
-                        </connections>
-                    </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-白色" id="bvB-py-yVi">
-                        <rect key="frame" x="50" y="238" width="21" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-白色" id="5dg-IF-isa">
-                        <rect key="frame" x="200" y="238" width="21" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </imageView>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WaL-N2-884">
+                                <rect key="frame" x="10" y="0.0" width="145" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="       图片墙" backgroundImage="中按钮-默认">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" backgroundImage="中按钮-按下"/>
+                                <connections>
+                                    <action selector="jumpToPictureWall:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Q52-gz-TWE"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iDx-Vs-ivA">
+                                <rect key="frame" x="165" y="0.0" width="145" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="     视频墙" backgroundImage="中按钮-默认">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" backgroundImage="中按钮-按下"/>
+                                <connections>
+                                    <action selector="jumpToVideoWall:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="9eo-aE-TLU"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本照片墙图标-白色" id="bvB-py-yVi">
+                                <rect key="frame" x="50" y="5" width="21" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="IOS版本视频墙图标-白色" id="5dg-IF-isa">
+                                <rect key="frame" x="200" y="5" width="21" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.94901960780000005" alpha="1" colorSpace="deviceRGB"/>
             </tableViewCellContentView>
@@ -261,13 +268,14 @@
                 <outlet property="launcherImg" destination="4vr-1j-7mP" id="tSx-g9-8Vj"/>
                 <outlet property="launcherinfo" destination="O6R-da-PXJ" id="noR-Nf-qA9"/>
                 <outlet property="location" destination="j6d-87-qca" id="ZHV-uK-mHS"/>
+                <outlet property="mediaEntrance" destination="zy6-H8-88J" id="JDH-ZI-C3Z"/>
                 <outlet property="member_count" destination="OW0-Fo-FEh" id="Ypb-so-WzT"/>
                 <outlet property="themePhoto" destination="Guf-aF-rYK" id="ah9-ZF-AM0"/>
                 <outlet property="timeInfo" destination="WWW-ty-peW" id="a5A-7Y-rYu"/>
                 <outlet property="videoWall" destination="iDx-Vs-ivA" id="w3U-k9-6Ig"/>
                 <outlet property="videoWall_icon" destination="5dg-IF-isa" id="8Ra-mG-YBF"/>
             </connections>
-            <point key="canvasLocation" x="254" y="206.5"/>
+            <point key="canvasLocation" x="259" y="185.5"/>
         </tableViewCell>
     </objects>
     <resources>

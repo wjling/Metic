@@ -15,6 +15,7 @@
 @property(nonatomic,weak)UIViewController* homeController;
 @property(nonatomic,strong)NSMutableArray *eventsSource;
 @property(nonatomic,strong) NSString* cellClassName;
+@property(nonatomic,strong) NSString* emptyTips;
 @end
 
 

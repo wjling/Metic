@@ -46,7 +46,7 @@
         cell.backgroundColor = [UIColor clearColor];
         
         
-        label.text = @"还没有活动哦，快去发起吧";
+        label.text = _emptyTips;
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
@@ -57,7 +57,7 @@
         
         return cell;
     }
-    _cellClassName = @"CustomCellTableViewCell";
+    
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
         UINib *nib = [UINib nibWithNibName:_cellClassName bundle:nil];
@@ -66,6 +66,7 @@
     }
     
     MTTableViewCellBase *cell = (MTTableViewCellBase *)[tableView dequeueReusableCellWithIdentifier:_cellClassName];
+    cell.clipsToBounds = YES;
     cell.controller = self.homeController;
 
     if (self.eventsSource) {

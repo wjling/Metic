@@ -10,6 +10,9 @@
 #import "EventDetailViewController.h"
 #import "EventPreviewViewController.h"
 #import "SlideNavigationController.h"
+#import "MTTableViewCellBase.h"
+#import "CustomCellTableViewCell.h"
+#import "MTTableView.h"
 #import "MJRefresh.h"
 #import "SVProgressHUD.h"
 #import "MTUser.h"
@@ -18,14 +21,15 @@
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
 
-@interface EventLikeViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,MJRefreshBaseViewDelegate>
+@interface EventLikeViewController ()<UITableViewDelegate,UISearchBarDelegate,MJRefreshBaseViewDelegate>
 @property (nonatomic,strong) UIView* shadowView;
 
-@property(nonatomic,strong) UITableView* tableView;
+@property(nonatomic,strong) MTTableView* tableView;
 @property(nonatomic,strong) UISearchBar* searchBar;
 @property(nonatomic,strong) NSArray* eventIds;
 @property(nonatomic,strong) NSMutableArray* events;
 @property(nonatomic,strong) MJRefreshFooterView* footer;
+@property(nonatomic, readwrite) NSInteger type;
 
 @property NSUInteger showNum;
 
@@ -57,30 +61,31 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"收藏活动";
     
-    CGRect frame = self.view.bounds;
-//    frame.origin.x = frame.size.width * 1/32;
-    frame.origin.y = 44;
-//    frame.size.width = frame.size.width * 15/16;
-    frame.size.height -= 44;
-    _tableView = [[UITableView alloc]initWithFrame:frame style:UITableViewStylePlain];
-    _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
-    [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [_tableView setShowsVerticalScrollIndicator:NO];
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
+    if (!_tableView) {
+        CGRect frame = self.view.frame;
+        frame.origin.x += 10;
+        frame.size.width -= 20;
+        frame.origin.y = 44;
+        frame.size.height -= 44;
+        _tableView = [[MTTableView alloc]initWithFrame:frame];
+        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
+        [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        [_tableView setRowHeight:166];
+        [_tableView setShowsVerticalScrollIndicator:NO];
+        [self.view addSubview:_tableView];
+        [self.view sendSubviewToBack:_tableView];
+    }
+
     _searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [_searchBar setPlaceholder:@"搜索"];
     _searchBar.delegate = self;
-    [self.view addSubview:_tableView];
     [self.view addSubview:_searchBar];
     [self.view setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
     //初始化上拉加载功能
     _footer = [[MJRefreshFooterView alloc]init];
     _footer.delegate = self;
     _footer.scrollView = self.tableView;
-    
-    
     
     
     //初始化阴影页
@@ -95,6 +100,11 @@
 - (void)initData
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name: @"deleteLikeItem" object:nil];
+    _tableView.homeController= self;
+    [self.tableView setDelegate:self];
+    [self.tableView setDataSource:self.tableView];
+    self.tableView.cellClassName = @"CustomCellTableViewCell";
+    self.tableView.emptyTips = @"暂时没有收藏活动哦";
     _showNum = 0;
     [self pullEventFromDB];
     [self getLikeEventIds];
@@ -117,7 +127,7 @@
             [events addObject:event];
         }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            _events = events;
+            self.events = events;
             [_tableView reloadData];
         });
         
@@ -126,6 +136,7 @@
 
 -(void)getLikeEventIdsForSearch
 {
+    self.type = 1;
     NSString* text = self.searchBar.text;
     if ([[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.searchBar.text = @"";
@@ -171,8 +182,7 @@
 
 -(void)getLikeEventIds
 {
-//    [SVProgressHUD showWithStatus:@"加载中" maskType:SVProgressHUDMaskTypeGradient];
-    
+    self.type = 0;
     [self.searchBar resignFirstResponder];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -205,13 +215,35 @@
     
 }
 
+-(void)setEvents:(NSMutableArray *)events
+{
+    _events = events;
+    _tableView.eventsSource = events;
+}
+
+-(void)setType:(NSInteger)type
+{
+    _type = type;
+    switch (type) {
+        case 0:
+            _tableView.emptyTips = @"暂时没有收藏活动哦";
+            break;
+        case 1:
+            _tableView.emptyTips = @"没有找到符合条件的活动";
+            break;
+            
+        default:
+            break;
+    }
+}
+
 -(void)get_events:(BOOL)needClear
 {
     NSLog(@"%lu", [_eventIds count] - [_events count]);
     NSUInteger restNum;
     if (needClear) {
         restNum = MIN(20, _eventIds.count);
-    }else restNum = MIN(20, _eventIds.count - _events.count);
+    }else restNum = MIN(20, _eventIds.count - self.events.count);
     
     if (restNum <= 0 && !needClear){
         [SVProgressHUD dismiss];
@@ -246,9 +278,9 @@
                         [[MTDatabaseAffairs sharedInstance]saveEventToDB:tmpDic];
                     }
                     if (!_events|| needClear) {
-                        _events = tmp;
+                        self.events = tmp;
                     }else{
-                        [_events addObjectsFromArray:tmp];
+                        [self.events addObjectsFromArray:tmp];
                     }
                     
                     [SVProgressHUD dismiss];
@@ -311,63 +343,10 @@
     [_searchBar resignFirstResponder];
 }
 
-#pragma UITableView Delegate & DataSource
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 190;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (self.events && self.events.count != 0) {
-        return self.events.count;
-    }else
-        return 1;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (!self.events || self.events.count == 0) {
-        UITableViewCell* cell = [[UITableViewCell alloc]init];
-        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,320,70)];
-        cell.userInteractionEnabled = NO;
-        cell.backgroundColor = [UIColor clearColor];
-        
-        
-        label.text = @"暂时没有收藏活动哦";
-        label.numberOfLines = 1;
-        label.backgroundColor = [UIColor clearColor];
-        label.font = [UIFont fontWithName:@"Helvetica-Bold" size:15];
-        label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
-        label.textAlignment = NSTextAlignmentCenter;
-        [cell addSubview:label];
-        
-        
-        return cell;
-    }
-    
-    static NSString *CellIdentifier = @"eventLikeTableViewCell";
-    BOOL nibsRegistered = NO;
-    if (!nibsRegistered) {
-        UINib *nib = [UINib nibWithNibName:NSStringFromClass([SquareTableViewCell class]) bundle:nil];
-        [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
-        nibsRegistered = YES;
-    }
-    SquareTableViewCell *cell = (SquareTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    NSMutableDictionary *eventInfo = _events[indexPath.row];
-    [eventInfo removeObjectForKey:@"pv"];
-
-    if (eventInfo) {
-        [cell applyData:eventInfo];
-    }
-    
-    return cell;
-}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [_searchBar resignFirstResponder];
-    SquareTableViewCell* cell = (SquareTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    CustomCellTableViewCell* cell = (CustomCellTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     NSDictionary* dict = cell.eventInfo;
     
     if (![[dict valueForKey:@"isIn"] boolValue]) {
