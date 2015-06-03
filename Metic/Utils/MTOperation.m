@@ -169,14 +169,15 @@
                 case NORMAL_REPLY:{
                     [SVProgressHUD dismissWithSuccess:islike? @"收藏成功":@"取消收藏"];
                     NSArray* result = [response1 valueForKey:@"result"];
-                    NSArray* eventList = [response1 valueForKey:@"event_list"];
                     
                     BOOL normal = NO;
                     if (result && result.count) {
                         NSDictionary* item = result[0];
-                        NSDictionary* eventInfo = eventList[0];
-                        NSString* likeTime = [eventInfo valueForKey:@"likeTime"];
+                        NSString* likeTime = [item valueForKey:@"likeTime"];
                         NSNumber* innerCmd = [item valueForKey:@"cmd"];
+                        if ([likeTime isEqual: [NSNull null]]) {
+                            likeTime = nil;
+                        }
                         if (innerCmd) {
                             if ([innerCmd integerValue] == NORMAL_REPLY) {
                                 normal = YES;
