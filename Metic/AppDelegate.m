@@ -710,6 +710,11 @@
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         type = 2;
     }
+    else if (msg_cmd == CHANGE_EVENT_INFO_NOTIFICATION)
+    {
+        [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
+        type = 0;
+    }
     
     
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];

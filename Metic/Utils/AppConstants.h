@@ -163,6 +163,8 @@ enum Return_Code
     QUIT_EVENT_NOTIFICATION = 985,   //活动解散
     KICK_EVENT_NOTIFICATION = 984,   //被踢出活动
     
+    CHANGE_EVENT_INFO_NOTIFICATION = 990, //活动信息修改通知推送
+    
 };
 
 #endif

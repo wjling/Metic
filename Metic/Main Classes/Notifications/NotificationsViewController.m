@@ -579,6 +579,10 @@ enum Response_Type
                 if (cmd1 == cmd2) {
                     NSNumber* event_id1 = [MTUser_msg_dic objectForKey:@"event_id"];
                     NSNumber* event_id2 = [msg_dic objectForKey:@"event_id"];
+                    if (!event_id1)
+                    {
+                        break;
+                    }
                     if ([event_id1 integerValue] == [event_id2 integerValue]) {
                         flag = NO;
                         break;
@@ -921,6 +925,7 @@ enum Response_Type
                 break;
             case NEW_EVENT_NOTIFICATION:
             case REQUEST_EVENT:
+            case CHANGE_EVENT_INFO_NOTIFICATION:
             {
                 NSInteger cmd2;
                 NSInteger eventid1, eventid2;
@@ -1081,9 +1086,9 @@ enum Response_Type
     UIColor* label1Color = [UIColor colorWithRed:0.58 green:0.58 blue:0.58 alpha:1];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
     if (tableView == self.eventRequest_tableView) {
-        NotificationsEventRequestTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
-        if (nil == cell) {
-            cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
+        UITableViewCell* cell1 = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
+        if (nil == cell1) {
+            cell1 = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
         }
         NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
 //        NSLog(@"event %d request: %@",indexPath.row, msg_dic);
@@ -1092,6 +1097,7 @@ enum Response_Type
         switch (cmd) {
             case NEW_EVENT_NOTIFICATION: //cmd 997
             {
+                NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* launcher = [msg_dic objectForKey:@"launcher"];
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
@@ -1151,6 +1157,7 @@ enum Response_Type
                 break;
             case REQUEST_EVENT: //995
             {
+                NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSNumber* uid = [msg_dic valueForKey:@"id"];
                 NSString* fname = [msg_dic valueForKey:@"name"];
@@ -1239,15 +1246,25 @@ enum Response_Type
 
             }
                 break;
+            case CHANGE_EVENT_INFO_NOTIFICATION:
+            {
+                NotificationsSystemMessageTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
+                cell1 = cell;
+                NSString* content = [msg_dic objectForKey:@"content"];
+                
+                cell.title_label.text = @"活动消息";
+                cell.sys_msg_label.text = content? content:@"无";
+            }
+                break;
             default:
                 break;
         }
-        [cell.contentView setBackgroundColor:bgColor];
+        [cell1.contentView setBackgroundColor:bgColor];
         UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
+        cell1.layer.borderColor = borderColor.CGColor;
+        cell1.layer.borderWidth = 0.3;
         
-        CGRect cellFrame = cell.contentView.frame;
+        CGRect cellFrame = cell1.contentView.frame;
         if (cmd == NEW_EVENT_NOTIFICATION) {
             cellFrame.size.height = 50;
         }
@@ -1255,8 +1272,8 @@ enum Response_Type
         {
             cellFrame.size.height = 80;
         }
-        [cell.contentView setFrame:cellFrame];
-        return cell;
+        [cell1.contentView setFrame:cellFrame];
+        return cell1;
     }
     else if(tableView == self.friendRequest_tableView)
     {

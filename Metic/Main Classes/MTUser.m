@@ -918,6 +918,7 @@ static MTUser *singletonInstance;
                         break;
                     case NEW_EVENT_NOTIFICATION:
                     case REQUEST_EVENT:
+                    case CHANGE_EVENT_INFO_NOTIFICATION:
                     {
                         [self.eventRequestMsg addObject:msg_dic];
                     }
