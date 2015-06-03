@@ -67,7 +67,7 @@
 @property(nonatomic,strong) TTTAttributedLabel *member_count;
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) UIView *commentInputView;
-@property(nonatomic,weak) EventDetailViewController * eventController;
+@property(nonatomic,weak) EventDetailViewController * controller;
 @property(nonatomic,strong) UIButton *addPaticipator;
 
 @end

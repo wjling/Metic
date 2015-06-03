@@ -37,6 +37,7 @@
 @synthesize addPaticipator;
 @synthesize imgWall_icon;
 @synthesize videoWall_icon;
+@synthesize controller;
 
 
 #define widthspace 10
@@ -165,9 +166,9 @@
     pictureWall.eventLauncherId = [_eventInfo valueForKey:@"launcher_id"];
     pictureWall.eventName = [_eventInfo valueForKey:@"subject"];
     pictureWall.eventInfo = self.eventInfo;
-    [self.eventController.navigationController pushViewController:pictureWall animated:YES];
+    [self.controller.navigationController pushViewController:pictureWall animated:YES];
     return;
-    [self.eventController performSegueWithIdentifier:@"toPictureWall" sender:self.eventController];
+    [self.controller performSegueWithIdentifier:@"toPictureWall" sender:self.controller];
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
@@ -180,9 +181,9 @@
     videowall.eventLauncherId = [_eventInfo valueForKey:@"launcher_id"];;
     videowall.eventName = [_eventInfo valueForKey:@"subject"];
     videowall.eventInfo = self.eventInfo;
-    [self.eventController.navigationController pushViewController:videowall animated:YES];
+    [self.controller.navigationController pushViewController:videowall animated:YES];
     return;
-    [self.eventController performSegueWithIdentifier:@"toVideoWall" sender:self.eventController];
+    [self.controller performSegueWithIdentifier:@"toVideoWall" sender:self.controller];
     
 }
 
@@ -190,15 +191,15 @@
 }
 
 - (IBAction)showParticipators:(id)sender {
-    if ([_eventController isKindOfClass:[EventDetailViewController class]]) {
-        if (_eventController.isKeyBoard) {
-            [_eventController.inputTextView resignFirstResponder];
-        }else if (_eventController.isEmotionOpen){
-            [_eventController button_Emotionpress:nil];
-        } else [self.eventController performSegueWithIdentifier:@"showParticipators" sender:self.eventController];
+    if ([controller isKindOfClass:[EventDetailViewController class]]) {
+        if (self.controller.isKeyBoard) {
+            [self.controller.inputTextView resignFirstResponder];
+        }else if (self.controller.isEmotionOpen){
+            [self.controller button_Emotionpress:nil];
+        } else [self.controller performSegueWithIdentifier:@"showParticipators" sender:self.controller];
     }else{
-        if (_eventController.isKeyBoard) {
-            [_eventController.inputTextView resignFirstResponder];
+        if (self.controller.isKeyBoard) {
+            [self.controller.inputTextView resignFirstResponder];
             return;
         }
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -207,30 +208,30 @@
 
         viewcontroller.eventId = self.eventId;
         viewcontroller.canManage = NO;
-        [self.eventController.navigationController pushViewController:viewcontroller animated:YES];
+        [self.controller.navigationController pushViewController:viewcontroller animated:YES];
     }
     
 }
 
 - (IBAction)showBanner:(id)sender {
-    if ([_eventController isKindOfClass:[EventDetailViewController class]]) {
-        if (_eventController.isKeyBoard) {
-            [_eventController.inputTextView resignFirstResponder];
-        }else if (_eventController.isEmotionOpen){
-            [_eventController button_Emotionpress:nil];
+    if ([self.controller isKindOfClass:[EventDetailViewController class]]) {
+        if (self.controller.isKeyBoard) {
+            [self.controller.inputTextView resignFirstResponder];
+        }else if (self.controller.isEmotionOpen){
+            [self.controller button_Emotionpress:nil];
         }else{
             BannerViewController* bannerView = [[BannerViewController alloc] init];
             bannerView.banner = themePhoto.image;
-            [self.eventController presentViewController:bannerView animated:YES completion:^{}];
+            [self.controller presentViewController:bannerView animated:YES completion:^{}];
         }
     }else{
-        if (_eventController.isKeyBoard) {
-            [_eventController.inputTextView resignFirstResponder];
+        if (self.controller.isKeyBoard) {
+            [self.controller.inputTextView resignFirstResponder];
             return;
         }
         BannerViewController* bannerView = [[BannerViewController alloc] init];
         bannerView.banner = themePhoto.image;
-        [self.eventController presentViewController:bannerView animated:YES completion:^{}];
+        [self.controller presentViewController:bannerView animated:YES completion:^{}];
     }
     
 }
