@@ -79,6 +79,7 @@
     viewcontroller.eventName = _PhotoWall.eventName;
     viewcontroller.controller = self.PhotoWall;
     viewcontroller.type = 2;
+    viewcontroller.canManage = [[_PhotoWall.eventInfo valueForKey:@"isIn"]boolValue];
     [self.PhotoWall.navigationController pushViewController:viewcontroller animated:YES];
 
 }

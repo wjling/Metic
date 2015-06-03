@@ -11,8 +11,7 @@
 #import "CommonUtils.h"
 #import "FlatDatePicker.h"
 #import "MTUser.h"
-#import "MTDatabaseHelper.h"
-#import "NSString+JSON.h"
+#import "MTDatabaseAffairs.h"
 
 @interface EventEditTimeViewController ()<UITextFieldDelegate,FlatDatePickerDelegate>
 @property (nonatomic,strong) UIButton* confirmBtn;
@@ -229,7 +228,7 @@
                     [SVProgressHUD dismissWithSuccess:@"修改成功"];
                     [_eventInfo setValue:beg_Time forKey:@"time"];
                     [_eventInfo setValue:end_Time forKey:@"endTime"];
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                     break;
@@ -255,18 +254,6 @@
         }
     }];
     
-}
-
--(void)saveEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 #pragma mark - UITextField Delegate

@@ -11,6 +11,7 @@
 #import "CommonUtils.h"
 #import "MobClick.h"
 #import "MTUser.h"
+#import "SVProgressHUD.h"
 
 
 @interface ReportViewController ()
@@ -101,13 +102,7 @@
     [self.confirm_Button setEnabled:NO];
     [self.textView resignFirstResponder];
     [self.titleTextField resignFirstResponder];
-    [self showWaitingView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self) {
-            [self removeWaitingView];
-            [self.confirm_Button setEnabled:YES];
-        }
-    });
+    [SVProgressHUD showWithStatus:@"处理中.." maskType:SVProgressHUDMaskTypeClear];
     
     
     NSNumber* object_id;
@@ -140,7 +135,7 @@
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithInt:_type] forKey:@"type"];
+    [dictionary setValue:[NSNumber numberWithInteger:_type] forKey:@"type"];
     [dictionary setValue:object_id forKey:@"object_id"];
     [dictionary setValue:_textView.text forKey:@"content"];
     NSLog(@"%@",dictionary);
@@ -154,19 +149,20 @@
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:{
+                    [SVProgressHUD dismiss];
                     UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"感谢投诉" WithMessage:@"谢谢你！活动宝坚决反对色情、暴力、欺诈等不良信息，我们会认真处理你的投诉。" WithDelegate:self WithCancelTitle:@"确定"];
                     [alert setTag:101];
                 }
                     break;
                 default:{
-                    UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:self WithCancelTitle:@"确定"];
-                    [alert setTag:102];
+                    _confirm_Button.enabled = YES;
+                    [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
                 }
                     break;
             }
         }else{
-            UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"网络异常，请重试。" WithDelegate:self WithCancelTitle:@"确定"];
-            [alert setTag:102];
+            _confirm_Button.enabled = YES;
+            [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
         }
         
     }];
@@ -203,14 +199,9 @@
         case 0:
             switch ([alertView tag]) {
                 case 101:
-                    [self removeWaitingView];
+//                    [self removeWaitingView];
                     [self.confirm_Button setEnabled:YES];
                     [self.navigationController popViewControllerAnimated:YES];
-                    break;
-                case 102:{
-                    [self removeWaitingView];
-                    [self.confirm_Button setEnabled:YES];
-                }
                     break;
                     
                 default:

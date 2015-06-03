@@ -8,6 +8,7 @@
 
 #import "CustomCellTableViewCell.h"
 #import "../Main Classes/PictureWall2.h"
+#import "../Main Classes/Video/VideoWallViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 #import "UIImageView+WebCache.h"
 
@@ -92,6 +93,7 @@
 
 - (void)applyData:(NSDictionary*)data
 {
+    self.eventInfo = data;
     self.eventName.text = [data valueForKey:@"subject"];
     self.event = [data valueForKey:@"subject"];
     NSString* beginT = [data valueForKey:@"time"];
@@ -169,6 +171,15 @@
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    PictureWall2 *pictureWall = [mainStoryboard instantiateViewControllerWithIdentifier: @"PictureWall2"];
+    pictureWall.eventId = self.eventId;
+    pictureWall.eventLauncherId = self.launcherId;
+    pictureWall.eventName = self.event;
+    pictureWall.eventInfo = self.eventInfo;
+    [self.homeController.navigationController pushViewController:pictureWall animated:YES];
+    return;
+    
     self.homeController.selete_Eventid = self.eventId;
     self.homeController.selete_EventLauncherid = self.launcherId;
     self.homeController.selete_EventName = _event;
@@ -176,6 +187,16 @@
 }
 
 - (IBAction)jumpToVideoWall:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    VideoWallViewController *videowall = [mainStoryboard instantiateViewControllerWithIdentifier: @"VideoWallViewController"];
+//    VideoWallViewController* videowall = [[VideoWallViewController alloc]init];
+    videowall.eventId = self.eventId;
+    videowall.eventLauncherId = self.launcherId;
+    videowall.eventName = self.event;
+    videowall.eventInfo = self.eventInfo;
+    [self.homeController.navigationController pushViewController:videowall animated:YES];
+    
+    return;
     self.homeController.selete_Eventid = self.eventId;
     self.homeController.selete_EventLauncherid = self.launcherId;
     self.homeController.selete_EventName = _event;

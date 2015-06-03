@@ -671,6 +671,7 @@
 
 
 - (IBAction)button_Emotionpress:(id)sender {
+    if(!_canManage)return;
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
         
@@ -781,7 +782,7 @@
 
 -(void)deleteVideo:(UIButton*)button
 {
-    
+    if(!_canManage)return;
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这段视频？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setTag:100];
     [alert show];
@@ -1299,7 +1300,7 @@
             
             return ;
         }
-
+        if(!_canManage)return;
         VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1389,6 +1390,15 @@
 }
 
 #pragma mark - UITextView Delegate
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if(!_canManage){
+        ((MTMessageTextView*)textView).placeHolder = @"请先加入活动";
+        return NO;
+    }else return YES;
+    
+}
+
 -(void)textViewDidChange:(UITextView *)textView
 {
     CGRect frame = _inputTextView.frame;

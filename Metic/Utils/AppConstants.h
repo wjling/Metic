@@ -100,7 +100,8 @@ enum Operation_Code
     VIEW_EVENT = 52,
     CHANGE_EVENT_INFO = 53,
     ADD_FRIEND_BATCH = 54,
-    
+    GET_LIKE_EVENT = 55,
+    LIKE_EVENT = 56,
 };
 
 enum CloudOperation_Code

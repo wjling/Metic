@@ -37,7 +37,13 @@
     self.eventInfo = data;
     
     self.subject.text = [data valueForKey:@"subject"];
-    self.viewcount.text = [NSString stringWithFormat:@"%@次浏览",[data valueForKey:@"pv"]];
+    NSNumber* pv = [data valueForKey:@"pv"];
+    if (pv) {
+        self.viewcount.text = [NSString stringWithFormat:@"%@次浏览",pv];
+    }else{
+        self.viewcount.text = @"";
+    }
+    
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"launcher_id"]];
     [avatarGetter getAvatar];

@@ -16,4 +16,5 @@
 @property(nonatomic,strong) NSString* eventName;
 @property(nonatomic,strong) PictureWall2* pictureWallController;
 @property BOOL shouldFlash;
+@property BOOL canManage;
 @end

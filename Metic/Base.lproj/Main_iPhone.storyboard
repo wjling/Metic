@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="QMj-f1-iic">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -3147,20 +3147,36 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="H2j-n1-6M4">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Agz-Hd-Hpf">
-                                <rect key="frame" x="274" y="7" width="30" height="30"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="fKk-0f-s73">
+                            <view key="customView" contentMode="scaleToFill" id="IM7-9o-9ay">
+                                <rect key="frame" x="0.0" y="0.0" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="头部右上角图标-更多">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="more:" destination="cGW-AM-0QH" eventType="touchUpInside" id="Oya-zx-evB"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AD-QB-sfd">
+                                        <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
+                                        <state key="normal" image="favor">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="like:" destination="cGW-AM-0QH" eventType="touchUpInside" id="Qd8-Nw-8Uu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTP-PC-gW8">
+                                        <rect key="frame" x="38" y="0.0" width="33" height="33"/>
+                                        <state key="normal" backgroundImage="头部右上角图标-更多">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="more:" destination="cGW-AM-0QH" eventType="touchUpInside" id="c3N-rK-0vG"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="likeBtn" destination="8AD-QB-sfd" id="o0j-eo-Ont"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
@@ -3185,7 +3201,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
@@ -3561,7 +3577,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eYA-7C-1UR">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yY7-SY-N81">
@@ -3949,7 +3965,7 @@
         <!--图片墙-->
         <scene sceneID="jET-B2-Ifw">
             <objects>
-                <viewController id="EfS-Jw-ePs" customClass="PictureWall2" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PictureWall2" id="EfS-Jw-ePs" customClass="PictureWall2" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aZO-Rz-Mw7"/>
                         <viewControllerLayoutGuide type="bottom" id="yxv-Y7-moU"/>
@@ -3985,7 +4001,7 @@
         <!--视频墙-->
         <scene sceneID="N68-cJ-ABs">
             <objects>
-                <viewController id="hz5-4h-NDx" customClass="VideoWallViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VideoWallViewController" id="hz5-4h-NDx" customClass="VideoWallViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9sO-st-M5r"/>
                         <viewControllerLayoutGuide type="bottom" id="LIc-gl-BC3"/>
@@ -4856,6 +4872,26 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IkT-GQ-sH8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="FG0-6A-0d5">
+                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="头部右上角图标-更多">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="more:" destination="cGW-AM-0QH" eventType="touchUpInside" id="6Ci-09-EC3"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="BCo-bA-iE5">
+                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" backgroundImage="头部右上角图标-更多">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="more:" destination="cGW-AM-0QH" eventType="touchUpInside" id="6bB-Mf-anA"/>
+                    </connections>
+                </button>
             </objects>
             <point key="canvasLocation" x="3480" y="229"/>
         </scene>
@@ -4868,6 +4904,7 @@
         <image name="6听课.jpg" width="640" height="245"/>
         <image name="7夜店.jpg" width="640" height="245"/>
         <image name="dian" width="32" height="44"/>
+        <image name="favor" width="20" height="20"/>
         <image name="ic_remove" width="31" height="31"/>
         <image name="img_about_logo" width="234" height="144"/>
         <image name="img_about_slogon" width="230" height="32"/>
@@ -4921,18 +4958,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="ItJ-aD-aY9"/>
         <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="mCC-Hp-8GT"/>
+        <segue reference="UXj-VV-omZ"/>
         <segue reference="823-Eq-eYh"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="kIc-uU-eUg"/>
         <segue reference="hB7-KS-rrK"/>
-        <segue reference="eBE-9B-Hp2"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="ItJ-aD-aY9"/>
+        <segue reference="06u-oh-4gy"/>
+        <segue reference="kIc-uU-eUg"/>
         <segue reference="vrP-dE-x9J"/>
+        <segue reference="ib8-0I-OZA"/>
         <segue reference="KQw-JA-BHy"/>
-        <segue reference="Bdm-ot-CYp"/>
     </inferredMetricsTieBreakers>
 </document>

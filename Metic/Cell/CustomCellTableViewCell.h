@@ -37,7 +37,7 @@
 - (void)drawOfficialFlag:(BOOL)isOfficial;
 - (void)applyData:(NSDictionary*)data;
 
-
+@property(nonatomic,strong)NSDictionary* eventInfo;
 
 @property(nonatomic,weak) HomeViewController* homeController;
 @property(atomic,strong) UIImageView *avatar;

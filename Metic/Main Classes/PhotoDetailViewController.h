@@ -33,6 +33,7 @@
 @property int type;
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
+@property BOOL canManage;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;
 - (IBAction)share:(id)sender;

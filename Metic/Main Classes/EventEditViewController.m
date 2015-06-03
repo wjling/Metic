@@ -10,19 +10,19 @@
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
 #import "Reachability.h"
-#import "MTDatabaseHelper.h"
-#import "NSString+JSON.h"
+#import "MTDatabaseAffairs.h"
 
 #import "EventEditSubjectViewController.h"
 #import "EventEditTimeViewController.h"
 #import "EventEditLocationViewController.h"
 #import "EventEditRemarkViewController.h"
 #import "BannerSelectorViewController.h"
+#import "EventEditTypeViewController.h"
 
 #import "SVProgressHUD.h"
 
 const float rowHeight = 42.0f;
-const NSInteger rowCount = 3;
+const NSInteger rowCount = 4;
 
 @interface EventEditViewController () <UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
 @property (nonatomic,strong) UIImageView* banner;
@@ -139,7 +139,7 @@ const NSInteger rowCount = 3;
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY) {
                         [_eventInfo setValue:@(bannercode) forKey:@"code"];
-                        [self saveEventToDB:_eventInfo];
+                        [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                         [self refresh];
                         [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
                     }else{
@@ -168,18 +168,6 @@ const NSInteger rowCount = 3;
     BanSelector.code = [[_eventInfo valueForKey:@"code"] integerValue];
     BanSelector.EEcontroller = self;
     [self.navigationController pushViewController:BanSelector animated:YES];
-}
-
--(void)saveEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
 }
 
 #pragma UITableView DataSource
@@ -316,6 +304,12 @@ const NSInteger rowCount = 3;
                     title.text = @"活动描述";
 //                    content.text = [_eventInfo valueForKey:@"remark"];
                     break;
+                case 3:
+                    titleframe.size.height = rowHeight + 1;
+                    contentframe.size.height = rowHeight + 1;
+                    title.text = @"活动类型";
+//                    content.text = [_eventInfo valueForKey:@"remark"];
+                    break;
                     
                 default:
                     break;
@@ -377,6 +371,13 @@ const NSInteger rowCount = 3;
                     [self.navigationController pushViewController:vc animated:YES];
                 }
                     break;
+                case 3:
+                {
+                    EventEditTypeViewController* vc = [[EventEditTypeViewController alloc]init];
+                    vc.eventInfo = _eventInfo;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                    break;
                     
                 default:
                     break;
@@ -418,7 +419,7 @@ const NSInteger rowCount = 3;
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 if ([cmd intValue] == NORMAL_REPLY) {
                     [_eventInfo setValue:@(bannercode) forKey:@"code"];
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [self refresh];
                     [SVProgressHUD dismissWithSuccess:@"更改封面成功" afterDelay:1];
                 }else{

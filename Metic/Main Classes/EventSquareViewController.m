@@ -554,7 +554,6 @@
 #pragma mark - 获取最新活动资料 -
 -(void)getNearbyEventIdsFromAir:(NSNumber*)sequence
 {
-    return;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[NSNumber numberWithInt:2] forKey:@"type"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -740,7 +739,7 @@
     SquareTableViewCell* cell = (SquareTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     NSDictionary* dict = cell.eventInfo;
     
-    if (![[dict valueForKey:@"isIn"] boolValue]) {
+    if (![[dict valueForKey:@"isIn"] boolValue] && [[dict valueForKey:@"visibility"] integerValue] != 2) {
         EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
         viewcontroller.eventInfo = dict;
         [self.navigationController pushViewController:viewcontroller animated:YES];
@@ -753,6 +752,7 @@
         EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
         eventDetailView.eventId = eventId;
         eventDetailView.eventLauncherId = eventLauncherId;
+        eventDetailView.event = [dict mutableCopy];
         [self.navigationController pushViewController:eventDetailView animated:YES];
     }
 

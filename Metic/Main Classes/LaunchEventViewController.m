@@ -33,11 +33,13 @@
 //@property (strong, nonatomic) BMKMapManager *mapManager;
 @property (strong, nonatomic) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
-@property int visibility;
+@property NSInteger visibility;
 @property BOOL isKeyBoard;
 @property (nonatomic,strong) UIView* InviteFriendsView;
 @property (nonatomic,strong) UIView* isAllowStrangerView;
-@property (nonatomic,strong) UIButton *isAllowStrangerButton;
+
+
+
 @property (strong,nonatomic) UICollectionView *collectionView;
 @property (nonatomic, strong) CLLocationManager  *locationManager;
 @property (nonatomic, strong) NSArray* notFriendsList;
@@ -73,7 +75,7 @@
     self.location_text.delegate = self;
     self.detail_text.delegate = self;
     [self initInviteFriendsView];
-    _visibility = 1;
+    [self initEventType];
     _code = -1;
     _canLeave = NO;
     _isKeyBoard = NO;
@@ -254,22 +256,6 @@
     _InviteFriendsView.layer.cornerRadius = 5;
     [_scrollView addSubview:_InviteFriendsView];
     
-    _isAllowStrangerView = [[UIView alloc]initWithFrame:CGRectMake(20, 640, 280, 40)];
-    [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
-    [_scrollView addSubview:_isAllowStrangerView];
-    
-    _isAllowStrangerButton = [[UIButton alloc]initWithFrame:CGRectMake(5, 5, 26, 26)];
-    [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [_isAllowStrangerButton addTarget:self action:@selector(changeAllowStangerStage) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:_isAllowStrangerButton];
-    
-    UILabel *isAllowStrangerLabel = [[UILabel alloc]initWithFrame:CGRectMake(40, 5, 200, 30)];
-    [isAllowStrangerLabel setBackgroundColor:[UIColor clearColor]];
-    isAllowStrangerLabel.text = @"允许陌生人参与";
-    [isAllowStrangerLabel setFont:[UIFont systemFontOfSize:16]];
-    [isAllowStrangerLabel setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:isAllowStrangerLabel];
-    
     UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
     flowLayout.itemSize=CGSizeMake(50,70);
     flowLayout.minimumLineSpacing = 0;
@@ -281,19 +267,122 @@
     [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"participantCell"];
     [_collectionView setBackgroundColor:[UIColor clearColor]];
     [_InviteFriendsView addSubview:_collectionView];
-    
-    
 }
 
--(void)changeAllowStangerStage
+-(void)initEventType
 {
-    if (_visibility == 0) {
-        _visibility = 1;
-        [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+    _isAllowStrangerView = [[UIView alloc]initWithFrame:CGRectMake(20, 640, 280, 70)];
+    [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
+    [_scrollView addSubview:_isAllowStrangerView];
+    
+    UIButton* button1 = [[UIButton alloc]initWithFrame:CGRectMake(5, 0, 26, 26)];
+    button1.tag = 1;
+    [button1 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+    [button1 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
+    [_isAllowStrangerView addSubview:button1];
+    
+    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(35, 0, 80, 30)];
+    label1.tag = 2;
+    [label1 setBackgroundColor:[UIColor clearColor]];
+    label1.text = @"公开活动";
+    [label1 setFont:[UIFont systemFontOfSize:16]];
+    [label1 setTextAlignment:NSTextAlignmentLeft];
+    [_isAllowStrangerView addSubview:label1];
+    
+    UIButton* button2 = [[UIButton alloc]initWithFrame:CGRectMake(145, 0, 26, 26)];
+    button2.tag = 3;
+    [button2 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+    [button2 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
+    [_isAllowStrangerView addSubview:button2];
+    
+    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(175, 0, 80, 30)];
+    label2.tag = 4;
+    [label2 setBackgroundColor:[UIColor clearColor]];
+    label2.text = @"私密活动";
+    [label2 setFont:[UIFont systemFontOfSize:16]];
+    [label2 setTextAlignment:NSTextAlignmentLeft];
+    [_isAllowStrangerView addSubview:label2];
+    
+    UIButton* button3 = [[UIButton alloc]initWithFrame:CGRectMake(5, 35, 26, 26)];
+    button3.tag = 5;
+    [button3 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+    [button3 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
+    [_isAllowStrangerView addSubview:button3];
+    
+    UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(35, 35, 80, 30)];
+    label3.tag = 6;
+    [label3 setBackgroundColor:[UIColor clearColor]];
+    label3.text = @"内容公开";
+    [label3 setFont:[UIFont systemFontOfSize:16]];
+    [label3 setTextAlignment:NSTextAlignmentLeft];
+    [_isAllowStrangerView addSubview:label3];
+    
+    UIButton* button4 = [[UIButton alloc]initWithFrame:CGRectMake(145, 35, 26, 26)];
+    button4.tag = 7;
+    [button4 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+    [button4 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
+    [_isAllowStrangerView addSubview:button4];
+    
+    UILabel *label4 = [[UILabel alloc]initWithFrame:CGRectMake(175, 35, 80, 30)];
+    label4.tag = 8;
+    [label4 setBackgroundColor:[UIColor clearColor]];
+    label4.text = @"内容不公开";
+    [label4 setFont:[UIFont systemFontOfSize:16]];
+    [label4 setTextAlignment:NSTextAlignmentLeft];
+    [_isAllowStrangerView addSubview:label4];
+    
+    _visibility = 2;
+    [self changeAllowStangerStage:button3];
+}
 
-    }else{
-        _visibility = 0;
-        [_isAllowStrangerButton setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+-(void)changeAllowStangerStage:(UIButton*)sender
+{
+    switch (sender.tag) {
+        case 1:
+            if (_visibility == 0) {
+                _visibility = 2;
+            }
+            break;
+        case 3:
+            _visibility = 0;
+            break;
+        case 5:
+            _visibility = 2;
+            break;
+        case 7:
+            _visibility = 1;
+            break;
+            
+        default:
+            break;
+    }
+    if (_visibility == 0) {
+        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = YES;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = YES;
+        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = YES;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = YES;
+    }else if(_visibility == 1){
+        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
+        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
+    }else if(_visibility == 2){
+        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
+        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
+        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
+        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
     }
 }
 
@@ -320,9 +409,9 @@
     frame.origin.y = 570 + ceilf(count/5)*70;
     _isAllowStrangerView.frame = frame;
     
-    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60 > _scrollView.contentSize.height) {
+    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80 > _scrollView.contentSize.height) {
         CGSize size = _scrollView.contentSize;
-        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60;
+        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80;
         _scrollView.contentSize = size;
         
     }
@@ -472,14 +561,8 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     int duration = 0;
     int status = 0;
-    NSString *friends = @"[";
-    BOOL flag = YES;
-    for (NSNumber* friendid in self.FriendsIds) {
-        friends = [friends stringByAppendingString: flag? @"%@":@",%@"];
-        if (flag) flag = NO;
-        friends = [NSString stringWithFormat:friends,friendid];
-    }
-    friends = [friends stringByAppendingString:@"]"];
+    NSString *friends = [CommonUtils arrayStyleStringfromNummerArray:self.FriendsIds];
+    
     _notFriendsList = nil;
     NSString* location = self.location_text.text;
     if ([location isEqualToString:@""] || [location isEqualToString:@"定位中"]) location = @"地点未定";
@@ -530,7 +613,7 @@
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.latitude] forKey:@"latitude"];
-    [dictionary setValue:[NSNumber numberWithInt:_visibility] forKey:@"visibility"];
+    [dictionary setValue:[NSNumber numberWithInteger:_visibility] forKey:@"visibility"];
     [dictionary setValue:[NSNumber numberWithInt:status] forKey:@"status"];
     [dictionary setValue:(_code == -1? @(random()%6+2):@(_code)) forKeyPath:@"code"];
     [dictionary setValue:friends forKey:@"friends"];
@@ -610,9 +693,9 @@
 #pragma mark - CollectionViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60 > _scrollView.contentSize.height) {
+    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80 > _scrollView.contentSize.height) {
         CGSize size = _scrollView.contentSize;
-        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 60;
+        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80;
         _scrollView.contentSize = size;
         
     }

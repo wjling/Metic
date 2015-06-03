@@ -10,8 +10,7 @@
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
 #import "MTUser.h"
-#import "MTDatabaseHelper.h"
-#import "NSString+JSON.h"
+#import "MTDatabaseAffairs.h"
 #import "BMapKit.h"
 
 @interface EventEditLocationViewController ()<BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
@@ -202,7 +201,7 @@
                     [_eventInfo setValue:@999.999999 forKey:@"latitude"];
                     [_eventInfo setValue:@999.999999 forKey:@"longitude"];
                     
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [SVProgressHUD dismissWithSuccess:@"清除成功"];
                     [self adjustView];
                 }
@@ -277,7 +276,7 @@
                     [_eventInfo setValue:content forKey:@"location"];
                     [_eventInfo setValue:@(_pt.latitude) forKey:@"latitude"];
                     [_eventInfo setValue:@(_pt.longitude) forKey:@"longitude"];
-                    [self saveEventToDB:_eventInfo];
+                    [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                     break;
@@ -304,19 +303,6 @@
     }];
     
 }
-
--(void)saveEventToDB:(NSDictionary*)event
-{
-    NSString *eventData = [NSString jsonStringWithDictionary:event];
-    eventData = [eventData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-    NSString *beginTime = [event valueForKey:@"time"];
-    NSString *joinTime = [event valueForKey:@"jointime"];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'beginTime'",@"'joinTime'",@"'updateTime'",@"'event_info'", nil];
-    NSString* updateTime_sql = [NSString stringWithFormat:@"(SELECT updateTime FROM event WHERE event_id = %@)",[event valueForKey:@"event_id"]];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[event valueForKey:@"event_id"]],[NSString stringWithFormat:@"'%@'",beginTime],[NSString stringWithFormat:@"'%@'",joinTime],updateTime_sql,[NSString stringWithFormat:@"'%@'",eventData], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"event" withColumns:columns andValues:values];
-}
-
 
 #pragma mark - BMK Delegate
 /**

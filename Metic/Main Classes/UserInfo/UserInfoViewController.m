@@ -8,6 +8,7 @@
 
 #import "UserInfoViewController.h"
 #import "MenuViewController.h"
+#import "EventLikeViewController.h"
 #import "MobClick.h"
 #import "UserQRCodeViewController.h"
 #import "UIImageView+LBBlurredImage.h"
@@ -494,14 +495,12 @@
         case 2:
         {
             if (indexPath.row == 0) {
-                [self performSegueWithIdentifier:@"userInfo_securitycenter" sender:self];
-            }
-        }
-            break;
-        case 3:
-        {
-            if (indexPath.row == 0) {
+                EventLikeViewController* vc = [[EventLikeViewController alloc]init];
+                [self.navigationController pushViewController:vc animated:YES];
+            }else if (indexPath.row == 1) {
                 [self QRcodeBtnClicked:nil];
+            }else if (indexPath.row == 2) {
+                [self performSegueWithIdentifier:@"userInfo_securitycenter" sender:self];
             }
         }
             break;
@@ -515,7 +514,7 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -529,11 +528,7 @@
     }
     else if (section == 2)
     {
-        return 1;
-    }
-    else if (section == 3)
-    {
-        return 1;
+        return 3;
     }
     return 0;
 }
@@ -664,7 +659,7 @@
                 if (nil == cell) {
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
                 }
-                cell.title_label.text = @"安全中心";
+                cell.title_label.text = @"我的收藏";
                 cell.content_label.text = @"";
                 cell.title_label.textColor = textColor2;
                 if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
@@ -673,12 +668,7 @@
                     cell.layer.borderWidth = 0.3;
                 }
                 return cell;
-            }
-        }
-            break;
-        case 3:
-        {
-            if (indexPath.row == 0) {
+            }else if (indexPath.row == 1){
                 UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
                 if (nil == cell) {
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
@@ -692,7 +682,23 @@
                     cell.layer.borderWidth = 0.3;
                 }
                 return cell;
+                
+            }else if (indexPath.row == 2){
+                UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
+                if (nil == cell) {
+                    cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
+                }
+                cell.title_label.text = @"安全中心";
+                cell.content_label.text = @"";
+                cell.title_label.textColor = textColor2;
+                if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+                {
+                    cell.layer.borderColor = borderColor.CGColor;
+                    cell.layer.borderWidth = 0.3;
+                }
+                return cell;
             }
+            
         }
             break;
             

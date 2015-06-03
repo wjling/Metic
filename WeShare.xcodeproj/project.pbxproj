@@ -381,6 +381,8 @@
 		F84DEE351B10B65C0083BCF1 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F84DEE2B1B10B65C0083BCF1 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		F84DEE361B10B65C0083BCF1 /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84DEE2E1B10B65C0083BCF1 /* libSocialWechat.a */; };
 		F84DEE371B10B65C0083BCF1 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F84DEE2F1B10B65C0083BCF1 /* libWeChatSDK.a */; };
+		F85966E51B13715F003B22EE /* EventEditTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F85966E41B13715F003B22EE /* EventEditTypeViewController.m */; };
+		F85966E81B149FD7003B22EE /* MTDatabaseAffairs.m in Sources */ = {isa = PBXBuildFile; fileRef = F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */; };
 		F864C0F61AE0EC1A00E2EB23 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */; };
 		F864C0F71AE0EC1A00E2EB23 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */; };
 		F864C0F81AE0EC1A00E2EB23 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F01AE0EC1A00E2EB23 /* FMDatabasePool.m */; };
@@ -1137,6 +1139,10 @@
 		F84DEE301B10B65C0083BCF1 /* UMSocialWechatHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialWechatHandler.h; sourceTree = "<group>"; };
 		F84DEE311B10B65C0083BCF1 /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		F84DEE321B10B65C0083BCF1 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		F85966E31B13715F003B22EE /* EventEditTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditTypeViewController.h; sourceTree = "<group>"; };
+		F85966E41B13715F003B22EE /* EventEditTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditTypeViewController.m; sourceTree = "<group>"; };
+		F85966E61B149FD7003B22EE /* MTDatabaseAffairs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDatabaseAffairs.h; sourceTree = "<group>"; };
+		F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseAffairs.m; sourceTree = "<group>"; };
 		F864C0EB1AE0EC1A00E2EB23 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		F864C0ED1AE0EC1A00E2EB23 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -1916,6 +1922,8 @@
 				F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */,
 				F810B7BB1B0B996100843AAB /* MTOperation.h */,
 				F810B7BC1B0B996100843AAB /* MTOperation.m */,
+				F85966E61B149FD7003B22EE /* MTDatabaseAffairs.h */,
+				F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2475,16 +2483,10 @@
 				F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */,
 				F810B7B71B01080400843AAB /* EventEditRemarkViewController.h */,
 				F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */,
-				F810B7BA1B09D96F00843AAB /* New Group */,
+				F85966E31B13715F003B22EE /* EventEditTypeViewController.h */,
+				F85966E41B13715F003B22EE /* EventEditTypeViewController.m */,
 			);
 			name = EventEdit;
-			sourceTree = "<group>";
-		};
-		F810B7BA1B09D96F00843AAB /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		F810B7BE1B0F675300843AAB /* EventLike */ = {
@@ -2691,6 +2693,11 @@
 				TargetAttributes = {
 					51581D1F1933575300943606 = {
 						DevelopmentTeam = BQWKD37TRB;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 					51581D431933575300943606 = {
 						TestTargetID = 51581D1F1933575300943606;
@@ -2862,7 +2869,9 @@
 				51E55C741987389000D62C36 /* BannerSelectorViewController.m in Sources */,
 				51F4CB1A19E6307500E487F1 /* DDTTYLogger.m in Sources */,
 				088DCEB119FF97D70036BE82 /* VideoPlayerViewController.m in Sources */,
+				F85966E81B149FD7003B22EE /* MTDatabaseAffairs.m in Sources */,
 				510BE1A3195BED3A00084014 /* PhotoGetter.m in Sources */,
+				F85966E51B13715F003B22EE /* EventEditTypeViewController.m in Sources */,
 				04BAF6A1199BCF7500BF00E1 /* myScrollView.m in Sources */,
 				04B6F8AE19A25D5C00229393 /* MLEmojiLabel.m in Sources */,
 				081570E11AAB37B900D34F46 /* photoProcesser.m in Sources */,

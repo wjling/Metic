@@ -417,6 +417,7 @@
 
 
 - (IBAction)appreciate:(id)sender {
+    if (!_canManage) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
@@ -507,6 +508,7 @@
             nextViewController.eventName = _eventName;
             nextViewController.controller = self.controller;
             nextViewController.type = 1;
+            nextViewController.canManage = self.canManage;
         }
         if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
             

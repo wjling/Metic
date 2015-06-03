@@ -316,6 +316,7 @@ enum pos{
                 viewcontroller.eventLauncherId = _selete_EventLauncherId;
                 viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                 viewcontroller.controller = nil;
+                viewcontroller.canManage = YES;
                 [self.navigationController pushViewController:viewcontroller animated:YES];
             }
                 break;
@@ -330,6 +331,7 @@ enum pos{
                 viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                 viewcontroller.controller = nil;
                 viewcontroller.type = 2;
+                viewcontroller.canManage = YES;
                 [self.navigationController pushViewController:viewcontroller animated:YES];
             }
                 
@@ -358,6 +360,7 @@ enum pos{
                         viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                         viewcontroller.controller = nil;
                         viewcontroller.type = 2;
+                        viewcontroller.canManage = YES;
                         [self.navigationController pushViewController:viewcontroller animated:YES];
                     }
                         break;
@@ -373,6 +376,7 @@ enum pos{
                         viewcontroller.eventLauncherId = [atMeInfo valueForKey:@"launcher_id"];
                         viewcontroller.eventName = [atMeInfo valueForKey:@"subject"];
                         viewcontroller.controller = nil;
+                        viewcontroller.canManage = YES;
                         [self.navigationController pushViewController:viewcontroller animated:YES];
                     }
                         break;

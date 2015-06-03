@@ -96,6 +96,7 @@
 
 - (IBAction)addGood:(id)button
 {
+    if (!_controller.canManage) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
@@ -165,6 +166,7 @@
     viewcontroller.eventName = _controller.eventName;
     viewcontroller.controller = self.controller.pictureWallController;
     viewcontroller.type = 2;
+    viewcontroller.canManage = self.controller.canManage;
     [self.controller.navigationController pushViewController:viewcontroller animated:YES];
     
 }

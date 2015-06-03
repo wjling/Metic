@@ -66,6 +66,7 @@
 
 - (void)initUI
 {
+    self.title = @"图片墙";
     quiltView = [[TMQuiltView alloc] initWithFrame:self.view.bounds];
     quiltView.delegate = self;
     quiltView.dataSource = self;
@@ -118,7 +119,10 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
-    [_add appear];
+    if (_eventInfo && [[_eventInfo valueForKey:@"isIn"]boolValue]) {
+        [_add appear];
+    }
+    
     [self UploadStatusTimerStart];
     if (!_isFirstIn && !_shouldReloadPhoto) {
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -763,6 +767,7 @@
     photoDisplay.eventLauncherId = self.eventLauncherId;
     photoDisplay.eventName = self.eventName;
     photoDisplay.controller = self;
+    photoDisplay.canManage = [[_eventInfo valueForKey:@"isIn"]boolValue];
     
     [self.navigationController pushViewController:photoDisplay animated:YES];
 }
@@ -782,6 +787,7 @@
             nextViewController.pictureWallController = self;
             nextViewController.eventName = self.eventName;
             nextViewController.eventId = self.eventId;
+            nextViewController.canManage = [[_eventInfo valueForKey:@"isIn"]boolValue];
         }
     }
 }

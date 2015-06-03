@@ -233,12 +233,7 @@
 
 -(void)good:(UIButton*)button
 {
-//    [button setEnabled:NO];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        if (self && ![button isEnabled]) {
-//            [button setEnabled:YES];
-//        }
-//    });
+    if(![[_controller.eventInfo valueForKey:@"isIn"]boolValue])return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;

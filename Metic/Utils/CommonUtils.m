@@ -568,4 +568,18 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         return -1;
     }
 }
+
++(NSString*)arrayStyleStringfromNummerArray:(id)numbers
+{
+    NSString *arrayString = @"[";
+    BOOL flag = YES;
+    for (NSNumber* number in numbers) {
+        arrayString = [arrayString stringByAppendingString: flag? @"%@":@",%@"];
+        if (flag) flag = NO;
+        arrayString = [NSString stringWithFormat:arrayString,number];
+    }
+    arrayString = [arrayString stringByAppendingString:@"]"];
+    return arrayString;
+}
+
 @end

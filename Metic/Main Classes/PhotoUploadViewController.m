@@ -24,7 +24,7 @@
 
 static const CGSize progressViewSize = { 200.0f, 30.0f };
 static const NSInteger MaxUploadCount = 20;
-static const BOOL canMutiUpload = NO;
+static const BOOL canMutiUpload = YES;
 
 
 @interface PhotoUploadViewController ()<MTPhotoBrowserDelegate>
