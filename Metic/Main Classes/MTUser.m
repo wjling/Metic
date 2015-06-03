@@ -904,6 +904,7 @@ static MTUser *singletonInstance;
                     case REQUEST_EVENT_RESPONSE:
                     case QUIT_EVENT_NOTIFICATION:
                     case KICK_EVENT_NOTIFICATION:
+                    case SYSTEM_PUSH:
                     {
                         [self.systemMsg addObject:msg_dic];
                     }

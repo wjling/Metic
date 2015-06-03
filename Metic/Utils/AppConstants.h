@@ -27,8 +27,8 @@
 HttpSender* httpSender;
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
 };
 
 enum Enterprise_code{
@@ -139,6 +139,9 @@ enum Return_Code
     
     NEED_CONFIRM=198,
     INCOME_CONFIRM=199,
+    
+    //系统推送
+    SYSTEM_PUSH = 666,
     
     //推送消息相关Return_Code
     ADD_FRIEND_NOTIFICATION=999,  //收到好友请求

@@ -234,12 +234,16 @@ enum Response_Type
         case REQUEST_EVENT_RESPONSE:
         case QUIT_EVENT_NOTIFICATION:
         case KICK_EVENT_NOTIFICATION:
+        case SYSTEM_PUSH:
         {
             for (int j = 0; j < self.systemMsg.count; j++) {
                 NSDictionary* msg_dic2 = [self.systemMsg objectAtIndex:j];
                 NSInteger cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
                 if (cmd == cmd2) {
                     NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+                    if (!event_id1 || [event_id1 isEqual:[NSNull null]]) {
+                        continue;
+                    }
                     NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
                     if ([event_id1 integerValue] == [event_id2 integerValue]) {
                         [self.systemMsg removeObject:msg_dic2];
@@ -907,6 +911,7 @@ enum Response_Type
             case REQUEST_EVENT_RESPONSE:
             case QUIT_EVENT_NOTIFICATION:
             case KICK_EVENT_NOTIFICATION:
+            case SYSTEM_PUSH:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label2.hidden) {
@@ -1434,7 +1439,16 @@ enum Response_Type
                 cell.sys_msg_label.text = text;
             }
                 break;
-                
+            case SYSTEM_PUSH:
+            {
+                NSString* content = [msg_dic objectForKey:@"content"];
+                NSString* text;
+                text = [NSString stringWithFormat:@"%@",content];
+                cell.title_label.text = @"系统消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+        
             default:
                 break;
         }
@@ -1754,22 +1768,35 @@ enum Response_Type
                         }
                     }
                     
-                    NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
-                                                fname,@"name",
-                                                femail,@"email",
-                                                fgender,@"gender",
-                                                [NSNumber numberWithInt:fid1],@"id",
-                                                [NSNull null], @"alias",
-                                                nil];
-                    [[MTUser sharedInstance].friendList addObject:friendJson];
-                    [[MTUser sharedInstance] friendListDidChanged];
-                    
                     [MTUser_friendRequestMsg removeObject:msg_dic];
                     NSLog(@"（同意）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
                     [msg_dic setValue:result forKey:@"ishandled"];
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
+                    
+                    bool f = YES;
+                    for(NSInteger i = [MTUser sharedInstance].friendList.count; i >= 0; i--){
+                        NSDictionary* afriend = [[MTUser sharedInstance].friendList objectAtIndex:i];
+                        NSNumber* friend_id = [afriend objectForKey:@"id"];
+                        if ([friend_id integerValue] == fid1) {
+                            f = NO;
+                            break;
+                        }
+                    }
+                    if (f) {
+                        NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
+                                                           fname,@"name",
+                                                           femail,@"email",
+                                                           fgender,@"gender",
+                                                           [NSNumber numberWithInt:fid1],@"id",
+                                                           [NSNull null], @"alias",
+                                                           nil];
+                        [[MTUser sharedInstance].friendList addObject:friendJson];
+                        [[MTUser sharedInstance] friendListDidChanged];
+                    }
+
                     [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功添加%@为好友",fname] afterDelay:2];
+                    
                 }
                 else
                 {

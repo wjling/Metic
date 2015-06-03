@@ -256,7 +256,7 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
+//    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
@@ -400,22 +400,29 @@
     //当位于前台 而且该消息序号大于本地消息最大序号才拉取该推送消息
     if ([application applicationState] == UIApplicationStateActive) {
         NSNumber* seq = [userInfo objectForKey:@"seq"];
-        if ([MTUser sharedInstance].userid) {
-            NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-            if (maxSeqDict) {
-                NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                if([localMaxSeq integerValue] >= [seq integerValue]){
-                    return;
+        if (cmd != SYSTEM_PUSH) {
+            if ([MTUser sharedInstance].userid) {
+                NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+                if (maxSeqDict) {
+                    NSNumber* localMaxSeq = [maxSeqDict objectForKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                    if([localMaxSeq integerValue] >= [seq integerValue]){
+                        return;
+                    }
                 }
             }
+            
+            void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
+            {
+                
+            };
+            
+            [self pullAndHandlePushMessageWithMinSeq:seq andMaxSeq:seq andCallBackBlock:getPushMessageDone];
+        }
+        else
+        {
+            [self pullSystemNotificationWithSeq:seq];
         }
         
-        void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
-        {
-            
-        };
-        
-        [self pullAndHandlePushMessageWithMinSeq:seq andMaxSeq:seq andCallBackBlock:getPushMessageDone];
     }
     
 }
@@ -704,15 +711,32 @@
         [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
         type = 0;
     }
+    else if (msg_cmd == SYSTEM_PUSH)
+    {
+        [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
+        type = 2;
+    }
     
     
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
 //    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
-    NSArray* values = [[NSArray alloc]initWithObjects:
-                       [NSString stringWithFormat:@"%@",seq],
-                       [NSString stringWithFormat:@"'%@'",content_str],
-                       [NSString stringWithFormat:@"%d",-1],
-                       nil];
+    NSArray* values;
+    if (msg_cmd == SYSTEM_PUSH) {
+        values = [[NSArray alloc]initWithObjects:
+                  [NSString stringWithFormat:@"%@",seq],
+                  [NSString stringWithFormat:@"'%@'",msg_dic],
+                  [NSString stringWithFormat:@"%d",-1],
+                  nil];
+    }
+    else
+    {
+        values = [[NSArray alloc]initWithObjects:
+                  [NSString stringWithFormat:@"%@",seq],
+                  [NSString stringWithFormat:@"'%@'",content_str],
+                  [NSString stringWithFormat:@"%d",-1],
+                  nil];
+
+    }
     [[MTDatabaseHelper sharedInstance] insertToTable:@"notification" withColumns:columns andValues:values];
     
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
@@ -954,7 +978,40 @@
 
 }
 
-
+#pragma mark - System Push
+-(void)pullSystemNotificationWithSeq:(NSNumber*)seq
+{
+    if (!seq || [seq isEqual:[NSNull null]] || ![seq isKindOfClass:[NSNumber class]]) {
+        return;
+    }
+    void (^pullsysDone)(NSData*) = ^(NSData* rData){
+        if (!rData) {
+            NSLog(@"服务器返回数据为空");
+            return ;
+        }
+        NSString* temp = [NSString string];
+        if ([rData isKindOfClass:[NSString class]]) {
+            temp = (NSString*)rData;
+        }
+        else if ([rData isKindOfClass:[NSData class]])
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        NSLog(@"拉取系统推送的结果：%@",temp);
+        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:response];
+        [response_mul setValue:seq forKey:@"seq"];
+        [response_mul setValue:[NSNumber numberWithInteger:SYSTEM_PUSH] forKey:@"cmd"];
+        [self handlePushMessage:response_mul andFeedBack:NO];
+    };
+    
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:3], @"operation",
+                              seq, @"message_id",nil];
+    
+    NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:json_data withOperationCode:SYSTEM_PUSH finshedBlock:pullsysDone];
+}
 
 #pragma mark - Network Status Checking
 //================================Network Status Checking=====================================
@@ -1590,7 +1647,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
+//    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
     isConnected = NO;
     [self disconnect];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
