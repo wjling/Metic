@@ -36,6 +36,7 @@
     
 }
 
+- (void)showDetail:(id)sender;
 - (IBAction)jumpToPictureWall:(id)sender;
 - (IBAction)jumpToVideoWall:(id)sender;
 - (IBAction)addComment:(id)sender;

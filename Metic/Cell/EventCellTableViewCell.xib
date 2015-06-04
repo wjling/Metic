@@ -198,20 +198,14 @@
                         </subviews>
                         <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
                     </view>
-                    <view contentMode="scaleToFill" id="uWH-1g-1oG">
-                        <rect key="frame" x="0.0" y="262" width="320" height="25"/>
+                    <label opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="X0p-3x-5lK">
+                        <rect key="frame" x="10" y="262" width="300" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="快看快看快看" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="X0p-3x-5lK">
-                                <rect key="frame" x="10" y="0.0" width="300" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="deviceRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" red="0.9490196704864502" green="0.9490196704864502" blue="0.9490196704864502" alpha="1" colorSpace="deviceRGB"/>
-                    </view>
+                        <gestureRecognizers/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="0.26666666666666666" green="0.26666666666666666" blue="0.26666666666666666" alpha="1" colorSpace="deviceRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <view contentMode="scaleToFill" id="zy6-H8-88J">
                         <rect key="frame" x="0.0" y="259" width="320" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

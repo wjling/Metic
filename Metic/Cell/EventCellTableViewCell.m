@@ -13,6 +13,7 @@
 #import "VideoWallViewController.h"
 #import "showParticipatorsViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "MTShowTextViewController.h"
 
 #define MainFontSize 14
 
@@ -60,6 +61,10 @@
 {
     // Initialization code
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshPVRPStatus) name: @"refreshPVRPStatus" object:nil];
+    
+    //点击显示MTShowTextViewController
+    UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showDetail:)];
+    [eventDetail addGestureRecognizer:tapRecognizer];
 }
 
 - (void)applyData:(NSDictionary*)data
@@ -154,6 +159,14 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+}
+
+- (void)showDetail:(id)sender {
+    if (eventDetail) {
+        MTShowTextViewController* showTextVC = [[MTShowTextViewController alloc]init];
+        showTextVC.content = eventDetail.text;
+        [showTextVC show];
+    }
 }
 
 - (IBAction)jumpToPictureWall:(id)sender {

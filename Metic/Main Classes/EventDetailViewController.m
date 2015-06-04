@@ -1287,7 +1287,6 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *eventCellIdentifier = @"eventcell";
     static NSString *mCellIdentifier = @"McommentCell";
     static NSString *sCellIdentifier = @"ScommentCell";
     
