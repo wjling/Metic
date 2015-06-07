@@ -56,6 +56,7 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deletePhotoItem" object:nil];
     [_header free];
     [_add free];
 }
@@ -114,6 +115,7 @@
         }
     });
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deletePhotoItem:) name:@"deletePhotoItem" object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -416,6 +418,28 @@
             [_photo_list insertObject:newPhotoInfo atIndex:0];
             [_photo_list_all insertObject:newPhotoInfo atIndex:0];
             [self resetPhoNum];
+            [self calculateLRH];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [quiltView reloadData];
+            });
+        });
+        
+    }
+}
+
+-(void)deletePhotoItem:(id)sender
+{
+    NSLog(@"deletePhotoItem receive: %@",sender);
+    NSMutableDictionary* deleteItem = (NSMutableDictionary*)[sender userInfo];
+    if (deleteItem) {
+        dispatch_sync(sync_queue, ^{
+            [_photo_list removeObject:deleteItem];
+            [_photo_list_all removeObject:deleteItem];
+            _showPhoNum --;
+            if (_showPhoNum < 0) {
+                _showPhoNum = 0;
+            }
             [self calculateLRH];
             
             dispatch_async(dispatch_get_main_queue(), ^{

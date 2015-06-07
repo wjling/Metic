@@ -193,6 +193,11 @@
     [self pullPhotoInfoFromAir];
 }
 
+-(void)setPhotoInfo:(NSMutableDictionary *)photoInfo
+{
+    _photoInfo = photoInfo;
+}
+
 -(void)pullPhotoInfoFromDB
 {
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"photoInfo", nil];
@@ -708,6 +713,8 @@
     if (_photoId) {
         [self deletePhotoInfoFromDB];
     }
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"deletePhotoItem" object:nil userInfo:self.photoInfo];
+    
 //    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
 //        NSInteger index = -1;
 //        index = [self.controller.photo_list indexOfObject:_photoInfo];
