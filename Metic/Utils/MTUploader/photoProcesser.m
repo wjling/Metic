@@ -19,11 +19,14 @@
     NSInteger adjustWidth = maxWidth;
     if (adjustWidth < 640) adjustWidth = 640;
     if (adjustWidth > 1440) adjustWidth = 1440;
+    if (image.size.height > image.size.width) {
+        adjustWidth = image.size.width/image.size.height*adjustWidth;
+    }
     NSInteger curWidth = image.size.width;
     float ratio = (float)(image.size.height /image.size.width);
     
     while (flag) {
-        UIImage* compressedImage;
+        UIImage* compressedImage = image;
         if (curWidth> adjustWidth) {
             curWidth = adjustWidth;
             CGSize imagesize=CGSizeMake(adjustWidth, (NSInteger)(adjustWidth*ratio));
