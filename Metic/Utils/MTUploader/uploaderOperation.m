@@ -202,7 +202,7 @@
                                                scale:_imageALAsset.defaultRepresentation.scale
                                          orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
             img = [UIImage fixOrientation:img];
-            imgData = [photoProcesser compressPhoto:img maxSize:200];
+            imgData = [photoProcesser compressPhoto:img maxWidth:1280 maxSize:360];
             _imageALAsset = nil;
             img = nil;
         }

@@ -11,37 +11,49 @@
 #import "MTUser.h"
 
 @implementation photoProcesser
-+ (NSDictionary*)compressPhoto:(UIImage*)image maxSize:(NSInteger)maxSize
++ (NSDictionary*)compressPhoto:(UIImage*)image maxWidth:(NSInteger)maxWidth maxSize:(NSInteger)maxSize
 {
-    UIImage* compressedImage = image;
-    NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+    
+    NSData* imageData = UIImageJPEGRepresentation(image, 1.0);
     BOOL flag = YES;
-    float adjustWidth = 1024.0;
+    NSInteger adjustWidth = maxWidth;
+    if (adjustWidth < 640) adjustWidth = 640;
+    if (adjustWidth > 1440) adjustWidth = 1440;
+    NSInteger curWidth = image.size.width;
+    float ratio = (float)(image.size.height /image.size.width);
+    
     while (flag) {
-        if (compressedImage.size.width> adjustWidth) {
-            CGSize imagesize=CGSizeMake((NSInteger)adjustWidth, (NSInteger)(compressedImage.size.height * adjustWidth/compressedImage.size.width));
-            compressedImage = [compressedImage imageByScalingToSize:imagesize];
-            imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+        UIImage* compressedImage;
+        if (curWidth> adjustWidth) {
+            curWidth = adjustWidth;
+            CGSize imagesize=CGSizeMake(adjustWidth, (NSInteger)(adjustWidth*ratio));
+            @autoreleasepool {
+                compressedImage = [image imageByScalingToSize:imagesize];
+                imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
+            }
         }
+        
         float para = 1.0;
         int restOp = 5;
         while (imageData.length > maxSize*1000) {
-            para *= 0.8;
-            imageData = UIImageJPEGRepresentation(compressedImage, para);
-            compressedImage = [UIImage imageWithData:imageData];
-            if (!restOp--) {
-                adjustWidth *= 7/8.0;
-                break;
+            @autoreleasepool {
+                para *= 0.8;
+                imageData = UIImageJPEGRepresentation(compressedImage, para);
+                if (!restOp--) {
+                    adjustWidth *= 7/8.0;
+                    imageData = nil;
+                    break;
+                }
             }
         }
-        if (imageData.length < maxSize*1000) {
+        if (imageData || imageData.length < maxSize*1000) {
             flag = NO;
         }
     }
     NSMutableDictionary* ImgData = [[NSMutableDictionary alloc]init];
     [ImgData setValue:imageData forKey:@"imageData"];
-    [ImgData setValue:[NSNumber numberWithFloat:compressedImage.size.width] forKey:@"width"];
-    [ImgData setValue:[NSNumber numberWithFloat:compressedImage.size.height] forKey:@"height"];
+    [ImgData setValue:[NSNumber numberWithInteger:adjustWidth] forKey:@"width"];
+    [ImgData setValue:[NSNumber numberWithInteger:(NSInteger)(adjustWidth*ratio)] forKey:@"height"];
     return ImgData;
 }
 

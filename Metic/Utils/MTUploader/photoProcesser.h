@@ -11,7 +11,7 @@
 @interface photoProcesser : NSObject
 
 #pragma 压缩图片 返回图片数据
-+ (NSDictionary*)compressPhoto:(UIImage*)image maxSize:(NSInteger)maxSize;
++ (NSDictionary*)compressPhoto:(UIImage*)image maxWidth:(NSInteger)maxWidth maxSize:(NSInteger)maxSize;
 
 #pragma 生成图片文件名
 + (NSString*)generateImageName;

@@ -55,6 +55,7 @@
 
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
     [_header free];
     [_add free];
 }
@@ -112,24 +113,25 @@
             
         }
     });
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"图片墙"];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
+    
     if (_eventInfo && [[_eventInfo valueForKey:@"isIn"]boolValue]) {
         [_add appear];
     }
     
     [self UploadStatusTimerStart];
-    if (!_isFirstIn && !_shouldReloadPhoto) {
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [self pullPhotoInfosFromDB];
-            [self pullUploadTasksfromDB];
-        });
-    }
+//    if (!_isFirstIn && !_shouldReloadPhoto) {
+//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//            [self pullPhotoInfosFromDB];
+//            [self pullUploadTasksfromDB];
+//        });
+//    }
     
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
@@ -141,7 +143,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
     [_add disappear];
     [self UploadStatusTimerEnd];
 }
