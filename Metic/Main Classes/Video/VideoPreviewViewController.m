@@ -168,12 +168,12 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 -(void)confirm:(id)sender
 {
+    [sender setEnabled:NO];
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0){
         [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"未连接网络" WithDelegate:nil WithCancelTitle:@"确定"];
+        [sender setEnabled:YES];
         return;
     }
-    
-    [sender setEnabled:NO];
     if (!_hasEncode) {
         NSLog(@"开始转码");
         [self encodeVideo];

@@ -392,16 +392,16 @@
 }
 
 - (IBAction)good:(id)sender {
-    if (!_canManage) return;
+    if(!_canManage) return;
+    if(!_photoInfo) return;
+    [self.good_button setEnabled:NO];
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        [self.good_button setEnabled:YES];
         return;
     }
-    
-    if(!_photoInfo) return;
-    
-    [self.good_button setEnabled:NO];
+
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
