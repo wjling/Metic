@@ -16,7 +16,7 @@
     UIImage* compressedImage = image;
     NSData* imageData = UIImageJPEGRepresentation(compressedImage, 1.0);
     BOOL flag = YES;
-    float adjustWidth = 640.0;
+    float adjustWidth = 1024.0;
     while (flag) {
         if (compressedImage.size.width> adjustWidth) {
             CGSize imagesize=CGSizeMake((NSInteger)adjustWidth, (NSInteger)(compressedImage.size.height * adjustWidth/compressedImage.size.width));
@@ -26,7 +26,8 @@
         float para = 1.0;
         int restOp = 5;
         while (imageData.length > maxSize*1000) {
-            imageData = UIImageJPEGRepresentation(compressedImage, para*0.5);
+            para *= 0.8;
+            imageData = UIImageJPEGRepresentation(compressedImage, para);
             compressedImage = [UIImage imageWithData:imageData];
             if (!restOp--) {
                 adjustWidth *= 7/8.0;
