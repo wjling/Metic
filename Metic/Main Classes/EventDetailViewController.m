@@ -527,11 +527,13 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    static NSInteger operationNum = 0;
+    operationNum ++;
+    NSInteger operNum = operationNum;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS finshedBlock:^(NSData *rData) {
+        if (operNum != operationNum) return ;
         if (rData) {
-//            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//            NSLog(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -549,8 +551,9 @@
                         if (type == 0) {
                             if (sequence == [_master_sequence longValue]) {
                                 self.master_sequence = [response1 valueForKey:@"sequence"];
-                                if (_Headeropen) [_comment_list removeAllObjects];
+                                if (sequence == 0) [_comment_list removeAllObjects];
                                 [self.comment_list addObjectsFromArray:tmp];
+                                [_tableView reloadData];
                                 if (_Footeropen && [_master_sequence intValue] == -1) {
                                     [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(showAlert) userInfo:nil repeats:NO];
                                     [NSTimer scheduledTimerWithTimeInterval:1.2f target:self selector:@selector(performDismiss) userInfo:nil repeats:NO];
