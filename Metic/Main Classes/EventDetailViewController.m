@@ -185,7 +185,6 @@
     self.view.autoresizesSubviews = YES;
     [self setupBottomView];
     [self setupLikeState];
-    [_emotionKeyboard initCollectionView];
 }
 
 -(void)initData
@@ -202,7 +201,6 @@
     self.isEmotionOpen = NO;
     self.isKeyBoard = NO;
     _inputTextView.delegate = self;
-    _emotionKeyboard.textView = _inputTextView;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -305,6 +303,7 @@
     //初始化表情面板
     _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width,200)];
     [_emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
+    _emotionKeyboard.textView = _inputTextView;
     [self.view addSubview:_emotionKeyboard];
 }
 
