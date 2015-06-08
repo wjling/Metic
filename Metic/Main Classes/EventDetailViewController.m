@@ -1182,6 +1182,19 @@
     [_Alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
+-(NSNumber *)eventLauncherId
+{
+    if (_eventLauncherId) {
+        return _eventLauncherId;
+    }else if (_event){
+        NSNumber* eventLauncherId = [_event valueForKey:@"launcher_id"];
+        if (eventLauncherId) _eventLauncherId = eventLauncherId;
+        return eventLauncherId;
+    }else{
+        return nil;
+    }
+}
+
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {

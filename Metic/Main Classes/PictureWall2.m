@@ -107,7 +107,7 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self pullPhotoInfosFromDB];
         [self pullUploadTasksfromDB];
-        if ([NotificationController visitPhotoWall:_eventId needClear:YES] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+        if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [_header beginRefreshing];
             });
@@ -461,9 +461,12 @@
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     _isLoading = YES;
+    static NSInteger operationNum = 0;
+    operationNum ++;
+    NSInteger operNum = operationNum;
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
-        if ([sequence integerValue] != [_sequence integerValue] && [_sequence integerValue] != -1)
+        if (operNum != operationNum)
         {
             NSLog(@"wuwuwuwuwu");
             if(_header.refreshing) [_header endRefreshing];
