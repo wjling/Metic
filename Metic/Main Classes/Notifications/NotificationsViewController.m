@@ -12,6 +12,7 @@
 #import "FriendInfoViewController.h"
 #import "KxMenu.h"
 #import "MTDatabaseHelper.h"
+#import "EventPreviewViewController.h"
 
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
@@ -1028,6 +1029,12 @@ enum Response_Type
 //        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
 //        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label0.frame.origin.x);
         if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
+            NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
+            EventPreviewViewController* preVC = [[EventPreviewViewController alloc]init];
+            preVC.eventInfo = msg_dic;
+            preVC.beingInvited = @1;
+            [self.navigationController pushViewController:preVC animated:YES];
+            return;
             [self eventBtnClicked:self];
         }
 

@@ -11,6 +11,8 @@
 #import "EventPhotosTableViewCell.h"
 #import "Reachability.h"
 #import "UIImageView+WebCache.h"
+#import "SVProgressHUD.h"
+#import "MTDatabaseHelper.h"
 
 #define MainFontSize 14
 
@@ -74,7 +76,9 @@
         _tableView.delegate = self;
         [_tableView reloadData];
     }
-    if (_visibility && ![_visibility boolValue])
+    if (self.beingInvited){
+        [self setupInviteView];
+    }else if (_visibility && ![_visibility boolValue])
     {
         //此活动不允许陌生人参与
         [self setupBottomLabel:@"此活动不允许陌生人参与" textColor:[UIColor grayColor] offset:64];
@@ -214,6 +218,206 @@
 
 }
 
+-(void)setupInviteView
+{
+    //初始化评论框
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    _commentView = commentV;
+    [commentV setBackgroundColor:[UIColor whiteColor]];
+    
+    UIButton *ignoreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [ignoreBtn setTag:520];
+    [ignoreBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    [ignoreBtn setFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.frame)/2-15, 35)];
+    [ignoreBtn setTitle:@"忽略邀请" forState:UIControlStateNormal];
+    [ignoreBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [ignoreBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
+    [ignoreBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.75 alpha:1.0f]] forState:UIControlStateNormal];
+    ignoreBtn.layer.cornerRadius = 3;
+    ignoreBtn.layer.masksToBounds = YES;
+    [ignoreBtn addTarget:self action:@selector(ignoreInvitation) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:ignoreBtn];
+    
+    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendBtn setTag:520];
+    [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame)/2+5, 5, CGRectGetWidth(self.view.frame)/2-15, 35)];
+    [sendBtn setTitle:@"同意邀请" forState:UIControlStateNormal];
+    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
+    [sendBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f]] forState:UIControlStateNormal];
+    sendBtn.layer.cornerRadius = 3;
+    sendBtn.layer.masksToBounds = YES;
+    [sendBtn addTarget:self action:@selector(agreeInvitation) forControlEvents:UIControlEventTouchUpInside];
+    [commentV addSubview:sendBtn];
+    
+    [self.view addSubview:commentV];
+    
+}
+
+-(void)ignoreInvitation
+{
+    NSMutableDictionary* msg_dic = (NSMutableDictionary*)_eventInfo;
+    
+    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
+                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq",nil]
+                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%d",0],@"ishandled",nil]];
+    
+    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+        NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+            
+            [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
+            
+            [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+            continue;
+        }
+    }
+
+    [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+    [msg_dic setValue:[NSNumber numberWithInteger:0] forKey:@"ishandled"];
+    
+    [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)agreeInvitation
+{
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeBlack];
+    NSDictionary* msg_dic = _eventInfo;
+    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
+    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
+                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:1],@"result",
+                                 [MTUser sharedInstance].userid,@"id",
+                                 eventid,@"event_id",
+                                 nil];
+    NSLog(@"participate event okBtn, http json : %@",json );
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+        if(rData){
+
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+
+                    NSMutableDictionary* msg_dic = (NSMutableDictionary*)_eventInfo;
+                    
+                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+                    NSLog(@"response event, seq: %ld",(long)seq1);
+                    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+                    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                    [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
+                                                                      andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq",nil]
+                                                                        andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",@1],@"ishandled",nil]];
+                    
+                    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                        NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                            
+                            [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
+                            
+                            [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                            continue;
+                        }
+                    }
+                    
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+                    [msg_dic setValue:@1 forKey:@"ishandled"];
+                    
+                    [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
+                    [SVProgressHUD dismissWithSuccess:@"加入活动成功" afterDelay:0.5];
+
+                    //更新活动中心列表：
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
+                    NSNumber* eventId = [_eventInfo valueForKey:@"event_id"];
+                    [self toEventDetail:eventId];
+                }
+                    break;
+                case REQUEST_FAIL:
+                {
+                    [SVProgressHUD dismissWithError:@"发送请求错误"];
+                }
+                    break;
+                case ALREADY_IN_EVENT:
+                {
+                    NSMutableDictionary* msg_dic = (NSMutableDictionary*)_eventInfo;
+                    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+                    
+                    [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
+                                                                     andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq",nil]
+                                                                       andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",@1],@"ishandled",nil]];
+                    
+                    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                        NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                            [[MTDatabaseHelper sharedInstance]deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
+                            [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                            continue;
+                        }
+                    }
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+                    [SVProgressHUD dismissWithError:@"你已经在此活动中"];
+                    NSNumber* eventId = [_eventInfo valueForKey:@"event_id"];
+                    [self toEventDetail:eventId];
+                }
+                    break;
+                case EVENT_NOT_EXIST:
+                {
+                    [SVProgressHUD dismissWithError:@"该活动已经解散" afterDelay:2.0];
+                    
+                    NSMutableDictionary* msg_dic = (NSMutableDictionary*)_eventInfo;
+                    NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                    NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
+                    NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
+                    [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"
+                                                                     andWhere:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%ld",(long)seq1],@"seq",nil]
+                                                                       andSet:[CommonUtils packParamsInDictionary:[NSString stringWithFormat:@"%@",@1],@"ishandled",nil]];
+                    
+                    for (int i = 0; i < [MTUser sharedInstance].eventRequestMsg.count; i++) {
+                        NSMutableDictionary* msg = [MTUser sharedInstance].eventRequestMsg[i];
+                        NSInteger cmd2 = [[msg objectForKey:@"cmd"]integerValue];
+                        NSInteger event_id2 = [[msg objectForKey:@"event_id"]integerValue];
+                        NSInteger seq2 = [[msg objectForKey:@"seq"]integerValue];
+                        if (cmd1 == cmd2 && event_id1 == event_id2 && seq1 != seq2) {
+                            [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"notification"
+                                                                           withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%ld", (long)seq2],@"seq", nil]];
+                            [[MTUser sharedInstance].eventRequestMsg removeObject:msg];
+                            continue;
+                        }
+                    }
+                    [[MTUser sharedInstance].eventRequestMsg removeObject:msg_dic];
+                    [SVProgressHUD dismissWithError:@"该活动已经解散" afterDelay:1.0];
+                }
+                    break;
+                default:
+                    
+                    break;
+            }
+        } else{
+            [SVProgressHUD dismissWithError:@"网络异常"];
+        }
+    }];
+}
+
 -(void)apply:(id)sender
 {
     if (sender) {
@@ -246,6 +450,20 @@
         }
     }];
 }
+
+- (void)toEventDetail:(NSNumber*)eventId
+{
+    if (!eventId) return;
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    
+    EventDetailViewController* eventDetail = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+    eventDetail.eventId = eventId;
+    [_eventInfo setValue:@(YES) forKey:@"isIn"];
+    eventDetail.event = (NSMutableDictionary*)_eventInfo;
+    eventDetail.isFromQRCode = YES;
+    [self.navigationController pushViewController:eventDetail animated:YES];
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 2;

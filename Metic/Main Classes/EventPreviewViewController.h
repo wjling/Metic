@@ -10,4 +10,5 @@
 
 @interface EventPreviewViewController : UIViewController
 @property(nonatomic,strong) NSDictionary* eventInfo;
+@property(nonatomic,strong) NSNumber* beingInvited;
 @end
