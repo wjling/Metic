@@ -494,13 +494,13 @@
             break;
         case 2:
         {
-            if (indexPath.row == 0) {
+            if (indexPath.row == -1) {
                 EventLikeViewController* vc = [[EventLikeViewController alloc]init];
                 vc.isFirstPage = NO;
                 [self.navigationController pushViewController:vc animated:YES];
-            }else if (indexPath.row == 1) {
+            }else if (indexPath.row == 0) {
                 [self QRcodeBtnClicked:nil];
-            }else if (indexPath.row == 2) {
+            }else if (indexPath.row == 1) {
                 [self performSegueWithIdentifier:@"userInfo_securitycenter" sender:self];
             }
         }
@@ -529,7 +529,7 @@
     }
     else if (section == 2)
     {
-        return 3;
+        return 2;
     }
     return 0;
 }
@@ -655,7 +655,7 @@
             break;
         case 2:
         {
-            if (indexPath.row == 0) {
+            if (indexPath.row == -1) {
                 UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
                 if (nil == cell) {
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
@@ -669,7 +669,7 @@
                     cell.layer.borderWidth = 0.3;
                 }
                 return cell;
-            }else if (indexPath.row == 1){
+            }else if (indexPath.row == 0){
                 UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
                 if (nil == cell) {
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
@@ -684,7 +684,7 @@
                 }
                 return cell;
                 
-            }else if (indexPath.row == 2){
+            }else if (indexPath.row == 1){
                 UserInfoTableViewCell* cell = [self.info_tableView dequeueReusableCellWithIdentifier:@"UserInfoTableViewCell"];
                 if (nil == cell) {
                     cell = [[UserInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UserInfoTableViewCell"];
