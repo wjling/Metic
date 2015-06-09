@@ -29,6 +29,7 @@
 @property(nonatomic,strong) NSArray* eventIds;
 @property(nonatomic,strong) NSMutableArray* events;
 @property(nonatomic,strong) MJRefreshFooterView* footer;
+@property(nonatomic,strong) MJRefreshHeaderView* header;
 @property(nonatomic, readwrite) NSInteger type;
 
 @property NSUInteger showNum;
@@ -47,6 +48,7 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"deleteLikeItem" object:nil];
+    [_header free];
     [_footer free];
 }
 
@@ -87,6 +89,10 @@
     _footer.delegate = self;
     _footer.scrollView = self.tableView;
     
+    //初始化下拉刷新功能
+    _header = [[MJRefreshHeaderView alloc]init];
+    _header.delegate = self;
+    _header.scrollView = self.tableView;
     
     //初始化阴影页
     _shadowView = [[UIView alloc]initWithFrame:self.view.bounds];
@@ -140,6 +146,7 @@
     NSString* text = self.searchBar.text;
     if ([[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.searchBar.text = @"";
+        [self closeRJ];
         return;
     }
     
@@ -169,11 +176,13 @@
                     break;
                 default:{
                     [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+                    [_header endRefreshing];
                 }
                     break;
             }
         }else{
             [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+            [_header endRefreshing];
         }
         
     }];
@@ -204,11 +213,13 @@
                     break;
                 default:{
                     [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+                    [_header endRefreshing];
                 }
                     break;
             }
         }else{
             [SVProgressHUD dismissWithError:@"网络异常，请重试。"];
+            [_header endRefreshing];
         }
         
     }];
@@ -308,6 +319,9 @@
         if (_footer.refreshing) {
             [_footer endRefreshing];
         }
+        if (_header.refreshing) {
+            [_header endRefreshing];
+        }
     });
 }
 
@@ -371,10 +385,38 @@
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
-    if (_footer.refreshing) {
-        return;
-    }
-    [self get_events:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        if (refreshView == _header && _footer.refreshing)
+        {
+            [_header endRefreshing];
+            return;
+        }
+        if (refreshView == _footer && _header.refreshing)
+        {
+            [_footer endRefreshing];
+            return;
+        }
+        
+        if (refreshView == _header) {
+            switch (_type) {
+                case 0:
+                    [self getLikeEventIds];
+                    break;
+                case 1:
+                    [self getLikeEventIdsForSearch];
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+        }else if (refreshView == _footer){
+            [self get_events:NO];
+        }
+        
+    });
+    
 }
 
 #pragma mark - SlideNavigationController Methods -
