@@ -275,7 +275,7 @@ static MenuViewController *singletonInstance;
 			break;
 			
 		case 1:
-			((UILabel*)[cell viewWithTag:2]).text = @"活动邀请";
+			((UILabel*)[cell viewWithTag:2]).text = @"收藏活动";
             [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
 			break;
 			
@@ -371,10 +371,16 @@ static MenuViewController *singletonInstance;
 			break;
 			
 		case 1:
-            if (!eventInvitationViewController) {
-                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
-                eventInvitationViewController = vc;
-            }else vc = eventInvitationViewController;
+            if (!eventLikeViewController) {
+                vc = [[EventLikeViewController alloc]init];
+                ((EventLikeViewController*)vc).isFirstPage = YES;
+//                eventLikeViewController = vc;
+            }else vc = eventLikeViewController;
+            
+//            if (!eventInvitationViewController) {
+//                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
+//                eventInvitationViewController = vc;
+//            }else vc = eventInvitationViewController;
 			break;
 			
         case 2:

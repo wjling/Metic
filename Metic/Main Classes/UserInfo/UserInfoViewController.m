@@ -496,6 +496,7 @@
         {
             if (indexPath.row == 0) {
                 EventLikeViewController* vc = [[EventLikeViewController alloc]init];
+                vc.isFirstPage = NO;
                 [self.navigationController pushViewController:vc animated:YES];
             }else if (indexPath.row == 1) {
                 [self QRcodeBtnClicked:nil];

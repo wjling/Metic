@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventLikeViewController : UIViewController
-
+@property (nonatomic) BOOL isFirstPage;
 @end

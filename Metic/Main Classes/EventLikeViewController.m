@@ -21,7 +21,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
 
-@interface EventLikeViewController ()<UITableViewDelegate,UISearchBarDelegate,MJRefreshBaseViewDelegate>
+@interface EventLikeViewController ()<UITableViewDelegate,UISearchBarDelegate,MJRefreshBaseViewDelegate,SlideNavigationControllerDelegate>
 @property (nonatomic,strong) UIView* shadowView;
 
 @property(nonatomic,strong) MTTableView* tableView;
@@ -57,7 +57,7 @@
 
 - (void)initUI
 {
-    [CommonUtils addLeftButton:self isFirstPage:NO];
+    [CommonUtils addLeftButton:self isFirstPage:_isFirstPage];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"收藏活动";
     
@@ -377,5 +377,30 @@
     [self get_events:NO];
 }
 
+#pragma mark - SlideNavigationController Methods -
+
+- (BOOL)slideNavigationControllerShouldDisplayLeftMenu
+{
+    return _isFirstPage;
+}
+
+- (BOOL)slideNavigationControllerShouldDisplayRightMenu
+{
+    return NO;
+}
+
+-(void)sendDistance:(float)distance
+{
+    if (distance > 0) {
+        self.shadowView.hidden = NO;
+        //[self.view bringSubviewToFront:self.shadowView];
+        [self.shadowView setAlpha:distance/400.0];
+        //[((SlideNavigationController*)self.navigationController) setBarAlpha:distance/400.0];
+        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+    }else{
+        //self.shadowView.hidden = YES;
+        //[self.view sendSubviewToBack:self.shadowView];
+    }
+}
 
 @end
