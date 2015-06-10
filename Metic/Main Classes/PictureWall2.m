@@ -107,12 +107,6 @@
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         [self pullPhotoInfosFromDB];
         [self pullUploadTasksfromDB];
-        if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [_header beginRefreshing];
-            });
-            
-        }
     });
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(photoUploadFinished:) name:@"photoUploadFinished" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deletePhotoItem:) name:@"deletePhotoItem" object:nil];
@@ -212,6 +206,9 @@
             if (resultsArray.count == 0) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_header beginRefreshing];
+                    if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+                        [_header beginRefreshing];
+                    }
                 });
                 return ;
             }
@@ -244,6 +241,10 @@
             _uploadingTaskCount = 0;
             [quiltView reloadData];
             self.sequence = @-1;
+            
+            if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
+                [_header beginRefreshing];
+            }
             
         });
     }];
