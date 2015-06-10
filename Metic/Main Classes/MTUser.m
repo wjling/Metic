@@ -911,12 +911,14 @@ static MTUser *singletonInstance;
                     case REQUEST_EVENT_RESPONSE:
                     case QUIT_EVENT_NOTIFICATION:
                     case KICK_EVENT_NOTIFICATION:
+                    case SYSTEM_PUSH:
                     {
                         [self.systemMsg addObject:msg_dic];
                     }
                         break;
                     case NEW_EVENT_NOTIFICATION:
                     case REQUEST_EVENT:
+                    case CHANGE_EVENT_INFO_NOTIFICATION:
                     {
                         [self.eventRequestMsg addObject:msg_dic];
                     }

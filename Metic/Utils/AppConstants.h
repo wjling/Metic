@@ -141,6 +141,9 @@ enum Return_Code
     NEED_CONFIRM=198,
     INCOME_CONFIRM=199,
     
+    //系统推送
+    SYSTEM_PUSH = 666,
+    
     //推送消息相关Return_Code
     ADD_FRIEND_NOTIFICATION=999,  //收到好友请求
     ADD_FRIEND_RESULT=998,      //收到好友请求结果，对方同意或拒绝
@@ -159,6 +162,8 @@ enum Return_Code
     
     QUIT_EVENT_NOTIFICATION = 985,   //活动解散
     KICK_EVENT_NOTIFICATION = 984,   //被踢出活动
+    
+    CHANGE_EVENT_INFO_NOTIFICATION = 990, //活动信息修改通知推送
     
 };
 

@@ -235,12 +235,16 @@ enum Response_Type
         case REQUEST_EVENT_RESPONSE:
         case QUIT_EVENT_NOTIFICATION:
         case KICK_EVENT_NOTIFICATION:
+        case SYSTEM_PUSH:
         {
             for (int j = 0; j < self.systemMsg.count; j++) {
                 NSDictionary* msg_dic2 = [self.systemMsg objectAtIndex:j];
                 NSInteger cmd2 = [[msg_dic2 objectForKey:@"cmd"] integerValue];
                 if (cmd == cmd2) {
                     NSNumber* event_id1 = [msg_dic objectForKey:@"event_id"];
+                    if (!event_id1 || [event_id1 isEqual:[NSNull null]]) {
+                        continue;
+                    }
                     NSNumber* event_id2 = [msg_dic2 objectForKey:@"event_id"];
                     if ([event_id1 integerValue] == [event_id2 integerValue]) {
                         [self.systemMsg removeObject:msg_dic2];
@@ -576,6 +580,10 @@ enum Response_Type
                 if (cmd1 == cmd2) {
                     NSNumber* event_id1 = [MTUser_msg_dic objectForKey:@"event_id"];
                     NSNumber* event_id2 = [msg_dic objectForKey:@"event_id"];
+                    if (!event_id1)
+                    {
+                        break;
+                    }
                     if ([event_id1 integerValue] == [event_id2 integerValue]) {
                         flag = NO;
                         break;
@@ -908,6 +916,7 @@ enum Response_Type
             case REQUEST_EVENT_RESPONSE:
             case QUIT_EVENT_NOTIFICATION:
             case KICK_EVENT_NOTIFICATION:
+            case SYSTEM_PUSH:
             {
                 [systemMsg insertObject:msg_dic atIndex:0];
                 if (!label2.hidden) {
@@ -917,6 +926,7 @@ enum Response_Type
                 break;
             case NEW_EVENT_NOTIFICATION:
             case REQUEST_EVENT:
+            case CHANGE_EVENT_INFO_NOTIFICATION:
             {
                 NSInteger cmd2;
                 NSInteger eventid1, eventid2;
@@ -1017,6 +1027,10 @@ enum Response_Type
         if (cmd == REQUEST_EVENT) {
             return 80;
         }
+        else if (cmd == NEW_EVENT_NOTIFICATION)
+        {
+            return 60;
+        }
     }
     return 50;
 }
@@ -1083,9 +1097,9 @@ enum Response_Type
     UIColor* label1Color = [UIColor colorWithRed:0.58 green:0.58 blue:0.58 alpha:1];
     UITableViewCell* temp_cell = [[UITableViewCell alloc]init];
     if (tableView == self.eventRequest_tableView) {
-        NotificationsEventRequestTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
-        if (nil == cell) {
-            cell = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
+        UITableViewCell* cell1 = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsEventRequestTableViewCell"];
+        if (nil == cell1) {
+            cell1 = [[NotificationsEventRequestTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NotificationsEventRequestTableViewCell"];
         }
         NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
 //        NSLog(@"event %d request: %@",indexPath.row, msg_dic);
@@ -1094,6 +1108,7 @@ enum Response_Type
         switch (cmd) {
             case NEW_EVENT_NOTIFICATION: //cmd 997
             {
+                NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* launcher = [msg_dic objectForKey:@"launcher"];
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
@@ -1115,7 +1130,7 @@ enum Response_Type
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
                 CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
-                CGRect frame = CGRectMake(112, 28, 180, 16);
+                CGRect frame = CGRectMake(112, 35, 180, 16);
                 if (size.width <= 180) {
                     frame.size.width = size.width;
                 }
@@ -1153,6 +1168,7 @@ enum Response_Type
                 break;
             case REQUEST_EVENT: //995
             {
+                NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSNumber* uid = [msg_dic valueForKey:@"id"];
                 NSString* fname = [msg_dic valueForKey:@"name"];
@@ -1172,7 +1188,7 @@ enum Response_Type
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
                 CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
-                CGRect frame = CGRectMake(100, 28, 180, 16);
+                CGRect frame = CGRectMake(100, 35, 180, 16);
                 if (size.width <= 180) {
                     frame.size.width = size.width;
                 }
@@ -1202,7 +1218,7 @@ enum Response_Type
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
                 
                 if (!cell.confirm_msg_label) {
-                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(75, 45, 220, 30)];
+                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(70, 55, 220, 21)];
                     [cell.contentView addSubview:cell.confirm_msg_label];
                     [cell.contentView setClipsToBounds:YES];
                     cell.confirm_msg_label.font = [UIFont systemFontOfSize:11];
@@ -1241,24 +1257,59 @@ enum Response_Type
 
             }
                 break;
+            case CHANGE_EVENT_INFO_NOTIFICATION:
+            {
+                NotificationsSystemMessageTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
+                cell1 = cell;
+                NSString* content = [msg_dic objectForKey:@"content"];
+                cell.title_label.text = @"活动消息";
+                if (content) {
+                    NSString* content_text = @"无";
+                    if ([content isEqualToString:@"subject"]) {
+                        content_text = @"活动主题 已被修改";
+                    }
+                    else if ([content isEqualToString:@"time"])
+                    {
+                        content_text = @"活动时间 已被修改";
+                    }
+                    else if ([content isEqualToString:@"location"])
+                    {
+                        content_text = @"活动地点 已被修改";
+                    }
+                    else if ([content isEqualToString:@"remark"])
+                    {
+                        content_text = @"活动描述 已被修改";
+                    }
+                    else if ([content isEqualToString:@"visibility"])
+                    {
+                        content_text = @"活动类型 已被修改";
+                    }
+                    cell.sys_msg_label.text = content_text;
+                }
+                else
+                {
+                    cell.sys_msg_label.text = @"无";
+                }
+            }
+                break;
             default:
                 break;
         }
-        [cell.contentView setBackgroundColor:bgColor];
+        [cell1.contentView setBackgroundColor:bgColor];
         UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
-        cell.layer.borderColor = borderColor.CGColor;
-        cell.layer.borderWidth = 0.3;
+        cell1.layer.borderColor = borderColor.CGColor;
+        cell1.layer.borderWidth = 0.3;
         
-        CGRect cellFrame = cell.contentView.frame;
-        if (cmd == NEW_EVENT_NOTIFICATION) {
-            cellFrame.size.height = 50;
-        }
-        else if (cmd == REQUEST_EVENT)
-        {
-            cellFrame.size.height = 80;
-        }
-        [cell.contentView setFrame:cellFrame];
-        return cell;
+//        CGRect cellFrame = cell1.contentView.frame;
+//        if (cmd == NEW_EVENT_NOTIFICATION) {
+//            cellFrame.size.height = 60;
+//        }
+//        else if (cmd == REQUEST_EVENT)
+//        {
+//            cellFrame.size.height = 80;
+//        }
+//        [cell1.contentView setFrame:cellFrame];
+        return cell1;
     }
     else if(tableView == self.friendRequest_tableView)
     {
@@ -1441,7 +1492,16 @@ enum Response_Type
                 cell.sys_msg_label.text = text;
             }
                 break;
-                
+            case SYSTEM_PUSH:    //666
+            {
+                NSString* content = [msg_dic objectForKey:@"content"];
+                NSString* text;
+                text = content? @"无":[NSString stringWithFormat:@"%@",content];
+                cell.title_label.text = @"系统消息";
+                cell.sys_msg_label.text = text;
+            }
+                break;
+        
             default:
                 break;
         }
@@ -1761,22 +1821,35 @@ enum Response_Type
                         }
                     }
                     
-                    NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
-                                                fname,@"name",
-                                                femail,@"email",
-                                                fgender,@"gender",
-                                                [NSNumber numberWithInt:fid1],@"id",
-                                                [NSNull null], @"alias",
-                                                nil];
-                    [[MTUser sharedInstance].friendList addObject:friendJson];
-                    [[MTUser sharedInstance] friendListDidChanged];
-                    
                     [MTUser_friendRequestMsg removeObject:msg_dic];
                     NSLog(@"（同意）MTuser_friendR去掉一条记录：%@ \n剩下的记录有：%@",msg_dic,MTUser_friendRequestMsg);
                     [msg_dic setValue:result forKey:@"ishandled"];
                     
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
+                    
+                    bool f = YES;
+                    for(NSInteger i = [MTUser sharedInstance].friendList.count; i >= 0; i--){
+                        NSDictionary* afriend = [[MTUser sharedInstance].friendList objectAtIndex:i];
+                        NSNumber* friend_id = [afriend objectForKey:@"id"];
+                        if ([friend_id integerValue] == fid1) {
+                            f = NO;
+                            break;
+                        }
+                    }
+                    if (f) {
+                        NSMutableDictionary* friendJson = [CommonUtils packParamsInDictionary:
+                                                           fname,@"name",
+                                                           femail,@"email",
+                                                           fgender,@"gender",
+                                                           [NSNumber numberWithInt:fid1],@"id",
+                                                           [NSNull null], @"alias",
+                                                           nil];
+                        [[MTUser sharedInstance].friendList addObject:friendJson];
+                        [[MTUser sharedInstance] friendListDidChanged];
+                    }
+
                     [SVProgressHUD dismissWithSuccess:[NSString stringWithFormat:@"成功添加%@为好友",fname] afterDelay:2];
+                    
                 }
                 else
                 {
@@ -1823,7 +1896,7 @@ enum Response_Type
                 NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:[item_index intValue]];
                 
                 NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-                NSLog(@"response event, seq: %d",seq1);
+//                NSLog(@"response event, seq: %d",seq1);
                 NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
                 NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
                 [[MTDatabaseHelper sharedInstance]updateDataWithTableName:@"notification"

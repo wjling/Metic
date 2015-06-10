@@ -28,6 +28,8 @@
 - (void)awakeFromNib
 {
     // Initialization code
+    _no_button.layer.cornerRadius = 3;
+    _no_button.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

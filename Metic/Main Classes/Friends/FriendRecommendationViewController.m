@@ -108,8 +108,8 @@
     
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
-    NSNumber* hasUploadContact = [userSettings objectForKey:@"hasUploadPhoneNumber"];
-    if (![hasUploadContact boolValue]) {
+    NSString* userPhoneNumber = [userSettings objectForKey:@"userPhoneNumber"];
+    if (!userPhoneNumber || [userPhoneNumber isEqualToString:@""]) {
         self.noUpload_view.hidden = NO;
         self.hasUpload_view.hidden = YES;
     }
@@ -617,7 +617,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UIColor* bgColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.949 alpha:1];
-    UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
+//    UIColor* seperatorColor = [UIColor colorWithRed:0.913 green:0.913 blue:0.913 alpha:1];
     
     if (tableView == contacts_tableview) {
         ContactsRecommendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ContactsRecommendTableViewCell" forIndexPath:indexPath];
@@ -631,6 +631,8 @@
         NSString* fname = [friend valueForKey:@"name"];
         NSNumber* isFriend = [friend valueForKey:@"isFriend"];
         NSLog(@"isFriend: %d",[isFriend boolValue]);
+        PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
+        [getter getAvatar];
         cell.name_label.text = fname;
         if ([isFriend boolValue]) {
             cell.add_button.hidden = YES;
