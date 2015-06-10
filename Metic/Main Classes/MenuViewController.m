@@ -371,16 +371,18 @@ static MenuViewController *singletonInstance;
 			break;
 			
 		case 1:
-            if (!eventLikeViewController) {
-                vc = [[EventLikeViewController alloc]init];
-                ((EventLikeViewController*)vc).isFirstPage = YES;
-//                eventLikeViewController = vc;
-            }else vc = eventLikeViewController;
+//            //我的收藏
+//            if (!eventLikeViewController) {
+//                vc = [[EventLikeViewController alloc]init];
+//                ((EventLikeViewController*)vc).isFirstPage = YES;
+////                eventLikeViewController = vc;
+//            }else vc = eventLikeViewController;
             
-//            if (!eventInvitationViewController) {
-//                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
-//                eventInvitationViewController = vc;
-//            }else vc = eventInvitationViewController;
+            //活动邀请
+            if (!eventInvitationViewController) {
+                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventInvitationViewController"];
+                eventInvitationViewController = vc;
+            }else vc = eventInvitationViewController;
 			break;
 			
         case 2:
