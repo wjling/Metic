@@ -963,9 +963,6 @@
 #pragma mark - System Push
 -(void)pullSystemNotificationWithSeq:(NSNumber*)seq
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
-                                                        object:nil
-                                                      userInfo:nil];
     if (!seq || [seq isEqual:[NSNull null]] || ![seq isKindOfClass:[NSNumber class]]) {
         return;
     }
@@ -988,12 +985,11 @@
         if (list) {
             for (int i = 0; i < list.count; i++) {
                 NSDictionary* list_item = [list objectAtIndex:i];
-                if (!list_item) {
+                if (!list_item || [list_item isEqual:[NSNull null]]) {
                     continue;
                 }
                 NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:list_item];
                 [response_mul setValue:seq forKey:@"seq"];
-//                [response_mul setValue:[NSNumber numberWithInteger:SYSTEM_PUSH] forKey:@"cmd"];
                 [self handleSystemPushMessage:response_mul];
             }
             
@@ -1019,6 +1015,9 @@
     if (cmd == SYSTEM_PUSH) {
         [[MTUser sharedInstance].systemMsg insertObject:temp_message atIndex:0];
         type = 2;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                            object:nil
+                                                          userInfo:nil];
     }
     else
     {
