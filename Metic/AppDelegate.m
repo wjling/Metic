@@ -415,6 +415,7 @@
         }
         
     }
+    //拉系统推送
     [self pullSystemNotificationWithSeq:seq];
     
 }
