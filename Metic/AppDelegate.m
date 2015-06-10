@@ -1116,9 +1116,7 @@
 {
     NSLog(@"network timer selector fire");
     if ([hostReach currentReachabilityStatus] != NotReachable) {
-        if (!isNetworkConnected) {
-            [self hideNetworkNotification];
-        }
+        [self hideNetworkNotification];
         isNetworkConnected = YES;
     }
 }
@@ -1222,7 +1220,7 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         networkStatusNotifier_view.tag = 1;
     });
-//    netWorkViewTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(netWorkTimerSelector:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(netWorkTimerSelector:) userInfo:nil repeats:NO];
 }
 
 -(void)NetworkNotificationDidHide
