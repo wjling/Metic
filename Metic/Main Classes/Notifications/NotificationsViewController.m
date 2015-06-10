@@ -1026,6 +1026,10 @@ enum Response_Type
         if (cmd == REQUEST_EVENT) {
             return 80;
         }
+        else if (cmd == NEW_EVENT_NOTIFICATION)
+        {
+            return 60;
+        }
     }
     return 50;
 }
@@ -1177,7 +1181,7 @@ enum Response_Type
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
                 CGSize size = [subject sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 16) lineBreakMode:NSLineBreakByWordWrapping];
-                CGRect frame = CGRectMake(100, 28, 180, 16);
+                CGRect frame = CGRectMake(100, 35, 180, 16);
                 if (size.width <= 180) {
                     frame.size.width = size.width;
                 }
@@ -1207,7 +1211,7 @@ enum Response_Type
                 [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
                 
                 if (!cell.confirm_msg_label) {
-                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(70, 45, 220, 30)];
+                    cell.confirm_msg_label = [[UILabel alloc]initWithFrame:CGRectMake(70, 55, 220, 21)];
                     [cell.contentView addSubview:cell.confirm_msg_label];
                     [cell.contentView setClipsToBounds:YES];
                     cell.confirm_msg_label.font = [UIFont systemFontOfSize:11];
@@ -1251,9 +1255,34 @@ enum Response_Type
                 NotificationsSystemMessageTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
                 cell1 = cell;
                 NSString* content = [msg_dic objectForKey:@"content"];
-                
                 cell.title_label.text = @"活动消息";
-                cell.sys_msg_label.text = content? content:@"无";
+                if (content) {
+                    NSString* content_text = @"无";
+                    if ([content isEqualToString:@"subject"]) {
+                        content_text = @"活动主题 已被修改";
+                    }
+                    else if ([content isEqualToString:@"time"])
+                    {
+                        content_text = @"活动时间 已被修改";
+                    }
+                    else if ([content isEqualToString:@"location"])
+                    {
+                        content_text = @"活动地点 已被修改";
+                    }
+                    else if ([content isEqualToString:@"remark"])
+                    {
+                        content_text = @"活动描述 已被修改";
+                    }
+                    else if ([content isEqualToString:@"visibility"])
+                    {
+                        content_text = @"活动类型 已被修改";
+                    }
+                    cell.sys_msg_label.text = content_text;
+                }
+                else
+                {
+                    cell.sys_msg_label.text = @"无";
+                }
             }
                 break;
             default:
@@ -1264,15 +1293,15 @@ enum Response_Type
         cell1.layer.borderColor = borderColor.CGColor;
         cell1.layer.borderWidth = 0.3;
         
-        CGRect cellFrame = cell1.contentView.frame;
-        if (cmd == NEW_EVENT_NOTIFICATION) {
-            cellFrame.size.height = 50;
-        }
-        else if (cmd == REQUEST_EVENT)
-        {
-            cellFrame.size.height = 80;
-        }
-        [cell1.contentView setFrame:cellFrame];
+//        CGRect cellFrame = cell1.contentView.frame;
+//        if (cmd == NEW_EVENT_NOTIFICATION) {
+//            cellFrame.size.height = 60;
+//        }
+//        else if (cmd == REQUEST_EVENT)
+//        {
+//            cellFrame.size.height = 80;
+//        }
+//        [cell1.contentView setFrame:cellFrame];
         return cell1;
     }
     else if(tableView == self.friendRequest_tableView)
@@ -1456,11 +1485,11 @@ enum Response_Type
                 cell.sys_msg_label.text = text;
             }
                 break;
-            case SYSTEM_PUSH:
+            case SYSTEM_PUSH:    //666
             {
                 NSString* content = [msg_dic objectForKey:@"content"];
                 NSString* text;
-                text = [NSString stringWithFormat:@"%@",content];
+                text = content? @"无":[NSString stringWithFormat:@"%@",content];
                 cell.title_label.text = @"系统消息";
                 cell.sys_msg_label.text = text;
             }

@@ -953,30 +953,104 @@
                 NSString *tempPinYinStr = [CommonUtils pinyinFromNSString:text];
                 NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                 if (titleResult.length>0) {
-                    if (titleResult.location != 0) {
-                        if (!falias) {
-                            return;
-                        }
-                        NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                        if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
-                            return;
+                    NSInteger location = 0;
+                    //比较用户名name
+                    if ([CommonUtils isIncludeChineseInString:fname]) {
+                        for (NSInteger i = 0; i < fname.length; i++) {
+                            NSString* char_pinyin = [CommonUtils pinyinFromNSString:[fname substringWithRange:NSMakeRange(i, 1)]];
+                            NSString* long_str = char_pinyin;
+                            NSString* short_str = [friendSearchBar.text substringFromIndex:location];
+                            if (friendSearchBar.text.length > long_str.length) {
+                                long_str = friendSearchBar.text;
+                                short_str = char_pinyin;
+                            }
+                            NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
+                            if (compareResult_range.location != 0) {
+                                break;
+                            }
+                            location += short_str.length;
+                            if (location == friendSearchBar.text.length) {
+                                [searchFriendList addObject:friendList[i]];
+                                [self getRangesOfText:text withKeyWord:friendSearchBar.text];
+                                break;
+                            }
+                            
                         }
                     }
-                    [searchFriendList addObject:friendList[i]];
-                    [self getRangesOfText:text withKeyWord:friendSearchBar.text];
+                    else
+                    {
+                        NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                        if (titleResult_fname.length != 0 && titleResult_fname.location == 0) {
+                            [searchFriendList addObject:friendList[i]];
+                            [self getRangesOfText:text withKeyWord:friendSearchBar.text];
+                            continue;
+                        }
+                        
+                    }
+                    
+                    //比较备注名alias
+                    if (falias && ![falias isEqual:[NSNull null]]) {
+                        location = 0;
+                        if ([CommonUtils isIncludeChineseInString:falias]) {
+                            for (NSInteger i = 0; i < falias.length; i++) {
+                                NSString* char_pinyin = [CommonUtils pinyinFromNSString:[falias substringWithRange:NSMakeRange(i, 1)]];
+                                NSString* long_str = char_pinyin;
+                                NSString* short_str = [friendSearchBar.text substringFromIndex:location];
+                                if (friendSearchBar.text.length > long_str.length) {
+                                    long_str = friendSearchBar.text;
+                                    short_str = char_pinyin;
+                                }
+                                NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
+                                if (compareResult_range.location != 0) {
+                                    continue;
+                                }
+                                location += short_str.length;
+                                if (location == friendSearchBar.text.length) {
+                                    [searchFriendList addObject:friendList[i]];
+                                    [self getRangesOfText:text withKeyWord:friendSearchBar.text];
+                                    continue;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                            if (titleResult_falias.length != 0 && titleResult_falias.location == 0) {
+                                [searchFriendList addObject:friendList[i]];
+                                [self getRangesOfText:text withKeyWord:friendSearchBar.text];
+                                continue;
+                            }
+                            
+                        }
+                        
+                    }
+                    
+
+                    
+//                    if (titleResult.location != 0) {
+//                        if (!falias) {
+//                            return;
+//                        }
+//                        NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+//                        if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
+//                            return;
+//                        }
+//                    }
+//                    [searchFriendList addObject:friendList[i]];
+//                    [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                 }
-                else
+                else //好友信息（好友名+好友备注）转化成拼音首字母
                 {
                     NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:text];
                     NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                     if (titleHeadResult.length>0) {
                         if (titleHeadResult.location != 0) {
                             if (!falias) {
-                                return;
+                                continue;
                             }
                             NSRange titleHeadResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                             if (titleHeadResult_fname.length == 0 || titleHeadResult_fname.location > 0) {
-                                return;
+                                continue;
                             }
                         }
                         [searchFriendList addObject:friendList[i]];
@@ -985,18 +1059,24 @@
 
                 }
             }
-            else {
+            else //好友信息和搜索字段都不含中文
+            {
                 NSRange titleResult=[text rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                 if (titleResult.length>0) {
-                    if (titleResult.location != 0 ) {
-                        if (!falias) {
-                            return;
+                    NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                    if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
+                        if (falias && ![falias isEqual:[NSNull null]]) {
+                            NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                            if (titleResult_falias.length == 0 || titleResult_falias.location > 0) {
+                                continue;
+                            }
                         }
-                        NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                        if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
-                            return;
+                        else
+                        {
+                            continue;
                         }
                     }
+                    
                     [searchFriendList addObject:friendList[i]];
                     [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                 }
@@ -1019,11 +1099,11 @@
             if (titleResult.length>0) {
                 if (titleResult.location != 0 ) {
                     if (!falias) {
-                        return;
+                        continue;
                     }
                     NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                     if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
-                        return;
+                        continue;
                     }
                 }
                 [searchFriendList addObject:tempDic];

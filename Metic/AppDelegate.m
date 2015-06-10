@@ -392,8 +392,9 @@
     
     
     //当位于前台 而且该消息序号大于本地消息最大序号才拉取该推送消息
+    NSNumber* seq = [userInfo objectForKey:@"seq"];
     if ([application applicationState] == UIApplicationStateActive) {
-        NSNumber* seq = [userInfo objectForKey:@"seq"];
+        
         if (cmd != SYSTEM_PUSH) {
             if ([MTUser sharedInstance].userid) {
                 NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
@@ -412,12 +413,9 @@
             
             [self pullAndHandlePushMessageWithMinSeq:seq andMaxSeq:seq andCallBackBlock:getPushMessageDone];
         }
-        else
-        {
-            [self pullSystemNotificationWithSeq:seq];
-        }
         
     }
+    [self pullSystemNotificationWithSeq:seq];
     
 }
 
@@ -705,11 +703,6 @@
         [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
         type = 0;
     }
-    else if (msg_cmd == SYSTEM_PUSH)
-    {
-        [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
-        type = 2;
-    }
     else if (msg_cmd == CHANGE_EVENT_INFO_NOTIFICATION)
     {
         [[MTUser sharedInstance].eventRequestMsg insertObject:msg_dic atIndex:0];
@@ -719,23 +712,12 @@
     
     NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
 //    NSString* timeStamp = [msg_dic objectForKey:@"timestamp"];
-    NSArray* values;
-    if (msg_cmd == SYSTEM_PUSH) {
-        values = [[NSArray alloc]initWithObjects:
-                  [NSString stringWithFormat:@"%@",seq],
-                  [NSString stringWithFormat:@"'%@'",msg_dic],
-                  [NSString stringWithFormat:@"%d",-1],
-                  nil];
-    }
-    else
-    {
-        values = [[NSArray alloc]initWithObjects:
+    NSArray* values = [[NSArray alloc]initWithObjects:
                   [NSString stringWithFormat:@"%@",seq],
                   [NSString stringWithFormat:@"'%@'",content_str],
                   [NSString stringWithFormat:@"%d",-1],
                   nil];
 
-    }
     [[MTDatabaseHelper sharedInstance] insertToTable:@"notification" withColumns:columns andValues:values];
     
     NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
@@ -980,6 +962,9 @@
 #pragma mark - System Push
 -(void)pullSystemNotificationWithSeq:(NSNumber*)seq
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                        object:nil
+                                                      userInfo:nil];
     if (!seq || [seq isEqual:[NSNull null]] || ![seq isKindOfClass:[NSNumber class]]) {
         return;
     }
@@ -998,18 +983,111 @@
         }
         NSLog(@"拉取系统推送的结果：%@",temp);
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
-        NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:response];
-        [response_mul setValue:seq forKey:@"seq"];
-        [response_mul setValue:[NSNumber numberWithInteger:SYSTEM_PUSH] forKey:@"cmd"];
-        [self handlePushMessage:response_mul andFeedBack:NO];
+        NSArray* list = [response objectForKey:@"list"];
+        if (list) {
+            for (int i = 0; i < list.count; i++) {
+                NSDictionary* list_item = [list objectAtIndex:i];
+                if (!list_item) {
+                    continue;
+                }
+                NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:list_item];
+                [response_mul setValue:seq forKey:@"seq"];
+//                [response_mul setValue:[NSNumber numberWithInteger:SYSTEM_PUSH] forKey:@"cmd"];
+                [self handleSystemPushMessage:response_mul];
+            }
+            
+        }
+        
     };
     
-    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:3], @"operation",
+    NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                              [NSNumber numberWithInt:3], @"operation",
                               seq, @"message_id",nil];
-    
+    NSLog(@"拉取系统推送json: %@",json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:json_data withOperationCode:SYSTEM_PUSH finshedBlock:pullsysDone];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE finshedBlock:pullsysDone];
+}
+
+-(void)handleSystemPushMessage:(NSMutableDictionary*)md_message
+{
+    NSMutableDictionary* temp_message = [[NSMutableDictionary alloc]initWithDictionary:md_message];
+    NSInteger cmd = [[temp_message objectForKey:@"cmd"]integerValue];
+    NSNumber* seq = [temp_message objectForKey:@"seq"];
+    int type = -1;
+    if (cmd == SYSTEM_PUSH) {
+        [[MTUser sharedInstance].systemMsg insertObject:temp_message atIndex:0];
+        type = 2;
+    }
+    else
+    {
+        return;
+    }
+    NSArray* columns = [[NSArray alloc]initWithObjects:@"seq",@"msg",@"ishandled", nil];
+    NSArray* values = [[NSArray alloc]initWithObjects:
+                            [NSString stringWithFormat:@"%@",seq],
+                            [NSString stringWithFormat:@"'%@'",temp_message],
+                            [NSString stringWithFormat:@"%d",-1],
+                            nil];
+    [[MTDatabaseHelper sharedInstance] insertToTable:@"notification" withColumns:columns andValues:values];
+    
+    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
+    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
+    
+    [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
+    NSInteger i = (type < 3 && type >= 0)? type : -1;
+    NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
+    
+    if (!unRead_dic) {
+        unRead_dic = [[NSMutableDictionary alloc]init];
+    }
+    if (i >= 0) {
+        NSString* key_n = [NSString stringWithFormat:@"tab_%d", i];
+        NSNumber* tabn_old = [unRead_dic objectForKey:key_n];
+        NSNumber* tabn_new;
+        if (tabn_old) {
+            tabn_new = [NSNumber numberWithInteger:([tabn_old integerValue] + 1)];;
+        }
+        else
+        {
+            tabn_new = [NSNumber numberWithInteger:1];
+        }
+        [unRead_dic setValue:tabn_new forKey:key_n];
+    }
+    
+    [unRead_dic setValue:[NSNumber numberWithInteger:i] forKey:@"tab_show"];
+    [userSettings setValue:unRead_dic forKey:@"hasUnreadNotification1"];
+    
+    [userDf setObject:userSettings forKey:key];
+    [userDf synchronize];
+    NSLog(@"appdelegate， unRead_dic: %@", unRead_dic);
+    
+    if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
+        [self.notificationDelegate notificationDidReceive:[NSArray arrayWithObject:temp_message]];
+    }
+    
+    int flag = type;
+    if (flag >= 0) {
+        //        NSLog(@"收到新推送，显示消息中心红点");
+        [self.leftMenu showUpdateInRow:4];
+        [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
+    }
+    
+    if (isInBackground) {
+        [self.leftMenu showNotificationCenter];
+    }
+    
+    NSDictionary* pack = [CommonUtils packParamsInDictionary:
+                          [NSNumber numberWithInteger:type], @"type",
+                          temp_message, @"msg",
+                          nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
+    
+    //反馈给服务器
+    [self feedBackPushMessagewithMinSeq:seq andMaxSeq:seq andCallBack:nil];
+    
+
 }
 
 #pragma mark - Network Status Checking
@@ -1030,11 +1108,12 @@
     [networkStatusNotifier_view addSubview:label];
     networkStatusNotifier_view.tag = 0;
     
-    netWorkViewTimer = [NSTimer timerWithTimeInterval:10.0 target:self selector:@selector(netWorkTimerSelector:) userInfo:nil repeats:YES];
+//    netWorkViewTimer = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(netWorkTimerSelector:) userInfo:nil repeats:NO];
 }
 
 - (void)netWorkTimerSelector:(NSTimer*)t
 {
+    NSLog(@"network timer selector fire");
     if ([hostReach currentReachabilityStatus] != NotReachable) {
         if (!isNetworkConnected) {
             [self hideNetworkNotification];
@@ -1049,41 +1128,24 @@
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
     NetworkStatus status = [curReach currentReachabilityStatus];
 //    NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    dispatch_time_t delaytime = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 1.0);
-    if (status == NotReachable) {
-        if (isNetworkConnected) {
+    dispatch_time_t delaytime = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 1.5);
+    dispatch_after(delaytime, dispatch_get_main_queue(), ^{
+        if ([hostReach currentReachabilityStatus] == NotReachable) {
             
             [self showNetworkNotification:@"网络连接异常，请检查网络设置"];
             
+            isNetworkConnected = NO;
+            NSLog(@"Network is not reachable");
         }
-        isNetworkConnected = NO;
-        
-        //        if (isConnected) {
-        //            [self disconnect];
-        //        }
-        
-        NSLog(@"Network is not reachable");
-    }
-    else
-    {
-        if (!isNetworkConnected) {
+        else
+        {
             [self hideNetworkNotification];
             
+            isNetworkConnected = YES;
+            NSLog(@"Network is reachable");
         }
-        isNetworkConnected = YES;
-        //        while (![userStatus isEqualToString:@"in"]) {
-        //          while (!isLogined) {
-        //            [[NSRunLoop currentRunLoop]runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        //        }
-        //        if (!isConnected) {
-        //            [self connect];
-        //        }
-        
-        NSLog(@"Network is reachable");
-    }
-    
-    
-    
+
+    });
 }
 
 +(BOOL)isEnableWIFI
@@ -1101,14 +1163,13 @@
     NSLog(@"显示 network notification");
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
 //    NSLog(@"screen bounds.height: %f",[UIScreen mainScreen].bounds.size.height);
-    NSLog(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
-    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
-    NSLog(@"show-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
-    if ((networkStatusNotifier_view.frame.origin.y  != frame.size.height &&(networkStatusNotifier_view.frame.origin.y + networkStatusNotifier_view.frame.size.height) > frame.size.height) || [networkStatusNotifier_view superview] != nil || [networkStatusNotifier_view tag] == 1) {
+//    NSLog(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
+//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+//    NSLog(@"show-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
+    if ((networkStatusNotifier_view.frame.origin.y  != frame.size.height &&(networkStatusNotifier_view.frame.origin.y + networkStatusNotifier_view.frame.size.height) > frame.size.height) || [networkStatusNotifier_view superview] != nil || [networkStatusNotifier_view tag] == 1 ) {
         NSLog(@"显示_没有执行");
         return;
     }
-    
     UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
     label.text = message;
     
@@ -1131,9 +1192,9 @@
 {
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
     NSLog(@"隐藏 network notification");
-    NSLog(@"hide-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
+//    NSLog(@"hide-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
 
-    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
     if ((networkStatusNotifier_view.frame.origin.y + networkStatusNotifier_view.frame.size.height) > frame.size.height || [networkStatusNotifier_view superview] == nil || [networkStatusNotifier_view tag] == 0) {
         NSLog(@"隐藏_没有执行");
         return;
@@ -1156,15 +1217,21 @@
 
 -(void)NetworkNotificationDidShow
 {
-    networkStatusNotifier_view.tag = 1;
-    [netWorkViewTimer fire];
+    NSLog(@"network notification did show");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        networkStatusNotifier_view.tag = 1;
+    });
+//    netWorkViewTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(netWorkTimerSelector:) userInfo:nil repeats:NO];
 }
 
 -(void)NetworkNotificationDidHide
 {
+    NSLog(@"network notification did hide");
     [networkStatusNotifier_view removeFromSuperview];
-    networkStatusNotifier_view.tag = 0;
-    [netWorkViewTimer invalidate];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        networkStatusNotifier_view.tag = 0;
+    });
+//    [netWorkViewTimer invalidate];
 }
 
 //==========================================================================================

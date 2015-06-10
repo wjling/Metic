@@ -161,6 +161,9 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
 + (NSMutableDictionary*)NSDictionaryWithNSString:(NSString *)string
 {
+    if (!string || [string isEqual:[NSNull null]]) {
+        return nil;
+    }
     NSData* temp1 = [string dataUsingEncoding:NSUTF8StringEncoding];
     return [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:temp1 options:NSJSONReadingMutableLeaves error:nil]];
 }

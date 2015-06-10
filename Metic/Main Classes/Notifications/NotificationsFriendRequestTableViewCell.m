@@ -27,6 +27,8 @@
     UIColor* borderColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
     self.layer.borderColor = borderColor.CGColor;
     self.layer.borderWidth = 0.3;
+    self.noBtn.layer.cornerRadius = 3;
+    self.noBtn.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

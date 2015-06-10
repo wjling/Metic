@@ -48,10 +48,9 @@
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
-    BOOL hasUpload = [[userSettings objectForKey:@"hasUploadPhoneNumber"] boolValue];
-    
-    if (hasUpload) {
-        phone = [userSettings objectForKey:@"userPhoneNumber"];
+//    BOOL hasUpload = [[userSettings objectForKey:@"hasUploadPhoneNumber"] boolValue];
+    phone = [userSettings objectForKey:@"userPhoneNumber"];
+    if (phone && ![phone isEqualToString:@""]) {
         hint1_textfield.hidden = NO;
         hint2_label.hidden = NO;
         gou_imageview.hidden = NO;
@@ -146,6 +145,8 @@
                 NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
                 NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
                 [userSettings setValue:phone forKey:@"userPhoneNumber"];
+                [userDf setValue:userSettings forKey:key];
+                NSLog(@"绑定号码：%@ 成功",phone);
                 [userDf synchronize];
                 [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"绑定手机成功" WithDelegate:self WithCancelTitle:@"确定"];
                 hint1_textfield.hidden = NO;

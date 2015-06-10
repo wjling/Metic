@@ -806,6 +806,12 @@
     for (NSInteger i = 0; i < messages.count; i++) {
         NSDictionary*message = [messages objectAtIndex:i];
         NSLog(@"homeviewcontroller receive a message %@",message);
+        
+        NSNumber* msg_cmd = [message objectForKey:@"cmd"];
+        if ([msg_cmd integerValue] == SYSTEM_PUSH) {   //cmd 666
+            return;
+        }
+        
         NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
