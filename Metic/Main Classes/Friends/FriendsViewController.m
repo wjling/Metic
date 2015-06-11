@@ -336,16 +336,23 @@
     NSMutableArray* textCharRange_arr = [[NSMutableArray alloc]init];
     NSInteger location = 0;
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
-//    NSLog(@"PINYIN head: %@",temp_text_head);
-    NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-//    NSLog(@"text: %@, keyword: %@", text, keyWord);
-    if (range_text.length > 0) {
-        NSValue* value = [NSValue valueWithRange:range_text];
-        [ranges_arr addObject:value];
-//        NSLog(@"colored range1: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+
+    if ([CommonUtils isIncludeChineseInString:keyWord]) { //搜索字串包含中文
+        NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+        
+        if (range_text.length > 0) {
+            NSValue* value = [NSValue valueWithRange:range_text];
+            [ranges_arr addObject:value];
+        }
     }
-//    else
+    else //搜索字串不包含中文
     {
+        NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+        
+        if (range_text.length > 0) {
+            NSValue* value = [NSValue valueWithRange:range_text];
+            [ranges_arr addObject:value];
+        }
         NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
         if (range_head.length > 0) {
             NSValue* value = [NSValue valueWithRange:range_head];
@@ -798,6 +805,9 @@
 //        richTextLabel.font = [UIFont systemFontOfSize:17.0f];
 //        richTextLabel.textColor = [UIColor grayColor];
 //        [cell.contentView addSubview:richTextLabel];
+        if (!self.searchFriendKeyWordRangeArr) {
+            return nil;
+        }
         UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
         NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc]initWithString:name];
         NSMutableArray* rangeArr = [self.searchFriendKeyWordRangeArr objectAtIndex:indexPath.row];
@@ -938,6 +948,7 @@
     searchFriendList = [[NSMutableArray alloc]init];
     searchFriendKeyWordRangeArr = [[NSMutableArray alloc]init];
     if (friendSearchBar.text.length>0&&![CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
+        //搜索字串不含中文
         for (int i=0; i<friendList.count; i++) {
             NSMutableDictionary* aFriend = [friendList objectAtIndex:i];
             NSString* fname = [aFriend objectForKey:@"name"];
@@ -949,30 +960,31 @@
             if (falias && ![falias isEqual:[NSNull null]]) {
                 text = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
             }
-            if ([CommonUtils isIncludeChineseInString:text]) {
+            if ([CommonUtils isIncludeChineseInString:text]) { //好友名+好友备注 包含中文 | 搜索字串不包含中文
                 NSString *tempPinYinStr = [CommonUtils pinyinFromNSString:text];
                 NSRange titleResult=[tempPinYinStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                if (titleResult.length>0) {
+                if (titleResult.length>0) //好友名+好友备注 转化成拼音
+                {
                     NSInteger location = 0;
                     //比较用户名name
                     if ([CommonUtils isIncludeChineseInString:fname]) {
-                        for (NSInteger i = 0; i < fname.length; i++) {
-                            NSString* char_pinyin = [CommonUtils pinyinFromNSString:[fname substringWithRange:NSMakeRange(i, 1)]];
+                        for (NSInteger j = 0; j < fname.length; j++) {
+                            NSString* char_pinyin = [CommonUtils pinyinFromNSString:[fname substringWithRange:NSMakeRange(j, 1)]];
                             NSString* long_str = char_pinyin;
                             NSString* short_str = [friendSearchBar.text substringFromIndex:location];
-                            if (friendSearchBar.text.length > long_str.length) {
-                                long_str = friendSearchBar.text;
+                            if (short_str.length > long_str.length) {
+                                long_str = short_str;
                                 short_str = char_pinyin;
                             }
                             NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
                             if (compareResult_range.location != 0) {
-                                break;
+                                continue;
                             }
                             location += short_str.length;
                             if (location == friendSearchBar.text.length) {
                                 [searchFriendList addObject:friendList[i]];
                                 [self getRangesOfText:text withKeyWord:friendSearchBar.text];
-                                break;
+                                continue;
                             }
                             
                         }
@@ -990,14 +1002,14 @@
                     
                     //比较备注名alias
                     if (falias && ![falias isEqual:[NSNull null]]) {
-                        location = 0;
                         if ([CommonUtils isIncludeChineseInString:falias]) {
-                            for (NSInteger i = 0; i < falias.length; i++) {
-                                NSString* char_pinyin = [CommonUtils pinyinFromNSString:[falias substringWithRange:NSMakeRange(i, 1)]];
+                            location = 0;
+                            for (NSInteger j = 0; j < falias.length; j++) {
+                                NSString* char_pinyin = [CommonUtils pinyinFromNSString:[falias substringWithRange:NSMakeRange(j, 1)]];
                                 NSString* long_str = char_pinyin;
                                 NSString* short_str = [friendSearchBar.text substringFromIndex:location];
-                                if (friendSearchBar.text.length > long_str.length) {
-                                    long_str = friendSearchBar.text;
+                                if (short_str.length > long_str.length) {
+                                    long_str = short_str;
                                     short_str = char_pinyin;
                                 }
                                 NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
@@ -1039,7 +1051,7 @@
 //                    [searchFriendList addObject:friendList[i]];
 //                    [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                 }
-                else //好友信息（好友名+好友备注）转化成拼音首字母
+                else //好友名+好友备注 转化成拼音首字母
                 {
                     NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:text];
                     NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];

@@ -1830,8 +1830,11 @@ enum Response_Type
                     [MTUser_historicalMsg insertObject:msg_dic atIndex:0];
                     
                     bool f = YES;
-                    for(NSInteger i = [MTUser sharedInstance].friendList.count; i >= 0; i--){
+                    for(NSInteger i = [MTUser sharedInstance].friendList.count - 1; i >= 0; i--){
                         NSDictionary* afriend = [[MTUser sharedInstance].friendList objectAtIndex:i];
+                        if (!afriend) {
+                            continue;
+                        }
                         NSNumber* friend_id = [afriend objectForKey:@"id"];
                         if ([friend_id integerValue] == fid1) {
                             f = NO;
