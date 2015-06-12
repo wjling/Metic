@@ -72,6 +72,7 @@
 
 -(void)okBtnClick
 {
+    [alias_view resignFirstResponder];
     alias_new = alias_view.text? alias_view.text:@"";
     NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                      [MTUser sharedInstance].userid, @"id",

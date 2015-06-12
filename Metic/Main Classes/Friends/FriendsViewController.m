@@ -149,19 +149,7 @@
     friendCount_label.textAlignment = NSTextAlignmentCenter;
     friendCount_label.text = @"";
     friendCount_label.textColor = [UIColor grayColor];
-//    UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc]init];
-//    indicator.center = friendCount_label.center;
-//    indicator.tag = 111;
-//    [friendCount_label addSubview:indicator];
-//    [indicator startAnimating];
     self.friendTableView.tableFooterView = friendCount_label;
-//    self.searchDisplayController.delegate = self;
-//    self.searchDisplayController.searchResultsDelegate = self;
-//    self.searchDisplayController.searchResultsDataSource = self;
-    
-//    UIImage* img = [[UIImage imageNamed:@"添加好友icon.png"] stretchableImageWithLeftCapWidth:3 topCapHeight: 3];
-//    [self.addFriendBtn setBackButtonBackgroundImage:img forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    
 }
 
 - (void)initTableData
@@ -295,13 +283,6 @@
             }
         }
         NSLog(@"table data init done");
-        //    self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-        //    self.sectionArray = [[MTUser sharedInstance] sectionArray];
-        //    NSLog(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
-        //    [self.friendTableView reloadData];
-        
-        
-
     }
     @catch (NSException *exception) {
         NSLog(@"init friend table exception: %@", exception);
@@ -334,12 +315,12 @@
     }
     NSMutableArray* ranges_arr = [[NSMutableArray alloc]init];
     NSMutableArray* textCharRange_arr = [[NSMutableArray alloc]init];
+    
     NSInteger location = 0;
     NSString* temp_text_head = [CommonUtils pinyinHeadFromNSString:text];
 
     if ([CommonUtils isIncludeChineseInString:keyWord]) { //搜索字串包含中文
         NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-        
         if (range_text.length > 0) {
             NSValue* value = [NSValue valueWithRange:range_text];
             [ranges_arr addObject:value];
@@ -350,33 +331,46 @@
         NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
         
         if (range_text.length > 0) {
-            NSValue* value = [NSValue valueWithRange:range_text];
-            [ranges_arr addObject:value];
+            NSInteger startIndex = 0;
+            while (range_text.location != NSNotFound) {
+                range_text.location += startIndex;
+                NSValue* value = [NSValue valueWithRange:range_text];
+                [ranges_arr addObject:value];
+                startIndex = range_text.location + range_text.length;
+                NSString* sub_text = [text substringFromIndex:startIndex];
+                range_text = [sub_text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+            }
+            
         }
+        
         NSRange range_head = [temp_text_head rangeOfString:keyWord options:NSCaseInsensitiveSearch];
         if (range_head.length > 0) {
             NSValue* value = [NSValue valueWithRange:range_head];
             [ranges_arr addObject:value];
         }
-        else
-        {
-            NSString* temp_text_all = [CommonUtils pinyinFromNSString:text];
-            NSInteger checkStringEnd = 0;
-            //        NSLog(@"PINYIN all: %@",temp_text_all);
-            for (NSInteger i = 0; i < text.length; i++) {
-                NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
-                NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
-                [textCharRange_arr addObject:value];
-                location = location + char_str.length;
-            }
+        
+        for (NSInteger i = 0; i < text.length; i++) {
+            NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
+            NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
+            [textCharRange_arr addObject:value];
+            location = location + char_str.length;
+        }
+        NSInteger range_all_end = 0;
+        NSString* text_pinyin = [CommonUtils pinyinFromNSString:text];
+        NSInteger range_zuoKuohao = 0;
+        NSInteger name_alias_flag = 0;
+        while (name_alias_flag < 2) {
+            NSRange range_youKuohao = [text_pinyin rangeOfString:@")"];
+            NSString* temp_text_all = [text_pinyin substringWithRange:NSMakeRange(range_zuoKuohao, text_pinyin.length - range_zuoKuohao - range_youKuohao.length)];
             NSRange range_all = [temp_text_all rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-            if (range_all.location >= temp_text_all.length) {
-                return;
+            if (range_all.location == NSNotFound) {
+                break;
             }
-            //        NSInteger range_all_begin = range_all.location;
-            NSInteger range_all_end = range_all.length + range_all.location - 1;
-            //        NSLog(@"temp_text_all range2: (%d,%d)",range_all.location,range_all.length);
+            range_all.location += range_zuoKuohao;
+            range_all_end = range_all.length + range_all.location;
+            
             NSInteger begin = -1, end = -1;
+            NSInteger checkStringEnd = 0; //检查过的字符的末尾，即下次检查的开头
             BOOL beginSet = NO;
             for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
                 NSRange range = [textCharRange_arr[i] rangeValue];
@@ -393,11 +387,11 @@
                 }
                 if(beginSet)
                 {
-                    if (checkStringEnd <= range_all_end && range_all_end < checkStringEnd + range.length) {
+                    if (checkStringEnd <= range_all_end - 1  && range_all_end - 1 < checkStringEnd + range.length) {
                         end = i;
                         break;
                     }
-                    else if (checkStringEnd > range_all_end)
+                    else if (checkStringEnd >= range_all_end - 1)
                     {
                         end = i - 1;
                         break;
@@ -410,15 +404,30 @@
             //            end = textCharRange_arr.count - 1;
             //        }
             //        NSLog(@"colored begin: %d, end: %d",begin,end);
-            NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, end - begin + 1)];
+            NSInteger final_end = end - begin + 1;
+            if (final_end <= 0 || final_end > textCharRange_arr.count - 1) {
+                final_end = 1;
+            }
+            NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, final_end)];
             [ranges_arr addObject:value];
-//                    NSLog(@"colored range2: (%d,%d)",[value rangeValue].location,[value rangeValue].length);
+            NSLog(@"%@, colored range2: (%ld,%ld)",text,[value rangeValue].location,[value rangeValue].length);
             
+            range_zuoKuohao = [text_pinyin rangeOfString:@"(" options:NSCaseInsensitiveSearch].location + 1;
+            if (range_zuoKuohao < text_pinyin.length && range_zuoKuohao >= 0) {
+                name_alias_flag++;
+            }
+            else
+            {
+                break;
+            }
         }
-        
     }
     [self.searchFriendKeyWordRangeArr addObject:ranges_arr];
     
+}
+
+-(void)getHighlightedRangeUserInfo:(NSString*)user_text withKeyWord:(NSString*)keyword
+{
     
 }
 
@@ -565,52 +574,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSInteger section = indexPath.section;
-//    NSInteger row = indexPath.row;
-//    NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
-//    NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
-//    selectedFriendID = [aFriend objectForKey:@"id"];
-//    NSLog(@"get1 fid value: %@",selectedFriendID);
     if (tableView == self.friendSearchDisplayController.searchResultsTableView) {
         [self.friendSearchDisplayController setActive:NO animated:YES];
         NSMutableDictionary* aFriend = [searchFriendList objectAtIndex:indexPath.row];
-//        NSString* fname;
-//        NSString* falias = [aFriend objectForKey:@"alias"];
-//        if (falias && ![falias isEqual:[NSNull null]]) {
-//            fname = falias;
-//        }
-//        else
-//        {
-//            fname = [aFriend objectForKey:@"name"];
-//        }
-//        NSString* fname_head = [CommonUtils pinyinHeadFromNSString:[fname substringToIndex:1]].uppercaseString;
-////        NSLog(@"fname head: %@",fname_head);
-//        NSInteger section = [sectionArray indexOfObject:fname_head];
-//        if (section >= sectionArray.count)
-//        {
-//            section = sectionArray.count - 1;
-//        }
-//        NSInteger row;
-//        NSMutableArray* friends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
-//        for (NSInteger i = 0; i < friends.count; i++) {
-//            NSMutableDictionary* friend = [friends objectAtIndex:i];
-//            NSString* name;
-//            NSString* alias = [friend objectForKey:@"alias"];
-//            if (alias && ![alias isEqual:[NSNull null]]) {
-//                name = alias;
-//            }
-//            else
-//            {
-//                name = [friend objectForKey:@"name"];
-//            }
-//            if ([name isEqualToString:fname]) {
-//                row = i;
-//                break;
-//            }
-//        }
-//        NSIndexPath* indexP = [NSIndexPath indexPathForRow:row inSection:section];
-////        NSLog(@"searched friend in section %d row %d", section, row);
-//        [self.friendTableView scrollToRowAtIndexPath:indexP atScrollPosition:UITableViewScrollPositionTop animated:YES];
         NSNumber* fID = [aFriend objectForKey:@"id"];
         selectedFriendID = fID;
         [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self]; 
@@ -620,9 +586,6 @@
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
                 [self performSegueWithIdentifier:@"friendCenter_friendRecommendation" sender:self];
-//                UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-//                FriendRecommendationViewController* vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FriendRecommendationViewController"];
-//                [self.navigationController pushViewController:vc animated:YES];
             }
         }
         else
@@ -731,10 +694,13 @@
     NSInteger row = indexPath.row;
     if (tableView == friendTableView) {
         if (section >= self.sectionArray.count) {
-            return nil;
+            return [[UITableViewCell alloc]init];
         }
         NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
         if (groupOfFriends) {
+            if (row >= groupOfFriends.count) {
+                return [[UITableViewCell alloc]init];
+            }
             NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
             NSString* label = [aFriend objectForKey:@"name"];
             NSNumber* fid = [aFriend objectForKey:@"id"];
@@ -783,6 +749,9 @@
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"] ;
         }
+        if (row >= searchFriendList.count) {
+            return cell;
+        }
         NSMutableDictionary* friend_dic = [searchFriendList objectAtIndex:row];
         NSString* name = [friend_dic objectForKey:@"name"];
         NSString* alias = [friend_dic objectForKey:@"alias"];
@@ -790,29 +759,19 @@
         if (alias && ![alias isEqual:[NSNull null]]) {
             name = [NSString stringWithFormat:@"%@ (%@)", alias, name];
         }
-//        for(UIView * elem in [cell.contentView subviews])
-//        {
-//            if([elem isKindOfClass:[BDSuggestLabel class]])
-//            {
-//                NSLog(@"remove");
-//                [elem removeFromSuperview];
-//            }
-//        }
-//        BDSuggestLabel * richTextLabel = [[BDSuggestLabel alloc] initWithFrame:CGRectMake(10, 10, 300, 25)];
-//        richTextLabel.text = [friend_dic objectForKey:@"name"];
-//        richTextLabel.keyWord = friendSearchBar.text;//设置当前搜索的关键字
-//        richTextLabel.backgroundColor = [UIColor clearColor];
-//        richTextLabel.font = [UIFont systemFontOfSize:17.0f];
-//        richTextLabel.textColor = [UIColor grayColor];
-//        [cell.contentView addSubview:richTextLabel];
-        if (!self.searchFriendKeyWordRangeArr) {
-            return nil;
+
+        if (!self.searchFriendKeyWordRangeArr || indexPath.row >= self.searchFriendKeyWordRangeArr.count) {
+            return cell;
         }
+        
         UIColor *color = [UIColor colorWithRed:0.29 green:0.76 blue:0.61 alpha:1];
         NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc]initWithString:name];
         NSMutableArray* rangeArr = [self.searchFriendKeyWordRangeArr objectAtIndex:indexPath.row];
         for (NSInteger i = 0; i < rangeArr.count; i++) {
             NSRange range = [[rangeArr objectAtIndex:i] rangeValue];
+            if (range.location > attrStr.length - 1 || range.length > attrStr.length) {
+                continue;
+            }
             [attrStr addAttribute:NSForegroundColorAttributeName
                             value:color
                             range:range];
@@ -853,7 +812,7 @@
     }
     
     
-    return nil;
+    return [[UITableViewCell alloc]init];
     
 }
 
@@ -957,7 +916,7 @@
             if (!fname || [fname isEqual:[NSNull null]]) {
                 return;
             }
-            if (falias && ![falias isEqual:[NSNull null]]) {
+            if (falias && ![falias isEqual:[NSNull null]] && ![falias isEqualToString:@""]) {
                 text = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
             }
             if ([CommonUtils isIncludeChineseInString:text]) { //好友名+好友备注 包含中文 | 搜索字串不包含中文
@@ -984,9 +943,12 @@
                             if (location == friendSearchBar.text.length) {
                                 [searchFriendList addObject:friendList[i]];
                                 [self getRangesOfText:text withKeyWord:friendSearchBar.text];
-                                continue;
+                                break;
                             }
                             
+                        }
+                        if (location == friendSearchBar.text.length) {
+                            continue;
                         }
                     }
                     else
@@ -1076,7 +1038,7 @@
                 NSRange titleResult=[text rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                 if (titleResult.length>0) {
                     NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                    if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
+                    if (titleResult_fname.length == 0) {
                         if (falias && ![falias isEqual:[NSNull null]]) {
                             NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                             if (titleResult_falias.length == 0 || titleResult_falias.location > 0) {
@@ -1095,7 +1057,7 @@
             }
         }
     }
-    else if (friendSearchBar.text.length>0&&[CommonUtils isIncludeChineseInString:friendSearchBar.text]) {
+    else if (friendSearchBar.text.length>0&&[CommonUtils isIncludeChineseInString:friendSearchBar.text]) { //搜索字段包含中文
         for (int i = 0; i < friendList.count; i++) {
             NSMutableDictionary* tempDic = [friendList objectAtIndex:i];
             NSString* fname = [tempDic objectForKey:@"name"];
@@ -1113,8 +1075,8 @@
                     if (!falias) {
                         continue;
                     }
-                    NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                    if (titleResult_fname.length == 0 || titleResult_fname.location > 0) {
+                    NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+                    if (titleResult_falias.length == 0) {
                         continue;
                     }
                 }
