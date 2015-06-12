@@ -756,7 +756,7 @@
         NSString* name = [friend_dic objectForKey:@"name"];
         NSString* alias = [friend_dic objectForKey:@"alias"];
         NSNumber* fid = [friend_dic objectForKey:@"id"];
-        if (alias && ![alias isEqual:[NSNull null]]) {
+        if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
             name = [NSString stringWithFormat:@"%@ (%@)", alias, name];
         }
 
@@ -1066,7 +1066,7 @@
             if (!fname || [fname isEqual:[NSNull null]]) {
                 return;
             }
-            if (falias && ![falias isEqual:[NSNull null]]) {
+            if (falias && ![falias isEqual:[NSNull null]] && ![falias isEqualToString:@""]) {
                 text = [NSString stringWithFormat:@"%@ (%@)", falias, fname];
             }
             NSRange titleResult=[text rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];

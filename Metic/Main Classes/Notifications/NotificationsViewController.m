@@ -284,6 +284,14 @@ enum Response_Type
             }
         }
             break;
+        case CHANGE_EVENT_INFO_NOTIFICATION:
+        {
+            [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+            if (!label0.hidden) {
+                label0.hidden = YES;
+            }
+        }
+            break;
             
         default:
             break;
@@ -490,17 +498,18 @@ enum Response_Type
             NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
             NSInteger event_id1 = [[MTUser_msg_dic objectForKey:@"event_id"]integerValue];
             NSInteger fid1 = [[MTUser_msg_dic objectForKey:@"id"]integerValue];
-            
-            for (NSMutableDictionary* msg_dic in self.eventRequestMsg) {
-                NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
-                NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
-                NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
-                
-                if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
-//                    NSLog(@"\ncmd1: %d, cmd2: %d\nevent_id1: %d, event_id2: %d\nfid1: %d, fid2: %d",cmd1,cmd2,event_id1,event_id2,fid1,fid2);
-                    flag = NO;
-                    break;
+            if (cmd1 != CHANGE_EVENT_INFO_NOTIFICATION) {
+                for (NSMutableDictionary* msg_dic in self.eventRequestMsg) {
+                    NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
+                    NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                    NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
+                    
+                    if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
+                        flag = NO;
+                        break;
+                    }
                 }
+
             }
             if (flag) {
                 [self.eventRequestMsg addObject:MTUser_msg_dic];

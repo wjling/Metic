@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "455733328.844234"
+            timestampString = "455816991.866343"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1639"
-            endingLineNumber = "1639"
+            startingLineNumber = "1648"
+            endingLineNumber = "1648"
             landmarkName = "-friend_request_noBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "455733328.844234"
+            timestampString = "455816991.866343"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1659"
-            endingLineNumber = "1659"
+            startingLineNumber = "1668"
+            endingLineNumber = "1668"
             landmarkName = "-delSystemMsg:"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,6 +234,22 @@
             startingLineNumber = "364"
             endingLineNumber = "364"
             landmarkName = "-getRangesOfText:withKeyWord:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
+            timestampString = "455814570.362411"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "916"
+            endingLineNumber = "916"
+            landmarkName = "-searchBar:textDidChange:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
