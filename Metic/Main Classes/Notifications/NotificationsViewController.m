@@ -284,6 +284,14 @@ enum Response_Type
             }
         }
             break;
+        case CHANGE_EVENT_INFO_NOTIFICATION:
+        {
+            [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+            if (!label0.hidden) {
+                label0.hidden = YES;
+            }
+        }
+            break;
             
         default:
             break;
@@ -490,17 +498,18 @@ enum Response_Type
             NSInteger cmd1 = [[MTUser_msg_dic objectForKey:@"cmd"]integerValue];
             NSInteger event_id1 = [[MTUser_msg_dic objectForKey:@"event_id"]integerValue];
             NSInteger fid1 = [[MTUser_msg_dic objectForKey:@"id"]integerValue];
-            
-            for (NSMutableDictionary* msg_dic in self.eventRequestMsg) {
-                NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
-                NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
-                NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
-                
-                if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
-//                    NSLog(@"\ncmd1: %d, cmd2: %d\nevent_id1: %d, event_id2: %d\nfid1: %d, fid2: %d",cmd1,cmd2,event_id1,event_id2,fid1,fid2);
-                    flag = NO;
-                    break;
+            if (cmd1 != CHANGE_EVENT_INFO_NOTIFICATION) {
+                for (NSMutableDictionary* msg_dic in self.eventRequestMsg) {
+                    NSInteger cmd2 = [[msg_dic objectForKey:@"cmd"]integerValue];
+                    NSInteger event_id2 = [[msg_dic objectForKey:@"event_id"]integerValue];
+                    NSInteger fid2 = [[msg_dic objectForKey:@"id"]integerValue];
+                    
+                    if (cmd1 == cmd2 && event_id1 == event_id2 && fid1 == fid2) {
+                        flag = NO;
+                        break;
+                    }
                 }
+
             }
             if (flag) {
                 [self.eventRequestMsg addObject:MTUser_msg_dic];
@@ -926,7 +935,6 @@ enum Response_Type
                 break;
             case NEW_EVENT_NOTIFICATION:
             case REQUEST_EVENT:
-            case CHANGE_EVENT_INFO_NOTIFICATION:
             {
                 NSInteger cmd2;
                 NSInteger eventid1, eventid2;
@@ -944,6 +952,14 @@ enum Response_Type
                     }
                 }
                 
+                [self.eventRequestMsg insertObject:msg_dic atIndex:0];
+                if (!label0.hidden) {
+                    label0.hidden = YES;
+                }
+            }
+                break;
+            case CHANGE_EVENT_INFO_NOTIFICATION:
+            {
                 [self.eventRequestMsg insertObject:msg_dic atIndex:0];
                 if (!label0.hidden) {
                     label0.hidden = YES;
@@ -1039,21 +1055,25 @@ enum Response_Type
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == self.eventRequest_tableView) {
-        NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-//        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_label.frame.size.width);
-//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label0.frame.origin.x);
-        if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
-//            //跳转活动预览页面进行处理
-//            NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
-//            EventPreviewViewController* preVC = [[EventPreviewViewController alloc]init];
-//            preVC.eventInfo = msg_dic;
-//            preVC.beingInvited = @1;
-//            [self.navigationController pushViewController:preVC animated:YES];
-//            return;
-            //跳转活动邀请页面进行处理
-            [self eventBtnClicked:self];
+        NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
+        NSInteger cmd = [[msg_dic objectForKey:@"cmd"]integerValue];
+        if (cmd == CHANGE_EVENT_INFO_NOTIFICATION) { //cmd 990
+            
         }
-
+        else
+        {
+            NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+            if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
+                
+//                EventPreviewViewController* preVC = [[EventPreviewViewController alloc]init];
+//                preVC.eventInfo = msg_dic;
+//                preVC.beingInvited = @1;
+//                [self.navigationController pushViewController:preVC animated:YES];
+//                return;
+                [self eventBtnClicked:self];
+            }
+        }
+        
     }
     else if (tableView == self.friendRequest_tableView)
     {
@@ -1264,7 +1284,8 @@ enum Response_Type
                 NotificationsSystemMessageTableViewCell* cell = [self.eventRequest_tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
                 cell1 = cell;
                 NSString* content = [msg_dic objectForKey:@"content"];
-                cell.title_label.text = @"活动消息";
+                NSString* subject = [msg_dic objectForKey:@"subject"];
+                cell.title_label.text = [NSString stringWithFormat:@"%@",subject];
                 if (content) {
                     NSString* content_text = @"无";
                     if ([content isEqualToString:@"subject"]) {

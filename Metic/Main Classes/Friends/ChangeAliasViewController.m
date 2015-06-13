@@ -7,6 +7,7 @@
 //
 
 #import "ChangeAliasViewController.h"
+#import "SVProgressHUD.h"
 
 @interface ChangeAliasViewController ()
 {
@@ -72,6 +73,8 @@
 
 -(void)okBtnClick
 {
+    [SVProgressHUD showWithStatus:@"正在提交" maskType:SVProgressHUDMaskTypeClear];
+    [alias_view resignFirstResponder];
     alias_new = alias_view.text? alias_view.text:@"";
     NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                      [MTUser sharedInstance].userid, @"id",
@@ -91,9 +94,7 @@
         else
         {
             NSLog(@"修改备注名，收到的rData为空");
-            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            [SVProgressHUD dismissWithError:@"网络异常"];
             return;
         }
         NSLog(@"修改备注名,Received Data: %@",temp);
@@ -103,23 +104,25 @@
         switch (cmd) {
             case NORMAL_REPLY:
             {
-                dispatch_async(dispatch_get_main_queue(), ^
+                dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
                                    [[MTUser sharedInstance].alias_dic setValue:alias_new forKey:[NSString stringWithFormat:@"%@",fid]];
                                    [[MTUser sharedInstance] aliasDicDidChanged];
                                });
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"备注名修改成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-                [alert show];
-                [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlertView:) userInfo:alert repeats:NO];
-                
+    
+                [SVProgressHUD dismissWithSuccess:@"备注名修改成功"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
             }
                 break;
                 
             default:
             {
-                UIAlertView* alert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"备注名修改失败" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-                [alert show];
-                [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlertView:) userInfo:alert repeats:NO];
+                [SVProgressHUD dismissWithError:@"备注名修改失败"];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
             }
                 break;
         }
@@ -127,18 +130,4 @@
     HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:ALIAS_OPERATION finshedBlock:setAliasDone];
 }
-
--(void)dismissAlert:(NSTimer*)timer
-{
-    UIAlertView* alert = [timer userInfo];
-    [alert dismissWithClickedButtonIndex:0 animated:YES];
-}
-
--(void)dismissAlertView:(NSTimer*)timer
-{
-    UIAlertView* alertview = [timer userInfo];
-    [alertview dismissWithClickedButtonIndex:0 animated:YES];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 @end
