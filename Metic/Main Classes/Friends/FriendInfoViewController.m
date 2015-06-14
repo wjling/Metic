@@ -332,6 +332,7 @@
     self.fInfoView_imgV.contentMode = UIViewContentModeScaleAspectFill;
     self.fInfoView_imgV.clipsToBounds = YES;
     self.fInfoView_imgV.image = [UIImage imageNamed:@"默认用户头像"];
+    [self.fInfoView_imgV setImageToBlur:[UIImage imageNamed:@"默认用户头像"] blurRadius:6 brightness:-0.1 completionBlock:nil];
     
     PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
     [getter getAvatarWithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
