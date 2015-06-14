@@ -230,6 +230,13 @@
     [friend_alias_button setTitle:@"修改备注名" forState:UIControlStateNormal];
     [friend_alias_button.titleLabel setFont:[UIFont systemFontOfSize:11]];
     [friend_alias_button addTarget:self action:@selector(changeAlias:) forControlEvents:UIControlEventTouchUpInside];
+    if ([[MTUser sharedInstance].friendsIdSet containsObject:fid]) {
+        friend_alias_button.hidden = NO;
+    }
+    else
+    {
+        friend_alias_button.hidden = YES;
+    }
     
 //    self.fInfoView.layer.borderColor
 //    [self.fInfoView addSubview:fInfoView_imgV];
