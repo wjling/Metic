@@ -130,7 +130,7 @@
     
     
     NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-    if (launcher == nil || [launcher isEqual:[NSNull null]]) {
+    if (launcher == nil || [launcher isEqual:[NSNull null]] || [launcher isEqualToString:@""]) {
         launcher = [data valueForKey:@"launcher"];
     }
     

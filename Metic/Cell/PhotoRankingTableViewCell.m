@@ -44,7 +44,7 @@
 {
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_photoInfo valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]]) {
+    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
         alias = [_photoInfo valueForKey:@"author"];
     }
     self.author.text = alias;
