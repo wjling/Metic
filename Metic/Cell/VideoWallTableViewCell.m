@@ -137,7 +137,7 @@
 
     //显示备注名
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]]) {
+    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
         alias = [_videoInfo valueForKey:@"author"];
     }
     self.author.text = alias;
