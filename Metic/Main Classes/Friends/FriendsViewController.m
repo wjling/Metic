@@ -359,6 +359,7 @@
         
         if (range_text.length > 0) {
             NSInteger startIndex = 0;
+            NSInteger count = keyWord.length;
             while (range_text.location != NSNotFound) {
                 range_text.location += startIndex;
                 NSValue* value = [NSValue valueWithRange:range_text];
@@ -366,6 +367,7 @@
                 startIndex = range_text.location + range_text.length;
                 NSString* sub_text = [text substringFromIndex:startIndex];
                 range_text = [sub_text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+                count--;
             }
             
         }
@@ -376,7 +378,7 @@
             [ranges_arr addObject:value];
         }
         
-        for (NSInteger i = 0; i < text.length; i++) {
+        for (NSInteger i = 0;i < text.length; i++) {
             NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
             NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
             [textCharRange_arr addObject:value];
@@ -399,7 +401,7 @@
             NSInteger begin = -1, end = -1;
             NSInteger checkStringEnd = 0; //检查过的字符的末尾，即下次检查的开头
             BOOL beginSet = NO;
-            for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
+            for (NSInteger i = 0;i < textCharRange_arr.count; i++) {
                 NSRange range = [textCharRange_arr[i] rangeValue];
                 if (!beginSet) {
                     if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
