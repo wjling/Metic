@@ -46,7 +46,7 @@
     for (int i = 0; i < notFriendsList.count; i++) {
         NSNumber* fid = notFriendsList[i];
         NSString* fname = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        if (fname == nil || [fname isEqual:[NSNull null]]) {
+        if (fname == nil || [fname isEqual:[NSNull null]] || [fname isEqualToString:@""]) {
             fname = [[MTUser sharedInstance].nameFromID_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
         }
         

@@ -1339,7 +1339,7 @@
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
-        if (author == nil || [author isEqual:[NSNull null]]) {
+        if (author == nil || [author isEqual:[NSNull null]] || [author isEqualToString:@""]) {
             author = [mainCom valueForKey:@"author"];
         }
         ((UILabel*)[cell viewWithTag:2]).text = author;
@@ -1356,11 +1356,11 @@
         if ([[mainCom valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
-            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]] || [alias1 isEqualToString:@""]) {
                 alias1 = [mainCom valueForKey:@"author"];
             }
             alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
                 alias2 = [mainCom valueForKey:@"replier"];
             }
             text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
@@ -1460,7 +1460,7 @@
         cell.ScommentDict = subCom;
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-        if (author == nil || [author isEqual:[NSNull null]]) {
+        if (author == nil || [author isEqual:[NSNull null]] || [author isEqualToString:@""]) {
             author = [subCom valueForKey:@"author"];
         }
         NSString* text = [subCom valueForKey:@"content"];
@@ -1468,17 +1468,17 @@
         if ([[subCom valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]] || [alias1 isEqualToString:@""]) {
                 alias1 = [subCom valueForKey:@"author"];
             }
             alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
                 alias2 = [subCom valueForKey:@"replier"];
             }
             text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
         }else{
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]] || [alias1 isEqualToString:@""]) {
                 alias1 = [subCom valueForKey:@"author"];
             }
             text = [NSString stringWithFormat:@"%@: %@",alias1,text];
@@ -1581,17 +1581,17 @@
         if ([[subCom valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]] || [alias1 isEqualToString:@""]) {
                 alias1 = [subCom valueForKey:@"author"];
             }
             alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]]) {
+            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
                 alias2 = [subCom valueForKey:@"replier"];
             }
             text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
         }else{
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[subCom valueForKey:@"author_id"]]];
-            if (alias1 == nil || [alias1 isEqual:[NSNull null]]) {
+            if (alias1 == nil || [alias1 isEqual:[NSNull null]] || [alias1 isEqualToString:@""]) {
                 alias1 = [subCom valueForKey:@"author"];
             }
             text = [NSString stringWithFormat:@"%@: %@",alias1,text];
