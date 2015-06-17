@@ -313,6 +313,17 @@
         || [text isEqual:[NSNull null]] || [text isEqual:[NSNull null]]) {
         return;
     }
+    NSRange range_zuokuohao = [text rangeOfString:@"(" options:NSCaseInsensitiveSearch];
+    NSString* fname = @"";
+    NSString* falias = @"";
+    if (range_zuokuohao.length > 0) {
+        fname = [text substringToIndex:range_zuokuohao.location - 1];
+        falias = [text substringWithRange:NSMakeRange(range_zuokuohao.location + 1, text.length - range_zuokuohao.location - 1)];
+    }
+    else
+    {
+        fname = text;
+    }
     NSMutableArray* ranges_arr = [[NSMutableArray alloc]init];
     NSMutableArray* textCharRange_arr = [[NSMutableArray alloc]init];
     
@@ -321,10 +332,26 @@
 
     if ([CommonUtils isIncludeChineseInString:keyWord]) { //搜索字串包含中文
         NSRange range_text = [text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
-        if (range_text.length > 0) {
-            NSValue* value = [NSValue valueWithRange:range_text];
-            [ranges_arr addObject:value];
+        if (range_text.length > 0 && range_text.location < text.length) {
+            NSRange range_name = [fname rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+            if (range_name.length > 0 && range_name.location < fname.length) {
+                NSValue* value = [NSValue valueWithRange:range_name];
+                [ranges_arr addObject:value];
+            }
         }
+        
+        if (![falias isEqualToString:@""]) {
+            NSRange range_alias = [falias rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+            if (range_alias.length > 0 && range_alias.location < falias.length) {
+                NSInteger begin = range_zuokuohao.location + 1 + range_alias.location;
+                if (begin > 0 && begin < text.length) {
+                    NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, range_alias.length)];
+                    [ranges_arr addObject:value];
+                }
+                
+            }
+        }
+        
     }
     else //搜索字串不包含中文
     {
@@ -332,6 +359,7 @@
         
         if (range_text.length > 0) {
             NSInteger startIndex = 0;
+            NSInteger count = keyWord.length;
             while (range_text.location != NSNotFound) {
                 range_text.location += startIndex;
                 NSValue* value = [NSValue valueWithRange:range_text];
@@ -339,6 +367,7 @@
                 startIndex = range_text.location + range_text.length;
                 NSString* sub_text = [text substringFromIndex:startIndex];
                 range_text = [sub_text rangeOfString:keyWord options:NSCaseInsensitiveSearch];
+                count--;
             }
             
         }
@@ -349,7 +378,7 @@
             [ranges_arr addObject:value];
         }
         
-        for (NSInteger i = 0; i < text.length; i++) {
+        for (NSInteger i = 0;i < text.length; i++) {
             NSString* char_str = [CommonUtils pinyinFromNSString:[text substringWithRange:NSMakeRange(i, 1)]];
             NSValue* value = [NSValue valueWithRange:NSMakeRange(location, char_str.length)];
             [textCharRange_arr addObject:value];
@@ -372,7 +401,7 @@
             NSInteger begin = -1, end = -1;
             NSInteger checkStringEnd = 0; //检查过的字符的末尾，即下次检查的开头
             BOOL beginSet = NO;
-            for (NSInteger i = 0; i < textCharRange_arr.count; i++) {
+            for (NSInteger i = 0;i < textCharRange_arr.count; i++) {
                 NSRange range = [textCharRange_arr[i] rangeValue];
                 if (!beginSet) {
                     if (checkStringEnd <= range_all.location && range_all.location < checkStringEnd + range.length) {
@@ -1071,15 +1100,15 @@
             }
             NSRange titleResult=[text rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
             if (titleResult.length>0) {
-                if (titleResult.location != 0 ) {
-                    if (!falias) {
-                        continue;
-                    }
-                    NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                    if (titleResult_falias.length == 0) {
-                        continue;
-                    }
-                }
+//                if (titleResult.location != 0 ) {
+//                    if (!falias) {
+//                        continue;
+//                    }
+//                    NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+//                    if (titleResult_falias.length == 0) {
+//                        continue;
+//                    }
+//                }
                 [searchFriendList addObject:tempDic];
                 [self getRangesOfText:text withKeyWord:friendSearchBar.text];
             }

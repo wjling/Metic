@@ -509,12 +509,16 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
+    avatar = croppedImage;
+    [self.info_tableview reloadData];
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:22 viewController:self];
     [getter uploadAvatar];
 }
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
 {
+    avatar = [UIImage imageNamed:@"默认用户头像"];
+    [self.info_tableview reloadData];
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }
 

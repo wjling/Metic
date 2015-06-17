@@ -199,9 +199,14 @@
         case 0:
             switch ([alertView tag]) {
                 case 101:
+                {
 //                    [self removeWaitingView];
-                    [self.confirm_Button setEnabled:YES];
-                    [self.navigationController popViewControllerAnimated:YES];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.confirm_Button setEnabled:YES];
+                        [self.navigationController popViewControllerAnimated:YES];
+                    });
+                }
+                    
                     break;
                     
                 default:
