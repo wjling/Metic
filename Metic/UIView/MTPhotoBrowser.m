@@ -61,10 +61,6 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     [window addSubview:self.view];
     [window.rootViewController addChildViewController:self];
-    
-    if (_currentPhotoIndex == 0) {
-        [self showPhotos];
-    }
 }
 
 - (void)quit
