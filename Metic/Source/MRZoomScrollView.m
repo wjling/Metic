@@ -58,7 +58,7 @@
 -(void)fitImageView
 {
     [self zoomToNormal];
-    float containerWidth = self.frame.size.width - 4;
+    float containerWidth = self.frame.size.width;
     float containerHeight = self.frame.size.height;
     [self setContentSize:CGSizeMake(containerWidth, containerHeight)];
     if (containerWidth/containerHeight < self.imageView.image.size.width / self.imageView.image.size.height) {
@@ -108,7 +108,7 @@
     return imageView;
 }
 
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale
+-(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
     [scrollView setZoomScale:scale animated:NO];
     [self setContentSize:CGSizeMake(self.contentSize.width, self.imageView.frame.origin.y*2 +self.imageView.frame.size.height)];
