@@ -32,8 +32,8 @@ enum Server_code{
 };
 
 enum Enterprise_code{
-    isEnterprise = 0,//上架版
-//    isEnterprise = 1,//企业版
+//    isEnterprise = 0,//上架版
+    isEnterprise = 1,//企业版
 //    isEnterprise = 2,//企业版测试服
 };
 
