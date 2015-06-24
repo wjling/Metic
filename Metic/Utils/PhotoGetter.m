@@ -13,6 +13,7 @@
 #import "UserInfoViewController.h"
 #import "FillinInfoViewController.h"
 #import "MenuViewController.h"
+#import "AvatarViewController.h"
 #import "SVProgressHUD.h"
 
 @interface PhotoGetter ()
@@ -145,8 +146,16 @@
     switch ([code intValue]) {
         case 0:
         {
-            //NSString *url = [self getLocalBannerUrl];
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
+            __weak UIImageView* wimageView  = self.imageView;
+            UIImage* grayBG = [CommonUtils createImageWithColor:[UIColor lightGrayColor]];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:grayBG  completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (image) {
+                    
+                }else if(wimageView){
+                    wimageView.image = [UIImage imageNamed:@"1星空.jpg"];
+                }
+            }];
+//            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:[UIImage imageNamed:@"1星空.jpg"]];
         }
             break;
         case 1:
@@ -457,13 +466,17 @@
                     NSLog(@"removed image url: %@",avatarUrl);
                 }];
                 
+                if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:avatarUrl];
+                
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                                  [MTUser sharedInstance].userid, @"id",
                                                  [NSNumber numberWithInteger:1], @"operation", nil];
                 NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:json_data withOperationCode:UPDATE_AVATAR finshedBlock:^(NSData *rData) {
-                    
+                    if(!rData){
+                        [SVProgressHUD dismissWithSuccess:@"修改头像成功" afterDelay:1.5];
+                    }
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                     NSLog(@"Received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -477,13 +490,17 @@
                                 updateAvatarViewController = nil;
                                 
                             }
+                            if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[AvatarViewController class]]) {
+                                [(AvatarViewController*)updateAvatarViewController refresh];
+                                
+                            }
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
                             NSLog(@"上传头像后刷新");
                             
 //                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
 //                            [alertView show];
 //                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
-                            [SVProgressHUD dismissWithSuccess:@"修改头像上传成功" afterDelay:1.5];
+                            [SVProgressHUD dismissWithSuccess:@"修改头像成功" afterDelay:1.5];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }
@@ -499,13 +516,17 @@
                     NSLog(@"removed image url: %@",avatarUrl);
                 }];
                 
+                if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:avatarUrl];
+
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                                  [MTUser sharedInstance].userid, @"id",
                                                  [NSNumber numberWithInteger:1], @"operation", nil];
                 NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:json_data withOperationCode:UPDATE_AVATAR finshedBlock:^(NSData *rData) {
-                    
+                    if(!rData){
+                        [SVProgressHUD dismissWithSuccess:@"头像上传成功" afterDelay:1.5];
+                    }
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                     NSLog(@"Received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -525,7 +546,7 @@
 //                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
 //                            [alertView show];
 //                            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(alertViewDismiss:) userInfo:alertView repeats:NO];
-                            [SVProgressHUD dismissWithSuccess:@"修改头像成功" afterDelay:1.5];
+                            [SVProgressHUD dismissWithSuccess:@"头像上传成功" afterDelay:1.5];
                         }
                         updateAvatarFlag = !updateAvatarFlag;
                     }

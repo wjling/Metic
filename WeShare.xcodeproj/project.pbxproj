@@ -391,6 +391,7 @@
 		F864C0FA1AE0EC1A00E2EB23 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0F51AE0EC1A00E2EB23 /* FMResultSet.m */; };
 		F864C0FD1AE0EE1100E2EB23 /* MTDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */; };
 		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
+		F891BC3A1B3AA3F800E59126 /* AvatarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F891BC391B3AA3F800E59126 /* AvatarViewController.m */; };
 		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
 /* End PBXBuildFile section */
 
@@ -1161,6 +1162,8 @@
 		F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDatabaseHelper.m; sourceTree = "<group>"; };
 		F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+squareThumbail.h"; sourceTree = "<group>"; };
 		F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+squareThumbail.m"; sourceTree = "<group>"; };
+		F891BC381B3AA3F800E59126 /* AvatarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarViewController.h; sourceTree = "<group>"; };
+		F891BC391B3AA3F800E59126 /* AvatarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarViewController.m; sourceTree = "<group>"; };
 		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
 		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1419,6 +1422,8 @@
 				0435EF5519B5EB0E003BB2F6 /* ModifyPasswordViewController.m */,
 				0435EF5919B623BD003BB2F6 /* BindingPhoneViewController.h */,
 				0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */,
+				F891BC381B3AA3F800E59126 /* AvatarViewController.h */,
+				F891BC391B3AA3F800E59126 /* AvatarViewController.m */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -3025,6 +3030,7 @@
 				08A68E2419FE62D000A9EB76 /* KxMenu.m in Sources */,
 				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
 				08DB69A419541F3A00F80F3F /* AFURLConnectionOperation.m in Sources */,
+				F891BC3A1B3AA3F800E59126 /* AvatarViewController.m in Sources */,
 				081B6DA91A7685D80044D623 /* qrencode.c in Sources */,
 				0435EF3C19B45C54003BB2F6 /* FriendsViewController.m in Sources */,
 				51F4CB1919E6307500E487F1 /* DDRange.m in Sources */,
