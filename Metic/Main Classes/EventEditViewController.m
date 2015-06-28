@@ -22,7 +22,8 @@
 #import "SVProgressHUD.h"
 
 const float rowHeight = 42.0f;
-const NSInteger rowCount = 4;
+//1.1.1版本不需要修改活动类型
+const NSInteger rowCount = 3;
 
 @interface EventEditViewController () <UITableViewDataSource,UITableViewDelegate,PhotoGetterDelegate>
 @property (nonatomic,strong) UIImageView* banner;
