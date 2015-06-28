@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "455816991.866343"
+            timestampString = "457203967.895179"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1648"
-            endingLineNumber = "1648"
+            startingLineNumber = "1675"
+            endingLineNumber = "1675"
             landmarkName = "-friend_request_noBtnClicked:"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Notifications/NotificationsViewController.m"
-            timestampString = "455816991.866343"
+            timestampString = "457203967.895179"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1668"
-            endingLineNumber = "1668"
+            startingLineNumber = "1695"
+            endingLineNumber = "1695"
             landmarkName = "-delSystemMsg:"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,27 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "457204231.843737"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1038"
-            endingLineNumber = "1038"
-            landmarkName = "-searchBar:textDidChange:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "938"
-            endingLineNumber = "938"
+            startingLineNumber = "1027"
+            endingLineNumber = "1027"
             landmarkName = "-searchBar:textDidChange:"
             landmarkType = "5">
          </BreakpointContent>
@@ -116,11 +100,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "457201404.764171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "784"
-            endingLineNumber = "784"
+            startingLineNumber = "767"
+            endingLineNumber = "767"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -132,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456187397.472638"
+            timestampString = "455809844.969518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
@@ -148,11 +132,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "455809844.969518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "369"
-            endingLineNumber = "369"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
@@ -164,11 +148,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "457201404.764171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "796"
-            endingLineNumber = "796"
+            startingLineNumber = "779"
+            endingLineNumber = "779"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -180,11 +164,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "455809844.969518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "338"
+            endingLineNumber = "338"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
@@ -196,11 +180,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "455811361.603445"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
@@ -212,11 +196,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "455811361.603445"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "382"
-            endingLineNumber = "382"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
@@ -228,11 +212,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Metic/Main Classes/Friends/FriendsViewController.m"
-            timestampString = "456188151.47713"
+            timestampString = "455811361.603445"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "364"
+            endingLineNumber = "364"
             landmarkName = "-getRangesOfText:withKeyWord:"
             landmarkType = "5">
          </BreakpointContent>
