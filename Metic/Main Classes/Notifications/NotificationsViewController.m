@@ -13,6 +13,7 @@
 #import "KxMenu.h"
 #import "MTDatabaseHelper.h"
 #import "EventPreviewViewController.h"
+#import "EventDetailViewController.h"
 
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
@@ -1057,23 +1058,41 @@ enum Response_Type
     if (tableView == self.eventRequest_tableView) {
         NSMutableDictionary* msg_dic = [eventRequestMsg objectAtIndex:indexPath.row];
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"]integerValue];
+        NSLog(@"event click: %@", msg_dic);
         if (cmd == CHANGE_EVENT_INFO_NOTIFICATION) { //cmd 990
             
         }
         else
         {
             NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-            if ([cell.text_label.text isEqualToString: @"邀请你加入"]) {
-                
-                EventPreviewViewController* preVC = [[EventPreviewViewController alloc]init];
-                preVC.eventInfo = msg_dic;
-                preVC.beingInvited = @1;
-                [self.navigationController pushViewController:preVC animated:YES];
-                return;
-                [self eventBtnClicked:self];
+            switch (cmd) {
+                case NEW_EVENT_NOTIFICATION:
+                {
+                    EventPreviewViewController* preVC = [[EventPreviewViewController alloc]init];
+                    preVC.eventInfo = msg_dic;
+                    preVC.beingInvited = @1;
+                    [self.navigationController pushViewController:preVC animated:YES];
+                    return;
+//                    [self eventBtnClicked:self];
+                }
+                    break;
+                case REQUEST_EVENT:
+                {
+                    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+                    EventDetailViewController* eDetail = [storyboard instantiateViewControllerWithIdentifier:@"EventDetailViewController"];
+                    NSNumber* eID = [msg_dic objectForKey:@"event_id"];
+                    if (eID) {
+                        eDetail.eventId = eID;
+                        [self.navigationController pushViewController:eDetail animated:YES];
+                    }
+                    
+                }
+                    break;
+                    
+                default:
+                    break;
             }
         }
-        
     }
     else if (tableView == self.friendRequest_tableView)
     {
@@ -1134,6 +1153,10 @@ enum Response_Type
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSString* launcher = [msg_dic objectForKey:@"launcher"];
                 NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
+                
+                cell.eventInfo_dic = msg_dic;
+                cell.context_weak = self;
+                cell.tag = [uid integerValue];
                 
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
@@ -1197,6 +1220,10 @@ enum Response_Type
                 NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
                 NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
+                
+                cell.eventInfo_dic = msg_dic;
+                cell.context_weak = self;
+                cell.tag = [uid integerValue];
                 
                 if (alias && ![alias isEqual:[NSNull null]]) {
                     cell.name_label.text = alias;

@@ -607,8 +607,11 @@
         [self.friendSearchDisplayController setActive:NO animated:YES];
         NSMutableDictionary* aFriend = [searchFriendList objectAtIndex:indexPath.row];
         NSNumber* fID = [aFriend objectForKey:@"id"];
-        selectedFriendID = fID;
-        [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self]; 
+        if (fID) {
+            selectedFriendID = fID;
+            [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self];
+        }
+        
     }
     else if (tableView == self.friendTableView)
     {
@@ -966,6 +969,9 @@
                             }
                             NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
                             if (compareResult_range.location != 0) {
+                                if (location != 0) {
+                                    break;
+                                }
                                 continue;
                             }
                             location += short_str.length;
@@ -983,7 +989,7 @@
                     else
                     {
                         NSRange titleResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                        if (titleResult_fname.length != 0 && titleResult_fname.location == 0) {
+                        if (titleResult_fname.length != 0) {
                             [searchFriendList addObject:friendList[i]];
                             [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                             continue;
@@ -1005,20 +1011,23 @@
                                 }
                                 NSRange compareResult_range = [long_str rangeOfString:short_str options:NSCaseInsensitiveSearch];
                                 if (compareResult_range.location != 0) {
+                                    if (location != 0) {
+                                        break;
+                                    }
                                     continue;
                                 }
                                 location += short_str.length;
                                 if (location == friendSearchBar.text.length) {
                                     [searchFriendList addObject:friendList[i]];
                                     [self getRangesOfText:text withKeyWord:friendSearchBar.text];
-                                    continue;
+                                    break;
                                 }
                             }
                         }
                         else
                         {
                             NSRange titleResult_falias = [falias rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                            if (titleResult_falias.length != 0 && titleResult_falias.location == 0) {
+                            if (titleResult_falias.length != 0) {
                                 [searchFriendList addObject:friendList[i]];
                                 [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                                 continue;
@@ -1047,15 +1056,15 @@
                     NSString *tempPinYinHeadStr = [CommonUtils pinyinHeadFromNSString:text];
                     NSRange titleHeadResult=[tempPinYinHeadStr rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
                     if (titleHeadResult.length>0) {
-                        if (titleHeadResult.location != 0) {
-                            if (!falias) {
-                                continue;
-                            }
-                            NSRange titleHeadResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
-                            if (titleHeadResult_fname.length == 0 || titleHeadResult_fname.location > 0) {
-                                continue;
-                            }
-                        }
+//                        if (titleHeadResult.location != 0) {
+//                            if (!falias) {
+//                                continue;
+//                            }
+//                            NSRange titleHeadResult_fname = [fname rangeOfString:friendSearchBar.text options:NSCaseInsensitiveSearch];
+//                            if (titleHeadResult_fname.length == 0 || titleHeadResult_fname.location > 0) {
+//                                continue;
+//                            }
+//                        }
                         [searchFriendList addObject:friendList[i]];
                         [self getRangesOfText:text withKeyWord:friendSearchBar.text];
                     }

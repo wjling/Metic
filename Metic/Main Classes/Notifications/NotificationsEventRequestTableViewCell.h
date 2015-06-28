@@ -20,4 +20,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *event_name_label;
 @property (strong, nonatomic) UILabel* confirm_msg_label;
 
+@property (strong, nonatomic) NSDictionary* eventInfo_dic;
+@property (weak, nonatomic) UIViewController* context_weak;
+
 @end
