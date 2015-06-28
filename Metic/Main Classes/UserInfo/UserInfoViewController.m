@@ -14,6 +14,7 @@
 #import "UIImageView+LBBlurredImage.h"
 #import "BOAlertController.h"
 #import "../BannerViewController.h"
+#import "AvatarViewController.h"
 #import "KxMenu.h"
 #import "UIImage+fixOrien.h"
 #import "MTDatabaseHelper.h"
@@ -256,6 +257,10 @@
 
 -(void)showAvatar
 {
+    AvatarViewController* avatarView = [[AvatarViewController alloc]init];
+    avatarView.controller = self;
+    [self presentViewController:avatarView animated:YES completion:^{}];
+    return;
     BannerViewController* bannerView = [[BannerViewController alloc] init];
     bannerView.banner = self.avatar_imageView.image;
     bannerView.url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid]];

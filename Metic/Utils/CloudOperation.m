@@ -187,7 +187,7 @@
         
         [formData appendPartWithFileData:fileData name:@"file" fileName:fileName mimeType:_mineType];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self.mDelegate finishwithOperationStatus:YES type:2 data:nil path:mpath];
+        [self.mDelegate finishwithOperationStatus:YES type:2 data:fileData path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
     }];
