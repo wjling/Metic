@@ -619,10 +619,9 @@
         case EVENT_NOT_EXIST:
         {
             NSLog(@"EVENT_NOT_EXIST");
-            [SVProgressHUD showErrorWithStatus:@"活动已解散" duration:1];
-            [_showView setHidden:YES];
-            [readerView start];
-            _isScaning = YES;
+            UIAlertView* alert =
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
+            alert.tag = 10;
         }
             break;
         case USER_EXIST:
@@ -633,20 +632,17 @@
                 [self showResult];
             }else{
                 NSLog(@"ALREADY_IN_EVENT");
-                [SVProgressHUD showErrorWithStatus:@"用户不存在" duration:1];
-                [_showView setHidden:YES];
-                [readerView start];
-                _isScaning = YES;
+                UIAlertView* alert =
+                [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户不存在" WithDelegate:self WithCancelTitle:@"确定"];
+                alert.tag = 10;
             }
         }
             break;
         case USER_NOT_FOUND:
         {
-            NSLog(@"USER_NOT_FOUND");
-            [SVProgressHUD showErrorWithStatus:@"用户不存在" duration:1];
-            [_showView setHidden:YES];
-            [readerView start];
-            _isScaning = YES;
+            UIAlertView* alert =
+            [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户不存在" WithDelegate:self WithCancelTitle:@"确定"];
+            alert.tag = 10;
         }
             break;
     }
