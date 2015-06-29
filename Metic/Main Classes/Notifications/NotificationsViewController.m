@@ -1161,7 +1161,7 @@ enum Response_Type
                 
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
                 
-                if (alias && ![alias isEqual:[NSNull null]]) {
+                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
                     cell.name_label.text = alias;
                 }
                 else
@@ -1226,7 +1226,7 @@ enum Response_Type
                 cell.context_weak = self;
                 cell.tag = [uid integerValue];
                 
-                if (alias && ![alias isEqual:[NSNull null]]) {
+                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
                     cell.name_label.text = alias;
                 }
                 else
@@ -1474,7 +1474,7 @@ enum Response_Type
                 NSString* name;
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
                 
-                if (alias && ![alias isEqual:[NSNull null]]) {
+                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
                     name = alias;
                 }
                 else
@@ -1503,7 +1503,7 @@ enum Response_Type
                 NSNumber* launcher_id = [msg_dic objectForKey:@"launcher_id"];
                 NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
                 
-                if (alias && ![alias isEqual:[NSNull null]]) {
+                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
                     launcher = alias;
                 }
                 else
