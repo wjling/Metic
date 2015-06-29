@@ -254,7 +254,7 @@
         [getter getAvatar];
         
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        if (alias && ![alias isEqual:[NSNull null]]) {
+        if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
             cell.title.text = alias;
         }
         else if (label) {
