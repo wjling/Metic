@@ -616,6 +616,15 @@
             
         }
             break;
+        case EVENT_NOT_EXIST:
+        {
+            NSLog(@"EVENT_NOT_EXIST");
+            [SVProgressHUD showErrorWithStatus:@"活动已解散" duration:1];
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
+        }
+            break;
         case USER_EXIST:
         {
             NSArray *friends = [response1 valueForKey:@"friend_list"];
@@ -624,7 +633,7 @@
                 [self showResult];
             }else{
                 NSLog(@"ALREADY_IN_EVENT");
-                [SVProgressHUD dismissWithError:@"用户不存在"];
+                [SVProgressHUD showErrorWithStatus:@"用户不存在" duration:1];
                 [_showView setHidden:YES];
                 [readerView start];
                 _isScaning = YES;
@@ -633,8 +642,8 @@
             break;
         case USER_NOT_FOUND:
         {
-            NSLog(@"ALREADY_IN_EVENT");
-            [SVProgressHUD dismissWithError:@"用户不存在"];
+            NSLog(@"USER_NOT_FOUND");
+            [SVProgressHUD showErrorWithStatus:@"用户不存在" duration:1];
             [_showView setHidden:YES];
             [readerView start];
             _isScaning = YES;
