@@ -339,8 +339,14 @@
                 [self stop];
             }
                 break;
+            case EVENT_NOT_EXIST:
+            {
+                [self removeuploadTaskInDB];
+                [self stop];
+            }
             default:
             {
+                
                 [self stop];
             }
         }
@@ -370,7 +376,9 @@
                     return;
                 }
                 NSString* message = [NSString stringWithFormat:@"你有 %lu 张活动图片上传失败 ，是否重新上传",(unsigned long)resultsArray.count];
-                [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+                });
             }
                 
                 break;
@@ -401,8 +409,10 @@
                 }
                 if ([[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[UploadManageViewController class]] || [[SlideNavigationController sharedInstance].viewControllers.lastObject isKindOfClass:[PictureWall2 class]]){
                     return;
-                }
-                [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+                }dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [[UploaderManager sharedManager] postUploadNotification:resultsArray message:message];
+                });
+                
             }
                 break;
         }
