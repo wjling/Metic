@@ -155,30 +155,9 @@
     }
     self.executing = YES;
     _thread = [NSThread currentThread];
-    if (_imageALAsset) {
-        [self beginUpload];
-    }else if(_imageALAssetStr){
+    [self checkEventExisted];
 
-        ALAssetsLibrary *library = [UzysAssetsPickerController defaultAssetsLibrary] ;
-        NSURL *imageFileURL = [NSURL URLWithString:_imageALAssetStr];
-        [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
-            
-            if (!asset) {
-                NSLog(@"图片已不存在");
-                [self removeuploadTaskInDB];
-                [self stop];
-                return ;
-            }
-            
-            _imageALAsset = asset;
-            [self performSelector:@selector(beginUpload) onThread:_thread withObject:nil waitUntilDone:NO];
-
-        } failureBlock:^(NSError *error) {
-            NSLog(@"error : %@", error);
-            [self removeuploadTaskInDB];
-            [self stop];
-        }];
-    }
+    
     _wait = YES;
     while(_wait) {
         
@@ -193,6 +172,84 @@
     }
 }
 
+//step1:checkEventExisted
+-(void)checkEventExisted
+{
+    NSArray* eventids = @[_eventId];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:eventids forKey:@"sequence"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
+        if (!rData){
+            [self stop];
+            return ;
+        }
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            BOOL normal_Reply = NO;
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                        NSDictionary* dict = [response1 valueForKey:@"event_list"][0];
+                        if ([[dict valueForKey:@"isIn"] boolValue]) {
+                            normal_Reply = YES;
+                            //继续上传图片
+                            [self processALAsset];
+                        }
+                    }
+                }
+                    break;
+                default:
+                    break;
+            }
+            if (!normal_Reply) {
+                //此活动不能上传活动
+                [self removeuploadTaskInDB];
+                [self stop];
+            }
+            while(_wait) {
+                
+                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+                
+            }
+
+        }
+        
+    }];
+}
+
+//step2:processALAsset
+-(void)processALAsset
+{
+    if (_imageALAsset) {
+        [self beginUpload];
+    }else if(_imageALAssetStr){
+        
+        ALAssetsLibrary *library = [UzysAssetsPickerController defaultAssetsLibrary] ;
+        NSURL *imageFileURL = [NSURL URLWithString:_imageALAssetStr];
+        [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
+            
+            if (!asset) {
+                NSLog(@"图片已不存在");
+                [self removeuploadTaskInDB];
+                [self stop];
+                return ;
+            }
+            
+            _imageALAsset = asset;
+            [self performSelector:@selector(beginUpload) onThread:_thread withObject:nil waitUntilDone:NO];
+            
+        } failureBlock:^(NSError *error) {
+            NSLog(@"error : %@", error);
+            [self removeuploadTaskInDB];
+            [self stop];
+        }];
+    }
+}
+//step3:beginUpload
 -(void)beginUpload
 {
     if (_imageALAsset) {
@@ -216,6 +273,7 @@
     }
 }
 
+//step4:getCloudFileURL
 -(void)getCloudFileURL:(NSString*)path
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -259,17 +317,7 @@
     
 }
 
--(void)stop
-{
-    NSLog(@"清理数据 && 退出线程");
-    _thread = nil;
-    _uploadURL = nil;
-    _imageALAsset = nil;
-    _imgData = nil;
-    _wait = NO;
-    _finished = YES;
-}
-
+//step5:uploadfile
 -(void)uploadfile
 {
     if (!_imgData || !_uploadURL) {
@@ -282,9 +330,9 @@
         [formData appendPartWithFileData:_imgData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"上传成功");
-//        _imgData = nil;
+        //        _imgData = nil;
         [self performSelector:@selector(reportToServer) onThread:_thread withObject:nil waitUntilDone:NO];
-
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"上传失败");
         _imgData = nil;
@@ -302,6 +350,7 @@
     [op start];
 }
 
+//step6:reportToServer
 -(void)reportToServer
 {
     NSString* ImgName = [NSString stringWithFormat:@"%@.png",_imageName];
@@ -344,9 +393,14 @@
                 [self removeuploadTaskInDB];
                 [self stop];
             }
+            case NOT_IN_EVENT:
+            {
+                [self removeuploadTaskInDB];
+                [self stop];
+            }
             default:
             {
-                
+                [self removeuploadTaskInDB];
                 [self stop];
             }
         }
@@ -359,6 +413,19 @@
     }
 }
 
+//step7:stop
+-(void)stop
+{
+    NSLog(@"清理数据 && 退出线程");
+    _thread = nil;
+    _uploadURL = nil;
+    _imageALAsset = nil;
+    _imgData = nil;
+    _wait = NO;
+    _finished = YES;
+}
+
+//step8:postFinishNotification
 - (void)postFinishNotification
 {
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
