@@ -255,10 +255,10 @@
     if (_imageALAsset) {
         NSDictionary* imgData;
         @autoreleasepool {
-            UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullResolutionImage
+            UIImage *img = [UIImage imageWithCGImage:_imageALAsset.defaultRepresentation.fullScreenImage
                                                scale:_imageALAsset.defaultRepresentation.scale
-                                         orientation:(UIImageOrientation)_imageALAsset.defaultRepresentation.orientation];
-            img = [UIImage fixOrientation:img];
+                                         orientation:0];
+//            img = [UIImage fixOrientation:img];
             imgData = [photoProcesser compressPhoto:img maxWidth:1280 maxSize:360];
             _imageALAsset = nil;
             img = nil;
