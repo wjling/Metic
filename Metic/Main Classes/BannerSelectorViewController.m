@@ -9,6 +9,9 @@
 #import "BannerSelectorViewController.h"
 #import "UIImage+fixOrien.h"
 
+#import "UzysAssetsPickerController.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
 @interface BannerSelectorViewController ()
 @end
 
@@ -177,12 +180,39 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    if (image) image = [UIImage fixOrientation:image];
-    self.uploadImage = image;
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [self openEditor];
-    }];
+    NSURL* imageURL = [info valueForKey:@"UIImagePickerControllerReferenceURL"];
+    if (imageURL) {
+        ALAssetsLibrary *library = [UzysAssetsPickerController defaultAssetsLibrary] ;
+        [library assetForURL:imageURL resultBlock:^(ALAsset *asset) {
+            
+            if (!asset) {
+                NSLog(@"图片已不存在");
+                [picker dismissViewControllerAnimated:YES completion:^{}];
+                //        [self openEditor];
+                //    }];
+                return ;
+            }
+            UIImage* img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage scale:asset.defaultRepresentation.scale orientation:0];
+            self.uploadImage = img;
+            [picker dismissViewControllerAnimated:YES completion:^{
+                [self openEditor];
+            }];
+            
+        } failureBlock:^(NSError *error) {
+            [picker dismissViewControllerAnimated:YES completion:^{}];
+        }];
+    }else{
+        UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
+        if (image) image = [UIImage fixOrientation:image];
+        self.uploadImage = image;
+        [picker dismissViewControllerAnimated:YES completion:^{
+            [self openEditor];
+        }];
+    }
+    
+    
+
+
     
 }
 
