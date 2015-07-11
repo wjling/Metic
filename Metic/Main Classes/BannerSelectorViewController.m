@@ -209,11 +209,7 @@
             [self openEditor];
         }];
     }
-    
-    
 
-
-    
 }
 
 

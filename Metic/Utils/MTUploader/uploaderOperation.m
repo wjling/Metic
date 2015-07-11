@@ -21,6 +21,7 @@
 #import "SlideNavigationController.h"
 #import "UploadManageViewController.h"
 #import "PictureWall2.h"
+#import "MTOperation.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -381,11 +382,8 @@
                 self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
                 _progress = 0.9f;
                 [self DBprocessionAfterUpload:response1 eventId:_eventId];
-                NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
-                [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
-                _imgData = nil;
-                [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
-                [self stop];
+                [self savePhotoToCache];
+
             }
                 break;
             case EVENT_NOT_EXIST:
@@ -411,6 +409,28 @@
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
         
     }
+}
+
+//step8:savePhotoToCache
+-(void)savePhotoToCache
+{
+    [[MTOperation sharedInstance]getUrlFromServer:[NSString stringWithFormat:@"/images/%@",_imageName] success:^(NSString *url) {
+        [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
+        _imgData = nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
+        [self stop];
+
+    } failure:^(NSString *message) {
+        _imgData = nil;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
+        [self stop];
+    }];
+    while(_wait) {
+        
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+        
+    }
+    
 }
 
 //step7:stop

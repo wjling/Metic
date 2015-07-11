@@ -27,8 +27,8 @@
 HttpSender* httpSender;
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
 };
 
 enum Enterprise_code{
@@ -102,6 +102,7 @@ enum Operation_Code
     ADD_FRIEND_BATCH = 54,
     GET_LIKE_EVENT = 55,
     LIKE_EVENT = 56,
+    TOKEN = 57,
 };
 
 enum CloudOperation_Code

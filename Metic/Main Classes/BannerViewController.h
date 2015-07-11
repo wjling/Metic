@@ -12,4 +12,5 @@
 @property (nonatomic,strong) UIImageView* imageView;
 @property (nonatomic,strong) UIImage* banner;
 @property (nonatomic,strong) NSString* url;
+@property (nonatomic,strong) NSString* path;
 @end

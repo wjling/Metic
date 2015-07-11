@@ -12,6 +12,7 @@
 #import "XGPush.h"
 #import "AppDelegate.h"
 #import "MTDatabaseHelper.h"
+#import "MTOperation.h"
 
 
 @interface MTUser ()
@@ -63,6 +64,7 @@ static MTUser *singletonInstance;
     if (self) {
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
+        self.downloadURLCache = [[NSMutableDictionary alloc]init];
         self.avatarURL = [[NSMutableDictionary alloc]init];
         self.bannerURL = [[NSMutableDictionary alloc]init];
         self.photoURL = [[NSMutableDictionary alloc]init];
@@ -92,6 +94,7 @@ static MTUser *singletonInstance;
     if (self = [super init]) {
         singletonInstance = self;
         _avatar = [aDecoder decodeObjectForKey:@"avatar"];
+        _downloadURLCache = [aDecoder decodeObjectForKey:@"downloadURLCache"];
         _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
         _bannerURL = [aDecoder decodeObjectForKey:@"bannerURL"];
         _photoURL = [aDecoder decodeObjectForKey:@"photoURL"];
@@ -118,6 +121,8 @@ static MTUser *singletonInstance;
         
         if(!updateEventStatus) updateEventStatus = [[NSMutableDictionary alloc]init];
         if(!updatePVStatus) updatePVStatus = [[NSMutableDictionary alloc]init];
+        if(!_downloadURLCache) _downloadURLCache = [[NSMutableDictionary alloc]init];
+        
     }
     
     return self;
@@ -126,6 +131,7 @@ static MTUser *singletonInstance;
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.avatar forKey:@"avatar"];
+    [aCoder encodeObject:self.downloadURLCache forKey:@"downloadURLCache"];
     [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
     [aCoder encodeObject:self.bannerURL forKey:@"bannerURL"];
     [aCoder encodeObject:self.photoURL forKey:@"photoURL"];
@@ -231,10 +237,21 @@ static MTUser *singletonInstance;
                     NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
                     NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
                     [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
-                    NSString* avatarUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]]];
-                    [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl];
-                    NSString* avatarHDUrl =[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[dictionary valueForKey:@"id"]]];
-                    [[SDImageCache sharedImageCache] removeImageForKey:avatarHDUrl];
+                    
+                    
+                    NSString*path = [NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]];
+                    [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+                        [[SDImageCache sharedImageCache] removeImageForKey:url];
+                    } failure:^(NSString *message) {
+                        NSLog(@"%@",message);
+                    }];
+                    
+                    NSString*path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[dictionary valueForKey:@"id"]];
+                    [[MTOperation sharedInstance]getUrlFromServer:path_HD success:^(NSString *url) {
+                        [[SDImageCache sharedImageCache] removeImageForKey:url];
+                    } failure:^(NSString *message) {
+                        NSLog(@"%@",message);
+                    }];
                 }
             }
         }];

@@ -214,6 +214,68 @@
     }];
 }
 
+-(void)getUrlFromServer:(NSString*) path
+                 success:(void (^)(NSString* url))success
+                 failure:(void (^)(NSString* message))failure
+{
+    if (!path) {
+        if (failure) {
+            failure(@"参数错误");
+        }
+        return;
+    }
+    
+    NSString* url = [[[MTUser sharedInstance] downloadURLCache] valueForKey:path];
+    
+    if (url) {
+        if (success) {
+            success(url);
+        }
+        return;
+    }
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:@"POST" forKey:@"method"];
+    [dictionary setValue:path forKey:@"object"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+        if (!rData){
+            if (failure) {
+                failure(@"网络异常");
+            }
+            return;
+        }
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    NSString* url = (NSString*)[response1 valueForKey:@"url"];
+                    if (url) {
+                        [[[MTUser sharedInstance] downloadURLCache] setValue:url forKey:path];
+                        if (success) {
+                            success(url);
+                        }
+                        return;
+                    }
+                }
+                    break;
+                default:
+                    if (failure) {
+                        failure(@"服务器异常");
+                    }
+                    return;
+                    break;
+                    
+            }
+        }
+    }];
+}
+
 #pragma mark - Alert Delegate
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex;{
     // the user clicked OK

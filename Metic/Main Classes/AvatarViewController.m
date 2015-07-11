@@ -15,6 +15,7 @@
 #import "RIButtonItem.h"
 #import "PECropViewController.h"
 #import "UIImage+fixOrien.h"
+#import "MTOperation.h"
 
 @interface AvatarViewController ()<UIImagePickerControllerDelegate,PECropViewControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic,strong) UIImageView* avatar;
@@ -77,12 +78,31 @@
 
 - (void)initData
 {
-    NSString* url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid]];
-    NSString* url_HD = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid]];
-    [_avatar sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid];
+    NSString* path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid];
+    
+    [[MTOperation sharedInstance] getUrlFromServer:path success:^(NSString *url) {
+        
+        [_avatar sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+        }];
+        
+    } failure:^(NSString *message) {
+        NSLog(@"message");
+        _avatar.image = [UIImage imageNamed:@"默认用户头像"];
     }];
-    [_avatar sd_setImageWithURL:[NSURL URLWithString:url_HD] placeholderImage:_avatar.image completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    
+    [[MTOperation sharedInstance] getUrlFromServer:path_HD success:^(NSString *url) {
+        
+        [_avatar sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            
+        }];
+        
+    } failure:^(NSString *message) {
+        NSLog(@"message");
+        [UIImage imageNamed:@"默认用户头像"];
     }];
+
 }
 
 -(void)refresh
@@ -177,13 +197,26 @@
 
 -(void)save
 {
-    NSString* url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid]];
-    NSString* url_HD = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid]];
-    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:url_HD]) {
-        UIImageWriteToSavedPhotosAlbum([[SDImageCache sharedImageCache]imageFromDiskCacheForKey:url_HD],self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
-    }else if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:url]){
-        UIImageWriteToSavedPhotosAlbum([[SDImageCache sharedImageCache]imageFromDiskCacheForKey:url],self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
-    }
+    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid];
+    NSString* path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid];
+    
+    [[MTOperation sharedInstance] getUrlFromServer:path_HD success:^(NSString *url) {
+        if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:url]) {
+            UIImageWriteToSavedPhotosAlbum([[SDImageCache sharedImageCache]imageFromDiskCacheForKey:url],self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+        }else{
+            [[MTOperation sharedInstance] getUrlFromServer:path success:^(NSString *url) {
+                if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:url]) {
+                    UIImageWriteToSavedPhotosAlbum([[SDImageCache sharedImageCache]imageFromDiskCacheForKey:url],self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+                }
+                
+            } failure:^(NSString *message) {
+                NSLog(@"message");
+            }];
+        }
+        
+    } failure:^(NSString *message) {
+        NSLog(@"message");
+    }];
 }
 
 - (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{

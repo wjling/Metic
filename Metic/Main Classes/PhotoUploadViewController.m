@@ -508,41 +508,41 @@ static const BOOL canMutiUpload = YES;
 
 -(void)finishWithReceivedData:(NSData *)rData
 {
-    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
-    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-    switch ([cmd intValue]) {
-        case NORMAL_REPLY:
-        {
-            NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
-            NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-            NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.png"];
-            [[SDImageCache sharedImageCache] storeImageToDisk:filePath forKey:url];
-            NSFileManager* fileManager = [NSFileManager defaultManager];
-            if ([fileManager fileExistsAtPath:filePath]) {
-                [fileManager removeItemAtPath:filePath error:nil];
-            }
-            
-            if (_progressView) {
-                [_progressView setProgress:1.0 animated:YES];
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self removeWaitingView];
-                ((PictureWall2*)self.photoWallController).shouldReloadPhoto = YES;
-                [self.navigationController popToViewController:self.photoWallController animated:YES];
-            });
-            
-        }
-            break;
-        default:
-        {
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传失败" WithDelegate:nil WithCancelTitle:@"确定"];
-            [self removeWaitingView];
-            [self.upLoad setEnabled:YES];
-            [self.getPhoto setEnabled:YES];
-        }
-    }
+//    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//    NSLog(@"received Data: %@",temp);
+//    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+//    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+//    switch ([cmd intValue]) {
+//        case NORMAL_REPLY:
+//        {
+//            NSString *url = [CommonUtils getUrl:[NSString stringWithFormat:@"/images/%@",[response1 valueForKey:@"photo_name"]]];
+//            NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+//            NSString* filePath = [docFolder stringByAppendingPathComponent:@"tmp.png"];
+//            [[SDImageCache sharedImageCache] storeImageToDisk:filePath forKey:url];
+//            NSFileManager* fileManager = [NSFileManager defaultManager];
+//            if ([fileManager fileExistsAtPath:filePath]) {
+//                [fileManager removeItemAtPath:filePath error:nil];
+//            }
+//            
+//            if (_progressView) {
+//                [_progressView setProgress:1.0 animated:YES];
+//            }
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                [self removeWaitingView];
+//                ((PictureWall2*)self.photoWallController).shouldReloadPhoto = YES;
+//                [self.navigationController popToViewController:self.photoWallController animated:YES];
+//            });
+//            
+//        }
+//            break;
+//        default:
+//        {
+//            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片上传失败" WithDelegate:nil WithCancelTitle:@"确定"];
+//            [self removeWaitingView];
+//            [self.upLoad setEnabled:YES];
+//            [self.getPhoto setEnabled:YES];
+//        }
+//    }
 }
 
 #pragma mark - Alert Delegate

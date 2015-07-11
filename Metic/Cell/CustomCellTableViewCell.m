@@ -160,9 +160,11 @@
         //tmp.layer.masksToBounds = YES;
         //[tmp.layer setCornerRadius:5];
         if (i < participator_count) {
+            tmp.hidden = NO;
             PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
             [miniGetter getAvatar];
         }else{
+            tmp.hidden = YES;
             [tmp sd_cancelCurrentImageLoad];
             tmp.image = nil;
         }

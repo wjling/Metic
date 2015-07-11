@@ -264,6 +264,9 @@
         case 56:
             resultCode = @"like_event";
             break;
+        case 57:
+            resultCode = @"token";
+            break;
         default:
             resultCode = @"json";
             break;

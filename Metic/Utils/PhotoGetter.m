@@ -15,6 +15,7 @@
 #import "MenuViewController.h"
 #import "AvatarViewController.h"
 #import "SVProgressHUD.h"
+#import "MTOperation.h"
 
 @interface PhotoGetter ()
 {
@@ -73,69 +74,50 @@
 
 -(void)getAvatar
 {
-    NSString *url = [self getLocalAvatarUrl];
-    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId] || [[MTUser sharedInstance].userid intValue] == [_avatarId intValue]) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
-        
-    }else{
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
-    }
+    [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
+    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+        if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId] || [[MTUser sharedInstance].userid intValue] == [_avatarId intValue]) {
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+            
+        }else{
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageCacheMemoryOnly];
+        }
+    } failure:^(NSString *message) {
+        NSLog(@"%@",message);
+        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+    }];
 }
 
 -(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
 {
-    NSString *url = [self getLocalAvatarUrl];
-    if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
-        NSLog(@"获取头像方法1");
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
-        
-    }else{
-        NSLog(@"获取头像方法2");
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];    }
-
+    [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
+    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+        if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
+            NSLog(@"获取头像方法1");
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
+            
+        }else{
+            NSLog(@"获取头像方法2");
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];    }
+    } failure:^(NSString *message) {
+        NSLog(@"%@",message);
+        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+    }];
 }
 
 -(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
 {
-    NSString* url = [self getLocalAvatarUrl];
-//    NSString* avatarURL = [CommonUtils getUrl:url];
-    [[SDImageCache sharedImageCache] removeImageForKey:url];
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
+    [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
+    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+        [[SDImageCache sharedImageCache] removeImageForKey:url];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed completed:completion];
+    } failure:^(NSString *message) {
+        NSLog(@"%@",message);
+    }];
 }
-
-//-(void)getAvatar
-//{
-//    __block NSString* url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//    if (!url) {
-//        [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        [dictionary setValue:@"GET" forKey:@"method"];
-//        [dictionary setValue:[NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId] forKey:@"object"];
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-//            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//            switch ([cmd intValue]) {
-//                case NORMAL_REPLY:
-//                {
-//                    url = (NSString*)[response1 valueForKey:@"url"];
-//                    NSLog(@"%@",url);
-//                    [[MTUser sharedInstance].avatarURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-//                    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-//                }
-//                    break;
-//            }
-//        }];
-//
-//        
-//    }else{
-//        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"]];
-//    }
-//    
-//}
 
 
 -(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL
@@ -430,26 +412,6 @@
     [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:_videoFilePath container:nil authorId:nil];
 }
 
--(NSString*)getLocalAvatarUrl
-{
-    NSString* url = [[MTUser sharedInstance].avatarURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-    if (!url) {
-        url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId]];
-        [[MTUser sharedInstance].avatarURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-    }
-    return url;
-}
-
--(NSString*)getLocalBannerUrl
-{
-    NSString* url = [[MTUser sharedInstance].bannerURL valueForKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-    if (!url) {
-        url = [CommonUtils getUrl:[NSString stringWithFormat:@"/banner/%@.jpg",self.avatarId]];
-        [[MTUser sharedInstance].bannerURL setValue:url forKey:[NSString stringWithFormat:@"%@",self.avatarId]];
-    }
-    return url;
-}
-
 
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {
@@ -461,12 +423,15 @@
 //                [cache removeImageForKey:path];
                 NSLog(@"removed image path: %@",path);
                 
-                NSString* avatarUrl =[CommonUtils getUrl:path];
-                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-                    NSLog(@"removed image url: %@",avatarUrl);
+                [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+                    [[SDImageCache sharedImageCache] removeImageForKey:url withCompletition:^{
+                        NSLog(@"removed image url: %@",url);
+                        if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:url];
+                    }];
+                } failure:^(NSString *message) {
+                    NSLog(@"%@",message);
                 }];
-                
-                if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:avatarUrl];
+
                 
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                                  [MTUser sharedInstance].userid, @"id",
@@ -511,12 +476,14 @@
             {
                 NSLog(@"removed image path: %@",path);
                 
-                NSString* avatarUrl =[CommonUtils getUrl:path];
-                [[SDImageCache sharedImageCache] removeImageForKey:avatarUrl withCompletition:^{
-                    NSLog(@"removed image url: %@",avatarUrl);
+                [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+                    [[SDImageCache sharedImageCache] removeImageForKey:url withCompletition:^{
+                        NSLog(@"removed image url: %@",url);
+                        if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:url];
+                    }];
+                } failure:^(NSString *message) {
+                    NSLog(@"%@",message);
                 }];
-                
-                if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:avatarUrl];
 
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                                  [MTUser sharedInstance].userid, @"id",

@@ -12,6 +12,7 @@
 #import "SDImageCache.h"
 #import "SDWebImageDownloader.h"
 #import "SDImageCache.h"
+#import "MTOperation.h"
 
 @interface BannerViewController ()
 @property (nonatomic,strong)MRZoomScrollView* zoomScrollview;
@@ -101,7 +102,6 @@
         
         _zoomScrollview.imageView.image = _banner;
         [_zoomScrollview fitImageView];
-        
     }
 }
 
@@ -131,6 +131,13 @@
                 
             }];
         }
+    }else if (_path){
+        [[MTOperation sharedInstance]getUrlFromServer:_path success:^(NSString *url) {
+            _url = url;
+            [self downloadHQphoto];
+        } failure:^(NSString *message) {
+            NSLog(@"%@",message);
+        }];
     }
 }
 

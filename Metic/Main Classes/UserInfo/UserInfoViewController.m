@@ -18,6 +18,7 @@
 #import "KxMenu.h"
 #import "UIImage+fixOrien.h"
 #import "MTDatabaseHelper.h"
+#import "MTOperation.h"
 
 
 @interface UserInfoViewController ()
@@ -263,7 +264,7 @@
     return;
     BannerViewController* bannerView = [[BannerViewController alloc] init];
     bannerView.banner = self.avatar_imageView.image;
-    bannerView.url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid]];
+    bannerView.path = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid];
     [self presentViewController:bannerView animated:YES completion:^{}];
 }
 
@@ -371,8 +372,22 @@
                                     NSNumber* friend_id = [friend_update_time_dic objectForKey:@"id"];
                                     if ([friend_id integerValue] == [account_id integerValue]) {
                                         if (![server_updatetime isEqualToString:local_updatetime]) {
-                                            [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",account_id]]];
-                                            [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@.jpg",account_id]]];
+                                            
+                                            NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",account_id];
+                                            NSString* path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",account_id];
+                                            
+                                            [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+                                                [[SDImageCache sharedImageCache] removeImageForKey:url];
+                                            } failure:^(NSString *message) {
+                                                NSLog(@"%@",message);
+                                            }];
+                                            
+                                            [[MTOperation sharedInstance]getUrlFromServer:path_HD success:^(NSString *url) {
+                                                [[SDImageCache sharedImageCache] removeImageForKey:url];
+                                            } failure:^(NSString *message) {
+                                                NSLog(@"%@",message);
+                                            }];
+
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                                 [self refresh];
                                                 [[MenuViewController sharedInstance] refresh];

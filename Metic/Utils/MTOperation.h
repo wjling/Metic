@@ -24,4 +24,8 @@ typedef void(^likeEventFinishBlock)(BOOL isSuccess,NSString* likeTime);
 //收藏／取消收藏活动操作
 -(void)likeEventOperation:(NSArray*)eventIds like:(BOOL)islike finishBlock:(likeEventFinishBlock)finishBlock;
 
+-(void)getUrlFromServer:(NSString*) path
+                 success:(void (^)(NSString* url))success
+                 failure:(void (^)(NSString* message))failure;
+
 @end

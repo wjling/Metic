@@ -13,6 +13,7 @@
 #import "AddFriendConfirmViewController.h"
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.h"
+#import "MTOperation.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate, UITextFieldDelegate>
 {
@@ -302,7 +303,7 @@
     BannerViewController* bannerView = [[BannerViewController alloc] init];
     bannerView.banner = self.photo.image;
     if (self.fid) {
-        bannerView.url = [CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid]];
+        bannerView.path = [NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid];
     }
     [self presentViewController:bannerView animated:YES completion:^{}];
 }
@@ -387,7 +388,13 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
                                                 [self.fInfoView_imgV setImageToBlur:[UIImage imageNamed:@"默认用户头像"] blurRadius:6 brightness:-0.1 completionBlock:nil];
-                                                [[SDImageCache sharedImageCache] removeImageForKey:[CommonUtils getUrl:[NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid]]];
+                                                NSString* path = [NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid];
+                                                [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
+                                                    [[SDImageCache sharedImageCache] removeImageForKey:url];
+                                                } failure:^(NSString *message) {
+                                                    NSLog(@"%@",message);
+                                                }];
+
                                                 [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                     if (!image) {
                                                         image = [UIImage imageNamed:@"默认用户头像"];
