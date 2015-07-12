@@ -1017,7 +1017,7 @@
     
     //检查token
     if([waitingComment valueForKey:@"token"]){
-        [dictionary setValue:@"1" forKey:@"token"];
+        [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
         resendCommentBlock();
     }else{
         //获取token
@@ -1135,7 +1135,7 @@
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
                     {
-//                        [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                        [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
                         [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
                         if (commentType == 0) {
                             [_comment_list removeObject:newComments];
