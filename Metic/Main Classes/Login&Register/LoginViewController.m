@@ -374,7 +374,6 @@
     NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithFile: MtsecretPath];
     NSString *userName = [arr objectAtIndex:0];
     NSString *password =  [arr objectAtIndex:1];
-    NSLog(@"验证密码,email: %@, password: %@", userName, password);
     self.logInEmail = userName;
     self.logInPassword = password;
     if (self.logInEmail && self.logInPassword) {

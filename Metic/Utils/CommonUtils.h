@@ -64,7 +64,7 @@
 + (NSString *)URLEncodedString:(NSString*) originUrl;
 
 ////计算头像url
-//+ (NSString*)getUrls:(NSString*) path;
+//+ (NSString*)getUrl:(NSString*) path;
 
 //将图片裁剪成圆形
 +(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset  borderColor:(UIColor*)color borderWidth:(CGFloat)width ;
