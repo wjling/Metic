@@ -1044,6 +1044,9 @@
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                     [_tableView reloadData];
                 }
+            }else{
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                [_tableView reloadData];
             }
         }];
     }
@@ -1184,6 +1187,9 @@
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                 [_tableView reloadData];
             }
+        }else{
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+            [_tableView reloadData];
         }
     }];
     
