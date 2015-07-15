@@ -797,7 +797,7 @@
     }
     NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
     NSInteger row = [_tableView indexPathForCell:cell].row;
-    NSMutableDictionary *waitingComment = _vcomment_list[_vcomment_list.count - row];
+    NSDictionary* waitingComment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - row ]:self.vcomment_list[_vcomment_list.count - row + 1];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -816,40 +816,79 @@
         }
     });
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == VIDEO_NOT_EXIST) {
-                if (_shouldExit == NO) {
-                    _shouldExit = YES;
-                    [self deleteLocalData];
-                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                    [alert setTag:1];
+    void (^resendCommentBlock)(void) = ^(void){
+        //再次发送评论
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == VIDEO_NOT_EXIST) {
+                    if (_shouldExit == NO) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                    return ;
                 }
-                return ;
-            }
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
-                {
-                    [waitingComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
-                    [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    [_vcomment_list removeObject:waitingComment];
-                    [_vcomment_list insertObject:waitingComment atIndex:0];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
+                    {
+                        [waitingComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
+                        [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                        [_vcomment_list removeObject:waitingComment];
+                        [_vcomment_list insertObject:waitingComment atIndex:0];
+                        [_tableView reloadData];
+                        [self commentNumPlus];
+                    }
+                }else{
+                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                     [_tableView reloadData];
-                    [self commentNumPlus];
                 }
             }else{
                 [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                 [_tableView reloadData];
             }
-        }else{
-            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
-            [_tableView reloadData];
-        }
-    }];
+        }];
+    };
+    
+    //检查token
+    if([waitingComment valueForKey:@"token"]){
+        [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
+        resendCommentBlock();
+    }else{
+        //获取token
+        NSMutableDictionary *token_dict = [[NSMutableDictionary alloc] init];
+        //    [token_dict setValue:[MTUser sharedInstance].userid forKey:@"id"];
+        NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                    NSString* token = [response1 valueForKey:@"token"];
+                    @synchronized(self)
+                    {
+                        if (![waitingComment valueForKey:@"token"]) {
+                            [waitingComment setValue:token forKey:@"token"];
+                        }
+                    }
+                    [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
+                    resendCommentBlock();
+                    
+                }else{
+                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                    [_tableView reloadData];
+                }
+            }else {
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                [_tableView reloadData];
+            }
+        }];
+    }
 }
 
 
@@ -909,40 +948,75 @@
         }
     });
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == VIDEO_NOT_EXIST) {
-                if (_shouldExit == NO) {
-                    _shouldExit = YES;
-                    [self deleteLocalData];
-                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                    [alert setTag:1];
+    void (^sendCommentBlock)(void) = ^(void){
+        //发送评论
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == VIDEO_NOT_EXIST) {
+                    if (_shouldExit == NO) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                    return ;
                 }
-                return ;
-            }
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
-                {
-                    [newComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
-                    [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    [_vcomment_list removeObject:newComment];
-                    [_vcomment_list insertObject:newComment atIndex:0];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
+                    {
+                        [newComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
+                        [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                        [_vcomment_list removeObject:newComment];
+                        [_vcomment_list insertObject:newComment atIndex:0];
+                        [_tableView reloadData];
+                        [self commentNumPlus];
+                    }
+                }else{
+                    [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                     [_tableView reloadData];
-                    [self commentNumPlus];
                 }
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
                 [_tableView reloadData];
             }
+            
+        }];
+    };
+    
+    //获取token
+    NSMutableDictionary *token_dict = [[NSMutableDictionary alloc] init];
+    //    [token_dict setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            NSLog(@"%@",content);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                NSString* token = [response1 valueForKey:@"token"];
+                @synchronized(self)
+                {
+                    if (![newComment valueForKey:@"token"]) {
+                        [newComment setValue:token forKey:@"token"];
+                    }
+                }
+                [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
+                sendCommentBlock();
+                
+            }else{
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                [_tableView reloadData];
+            }
         }else{
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
             [_tableView reloadData];
         }
-        
     }];
 }
 
