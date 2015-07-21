@@ -235,7 +235,7 @@
     }
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:@"POST" forKey:@"method"];
+    [dictionary setValue:@"GET" forKey:@"method"];
     [dictionary setValue:path forKey:@"object"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
