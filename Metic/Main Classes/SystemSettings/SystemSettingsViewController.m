@@ -215,7 +215,8 @@
     [fileManager createDirectoryAtPath:webPath withIntermediateDirectories:YES attributes:nil error:nil];
     [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     
-    
+    //删除url缓存
+    [MTUser sharedInstance].downloadURLCache = [[NSMutableDictionary alloc]init];
     
     [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"清理缓存完成" WithDelegate:self WithCancelTitle:@"确定"];
     [acView stopAnimating];
