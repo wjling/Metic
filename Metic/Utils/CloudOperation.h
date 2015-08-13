@@ -19,11 +19,6 @@
 //NSString* uploadfilePath = [NSString stringWithFormat:@"%@%@",NSHomeDirectory(),@"/documents/media/test.jpg"];
 //[cloudOP CloudToDo:UPLOAD path:@"/test.jpg" uploadPath:uploadfilePath];
 
-////test download
-//CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
-//cloudOP.mDelegate = self;
-//[cloudOP CloudToDo:DOWNLOAD path:@"/testdl.jpg" uploadPath:nil];
-
 
 #import "AFNetworking.h"
 #import "AppConstants.h"
@@ -56,9 +51,6 @@
 
 -(id)initWithDelegate:(id)delegate;
 -(void)CloudToDo:(int)type path:(NSString*)path uploadPath:(NSString*)uploadpath container:(UIImageView*)container authorId:(NSNumber *)authorId;
-
-//从url下载图片，并保存到document／media下 path 为在media下的相对路径
--(void)downloadfile:(NSString*)url path:(NSString*)path;
 
 //上传图片到url path为完整路径
 -(void)uploadfile:(NSString*)url path:(NSString*)path;

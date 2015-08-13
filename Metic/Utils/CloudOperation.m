@@ -86,8 +86,6 @@
                     httpURL = (NSString*)[response1 valueForKey:@"url"];
                     switch (COtype) {
                         case 1:
-                            //[self performSelectorOnMainThread:@selector(downloadfile:) withObject:httpURL waitUntilDone:YES];
-                            [self downloadfile:httpURL];
                             break;
                         case 2:
                             [self uploadfile:httpURL path:uploadFilePath];
@@ -121,56 +119,6 @@
 
 
 
-
-
-
-
-
--(void)downloadfile:(NSString*)url
-{
-//    MySqlite* sql = [[MySqlite alloc]init];
-//    NSString * DBpath = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [sql openMyDB:DBpath];
-//    NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'",@"'url'", nil];
-//    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",self.authorId],[NSString stringWithFormat:@"'%@'",@"unknown"],[NSString stringWithFormat:@"'%@'",url], nil];
-//    [sql insertToTable:@"avatar" withColumns:columns andValues:values];
-//    [sql closeMyDB];
-
-    if (uploadFilePath) {
-        [[MTUser sharedInstance].bannerURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
-        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"event.png"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                if (image) {
-//                    [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
-//                }
-//            }];
-//        });
-        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"1星空.jpg"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image) {
-                [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
-            }
-        }];
-    }else{
-        [[MTUser sharedInstance].avatarURL setValue:url forKeyPath:[NSString stringWithFormat:@"%@",self.authorId]];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            //回调或者说是通知主线程刷新，
-//            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-//                if (image) {
-//                    [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
-//                }
-//            }];
-//        });
-        [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image) {
-                [[SDImageCache sharedImageCache] storeImage:image forKey:mpath];
-                NSLog(@"保存头像，key: %@",mpath);
-            }
-        }];
-    }
-    
-    //[self performSelectorOnMainThread:@selector(draw:) withObject:url waitUntilDone:NO];
-}
 
 
 
@@ -270,8 +218,6 @@
             httpURL = (NSString*)[response1 valueForKey:@"url"];
             switch (COtype) {
                 case 1:
-                    //[self performSelectorOnMainThread:@selector(downloadfile:) withObject:httpURL waitUntilDone:YES];
-                    [self downloadfile:httpURL];
                     break;
                 case 2:
                     [self uploadfile:httpURL path:uploadFilePath];

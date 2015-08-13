@@ -38,6 +38,25 @@ static char imageURLKey;
     [self sd_setImageWithURL:url placeholderImage:placeholder options:options progress:nil completed:completedBlock];
 }
 
+//下载后将图片的key替换成云端路径
+- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder cloudPath:(NSString *)path options:(SDWebImageOptions)options completed:(SDWebImageCompletionBlock)completedBlock
+{
+    void (^newCompletedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) = ^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (options != SDWebImageCacheMemoryOnly && ![[url absoluteString] isEqualToString:path]) {
+            [[SDImageCache sharedImageCache] storeImage:image forKey:path];
+        }
+        completedBlock(image,error,cacheType,imageURL);
+    };
+    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
+        [self sd_setImageWithURL:[NSURL URLWithString:path] placeholderImage:placeholder options:SDWebImageRetryFailed progress:nil completed:newCompletedBlock];
+    }else [self sd_setImageWithURL:[NSURL URLWithString:path] placeholderImage:placeholder options:SDWebImageCacheMemoryOnly progress:nil completed:newCompletedBlock];
+}
+
+- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder cloudPath:(NSString *)path completed:(SDWebImageCompletionBlock)completedBlock
+{
+    [self sd_setImageWithURL:url placeholderImage:placeholder cloudPath:path completed:completedBlock];
+}
+
 - (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options progress:(SDWebImageDownloaderProgressBlock)progressBlock completed:(SDWebImageCompletionBlock)completedBlock {
     [self sd_cancelCurrentImageLoad];
     objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

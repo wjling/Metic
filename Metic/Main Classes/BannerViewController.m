@@ -124,7 +124,7 @@
                         [wself initIMG];
                         [SVProgressHUD dismiss];
                     }
-                    [[SDImageCache sharedImageCache]storeImage:image forKey:locURL];
+                    [[SDImageCache sharedImageCache]storeImage:image forKey:_path];
                 }else{
                     [SVProgressHUD dismiss];
                 }

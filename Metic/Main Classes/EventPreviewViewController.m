@@ -510,7 +510,7 @@
                     imgView.image = [UIImage imageNamed:@"活动图片的默认图片"];
                     NSString* path = [NSString stringWithFormat:@"/images/%@",[photoInfo valueForKey:@"photo_name"]];
                     [[MTOperation sharedInstance] getUrlFromServer:path success:^(NSString *url) {
-                        [imgView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                        [imgView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                             if (!image) {
                                 imgView.image = [UIImage imageNamed:@"加载失败"];
                             }else{

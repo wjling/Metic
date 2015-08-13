@@ -12,7 +12,7 @@
 #import "SlideNavigationController.h"
 #import "SVProgressHUD.h"
 #import "MTDatabaseAffairs.h"
-
+#import "SDImageCache.h"
 #import <objc/runtime.h>
 
 @interface MTOperation ()<UIAlertViewDelegate>
@@ -225,11 +225,9 @@
         return;
     }
     
-    NSString* url = [[[MTUser sharedInstance] downloadURLCache] valueForKey:path];
-    
-    if (url) {
+    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
         if (success) {
-            success(url);
+            success(path);
         }
         return;
     }
@@ -249,6 +247,7 @@
             return;
         }
         if (rData) {
+            NSString *content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {

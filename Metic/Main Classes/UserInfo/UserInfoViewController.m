@@ -375,18 +375,8 @@
                                             
                                             NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",account_id];
                                             NSString* path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",account_id];
-                                            
-                                            [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-                                                [[SDImageCache sharedImageCache] removeImageForKey:url];
-                                            } failure:^(NSString *message) {
-                                                NSLog(@"%@",message);
-                                            }];
-                                            
-                                            [[MTOperation sharedInstance]getUrlFromServer:path_HD success:^(NSString *url) {
-                                                [[SDImageCache sharedImageCache] removeImageForKey:url];
-                                            } failure:^(NSString *message) {
-                                                NSLog(@"%@",message);
-                                            }];
+                                            [[SDImageCache sharedImageCache] removeImageForKey:path];
+                                            [[SDImageCache sharedImageCache] removeImageForKey:path_HD];
 
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                                 [self refresh];

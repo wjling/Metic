@@ -12,7 +12,6 @@
 #import "../Utils/PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImageView+WebCache.h"
-#import "UIButton+WebCache.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"

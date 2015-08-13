@@ -415,7 +415,7 @@
 -(void)savePhotoToCache
 {
     [[MTOperation sharedInstance]getUrlFromServer:[NSString stringWithFormat:@"/images/%@",_imageName] success:^(NSString *url) {
-        [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:url];
+        [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:[NSString stringWithFormat:@"/images/%@",_imageName]];
         _imgData = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
         [self stop];

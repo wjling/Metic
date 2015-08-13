@@ -128,6 +128,9 @@
  */
 - (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder options:(SDWebImageOptions)options completed:(SDWebImageCompletionBlock)completedBlock;
 
+//下载后将图片的key替换成云端路径
+- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder cloudPath:(NSString *)path options:(SDWebImageOptions)options completed:(SDWebImageCompletionBlock)completedBlock;
+- (void)sd_setImageWithURL:(NSURL *)url placeholderImage:(UIImage *)placeholder cloudPath:(NSString *)path completed:(SDWebImageCompletionBlock)completedBlock;
 /**
  * Set the imageView `image` with an `url`, placeholder and custom options.
  *

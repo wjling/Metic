@@ -240,18 +240,11 @@ static MTUser *singletonInstance;
                     
                     
                     NSString*path = [NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]];
-                    [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-                        [[SDImageCache sharedImageCache] removeImageForKey:url];
-                    } failure:^(NSString *message) {
-                        NSLog(@"%@",message);
-                    }];
+                    [[SDImageCache sharedImageCache] removeImageForKey:path];
                     
                     NSString*path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[dictionary valueForKey:@"id"]];
-                    [[MTOperation sharedInstance]getUrlFromServer:path_HD success:^(NSString *url) {
-                        [[SDImageCache sharedImageCache] removeImageForKey:url];
-                    } failure:^(NSString *message) {
-                        NSLog(@"%@",message);
-                    }];
+                    [[SDImageCache sharedImageCache] removeImageForKey:path_HD];
+
                 }
             }
         }];
