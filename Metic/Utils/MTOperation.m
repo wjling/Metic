@@ -93,7 +93,7 @@
                 }
                 friendlist = [friendlist stringByAppendingString:@"]"];
                 
-                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendlist,@"friend_list",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:ADD_FRIEND_NOTIFICATION],@"cmd",userId,@"id",cm,@"confirm_msg", friendlist,@"friend_list",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND_BATCH finshedBlock:^(NSData *rData) {
@@ -247,7 +247,6 @@
             return;
         }
         if (rData) {
-            NSString *content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -255,7 +254,6 @@
                 {
                     NSString* url = (NSString*)[response1 valueForKey:@"url"];
                     if (url) {
-                        [[[MTUser sharedInstance] downloadURLCache] setValue:url forKey:path];
                         if (success) {
                             success(url);
                         }

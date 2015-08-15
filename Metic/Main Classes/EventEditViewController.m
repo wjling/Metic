@@ -9,6 +9,7 @@
 #import "EventEditViewController.h"
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
+#import "MegUtils.h"
 #import "Reachability.h"
 #import "MTDatabaseAffairs.h"
 
@@ -81,7 +82,8 @@ const NSInteger rowCount = 4;
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:_banner authorId:self.eventId];
     NSString* bannerURL = [_eventInfo valueForKey:@"banner"];
-    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:self.eventId];
+    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL path:bannerPath];
     
     UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 123, CGRectGetWidth(self.view.frame), 3)];
     [line setBackgroundColor:[UIColor orangeColor]];
@@ -106,7 +108,8 @@ const NSInteger rowCount = 4;
 {
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:_banner authorId:self.eventId];
     NSString* bannerURL = [_eventInfo valueForKey:@"banner"];
-    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL retainOldone:YES];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:self.eventId];
+    [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL path:bannerPath retainOldone:YES];
     [_tableView reloadData];
 }
 
@@ -397,11 +400,12 @@ const NSInteger rowCount = 4;
     if (type == 100){
         //上传封面后 删除临时文件
         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSString* bannerTmpPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
         NSFileManager *fileManager=[NSFileManager defaultManager];
-        if ([fileManager fileExistsAtPath:bannerPath])
-            [fileManager removeItemAtPath:bannerPath error:nil];
-        [[SDImageCache sharedImageCache] removeImageForKey:[_eventInfo valueForKey:@"banner"]];
+        if ([fileManager fileExistsAtPath:bannerTmpPath])
+            [fileManager removeItemAtPath:bannerTmpPath error:nil];
+        NSString* bannerPath = [MegUtils bannerImagePathWithEventId:_eventId];
+        [[SDImageCache sharedImageCache] removeImageForKey:bannerPath];
         
         NSInteger bannercode = _Bannercode;
         //上报封面修改信息

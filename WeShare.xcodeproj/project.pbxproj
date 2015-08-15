@@ -392,6 +392,9 @@
 		F864C0FD1AE0EE1100E2EB23 /* MTDatabaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0FC1AE0EE1100E2EB23 /* MTDatabaseHelper.m */; };
 		F86DF2B51ACE6DA6005CC60A /* UIImage+squareThumbail.m in Sources */ = {isa = PBXBuildFile; fileRef = F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */; };
 		F891BC3A1B3AA3F800E59126 /* AvatarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F891BC391B3AA3F800E59126 /* AvatarViewController.m */; };
+		F89442DB1B7F1E5C007F405E /* UIImageView+MTWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442DA1B7F1E5C007F405E /* UIImageView+MTWebCache.m */; };
+		F89442DE1B7F21FB007F405E /* UIButton+MTWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */; };
+		F89442E11B7F869A007F405E /* MegUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442E01B7F869A007F405E /* MegUtils.m */; };
 		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
 /* End PBXBuildFile section */
 
@@ -1164,6 +1167,12 @@
 		F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+squareThumbail.m"; sourceTree = "<group>"; };
 		F891BC381B3AA3F800E59126 /* AvatarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarViewController.h; sourceTree = "<group>"; };
 		F891BC391B3AA3F800E59126 /* AvatarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarViewController.m; sourceTree = "<group>"; };
+		F89442D91B7F1E5C007F405E /* UIImageView+MTWebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MTWebCache.h"; sourceTree = "<group>"; };
+		F89442DA1B7F1E5C007F405E /* UIImageView+MTWebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MTWebCache.m"; sourceTree = "<group>"; };
+		F89442DC1B7F21FB007F405E /* UIButton+MTWebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+MTWebCache.h"; sourceTree = "<group>"; };
+		F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+MTWebCache.m"; sourceTree = "<group>"; };
+		F89442DF1B7F869A007F405E /* MegUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MegUtils.h; sourceTree = "<group>"; };
+		F89442E01B7F869A007F405E /* MegUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MegUtils.m; sourceTree = "<group>"; };
 		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
 		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1611,6 +1620,10 @@
 				085B358D1A9CA8E900881778 /* UIImage+fixOrien.m */,
 				F86DF2B31ACE6DA5005CC60A /* UIImage+squareThumbail.h */,
 				F86DF2B41ACE6DA5005CC60A /* UIImage+squareThumbail.m */,
+				F89442D91B7F1E5C007F405E /* UIImageView+MTWebCache.h */,
+				F89442DA1B7F1E5C007F405E /* UIImageView+MTWebCache.m */,
+				F89442DC1B7F21FB007F405E /* UIButton+MTWebCache.h */,
+				F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1934,6 +1947,8 @@
 				F810B7BC1B0B996100843AAB /* MTOperation.m */,
 				F85966E61B149FD7003B22EE /* MTDatabaseAffairs.h */,
 				F85966E71B149FD7003B22EE /* MTDatabaseAffairs.m */,
+				F89442DF1B7F869A007F405E /* MegUtils.h */,
+				F89442E01B7F869A007F405E /* MegUtils.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3039,6 +3054,7 @@
 				514812161937064E00DBBED7 /* MJRefreshBaseView.m in Sources */,
 				08BEE9C51A2DEFAA00132F18 /* TMQuiltViewCell.m in Sources */,
 				510BE1A6195C32FE00084014 /* MTTableView.m in Sources */,
+				F89442DE1B7F21FB007F405E /* UIButton+MTWebCache.m in Sources */,
 				51581D6619335A8700943606 /* ProfileDetailViewController.m in Sources */,
 				F80DD1A51AF7A4A000DC1CA3 /* SquareTableViewCell.m in Sources */,
 				512C010119F4FF2D003E19A1 /* ChangeAliasViewController.m in Sources */,
@@ -3071,6 +3087,7 @@
 				510D459D196E8A960081672A /* SDWebImageDownloaderOperation.m in Sources */,
 				F83C341A1ABEE47300084CB0 /* MTAutoHideButton.m in Sources */,
 				04EF4A6019765DDB00649DC0 /* UserInfoViewController.m in Sources */,
+				F89442DB1B7F1E5C007F405E /* UIImageView+MTWebCache.m in Sources */,
 				0435EF5B19B623BD003BB2F6 /* BindingPhoneViewController.m in Sources */,
 				08C97F2D1AAF2C7000ABA19C /* UzysGroupPickerViewController.m in Sources */,
 				48151F21194947EB009E156E /* NSString+JSON.m in Sources */,
@@ -3101,6 +3118,7 @@
 				510D459C196E8A960081672A /* SDWebImageDownloader.m in Sources */,
 				51F4CB0919E6307500E487F1 /* ASIAuthenticationDialog.m in Sources */,
 				F810B7AC1B00B17800843AAB /* EventEditViewController.m in Sources */,
+				F89442E11B7F869A007F405E /* MegUtils.m in Sources */,
 				08DB69A019541F3A00F80F3F /* AFHTTPRequestOperationManager.m in Sources */,
 				51581D301933575300943606 /* main.m in Sources */,
 				51DFF383199A121900BF5FED /* UserTableViewCell.m in Sources */,

@@ -8,7 +8,7 @@
 
 #import "AvatarViewController.h"
 #import "CommonUtils.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "PhotoGetter.h"
 #import "SVProgressHUD.h"
 #import "BOAlertController.h"
@@ -16,6 +16,7 @@
 #import "PECropViewController.h"
 #import "UIImage+fixOrien.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 
 @interface AvatarViewController ()<UIImagePickerControllerDelegate,PECropViewControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic,strong) UIImageView* avatar;
@@ -78,8 +79,8 @@
 
 - (void)initData
 {
-    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",[MTUser sharedInstance].userid];
-    NSString* path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[MTUser sharedInstance].userid];
+    NSString* path = [MegUtils avatarImagePathWithUserId:[MTUser sharedInstance].userid];
+    NSString* path_HD = [MegUtils avatarHDImagePathWithUserId:[MTUser sharedInstance].userid];
     
     [[MTOperation sharedInstance] getUrlFromServer:path success:^(NSString *url) {
         

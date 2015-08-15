@@ -819,7 +819,7 @@
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
-        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 986 || cmd == 987 || cmd == 988 || cmd == 989) {
+        if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION || cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY || cmd == NEW_LIKE_NOTIFICATION) {
             [self adjustInfoView];
         }
         

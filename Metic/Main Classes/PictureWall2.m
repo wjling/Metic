@@ -23,6 +23,7 @@
 #import "UploaderManager.h"
 #import "UploadManageViewController.h"
 #import "MTDatabaseHelper.h"
+#import "MegUtils.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -638,66 +639,17 @@
         UIImageView* photo = cell.imgView;
         
         NSString* url = [a valueForKey:@"url"];
+        NSString *imagePath = [MegUtils photoImagePathWithImageName:a[@"photo_name"]];
         
         [photo setContentMode:UIViewContentModeScaleAspectFit];
         [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-        [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 [photo setContentMode:UIViewContentModeScaleToFill];
             }else{
                 photo.image = [UIImage imageNamed:@"加载失败"];
             }
         }];
-        
-        
-        
-        
-//        [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-//        [photo setContentMode:UIViewContentModeScaleAspectFit];
-//        photo.image = [UIImage imageNamed:@"活动图片的默认图片"];
-        
-//        NSString* alassetStr = [a valueForKey:@"alasset"];
-//        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-//        NSURL *imageFileURL = [NSURL URLWithString:alassetStr];
-        
-        
-        
-        
-        
-//        [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
-//            if (!asset) {
-//                NSLog(@"图片已不存在");
-//                    photo.image = [UIImage imageNamed:@"加载失败"];
-//                return ;
-//            }else{
-//                    photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
-//                    [photo setContentMode:UIViewContentModeScaleToFill];
-//            }
-//        } failureBlock:^(NSError *error) {
-//                photo.image = [UIImage imageNamed:@"加载失败"];
-//        }];
-        
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
-//                if (!asset) {
-//                    NSLog(@"图片已不存在");
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                        photo.image = [UIImage imageNamed:@"加载失败"];
-//                    });
-//                }else{
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                        photo.image = [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
-//                        [photo setContentMode:UIViewContentModeScaleToFill];
-//                    });
-//                }
-//            } failureBlock:^(NSError *error) {
-//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                    photo.image = [UIImage imageNamed:@"加载失败"];
-//                });
-//            }];
-//        });
-        
-        
         
         int width = [[a valueForKey:@"width"] intValue];
         int height = [[a valueForKey:@"height"] intValue];
@@ -732,10 +684,10 @@
 //    [cell.infoView removeFromSuperview];
     
     NSString* url = [a valueForKey:@"url"];
-    
+    NSString *imagePath = [MegUtils photoImagePathWithImageName:a[@"photo_name"]];
     [photo setContentMode:UIViewContentModeScaleAspectFit];
     [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [photo setContentMode:UIViewContentModeScaleToFill];
         }else{

@@ -9,9 +9,10 @@
 #import "PhotoRankingTableViewCell.h"
 #import "PhotoDetailViewController.h"
 #import "PhotoGetter.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendInfoViewController.h"
+#import "MegUtils.h"
 
 @implementation PhotoRankingTableViewCell
 #define widthspace 10
@@ -58,8 +59,10 @@
     [self setGood_buttonNum:[_photoInfo valueForKey:@"good"]];
 
     NSString *url = [_photoInfo valueForKey:@"url"];
+    NSString *imagePath = [MegUtils photoImagePathWithImageName:_photoInfo[@"photo_name"]];
+    
     self.photo.contentMode = UIViewContentModeScaleAspectFit;
-    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [self.photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (!image) {
             self.photo.image = [UIImage imageNamed:@"加载失败"];
         }else self.photo.contentMode = UIViewContentModeScaleAspectFill;

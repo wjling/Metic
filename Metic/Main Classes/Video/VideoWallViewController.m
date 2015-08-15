@@ -12,7 +12,7 @@
 #import "VideoDetailViewController.h"
 #import "../../Cell/VideoWallTableViewCell.h"
 #import "PhotoGetter.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "MobClick.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "VideoPreviewViewController.h"

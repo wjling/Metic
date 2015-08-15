@@ -14,6 +14,7 @@
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 
 @interface FriendInfoViewController ()<UIAlertViewDelegate, UITextFieldDelegate>
 {
@@ -388,8 +389,8 @@
                                             dispatch_async(dispatch_get_main_queue(), ^{
                                                 PhotoGetter* getter = [[PhotoGetter alloc]initWithData:photo authorId:fid];
                                                 [self.fInfoView_imgV setImageToBlur:[UIImage imageNamed:@"默认用户头像"] blurRadius:6 brightness:-0.1 completionBlock:nil];
-                                                NSString* path = [NSString stringWithFormat:@"/avatar/%@_2.jpg",self.fid];
-                                                [[SDImageCache sharedImageCache] removeImageForKey:path];
+                                                NSString* avatarHDPath = [MegUtils avatarHDImagePathWithUserId:self.fid];
+                                                [[SDImageCache sharedImageCache] removeImageForKey:avatarHDPath];
                                             
                                                 [getter getAvatarFromServerwithCompletion:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                                                     if (!image) {
@@ -808,7 +809,7 @@
                 NSString* cm = [alertView textFieldAtIndex:0].text;
                 NSNumber* userId = [MTUser sharedInstance].userid;
                 
-                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",userId,@"id",cm,@"confirm_msg", addEventID,@"event_id",nil];
+                NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",userId,@"id",cm,@"confirm_msg", addEventID,@"event_id",nil];
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];

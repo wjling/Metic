@@ -17,11 +17,12 @@
 #import "MobClick.h"
 #import "MLEmojiLabel.h"
 #import "../Custom Wedgets/emotion_Keyboard.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "NSString+JSON.h"
 #import "../Source/TMQuiltView/TMQuiltView.h"
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.H"
+#import "MegUtils.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -854,10 +855,11 @@
     if (indexPath.row == 0) {
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
+        NSString *imagePath = [MegUtils photoImagePathWithImageName:_photoInfo[@"photo_name"]];
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
         [imageView setContentMode:UIViewContentModeScaleAspectFit];
         [imageView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[_photoInfo valueForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [imageView sd_setImageWithURL:[NSURL URLWithString:[_photoInfo valueForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 _photo = image;
                 [imageView setContentMode:UIViewContentModeScaleToFill];

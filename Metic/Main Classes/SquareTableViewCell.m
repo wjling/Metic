@@ -10,6 +10,7 @@
 #import "CommonUtils.h"
 #import "MTUser.h"
 #import "PhotoGetter.h"
+#import "MegUtils.h"
 
 @interface SquareTableViewCell ()
 @property(nonatomic,strong) UIImageView* officialFlag;
@@ -50,7 +51,8 @@
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:self.themePhoto authorId:[data valueForKey:@"event_id"]];
     NSString* bannerURL = [data valueForKey:@"banner"];
-    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[data valueForKey:@"event_id"]];
+    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL path:bannerPath];
 
     BOOL official = [[data valueForKey:@"verify"] boolValue];
     [self drawOfficialFlag:official];

@@ -22,10 +22,6 @@
 @property(nonatomic,strong)NSString *location;
 @property(nonatomic,strong)NSString* saltValue;
 @property(nonatomic,strong)NSMutableDictionary *avatar;
-@property(nonatomic,strong)NSMutableDictionary *downloadURLCache;
-@property(nonatomic,strong)NSMutableDictionary *avatarURL;
-@property(nonatomic,strong)NSMutableDictionary *bannerURL;
-@property(nonatomic,strong)NSMutableDictionary *photoURL;
 //@property(nonatomic,strong)MySqlite *sql;
 @property float wait;
 

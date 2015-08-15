@@ -13,7 +13,7 @@
 #import "MobClick.h"
 #import "PhotoDetailViewController.h"
 #import "VideoDetailViewController.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
@@ -146,43 +146,43 @@ enum pos{
             float restWidth = 310;
             if ([updateInfo[1] boolValue]) {
                 restWidth -= 34;
-                UIImageView* image = (UIImageView*)[cell viewWithTag:991];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_VIDEO_NOTIFICATION];
                 if (!image) {
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_video"]];
-                    [image setTag:991];
+                    [image setTag:NEW_VIDEO_NOTIFICATION];
                 }
                 [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
                 [cell addSubview:image];
             }else{
-                UIImageView* image = (UIImageView*)[cell viewWithTag:991];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_VIDEO_NOTIFICATION];
                 [image removeFromSuperview];
             }
             
             if ([updateInfo[2] boolValue]) {
                 restWidth -= 34;
-                UIImageView* image = (UIImageView*)[cell viewWithTag:992];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_PHOTO_NOTIFICATION];
                 if (!image) {
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_photo"]];
-                    [image setTag:992];
+                    [image setTag:NEW_PHOTO_NOTIFICATION];
                 }
                 [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
                 [cell addSubview:image];
             }else{
-                UIImageView* image = (UIImageView*)[cell viewWithTag:992];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_PHOTO_NOTIFICATION];
                 [image removeFromSuperview];
             }
             
             if ([updateInfo[3] boolValue]) {
                 restWidth -= 34;
-                UIImageView* image = (UIImageView*)[cell viewWithTag:993];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_COMMENT_NOTIFICATION];
                 if (!image) {
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_comment"]];
-                    [image setTag:993];
+                    [image setTag:NEW_COMMENT_NOTIFICATION];
                 }
                 [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
                 [cell addSubview:image];
             }else{
-                UIImageView* image = (UIImageView*)[cell viewWithTag:993];
+                UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_COMMENT_NOTIFICATION];
                 [image removeFromSuperview];
             }
             
@@ -208,7 +208,7 @@ enum pos{
         UITableViewCell* cell;
         NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
-        if (cmd == 986 || cmd == 987 || cmd == 988) {
+        if (cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY) {
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
             avatar.layer.masksToBounds = YES;
@@ -221,7 +221,7 @@ enum pos{
             UIImageView* img = (UIImageView*)[cell viewWithTag:23];
             UILabel* lab = (UILabel*)[cell viewWithTag:25];
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
-            if (cmd == 986 || cmd == 987) {
+            if (cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY) {
                 lab.text = @"";
                 lab.hidden = YES;
                 img.hidden = NO;
@@ -229,7 +229,7 @@ enum pos{
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
-                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
                             img.contentMode = UIViewContentModeScaleAspectFill;
                         }else{
@@ -237,7 +237,7 @@ enum pos{
                         }
                     }];
                 }else img.image = nil;
-            }else if (cmd == 988){
+            }else if (cmd == NEW_COMMENT_REPLY){
                 img.image = nil;
                 img.hidden = YES;
                 lab.text = @"";
@@ -248,7 +248,7 @@ enum pos{
                     lab.text = object_content;
                 }
             }
-        }else if(cmd == 989){
+        }else if(cmd == NEW_LIKE_NOTIFICATION){
             cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
             UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
             avatar.layer.masksToBounds = YES;
@@ -268,7 +268,7 @@ enum pos{
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
-                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]   cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
                             img.contentMode = UIViewContentModeScaleAspectFill;
                         }else{
@@ -306,7 +306,7 @@ enum pos{
         _selete_EventLauncherId = [atMeInfo valueForKey:@"launcher_id"];
 //        NSNumber* launcher_id = [atMeInfo valueForKey:@"launcher_id"];
         switch (cmd) {
-            case 986:{
+            case NEW_VIDEO_COMMENT_REPLY:{
                 UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                          bundle: nil];
                 VideoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"VideoDetailViewController"];
@@ -320,7 +320,7 @@ enum pos{
                 [self.navigationController pushViewController:viewcontroller animated:YES];
             }
                 break;
-            case 987:{
+            case NEW_PHOTO_COMMENT_REPLY:{
                 UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                          bundle: nil];
                 PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
@@ -336,10 +336,10 @@ enum pos{
             }
                 
                 break;
-            case 988:
+            case NEW_COMMENT_REPLY:
                 if (_selete_Eventid) [self performSegueWithIdentifier:@"DynamicToEventDetail" sender:self];
                 break;
-            case 989:{
+            case NEW_LIKE_NOTIFICATION:{
                 int operation = [[atMeInfo valueForKey:@"operation"] intValue];
                 switch (operation) {
                     case 1:
@@ -465,8 +465,8 @@ enum pos{
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
         NSLog(@"cmd: %d",cmd);
-        if (cmd == 993 || cmd == 992 || cmd == 991 || cmd == 986 || cmd == 987 || cmd == 988 || cmd == 989) {
-            if (cmd == 993 || cmd == 992 || cmd == 991) {
+        if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION || cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY || cmd == NEW_LIKE_NOTIFICATION) {
+            if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION) {
                 [self refreshRPoin:LEFT];
             }else [self refreshRPoin:RIGHT];
             [_dynamic_tableView reloadData];

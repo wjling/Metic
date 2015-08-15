@@ -1147,7 +1147,7 @@ enum Response_Type
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
 //        NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
         switch (cmd) {
-            case NEW_EVENT_NOTIFICATION: //cmd 997
+            case NEW_EVENT_NOTIFICATION: //cmd NEW_EVENT_NOTIFICATION
             {
                 NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
@@ -1409,7 +1409,7 @@ enum Response_Type
             }
                 break;
                 
-            case ADD_FRIEND_RESULT: //cmd 998
+            case ADD_FRIEND_RESULT: //cmd ADD_FRIEND_RESULT
             {
                 NotificationsSystemMessageTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"NotificationsSystemMessageTableViewCell"];
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
@@ -1448,7 +1448,7 @@ enum Response_Type
 //        NSLog(@"system %d message: %@",indexPath.row, msg_dic);
         NSInteger cmd = [[msg_dic objectForKey:@"cmd"] intValue];
         switch (cmd) {
-            case ADD_FRIEND_RESULT: //cmd 998
+            case ADD_FRIEND_RESULT: //cmd ADD_FRIEND_RESULT
             {
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
                 NSString* name = [msg_dic objectForKey:@"name"];
@@ -1591,7 +1591,7 @@ enum Response_Type
                                  nil];
     
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:998],@"cmd",
+                                 [NSNumber numberWithInt:ADD_FRIEND_RESULT],@"cmd",
                                  [NSNumber numberWithInt:1],@"result",
                                  friendid,@"friend_id",
                                  userid,@"id",
@@ -1635,7 +1635,7 @@ enum Response_Type
 //                                 nil];
 //
 //    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-//                                 [NSNumber numberWithInt:998],@"cmd",
+//                                 [NSNumber numberWithInt:ADD_FRIEND_RESULT],@"cmd",
 //                                 [NSNumber numberWithInt:0],@"result",
 //                                 friendid,@"friend_id",
 //                                 userid,@"id",
@@ -1722,7 +1722,7 @@ enum Response_Type
                                  [NSNumber numberWithInteger:1],@"response_result",
                                  nil];
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:994],@"cmd",
+                                 [NSNumber numberWithInt:REQUEST_EVENT_RESPONSE],@"cmd",
                                  [NSNumber numberWithInt:1],@"result",
                                  [MTUser sharedInstance].userid,@"id",
                                  requester_id,@"requester_id",
@@ -1760,7 +1760,7 @@ enum Response_Type
 //                                 [NSNumber numberWithInteger:0],@"response_result",
 //                                 nil];
 //    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-//                                 [NSNumber numberWithInt:994],@"cmd",
+//                                 [NSNumber numberWithInt:REQUEST_EVENT_RESPONSE],@"cmd",
 //                                 [NSNumber numberWithInt:0],@"result",
 //                                 [MTUser sharedInstance].userid,@"id",
 //                                 requester_id,@"requester_id",

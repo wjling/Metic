@@ -12,6 +12,7 @@
 #import "../Cell/UserTableViewCell.h"
 #import "SVProgressHUD.h"
 #import "EventDetailViewController.h"
+#import "MegUtils.h"
 
 @interface ScanViewController ()
 @property(nonatomic,strong)NSString* result;
@@ -426,7 +427,8 @@
         
         PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
         NSString* bannerURL = [a valueForKey:@"banner"];
-        [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
+        NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
+        [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
         
         //cell.homeController = self.homeController;
         
@@ -707,7 +709,7 @@
                     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
                     NSString* cm = [alertView textFieldAtIndex:0].text;
                     
-                    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
+                    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
                     NSLog(@"%@",dictionary);
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -736,7 +738,7 @@
                     NSString* cm = [alertView textFieldAtIndex:0].text;
                     NSNumber* userId = [MTUser sharedInstance].userid;
                     NSNumber* friendId = self.efid;
-                    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:999],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
+                    NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:ADD_FRIEND_NOTIFICATION],@"cmd",userId,@"id",cm,@"confirm_msg", friendId,@"friend_id",[NSNumber numberWithInt:ADD_FRIEND],@"item_id",nil];
                     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                     NSInteger operNum = ++_operationNum;

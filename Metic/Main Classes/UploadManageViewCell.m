@@ -8,6 +8,7 @@
 
 #import "UploadManageViewCell.h"
 #import "UploadManageViewController.h"
+#import "UIImageView+MTWebCache.h"
 #import "UIImageView+WebCache.h"
 #import "uploaderOperation.h"
 #import "UploaderManager.h"
@@ -15,6 +16,7 @@
 //#import "MTprogressView.h"
 #import "SDLoopProgressView.h"
 #import "LCAlertView.h"
+#import "MegUtils.h"
 
 typedef enum {
     UPLOAD_UNKNOWN = -1,        ///<状态未知
@@ -61,7 +63,7 @@ typedef enum {
     [_imgView setClipsToBounds:YES];
     [_imgView setContentMode:UIViewContentModeScaleAspectFit];
     [_imgView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-    [_imgView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [_imgView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [_imgView setContentMode:UIViewContentModeScaleAspectFill];
         }else{

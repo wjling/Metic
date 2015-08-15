@@ -40,8 +40,8 @@
 -(void)getAvatar;
 -(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
 -(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion;
--(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL;
--(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL retainOldone:(BOOL)retainOldone;
+-(void)getBanner:(NSNumber*)code url:(NSString *)bannerURL path:(NSString *)path;
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL path:(NSString *)path retainOldone:(BOOL)retainOldone;
 -(void)updatePhoto;
 -(void)uploadPhoto;
 -(void)uploadAvatar;

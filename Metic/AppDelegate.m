@@ -580,7 +580,7 @@
         [[MTUser sharedInstance] synchronizeFriends];
         
     }
-    else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
+    else if (msg_cmd == NEW_COMMENT_NOTIFICATION || msg_cmd == NEW_PHOTO_NOTIFICATION || msg_cmd == NEW_VIDEO_NOTIFICATION) {
         if (![[MTUser sharedInstance].updateEventStatus objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
             [[MTUser sharedInstance].updateEventStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
         }
@@ -602,15 +602,15 @@
         type = -1;
 //        NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
-    else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
-        if (msg_cmd == 989) {
+    else if (msg_cmd == NEW_VIDEO_COMMENT_REPLY || msg_cmd == NEW_PHOTO_COMMENT_REPLY || msg_cmd == NEW_COMMENT_REPLY || msg_cmd == NEW_LIKE_NOTIFICATION) {
+        if (msg_cmd == NEW_LIKE_NOTIFICATION) {
             //除重
             NSArray* atmeEvents = [NSArray arrayWithArray:[MTUser sharedInstance].atMeEvents];
             BOOL msgNeed = YES;
             for (int index = 0; index < atmeEvents.count; index ++) {
                 NSDictionary* Oldmsg = atmeEvents[index];
                 NSInteger Oldmsg_cmd = [[Oldmsg objectForKey:@"cmd"] integerValue];
-                if (Oldmsg && Oldmsg_cmd == 989) {
+                if (Oldmsg && Oldmsg_cmd == NEW_LIKE_NOTIFICATION) {
                     if ([[Oldmsg valueForKey:@"operation"] integerValue] == [[msg_dic valueForKey:@"operation"] integerValue]) {
                         NSInteger msg_operation = [[Oldmsg objectForKey:@"operation"] integerValue];
                         
@@ -653,7 +653,7 @@
         }
         
     }
-    else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散985
+    else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散QUIT_EVENT_NOTIFICATION
     {
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
 //        NSString* subject = [msg_dic objectForKey:@"subject"];
@@ -1350,7 +1350,7 @@
             }
             
         }
-        else if (msg_cmd == 993 || msg_cmd == 992 || msg_cmd == 991) {
+        else if (msg_cmd == NEW_COMMENT_NOTIFICATION || msg_cmd == NEW_PHOTO_NOTIFICATION || msg_cmd == NEW_VIDEO_NOTIFICATION) {
             if (![[MTUser sharedInstance].updateEventStatus objectForKey:[msg_dic valueForKey:@"event_id"]] ) {
                 [[MTUser sharedInstance].updateEventStatus setObject:@[[msg_dic valueForKey:@"subject"],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO],[NSNumber numberWithBool:NO]] forKey:[msg_dic valueForKey:@"event_id"]];
             }
@@ -1378,14 +1378,14 @@
             }
             
         }
-        else if (msg_cmd == 986 || msg_cmd == 987 || msg_cmd == 988 || msg_cmd == 989) {
+        else if (msg_cmd == NEW_VIDEO_COMMENT_REPLY || msg_cmd == NEW_PHOTO_COMMENT_REPLY || msg_cmd == NEW_COMMENT_REPLY || msg_cmd == NEW_LIKE_NOTIFICATION) {
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
             }
 //            NSLog(@"有人@你： %@",msg_dic);
         }
-        else if (msg_cmd == 985) //活动被解散
+        else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散
         {
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             NSString* subject = [msg_dic objectForKey:@"subject"];
@@ -1401,7 +1401,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
             
         }
-        else if (msg_cmd == 984) //被踢出活动
+        else if (msg_cmd == KICK_EVENT_NOTIFICATION) //被踢出活动
         {
             [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
             NSString* subject = [msg_dic objectForKey:@"subject"];

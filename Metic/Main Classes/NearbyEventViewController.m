@@ -16,6 +16,7 @@
 #import "../Source/SDWebImage/UIImageView+WebCache.h"
 #import "EventDetailViewController.h"
 #import "EventPreviewViewController.h"
+#import "MegUtils.h"
 
 @interface NearbyEventViewController ()
 @property (nonatomic, strong) BMKLocationService* locService;
@@ -368,7 +369,8 @@
             [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
             PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
             NSString* bannerURL = [a valueForKey:@"banner"];
-            [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
+            NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
+            [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
             if ([[a valueForKey:@"isIn"] boolValue]) {
                 [cell.statusLabel setHidden:NO];
                 cell.statusLabel.text = @"已加入活动";

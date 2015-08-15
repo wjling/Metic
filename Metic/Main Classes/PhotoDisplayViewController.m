@@ -16,6 +16,7 @@
 #import "Reachability.h"
 #import "LCAlertView.h"
 #import "MTDatabaseHelper.h"
+#import "MegUtils.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -382,8 +383,9 @@
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
     NSString *url = [_photo_list[photoIndex] valueForKey:@"url"];
+    NSString *imagePath = [MegUtils photoImagePathWithImageName:_photo_list[photoIndex][@"photo_name"]];
 
-    [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [zoomScrollView fitImageView];
         }else{

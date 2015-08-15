@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MTDatabaseHelper.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 
 
 @interface MTUser ()
@@ -64,10 +65,6 @@ static MTUser *singletonInstance;
     if (self) {
         singletonInstance = self;
         self.avatar = [[NSMutableDictionary alloc]init];
-        self.downloadURLCache = [[NSMutableDictionary alloc]init];
-        self.avatarURL = [[NSMutableDictionary alloc]init];
-        self.bannerURL = [[NSMutableDictionary alloc]init];
-        self.photoURL = [[NSMutableDictionary alloc]init];
         self.friendList = [[NSMutableArray alloc]initWithCapacity:0];
         self.sortedFriendDic = [[NSMutableDictionary alloc]initWithCapacity:0];
         self.sectionArray = [[NSMutableArray alloc]initWithCapacity:0];
@@ -94,10 +91,6 @@ static MTUser *singletonInstance;
     if (self = [super init]) {
         singletonInstance = self;
         _avatar = [aDecoder decodeObjectForKey:@"avatar"];
-        _downloadURLCache = [aDecoder decodeObjectForKey:@"downloadURLCache"];
-        _avatarURL = [aDecoder decodeObjectForKey:@"avatarURL"];
-        _bannerURL = [aDecoder decodeObjectForKey:@"bannerURL"];
-        _photoURL = [aDecoder decodeObjectForKey:@"photoURL"];
         friendList = [aDecoder decodeObjectForKey:@"friendList"];
         sortedFriendDic = [aDecoder decodeObjectForKey:@"sortedFriendDic"];
         sectionArray = [aDecoder decodeObjectForKey:@"sectionArray"];
@@ -121,7 +114,6 @@ static MTUser *singletonInstance;
         
         if(!updateEventStatus) updateEventStatus = [[NSMutableDictionary alloc]init];
         if(!updatePVStatus) updatePVStatus = [[NSMutableDictionary alloc]init];
-        if(!_downloadURLCache) _downloadURLCache = [[NSMutableDictionary alloc]init];
         
     }
     
@@ -131,10 +123,6 @@ static MTUser *singletonInstance;
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.avatar forKey:@"avatar"];
-    [aCoder encodeObject:self.downloadURLCache forKey:@"downloadURLCache"];
-    [aCoder encodeObject:self.avatarURL forKey:@"avatarURL"];
-    [aCoder encodeObject:self.bannerURL forKey:@"bannerURL"];
-    [aCoder encodeObject:self.photoURL forKey:@"photoURL"];
     [aCoder encodeObject:self.friendList forKey:@"friendList"];
     [aCoder encodeObject:self.sortedFriendDic forKey:@"sortedFriendDic"];
     [aCoder encodeObject:self.sectionArray forKey:@"sectionArray"];
@@ -239,10 +227,10 @@ static MTUser *singletonInstance;
                     [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
                     
                     
-                    NSString*path = [NSString stringWithFormat:@"/avatar/%@.jpg",[dictionary valueForKey:@"id"]];
+                    NSString*path = [MegUtils avatarImagePathWithUserId:dictionary[@"id"]];
                     [[SDImageCache sharedImageCache] removeImageForKey:path];
                     
-                    NSString*path_HD = [NSString stringWithFormat:@"/avatar/%@_2.jpg",[dictionary valueForKey:@"id"]];
+                    NSString*path_HD = [MegUtils avatarHDImagePathWithUserId:dictionary[@"id"]];
                     [[SDImageCache sharedImageCache] removeImageForKey:path_HD];
 
                 }
@@ -379,17 +367,6 @@ static MTUser *singletonInstance;
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
     [userDfs synchronize];
-    NSString * path = [NSString stringWithFormat:@"%@/db",self.userid];
-//    [sql openMyDB:path];
-//    [sql createTableWithTableName:@"event" andIndexWithProperties:@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"event_info",nil];
-//    [sql createTableWithTableName:@"notification" andIndexWithProperties:@"seq INTEGER PRIMARY KEY UNIQUE",@"timestamp",@"msg",@"ishandled",nil];
-//    [sql createTableWithTableName:@"friend" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"name",@"email",@"gender",@"alias",nil];
-//    [sql createTableWithTableName:@"avatar" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"updatetime",nil];
-//    [sql createTableWithTableName:@"eventPhotos" andIndexWithProperties:@"photo_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"photoInfo",nil];
-//    [sql createTableWithTableName:@"eventVideo" andIndexWithProperties:@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo",nil];
-//    [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"width",@"height",nil];
-//    
-//    [sql closeMyDB];
     
     
     

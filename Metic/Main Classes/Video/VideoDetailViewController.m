@@ -14,16 +14,17 @@
 #import "MobClick.h"
 #import "MLEmojiLabel.h"
 #import "../../Custom Wedgets/emotion_Keyboard.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "MTMPMoviePlayerViewController.h"
 #import "../Friends/FriendInfoViewController.h"
 #import "../UserInfo/UserInfoViewController.h"
 #import "../../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "MTVideoPlayerViewController.h"
-#import "UIButton+WebCache.h"
+#import "UIButton+MTWebCache.h"
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.h"
+#import "MegUtils.h"
 
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
@@ -1123,8 +1124,8 @@
             
         }
         NSString *url = [_videoInfo valueForKey:@"thumb"];
-        
-        [video sd_setImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        NSString *thumbPath = [MegUtils videoThummbImagePathWithVideoName:_videoInfo[@"video_name"]];
+        [video sd_setImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal cloudPath:thumbPath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 video.contentMode = UIViewContentModeScaleAspectFill;
                 _video_thumb = image;

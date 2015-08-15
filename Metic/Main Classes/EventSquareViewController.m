@@ -17,7 +17,7 @@
 #import "MobClick.h"
 #import "AppConstants.h"
 #import "HttpSender.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "SVProgressHUD.h"
 #import "SquareTableView.h"
 #import "SquareTableViewCell.h"
@@ -284,7 +284,7 @@
                 NSString* url = [dict valueForKey:@"image_url"];
                 NSLog(@"%@",url);
                 img.contentMode = UIViewContentModeScaleAspectFit;
-                [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]  cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (image) {
                         img.contentMode = UIViewContentModeScaleAspectFill;
                     }else{
@@ -330,7 +330,7 @@
             NSString* url = [dict valueForKey:@"image_url"];
             NSLog(@"%@",url);
             img.contentMode = UIViewContentModeScaleAspectFit;
-            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image) {
                     img.contentMode = UIViewContentModeScaleAspectFill;
                 }else{
@@ -871,7 +871,7 @@
         }else if(buttonIndex == 1){
             
             NSString* cm = [alertView textFieldAtIndex:0].text;
-            NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _processingEventId,@"event_id",nil];
+            NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _processingEventId,@"event_id",nil];
             NSLog(@"%@",dictionary);
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
             [SVProgressHUD showWithStatus:@"正在发送..." maskType:SVProgressHUDMaskTypeClear];

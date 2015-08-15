@@ -8,7 +8,7 @@
 #import "MJPhotoView.h"
 #import "MJPhoto.h"
 #import "MJPhotoLoadingView.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface MJPhotoView ()
@@ -76,7 +76,7 @@
         if (_photo.url && ![_photo.url.absoluteString hasSuffix:@"gif"]) {
             __weak MJPhotoView *photoView = self;
             __weak MJPhoto *photo = _photo;
-            [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.placeholder options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.placeholder cloudPath:@"" options:SDWebImageRetryFailed|SDWebImageLowPriority completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 photo.image = image;
                 
                 // 调整frame参数
@@ -109,7 +109,7 @@
                 
                 __weak MJPhotoView *photoView = self;
                 __weak MJPhotoLoadingView *loading = _photoLoadingView;
-                [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                [_imageView sd_setImageWithURL:_photo.url placeholderImage:_photo.srcImageView.image cloudPath:@"" options:SDWebImageRetryFailed|SDWebImageLowPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                     if (receivedSize > kMinProgress) {
                         loading.progress = (float)receivedSize/expectedSize;
                     }
@@ -275,6 +275,6 @@
 - (void)dealloc
 {
     // 取消请求
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:@"file:///abc"]];
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:@"file:///abc"] cloudPath:@""];
 }
 @end

@@ -10,10 +10,11 @@
 #import "EventCellTableViewCell.h"
 #import "EventPhotosTableViewCell.h"
 #import "Reachability.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "SVProgressHUD.h"
 #import "MTDatabaseHelper.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 
 #define MainFontSize 14
 
@@ -295,7 +296,7 @@
     NSDictionary* msg_dic = _eventInfo;
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:NEW_EVENT_NOTIFICATION],@"cmd",
                                  [NSNumber numberWithInt:1],@"result",
                                  [MTUser sharedInstance].userid,@"id",
                                  eventid,@"event_id",
@@ -425,7 +426,7 @@
         [sender setEnabled:NO];
     }
     NSString* confirmMsg = _inputTextView.text;
-    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
+    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -508,7 +509,7 @@
                     
                     [imgView setContentMode:UIViewContentModeScaleAspectFit];
                     imgView.image = [UIImage imageNamed:@"活动图片的默认图片"];
-                    NSString* path = [NSString stringWithFormat:@"/images/%@",[photoInfo valueForKey:@"photo_name"]];
+                    NSString* path = [MegUtils photoImagePathWithImageName:[photoInfo valueForKey:@"photo_name"]];
                     [[MTOperation sharedInstance] getUrlFromServer:path success:^(NSString *url) {
                         [imgView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                             if (!image) {

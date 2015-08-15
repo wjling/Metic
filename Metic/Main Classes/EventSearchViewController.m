@@ -16,6 +16,7 @@
 #import "EventDetailViewController.h"
 #import "EventPreviewViewController.h"
 #import "SVProgressHUD.h"
+#import "MegUtils.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -329,7 +330,8 @@
     [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
     NSString* bannerURL = [a valueForKey:@"banner"];
-    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
+    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
     
     if ([[a valueForKey:@"isIn"] boolValue]) {
         [cell.statusLabel setHidden:NO];

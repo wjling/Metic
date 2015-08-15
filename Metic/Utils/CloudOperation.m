@@ -8,7 +8,7 @@
 
 #import "CloudOperation.h"
 #import "HttpSender.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 
 #import "../Main Classes/MTUser.h"
 @interface CloudOperation()

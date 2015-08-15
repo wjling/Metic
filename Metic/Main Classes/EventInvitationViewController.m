@@ -14,6 +14,7 @@
 #import "MobClick.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 #import "MTDatabaseHelper.h"
+#import "MegUtils.h"
 
 @interface EventInvitationViewController ()
 {
@@ -231,7 +232,8 @@
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
     NSString* bannerURL = [a valueForKey:@"banner"];
-    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:a[@"event_id"]];
+    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
 
     
     NSArray *memberids = [a valueForKey:@"member"];
@@ -272,7 +274,7 @@
                                  [NSNumber numberWithInteger:1],@"response_result",
                                  nil];
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-                                 [NSNumber numberWithInt:997],@"cmd",
+                                 [NSNumber numberWithInt:NEW_EVENT_NOTIFICATION],@"cmd",
                                  [NSNumber numberWithInt:1],@"result",
                                  [MTUser sharedInstance].userid,@"id",
                                  eventid,@"event_id",
@@ -310,7 +312,7 @@
 //                                 [NSNumber numberWithInteger:0],@"response_result",
 //                                 nil];
 //    NSMutableDictionary* json = [CommonUtils packParamsInDictionary:
-//                                 [NSNumber numberWithInt:997],@"cmd",
+//                                 [NSNumber numberWithInt:NEW_EVENT_NOTIFICATION],@"cmd",
 //                                 [NSNumber numberWithInt:0],@"result",
 //                                 [MTUser sharedInstance].userid,@"id",
 //                                 eventid,@"event_id",

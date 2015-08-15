@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "../Utils/HttpSender.h"
 #import "../Utils/PhotoGetter.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "PictureWall2.h"
 
 @interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate,HttpSenderDelegate>

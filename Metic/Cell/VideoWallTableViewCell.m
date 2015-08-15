@@ -11,13 +11,14 @@
 #import "../Main Classes/MTMPMoviePlayerViewController.h"
 #import "../Utils/PhotoGetter.h"
 #import "CommonUtils.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "../Main Classes/UserInfo/UserInfoViewController.h"
 #import "../Main Classes/Friends/FriendsViewController.h"
 #import "../Source/DAProgressOverlayView/DAProgressOverlayView.h"
 #import "../Main Classes/Video/VideoDetailViewController.h"
 #import "VideoPlayerViewController.h"
 #import "../Main Classes/Video/MTVideoPlayerViewController.h"
+#import "MegUtils.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -194,8 +195,8 @@
         _isPlaying = NO;
         self.videoPlayImg.hidden = NO;
     }
-
-    [self.thumbImg sd_setImageWithURL:[NSURL URLWithString:url] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    NSString *thumbPath = [MegUtils videoThummbImagePathWithVideoName:_videoInfo[@"video_name"]];
+    [self.thumbImg sd_setImageWithURL:[NSURL URLWithString:url] cloudPath:thumbPath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             self.thumbImg.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;

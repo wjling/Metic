@@ -14,6 +14,7 @@
 #import "showParticipatorsViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
 #import "MTShowTextViewController.h"
+#import "MegUtils.h"
 
 #define MainFontSize 14
 
@@ -139,7 +140,8 @@
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:self.themePhoto authorId:self.eventId];
     NSString* bannerURL = [data valueForKey:@"banner"];
-    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL retainOldone:YES];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:self.eventId];
+    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL path:bannerPath retainOldone:YES];
     
     NSArray *memberids = [data valueForKey:@"member"];
     for (int i =0; i<4; i++) {
@@ -285,15 +287,15 @@
 {
     NSLog(@"init button");
     if ([NotificationController visitPhotoWall:_eventId needClear:NO]) {
-        UIImageView* image = (UIImageView*)[imgWall viewWithTag:992];
+        UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
         if (!image) {
             image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
             image.image = [UIImage imageNamed:@"选择点图标"];
             [imgWall addSubview:image];
-            [image setTag:992];
+            [image setTag:NEW_PHOTO_NOTIFICATION];
         }
     }else{
-        UIImageView* image = (UIImageView*)[imgWall viewWithTag:992];
+        UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
         if (image) {
             [image removeFromSuperview];
         }
@@ -304,15 +306,15 @@
 {
     NSLog(@"init button");
     if ([NotificationController visitVideoWall:_eventId needClear:NO]) {
-        UIImageView* image = (UIImageView*)[videoWall viewWithTag:991];
+        UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
         if (!image) {
             image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
             image.image = [UIImage imageNamed:@"选择点图标"];
             [videoWall addSubview:image];
-            [image setTag:991];
+            [image setTag:NEW_VIDEO_NOTIFICATION];
         }
     }else{
-        UIImageView* image = (UIImageView*)[videoWall viewWithTag:991];
+        UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
         if (image) {
             [image removeFromSuperview];
         }

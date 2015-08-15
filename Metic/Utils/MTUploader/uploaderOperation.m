@@ -22,6 +22,7 @@
 #import "UploadManageViewController.h"
 #import "PictureWall2.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 
 @interface uploaderOperation (){
     BOOL _executing;
@@ -173,7 +174,7 @@
     }
 }
 
-//step1:checkEventExisted
+#pragma mark step1:checkEventExisted
 -(void)checkEventExisted
 {
     NSArray* eventids = @[_eventId];
@@ -222,7 +223,7 @@
     }];
 }
 
-//step2:processALAsset
+#pragma mark step2:processALAsset
 -(void)processALAsset
 {
     if (_imageALAsset) {
@@ -250,7 +251,7 @@
         }];
     }
 }
-//step3:beginUpload
+#pragma mark step3:beginUpload
 -(void)beginUpload
 {
     if (_imageALAsset) {
@@ -274,7 +275,7 @@
     }
 }
 
-//step4:getCloudFileURL
+#pragma mark step4:getCloudFileURL
 -(void)getCloudFileURL:(NSString*)path
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -318,7 +319,7 @@
     
 }
 
-//step5:uploadfile
+#pragma mark step5:uploadfile
 -(void)uploadfile
 {
     if (!_imgData || !_uploadURL) {
@@ -351,7 +352,7 @@
     [op start];
 }
 
-//step6:reportToServer
+#pragma mark step6:reportToServer
 -(void)reportToServer
 {
     NSString* ImgName = [NSString stringWithFormat:@"%@.png",_imageName];
@@ -411,29 +412,18 @@
     }
 }
 
-//step8:savePhotoToCache
+#pragma mark step7:savePhotoToCache
 -(void)savePhotoToCache
 {
-    [[MTOperation sharedInstance]getUrlFromServer:[NSString stringWithFormat:@"/images/%@",_imageName] success:^(NSString *url) {
-        [[SDImageCache sharedImageCache] storeImageDataToDisk:_imgData forKey:[NSString stringWithFormat:@"/images/%@",_imageName]];
-        _imgData = nil;
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
-        [self stop];
-
-    } failure:^(NSString *message) {
-        _imgData = nil;
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
-        [self stop];
-    }];
-    while(_wait) {
-        
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-        
-    }
+    NSString *photoPath = [MegUtils photoImagePathWithImageName:_imageName];
+    [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] forKey:photoPath];
+    _imgData = nil;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
+    [self stop];
     
 }
 
-//step7:stop
+#pragma mark step8:stop
 -(void)stop
 {
     NSLog(@"清理数据 && 退出线程");
@@ -445,7 +435,7 @@
     _finished = YES;
 }
 
-//step8:postFinishNotification
+#pragma mark step9:postFinishNotification
 - (void)postFinishNotification
 {
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];

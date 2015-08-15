@@ -9,13 +9,15 @@
 #import "PhotoGetter.h"
 #import "CommonUtils.h"
 #import "UIImage+UIImageExtras.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
 #import "UserInfoViewController.h"
 #import "FillinInfoViewController.h"
 #import "MenuViewController.h"
 #import "AvatarViewController.h"
 #import "SVProgressHUD.h"
 #import "MTOperation.h"
+#import "UIImageView+WebCache.h"
+#import "MegUtils.h"
 
 @interface PhotoGetter ()
 {
@@ -75,7 +77,7 @@
 -(void)getAvatar
 {
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
-    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
         if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId] || [[MTUser sharedInstance].userid intValue] == [_avatarId intValue]) {
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:NULL];
@@ -85,14 +87,14 @@
         }
     } failure:^(NSString *message) {
         NSLog(@"%@",message);
-        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed];
     }];
 }
 
 -(void)getAvatarWithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
 {
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
-    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
         if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
             NSLog(@"获取头像方法1");
@@ -103,14 +105,14 @@
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];    }
     } failure:^(NSString *message) {
         NSLog(@"%@",message);
-        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] options:SDWebImageRetryFailed];
+        [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed];
     }];
 }
 
 -(void)getAvatarFromServerwithCompletion:(void(^)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL))completion
 {
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
-    NSString* path = [NSString stringWithFormat:@"/avatar/%@.jpg",self.avatarId];
+    NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
         [[SDImageCache sharedImageCache] removeImageForKey:path];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];
@@ -120,7 +122,7 @@
 }
 
 
--(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL
+-(void)getBanner:(NSNumber*)code url:(NSString *)bannerURL path:(NSString *)path
 {
     if ([code intValue] > 0) {
         [_imageView sd_cancelCurrentImageLoad];
@@ -130,7 +132,7 @@
         {
             __weak UIImageView* wimageView  = self.imageView;
             UIImage* grayBG = [CommonUtils createImageWithColor:[UIColor lightGrayColor]];
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:grayBG  completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:grayBG cloudPath:path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image) {
                     
                 }else if(wimageView){
@@ -182,11 +184,11 @@
   
 }
 
--(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL retainOldone:(BOOL)retainOldone
+-(void)getBanner:(NSNumber*)code url:(NSString*)bannerURL path:(NSString *)path retainOldone:(BOOL)retainOldone
 {
     if ([code intValue] == 0 && retainOldone && self.imageView.image) {
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:self.imageView.image];
-    }else [self getBanner:code url:bannerURL];
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:bannerURL] placeholderImage:self.imageView.image cloudPath:path];
+    }else [self getBanner:code url:bannerURL path:path];
 }
 
 
@@ -425,8 +427,10 @@
                 
                 [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
                     [[SDImageCache sharedImageCache] removeImageForKey:path withCompletition:^{
-                        NSLog(@"removed image url: %@",url);
-                        if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:path];
+                        NSLog(@"removed image path: %@",path);
+                        if(mdata){
+                            [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
+                        }
                     }];
                 } failure:^(NSString *message) {
                     NSLog(@"%@",message);
@@ -478,8 +482,10 @@
                 
                 [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
                     [[SDImageCache sharedImageCache] removeImageForKey:path withCompletition:^{
-                        NSLog(@"removed image url: %@",url);
-                        if(mdata) [[SDImageCache sharedImageCache]storeImageDataToDisk:mdata forKey:path];
+                        NSLog(@"removed image path: %@",path);
+                        if(mdata){
+                            [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
+                        }
                     }];
                 } failure:^(NSString *message) {
                     NSLog(@"%@",message);

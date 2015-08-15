@@ -10,7 +10,8 @@
 #import "../Main Classes/PictureWall2.h"
 #import "../Main Classes/Video/VideoWallViewController.h"
 #import "../Source/SVProgressHUD/SVProgressHUD.h"
-#import "UIImageView+WebCache.h"
+#import "UIImageView+MTWebCache.h"
+#import "MegUtils.h"
 
 @implementation CustomCellTableViewCell
 
@@ -149,7 +150,8 @@
     
     PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:self.themePhoto authorId:[data valueForKey:@"event_id"]];
     NSString* bannerURL = [data valueForKey:@"banner"];
-    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:self.eventId];
+    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL path:bannerPath];
     
     self.homeController = self.homeController;
     

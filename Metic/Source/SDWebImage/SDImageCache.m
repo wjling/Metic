@@ -199,33 +199,6 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self storeImage:image recalculateFromImage:YES imageData:nil forKey:key toDisk:toDisk];
 }
 
-- (void)storeImageToDisk:(NSString *)filePath forKey:(NSString *)key {
-    if (!filePath || !key) {
-        return;
-    }
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
-    if (data) {
-        if (![_fileManager fileExistsAtPath:_diskCachePath]) {
-            [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-        }
-        
-        [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:data attributes:nil];
-    }
-}
-
-- (void)storeImageDataToDisk:(NSData *)imgData forKey:(NSString *)key {
-    if (!imgData || !key) {
-        return;
-    }
-    if (imgData) {
-        if (![_fileManager fileExistsAtPath:_diskCachePath]) {
-            [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-        }
-        
-        [_fileManager createFileAtPath:[self defaultCachePathForKey:key] contents:imgData attributes:nil];
-    }
-}
-
 - (BOOL)diskImageExistsWithKey:(NSString *)key {
     __block BOOL exists = NO;
     dispatch_sync(_ioQueue, ^{

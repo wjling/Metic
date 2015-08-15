@@ -30,6 +30,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
 #import "MTOperation.h"
+#import "MegUtils.h"
 //#import "ScanViewController.h"
 
 #define MainFontSize 14
@@ -715,7 +716,8 @@
                 NSLog(@"no need update banner");
             }else{
                 NSLog(@"update banner");
-                [[SDImageCache sharedImageCache] removeImageForKey:bannerURL];
+                NSString* bannerPath = [MegUtils bannerImagePathWithEventId:_eventId];
+                [[SDImageCache sharedImageCache] removeImageForKey:bannerPath];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                 });
@@ -1928,11 +1930,12 @@
     if (type == 100){
         //上传封面后 删除临时文件
         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-        NSString* bannerPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
+        NSString* bannerTmpPath = [docFolder stringByAppendingPathComponent:@"tmp.jpg"];
         NSFileManager *fileManager=[NSFileManager defaultManager];
-        if ([fileManager fileExistsAtPath:bannerPath])
-            [fileManager removeItemAtPath:bannerPath error:nil];
-        [[SDImageCache sharedImageCache] removeImageForKey:[_event valueForKey:@"banner"]];
+        if ([fileManager fileExistsAtPath:bannerTmpPath])
+            [fileManager removeItemAtPath:bannerTmpPath error:nil];
+        NSString* bannerPath = [MegUtils bannerImagePathWithEventId:_eventId];
+        [[SDImageCache sharedImageCache] removeImageForKey:bannerPath];
         
         //上报封面修改信息
         NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -1994,7 +1997,7 @@
         [sender setEnabled:NO];
     }
     NSString* confirmMsg = _inputTextView.text;
-    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:995],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
+    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
     NSLog(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
