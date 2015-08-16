@@ -687,7 +687,7 @@
     NSString *imagePath = [MegUtils photoImagePathWithImageName:a[@"photo_name"]];
     [photo setContentMode:UIViewContentModeScaleAspectFit];
     [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [photo setContentMode:UIViewContentModeScaleToFill];
         }else{
