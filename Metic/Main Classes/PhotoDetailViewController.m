@@ -1104,7 +1104,6 @@
         return;
     }
     
-    NSLog(@"kkkk");
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
         //[self.navigationController popToViewController:self.photoDisplayController animated:YES];

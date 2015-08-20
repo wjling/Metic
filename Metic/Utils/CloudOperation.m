@@ -43,7 +43,7 @@
             resultCode = @"GET";
             break;
         case 2:
-            resultCode = @"POST";
+            resultCode = @"PUT";
             break;
         case 3:
             resultCode = @"DELETE";
@@ -127,19 +127,22 @@
 
 -(void)uploadfile:(NSString*)url path:(NSString*)path;
 {
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     NSData *fileData = [NSData dataWithContentsOfFile:path];
-    NSRange range = [path rangeOfString:@"/" options:NSBackwardsSearch];
-    NSString *fileName = [path substringFromIndex:range.location+1];
-    AFHTTPRequestOperation *op = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        
-        [formData appendPartWithFileData:fileData name:@"file" fileName:fileName mimeType:_mineType];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:url parameters:@{@"Content-Type":_mineType,@"Content-Length":@(fileData.length)}  error:nil];
+    [request setHTTPBody:fileData];
+    
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"上传成功");
         [self.mDelegate finishwithOperationStatus:YES type:2 data:fileData path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"上传失败");
         [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
     }];
-    [op setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
+    
+    [requestOperation setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
                                         long long totalBytesWritten,
                                         long long totalBytesExpectedToWrite) {
         if (_shouldRecordProgress) {
@@ -151,7 +154,7 @@
         }
         
     }];
-    [op start];
+    [requestOperation start];
 }
 
 -(void)deletefile:(NSString*)url

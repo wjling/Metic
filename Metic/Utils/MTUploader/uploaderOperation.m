@@ -148,30 +148,32 @@
 
 - (void)start
 {
-    @synchronized (self) {
-        if (self.isCancelled) {
-            self.finished = YES;
-//            [self reset];
-            return;
+    @autoreleasepool {
+        @synchronized (self) {
+            if (self.isCancelled) {
+                self.finished = YES;
+                return;
+            }
+        }
+        self.executing = YES;
+        _thread = [NSThread currentThread];
+        [self checkEventExisted];
+        
+        
+        _wait = YES;
+        while(_wait) {
+            
+            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+            
+        }
+        self.executing = NO;
+        self.finished = YES;
+        if([UploaderManager sharedManager].uploadQueue.operations.count == 0)
+        {
+            [self postFinishNotification];
         }
     }
-    self.executing = YES;
-    _thread = [NSThread currentThread];
-    [self checkEventExisted];
-
     
-    _wait = YES;
-    while(_wait) {
-        
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-        
-    }
-    self.executing = NO;
-    self.finished = YES;
-    if([UploaderManager sharedManager].uploadQueue.operations.count == 0)
-    {
-        [self postFinishNotification];
-    }
 }
 
 #pragma mark step1:checkEventExisted
@@ -279,7 +281,7 @@
 -(void)getCloudFileURL:(NSString*)path
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:@"POST" forKey:@"method"];
+    [dictionary setValue:@"PUT" forKey:@"method"];
     [dictionary setValue:path forKey:@"object"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -328,28 +330,29 @@
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     NSString *fileName = [NSString stringWithFormat:@"%@.png",_imageName];
     
-    AFHTTPRequestOperation *op = [manager POST:_uploadURL parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:_imgData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:_uploadURL parameters:@{@"Content-Type":@"image/jpeg",@"Content-Length":@(_imgData.length)}  error:nil];
+    [request setHTTPBody:_imgData];
+    
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"上传成功");
-        //        _imgData = nil;
         [self performSelector:@selector(reportToServer) onThread:_thread withObject:nil waitUntilDone:NO];
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"上传失败");
         _imgData = nil;
         _wait = NO;
         [self performSelector:@selector(stop) onThread:_thread withObject:nil waitUntilDone:NO];
     }];
+    
     _progress = 0;
     
-    [op setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
+    [requestOperation setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
                                  long long totalBytesWritten,
                                  long long totalBytesExpectedToWrite) {
         _progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite*0.8f;
         NSLog(@"图片:%@ 进度:%f ",fileName,_progress);
     }];
-    [op start];
+    [requestOperation start];
 }
 
 #pragma mark step6:reportToServer
@@ -415,7 +418,8 @@
 #pragma mark step7:savePhotoToCache
 -(void)savePhotoToCache
 {
-    NSString *photoPath = [MegUtils photoImagePathWithImageName:_imageName];
+    NSString *imageName = [NSString stringWithFormat:@"%@.png",_imageName];
+    NSString *photoPath = [MegUtils photoImagePathWithImageName:imageName];
     [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] forKey:photoPath];
     _imgData = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
