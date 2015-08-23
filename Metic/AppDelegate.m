@@ -22,6 +22,7 @@
 #import "XGPush.h"
 #import "XGSetting.h"
 #import "MTDatabaseHelper.h"
+#import "SDWebImageManager.h"
 
 #define _IPHONE80_ 80000
 
@@ -196,6 +197,10 @@
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+    
+    SDWebImageManager.sharedManager.cacheKeyFilter = ^(NSURL *url) {
+        return url.path;
+    };
     
     return YES;
 
