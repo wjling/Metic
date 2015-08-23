@@ -113,7 +113,6 @@
             [self initIMG];
         }else{
             __weak typeof(self) wself = self;
-            NSString* locURL = [NSString stringWithString:_url];
             [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeNone];
             [[SDWebImageDownloader sharedDownloader]downloadImageWithURL:[NSURL URLWithString:_url] options:SDWebImageDownloaderHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
                 //

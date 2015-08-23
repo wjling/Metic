@@ -329,9 +329,9 @@
     }
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     NSString *fileName = [NSString stringWithFormat:@"%@.png",_imageName];
-    
-    
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:_uploadURL parameters:@{@"Content-Type":@"image/jpeg",@"Content-Length":@(_imgData.length)}  error:nil];
+
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:_uploadURL parameters:nil  error:nil];
+    [request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:_imgData];
     
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {

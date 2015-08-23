@@ -424,17 +424,9 @@
 //                SDImageCache* cache = [SDImageCache sharedImageCache];
 //                [cache removeImageForKey:path];
                 NSLog(@"removed image path: %@",path);
+                NSString *imagePath = [NSString stringWithFormat:@"/%@%@",@[@"metis201415",@"whatsact"][Server],path];
                 
-                [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-                    [[SDImageCache sharedImageCache] removeImageForKey:path withCompletition:^{
-                        NSLog(@"removed image path: %@",path);
-                        if(mdata){
-                            [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
-                        }
-                    }];
-                } failure:^(NSString *message) {
-                    NSLog(@"%@",message);
-                }];
+                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:imagePath];
 
                 
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
@@ -480,16 +472,11 @@
             {
                 NSLog(@"removed image path: %@",path);
                 
-                [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-                    [[SDImageCache sharedImageCache] removeImageForKey:path withCompletition:^{
-                        NSLog(@"removed image path: %@",path);
-                        if(mdata){
-                            [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
-                        }
-                    }];
-                } failure:^(NSString *message) {
-                    NSLog(@"%@",message);
-                }];
+                NSString *imagePath = [NSString stringWithFormat:@"/%@%@",@[@"metis201415",@"whatsact"][Server],path];
+                
+                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:imagePath];
+                
+
 
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
                                                  [MTUser sharedInstance].userid, @"id",

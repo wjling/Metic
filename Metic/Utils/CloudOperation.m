@@ -131,7 +131,8 @@
     
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:url parameters:@{@"Content-Type":_mineType,@"Content-Length":@(fileData.length)}  error:nil];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:@"PUT" URLString:url parameters:nil  error:nil];
+    [request setValue:@"application/octet-stream" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:fileData];
     
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -224,12 +224,10 @@
         }
         return;
     }
-    
-    NSString *bucketPath = [NSString stringWithFormat:@"%@%@",@[@"/metis201415",@"/whatsact"][Server],path];
-    
-    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:bucketPath]) {
+
+    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
         if (success) {
-            success(bucketPath);
+            success(path);
         }
         return;
     }
