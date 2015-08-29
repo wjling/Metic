@@ -46,6 +46,6 @@
 @property(nonatomic,strong) UIButton* wantInBtn;
 @property(nonatomic,strong) UIImageView* officialFlag;
 @property(nonatomic,strong) NSDictionary* dict;
-
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *avatarArray;
 
 @end

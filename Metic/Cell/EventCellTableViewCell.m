@@ -145,7 +145,7 @@
     
     NSArray *memberids = [data valueForKey:@"member"];
     for (int i =0; i<4; i++) {
-        UIImageView *tmp = ((UIImageView*)[((UIView*)[self viewWithTag:103]) viewWithTag:i+1]);
+        UIImageView *tmp = self.avatarArray[i];
         //tmp.layer.masksToBounds = YES;
         //[tmp.layer setCornerRadius:5];
         if (i < participator_count) {

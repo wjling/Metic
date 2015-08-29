@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
-        <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -107,19 +107,19 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sxO-RG-KoT">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="sxO-RG-KoT">
                                 <rect key="frame" x="8" y="5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="vM7-ec-oY1">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="vM7-ec-oY1">
                                 <rect key="frame" x="38" y="5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="EQa-gd-cXA">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="EQa-gd-cXA">
                                 <rect key="frame" x="68" y="5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ler-iK-OE2">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ler-iK-OE2">
                                 <rect key="frame" x="98" y="5" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -241,16 +241,20 @@
                 <outlet property="themePhoto" destination="kGs-QV-32L" id="Xrg-aC-Ep7"/>
                 <outlet property="timeInfo" destination="1Xn-O8-yxi" id="1tO-j9-adY"/>
                 <outlet property="wantInBtn" destination="6CM-nd-fvC" id="pZR-v9-Aa6"/>
+                <outletCollection property="avatarArray" destination="sxO-RG-KoT" id="9d6-3w-8u9"/>
+                <outletCollection property="avatarArray" destination="vM7-ec-oY1" id="REH-6J-uGL"/>
+                <outletCollection property="avatarArray" destination="EQa-gd-cXA" id="BkL-tU-6Vl"/>
+                <outletCollection property="avatarArray" destination="Ler-iK-OE2" id="0t7-XQ-CGI"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="加入活动" width="20" height="20"/>
-        <image name="发起人icon" width="7" height="7"/>
+        <image name="发起人icon" width="10" height="10"/>
         <image name="头像蒙板-42(白色底）" width="22" height="22"/>
         <image name="活主头像蒙板" width="33" height="33"/>
-        <image name="活动地点icon" width="7" height="7"/>
-        <image name="活动时间icon" width="6" height="6"/>
+        <image name="活动地点icon" width="10" height="10"/>
+        <image name="活动时间icon" width="10" height="10"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -57,7 +57,8 @@
 @property(nonatomic,strong) NSNumber *eventId;
 @property(nonatomic,strong) NSNumber *launcherId;
 @property(nonatomic,strong) NSString *event;
-@property(nonatomic,strong) UIImageView* officialFlag;
+@property(nonatomic,strong) UIImageView *officialFlag;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *avatarArray;
 
 
 

@@ -70,5 +70,6 @@
 @property(nonatomic,strong) UIView *commentInputView;
 @property(nonatomic,weak) EventDetailViewController * controller;
 @property(nonatomic,strong) UIButton *addPaticipator;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *avatarArray;
 
 @end

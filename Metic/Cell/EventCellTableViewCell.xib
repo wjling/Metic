@@ -101,19 +101,19 @@
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RMM-bV-JGN">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RMM-bV-JGN">
                                 <rect key="frame" x="8" y="5" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="7JI-gw-acT">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="7JI-gw-acT">
                                 <rect key="frame" x="43" y="5" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TwR-St-aDq">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="TwR-St-aDq">
                                 <rect key="frame" x="78" y="5" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ysj-JF-IVM">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ysj-JF-IVM">
                                 <rect key="frame" x="113" y="5" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -268,6 +268,10 @@
                 <outlet property="timeInfo" destination="WWW-ty-peW" id="a5A-7Y-rYu"/>
                 <outlet property="videoWall" destination="iDx-Vs-ivA" id="w3U-k9-6Ig"/>
                 <outlet property="videoWall_icon" destination="5dg-IF-isa" id="8Ra-mG-YBF"/>
+                <outletCollection property="avatarArray" destination="RMM-bV-JGN" id="qWW-QB-hSD"/>
+                <outletCollection property="avatarArray" destination="7JI-gw-acT" id="zlW-cG-sWy"/>
+                <outletCollection property="avatarArray" destination="TwR-St-aDq" id="uzZ-UO-47B"/>
+                <outletCollection property="avatarArray" destination="ysj-JF-IVM" id="HJp-dk-qyN"/>
             </connections>
             <point key="canvasLocation" x="259" y="185.5"/>
         </tableViewCell>

@@ -158,9 +158,7 @@
     NSArray *memberids = [data valueForKey:@"member"];
     
     for (int i =3; i>=0; i--) {
-        UIImageView *tmp = ((UIImageView*)[((UIView*)[self viewWithTag:103]) viewWithTag:i+1]);
-        //tmp.layer.masksToBounds = YES;
-        //[tmp.layer setCornerRadius:5];
+        UIImageView *tmp = self.avatarArray[i];
         if (i < participator_count) {
             tmp.hidden = NO;
             PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
@@ -170,7 +168,6 @@
             [tmp sd_cancelCurrentImageLoad];
             tmp.image = nil;
         }
-        
     }
 }
 

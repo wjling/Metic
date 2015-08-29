@@ -239,7 +239,7 @@
     NSArray *memberids = [a valueForKey:@"member"];
     
     for (int i =3; i>=0; i--) {
-        UIImageView *tmp = ((UIImageView*)[((UIView*)[cell viewWithTag:103]) viewWithTag:i+1]);
+        UIImageView *tmp = cell.avatarArray[i];
         //tmp.layer.masksToBounds = YES;
         [tmp.layer setCornerRadius:5];
         if (i < participator_count) {

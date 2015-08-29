@@ -43,5 +43,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *ok_button;
 @property (strong, nonatomic) IBOutlet UIButton *no_button;
 @property(nonatomic,strong) UIImageView* officialFlag;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *avatarArray;
 -(void)drawOfficialFlag:(BOOL)isOfficial;
 @end
