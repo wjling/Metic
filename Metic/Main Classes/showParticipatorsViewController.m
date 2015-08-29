@@ -11,6 +11,7 @@
 #import "../Utils/PhotoGetter.h"
 #import "UserInfo/UserInfoViewController.h"
 #import "FriendInfoViewController.h"
+#import "AvatarCollectionViewCell.h"
 
 @interface showParticipatorsViewController ()
 @property (nonatomic,strong) NSMutableSet *inviteFids;
@@ -153,46 +154,46 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participatorCell" forIndexPath:indexPath];
+    AvatarCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"participatorCell" forIndexPath:indexPath];
     NSInteger addition = 0;
     if(_isManaging){
         if (_isMine) {
             addition = 2;
             if (indexPath.row == 0) {
-                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                UIImageView* add = cell.avatar;
                 [add setImage:[UIImage imageNamed:@"添加图标"]];
-                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                UILabel* name = cell.name;
                 name.text = @"";
-                [[cell viewWithTag:4] setHidden:YES];//delete icon
-                [[cell viewWithTag:3] setHidden:YES];//mask
+                [cell.deleteIcon setHidden:YES];//delete icon
+                [cell.mask setHidden:YES];//mask
                 return cell;
             }
             if (indexPath.row == 1) {
-                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                UIImageView* add = cell.avatar;
                 [add setImage:[UIImage imageNamed:@"删除图标"]];
-                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                UILabel* name = cell.name;
                 name.text = @"";
-                [[cell viewWithTag:4] setHidden:YES];//delete icon
-                [[cell viewWithTag:3] setHidden:YES];//mask
+                [cell.deleteIcon setHidden:YES];//delete icon
+                [cell.mask setHidden:YES];//mask
                 return cell;
             }
         }else if (_visibility){
             addition = 1;
             if (indexPath.row == 0) {
-                UIImageView* add = (UIImageView*)[cell viewWithTag:1];
+                UIImageView* add = cell.avatar;
                 [add setImage:[UIImage imageNamed:@"添加图标"]];
-                UILabel* name = (UILabel*)[cell viewWithTag:2];
+                UILabel* name = cell.name;
                 name.text = @"";
-                [[cell viewWithTag:4] setHidden:YES];//delete icon
-                [[cell viewWithTag:3] setHidden:YES];//mask
+                [cell.deleteIcon setHidden:YES];//delete icon
+                [cell.mask setHidden:YES];//mask
                 return cell;
             }
         }
     }
     
     NSDictionary* participant = _participants[indexPath.row - addition];
-    UIImageView* avatar = (UIImageView*)[cell viewWithTag:1];
-    UILabel* name = (UILabel*)[cell viewWithTag:2];
+    UIImageView* avatar = cell.avatar;
+    UILabel* name = cell.name;
     avatar.image = nil;
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
     [getter getAvatar];
@@ -202,11 +203,11 @@
         alias = [participant valueForKey:@"name"];
     }
     name.text = alias;
-    [[cell viewWithTag:3] setHidden:NO];
+    [cell.mask setHidden:NO];
     BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);
     if (_isRemoving && !isMe) {
-        [[cell viewWithTag:4] setHidden:NO];
-    }else [[cell viewWithTag:4] setHidden:YES];
+        [cell.deleteIcon setHidden:NO];
+    }else [cell.deleteIcon setHidden:YES];
     
     return cell;
 }

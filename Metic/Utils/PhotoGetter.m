@@ -87,7 +87,7 @@
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:NULL];
 
         }else{
-            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageCacheMemoryOnly completed:NULL];
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:NULL];
         }
     } failure:^(NSString *message) {
         if (self.imageView.tag != [self.avatarId integerValue])
@@ -439,12 +439,8 @@
         self.uploadImage = nil;
         if (status){
             if (self.type == 21) { //上传头像
-//                SDImageCache* cache = [SDImageCache sharedImageCache];
-//                [cache removeImageForKey:path];
-                NSLog(@"removed image path: %@",path);
-                NSString *imagePath = [NSString stringWithFormat:@"/%@%@",@[@"metis201415",@"whatsact"][Server],path];
                 
-                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:imagePath];
+                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
 
                 
                 NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
@@ -490,9 +486,7 @@
             {
                 NSLog(@"removed image path: %@",path);
                 
-                NSString *imagePath = [NSString stringWithFormat:@"/%@%@",@[@"metis201415",@"whatsact"][Server],path];
-                
-                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:imagePath];
+                [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
                 
 
 

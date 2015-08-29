@@ -199,7 +199,13 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
     SDWebImageManager.sharedManager.cacheKeyFilter = ^(NSURL *url) {
-        return url.path;
+        NSString *path = url.path;
+        if ([path hasPrefix:@"/whatsact"]) {
+            path = [path stringByReplacingOccurrencesOfString:@"/whatsact" withString:@""];
+        }else if ([path hasPrefix:@"/metis201415"]) {
+            path = [path stringByReplacingOccurrencesOfString:@"/metis201415" withString:@""];
+        }
+        return path;
     };
     
     return YES;
