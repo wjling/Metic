@@ -952,7 +952,6 @@
             return cell;
         }
 
-        //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"pCommentCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
@@ -963,7 +962,7 @@
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
-        //NSString* commentText = [Pcomment valueForKey:@"content"];
+
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {

@@ -1217,7 +1217,6 @@
             return cell;
         }
 
-        //cell = [[UITableViewCell alloc]init];
         static NSString *CellIdentifier = @"vCommentCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
@@ -1227,7 +1226,6 @@
         }
         cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
-//        NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
             alias = [Vcomment valueForKey:@"author"];
@@ -1285,7 +1283,6 @@
         comment.lineBreakMode = NSLineBreakByCharWrapping;
         
         comment.emojiText = text;
-        //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
         

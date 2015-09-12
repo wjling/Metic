@@ -14,6 +14,8 @@
 #import "PhotoDetailViewController.h"
 #import "VideoDetailViewController.h"
 #import "UIImageView+MTWebCache.h"
+#import "AtMeGoodTableViewCell.h"
+#import "AtMeTableViewCell.h"
 
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
@@ -205,21 +207,20 @@ enum pos{
         }
         return cell;
     }else{
-        UITableViewCell* cell;
         NSDictionary *atMeInfo = _atMeEvents[_atMeEvents.count - 1 - indexPath.row];
         int cmd = [[atMeInfo valueForKey:@"cmd"] intValue];
         if (cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
-            UIImageView* avatar = (UIImageView*)[cell viewWithTag:11];
+            AtMeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"atMeCell"];
+            UIImageView* avatar = cell.avatar;
             avatar.layer.masksToBounds = YES;
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
-            ((UILabel*)[cell viewWithTag:3]).text = [atMeInfo valueForKey:@"content"];
-            ((UILabel*)[cell viewWithTag:4]).text = [atMeInfo valueForKey:@"time"];
-            UIImageView* img = (UIImageView*)[cell viewWithTag:23];
-            UILabel* lab = (UILabel*)[cell viewWithTag:25];
+            cell.author.text = [atMeInfo valueForKey:@"author"];
+            cell.content.text = [atMeInfo valueForKey:@"content"];
+            cell.time.text = [atMeInfo valueForKey:@"time"];
+            UIImageView* img = cell.contentImage;
+            UILabel* lab = cell.contentLabel;
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
             if (cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY) {
                 lab.text = @"";
@@ -248,16 +249,17 @@ enum pos{
                     lab.text = object_content;
                 }
             }
+            return cell;
         }else if(cmd == NEW_LIKE_NOTIFICATION){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
-            UIImageView* avatar = (UIImageView*)[cell viewWithTag:21];
+            AtMeGoodTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"atMeGoodCell"];
+            UIImageView* avatar = cell.avatar;
             avatar.layer.masksToBounds = YES;
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            ((UILabel*)[cell viewWithTag:2]).text = [atMeInfo valueForKey:@"author"];
-            UIImageView* img = (UIImageView*)[cell viewWithTag:24];
-            UILabel* lab = (UILabel*)[cell viewWithTag:26];
+            cell.author.text = [atMeInfo valueForKey:@"author"];
+            UIImageView* img = cell.contentImage;
+            UILabel* lab = cell.contentLabel;
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
             int operation = [[atMeInfo valueForKey:@"operation"] intValue];
             if (operation == 3 || operation == 5) {
@@ -287,9 +289,10 @@ enum pos{
                     lab.text = object_content;
                 }
             }
+            return cell;
         }
-        return cell;
     }
+    return nil;
 }
 
 

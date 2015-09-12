@@ -14,6 +14,9 @@
 #import "MLEmojiLabel.h"
 
 @interface MCommentTableViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UIImageView *avatar;
+@property (strong, nonatomic) IBOutlet UILabel *publishTime;
+@property (strong, nonatomic) IBOutlet UILabel *publisher;
 - (IBAction)delete_Comment:(id)sender;
 @property(strong,nonatomic) NSNumber* commentid;
 @property(strong,nonatomic) NSNumber* eventId;

@@ -397,6 +397,9 @@
 		F89442DE1B7F21FB007F405E /* UIButton+MTWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */; };
 		F89442E11B7F869A007F405E /* MegUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442E01B7F869A007F405E /* MegUtils.m */; };
 		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
+		F8C109B71BA463890043650E /* AtMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B61BA463890043650E /* AtMeTableViewCell.m */; };
+		F8C109BA1BA465E70043650E /* AtMeGoodTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */; };
+		F8C109BD1BA46CB30043650E /* UIImageView+MTTag.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109BC1BA46CB30043650E /* UIImageView+MTTag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1178,6 +1181,12 @@
 		F89442E01B7F869A007F405E /* MegUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MegUtils.m; sourceTree = "<group>"; };
 		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
 		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
+		F8C109B51BA463890043650E /* AtMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMeTableViewCell.h; sourceTree = "<group>"; };
+		F8C109B61BA463890043650E /* AtMeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMeTableViewCell.m; sourceTree = "<group>"; };
+		F8C109B81BA465E70043650E /* AtMeGoodTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMeGoodTableViewCell.h; sourceTree = "<group>"; };
+		F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMeGoodTableViewCell.m; sourceTree = "<group>"; };
+		F8C109BB1BA46CB30043650E /* UIImageView+MTTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MTTag.h"; sourceTree = "<group>"; };
+		F8C109BC1BA46CB30043650E /* UIImageView+MTTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MTTag.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1627,6 +1636,8 @@
 				F89442DA1B7F1E5C007F405E /* UIImageView+MTWebCache.m */,
 				F89442DC1B7F21FB007F405E /* UIButton+MTWebCache.h */,
 				F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */,
+				F8C109BB1BA46CB30043650E /* UIImageView+MTTag.h */,
+				F8C109BC1BA46CB30043650E /* UIImageView+MTTag.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1839,6 +1850,10 @@
 				08FC57F819E4377100D1BC66 /* EventPhotosTableViewCell.xib */,
 				F8511A8E1B91C12F00F835A6 /* AvatarCollectionViewCell.h */,
 				F8511A8F1B91C12F00F835A6 /* AvatarCollectionViewCell.m */,
+				F8C109B51BA463890043650E /* AtMeTableViewCell.h */,
+				F8C109B61BA463890043650E /* AtMeTableViewCell.m */,
+				F8C109B81BA465E70043650E /* AtMeGoodTableViewCell.h */,
+				F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -3036,6 +3051,7 @@
 				08D5E8C21A22050800D368D8 /* MTVideoPlayerViewController.m in Sources */,
 				51F4CB1219E6307500E487F1 /* ContextFilterLogFormatter.m in Sources */,
 				04BAF6781998CD3F00BF00E1 /* AddFriendConfirmViewController.m in Sources */,
+				F8C109B71BA463890043650E /* AtMeTableViewCell.m in Sources */,
 				510D45A1196E8A960081672A /* UIImage+GIF.m in Sources */,
 				F864C0F91AE0EC1A00E2EB23 /* FMDatabaseQueue.m in Sources */,
 				515F9FF419736D58009D96BA /* MapViewController.mm in Sources */,
@@ -3087,6 +3103,7 @@
 				0821828A1AA6DEED00EBD156 /* PECropViewController.m in Sources */,
 				08DB69AE19541F3A00F80F3F /* SCommentTableViewCell.m in Sources */,
 				0435EF3B19B45C54003BB2F6 /* FriendInfoViewController.m in Sources */,
+				F8C109BA1BA465E70043650E /* AtMeGoodTableViewCell.m in Sources */,
 				51F4CB1C19E6307500E487F1 /* GCDAsyncSocket.m in Sources */,
 				510D459E196E8A960081672A /* SDWebImageManager.m in Sources */,
 				04B3F5EC19756DAE00C0A6EB /* FeedBackViewController.m in Sources */,
@@ -3100,6 +3117,7 @@
 				0435EF5619B5EB0E003BB2F6 /* ModifyPasswordViewController.m in Sources */,
 				085D99FF19C996D6004362B8 /* SDAVAssetExportSession.m in Sources */,
 				F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */,
+				F8C109BD1BA46CB30043650E /* UIImageView+MTTag.m in Sources */,
 				48A4DDF4194FE42D0066BF8D /* NSString+PinYin4Cocoa.m in Sources */,
 				08DB69B619541F3A00F80F3F /* UIRefreshControl+AFNetworking.m in Sources */,
 				08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */,

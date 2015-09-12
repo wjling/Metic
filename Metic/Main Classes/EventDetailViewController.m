@@ -1423,15 +1423,15 @@
         //显示备注名
         NSString* author = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
         if (author == nil || [author isEqual:[NSNull null]] || [author isEqualToString:@""]) {
-            author = [mainCom valueForKey:@"author"];
+            author = mainCom[@"author"];
         }
-        ((UILabel*)[cell viewWithTag:2]).text = author;
-        ((UILabel*)[cell viewWithTag:3]).text = [mainCom valueForKey:@"time"];
+        cell.publisher.text = author;
+        cell.publishTime.text = mainCom[@"time"];
         if([[mainCom valueForKey:@"comment_num"]intValue]==0) [cell.subCommentBG setHidden:YES];
         else [cell.subCommentBG setHidden:NO];
         
         
-        MLEmojiLabel *textView = (MLEmojiLabel*)[cell viewWithTag:4];
+        MLEmojiLabel *textView = cell.comment;
         NSString* text = [mainCom valueForKey:@"content"];
         cell.origincomment = text;
         NSString*alias1,*alias2;
@@ -1480,14 +1480,12 @@
             [cell.good_button setImage:[UIImage imageNamed:@"实心点赞图"] forState:UIControlStateNormal];
         }else [cell.good_button setImage:[UIImage imageNamed:@"点赞图"] forState:UIControlStateNormal];
         if ([[mainCom valueForKey:@"comment_id"] intValue] == -1 ) {
-//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView startAnimating];
             [cell.resend_Button setHidden:YES];
             
             
         }else if([[mainCom valueForKey:@"comment_id"] intValue] == -2){
-//            [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
             [cell.zanView setHidden:YES];
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:NO];
@@ -1497,16 +1495,10 @@
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
-//            if ([[mainCom valueForKey:@"author_id"]integerValue] == [[MTUser sharedInstance].userid integerValue] || [[_event valueForKey:@"launcher_id"]integerValue] == [[MTUser sharedInstance].userid integerValue]) {
-//                [((UIButton*)[cell viewWithTag:5]) setHidden:NO];
-//            }
-//            else{
-//                [((UIButton*)[cell viewWithTag:5]) setHidden:YES];
-//            }
         }
         [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
-        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:(UIImageView*)[cell viewWithTag:1] authorId:[mainCom valueForKey:@"author_id"]];
+        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[mainCom valueForKey:@"author_id"]];
         [avatarGetter getAvatar];
         
         return cell;

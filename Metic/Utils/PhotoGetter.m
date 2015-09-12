@@ -18,6 +18,7 @@
 #import "MTOperation.h"
 #import "UIImageView+WebCache.h"
 #import "MegUtils.h"
+#import "UIImageView+MTTag.h"
 
 @interface PhotoGetter ()
 {
@@ -79,9 +80,9 @@
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
     [self.imageView sd_cancelCurrentImageLoad];
     NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
-    self.imageView.tag = [self.avatarId integerValue];
+    self.imageView.downloadId = self.avatarId;
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId] || [[MTUser sharedInstance].userid intValue] == [_avatarId intValue]) {
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:NULL];
@@ -90,7 +91,7 @@
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:NULL];
         }
     } failure:^(NSString *message) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         NSLog(@"%@",message);
         [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed];
@@ -102,9 +103,9 @@
     [self.imageView sd_cancelCurrentImageLoad];
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
     NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
-    self.imageView.tag = [self.avatarId integerValue];
+    self.imageView.downloadId = self.avatarId;
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
             NSLog(@"获取头像方法1");
@@ -114,7 +115,7 @@
             NSLog(@"获取头像方法2");
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];    }
     } failure:^(NSString *message) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         NSLog(@"%@",message);
         [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed];
@@ -126,14 +127,14 @@
     [self.imageView sd_cancelCurrentImageLoad];
     [self.imageView setImage:[UIImage imageNamed:@"默认用户头像"]];
     NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
-    self.imageView.tag = [self.avatarId integerValue];
+    self.imageView.downloadId = self.avatarId;
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         [[SDImageCache sharedImageCache] removeImageForKey:path];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];
     } failure:^(NSString *message) {
-        if (self.imageView.tag != [self.avatarId integerValue])
+        if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         NSLog(@"%@",message);
     }];
