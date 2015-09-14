@@ -122,8 +122,9 @@
     [self.comment_button setTitle:[CommonUtils TextFromInt:[num intValue]] forState:UIControlStateNormal];
 }
 
--(void)refresh
+- (void)applyData:(NSMutableDictionary *)data;
 {
+    self.videoInfo = data;
     _isVideoReady = NO;
     if (_progressOverlayView) {
         [_progressOverlayView removeFromSuperview];
@@ -150,15 +151,7 @@
         _playingVideoName = nil;
     }
     NSString* text = [_videoInfo valueForKey:@"title"];
-    //float height = [self.controller calculateTextHeight:text width:280 fontSize:16.0f];
-    CGRect frame = self.textViewContainer.frame;
-    frame.size.height = _height + 20;
-    self.textViewContainer.frame = frame;
     self.title.text = text;
-    
-    CGRect cframe = self.controlContainer.frame;
-    cframe.origin.y = frame.origin.y + frame.size.height;
-    self.controlContainer.frame = cframe;
     
     [self.good_button setEnabled:YES];
     [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
@@ -490,7 +483,6 @@
             frame.size.height = height*Bframe.size.width/width;
         }
 
-        
         self.avLayer.frame = frame;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
@@ -502,9 +494,7 @@
             
         }
         [self.videoPlayer play];
-
     }
-    
 }
 
 - (void)repeatPlaying:(NSNotification *)n
@@ -596,9 +586,16 @@
         [theMovie play];
         [theMovie pause];
     }
-    
 }
 
++ (float)calculateCellHeightwithText:(NSString *)text labelWidth:(float)labelWidth
+{
+    float height = [CommonUtils calculateTextHeight:text width:labelWidth fontSize:16.0f isEmotion:NO];
+    if (height > 60) height = 60;
+    if ([text isEqualToString:@""]) height = 0;
+    else height += 20;
+    return 321 + height;
+}
 
 @end
 

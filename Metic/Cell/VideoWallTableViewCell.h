@@ -40,13 +40,16 @@
 
 @property (nonatomic) BOOL isZan;
 @property BOOL isVideoReady;
-@property (nonatomic) float height;
+//@property (nonatomic) float height;
 - (IBAction)play:(id)sender;
 - (void)setISZan:(BOOL)isZan;
 - (void)setGood_buttonNum:(NSNumber *)num;
 - (void)setComment_buttonNum:(NSNumber *)num;
-- (void)refresh;
 - (void)animationBegin;
 - (void)PlayingVideoAtOnce;
 - (void)clearVideoRequest;
+
+//加载数据
+- (void)applyData:(NSMutableDictionary *)data;
++ (float)calculateCellHeightwithText:(NSString *)text labelWidth:(float)labelWidth;
 @end

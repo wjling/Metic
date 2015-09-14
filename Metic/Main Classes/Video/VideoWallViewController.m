@@ -534,15 +534,9 @@
     
     if (self.videoInfos) {
         NSMutableDictionary *dictionary = self.videoInfos[indexPath.row];
-        cell.videoInfo = dictionary;
         cell.eventId = _eventId;
         cell.controller = self;
-
-        NSString* text = [dictionary valueForKey:@"title"];
-        float height = [CommonUtils calculateTextHeight:text width:280 fontSize:16.0f  isEmotion:NO];
-        if ([text isEqualToString:@""]) height = -19;
-        cell.height = height;
-        [cell refresh];
+        [cell applyData:dictionary];
         [cell animationBegin];
     }
     
@@ -556,9 +550,8 @@
     
     NSDictionary *dictionary = self.videoInfos[indexPath.row];
     NSString* text = [dictionary valueForKey:@"title"];
-    float height = [CommonUtils calculateTextHeight:text width:280 fontSize:16.0f isEmotion:NO];
-    if ([text isEqualToString:@""]) height = -19;
-    return 341 + height;
+    float height = [VideoWallTableViewCell calculateCellHeightwithText:text labelWidth:CGRectGetWidth(tableView.frame) - 20];
+    return height;
     
 }
 #pragma tableView Delegate
