@@ -232,12 +232,13 @@
         NSMutableArray* newVCs = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
         UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
         if (home) {
-            [newVCs replaceObjectAtIndex:vccount-2 withObject:home];
+            newVCs[1] = home;
+            for (NSInteger i = vccount - 2; i > 1; i --) {
+                [newVCs removeObjectAtIndex:i];
+            }
             self.navigationController.viewControllers = newVCs;
         }
-        
     }
-    
 }
 
 -(void)setupBottomView

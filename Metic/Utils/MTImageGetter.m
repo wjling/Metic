@@ -97,8 +97,8 @@
             placeHolderFail = defaultAvatarFailImg;
             break;
         case MTImageGetterTypePhoto:
-            placeHolder = defaultAvatarImg;
-            placeHolderFail = defaultAvatarFailImg;
+            placeHolder = defaultPhotoImg;
+            placeHolderFail = defaultPhotoFailImg;
             break;
         case MTImageGetterTypeVideoThumb:
             placeHolder = defaultVideoThumbImg;
@@ -108,8 +108,12 @@
         default:
             break;
     }
-    self.imageView.downloadName = self.imageName;
-    self.imageView.image = placeHolder;
+    
+    if(![self.imageView.downloadName isEqualToString:self.imageName]){
+        self.imageView.image = placeHolder;
+        self.imageView.downloadName = self.imageName;
+    }
+    
     [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
     [[MTOperation sharedInstance]getUrlFromServer:self.path success:^(NSString *url) {
         if (![self.imageView.downloadName isEqualToString:self.imageName])
