@@ -404,11 +404,10 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     static NSDateFormatter* dateFormatter;
     if (!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateFormatter setLocale:[NSLocale currentLocale]];
     }
-    
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     NSDate* dateTime = [dateFormatter dateFromString:time];
     NSDate* now = [NSDate date];
     NSTimeInterval dateTimeInterval = [dateTime timeIntervalSince1970];
