@@ -1151,26 +1151,26 @@ enum Response_Type
             {
                 NotificationsEventRequestTableViewCell* cell = (NotificationsEventRequestTableViewCell*)cell1;
                 NSString* subject = [msg_dic objectForKey:@"subject"];
-                NSString* launcher = [msg_dic objectForKey:@"launcher"];
-                NSNumber* uid = [msg_dic objectForKey:@"launcher_id"];
+                NSString* promoter = [msg_dic objectForKey:@"promoter"];
+                NSNumber* promoter_id = [msg_dic objectForKey:@"promoter_id"];
                 
                 cell.eventInfo_dic = msg_dic;
                 cell.context_weak = self;
-                cell.tag = [uid integerValue];
+                cell.tag = [promoter_id integerValue];
                 
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
+                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",promoter_id]];
                 
                 if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
                     cell.name_label.text = alias;
                 }
                 else
                 {
-                    cell.name_label.text = launcher;
+                    cell.name_label.text = promoter;
                 }
                 cell.text_label.text = @"邀请你加入";
 //                cell.text_label.text = [NSString stringWithFormat:@"邀请你加入%d",indexPath.row];
 //                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
-                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:uid];
+                PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar_imageView authorId:promoter_id];
                 [getter getAvatar];
                 
                 UIFont* font = [UIFont systemFontOfSize:11];
