@@ -17,6 +17,7 @@
 #import "LCAlertView.h"
 #import "MTDatabaseHelper.h"
 #import "MegUtils.h"
+#import "MTImageGetter.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -382,10 +383,9 @@
     [zoomScrollView setFrame:CGRectMake(containerWidth*photoIndex+2,0,containerWidth - 4, containerHeight)];
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
-    NSString *url = [_photo_list[photoIndex] valueForKey:@"url"];
-    NSString *imagePath = [MegUtils photoImagePathWithImageName:_photo_list[photoIndex][@"photo_name"]];
-
-    [zoomScrollView.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    
+    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:zoomScrollView.imageView imageId:nil imageName:_photo_list[photoIndex][@"photo_name"] type:MTImageGetterTypePhoto];
+    [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             [zoomScrollView fitImageView];
         }else{
@@ -393,15 +393,13 @@
             [zoomScrollView fitImageView];
         }
     }];
+    
     if (zoomScrollView.imageView.image) {
         [zoomScrollView fitImageView];
     }
     
     [self.scrollView addSubview:zoomScrollView];
-    
-    
 }
-
 
 
 #pragma mark - UiScrollViewDelegate

@@ -23,7 +23,6 @@
 #import "UploaderManager.h"
 #import "UploadManageViewController.h"
 #import "MTDatabaseHelper.h"
-#import "MegUtils.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -620,88 +619,9 @@
     }else{
         cell.hidden = NO;
     }
-    NSMutableDictionary *a = _photo_list[indexPath.row];
-    if ([a valueForKey:@"alasset"]) {
-        cell.isUploading = YES;
-//        cell.layer.borderColor = [UIColor redColor].CGColor;
-//        cell.layer.borderWidth = 2;
-        cell.author.text = [MTUser sharedInstance].name ;
-        cell.publish_date.text = @"正在上传";
-        cell.photoName = [a valueForKey:@"imgName"];
-        cell.avatar.layer.masksToBounds = YES;
-        [cell.avatar.layer setCornerRadius:5];
-        cell.photoInfo = a;
-        cell.PhotoWall = self;
-        cell.photo_id = nil;
-        
-        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[MTUser sharedInstance].userid];
-        [avatarGetter getAvatar];
-        UIImageView* photo = cell.imgView;
-        
-        NSString* url = [a valueForKey:@"url"];
-        NSString *imagePath = [MegUtils photoImagePathWithImageName:a[@"photo_name"]];
-        
-        [photo setContentMode:UIViewContentModeScaleAspectFit];
-        [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-        [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image) {
-                [photo setContentMode:UIViewContentModeScaleToFill];
-            }else{
-                photo.image = [UIImage imageNamed:@"加载失败"];
-            }
-        }];
-        
-        int width = [[a valueForKey:@"width"] intValue];
-        int height = [[a valueForKey:@"height"] intValue];
-        float RealHeight = height * 145.0f / width;
-        
-        [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
-        [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
-        [cell beginUpdateProgress];
-        return cell;
-    }
-    [cell stopUpdateProgress];
-    cell.isUploading = NO;
-    cell.layer.borderColor = [UIColor clearColor].CGColor;
-    cell.layer.borderWidth = 0;
-    //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [a valueForKey:@"author"];
-    }
-    cell.author.text = alias;
-    cell.publish_date.text = [[a valueForKey:@"time"] substringToIndex:10];
-    
-    cell.avatar.layer.masksToBounds = YES;
-    [cell.avatar.layer setCornerRadius:5];
-    cell.photoInfo = a;
+    NSMutableDictionary *data = _photo_list[indexPath.row];
     cell.PhotoWall = self;
-    cell.photo_id = [a valueForKey:@"photo_id"];
-    
-    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"author_id"]];
-    [avatarGetter getAvatar];
-    UIImageView* photo = cell.imgView;
-//    [cell.infoView removeFromSuperview];
-    
-    NSString* url = [a valueForKey:@"url"];
-    NSString *imagePath = [MegUtils photoImagePathWithImageName:a[@"photo_name"]];
-    [photo setContentMode:UIViewContentModeScaleAspectFit];
-    [photo setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-    [photo sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        if (image) {
-            [photo setContentMode:UIViewContentModeScaleToFill];
-        }else{
-            photo.image = [UIImage imageNamed:@"加载失败"];
-        }
-    }];
-    
-    int width = [[a valueForKey:@"width"] intValue];
-    int height = [[a valueForKey:@"height"] intValue];
-    float RealHeight = height * 145.0f / width;
-    
-    [photo setFrame:CGRectMake(0, 0, 145, RealHeight)];
-    [cell.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
-
+    [cell applyData:data];
     return cell;
 }
 
@@ -735,9 +655,6 @@
         return;
     }
     PhotoTableViewCell* cell = (PhotoTableViewCell*)[quiltView cellAtIndexPath:indexPath];
-    if (cell.isUploading) {
-        return;
-    }
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];

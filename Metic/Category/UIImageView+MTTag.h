@@ -10,4 +10,5 @@
 
 @interface UIImageView (MTTag)
 @property (strong, nonatomic) NSNumber *downloadId;
+@property (strong, nonatomic) NSString *downloadName;
 @end

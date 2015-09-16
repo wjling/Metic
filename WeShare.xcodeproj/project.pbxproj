@@ -400,6 +400,7 @@
 		F8C109B71BA463890043650E /* AtMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B61BA463890043650E /* AtMeTableViewCell.m */; };
 		F8C109BA1BA465E70043650E /* AtMeGoodTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */; };
 		F8C109BD1BA46CB30043650E /* UIImageView+MTTag.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109BC1BA46CB30043650E /* UIImageView+MTTag.m */; };
+		F8F51AF51BA9631800DA5474 /* MTImageGetter.m in Sources */ = {isa = PBXBuildFile; fileRef = F8F51AF41BA9631800DA5474 /* MTImageGetter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1187,6 +1188,8 @@
 		F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMeGoodTableViewCell.m; sourceTree = "<group>"; };
 		F8C109BB1BA46CB30043650E /* UIImageView+MTTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+MTTag.h"; sourceTree = "<group>"; };
 		F8C109BC1BA46CB30043650E /* UIImageView+MTTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+MTTag.m"; sourceTree = "<group>"; };
+		F8F51AF31BA9631800DA5474 /* MTImageGetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTImageGetter.h; sourceTree = "<group>"; };
+		F8F51AF41BA9631800DA5474 /* MTImageGetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTImageGetter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1944,6 +1947,7 @@
 				48A4DDE3194FE42D0066BF8D /* PinYin4Objc */,
 				485F47CC19494A30003AAD30 /* SocketRocket */,
 				081570DB1AAB248500D34F46 /* MTUploader */,
+				F8F51AF61BA9632A00DA5474 /* ImageGetter */,
 				48151F15194947EB009E156E /* AppConstants.h */,
 				48151F16194947EB009E156E /* CommonUtils.h */,
 				48151F17194947EB009E156E /* CommonUtils.m */,
@@ -1953,8 +1957,6 @@
 				08B3F708195711A3003B32B7 /* CloudOperation.m */,
 				48151F1C194947EB009E156E /* NSString+JSON.h */,
 				48151F1D194947EB009E156E /* NSString+JSON.m */,
-				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
-				510BE1A2195BED3A00084014 /* PhotoGetter.m */,
 				510D45A7196EA5700081672A /* UIImage+UIImageExtras.h */,
 				510D45A8196EA5700081672A /* UIImage+UIImageExtras.m */,
 				04BAF6551993644F00BF00E1 /* Reachability.h */,
@@ -2689,6 +2691,17 @@
 			path = fmdb;
 			sourceTree = "<group>";
 		};
+		F8F51AF61BA9632A00DA5474 /* ImageGetter */ = {
+			isa = PBXGroup;
+			children = (
+				510BE1A1195BED3A00084014 /* PhotoGetter.h */,
+				510BE1A2195BED3A00084014 /* PhotoGetter.m */,
+				F8F51AF31BA9631800DA5474 /* MTImageGetter.h */,
+				F8F51AF41BA9631800DA5474 /* MTImageGetter.m */,
+			);
+			name = ImageGetter;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2895,6 +2908,7 @@
 				0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
 				0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */,
+				F8F51AF51BA9631800DA5474 /* MTImageGetter.m in Sources */,
 				085EAF3A19FBC24D00BFDA10 /* DAProgressOverlayView.m in Sources */,
 				48A4DDF6194FE42D0066BF8D /* PinyinHelper.m in Sources */,
 				51E546B2199896E5003FA551 /* nearbyEventTableViewCell.m in Sources */,

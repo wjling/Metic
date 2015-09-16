@@ -16,17 +16,16 @@
 @property (strong, nonatomic) UILabel *publish_date;
 @property (strong, nonatomic) UIView *infoView;
 @property (strong, nonatomic) UIImageView *imgView;
-@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
-//@property (strong, nonatomic) UIButton *button_Detail;
 @property (strong, nonatomic) NSNumber *photo_id;
 @property (strong, nonatomic) NSMutableDictionary* photoInfo;
 @property (weak, nonatomic) PictureWall2* PhotoWall;
 @property (strong, nonatomic) NSString* photoName;
-@property BOOL isUploading;
+
 @property BOOL isloading;
 @property BOOL isLeft;
 - (void)button_DetailPressed:(id)sender;
 -(void)animationBegin;
--(void)beginUpdateProgress;
--(void)stopUpdateProgress;
+
+//加载数据
+- (void)applyData:(NSMutableDictionary *)data;
 @end

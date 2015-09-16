@@ -23,6 +23,7 @@
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.H"
 #import "MegUtils.h"
+#import "MTImageGetter.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -855,11 +856,11 @@
     if (indexPath.row == 0) {
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        NSString *imagePath = [MegUtils photoImagePathWithImageName:_photoInfo[@"photo_name"]];
         UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
-        [imageView setContentMode:UIViewContentModeScaleAspectFit];
         [imageView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-        [imageView sd_setImageWithURL:[NSURL URLWithString:[_photoInfo valueForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:imagePath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:imageView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
+        [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 _photo = image;
                 [imageView setContentMode:UIViewContentModeScaleToFill];
