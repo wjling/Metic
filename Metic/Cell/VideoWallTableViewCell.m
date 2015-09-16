@@ -19,6 +19,7 @@
 #import "VideoPlayerViewController.h"
 #import "../Main Classes/Video/MTVideoPlayerViewController.h"
 #import "MegUtils.h"
+#import "MTImageGetter.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -188,15 +189,14 @@
         _isPlaying = NO;
         self.videoPlayImg.hidden = NO;
     }
-    NSString *thumbPath = [MegUtils videoThummbImagePathWithVideoName:_videoInfo[@"video_name"]];
-    [self.thumbImg sd_setImageWithURL:[NSURL URLWithString:url] cloudPath:thumbPath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+    
+    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.thumbImg imageId:nil imageName:_videoInfo[@"video_name"] type:MTImageGetterTypeVideoThumb];
+    [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
             self.thumbImg.contentMode = UIViewContentModeScaleAspectFill;
             self.videoThumb = image;
         }
-        
     }];
-    
 }
 
 - (void)clearVideoRequest

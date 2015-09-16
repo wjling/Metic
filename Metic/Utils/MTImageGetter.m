@@ -62,28 +62,66 @@
 -(void)getImageComplete:(MTImageGetterCompletionBlock)completedBlock
 {
     [self.imageView sd_cancelCurrentAnimationImagesLoad];
-    static UIImage *defaultImg;
-    static UIImage *defaultFailImg;
-    if (!defaultImg) {
-        defaultImg = [UIImage imageNamed:@"活动图片的默认图片"];
+    static UIImage *defaultPhotoImg;
+    static UIImage *defaultPhotoFailImg;
+    static UIImage *defaultAvatarImg;
+    static UIImage *defaultAvatarFailImg;
+    static UIImage *defaultVideoThumbImg;
+    static UIImage *defaultVideoThumbFailImg;
+    if (!defaultPhotoImg) {
+        defaultPhotoImg = [UIImage imageNamed:@"活动图片的默认图片"];
     }
-    if (!defaultFailImg) {
-        defaultFailImg = [UIImage imageNamed:@"加载失败"];
+    if (!defaultPhotoFailImg) {
+        defaultPhotoFailImg = [UIImage imageNamed:@"加载失败"];
+    }
+    
+    if (!defaultAvatarImg) {
+        defaultAvatarImg = [UIImage imageNamed:@"默认用户头像"];
+    }
+    if (!defaultAvatarFailImg) {
+        defaultAvatarFailImg = [UIImage imageNamed:@"默认用户头像"];
+    }
+    
+    if (!defaultVideoThumbImg) {
+        defaultVideoThumbImg = nil;
+    }
+    if (!defaultVideoThumbFailImg) {
+        defaultVideoThumbFailImg = nil;
+    }
+    
+    UIImage *placeHolder = nil;
+    UIImage *placeHolderFail = nil;
+    switch (self.type) {
+        case MTImageGetterTypeAvatar:
+            placeHolder = defaultAvatarImg;
+            placeHolderFail = defaultAvatarFailImg;
+            break;
+        case MTImageGetterTypePhoto:
+            placeHolder = defaultAvatarImg;
+            placeHolderFail = defaultAvatarFailImg;
+            break;
+        case MTImageGetterTypeVideoThumb:
+            placeHolder = defaultVideoThumbImg;
+            placeHolderFail = defaultVideoThumbFailImg;
+            break;
+            
+        default:
+            break;
     }
     self.imageView.downloadName = self.imageName;
-    self.imageView.image = defaultImg;
+    self.imageView.image = placeHolder;
     [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
     [[MTOperation sharedInstance]getUrlFromServer:self.path success:^(NSString *url) {
         if (![self.imageView.downloadName isEqualToString:self.imageName])
             return ;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:defaultImg cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (completedBlock) {
                 completedBlock(image,error,cacheType,imageURL);
             }else {
                 if (image) {
                     [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
                 }else{
-                    self.imageView.image = defaultFailImg;
+                    self.imageView.image = placeHolderFail;
                 }
             }
             

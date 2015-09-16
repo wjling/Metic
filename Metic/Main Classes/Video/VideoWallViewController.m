@@ -537,7 +537,7 @@
         cell.eventId = _eventId;
         cell.controller = self;
         [cell applyData:dictionary];
-        [cell animationBegin];
+//        [cell animationBegin];
     }
     
 	return cell;

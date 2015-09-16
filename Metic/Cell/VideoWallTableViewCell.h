@@ -45,7 +45,7 @@
 - (void)setISZan:(BOOL)isZan;
 - (void)setGood_buttonNum:(NSNumber *)num;
 - (void)setComment_buttonNum:(NSNumber *)num;
-- (void)animationBegin;
+//- (void)animationBegin;
 - (void)PlayingVideoAtOnce;
 - (void)clearVideoRequest;
 

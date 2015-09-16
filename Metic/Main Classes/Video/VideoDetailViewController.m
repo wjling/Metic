@@ -25,6 +25,7 @@
 #import "MTDatabaseHelper.h"
 #import "SVProgressHUD.h"
 #import "MegUtils.h"
+#import "MTImageGetter.h"
 
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()
@@ -1123,12 +1124,13 @@
             [video setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
             
         }
-        NSString *url = [_videoInfo valueForKey:@"thumb"];
-        NSString *thumbPath = [MegUtils videoThummbImagePathWithVideoName:_videoInfo[@"video_name"]];
-        [video sd_setImageWithURL:[NSURL URLWithString:url] forState:UIControlStateNormal cloudPath:thumbPath completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        
+        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:video.imageView imageId:nil imageName:_videoInfo[@"video_name"] type:MTImageGetterTypeVideoThumb];
+        [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
-                video.contentMode = UIViewContentModeScaleAspectFill;
                 _video_thumb = image;
+                [video setImage:image forState:UIControlStateNormal];
+                video.imageView.contentMode = UIViewContentModeScaleAspectFill;
             }
         }];
         
