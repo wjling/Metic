@@ -12,7 +12,7 @@
 #import "UzysAssetsPickerController.h"
 
 
-@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,HttpSenderDelegate,PhotoGetterDelegate,PECropViewControllerDelegate,UIAlertViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate,UzysAssetsPickerControllerDelegate>
+@interface PhotoUploadViewController : UIViewController<UIScrollViewDelegate,UITextViewDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate,UzysAssetsPickerControllerDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) UIViewController* photoWallController;
 @property (strong, nonatomic) NSNumber* eventId;

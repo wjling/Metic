@@ -68,7 +68,7 @@
 {
     //多图上传
     
-    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height", nil];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"width",@"height",@"imageDescription", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@ order by id",_eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance]queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         for (int i = 0; i < resultsArray.count; i++) {

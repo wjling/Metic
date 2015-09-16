@@ -15,7 +15,7 @@
 @property (nonatomic,strong) NSNumber* eventId;
 @property BOOL wait;
 
-- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName;
-- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName;
+- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription;
+- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription;
 - (void)removeuploadTaskInDB;
 @end

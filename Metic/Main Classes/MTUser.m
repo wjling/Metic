@@ -350,6 +350,12 @@ static MTUser *singletonInstance;
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"event" addsColumn:@"likeTime" withDefault:nil];
         }
         
+        result = [CommonUtils compareVersion1:version andVersion2:@"1.2.0"];
+        
+        if (result <= 0) {
+            [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"uploadIMGtasks" addsColumn:@"imageDescription" withDefault:nil];
+        }
+        
 
         version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];

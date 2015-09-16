@@ -29,6 +29,7 @@
     BOOL _finished;
 }
 @property (nonatomic,strong) NSString* imageName;
+@property (nonatomic,strong) NSString* imageDescription;
 @property (nonatomic,strong) NSString* uploadURL;
 @property (nonatomic,strong) ALAsset* imageALAsset;
 @property (nonatomic,strong) NSString* imageALAssetStr;
@@ -45,7 +46,7 @@
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
-- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName{
+- (id)initWithimgAsset:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription{
     if ((self = [super init])) {
         _progress = 0;
         _executing = NO;
@@ -53,14 +54,15 @@
         _imageALAsset = imgAsset;
         _eventId = eventId;
         _imageName = imageName;
+        _imageDescription = imageDescription;
         _wait = YES;
-        [self saveToDB:imgAsset imageName:_imageName];
+        [self saveToDB:imgAsset imageName:_imageName imageDescription:imageDescription];
         [self saveThumbnail];
     }
     return self;
 }
 
-- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName
+- (id)initWithimgAssetStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription
 {
     if ((self = [super init])) {
         _progress = 0;
@@ -69,6 +71,7 @@
         _imageALAssetStr = imgAssetStr;
         _eventId = eventId;
         _imageName = imageName;
+        _imageDescription = imageDescription;
         _wait = YES;
     }
     return self;
@@ -104,15 +107,15 @@
     }
 }
 
-- (void)saveToDB:(ALAsset*)alasset imageName:(NSString*)imageName
+- (void)saveToDB:(ALAsset*)alasset imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription
 {
     NSURL* aLAssetsURL = [alasset valueForProperty:ALAssetPropertyAssetURL];
     NSString *aLAssetsStr = [aLAssetsURL absoluteString];
     float width = [[alasset defaultRepresentation]dimensions].width;
     float height = [[alasset defaultRepresentation]dimensions].height;;
 
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'",@"'width'",@"'height'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr],[NSString stringWithFormat:@"%f",width],[NSString stringWithFormat:@"%f",height], nil];
+    NSArray *columns = [[NSArray alloc]initWithObjects:@"'event_id'",@"'imgName'",@"'alasset'",@"'width'",@"'height'",@"'imageDescription'", nil];
+    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",imageName],[NSString stringWithFormat:@"'%@'",aLAssetsStr],[NSString stringWithFormat:@"%f",width],[NSString stringWithFormat:@"%f",height], [NSString stringWithFormat:@"'%@'",imageDescription], nil];
     [[MTDatabaseHelper sharedInstance]insertToTable:@"uploadIMGtasks" withColumns:columns andValues:values];
 }
 
@@ -367,7 +370,7 @@
     [dictionary setValue:ImgName forKey:@"photos"];
     [dictionary setValue:_width  forKey:@"width"];
     [dictionary setValue:_height forKey:@"height"];
-    [dictionary setValue:@"" forKey:@"specification"];
+    [dictionary setValue:_imageDescription forKey:@"specification"];
     
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendPhotoMessage:dictionary withOperationCode: UPLOADPHOTO finshedBlock:^(NSData *rData) {
@@ -442,7 +445,7 @@
 #pragma mark step9:postFinishNotification
 - (void)postFinishNotification
 {
-    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"imageDescription", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
     
     [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {

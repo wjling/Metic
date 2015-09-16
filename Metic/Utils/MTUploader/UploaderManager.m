@@ -44,7 +44,7 @@
 
 - (void)checkUnfinishedTasks
 {
-    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset", nil];
+    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id",@"imgName",@"alasset",@"imageDescription", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by id ",@"1", nil];
     
     [[MTDatabaseHelper sharedInstance] queryTable:@"uploadIMGtasks" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
@@ -77,7 +77,8 @@
                 NSString* alassetStr = [task valueForKey:@"alasset"];
                 NSString* eventId = [task valueForKey:@"event_id"];
                 NSString* imgName = [task valueForKey:@"imgName"];
-                [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+                NSString* imageDescription = [task valueForKey:@"imageDescription"];
+                [self uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName imageDescription:imageDescription];
             }
         });
         
@@ -92,32 +93,32 @@
     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"uploadIMGtasks" withWhere:wheres];
 }
 
-- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId
+- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageDescription:(NSString *)imageDescription
 {
     NSString* imageName = [photoProcesser generateImageName];
-    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId imageName:imageName];
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAsset:imgAsset eventId:eventId imageName:imageName imageDescription:imageDescription];
     [_taskswithPhotoName setValue:newUploadTask forKey:imageName];
     [_uploadQueue addOperation:newUploadTask];
 
 }
 
-- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName
+- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription
 {
-    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAssetStr:imgAssetStr eventId:eventId imageName:imageName];
+    uploaderOperation* newUploadTask = [[uploaderOperation alloc]initWithimgAssetStr:imgAssetStr eventId:eventId imageName:imageName imageDescription:imageDescription];
     [_taskswithPhotoName setValue:newUploadTask forKey:imageName];
     [_uploadQueue addOperation:newUploadTask];
     
     
 }
 
-- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId
+- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId imageDescription:(NSString *)imageDescription;
 {
     if (uploadALAssets.count == 0 || !eventId) {
         return;
     }
     [uploadALAssets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         ALAsset *representation = obj;
-        [self uploadImage:representation eventId:eventId];
+        [self uploadImage:representation eventId:eventId imageDescription:imageDescription];
     }];
 }
 

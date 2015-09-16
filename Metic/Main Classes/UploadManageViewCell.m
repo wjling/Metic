@@ -230,7 +230,8 @@ typedef enum {
         NSString* alassetStr = [_photoInfo valueForKey:@"alasset"];
         NSString* eventId = [_photoInfo valueForKey:@"event_id"];
         NSString* imgName = [_photoInfo valueForKey:@"imgName"];
-        [[UploaderManager sharedManager] uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName];
+        NSString* imageDescription = [_photoInfo valueForKey:@"imageDescription"];
+        [[UploaderManager sharedManager] uploadImageStr:alassetStr eventId:[CommonUtils NSNumberWithNSString:eventId] imageName:imgName imageDescription:imageDescription];
     }
     if (_timer) {
         [_timer invalidate];

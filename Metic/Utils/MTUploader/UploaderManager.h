@@ -15,9 +15,9 @@
 + (UploaderManager *)sharedManager;
 - (void)checkUnfinishedTasks;
 - (void)postUploadNotification:(NSArray*)resultsArray message:(NSString*)message;
-- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId;
-- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId;
-- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:imageName;
+- (void)uploadALAssets:(NSArray *)uploadALAssets eventId:(NSNumber*)eventId imageDescription:(NSString *)imageDescription;
+- (void)uploadImage:(ALAsset *)imgAsset eventId:(NSNumber*)eventId imageDescription:(NSString *)imageDescription;
+- (void)uploadImageStr:(NSString *)imgAssetStr eventId:(NSNumber*)eventId imageName:(NSString*)imageName imageDescription:(NSString *)imageDescription;
 - (NSInteger)uploadTaskCountWithEventId:(NSNumber*)eventId;
 
 @end
