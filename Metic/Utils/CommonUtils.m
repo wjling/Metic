@@ -359,10 +359,14 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 +(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime
 {
     NSString* timeInfo = @"";
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
+    static NSDateFormatter* dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+    }
+    
     NSDate* begin = [dateFormatter dateFromString:beginTime];
     NSDate* end = [dateFormatter dateFromString:endTime];
     NSTimeInterval begins = [begin timeIntervalSince1970];
@@ -397,11 +401,13 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 //根据时间生成活动时间信息简述
 +(NSString*)calculateTimeStr:(NSString*)time
 {
-    
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
+    static NSDateFormatter* dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+    }
     
     NSDate* dateTime = [dateFormatter dateFromString:time];
     NSDate* now = [NSDate date];

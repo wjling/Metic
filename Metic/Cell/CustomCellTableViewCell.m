@@ -135,7 +135,6 @@
         launcher = [data valueForKey:@"launcher"];
     }
     
-    
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
     self.eventId = [data valueForKey:@"event_id"];
     self.launcherId = [data valueForKey:@"launcher_id"];

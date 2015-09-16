@@ -224,53 +224,60 @@
         }
         return;
     }
-
-    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
-        if (success) {
-            success(path);
-        }
-        return;
-    }
-    
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:@"GET" forKey:@"method"];
-    [dictionary setValue:path forKey:@"object"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-        if (!rData){
-            if (failure) {
-                failure(@"网络异常");
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
+            if (success) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    success(path);
+                });
             }
             return;
         }
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            switch ([cmd intValue]) {
-                case NORMAL_REPLY:
-                {
-                    NSString* url = (NSString*)[response1 valueForKey:@"url"];
-                    if (url) {
-                        if (success) {
-                            success(url);
-                        }
-                        return;
-                    }
-                }
-                    break;
-                default:
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:@"GET" forKey:@"method"];
+            [dictionary setValue:path forKey:@"object"];
+            
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+                if (!rData){
                     if (failure) {
-                        failure(@"服务器异常");
+                        failure(@"网络异常");
                     }
                     return;
-                    break;
-                    
-            }
-        }
-    }];
+                }
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY:
+                        {
+                            NSString* url = (NSString*)[response1 valueForKey:@"url"];
+                            if (url) {
+                                if (success) {
+                                    success(url);
+                                }
+                                return;
+                            }
+                        }
+                            break;
+                        default:
+                            if (failure) {
+                                failure(@"服务器异常");
+                            }
+                            return;
+                            break;
+                            
+                    }
+                }
+            }];
+        });
+    });
+    
+    
 }
 
 #pragma mark - Alert Delegate
