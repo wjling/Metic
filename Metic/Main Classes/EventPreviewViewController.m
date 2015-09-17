@@ -62,13 +62,14 @@
 
 - (void)initUI
 {
+    self.view.autoresizesSubviews = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self.navigationItem setTitle:@"活动详情"];
     if (!_tableView) {
-        CGRect frame = self.view.frame;
+        CGRect frame = self.view.bounds;
         frame.size.height -= 45;
         _tableView = [[UITableView alloc]initWithFrame:frame];
-        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableView setRowHeight:289];
