@@ -27,6 +27,8 @@
 @synthesize location;
 @synthesize launcherinfo;
 @synthesize member_count;
+@synthesize wantInBtn;
+@synthesize statusLabel;
 
 #define widthspace 10
 #define deepspace 4
@@ -121,7 +123,7 @@
                 NSString* cm = [alertView textFieldAtIndex:0].text;
                 
                 NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _eventId,@"event_id",nil];
-                NSLog(@"%@",dictionary);
+                MTLOG(@"%@",dictionary);
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
@@ -140,7 +142,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     

@@ -237,7 +237,7 @@
 -(void)insertEventToQueue:(id)sender
 {
     return;
-    NSLog(@"在头部插入某个卡片:%@",[sender userInfo]);
+    MTLOG(@"在头部插入某个卡片:%@",[sender userInfo]);
     if ([sender userInfo]) {
         NSMutableDictionary *newEvent = [[NSMutableDictionary alloc]initWithDictionary:[sender userInfo]];
         [newEvent removeObjectForKey:@"cmd"];
@@ -245,7 +245,7 @@
         [newEvent removeObjectForKey:@"promoter"];
         [newEvent removeObjectForKey:@"promoter_id"];
         [newEvent removeObjectForKey:@"seq"];
-        NSLog(@"经处理后的活动信息:%@",newEvent);
+        MTLOG(@"经处理后的活动信息:%@",newEvent);
         
         //插入数据库
         [self updateEventToDB:@[newEvent]];
@@ -274,7 +274,7 @@
     }
     [self.eventIds_all removeObject:eventId];
     
-    NSLog(@"deleteItem %@",eventId);
+    MTLOG(@"deleteItem %@",eventId);
 }
 
 //更新某个卡片
@@ -290,22 +290,22 @@
             break;
         }
     }
-    NSLog(@"replaceItem %d ",eventId);
+    MTLOG(@"replaceItem %d ",eventId);
 }
 
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  home");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  home");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -339,7 +339,7 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
@@ -367,18 +367,18 @@
                     [[NSUserDefaults standardUserDefaults]setObject:curTime forKey:@"ADTime"];
                     
                     NSArray*args = [response1 valueForKey:@"args"];
-                    NSLog(@"%@",args);
+                    MTLOG(@"%@",args);
                     
                     
                     
-                    NSLog(@"%@",url);
+                    MTLOG(@"%@",url);
                     if (url && ![url isEqualToString:@""]) {
                         AdViewController* adViewController = [[AdViewController alloc]init];
                         adViewController.args = args;
                         adViewController.AdUrl = url;
                         adViewController.method = method;
                         if (title && ![title isEqual:[NSNull null]]){
-                            NSLog(@"%@",title);
+                            MTLOG(@"%@",title);
                             adViewController.URLtitle = title;
                         }
                         
@@ -403,7 +403,7 @@
 {
     _AdUrl = [MobClick getAdURL];
     if ( _AdUrl && ![_AdUrl isEqualToString:@""]) {
-        NSLog(@"广告广告广告广告广告%f广告：%@",self.view.frame.size.height,_AdUrl);
+        MTLOG(@"广告广告广告广告广告%f广告：%@",self.view.frame.size.height,_AdUrl);
         UIView* adView = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 124, 320, 60)];
         [adView setBackgroundColor:[UIColor whiteColor]];
         UIButton* ad = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -441,10 +441,10 @@
 
 -(void)adjustInfoView
 {
-    //NSLog(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
+    //MTLOG(@"%f  %f",_scrollView.frame.origin.y ,_scrollView.frame.size.height);
     
     long num = [MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count;
-    NSLog(@"有%lu条新动态",([MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count));
+    MTLOG(@"有%lu条新动态",([MTUser sharedInstance].updateEventStatus.count + [MTUser sharedInstance].atMeEvents.count));
     if (num > 0) {
         [_updateInfoView setHidden:NO];
         if (num < 10) {
@@ -499,7 +499,7 @@
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     
-//    NSLog(@"received Data: %@",temp);
+//    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -548,7 +548,7 @@
 //    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
 //    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
 //    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-////    NSLog(@"%@",result);
+////    MTLOG(@"%@",result);
 //    
 //    [self.sql closeMyDB];
     
@@ -574,7 +574,7 @@
         }
 
     }];
-    //    NSLog(@"%@",result);
+    //    MTLOG(@"%@",result);
     
 //    [self.sql closeMyDB];
     
@@ -756,7 +756,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
         });
@@ -770,13 +770,13 @@
         return;
     }
     if (refreshView == _header) {
-        NSLog(@"header Begin");
+        MTLOG(@"header Begin");
         _Headeropen = YES;
         _clearIds = YES;
         [self getEventids];
         [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(closeRJ) userInfo:nil repeats:NO];
     }else if(refreshView == _footer){
-        NSLog(@"footer Begin");
+        MTLOG(@"footer Begin");
         _Footeropen = YES;
         _clearIds = NO;
         
@@ -807,7 +807,7 @@
 {
     for (NSInteger i = 0; i < messages.count; i++) {
         NSDictionary*message = [messages objectAtIndex:i];
-        NSLog(@"homeviewcontroller receive a message %@",message);
+        MTLOG(@"homeviewcontroller receive a message %@",message);
         
         NSNumber* msg_cmd = [message objectForKey:@"cmd"];
         if ([msg_cmd integerValue] == SYSTEM_PUSH) {   //cmd 666
@@ -818,7 +818,7 @@
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
-        NSLog(@"cmd: %d",cmd);
+        MTLOG(@"cmd: %d",cmd);
         if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION || cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY || cmd == NEW_LIKE_NOTIFICATION) {
             [self adjustInfoView];
         }

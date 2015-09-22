@@ -58,7 +58,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"login did load, fromRegister: %d",fromRegister);
+    MTLOG(@"login did load, fromRegister: %d",fromRegister);
     
     UIButton* forgetPS_btn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60 - 10, 275, 60, 25)];
     [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
@@ -74,7 +74,7 @@
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (!fromRegister) {
         if ([userDf boolForKey:@"firstLaunched"]) {
-            NSLog(@"login: it is the first launch");
+            MTLOG(@"login: it is the first launch");
 //            [self showBlackView];
 //            [userDf setValue:[NSNumber numberWithBool:NO] forKey:@"firstLaunched"];
 //            [userDf synchronize];
@@ -90,7 +90,7 @@
         }
         else
         {
-            NSLog(@"login: it is not the first launch");
+            MTLOG(@"login: it is not the first launch");
             [self showLaunchView];
 //            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
         }
@@ -139,7 +139,7 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    NSLog(@"login will apear");
+    MTLOG(@"login will apear");
     if (fromRegister) {
 //        [self.view setHidden:NO];
 //        [self dismissBlackView];
@@ -168,7 +168,7 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"登录"];
-    NSLog(@"login view did disappear");
+    MTLOG(@"login view did disappear");
 }
 - (void)didReceiveMemoryWarning
 {
@@ -188,7 +188,7 @@
         FillinInfoViewController* vc = segue.destinationViewController;
         vc.gender = gender;
         vc.email = [textField_userName text];
-        NSLog(@"register gender: %@",vc.gender);
+        MTLOG(@"register gender: %@",vc.gender);
     }
     
 }
@@ -320,16 +320,16 @@
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         //处理登录状态下，直接跳转 需要读取默认信息。
-        NSLog(@"用户 %@ 在线", userName);
+        MTLOG(@"用户 %@ 在线", userName);
         appDelegate.isLogined = YES;
         appDelegate.hadCheckPassWord = NO;
         if (![[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"有网络，验证密码");
+            MTLOG(@"有网络，验证密码");
             [self checkPassWord];
         }
 //        else
 //        {
-//            NSLog(@"没网络，跳过验证密码");
+//            MTLOG(@"没网络，跳过验证密码");
 //            [self removeWaitingView];
 //            [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
 //            [button_login setEnabled:YES];
@@ -382,17 +382,17 @@
         [dictionary setValue:@"" forKey:@"passwd"];
         [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
         
-//        NSLog(@"%@",dictionary);
+//        MTLOG(@"%@",dictionary);
         
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
             if (!rData) {
-                NSLog(@"服务器错误，返回的data为空");
+                MTLOG(@"服务器错误，返回的data为空");
                 return;
             }
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"Received Data: %@",temp);
+            MTLOG(@"Received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -401,7 +401,7 @@
                     NSString *salt = [response1 valueForKey:@"salt"];
                     NSString *str = [self.logInPassword stringByAppendingString:salt];
                     [MTUser sharedInstance].saltValue = salt;
-//                    NSLog(@"password+salt: %@",str);怎么能打log！！
+//                    MTLOG(@"password+salt: %@",str);怎么能打log！！
                     
                     //MD5 encrypt
                     NSMutableString *md5_str = [NSMutableString string];
@@ -412,16 +412,16 @@
                     [params setValue:md5_str forKey:@"passwd"];
                     [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
-//                    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);怎么能打log！！
+//                    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);怎么能打log！！
                     
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                     [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
                         if (!rData) {
-                            NSLog(@"服务器错误，返回的data为空");
+                            MTLOG(@"服务器错误，返回的data为空");
                             return;
                         }
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                        NSLog(@"Received Data: %@",temp);
+                        MTLOG(@"Received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSNumber *cmd = [response1 valueForKey:@"cmd"];
                         switch ([cmd intValue]) {
@@ -431,13 +431,13 @@
 //                                [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
 //                                [button_login setEnabled:YES];
 //                                [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
-                                NSLog(@"验证密码成功");
+                                MTLOG(@"验证密码成功");
                             }
                                 break;
                             default:
                             {
                                 //通知退出到登录页面
-                                NSLog(@"验证密码错误，强制退出到登录页面");
+                                MTLOG(@"验证密码错误，强制退出到登录页面");
                                 [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                             }
                         }
@@ -449,7 +449,7 @@
                 default:
                 {
                     //通知退出到登录页面
-                    NSLog(@"获取盐值失败，强制退出到登录页面");
+                    MTLOG(@"获取盐值失败，强制退出到登录页面");
 //                    [self removeWaitingView];
                     [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                 }
@@ -548,7 +548,7 @@
     }
     [sender setEnabled:NO];
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(recoverloginbutton) userInfo:nil repeats:NO];
-    NSLog(@"%@",[self.textField_userName text]);
+    MTLOG(@"%@",[self.textField_userName text]);
     self.logInEmail = [self.textField_userName text];
     self.logInPassword = [self.textField_password text];
     _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
@@ -566,7 +566,7 @@
     [dictionary setValue:@"" forKey:@"passwd"];
     [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
     
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -584,11 +584,11 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     if (!rData) {
-        NSLog(@"服务器错误，返回的data为空");
+        MTLOG(@"服务器错误，返回的data为空");
         return;
     }
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -597,7 +597,7 @@
             NSString *salt = [response1 valueForKey:@"salt"];
             NSString *str = [self.logInPassword stringByAppendingString:salt];
             [MTUser sharedInstance].saltValue = salt;
-//            NSLog(@"password+salt: %@",str);
+//            MTLOG(@"password+salt: %@",str);
             
             //MD5 encrypt
             NSMutableString *md5_str = [NSMutableString string];
@@ -608,7 +608,7 @@
             [params setValue:md5_str forKey:@"passwd"];
             [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
-            NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+            MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
             
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode:LOGIN];
@@ -622,7 +622,7 @@
 //            BOOL name = [SFHFKeychainUtils storeUsername:@"MeticUserName" andPassword:self.logInEmail forServiceName:@"Metic0713" updateExisting:1 error:nil];
 //            BOOL key = [SFHFKeychainUtils storeUsername:@"MeticPassword" andPassword:self.logInPassword forServiceName:@"Metic0713" updateExisting:1 error:nil];
 //            BOOL status = [SFHFKeychainUtils storeUsername:@"MeticStatus" andPassword:@"in" forServiceName:@"Metic0713" updateExisting:1 error:nil];
-            NSLog(@"login succeeded");
+            MTLOG(@"login succeeded");
             ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
             //保存信息
             NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
@@ -665,7 +665,7 @@
             [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"密码错误，请重试" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
-            NSLog(@"password not correct");
+            MTLOG(@"password not correct");
             
         }
             break;
@@ -674,7 +674,7 @@
             [_timer invalidate];
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此用户不存在，请先注册" WithDelegate:self WithCancelTitle:@"确定"];
             [button_login setEnabled:YES];
-            NSLog(@"user not found");
+            MTLOG(@"user not found");
         }
             break;
         case NORMAL_REPLY:
@@ -717,9 +717,9 @@
     CGRect frame;
     frame = button_login.frame;
     
-    NSLog(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+    MTLOG(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
     viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
-    NSLog(@"textField offset: %f",viewOffet);
+    MTLOG(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
     [UIView setAnimationDuration:animationDuration];

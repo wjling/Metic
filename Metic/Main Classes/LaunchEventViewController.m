@@ -142,7 +142,7 @@
     _geocodesearch.delegate = nil;
     
     //[mapManager stop];
-    NSLog(@"delete");
+    MTLOG(@"delete");
 }
 
 
@@ -473,7 +473,7 @@
             [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
             [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
             [dateFormatter setLocale:[NSLocale currentLocale]];
-            NSLog(@"#%@#",textField.text);
+            MTLOG(@"#%@#",textField.text);
             date= [dateFormatter dateFromString:textField.text];
         }else date = [NSDate date];
         self.seletedText = textField;
@@ -496,7 +496,7 @@
     NSString* toBeString = textField.text;
     //获取当前输入法
     NSString* lang = [[UITextInputMode currentInputMode] primaryLanguage];
-    //    NSLog(@"当前输入法： %@", lang);
+    //    MTLOG(@"当前输入法： %@", lang);
     if ([lang isEqualToString:@"zh-Hans"]) { //当前输入法是中文
         UITextRange* selectedRange = [textField markedTextRange]; //高亮的文本范围
         UITextPosition* position = [textField positionFromPosition:selectedRange.start offset:0];
@@ -527,7 +527,7 @@
     [formate setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     
     NSString *formateDateString = [formate stringFromDate:curDate];
-    NSLog(@"%@",formateDateString);
+    MTLOG(@"%@",formateDateString);
     self.seletedText.enabled = YES;
     self.seletedText.text = formateDateString;
     
@@ -618,12 +618,12 @@
     [dictionary setValue:(_code == -1? @(random()%6+2):@(_code)) forKeyPath:@"code"];
     [dictionary setValue:friends forKey:@"friends"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:LAUNCH_EVENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"Received Data: %@",temp);
+            MTLOG(@"Received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             NSNumber *tmpid = [response1 valueForKey:@"event_id"];
@@ -874,7 +874,7 @@
     }
     if ([segue.destinationViewController isKindOfClass:[MapViewController class]]) {
         MapViewController *nextViewController = segue.destinationViewController;
-        NSLog(@"初始化地理坐标为 %f  %f  ",self.pt.latitude,self.pt.longitude);
+        MTLOG(@"初始化地理坐标为 %f  %f  ",self.pt.latitude,self.pt.longitude);
         nextViewController.position = self.pt;
         nextViewController.positionInfo = self.positionInfo;
         nextViewController.controller = self;
@@ -921,7 +921,7 @@
     BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag)
     {
-        NSLog(@"反geo检索发送成功");
+        MTLOG(@"反geo检索发送成功");
     }
     else
     {
@@ -930,7 +930,7 @@
         [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
         [self.getLocButton addTarget:self action:@selector(seletePosition) forControlEvents:UIControlEventTouchUpInside];
         [self.getLocButton setHidden:NO];
-        NSLog(@"反geo检索发送失败");
+        MTLOG(@"反geo检索发送失败");
     }
     [_locService stopUserLocationService];
     _locService.delegate = nil;

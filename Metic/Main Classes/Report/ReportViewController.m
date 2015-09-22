@@ -138,13 +138,13 @@
     [dictionary setValue:[NSNumber numberWithInteger:_type] forKey:@"type"];
     [dictionary setValue:object_id forKey:@"object_id"];
     [dictionary setValue:_textView.text forKey:@"content"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:COMPLAIN finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {

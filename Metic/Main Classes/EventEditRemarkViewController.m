@@ -190,7 +190,7 @@ const float keyboardleft = 0;
 -(void)textViewDidChangeSelection:(UITextView *)textView
 {
     [self observeValueForKeyPath:@"contentSize" ofObject:_textView change:nil context:nil];
-    NSLog(@"sdfadf");
+    MTLOG(@"sdfadf");
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

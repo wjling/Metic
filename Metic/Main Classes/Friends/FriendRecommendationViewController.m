@@ -104,7 +104,7 @@
 {
     [super viewWillAppear:animated];
     
-    NSLog(@"friend recommendation view will appear");
+    MTLOG(@"friend recommendation view will appear");
     
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
@@ -138,7 +138,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated
 {
-    NSLog(@"friend recommandation viewdiddisappear");
+    MTLOG(@"friend recommandation viewdiddisappear");
     locationService.delegate = nil;
     [locationService stopUserLocationService];
     [super viewDidDisappear:animated];
@@ -178,7 +178,7 @@
     UIColor* myGreen = [UIColor colorWithRed:0.27 green:0.80 blue:0.68 alpha:1];
     CGFloat tab_width = self.tabbar_scrollview.frame.size.width/3.0;
     CGFloat tab_height = self.tabbar_scrollview.frame.size.height - 1;
-    NSLog(@"tab_height: %f, tab_width: %f",tab_height,tab_width);
+    MTLOG(@"tab_height: %f, tab_width: %f",tab_height,tab_width);
 //    self.tabbar_scrollview.scrollEnabled = NO;
     self.tabbar_scrollview = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
     [self.view addSubview:self.tabbar_scrollview];
@@ -267,7 +267,7 @@
     UIColor* waitingBgColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.7];
     waitingView = [[UIView alloc]init];
     waitingView.frame = CGRectMake(0, 0, self.content_scrollview.frame.size.width, self.content_scrollview.frame.size.height);
-    NSLog(@"content_scrollview, width: %f, height: %f",self.content_scrollview.frame.size.width,self.content_scrollview.frame.size.height);
+    MTLOG(@"content_scrollview, width: %f, height: %f",self.content_scrollview.frame.size.width,self.content_scrollview.frame.size.height);
     [waitingView setBackgroundColor:waitingBgColor];
     [waitingView setAlpha:0.5];
     actIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(140, 180, 40, 40)];
@@ -341,7 +341,7 @@
     }
     else if (tab_index == 1)
     {
-        NSLog(@"tab 1");
+        MTLOG(@"tab 1");
         if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
             //由于IOS8中定位的授权机制改变 需要进行手动授权
             _locationManager = [[CLLocationManager alloc] init];
@@ -357,7 +357,7 @@
     }
     else if (tab_index == 2)
     {
-        NSLog(@"tab 2");
+        MTLOG(@"tab 2");
         [self getKanKan:nil];
     }
     
@@ -378,10 +378,10 @@
 {
     [self getPeopleInContact];
     phoneNumbers = [self getFriendsPhoneNumber];
-    NSLog(@"phone numbers: %@", phoneNumbers);
-    NSLog(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
+    MTLOG(@"phone numbers: %@", phoneNumbers);
+    MTLOG(@"cotnent scrollview, content size: width: %f, height: %f",self.content_scrollview.contentSize.width,self.content_scrollview.contentSize.height);
     ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
-    NSLog(@"address book authorization status: %ld",status);
+    MTLOG(@"address book authorization status: %ld",status);
     if (status == kABAuthorizationStatusDenied) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您曾经拒绝了活动宝的通讯录访问，请您在\n设置->隐私->通讯录\n里面授权活动宝获取您的通讯录内容" WithDelegate:self WithCancelTitle:@"确定"];
     }
@@ -399,7 +399,7 @@
 {
     [self getPeopleInContact];
     phoneNumbers = [self getFriendsPhoneNumber];
-    NSLog(@"phone numbers: %@", phoneNumbers);
+    MTLOG(@"phone numbers: %@", phoneNumbers);
     void (^getContactFriendsDone)(NSData*) = ^(NSData* rData)
     {
         NSString* temp = @"";
@@ -408,18 +408,18 @@
         }
         else
         {
-            NSLog(@"获取通讯录好友，收到的rData为空");
+            MTLOG(@"获取通讯录好友，收到的rData为空");
             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
             [alertView show];
             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
             return;
         }
-        NSLog(@"get contactfriends done, received Data: %@",temp);
+        MTLOG(@"get contactfriends done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
         if ([cmd integerValue] == 100) {
             contactFriends_arr = [response1 objectForKey:@"friend_recom"];
-            NSLog(@"contact friend array: %@",contactFriends_arr);
+            MTLOG(@"contact friend array: %@",contactFriends_arr);
             if (contactFriends_arr) {
                 [contacts_tableview reloadData];
             }
@@ -432,11 +432,11 @@
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [MTUser sharedInstance].userid,@"id",
                               phoneNumbers,@"friends_phone",nil];
-    NSLog(@"upload number json: %@",json_dic);
+    MTLOG(@"upload number json: %@",json_dic);
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:getContactFriendsDone];
-    NSLog(@"doing getContactFriends, json: %@",json_dic);
+    MTLOG(@"doing getContactFriends, json: %@",json_dic);
     [waitingView removeFromSuperview];
     [tabPage1_view addSubview:waitingView];
     [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
@@ -453,13 +453,13 @@
         }
         else
         {
-            NSLog(@"获取附近好友，收到的rData为空");
+            MTLOG(@"获取附近好友，收到的rData为空");
             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
             [alertView show];
             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
             return;
         }
-        NSLog(@"get nearbyfriends done, received Data: %@",temp);
+        MTLOG(@"get nearbyfriends done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
         if ([cmd integerValue] == 100) {
@@ -478,7 +478,7 @@
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:GET_NEARBY_FRIENDS finshedBlock:getNearbyFriendsDone];
-    NSLog(@"doing getNearbyFriends, json: %@",json_dic);
+    MTLOG(@"doing getNearbyFriends, json: %@",json_dic);
     [waitingView removeFromSuperview];
     [tabPage2_view addSubview:waitingView];
     [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
@@ -494,13 +494,13 @@
         }
         else
         {
-            NSLog(@"获取随便看看，收到的rData为空");
+            MTLOG(@"获取随便看看，收到的rData为空");
             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
             [alertView show];
             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
             return;
         }
-        NSLog(@"get kankan done, received Data: %@",temp);
+        MTLOG(@"get kankan done, received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
         if ([cmd integerValue] == 100) {
@@ -516,7 +516,7 @@
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:KANKAN finshedBlock:getKanKanDone];
-    NSLog(@"doing getKanKan, json: %@",jsonDic);
+    MTLOG(@"doing getKanKan, json: %@",jsonDic);
     [waitingView removeFromSuperview];
     [tabPage3_view addSubview:waitingView];
     [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(hideWaitingView) userInfo:nil repeats:NO];
@@ -559,10 +559,10 @@
 //- (void)finishWithReceivedData:(NSData *)rData
 //{
 //    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//    NSLog(@"Received Data: %@",temp);
+//    MTLOG(@"Received Data: %@",temp);
 //    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
 //    NSNumber* cmd = [response1 objectForKey:@"cmd"];
-//    NSLog(@"cmd: %@",cmd);
+//    MTLOG(@"cmd: %@",cmd);
 //    switch ([cmd integerValue]) {
 //    }
 //}
@@ -626,11 +626,11 @@
             
         }
         NSMutableDictionary* friend = [contactFriends_arr objectAtIndex:indexPath.row];
-        NSLog(@"a contact friend: %@",friend);
+        MTLOG(@"a contact friend: %@",friend);
         NSNumber* fid = [friend valueForKey:@"id"];
         NSString* fname = [friend valueForKey:@"name"];
         NSNumber* isFriend = [friend valueForKey:@"isFriend"];
-        NSLog(@"isFriend: %d",[isFriend boolValue]);
+        MTLOG(@"isFriend: %d",[isFriend boolValue]);
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getAvatar];
         cell.name_label.text = fname;
@@ -676,7 +676,7 @@
         NSString* fname = [friend objectForKey:@"name"];
         NSNumber* gender = [friend objectForKey:@"gender"];
         NSNumber* isFriend = [friend objectForKey:@"isFriend"];
-        NSLog(@"is friend: %@",isFriend);
+        MTLOG(@"is friend: %@",isFriend);
         CLLocationCoordinate2D fcoordinate;
         fcoordinate.latitude = [latitude doubleValue];
         fcoordinate.longitude = [longitude doubleValue];
@@ -808,7 +808,7 @@
 #pragma mark - Touches
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    NSLog(@"touches begin");
+//    MTLOG(@"touches begin");
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -820,7 +820,7 @@
 {
     //cclocat
     coordinate = userLocation.location.coordinate;
-    NSLog(@"%f   %f",coordinate.latitude,coordinate.longitude);
+    MTLOG(@"%f   %f",coordinate.latitude,coordinate.longitude);
     [locationService stopUserLocationService];
     [self getNearbyFriends:nil];
 }
@@ -829,12 +829,12 @@
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-//    NSLog(@"scroll begin drag");
+//    MTLOG(@"scroll begin drag");
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView    // any offset changes
 {
-//    NSLog(@"scroll did scroll");
+//    MTLOG(@"scroll did scroll");
     if (scrollView == self.tabbar_scrollview) {
         ;
     }
@@ -863,7 +863,7 @@
 {
     if (clickTab) {
         clickTab = NO;
-        NSLog(@"scrollviewdidendscrollingAnimation: clicktab NO");
+        MTLOG(@"scrollviewdidendscrollingAnimation: clicktab NO");
         return;
     }
    
@@ -874,12 +874,12 @@
     if (scrollView == self.content_scrollview) {
         if (clickTab) {
             clickTab = NO;
-            NSLog(@"scrollviewdidenddecelerating: clicktab NO");
+            MTLOG(@"scrollviewdidenddecelerating: clicktab NO");
             return;
         }
-        NSLog(@"滚动停止");
+        MTLOG(@"滚动停止");
         if (tab_index == 1) {
-            NSLog(@"附近的人");
+            MTLOG(@"附近的人");
             if ([[UIDevice currentDevice].systemVersion floatValue] >= 8 && self.locationManager == nil) {
                 //由于IOS8中定位的授权机制改变 需要进行手动授权
                 _locationManager = [[CLLocationManager alloc] init];
@@ -895,7 +895,7 @@
         }
         else if (tab_index == 2)
         {
-            NSLog(@"随便看看");
+            MTLOG(@"随便看看");
             [self getKanKan:nil];
         }
 
@@ -925,7 +925,7 @@
                 [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"hasUploadPhoneNumber"];
                 [userDf setObject:userSettings forKey:key];
                 [userDf synchronize];
-                NSLog(@"user settings : %@",userSettings);
+                MTLOG(@"user settings : %@",userSettings);
                 
                 void (^uploadContactsDone)(NSData*) = ^(NSData* rData)
                 {
@@ -936,13 +936,13 @@
                     }
                     else
                     {
-                        NSLog(@"上传通讯录，收到的rData为空");
+                        MTLOG(@"上传通讯录，收到的rData为空");
                         UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                         [alertView show];
                         [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
                         return;
                     }
-                    NSLog(@"upload contact done, received Data: %@",temp);
+                    MTLOG(@"upload contact done, received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber* cmd = [response1 objectForKey:@"cmd"];
                     if ([cmd integerValue] == 100)
@@ -956,7 +956,7 @@
                                          [MTUser sharedInstance].userid, @"id",
                                          phone, @"my_phone_number",
                                          phoneNumbers, @"friends_phone",nil];
-                NSLog(@"upload number json: %@",jsonDic);
+                MTLOG(@"upload number json: %@",jsonDic);
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:uploadContactsDone];

@@ -109,16 +109,16 @@
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  square");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  square");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -282,7 +282,7 @@
                 UITapGestureRecognizer* tap  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
                 [img addGestureRecognizer:tap];
                 NSString* url = [dict valueForKey:@"image_url"];
-                NSLog(@"%@",url);
+                MTLOG(@"%@",url);
                 img.contentMode = UIViewContentModeScaleAspectFit;
                 [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]  cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (image) {
@@ -328,7 +328,7 @@
             UITapGestureRecognizer* tap  = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapEvent:)];
             [img addGestureRecognizer:tap];
             NSString* url = [dict valueForKey:@"image_url"];
-            NSLog(@"%@",url);
+            MTLOG(@"%@",url);
             img.contentMode = UIViewContentModeScaleAspectFit;
             [img sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                 if (image) {
@@ -403,11 +403,11 @@
     }else if([[dict valueForKey:@"type"] isEqualToString:@"url"]){
 
         NSString*extra = [dict valueForKey:@"extra"];
-        NSLog(@"%@",extra);
+        MTLOG(@"%@",extra);
         NSData* rData = [extra dataUsingEncoding:NSUTF8StringEncoding];
-         NSLog(@"%@",rData);
+         MTLOG(@"%@",rData);
         NSDictionary *extraDict = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-         NSLog(@"%@",extraDict);
+         MTLOG(@"%@",extraDict);
         
         NSString* url = [dict valueForKey:@"content"];
         NSString* title = [extraDict valueForKey:@"title"];
@@ -419,7 +419,7 @@
         adViewController.AdUrl = url;
         adViewController.method = method;
         if (title && ![title isEqual:[NSNull null]]){
-            NSLog(@"%@",title);
+            MTLOG(@"%@",title);
             adViewController.URLtitle = title;
         }
         
@@ -443,7 +443,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
-            NSLog(@"%@", response1);
+            MTLOG(@"%@", response1);
             if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
                 NSDictionary* dict = [response1 valueForKey:@"event_list"][0];
                 [SVProgressHUD dismiss];
@@ -489,7 +489,7 @@
                 case NORMAL_REPLY:
                 {
                     _posterList = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"poster_list"]];
-                    NSLog(@"%@",_posterList);
+                    MTLOG(@"%@",_posterList);
                     for (int i = 0; i < _posterList.count; i++) {
                         NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:_posterList[i]];
                         _posterList[i] = dictionary;
@@ -545,7 +545,7 @@
 
 -(void)refreshTable
 {
-    NSLog(@"refreshTable");
+    MTLOG(@"refreshTable");
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
     [self getNearbyEventIdsFromAir:@0];
 }
@@ -560,7 +560,7 @@
     [dictionary setValue:sequence forKey:@"sequence"];
 //    [dictionary setValue:[NSNumber numberWithBool:YES] forKey:@"all"];
     
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND finshedBlock:^(NSData *rData) {
@@ -596,7 +596,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -779,7 +779,7 @@
         float x = scrollView.contentOffset.x;
         int page = x/bannerWidth - 1;
         if (page < 0) page += _posterList.count;
-        //    NSLog(@"page:%d",page);
+        //    MTLOG(@"page:%d",page);
         if (page < _posterList.count && page != _pagecontrol.currentPage) {
             [_pagecontrol setCurrentPage:page];
         }
@@ -803,7 +803,7 @@
             float x = scrollView.contentOffset.x;
             int page = x/bannerWidth - 1;
             if (page < 0) page += _posterList.count;
-            //        NSLog(@"page:%d",page);
+            //        MTLOG(@"page:%d",page);
             if (page < _posterList.count && page != _pagecontrol.currentPage) {
                 [_pagecontrol setCurrentPage:page];
             }
@@ -853,7 +853,7 @@
 {
     if([alertView tag] == 233){
         //从活动广场进来
-        NSLog(@"从活动广场进来,申请加入活动");
+        MTLOG(@"从活动广场进来,申请加入活动");
         if(buttonIndex == 0){
         }else if(buttonIndex == 1){
             UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
@@ -872,14 +872,14 @@
             
             NSString* cm = [alertView textFieldAtIndex:0].text;
             NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _processingEventId,@"event_id",nil];
-            NSLog(@"%@",dictionary);
+            MTLOG(@"%@",dictionary);
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
             [SVProgressHUD showWithStatus:@"正在发送..." maskType:SVProgressHUDMaskTypeClear];
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
                 if (rData) {
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                    NSLog(@"received Data: %@",temp);
+                    MTLOG(@"received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     switch ([cmd intValue]) {

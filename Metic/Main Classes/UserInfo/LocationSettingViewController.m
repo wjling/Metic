@@ -51,7 +51,7 @@
         NSDictionary* province = [location_arr objectAtIndex:i];
         [province_array addObject:[province objectForKey:@"ProvinceName"]];
     }
-    NSLog(@"province array: %@",province_array);
+    MTLOG(@"province array: %@",province_array);
     
     [self.content_scrollView setScrollEnabled:NO];
     self.content_scrollView.showsHorizontalScrollIndicator = NO;
@@ -94,7 +94,7 @@
 -(void)rightBarButtonInProvinceClicked:(id)sender
 {
     selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
-    NSLog(@"selected_city_array: %@",selected_city_array);
+    MTLOG(@"selected_city_array: %@",selected_city_array);
     [self.city_tableView reloadData];
     CGPoint p = CGPointMake(320, 0);
     [self.content_scrollView setContentOffset:p animated:YES];
@@ -185,7 +185,7 @@
         [self.province_tableView reloadData];
         
         selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
-        NSLog(@"selected_city_array: %@",selected_city_array);
+        MTLOG(@"selected_city_array: %@",selected_city_array);
         [self.city_tableView reloadData];
         CGPoint p = CGPointMake(320, 0);
         [self.content_scrollView setContentOffset:p animated:YES];
@@ -237,18 +237,18 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     if (!rData) {
-        NSLog(@"服务器返回为空");
+        MTLOG(@"服务器返回为空");
         return;
     }
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
-            NSLog(@"所在地修改成功");
+            MTLOG(@"所在地修改成功");
             [SVProgressHUD dismissWithSuccess:@"地址修改成功" afterDelay:2];
             [MTUser sharedInstance].location = newLocation;
             [self.navigationController popViewControllerAnimated:YES];
@@ -256,7 +256,7 @@
             break;
             
         default:
-            NSLog(@"所在地修改失败");
+            MTLOG(@"所在地修改失败");
             [SVProgressHUD dismissWithSuccess:@"地址修改失败" afterDelay:2];
 //            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因所在地修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
             break;

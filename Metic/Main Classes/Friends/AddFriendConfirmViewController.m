@@ -87,13 +87,13 @@
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
-    NSLog(@"add friend apply: %@",json);
+    MTLOG(@"add friend apply: %@",json);
     if ([self.fid isKindOfClass:[NSNumber class]]) {
-        NSLog(@"fid is number");
+        MTLOG(@"fid is number");
     }
     else if ([self.fid isKindOfClass:[NSString class]])
     {
-        NSLog(@"fid is string");
+        MTLOG(@"fid is string");
     }
 
 }
@@ -102,10 +102,10 @@
 - (void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
             [SVProgressHUD dismissWithSuccess:@"验证信息发送成功" afterDelay:2];

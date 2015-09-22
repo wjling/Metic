@@ -100,7 +100,7 @@
     frame.origin.y = 44;
     frame.size.width = frame.size.width * 15/16;
     frame.size.height -= 44;
-    NSLog(@"%f  %f",frame.origin.x,frame.size.width);
+    MTLOG(@"%f  %f",frame.origin.x,frame.size.width);
     _tableView = [[UITableView alloc]initWithFrame:frame style:UITableViewStylePlain];
     [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -133,13 +133,13 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:text forKey:@"subject"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -183,7 +183,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -271,7 +271,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%d  %d",indexPath.row,_events.count);
+    MTLOG(@"%d  %d",indexPath.row,_events.count);
     static NSString *CellIdentifier = @"nearbyEventCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {

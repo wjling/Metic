@@ -108,7 +108,7 @@
     if (_Bannercode>-1) {
         [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
         if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"没有网络");
+            MTLOG(@"没有网络");
             _Bannercode = -1;
             _uploadImage = nil;
             [SVProgressHUD dismissWithError:@"网络无连接，更改封面失败" afterDelay:1];
@@ -127,7 +127,7 @@
             [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
                 if (rData) {
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                    NSLog(@"%@",response1);
+                    MTLOG(@"%@",response1);
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY) {
                         [self pullEventFromAir];
@@ -460,7 +460,7 @@
             if (rData) {
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                NSLog(@"%@",cmd);
+                MTLOG(@"%@",cmd);
             }
         }
      ];
@@ -527,7 +527,7 @@
     [dictionary setValue:[NSNumber numberWithInt:0] forKey:@"master"];
     [dictionary setValue:self.master_sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     static NSInteger operationNum = 0;
     operationNum ++;
@@ -580,7 +580,7 @@
     [dictionary setValue:master forKey:@"master"];
     [dictionary setValue:sub_Sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_COMMENTS finshedBlock:^(NSData *rData) {
@@ -637,7 +637,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
 //            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//            NSLog(@"received Data: %@",temp);
+//            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -714,9 +714,9 @@
         if (resultsArray.count) {
             NSString *oldUpdateTime = [resultsArray[0] valueForKey:@"updateTime"];
             if ([oldUpdateTime isKindOfClass:[NSString class]] && [oldUpdateTime isEqualToString:updateTime]) {
-                NSLog(@"no need update banner");
+                MTLOG(@"no need update banner");
             }else{
-                NSLog(@"update banner");
+                MTLOG(@"update banner");
                 NSString* bannerPath = [MegUtils bannerImagePathWithEventId:_eventId];
                 [[SDImageCache sharedImageCache] removeImageForKey:bannerPath];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -863,14 +863,14 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT finshedBlock:^(NSData *rData) {
         if (!rData) {
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         }
 //        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//        NSLog(@"received Data: %@",temp);
+//        MTLOG(@"received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
@@ -916,7 +916,7 @@
     [dictionary setValue:[NSNumber numberWithInt:isZan? 0:1]  forKey:@"operation"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
         if (rData) {
@@ -985,12 +985,12 @@
     void (^resendCommentBlock)(void) = ^(void){
         //再次发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                NSLog(@"%@",content);
+                MTLOG(@"%@",content);
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
@@ -1129,14 +1129,14 @@
     
     void (^sendCommentBlock)(void) = ^(void){
         //发送评论
-        NSLog(@"%@",dictionary);
+        MTLOG(@"%@",dictionary);
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                NSLog(@"%@",content);
+                MTLOG(@"%@",content);
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
@@ -1172,7 +1172,7 @@
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",content);
+            MTLOG(@"%@",content);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
@@ -1286,7 +1286,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
         });
@@ -1846,7 +1846,7 @@
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             [dictionary setValue:_eventId forKey:@"event_id"];
             [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-            NSLog(@"%@",dictionary);
+            MTLOG(@"%@",dictionary);
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
@@ -1879,7 +1879,7 @@
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             [dictionary setValue:_eventId forKey:@"event_id"];
             [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-            NSLog(@"%@",dictionary);
+            MTLOG(@"%@",dictionary);
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode:QUIT_EVENT finshedBlock:^(NSData *rData) {
@@ -1936,7 +1936,7 @@
         [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
         _Bannercode = -1;
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-        NSLog(@"%@",dictionary);
+        MTLOG(@"%@",dictionary);
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
@@ -1991,7 +1991,7 @@
     }
     NSString* confirmMsg = _inputTextView.text;
     NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {

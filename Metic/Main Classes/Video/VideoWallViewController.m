@@ -194,7 +194,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
         });
@@ -318,13 +318,13 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_VIDEO_LIST finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -399,7 +399,7 @@
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择视频" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
-        NSLog(@"cancel");
+        MTLOG(@"cancel");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
         if (_eventInfo && [[_eventInfo valueForKey:@"isIn"]boolValue]) {
             [_add appear];
@@ -451,7 +451,7 @@
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
-    NSLog(@"%f   %f   %f",scrollView.frame.size.height,self.view.frame.size.height,self.navigationController.view.frame.size.height);
+    MTLOG(@"%f   %f   %f",scrollView.frame.size.height,self.view.frame.size.height,self.navigationController.view.frame.size.height);
     
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -597,7 +597,7 @@
     NSInteger videoLen_N = [self getVideoDuration:videoURL];
     NSString* fileSize = [NSString stringWithFormat:@"%ld kb",(long)fileSize_N];
     NSString* videoLen = [NSString stringWithFormat:@"%.0ld s", (long)videoLen_N];
-    NSLog(@"%@   %@",fileSize,videoLen);
+    MTLOG(@"%@   %@",fileSize,videoLen);
     if (videoLen_N > 20*60) {
         //视频超过20分钟，不能上传
         [picker dismissViewControllerAnimated:YES completion:^{
@@ -665,9 +665,9 @@
     [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:urlString]
                                 completionBlock:^(NSURL *assetURL, NSError *error) {
                                     if (error) {
-                                        NSLog(@"Save video fail:%@",error);
+                                        MTLOG(@"Save video fail:%@",error);
                                     } else {
-                                        NSLog(@"Save video succeed.");
+                                        MTLOG(@"Save video succeed.");
                                         
                                     }
                                 }];

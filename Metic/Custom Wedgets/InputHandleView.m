@@ -60,9 +60,9 @@
     {
         frame = [textField convertRect:textField.frame toView:self];
     }
-    NSLog(@"textField frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+    MTLOG(@"textField frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
     textFieldOffset = frame.origin.y + textField.frame.size.height - (self.frame.size.height - 216.0 - 40);//键盘高度216
-    NSLog(@"textField offset: %f",textFieldOffset);
+    MTLOG(@"textField offset: %f",textFieldOffset);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
     [UIView setAnimationDuration:animationDuration];
@@ -122,7 +122,7 @@
 //    CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
     CGRect frame = self.frame;
     int offset = self.frame.origin.y + textViewFrame.origin.y + textHeight- (self.frame.size.height - 216.0 - 30);//键盘高度216
-    NSLog(@"offset: %d", offset);
+    MTLOG(@"offset: %d", offset);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
     [UIView setAnimationDuration:animationDuration];
@@ -146,11 +146,11 @@
     if (textHeight < windowHeight) {
 
         
-        NSLog(@"Feedback, text Height: %f, text view height: %f, text view y: %f",textHeight, textViewFrame.size.height, textViewFrame.origin.y);
+        MTLOG(@"Feedback, text Height: %f, text view height: %f, text view y: %f",textHeight, textViewFrame.size.height, textViewFrame.origin.y);
 //        CGRect frame = CGRectMake(textView.frame.origin.x, textView.frame.origin.y, textViewFrame.size.width, textViewFrame.size.height);
         CGRect frame = self.frame;
         CGFloat offset = self.frame.origin.y + textViewFrame.origin.y + textHeight - (self.frame.size.height - 216.0 - 30);//键盘高度216
-        NSLog(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
+        MTLOG(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
         if (offset > 0) {
             NSTimeInterval animationDuration = 0.30f;
             [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
@@ -201,7 +201,7 @@
         }
 //        CGRect frame = self.frame;
 //        CGFloat offset = self.frame.origin.y + textViewFrame.origin.y + textHeight - (self.frame.size.height - 216.0);//键盘高度216
-//        NSLog(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
+//        MTLOG(@"offset: %f, self.frame.origin.y: %f", offset,self.frame.origin.y);
 //
 //        if (offset < 0) {
 //            if (self.frame.origin.y < selfOriginFrame.origin.y) {
@@ -228,7 +228,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-//    NSLog(@"textView did end editing");
+//    MTLOG(@"textView did end editing");
 //    [textView setFrame:textViewFrame];
     [self setFrame:selfOriginFrame];
     [textView setContentOffset:CGPointMake(0, 0) animated:YES];

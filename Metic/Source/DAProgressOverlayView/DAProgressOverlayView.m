@@ -83,7 +83,7 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
     CGFloat width = CGRectGetWidth(rect);
     CGFloat height = CGRectGetHeight(rect);
     
-    CGFloat outerRadius = [self outerRadius];
+//    CGFloat outerRadius = [self outerRadius];
     CGFloat innerRadius = [self innerRadius];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, width / 2., height / 2.);

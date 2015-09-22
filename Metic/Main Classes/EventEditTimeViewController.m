@@ -269,7 +269,7 @@
         [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
         [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [dateFormatter setLocale:[NSLocale currentLocale]];
-        NSLog(@"#%@#",textField.text);
+        MTLOG(@"#%@#",textField.text);
         date= [dateFormatter dateFromString:textField.text];
     }else date = [NSDate date];
     self.seletedText = textField;

@@ -14,7 +14,7 @@
 //-(void)layoutSubviews
 //{
 //    [super layoutSubviews];
-//    NSLog(@"SquareTableView layoutSubviews");
+//    MTLOG(@"SquareTableView layoutSubviews");
 //
 //    NSArray* cells = [self visibleCells];
 //    for (UITableViewCell* cell in cells) {

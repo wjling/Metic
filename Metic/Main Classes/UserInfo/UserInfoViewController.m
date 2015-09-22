@@ -67,7 +67,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"UserInfoViewController viewWillAppear");
+    MTLOG(@"UserInfoViewController viewWillAppear");
     UIColor* bgColor = [UIColor colorWithRed:0.82 green:0.85 blue:0.88 alpha:1];
     if ([[UIDevice currentDevice].systemVersion floatValue] < 7.0)
     {
@@ -101,16 +101,16 @@
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  UserInfo");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  UserInfo");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -149,17 +149,17 @@
     self.email_label.text = [MTUser sharedInstance].email;
     
     NSNumber* gender = [MTUser sharedInstance].gender;
-    NSLog(@"性别gender： %@",gender);
+    MTLOG(@"性别gender： %@",gender);
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [self.name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, self.name_label.frame.size.height) lineBreakMode:NSLineBreakByCharWrapping];
     self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     if ([gender integerValue] == 0) {
-        NSLog(@"性别女");
+        MTLOG(@"性别女");
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
     else
     {
-        NSLog(@"性别男");
+        MTLOG(@"性别男");
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
     [self.banner_UIview addSubview:self.banner_imageView];
@@ -174,11 +174,11 @@
 
 -(void)avatarClicked:(id)sender
 {
-    NSLog(@"avatar clicked");
+    MTLOG(@"avatar clicked");
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
-        NSLog(@"cancel");
+        MTLOG(@"cancel");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
@@ -324,12 +324,12 @@
         self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     }
     if ([gender integerValue] == 0) {
-        NSLog(@"性别女,gender: %@",gender);
+        MTLOG(@"性别女,gender: %@",gender);
         self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
     }
     else
     {
-        NSLog(@"性别男,gender: %@",gender);
+        MTLOG(@"性别男,gender: %@",gender);
         self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
     }
     [self.info_tableView reloadData];
@@ -359,7 +359,7 @@
                         {
                             return;
                         }
-                        NSLog(@"查看自己头像更新时间,Received Data: %@",temp);
+                        MTLOG(@"查看自己头像更新时间,Received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
                         switch (cmd) {
@@ -730,11 +730,11 @@
                                       [NSNumber numberWithInteger:newGender],@"gender",
                                       [MTUser sharedInstance].userid,@"id",
                                       nil];
-                NSLog(@"gender modify json: %@",json);
+                MTLOG(@"gender modify json: %@",json);
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
-                NSLog(@"click alert Button");
+                MTLOG(@"click alert Button");
             }
         }
 
@@ -784,10 +784,10 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
@@ -799,12 +799,12 @@
             {
                 self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
             }
-            NSLog(@"性别修改成功");
+            MTLOG(@"性别修改成功");
         }
             break;
             
         default:
-            NSLog(@"性别修改失败");
+            MTLOG(@"性别修改失败");
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因性别修改失败" WithDelegate:self WithCancelTitle:@"OK"];
             break;
     }

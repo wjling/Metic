@@ -81,7 +81,7 @@
                                      fid, @"friend_id",
                                      [NSNumber numberWithInt:ALIAS_SET], @"operation",
                                      alias_new, @"alias", nil];
-    NSLog(@"alias json: %@", json_dic);
+    MTLOG(@"alias json: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     
     void(^setAliasDone)(NSData *rData) = ^(NSData* rData)
@@ -93,14 +93,14 @@
         }
         else
         {
-            NSLog(@"修改备注名，收到的rData为空");
+            MTLOG(@"修改备注名，收到的rData为空");
             [SVProgressHUD dismissWithError:@"网络异常"];
             return;
         }
-        NSLog(@"修改备注名,Received Data: %@",temp);
+        MTLOG(@"修改备注名,Received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
-        NSLog(@"cmd: %d",cmd);
+        MTLOG(@"cmd: %d",cmd);
         switch (cmd) {
             case NORMAL_REPLY:
             {

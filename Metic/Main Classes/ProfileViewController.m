@@ -29,12 +29,12 @@
 
 - (void) handleSwipeRight:(UIGestureRecognizer*)gesture
 {
-    NSLog(@"handle swipe right");
+    MTLOG(@"handle swipe right");
 }
 
 - (void) handleSwipeLeft:(UIGestureRecognizer*)gesture
 {
-    NSLog(@"handle swipe left");
+    MTLOG(@"handle swipe left");
 }
 
 
@@ -91,7 +91,7 @@
 
 - (IBAction)heartbeat:(id)sender {
     [mySocket send:@""];
-    NSLog(@"心一跳");
+    MTLOG(@"心一跳");
 }
 - (IBAction)confirmPush:(id)sender {
     NSDictionary* json = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:10],@"uid",@"feedback",@"cmd",[NSNumber numberWithInt:146],@"seq",nil];
@@ -111,7 +111,7 @@
     NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
     mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
     mySocket.delegate = self;
-    NSLog(@"Connecting...");
+    MTLOG(@"Connecting...");
     [mySocket open];
 }
 
@@ -119,29 +119,29 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-    NSLog(@"Get message: %@",message);
+    MTLOG(@"Get message: %@",message);
     self.msg.text = [NSString stringWithFormat:@"Get message: %@",message];
 }
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
-    NSLog(@"Websocket Connected");
+    MTLOG(@"Websocket Connected");
     self.msg.text = @"connected";
     
 //    [mySocket send:@""];
-//    NSLog(@"send data");
+//    MTLOG(@"send data");
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
-    NSLog(@":( Websocket Failed With Error %@", error);
+    MTLOG(@":( Websocket Failed With Error %@", error);
     self.msg.text = [NSString stringWithFormat:@":( Websocket Failed With Error %@", error];
     mySocket = nil;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
+    MTLOG(@"WebSocket closed, code: %d,reason: %@",code,reason);
     self.msg.text = @"closed";
     mySocket = nil;
     //    [self reconnect];

@@ -61,7 +61,7 @@
 
 -(void)getImageComplete:(MTImageGetterCompletionBlock)completedBlock
 {
-    [self.imageView sd_cancelCurrentAnimationImagesLoad];
+    [self.imageView sd_cancelCurrentImageLoad];
     static UIImage *defaultPhotoImg;
     static UIImage *defaultPhotoFailImg;
     static UIImage *defaultAvatarImg;
@@ -112,10 +112,10 @@
     if(![self.imageView.downloadName isEqualToString:self.imageName]){
         self.imageView.image = placeHolder;
         self.imageView.downloadName = self.imageName;
-    }
+        [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
+    }else return;
     
-    [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
-    [[MTOperation sharedInstance]getUrlFromServer:self.path success:^(NSString *url) {
+    [[MTOperation sharedInstance] getUrlFromServer:self.path success:^(NSString *url) {
         if (![self.imageView.downloadName isEqualToString:self.imageName])
             return ;
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
@@ -133,7 +133,7 @@
     } failure:^(NSString *message) {
         if (![self.imageView.downloadName isEqualToString:self.imageName])
             return ;
-        NSLog(@"%@",message);
+        MTLOG(@"%@",message);
     }];
 }
 

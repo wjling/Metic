@@ -462,12 +462,12 @@ enum pos{
 {
     for (int i = 0; i < messages.count; i++) {
         NSDictionary* message = [messages objectAtIndex:i];
-        NSLog(@"homeviewcontroller receive a message %@",message);
+        MTLOG(@"homeviewcontroller receive a message %@",message);
         NSString *eventInfo = [message valueForKey:@"content"];
         NSData *eventData = [eventInfo dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *event =  [NSJSONSerialization JSONObjectWithData:eventData options:NSJSONReadingMutableLeaves error:nil];
         int cmd = [[event valueForKey:@"cmd"] intValue];
-        NSLog(@"cmd: %d",cmd);
+        MTLOG(@"cmd: %d",cmd);
         if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION || cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY || cmd == NEW_COMMENT_REPLY || cmd == NEW_LIKE_NOTIFICATION) {
             if (cmd == NEW_COMMENT_NOTIFICATION || cmd == NEW_PHOTO_NOTIFICATION || cmd == NEW_VIDEO_NOTIFICATION) {
                 [self refreshRPoin:LEFT];

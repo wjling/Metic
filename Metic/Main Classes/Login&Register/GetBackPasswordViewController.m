@@ -130,13 +130,13 @@
         }
         else
         {
-            NSLog(@"修改密码，收到的rData为空");
+            MTLOG(@"修改密码，收到的rData为空");
             return;
         }
-        NSLog(@"Received Data: %@",temp);
+        MTLOG(@"Received Data: %@",temp);
         NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
-        NSLog(@"cmd: %@",cmd);
+        MTLOG(@"cmd: %@",cmd);
         switch ([cmd integerValue]) {
             case NORMAL_REPLY:
             {
@@ -181,7 +181,7 @@
     NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
     float keyboard_height = 202;
-    NSLog(@"keyBoard:%f", keyboardSize.height);  //216
+    MTLOG(@"keyBoard:%f", keyboardSize.height);  //216
 //    if (keyboardSize.height == 0 || keyboardSize.height > 202) {
 //        keyboard_height = 202;
 //    }
@@ -208,7 +208,7 @@
 //    
 //    NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
 //    CGSize keyboardSize = [value CGRectValue].size;
-//    NSLog(@"keyboardWasHidden keyBoard:%f", keyboardSize.height);
+//    MTLOG(@"keyboardWasHidden keyBoard:%f", keyboardSize.height);
     float offset = [UIScreen mainScreen].bounds.size.height - self.view.frame.origin.y - self.view.frame.size.height;
     [UIView beginAnimations:@"goDOWN" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];

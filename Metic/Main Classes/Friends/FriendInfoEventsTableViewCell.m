@@ -24,7 +24,7 @@
 //    [self.stretch_button setBackgroundImage:[UIImage imageNamed:@"箭头icon"] forState:UIControlStateNormal];
 //    [self.contentView addSubview:self.stretch_button];
     isExpanded = NO;
-    NSLog(@"init cell");
+    MTLOG(@"init cell");
     return self;
 }
 
@@ -35,7 +35,7 @@
 //    self.stretch_button = [[UIButton alloc]init];
 //    self.stretch_button.tag = 90;
     isExpanded = NO;
-    NSLog(@"awake cell");
+    MTLOG(@"awake cell");
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -56,12 +56,12 @@
 //            v = [v superview];
 //        }
 //        if ([v isKindOfClass:[UITableView class]]) {
-//            NSLog(@"cell reload");
+//            MTLOG(@"cell reload");
 //            [(UITableView*)v beginUpdates];
 //        }
 //        for (UIImageView* imgv in self.avatars) {
 //            imgv.hidden = NO;
-//            NSLog(@"set hidden NO");
+//            MTLOG(@"set hidden NO");
 //        }
 //    }
 //    else
@@ -77,12 +77,12 @@
 //            v = [v superview];
 //        }
 //        if ([v isKindOfClass:[UITableView class]]) {
-//            NSLog(@"cell reload");
+//            MTLOG(@"cell reload");
 //            [(UITableView*)v beginUpdates];
 //        }
 //        for (UIImageView* imgv in self.avatars) {
 //            imgv.hidden = YES;
-//            NSLog(@"set hidden YES");
+//            MTLOG(@"set hidden YES");
 //        }
 //
 //

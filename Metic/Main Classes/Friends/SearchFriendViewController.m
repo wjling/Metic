@@ -42,10 +42,10 @@
     self.content_tableview.delegate = self;
     self.content_tableview.dataSource = self;
     
-    NSLog(@"search friend name: %@, my ID : %@",searchName,[MTUser sharedInstance].userid);
+    MTLOG(@"search friend name: %@, my ID : %@",searchName,[MTUser sharedInstance].userid);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary = [CommonUtils packParamsInDictionary:self.searchName,@"name",[MTUser sharedInstance].userid,@"myId",nil];
-    NSLog(@"search friend: %@",dictionary);
+    MTLOG(@"search friend: %@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -130,7 +130,7 @@
     //    if ([CommonUtils isEmailValid:text]) {
     //        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     //        dictionary = [CommonUtils packParamsInDictionary:text,@"email",self.user.userid,@"myId",nil];
-    //        NSLog(@"%@",dictionary);
+    //        MTLOG(@"%@",dictionary);
     //
     //        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     //        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -140,7 +140,7 @@
     //    {
     //        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     //        dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
-    //        NSLog(@"%@",dictionary);
+    //        MTLOG(@"%@",dictionary);
     //
     //        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     //        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -148,7 +148,7 @@
     //    }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary = [CommonUtils packParamsInDictionary:text,@"name",[MTUser sharedInstance].userid,@"myId",nil];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -166,7 +166,7 @@
 #pragma  mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"searchFriendList.count: %lu",(unsigned long)self.searchFriendList.count);
+    MTLOG(@"searchFriendList.count: %lu",(unsigned long)self.searchFriendList.count);
     return self.searchFriendList.count;
 }
 
@@ -177,7 +177,7 @@
 {
     SearchedFriendTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
     if (nil == cell) {
-        //        NSLog(@"create cell");
+        //        MTLOG(@"create cell");
         cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
     }
     NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
@@ -186,7 +186,7 @@
     NSInteger gender = [[aFriend objectForKey:@"gender"] integerValue];
     NSNumber* fid = [aFriend objectForKey:@"id"];
     BOOL isFriend = [[aFriend objectForKey:@"isFriend"]boolValue];
-    NSLog(@"is friend ?: %@",isFriend? @"YES":@"NO");
+    MTLOG(@"is friend ?: %@",isFriend? @"YES":@"NO");
     if (isFriend) {
         cell.theLabel.hidden = NO;
         cell.add_button.hidden = YES;
@@ -232,7 +232,7 @@
     }
     [cell.contentView addSubview:cell.gender_imageview];
     
-    NSLog(@"gender frame: x: %f, y: %f, width: %f, height: %f",cell.gender_imageview.frame.origin.x,cell.gender_imageview.frame.origin.y,cell.gender_imageview.frame.size.width,cell.gender_imageview.frame.size.height);
+    MTLOG(@"gender frame: x: %f, y: %f, width: %f, height: %f",cell.gender_imageview.frame.origin.x,cell.gender_imageview.frame.origin.y,cell.gender_imageview.frame.size.width,cell.gender_imageview.frame.size.height);
     cell.add_button.tag = indexPath.row;
     [cell.add_button addTarget:self action:@selector(addFriendBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -271,26 +271,26 @@
 - (void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     self.waiting_activityindicator.hidden = YES;
     if (cmd) {
         if ([cmd intValue] == USER_NOT_FOUND) {
             self.searchFriendList = [NSMutableArray array];
             [self showNoResultNote];
-            NSLog(@"user not found");
+            MTLOG(@"user not found");
         }
         else if ( [cmd intValue] == USER_EXIST)
         {
             [self hideNoResultNote];
             self.searchFriendList = [response1 objectForKey:@"friend_list"];
-            NSLog(@"searched friend list: %@",self.searchFriendList);
+            MTLOG(@"searched friend list: %@",self.searchFriendList);
 //            self.content_tableview.hidden = NO;
         }
     }
-    //    NSLog(@"reload data.");
+    //    MTLOG(@"reload data.");
     [self.content_tableview reloadData];
 }
 
@@ -314,7 +314,7 @@
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:ADD_FRIEND];
-                NSLog(@"add friend apply: %@",json);
+                MTLOG(@"add friend apply: %@",json);
             }
         }
             break;

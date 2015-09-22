@@ -110,11 +110,11 @@
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag)
     {
-        NSLog(@"反geo检索发送成功");
+        MTLOG(@"反geo检索发送成功");
     }
     else
     {
-        NSLog(@"反geo检索发送失败");
+        MTLOG(@"反geo检索发送失败");
     }
 }
 
@@ -175,11 +175,11 @@
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag)
     {
-        NSLog(@"反geo检索发送成功");
+        MTLOG(@"反geo检索发送成功");
     }
     else
     {
-        NSLog(@"反geo检索发送失败");
+        MTLOG(@"反geo检索发送失败");
     }
 }
 

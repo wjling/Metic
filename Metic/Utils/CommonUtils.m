@@ -104,7 +104,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSMutableString *md5_str = [NSMutableString string];
     for (int i = 0; i < 16; i++)
         [md5_str appendFormat:@"%02x", result[i]];
-    NSLog(@"MD5: %@",md5_str);
+    MTLOG(@"MD5: %@",md5_str);
     return md5_str;
 
 }
@@ -134,7 +134,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     }
     else
     {
-        NSLog(@"toast不存在");
+        MTLOG(@"toast不存在");
     }
 }
 //////////////////////////////////////
@@ -187,7 +187,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSMutableString *outputPinyin = [[NSMutableString alloc] init];
     for (int i=0;i <str.length;i++) {
         NSString *mainPinyinStrOfChar = [PinyinHelper toHanyuPinyinStringWithNSString:[str substringWithRange:NSMakeRange(i,1)] withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
-//        NSLog(@"char %d: %@",i,mainPinyinStrOfChar);
+//        MTLOG(@"char %d: %@",i,mainPinyinStrOfChar);
         if (nil!=mainPinyinStrOfChar) {
             [outputPinyin appendString:[mainPinyinStrOfChar substringToIndex:1]];
         } else {
@@ -229,9 +229,9 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         
         [formData appendPartWithFileData:imageData name:@"file" fileName:fileName mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Success: %@ ***** %@", operation.responseString, responseObject);
+        MTLOG(@"Success: %@ ***** %@", operation.responseString, responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@ ***** %@", operation.responseString, error);
+        MTLOG(@"Error: %@ ***** %@", operation.responseString, error);
     }];
     [op start];
 }
@@ -240,9 +240,9 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 {
     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
     AFHTTPRequestOperation *op = [manager DELETE:url parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Success: %@ ***** %@", operation.responseString, responseObject);
+        MTLOG(@"Success: %@ ***** %@", operation.responseString, responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@ ***** %@", operation.responseString, error);
+        MTLOG(@"Error: %@ ***** %@", operation.responseString, error);
     }];
     [op start];
 }
@@ -530,8 +530,8 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     int isCountEqual = 0;
     NSArray* version1_arr = [version1 componentsSeparatedByString:@"."];
     NSArray* version2_arr = [version2 componentsSeparatedByString:@"."];
-    NSLog(@"version1 parts arr: %@",version1_arr);
-    NSLog(@"version2 parts arr: %@",version2_arr);
+    MTLOG(@"version1 parts arr: %@",version1_arr);
+    MTLOG(@"version2 parts arr: %@",version2_arr);
     int count;
     if (version1_arr.count < version2_arr.count) {
         count = version1_arr.count;
@@ -552,27 +552,27 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         NSNumber* ver2 = [CommonUtils NSNumberWithNSString:version2_arr[i]];
         int rs = [ver1 compare:ver2];
         if (rs == -1) {
-            NSLog(@"version1 小于 version2");
+            MTLOG(@"version1 小于 version2");
             return -1;
         }
         else if (rs == 1)
         {
-            NSLog(@"version1 大于 version2");
+            MTLOG(@"version1 大于 version2");
             return 1;
         }
     }
     if (isCountEqual == 0) {
-        NSLog(@"version1 等于 version2");
+        MTLOG(@"version1 等于 version2");
         return 0;
     }
     else if (isCountEqual == 1)
     {
-        NSLog(@"version1 大于 version2");
+        MTLOG(@"version1 大于 version2");
         return 1;
     }
     else
     {
-        NSLog(@"version1 小于 version2");
+        MTLOG(@"version1 小于 version2");
         return -1;
     }
 }

@@ -88,16 +88,16 @@
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  invitation");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  invitation");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -139,7 +139,7 @@
             
         }
     }
-    NSLog(@"活动邀请列表: %@",msg_arr);
+    MTLOG(@"活动邀请列表: %@",msg_arr);
 }
 #pragma mark UITableViewDataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -265,7 +265,7 @@
     selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
     NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
     NSNumber* seq = [msg_dic objectForKey:@"seq"];
-    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+    MTLOG(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
     
     NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
     NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
@@ -281,7 +281,7 @@
                                  item_id_dic,@"item_id",
 //                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
                                  nil];
-    NSLog(@"participate event okBtn, http json : %@",json );
+    MTLOG(@"participate event okBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
@@ -303,7 +303,7 @@
     selectedPath = [_tableView indexPathForCell:(UITableViewCell*)cell];
 //    NSDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
 //    NSNumber* seq = [msg_dic objectForKey:@"seq"];
-//    NSLog(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
+//    MTLOG(@"participate cell seq: %@, row: %d",seq,selectedPath.row);
 //    
 //    NSNumber* eventid = [msg_dic objectForKey:@"event_id"];
 //    NSDictionary* item_id_dic = [CommonUtils packParamsInDictionary:
@@ -319,7 +319,7 @@
 //                                 item_id_dic,@"item_id",
 ////                                 [NSNumber numberWithInt:RESPONSE_EVENT],@"response_type",
 //                                 nil];
-//    NSLog(@"participate event noBtn, http json : %@",json );
+//    MTLOG(@"participate event noBtn, http json : %@",json );
 //    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
 //    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
 //    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
@@ -333,7 +333,7 @@
     NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:selectedPath.row];
     
     NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-    NSLog(@"response event, seq: %d",seq1);
+    MTLOG(@"response event, seq: %d",seq1);
     NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
     NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
     [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
@@ -377,21 +377,21 @@
 {
     [timer invalidate];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
             NSDictionary* item_id_dic = [response1 objectForKey:@"item_id"];
-            NSLog(@"item_id_dic: %@", item_id_dic);
+            MTLOG(@"item_id_dic: %@", item_id_dic);
             NSNumber* item_index = [item_id_dic objectForKey:@"item_index"];
 //            NSNumber* response_type = [item_id_dic objectForKey:@"response_type"];
             NSNumber* result = [item_id_dic valueForKey:@"response_result"];
             NSMutableDictionary* msg_dic = [msg_arr objectAtIndex:[item_index intValue]];
             
             NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-            NSLog(@"response event, seq: %d",seq1);
+            MTLOG(@"response event, seq: %d",seq1);
             NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
             NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
             [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
@@ -420,8 +420,8 @@
             [[MTUser sharedInstance].historicalMsg insertObject:msg_dic atIndex:0];
             [SVProgressHUD dismissWithSuccess:@"处理成功" afterDelay:0.5];
             [self.tableView reloadData];
-            NSLog(@"本次处理的活动邀请: %@",msg_dic);
-            NSLog(@"处理之后的消息列表: \n MTUser.eventRequestMsg: %@ \nself.msg_arr: %@", [MTUser sharedInstance].eventRequestMsg, self.msg_arr);
+            MTLOG(@"本次处理的活动邀请: %@",msg_dic);
+            MTLOG(@"处理之后的消息列表: \n MTUser.eventRequestMsg: %@ \nself.msg_arr: %@", [MTUser sharedInstance].eventRequestMsg, self.msg_arr);
             //更新活动中心列表：
             [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
         }
@@ -470,7 +470,7 @@
             //            int count = self.msgFromDB.count;
             //            NSDictionary* dataMsg = [self.msgFromDB objectAtIndex:(selectedPath.row)];
             //            NSNumber* seq = [dataMsg objectForKey:@"seq"];
-            //            NSLog(@"already in event, seq: %@",seq);
+            //            MTLOG(@"already in event, seq: %@",seq);
             //            [mySql openMyDB:DB_path];
             //            [mySql deleteTurpleFromTable:@"notification" withWhere:[[NSDictionary alloc]initWithObjectsAndKeys:[[NSString alloc]initWithFormat:@"%@", seq],@"seq", nil]];
             //            [mySql closeMyDB];
@@ -518,7 +518,7 @@
         }
             break;
         default:
-            NSLog(@"好友邀请，服务器返回错误");
+            MTLOG(@"好友邀请，服务器返回错误");
             break;
     }
     

@@ -72,7 +72,7 @@
     [self getUserInfo];
     [self checkAvatarUpdate];
     [self.view bringSubviewToFront:moreFunction_view];
-     NSLog(@"friend info fid: %@",fid);
+     MTLOG(@"friend info fid: %@",fid);
     
 }
 
@@ -84,7 +84,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"view will appear");
+    MTLOG(@"view will appear");
     if ([[MTUser sharedInstance].friendsIdSet containsObject:fid])
     {
         [self.navigationItem setTitle:@"好友信息"];
@@ -105,9 +105,9 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"view did appear");
+    MTLOG(@"view did appear");
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0) {
-        NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
+        MTLOG(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
 //        [friendInfoEvents_tableView setFrame:CGRectMake(10, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width - 20, friendInfoEvents_tableView.frame.size.height)];
         
     }
@@ -273,7 +273,7 @@
 //    friendInfoEvents_tableView.delegate = self;
 //    friendInfoEvents_tableView.dataSource = self;
 //    [friendInfoEvents_tableView setBackgroundColor:[UIColor blueColor]];
-//    NSLog(@"x: %f, y: %f, width: %f, height: %f",friendInfoEvents_tableView.frame.origin.x,friendInfoEvents_tableView.frame.origin.y,friendInfoEvents_tableView.frame.size.width,friendInfoEvents_tableView.frame.size.height);
+//    MTLOG(@"x: %f, y: %f, width: %f, height: %f",friendInfoEvents_tableView.frame.origin.x,friendInfoEvents_tableView.frame.origin.y,friendInfoEvents_tableView.frame.size.width,friendInfoEvents_tableView.frame.size.height);
     
     self.friendInfoEvents_tableView.delegate = self;
     self.friendInfoEvents_tableView.dataSource = self;
@@ -373,7 +373,7 @@
                             [SVProgressHUD dismissWithError:@"网络异常" afterDelay:1.5];
                             return;
                         }
-                        NSLog(@"查看好友头像更新时间,Received Data: %@",temp);
+                        MTLOG(@"查看好友头像更新时间,Received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSInteger cmd = [[response1 objectForKey:@"cmd"]intValue];
                         switch (cmd) {
@@ -432,7 +432,7 @@
     NSString* sign = [friendInfo_dic objectForKey:@"sign"];
     NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     
-    NSLog(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
+    MTLOG(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
     name_label.text = name;
     if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
         alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
@@ -485,7 +485,7 @@
         NSArray* alias_arr;
         alias_arr = resultsArray;
         if(alias_arr.count > 0) self.friendInfo_dic = alias_arr[0];
-        NSLog(@"get alias from DB: %@",alias_arr);
+        MTLOG(@"get alias from DB: %@",alias_arr);
     }];
 }
 
@@ -493,7 +493,7 @@
 {
     ChangeAliasViewController *aliasVC = [[ChangeAliasViewController alloc]init];
     aliasVC.fid = fid;
-    NSLog(@"alias change, fid = %@",aliasVC.fid);
+    MTLOG(@"alias change, fid = %@",aliasVC.fid);
     [self.navigationController pushViewController:aliasVC animated:YES];
 }
 
@@ -510,7 +510,7 @@
 - (void)getUserInfo
 {
     NSMutableDictionary* json = [CommonUtils packParamsInDictionary:fid,@"id",[MTUser sharedInstance].userid,@"myId",nil];
-    NSLog(@"friend info json: %@",json);
+    MTLOG(@"friend info json: %@",json);
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* httpsender = [[HttpSender alloc]initWithDelegate:self];
     [httpsender sendMessage:jsonData withOperationCode:GET_USER_INFO];
@@ -591,10 +591,10 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"从服务器获得好友信息: %@",temp);
+    MTLOG(@"从服务器获得好友信息: %@",temp);
     NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
         {
@@ -634,7 +634,7 @@
     FriendInfoEventsTableViewCell* cell = (FriendInfoEventsTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     if ([cell isKindOfClass:[FriendInfoEventsTableViewCell class]]) {
         NSNumber* rowHeight = rowHeights[indexPath.section];
-        NSLog(@"%@",rowHeight);
+        MTLOG(@"%@",rowHeight);
         if (cell.isExpanded) {
             [rowHeights replaceObjectAtIndex:indexPath.section withObject:[NSNumber numberWithFloat:110]];
         }else {
@@ -670,9 +670,9 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    NSLog(@"events count: %d",events.count);
+//    MTLOG(@"events count: %d",events.count);
 //    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
-//        NSLog(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
+//        MTLOG(@"IOS %f", [[UIDevice currentDevice].systemVersion floatValue]);
 //        [friendInfoEvents_tableView setFrame:CGRectMake(0, friendInfoEvents_tableView.frame.origin.y, self.view.frame.size.width, friendInfoEvents_tableView.frame.size.height)];
 //    }
     return 1;
@@ -692,7 +692,7 @@
     NSArray* member_ids = [event objectForKey:@"member"];
     FriendInfoEventsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"eventCell"];
     if (nil == cell) {
-        NSLog(@"friendinfoeventstableviewcell");
+        MTLOG(@"friendinfoeventstableviewcell");
         cell = [[FriendInfoEventsTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"eventCell"];
         
     }
@@ -771,15 +771,15 @@
         cell = (FriendInfoEventsTableViewCell*)[cell superview];
     }
     NSIndexPath* indexP = [self.friendInfoEvents_tableView indexPathForCell:cell];
-    NSLog(@"index.section: %d", indexP.section);
+    MTLOG(@"index.section: %d", indexP.section);
     NSDictionary* event = [events objectAtIndex:indexP.section];
     addEventID = [event objectForKey:@"event_id"];
     if ([addEventID isKindOfClass:[NSString class]]) {
-        NSLog(@"addEventID is string, id: %@",addEventID);
+        MTLOG(@"addEventID is string, id: %@",addEventID);
     }
     else if([addEventID isKindOfClass:[NSNumber class]])
     {
-        NSLog(@"addEventID is number, id: %@",addEventID);
+        MTLOG(@"addEventID is number, id: %@",addEventID);
 
     }
     UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"请输入申请加入信息:" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -813,7 +813,7 @@
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT];
-                NSLog(@"add event apply: %@",json);
+                MTLOG(@"add event apply: %@",json);
             }
         }
             break;
@@ -832,7 +832,7 @@
 //        UITextPosition* pos = [[UITextPosition alloc]init];
 //        [textField selectAll:textField];
     }
-    NSLog(@"yayyayayayayyayayyayayayyy");
+    MTLOG(@"yayyayayayayyayayyayayayyy");
 }
 
 

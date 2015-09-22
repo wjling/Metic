@@ -105,7 +105,7 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:_eventId forKey:@"event_id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_PARTICIPANTS];
 }
@@ -115,7 +115,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -287,12 +287,12 @@
                 [dictionary setValue:_eventId forKey:@"event_id"];
                 [dictionary setValue:[NSString stringWithFormat:@"[%@]",_kickingId] forKey:@"participant"];
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-                NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+                MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendMessage:jsonData withOperationCode:KICK_OUT finshedBlock:^(NSData *rData) {
                     if (rData) {
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                        NSLog(@"received Data: %@",response1);
+                        MTLOG(@"received Data: %@",response1);
                         NSNumber *cmd = [response1 valueForKey:@"cmd"];
                         switch ([cmd intValue]) {
                             case NORMAL_REPLY:

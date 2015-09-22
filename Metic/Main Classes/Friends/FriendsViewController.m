@@ -43,7 +43,7 @@
     [super viewDidLoad];
 //    [[SlideNavigationController sharedInstance] setEnableSwipeGesture:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
-    NSLog(@"friendviewcontroller viewdidload");
+    MTLOG(@"friendviewcontroller viewdidload");
     //下面的if语句是为了解决iOS7上navigationbar可以和别的view重叠的问题
     if( ([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0))
     {
@@ -89,22 +89,22 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    NSLog(@"touches begin");
+    MTLOG(@"touches begin");
 }
 
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  Friends");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  Friends");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -158,15 +158,15 @@
         self.friendList = [[MTUser sharedInstance] friendList];
         self.sectionArray = [[MTUser sharedInstance] sectionArray];
         self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-//        NSLog(@"sectionarray: %@ \nsortedFriendDic: %@", self.sectionArray, self.sortedFriendDic);
+//        MTLOG(@"sectionarray: %@ \nsortedFriendDic: %@", self.sectionArray, self.sortedFriendDic);
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self friendTableviewReload];
         });
         
         if (self.friendList.count > 0) {
-//            NSLog(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
+//            MTLOG(@"好友列表初始存在好友：friendlist count: %d",friendList.count);
             if (![MTUser sharedInstance].doingSortingFriends && ![MTUser sharedInstance].sortingFriendsDone) { //如果这时不在进行好友排序 且 好友排序并没有完成, 则进行排序
-                NSLog(@"好友列表初始化：好友排序未完成且不在进行好友排序");
+                MTLOG(@"好友列表初始化：好友排序未完成且不在进行好友排序");
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
                                    [[MTUser sharedInstance] friendListDidChanged];
@@ -174,7 +174,7 @@
                                                   {
                                                       self.sectionArray = [[MTUser sharedInstance] sectionArray];
                                                       self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-                                                      NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
+                                                      MTLOG(@"sortedFriendDic: %@", self.sortedFriendDic);
                                                       [self friendTableviewReload];
                                                   });
                                });
@@ -182,13 +182,13 @@
             }
             else //如果这时在进行好友排序或已经完成排序
             {
-                NSLog(@"好友列表初始化：正在进行好友排序或已经完成排序");
+                MTLOG(@"好友列表初始化：正在进行好友排序或已经完成排序");
                 while([MTUser sharedInstance].doingSynchronizeFriend) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
                 }
                 self.sectionArray = [[MTUser sharedInstance] sectionArray];
                 self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-//                NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
+//                MTLOG(@"sortedFriendDic: %@", self.sortedFriendDic);
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self friendTableviewReload];;
@@ -201,7 +201,7 @@
             }
             self.sectionArray = [[MTUser sharedInstance] sectionArray];
             self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
-            NSLog(@"sortedFriendDic: %@", self.sortedFriendDic);
+            MTLOG(@"sortedFriendDic: %@", self.sortedFriendDic);
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self friendTableviewReload];;
@@ -211,19 +211,19 @@
         }
         else //如果好友列表为空，可能是同步好友失败，也有可能真为空
         {
-            NSLog(@"好友列表初始不存在好友：friendlist count: %ld",friendList.count);
+            MTLOG(@"好友列表初始不存在好友：friendlist count: %ld",friendList.count);
             AppDelegate* app = (AppDelegate*)[UIApplication sharedApplication].delegate;
             
             if (app.isNetworkConnected) { //为防万一，再进行一次好友同步，前提是网络已连接
-                NSLog(@"好友列表初始化：网络连接，再进行一次好友同步");
+                MTLOG(@"好友列表初始化：网络连接，再进行一次好友同步");
                 [[MTUser sharedInstance] synchronizeFriends];
                 while(![MTUser sharedInstance].synchronizeFriendDone && [MTUser sharedInstance].doingSynchronizeFriend) {
                     [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
                 }
-                NSLog(@"好友列表初始化：同步之后，friendlist count: %d",[MTUser sharedInstance].friendList.count);
+                MTLOG(@"好友列表初始化：同步之后，friendlist count: %d",[MTUser sharedInstance].friendList.count);
                 if ([MTUser sharedInstance].friendList.count > 0) {
                     if ([MTUser sharedInstance].sortedFriendDic.count == 1) {  //1是必定有个“好友推荐”
-                        NSLog(@"好友列表初始化：如果好友排序列表为空，说明没有收到服务器返回的消息");
+                        MTLOG(@"好友列表初始化：如果好友排序列表为空，说明没有收到服务器返回的消息");
                         dispatch_async(dispatch_get_global_queue(0, 0), ^
                                        {
                                            [[MTUser sharedInstance] friendListDidChanged];
@@ -238,7 +238,7 @@
                     }
                     else
                     {
-                        NSLog(@"好友列表初始化：好友同步和好友排序完成");
+                        MTLOG(@"好友列表初始化：好友同步和好友排序完成");
                         self.friendList = [[MTUser sharedInstance] friendList];
                         self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
                         self.sectionArray = [[MTUser sharedInstance] sectionArray];
@@ -250,7 +250,7 @@
                 }
                 else
                 {
-                    NSLog(@"好友列表初始化：该用户暂时没有好友");
+                    MTLOG(@"好友列表初始化：该用户暂时没有好友");
                     self.friendList = [[MTUser sharedInstance] friendList];
                     self.sectionArray = [[MTUser sharedInstance] sectionArray];
                     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
@@ -262,7 +262,7 @@
             }
             else //网络不连通，直接从数据库取
             {
-                NSLog(@"好友列表初始化：网络不联通，直接从数据库获取friendlist");
+                MTLOG(@"好友列表初始化：网络不联通，直接从数据库获取friendlist");
                 dispatch_async(dispatch_get_global_queue(0, 0), ^
                                {
 //                                   [MTUser sharedInstance].friendList = [[MTUser sharedInstance] getFriendsFromDB];
@@ -282,10 +282,10 @@
                 
             }
         }
-        NSLog(@"table data init done");
+        MTLOG(@"table data init done");
     }
     @catch (NSException *exception) {
-        NSLog(@"init friend table exception: %@", exception);
+        MTLOG(@"init friend table exception: %@", exception);
     }
     @finally {
         
@@ -302,7 +302,7 @@
         lab.textColor = [UIColor grayColor];
         lab.text = [NSString stringWithFormat:@"%lu位好友", (unsigned long)self.friendList.count];
         [self.friendTableView setTableFooterView:lab];
-        NSLog(@"刷新好友列表");
+        MTLOG(@"刷新好友列表");
     }
 }
 
@@ -432,14 +432,14 @@
             //        if (end == -1) {
             //            end = textCharRange_arr.count - 1;
             //        }
-            //        NSLog(@"colored begin: %d, end: %d",begin,end);
+            //        MTLOG(@"colored begin: %d, end: %d",begin,end);
             NSInteger final_end = end - begin + 1;
             if (final_end <= 0 || final_end > textCharRange_arr.count - 1) {
                 final_end = 1;
             }
             NSValue* value = [NSValue valueWithRange:NSMakeRange(begin, final_end)];
             [ranges_arr addObject:value];
-            NSLog(@"%@, colored range2: (%ld,%ld)",text,[value rangeValue].location,[value rangeValue].length);
+            MTLOG(@"%@, colored range2: (%ld,%ld)",text,[value rangeValue].location,[value rangeValue].length);
             
             range_zuoKuohao = [text_pinyin rangeOfString:@"(" options:NSCaseInsensitiveSearch].location + 1;
             if (range_zuoKuohao < text_pinyin.length && range_zuoKuohao >= 0) {
@@ -472,7 +472,7 @@
     [SVProgressHUD showWithStatus:@"正在处理..." maskType:SVProgressHUDMaskTypeClear];
 //    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
     if (indexPath.section >= sectionArray.count) {
-        NSLog(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
+        MTLOG(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
         return;
     }
     NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section];
@@ -488,11 +488,11 @@
         [http sendMessage:json_data withOperationCode:DELETE_FRIEND finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* temp  = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                NSLog(@"获取到删除好友反馈：%@", temp);
+                MTLOG(@"获取到删除好友反馈：%@", temp);
             }
             else
             {
-                NSLog(@"删除好友获取的rData为空, indexPath.section: %d, indexPath.row: %d", indexPath.section, indexPath.row);
+                MTLOG(@"删除好友获取的rData为空, indexPath.section: %d, indexPath.row: %d", indexPath.section, indexPath.row);
                 [SVProgressHUD dismissWithError:@"网络异常"];
 //                [groupFriends insertObject:friend atIndex:indexPath.row];
 //                [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
@@ -542,7 +542,7 @@
                 case REQUEST_FAIL:  //108
                 default:
                 {
-                    NSLog(@"删除好友失败，恢复成没删除的状态");
+                    MTLOG(@"删除好友失败，恢复成没删除的状态");
 //                    [groupFriends insertObject:friend atIndex:indexPath.row];
 //                    [friendTableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
                     [SVProgressHUD dismissWithError:@"删除好友失败" afterDelay:1.5];
@@ -570,8 +570,8 @@
         
     }
     else{
-        NSLog(@"key: %@", key);
-        NSLog(@"删除好友的indexpath.row错误, row: %li \ngroupFriends: %@", (long)indexPath.row, groupFriends);
+        MTLOG(@"key: %@", key);
+        MTLOG(@"删除好友的indexpath.row错误, row: %li \ngroupFriends: %@", (long)indexPath.row, groupFriends);
     }
     
 }
@@ -637,18 +637,18 @@
     if (tableView == friendTableView) {
         NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
         NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
-        NSLog(@"afriend: %@",aFriend);
+        MTLOG(@"afriend: %@",aFriend);
         selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
         if ([selectedFriendID isKindOfClass:[NSString class]]) {
-            NSLog(@"NSString fid value: %@",selectedFriendID);
+            MTLOG(@"NSString fid value: %@",selectedFriendID);
         }
         else if([selectedFriendID isKindOfClass:[NSNumber class]])
         {
-            NSLog(@"NSNumber fid value: %@",selectedFriendID);
+            MTLOG(@"NSNumber fid value: %@",selectedFriendID);
         }
         else
         {
-            NSLog(@"class of selectedFriendID: %@",[selectedFriendID class]);
+            MTLOG(@"class of selectedFriendID: %@",[selectedFriendID class]);
         }
         
     }
@@ -664,7 +664,7 @@
 {
     if ([segue.destinationViewController isKindOfClass:[FriendInfoViewController class]]) {
         FriendInfoViewController* viewController = (FriendInfoViewController*)segue.destinationViewController;
-//        NSLog(@"pass fid value: %@",selectedFriendID);
+//        MTLOG(@"pass fid value: %@",selectedFriendID);
         
         viewController.fid = selectedFriendID;
     }
@@ -816,7 +816,7 @@
         {
             if([elem isKindOfClass:[TTTAttributedLabel class]])
             {
-//                NSLog(@"remove");
+//                MTLOG(@"remove");
                 [elem removeFromSuperview];
             }
         }
@@ -839,7 +839,7 @@
         cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
         cell.layer.borderWidth = 0.3f;
 //        cell.textLabel.text = name;
-//        NSLog(@"cell of searched friend, name: %@",name);
+//        MTLOG(@"cell of searched friend, name: %@",name);
         return cell;
     }
     
@@ -1123,8 +1123,8 @@
             }
         }
     }
-//    NSLog(@"search friend list: %@",searchFriendList);
-//    NSLog(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.contentSize.width, friendSearchDisplayController.searchResultsTableView.contentSize.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
+//    MTLOG(@"search friend list: %@",searchFriendList);
+//    MTLOG(@"search_friend_display_controller: width: %f, height: %f, x: %f, y: %f", friendSearchDisplayController.searchResultsTableView.contentSize.width, friendSearchDisplayController.searchResultsTableView.contentSize.height, friendSearchDisplayController.searchResultsTableView.frame.origin.x, friendSearchDisplayController.searchResultsTableView.frame.origin.y);
 
 }
 
@@ -1161,10 +1161,10 @@
 - (void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
 //    if (cmd) {
 //        if ([cmd intValue] == NORMAL_REPLY) {
 //            NSMutableArray* tempFriends = [response1 valueForKey:@"friend_list"];
@@ -1179,22 +1179,22 @@
 //            }
 //            else
 //            {
-//                NSLog(@"好友列表已经是最新的啦～");
+//                MTLOG(@"好友列表已经是最新的啦～");
 //                self.friendList = [self getFriendsFromDB];
 //                self.sortedFriendDic = [self sortFriendList];
 //
 //            }
-//            NSLog(@"synchronize friends: %@",friendList);
+//            MTLOG(@"synchronize friends: %@",friendList);
 //            
 //        }
 //        else
 //        {
-//            NSLog(@"synchronize friends failed");
+//            MTLOG(@"synchronize friends failed");
 //        }
 //    }
 //    else
 //    {
-//        NSLog(@"server error");
+//        MTLOG(@"server error");
 //    }
 //    
 //    [self.friendTableView reloadData];
@@ -1202,7 +1202,7 @@
 
 //- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 //{
-////    NSLog(@"scroll begin dragging"); 
+////    MTLOG(@"scroll begin dragging"); 
 //}
 
 #pragma mark - SlideNavigationControllerDelegate

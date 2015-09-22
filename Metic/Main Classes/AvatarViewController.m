@@ -89,7 +89,7 @@
         }];
         
     } failure:^(NSString *message) {
-        NSLog(@"message");
+        MTLOG(@"message");
         _avatar.image = [UIImage imageNamed:@"默认用户头像"];
     }];
     
@@ -100,7 +100,7 @@
         }];
         
     } failure:^(NSString *message) {
-        NSLog(@"message");
+        MTLOG(@"message");
         [UIImage imageNamed:@"默认用户头像"];
     }];
 
@@ -122,11 +122,11 @@
 
 -(void)avatarClicked:(id)sender
 {
-    NSLog(@"avatar clicked");
+    MTLOG(@"avatar clicked");
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择图像" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
-        NSLog(@"cancel");
+        MTLOG(@"cancel");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     }];
     [actionSheet addButton:cancelItem type:RIButtonItemType_Cancel];
@@ -211,12 +211,12 @@
                 }
                 
             } failure:^(NSString *message) {
-                NSLog(@"message");
+                MTLOG(@"message");
             }];
         }
         
     } failure:^(NSString *message) {
-        NSLog(@"message");
+        MTLOG(@"message");
     }];
 }
 

@@ -135,7 +135,7 @@
             _url = url;
             [self downloadHQphoto];
         } failure:^(NSString *message) {
-            NSLog(@"%@",message);
+            MTLOG(@"%@",message);
         }];
     }
 }

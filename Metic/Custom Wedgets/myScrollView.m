@@ -36,7 +36,7 @@
         self.originContentSize = contentSize;
     }
     
-//    NSLog(@"self content size: width: %f, height: %f",self.originContentSize.width,self.originContentSize.height);
+//    MTLOG(@"self content size: width: %f, height: %f",self.originContentSize.width,self.originContentSize.height);
 }
 
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -47,34 +47,34 @@
 //        [self.superview touchesBegan:touches withEvent:event];
 ////        self.scrollEnabled = NO;
 //        [super touchesBegan:touches withEvent:event];
-//        NSLog(@"superview do the touch, superview: %@",self.superview);
-//        NSLog(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
+//        MTLOG(@"superview do the touch, superview: %@",self.superview);
+//        MTLOG(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
 //    }
 //    else
 //    {
 //        [self setNeedsDisplay];
 ////        self.scrollEnabled = YES;
 //        [super touchesBegan:touches withEvent:event];
-//        NSLog(@"self do the touch");
-//        NSLog(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
+//        MTLOG(@"self do the touch");
+//        MTLOG(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
 //    }
 //}
 
 
 -(UIView*)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
-    NSLog(@"point : x: %f, y: %f",point.x,point.y);
+    MTLOG(@"point : x: %f, y: %f",point.x,point.y);
     if (point.x <= 10) {
-//        NSLog(@"superview do the touch, view: %@",self.superview);
-//        NSLog(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
+//        MTLOG(@"superview do the touch, view: %@",self.superview);
+//        MTLOG(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
         return self.superview;
     }
     else
     {
 //        UIView* view = [super hitTest:point withEvent:event];
-//        NSLog(@"self do the touch, view: %@",self);
+//        MTLOG(@"self do the touch, view: %@",self);
         self.contentSize = self.originContentSize;
-//        NSLog(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
+//        MTLOG(@"content size: width: %f, height: %f",self.contentSize.width,self.contentSize.height);
         return [super hitTest:point withEvent:event];
     }
 }

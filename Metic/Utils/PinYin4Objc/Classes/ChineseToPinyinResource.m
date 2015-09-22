@@ -56,7 +56,7 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
         @autoreleasepool {
             [lines enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 NSArray *lineComponents=[obj componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                //NSLog(@"%@, %@",lineComponents[0],lineComponents[1]);
+                //MTLOG(@"%@, %@",lineComponents[0],lineComponents[1]);
                 [tempMap setObject:lineComponents[1] forKey:lineComponents[0]];
             }];
         }

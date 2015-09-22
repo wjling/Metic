@@ -76,14 +76,14 @@
 }
 -(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
 {
-//    NSLog(@"didReceiveData");
+//    MTLOG(@"didReceiveData");
     [responseData appendData:data];
 }
 
 
 -(void)connectionDidFinishLoading:(NSURLConnection*)connection
 {
-//    NSLog(@"connectionDidFinishLoading");
+//    MTLOG(@"connectionDidFinishLoading");
     if (self.finishBlock) {
         self.finishBlock(responseData);
         self.finishBlock = nil;
@@ -281,7 +281,7 @@
     httpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
-    NSLog(@"%@",httpURL);
+//    MTLOG(@"%@",httpURL);
     [request setHTTPMethod:@"POST"];
     NSString *body=@"";
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
@@ -319,7 +319,7 @@
     httpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
-    NSLog(@"%@",httpURL);
+//    MTLOG(@"%@",httpURL);
     [request setHTTPMethod:@"POST"];
     NSString *body=@"";
     body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
@@ -356,7 +356,7 @@
     [request setHTTPBody:jsonData];
     [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    //NSLog(@"request sent");
+    //MTLOG(@"request sent");
     
 }
 
@@ -371,7 +371,7 @@
     [request setHTTPBody:jsonData];
     [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    NSLog(@"URL: %@ ",httpURL);
+//    MTLOG(@"URL: %@ ",httpURL);
     
 }
 
@@ -386,7 +386,7 @@
     [request setHTTPBody:jsonData];
     [request setTimeoutInterval:12];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    NSLog(@"URL: %@ ",httpURL);
+//    MTLOG(@"URL: %@ ",httpURL);
     
 }
 
@@ -415,7 +415,7 @@
     self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
     httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,parsingOperationCode];
-    NSLog(@"%@",httpURL);
+//    MTLOG(@"%@",httpURL);
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
     
     [request setHTTPMethod:@"POST"];

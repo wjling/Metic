@@ -58,7 +58,7 @@ static MenuViewController *singletonInstance;
     self.view.backgroundColor = [UIColor blackColor];
     if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
         CGRect frame = self.view.frame;
-        NSLog(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+        MTLOG(@"%f  %f  %f  %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
         frame.size.height += frame.origin.y;
         frame.origin.y += 20;
         [self.view setFrame:frame];
@@ -97,7 +97,7 @@ static MenuViewController *singletonInstance;
     NSDictionary* userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     NSDictionary* unRead_dic = [userSettings objectForKey:@"hasUnreadNotification1"];
     NSInteger tab_show = [[unRead_dic objectForKey:@"tab_show"] integerValue];
-    NSLog(@"user %@ menu dianReset, tab_show： %ld", [MTUser sharedInstance].userid,(long)tab_show);
+    MTLOG(@"user %@ menu dianReset, tab_show： %ld", [MTUser sharedInstance].userid,(long)tab_show);
     if (tab_show >= 0) {
         [self showUpdateInRow:4];
         [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
@@ -113,11 +113,11 @@ static MenuViewController *singletonInstance;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"menuviewcontroller will appear");
+    MTLOG(@"menuviewcontroller will appear");
     NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]objectForKey:key];
     NSNumber* flag = [[userSettings valueForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"];
-    NSLog(@"侧边栏，viewWillAppear, hasUnreadNotification1: %@", flag);
+    MTLOG(@"侧边栏，viewWillAppear, hasUnreadNotification1: %@", flag);
     if (flag && [flag integerValue]>= 0) {
         [self showUpdateInRow:4];
         [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
@@ -149,13 +149,13 @@ static MenuViewController *singletonInstance;
     }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [_tableView reloadData];
-    NSLog(@"menu Uid: %@",[MTUser sharedInstance].userid);
+    MTLOG(@"menu Uid: %@",[MTUser sharedInstance].userid);
     [getter getAvatar];
 }
 
 -(void)clearVC
 {
-    NSLog(@"homeViewController is cleared ");
+    MTLOG(@"homeViewController is cleared ");
     homeViewController = nil;
     [(AppDelegate*)[UIApplication sharedApplication].delegate setHomeViewController:nil];
     eventInvitationViewController = nil;
@@ -214,21 +214,21 @@ static MenuViewController *singletonInstance;
 
 -(void)showUpdateInRow:(NSInteger)row
 {
-    NSLog(@"显示侧边栏红点");
+    MTLOG(@"显示侧边栏红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:YES]];
     [_tableView reloadData];
 }
 
 -(void)hideUpdateInRow:(NSInteger)row
 {
-    NSLog(@"隐藏侧边栏红点");
+    MTLOG(@"隐藏侧边栏红点");
     [notificationSigns_arr replaceObjectAtIndex:row withObject:[NSNumber numberWithBool:NO]];
     [_tableView reloadData];
 }
 
 -(void)showNotificationCenter
 {
-    NSLog(@"自动跳转到消息中心");
+    MTLOG(@"自动跳转到消息中心");
     if (![[SlideNavigationController sharedInstance].topViewController isKindOfClass:[NotificationsViewController class]]) {
         if (!self.notificationsViewController) {
             UIStoryboard *mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
@@ -361,7 +361,7 @@ static MenuViewController *singletonInstance;
             if (!homeViewController) {
 //                vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
 //                _homeViewController = vc;
-                NSLog(@"homeViewController is nil");
+                MTLOG(@"homeViewController is nil");
                 homeViewController = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
                 if (!homeViewController) {
                     homeViewController = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];

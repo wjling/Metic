@@ -39,7 +39,7 @@
 
 -(void)dealloc
 {
-    NSLog(@"dealloc");
+    MTLOG(@"dealloc");
 }
 
 - (void)didReceiveMemoryWarning
@@ -186,7 +186,7 @@
         [library assetForURL:imageURL resultBlock:^(ALAsset *asset) {
             
             if (!asset) {
-                NSLog(@"图片已不存在");
+                MTLOG(@"图片已不存在");
                 [picker dismissViewControllerAnimated:YES completion:^{}];
                 //        [self openEditor];
                 //    }];

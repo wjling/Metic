@@ -42,7 +42,7 @@
 
 -(void)avatarClick
 {
-    NSLog(@"avatar click");
+    MTLOG(@"avatar click");
     UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     FriendInfoViewController* fInfoV = [mainSB instantiateViewControllerWithIdentifier:@"FriendInfoViewController"];
     if (self.tag) {

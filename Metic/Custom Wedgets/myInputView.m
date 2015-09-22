@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         // Initialization code
-        NSLog(@"myInputView init");
+        MTLOG(@"myInputView init");
         [self initViews];
     }
     return self;
@@ -38,7 +38,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        NSLog(@"myInputView initwithframe,frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y, frame.size.width, frame.size.height);
+        MTLOG(@"myInputView initwithframe,frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y, frame.size.width, frame.size.height);
         [self initViews:frame];
     }
     return self;

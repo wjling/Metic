@@ -97,16 +97,16 @@
 //返回本页并跳转到消息页
 -(void)PopToHereAndTurnToNotificationPage:(id)sender
 {
-    NSLog(@"PopToHereAndTurnToNotificationPage  from  systemSetting");
+    MTLOG(@"PopToHereAndTurnToNotificationPage  from  systemSetting");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
-        NSLog(@"Here");
+        MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
             [self ToNotificationCenter];
         }
     }else{
-        NSLog(@"NotHere");
+        MTLOG(@"NotHere");
     }
 }
 
@@ -151,14 +151,14 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.nextResponder touchesBegan:touches withEvent:event];
-    NSLog(@"touch begin");
+    MTLOG(@"touch begin");
     [quitAlert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 
 -(void)backgroundClicked
 {
-    NSLog(@"quit alert");
+    MTLOG(@"quit alert");
     [quitAlert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
@@ -171,7 +171,7 @@
 //        [userDf setBool:sender.on forKey:@"systemSettings1"];
         [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting1"];
         [userDf setObject:userSettings forKey:key];
-        NSLog(@"switch1: %@",[NSNumber numberWithBool:sender.on]);
+        MTLOG(@"switch1: %@",[NSNumber numberWithBool:sender.on]);
     }
     [userDf synchronize];
 }
@@ -184,7 +184,7 @@
     if ([sender isKindOfClass:[UISwitch class]]) {
         [userSettings setValue:[NSNumber numberWithBool:sender.on] forKey:@"systemSetting2"];
         [userDf setObject:userSettings forKey:key];
-        NSLog(@"switch2: %@",[NSNumber numberWithBool:sender.on]);;
+        MTLOG(@"switch2: %@",[NSNumber numberWithBool:sender.on]);;
     }
     [userDf synchronize];
 }
@@ -224,7 +224,7 @@
 -(void)updateCheck
 {
     currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSLog(@"version: %@",currentVersion);
+    MTLOG(@"version: %@",currentVersion);
     
     [MobClick setAppVersion:currentVersion];
 //    [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
@@ -244,7 +244,7 @@
 //    
 //    NSString *results = [[NSString alloc] initWithBytes:[recervedData bytes] length:[recervedData length] encoding:NSUTF8StringEncoding];
 //    NSDictionary *dic = [CommonUtils NSDictionaryWithNSString:results];
-//    NSLog(@"get update dictionary: %@",dic);
+//    MTLOG(@"get update dictionary: %@",dic);
 //    NSArray *infoArray = [dic objectForKey:@"results"];
 //    if ([infoArray count]) {
 //        NSDictionary *releaseInfo = [infoArray objectAtIndex:0];
@@ -291,7 +291,7 @@
 
 -(void)callBackSelectorWithDictionary:(NSDictionary*)appUpdateInfo
 {
-    NSLog(@"appUpdateInfo: %@",appUpdateInfo);
+    MTLOG(@"appUpdateInfo: %@",appUpdateInfo);
     BOOL update = [[appUpdateInfo objectForKey:@"update"] boolValue];
     if (update) {
 //        [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
@@ -311,7 +311,7 @@
 -(void)operationTimeOut:(NSTimer*)timer
 {
     [[timer userInfo] stopAnimating];
-    NSLog(@"time out");
+    MTLOG(@"time out");
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -319,10 +319,10 @@
 {
     if (alertView == quitAlert) {
         if (buttonIndex == 1) {
-            NSLog(@"退出程序");
+            MTLOG(@"退出程序");
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
-            NSLog(@"Metic被用户残忍杀死了");
+            MTLOG(@"Metic被用户残忍杀死了");
             NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
             if ([MTUser sharedInstance]) {
                 [((AppDelegate *)[[UIApplication sharedApplication] delegate]) saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
@@ -342,7 +342,7 @@
         }
         else if (buttonIndex == 2)
         {
-            NSLog(@"切换账号");
+            MTLOG(@"切换账号");
             [XGPush unRegisterDevice];
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
 //            [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
@@ -364,10 +364,10 @@
 
 - (void)didPresentAlertView:(UIAlertView *)alertView
 {
-    NSLog(@"did present alertview");
+    MTLOG(@"did present alertview");
 //    UIView* view = [alertView superview];
 //    if (view) {
-//        NSLog(@"add gesture in view ");
+//        MTLOG(@"add gesture in view ");
 //        view.userInteractionEnabled = YES;
 //        [view addGestureRecognizer:backgroundRecognizer];
 //    }
@@ -547,7 +547,7 @@
     if(response.responseCode == UMSResponseCodeSuccess)
     {
         //得到分享到的微博平台名
-        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        MTLOG(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
     }
 }
 

@@ -99,7 +99,7 @@
 - (IBAction)play:(id)sender {
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
-    NSLog(@"%@",url);
+    MTLOG(@"%@",url);
     [self downloadVideo:videoName url:url];
 }
 
@@ -241,7 +241,7 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
         [self.good_button setEnabled:YES];
@@ -337,7 +337,7 @@
         }
         
         if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"没有网络");
+            MTLOG(@"没有网络");
             return;
         }
 
@@ -360,7 +360,7 @@
                 _receivedBytes += size;
                 CGFloat progress = _receivedBytes*1.0f / total;
                 self.progressOverlayView.progress = progress;
-                NSLog(@"%f",progress);
+                MTLOG(@"%f",progress);
                 if (!(_controller.navigationController.viewControllers.lastObject == _controller)) {
                     [self clearVideoRequest];
                 }
@@ -417,7 +417,7 @@
     // my video player
     
     if(_isPlaying) return;
-    NSLog(@"play");
+    MTLOG(@"play");
 
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
@@ -501,7 +501,7 @@
 {
     AVPlayerItem* item = [n valueForKey:@"object"];
     if (item != _videoItem) return;
-    NSLog(@"repeat");
+    MTLOG(@"repeat");
     UIViewController* controllerr = _controller.navigationController.viewControllers.lastObject;
     if (![controllerr isKindOfClass:[VideoWallViewController class]] && ![controllerr isKindOfClass:[VideoDetailViewController class]]) {
         _isPlaying = NO;

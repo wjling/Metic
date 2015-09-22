@@ -104,7 +104,7 @@
         return;
     }
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"showOption");
+        MTLOG(@"showOption");
         if (!_controller.optionShadowView) {
             CGRect frame = _controller.view.frame;
             frame.origin = CGPointMake(0, 0);
@@ -139,7 +139,7 @@
 
 -(void)dismissOption
 {
-    NSLog(@"dismissOption");
+    MTLOG(@"dismissOption");
     if (_controller.optionShadowView) {
         [_controller.optionShadowView removeFromSuperview];
         _controller.optionShadowView = nil;
@@ -152,7 +152,7 @@
 }
 
 -(void)report{
-    NSLog(@"匿名投诉");
+    MTLOG(@"匿名投诉");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
@@ -172,7 +172,7 @@
 
 - (void)deleteComment
 {
-    NSLog(@"删除评论");
+    MTLOG(@"删除评论");
 }
 
 @end

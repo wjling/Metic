@@ -66,10 +66,10 @@
 - (void)initTableData
 {
     self.friendList = [[MTUser sharedInstance] friendList];
-    NSLog(@"table data init done");
+    MTLOG(@"table data init done");
     self.sortedFriendDic = [[MTUser sharedInstance] sortedFriendDic];
     self.sectionArray = [[MTUser sharedInstance] sectionArray];
-    //    NSLog(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
+    //    MTLOG(@"friendviewcontroller: friendList count: %d\n, sortedFriendDic: %@, sectionArray: %@",self.friendList.count, self.sortedFriendDic, self.sectionArray);
     UILabel* friendcount_label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, _friendTableView.frame.size.width, 30)];
     friendcount_label.textAlignment = NSTextAlignmentCenter;
     friendcount_label.textColor = [UIColor grayColor];
@@ -138,12 +138,12 @@
         [dictionary setValue:_eventId forKey:@"event_id"];
         [dictionary setValue:friends forKey:@"friends"];
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:INVITE_FRIENDS finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                NSLog(@"received Data: %@",temp);
+                MTLOG(@"received Data: %@",temp);
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
                 switch ([cmd intValue]) {
@@ -214,11 +214,11 @@
         if ([self.tmp_fids containsObject:cell.friendid]) {
             [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选前icon"]];
             [self.tmp_fids removeObject:cell.friendid];
-            NSLog(@"remove: %d",[cell.friendid intValue]);
+            MTLOG(@"remove: %d",[cell.friendid intValue]);
         }else{
             [(UIImageView*)[cell viewWithTag:3] setImage:[UIImage imageNamed:@"勾选后icon"]];
             [self.tmp_fids addObject:cell.friendid];
-            NSLog(@"add: %d",[cell.friendid intValue]);
+            MTLOG(@"add: %d",[cell.friendid intValue]);
         }
     }
 }

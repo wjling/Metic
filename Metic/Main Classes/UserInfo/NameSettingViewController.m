@@ -140,17 +140,17 @@
 {
 //    [self.confirm_barButton setEnabled:YES];
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].name = newName;
             [AppDelegate refreshMenu];
             [self synName:newName];
-            NSLog(@"昵称修改成功");
+            MTLOG(@"昵称修改成功");
             [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:2];
 //            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
             [self.navigationController popViewControllerAnimated:YES];
@@ -164,7 +164,7 @@
             break;
             
         default:
-            NSLog(@"昵称修改失败");
+            MTLOG(@"昵称修改失败");
             [SVProgressHUD dismissWithError:@"昵称修改失败，请检查是否包含非法字符" afterDelay:1.5];
 //            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
             break;
@@ -180,7 +180,7 @@
     NSString* toBeString = textField.text;
     //获取当前输入法
     NSString* lang = [[UITextInputMode currentInputMode] primaryLanguage];
-//    NSLog(@"当前输入法： %@", lang);
+//    MTLOG(@"当前输入法： %@", lang);
     if ([lang isEqualToString:@"zh-Hans"]) { //当前输入法是中文
         UITextRange* selectedRange = [textField markedTextRange]; //高亮的文本范围
         UITextPosition* position = [textField positionFromPosition:selectedRange.start offset:0];

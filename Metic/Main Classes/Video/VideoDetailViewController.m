@@ -225,12 +225,12 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"拉取视频%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"拉取视频%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_OBJECT_INFO finshedBlock:^(NSData *rData) {
         if(rData){
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -274,7 +274,7 @@
     }
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     NSString *url = [_videoInfo valueForKey:@"url"];
-    NSLog(@"%@",url);
+    MTLOG(@"%@",url);
     [self downloadVideo:videoName url:url];
 //    [self videoPlay:videoName url:url];
 //    [self openmovie:url];
@@ -383,7 +383,7 @@
         videoRequest = nil;
     }else if (videoRequest){
         if (_isVideoReady) {
-            NSLog(@"trytrytrytry");
+            MTLOG(@"trytrytrytry");
             [self playVideo:videoName];
         }
         
@@ -399,7 +399,7 @@
         [request setBytesReceivedBlock:^(unsigned long long size, unsigned long long total) {
             totalBytes = total;
             _receivedBytes += size;
-            //            NSLog(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
+            //            MTLOG(@"%lld   %lld   %f",_receivedBytes,total,_receivedBytes*1.0f/total);
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             if (_movie) [_movie.moviePlayer prepareToPlay];
             [userDefaults setDouble:total forKey:@"file_length"];
@@ -408,9 +408,9 @@
             //            float duration = _movie.moviePlayer.duration;
             //            float cur = _movie.moviePlayer.currentPlaybackTime;
             //
-            //            NSLog(@"%f",receivedBytes - total*1.0f* cur/duration);
+            //            MTLOG(@"%f",receivedBytes - total*1.0f* cur/duration);
             ////            if (receivedBytes - total*1.0f* cur/duration > 500000 || receivedBytes*1.0/total > 0.8) {
-            ////                NSLog(@"play");
+            ////                MTLOG(@"play");
             ////                canReplay = NO;
             ////                [_movie.moviePlayer prepareToPlay];
             ////                [_movie.moviePlayer play];
@@ -487,7 +487,7 @@
         }
         
         if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"没有网络");
+            MTLOG(@"没有网络");
             return;
         }
         
@@ -734,13 +734,13 @@
     long sequence = [self.sequence longValue];
     [dictionary setValue:self.sequence forKey:@"sequence"];
     [dictionary setValue:self.videoId forKey:@"video_id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_VCOMMENTS finshedBlock:^(NSData *rData) {
         if(rData){
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -821,7 +821,7 @@
     void (^resendCommentBlock)(void) = ^(void){
         //再次发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
             if (rData) {
@@ -908,7 +908,7 @@
         [self textViewDidChange:nil];
         self.inputTextView.text = @"";
     });
-    NSLog(comment,nil);
+    MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
     if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
@@ -953,7 +953,7 @@
     void (^sendCommentBlock)(void) = ^(void){
         //发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_VCOMMENT finshedBlock:^(NSData *rData) {
             if (rData) {
@@ -997,7 +997,7 @@
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",content);
+            MTLOG(@"%@",content);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
@@ -1165,7 +1165,7 @@
         [date setBackgroundColor:[UIColor clearColor]];
         [cell addSubview:date];
         
-        //NSLog(@"%f",self.specificationHeight);
+        //MTLOG(@"%f",self.specificationHeight);
         UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, height+38, 260, self.specificationHeight+15)];
         [specification setFont:[UIFont systemFontOfSize:12]];
         [specification setNumberOfLines:0];
@@ -1361,7 +1361,7 @@
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
             if (_isLoading) return;
             if (!_videoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-                NSLog(@"没有网络");
+                MTLOG(@"没有网络");
                 return;
             }
             
@@ -1397,7 +1397,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if (!_videoInfo || [[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
         });
@@ -1507,12 +1507,12 @@
                 [dictionary setValue:self.eventId forKey:@"event_id"];
                 [dictionary setValue:@"delete" forKey:@"cmd"];
                 [dictionary setValue:self.videoId forKey:@"video_id"];
-                NSLog(@"%@",dictionary);
+                MTLOG(@"%@",dictionary);
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                 [httpSender sendVideoMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
                     if (rData) {
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                        NSLog(@"received Data: %@",temp);
+                        MTLOG(@"received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSNumber *cmd = [response1 valueForKey:@"cmd"];
                         switch ([cmd intValue]) {

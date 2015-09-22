@@ -71,7 +71,7 @@ static const NSInteger MaxUploadCount = 20;
 
 -(void)dealloc
 {
-    NSLog(@"dealloc");
+    MTLOG(@"dealloc");
 }
 
 //返回上一层
@@ -196,7 +196,7 @@ static const NSInteger MaxUploadCount = 20;
 #pragma mark - TextView delegate
 -(void)textViewDidChange:(UITextView *)textView
 {
-    NSLog(@"test");
+    MTLOG(@"test");
     if ([textView.text isEqualToString:@""]) {
         [self.preLabel setEnabled:YES];
         self.preLabel.text = @"";
@@ -295,7 +295,7 @@ static const NSInteger MaxUploadCount = 20;
         
     }else {
         //多图上传
-        NSLog(@"showPhotos");
+        MTLOG(@"showPhotos");
         NSInteger count = self.uploadImgs.count;
         if (count == 0) return;
         NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
@@ -361,7 +361,7 @@ static const NSInteger MaxUploadCount = 20;
             
         });
     });
-    NSLog(@"%@",assets);
+    MTLOG(@"%@",assets);
 }
 
 -(void)UzysAssetsPickerControllerDidCancel:(UzysAssetsPickerController *)picker

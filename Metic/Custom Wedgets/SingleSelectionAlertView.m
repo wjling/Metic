@@ -62,7 +62,7 @@
     {
         content_height = 400;
     }
-    NSLog(@"width: %f, height: %f",content_width,content_height);
+    MTLOG(@"width: %f, height: %f",content_width,content_height);
     contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, content_width, content_height)];
     [contentView setBackgroundColor:[UIColor clearColor]];
     
@@ -161,7 +161,7 @@
 
 - (void)customIOS7dialogButtonTouchUpInside:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-//    NSLog(@"click custom ios7 dialog button");
+//    MTLOG(@"click custom ios7 dialog button");
     if ([self.kDelegate respondsToSelector:@selector(SingleSelectionAlertView:clickedButtonAtIndex:)]) {
         [self.kDelegate SingleSelectionAlertView:alertView clickedButtonAtIndex:buttonIndex];
     }

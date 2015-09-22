@@ -86,7 +86,7 @@
         return;
     }
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"showOption");
+        MTLOG(@"showOption");
         if (!_controller.optionShadowView) {
             CGRect frame = _controller.view.frame;
             frame.origin = CGPointMake(0, 0);
@@ -122,7 +122,7 @@
 
 -(void)dismissOption
 {
-    NSLog(@"dismissOption");
+    MTLOG(@"dismissOption");
     if (_controller.optionShadowView) {
         [_controller.optionShadowView removeFromSuperview];
         _controller.optionShadowView = nil;
@@ -135,7 +135,7 @@
 }
 
 -(void)report{
-    NSLog(@"匿名投诉");
+    MTLOG(@"匿名投诉");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -156,21 +156,21 @@
 
 - (void)deleteComment
 {
-    NSLog(@"删除评论");
+    MTLOG(@"删除评论");
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.pcomment_id forKey:@"pcomment_id"];
     [dictionary setValue:_controller.eventId forKey:@"event_id"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:DELETE_PCOMMENT finshedBlock:^(NSData *rData) {
         if (!rData) {
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         }
         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        NSLog(@"received Data: %@",temp);
+        MTLOG(@"received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {

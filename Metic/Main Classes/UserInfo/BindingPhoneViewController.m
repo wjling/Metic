@@ -130,13 +130,13 @@
             }
             else
             {
-                NSLog(@"上传手机号，收到的rData为空");
+                MTLOG(@"上传手机号，收到的rData为空");
                 UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [alertView show];
                 [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
                 return;
             }
-            NSLog(@"upload phone number done, received Data: %@",temp);
+            MTLOG(@"upload phone number done, received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber* cmd = [response1 objectForKey:@"cmd"];
             if ([cmd integerValue] == 100)
@@ -146,7 +146,7 @@
                 NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
                 [userSettings setValue:phone forKey:@"userPhoneNumber"];
                 [userDf setValue:userSettings forKey:key];
-                NSLog(@"绑定号码：%@ 成功",phone);
+                MTLOG(@"绑定号码：%@ 成功",phone);
                 [userDf synchronize];
                 [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"绑定手机成功" WithDelegate:self WithCancelTitle:@"确定"];
                 hint1_textfield.hidden = NO;
@@ -163,7 +163,7 @@
         NSDictionary* jsonDic = [CommonUtils packParamsInDictionary:
                                  [MTUser sharedInstance].userid, @"id",
                                  phone, @"my_phone_number",nil];
-        NSLog(@"upload number json: %@",jsonDic);
+        MTLOG(@"upload number json: %@",jsonDic);
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:jsonDic options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
         [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:uploadPhoneNumberDone];

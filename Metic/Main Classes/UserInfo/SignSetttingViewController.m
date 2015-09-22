@@ -82,21 +82,21 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
-            NSLog(@"个人描述修改成功");
+            MTLOG(@"个人描述修改成功");
             [MTUser sharedInstance].sign = newSign;
             [self.navigationController popViewControllerAnimated:YES];
         }
             break;
             
         default:
-            NSLog(@"个人描述修改失败");
+            MTLOG(@"个人描述修改失败");
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因个人描述修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
             break;
     }

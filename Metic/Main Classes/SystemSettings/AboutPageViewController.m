@@ -34,7 +34,7 @@
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
     currentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSLog(@"version: %@",currentVersion);
+    MTLOG(@"version: %@",currentVersion);
     version_label.text = [NSString stringWithFormat:@"活动宝 %@",currentVersion];
     
 }
@@ -67,7 +67,7 @@
 */
 
 - (IBAction)URLBtnClicked:(id)sender {
-    NSLog(@"open safari");
+    MTLOG(@"open safari");
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.whatsact.com"]];
 }
 @end

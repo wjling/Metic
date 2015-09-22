@@ -175,10 +175,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         return;
     }
     if (!_hasEncode) {
-        NSLog(@"开始转码");
+        MTLOG(@"开始转码");
         [self encodeVideo];
     }else{
-        NSLog(@"开始上传");
+        MTLOG(@"开始上传");
         [self upload];
     }
     
@@ -281,16 +281,16 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                  [self upload];
              });
              _hasEncode = YES;
-             NSLog(@"Video export succeeded");
+             MTLOG(@"Video export succeeded");
          }
          else if (encoder.status == AVAssetExportSessionStatusCancelled)
          {
-             NSLog(@"Video export cancelled");
+             MTLOG(@"Video export cancelled");
              _confirmBtn.enabled = YES;
          }
          else
          {
-             NSLog(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
+             MTLOG(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
              _confirmBtn.enabled = YES;
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [_alert dismissWithClickedButtonIndex:0 animated:YES];
@@ -412,15 +412,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [dictionary setValue:@"upload" forKey:@"cmd"];
         [dictionary setValue:container[0] forKey:@"video_name"];
         [dictionary setValue:self.textView.text forKey:@"title"];
-        NSLog(@"%@",dictionary);
+        MTLOG(@"%@",dictionary);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendVideoMessage:dictionary withOperationCode: VIDEOSERVER finshedBlock:^(NSData *rData) {
             if (rData) {
                 NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                NSLog(@"received Data: %@",temp);
+                MTLOG(@"received Data: %@",temp);
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                NSLog(@"%@     =   %@",cmd,response1  );
+                MTLOG(@"%@     =   %@",cmd,response1  );
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {

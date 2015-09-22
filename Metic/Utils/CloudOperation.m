@@ -71,13 +71,13 @@
     [dictionary setValue:path forKey:@"object"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
         if (rData) {
             _shouldExit = YES;
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -136,10 +136,10 @@
     [request setHTTPBody:fileData];
     
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"上传成功");
+        MTLOG(@"上传成功");
         [self.mDelegate finishwithOperationStatus:YES type:2 data:fileData path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"上传失败");
+        MTLOG(@"上传失败");
         [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
     }];
     
@@ -176,7 +176,7 @@
     [dictionary setValue:path forKey:@"object"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
         if (rData) {
@@ -186,7 +186,7 @@
                 case NORMAL_REPLY:
                 {
                     httpURL = (NSString*)[response1 valueForKey:@"url"];
-                    NSLog(@"Delete url: %@",httpURL);
+                    MTLOG(@"Delete url: %@",httpURL);
                     AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
                     AFHTTPRequestOperation *op = [manager DELETE:httpURL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                         [self.mDelegate finishwithOperationStatus:YES type:3 data:nil path:mpath];
@@ -213,7 +213,7 @@
     
     _shouldExit = YES;
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {

@@ -50,7 +50,7 @@
 //@synthesize user;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSLog(@"app did finish launch===============");
+    MTLOG(@"app did finish launch===============");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(forceQuitToLogin) name:@"forceQuitToLogin" object:nil];
     [self NetworkStatusInitViews];
     sync_queue = dispatch_queue_create("msg_syncueue", NULL);
@@ -67,12 +67,12 @@
     if (![userDf boolForKey:@"everLaunched"]) {
         [userDf setBool:YES forKey:@"everLaunched"];
         [userDf setBool:YES forKey:@"firstLaunched"];
-        NSLog(@"The first launch");
+        MTLOG(@"The first launch");
         [userDf synchronize];
     }
     else
     {
-        NSLog(@"Not the first launch");
+        MTLOG(@"Not the first launch");
         [userDf setBool:NO forKey:@"firstLaunched"];
         [userDf synchronize];
     }
@@ -104,7 +104,7 @@
         ret = [_mapManager start:@"qF8lbnGm6cIaAVe0tUTTBnyg" generalDelegate:nil];//企业版本测试服
     }
 	if (!ret) {
-		NSLog(@"manager start failed!");
+		MTLOG(@"manager start failed!");
 	}
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
     [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" appSecret:@"975f26374a1ade1290b1d4dfa767ed1f" url:@"http://www.whatsact.com"];
@@ -168,12 +168,12 @@
     //推送反馈回调版本示例
     void (^successBlock)(void) = ^(void){
         //成功之后的处理
-        NSLog(@"[XGPush]handleLaunching's successBlock");
+        MTLOG(@"[XGPush]handleLaunching's successBlock");
     };
     
     void (^errorBlock)(void) = ^(void){
         //失败之后的处理
-        NSLog(@"[XGPush]handleLaunching's errorBlock");
+        MTLOG(@"[XGPush]handleLaunching's errorBlock");
     };
     
     [XGPush handleLaunching:launchOptions successCallback:successBlock errorCallback:errorBlock];
@@ -225,10 +225,10 @@
     
 //     [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{
 //         /*todo send keep live */
-//         NSLog(@"alive in background");
+//         MTLOG(@"alive in background");
 //         [NSThread sleepForTimeInterval:10];
 //     }];
-     NSLog(@"app did enter Background====================");
+     MTLOG(@"app did enter Background====================");
     isInBackground = YES;
     application.applicationIconBadgeNumber = 0;
     
@@ -265,7 +265,7 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
-    NSLog(@"app will enter foreground==================");
+    MTLOG(@"app will enter foreground==================");
     application.applicationIconBadgeNumber = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Playfrompause"
                                                         object:nil
@@ -276,7 +276,7 @@
     isInBackground = NO;
     
     //同步推送消息
-    NSLog(@"开始同步消息");
+    MTLOG(@"开始同步消息");
     void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
     {
         if (!min_seq || !max_seq) {
@@ -292,7 +292,7 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
-    NSLog(@"app did become active===================");
+    MTLOG(@"app did become active===================");
     isInBackground = NO;
     
     //通知活动中心刷新新动态
@@ -302,7 +302,7 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     //点击本地通知提示框的打开
-    NSLog(@"点击本地通知");
+    MTLOG(@"点击本地通知");
     application.applicationIconBadgeNumber = 0;
     isInBackground = NO;
     
@@ -329,16 +329,16 @@
     
 //    void (^successBlock)(void) = ^(void){
 //        //成功之后的处理
-//        NSLog(@"[XGPush]unRegisterDevice successBlock");
+//        MTLOG(@"[XGPush]unRegisterDevice successBlock");
 //    };
 //    
 //    void (^errorBlock)(void) = ^(void){
 //        //失败之后的处理
-//        NSLog(@"[XGPush]unRegisterDevice errorBlock");
+//        MTLOG(@"[XGPush]unRegisterDevice errorBlock");
 //    };
 //
 //    [XGPush unRegisterDevice:successBlock errorCallback:errorBlock];
-    NSLog(@"Metic被残忍杀死了");
+    MTLOG(@"Metic被残忍杀死了");
     NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"]) {
         NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
@@ -355,13 +355,13 @@
     NSString * deviceTokenStr = [XGPush registerDevice: deviceToken];
     
     //打印获取的deviceToken的字符串
-    NSLog(@"deviceTokenStr is %@",deviceTokenStr);
+    MTLOG(@"deviceTokenStr is %@",deviceTokenStr);
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSString *error_str = [NSString stringWithFormat:@"%@",error];
-    NSLog(@"Failed to get token, error: %@",error_str);
+    MTLOG(@"Failed to get token, error: %@",error_str);
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -371,16 +371,16 @@
     if (cmd == ADD_FRIEND_NOTIFICATION || cmd == ADD_FRIEND_RESULT || cmd == NEW_EVENT_NOTIFICATION || cmd == REQUEST_EVENT || cmd == QUIT_EVENT_NOTIFICATION || cmd == KICK_EVENT_NOTIFICATION) {
         switch ([application applicationState]) {
             case UIApplicationStateActive:
-                NSLog(@"UIApplicationStateActive");
+                MTLOG(@"UIApplicationStateActive");
                 break;
             case UIApplicationStateInactive:
-                NSLog(@"UIApplicationStateInactive");
+                MTLOG(@"UIApplicationStateInactive");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
                                                                     object:nil
                                                                   userInfo:nil];
                 break;
             case UIApplicationStateBackground:
-                NSLog(@"UIApplicationStateBackground");
+                MTLOG(@"UIApplicationStateBackground");
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
                                                                     object:nil
                                                                   userInfo:nil];
@@ -394,7 +394,7 @@
     
     //在此处理接受到的消息
     
-    NSLog(@"APP receive remote userInfo: %@", userInfo);
+    MTLOG(@"APP receive remote userInfo: %@", userInfo);
     [XGPush handleReceiveNotification:userInfo];
 //    NSString* message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
 //    NSMutableDictionary* message_dic = [CommonUtils NSDictionaryWithNSString:message];
@@ -474,7 +474,7 @@
 #pragma mark - XinGe Push
 
 - (void)registerPush{
-    NSLog(@"XG register");
+    MTLOG(@"XG register");
     
     void (^successCallback)(void) = ^(void){
         //如果变成需要注册状态
@@ -510,7 +510,7 @@
 
 - (void)registerPushForIOS8{
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
-    NSLog(@"register Push for iOS8 begin");
+    MTLOG(@"register Push for iOS8 begin");
     //Types
     UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
     
@@ -542,7 +542,7 @@
     
     
     [[UIApplication sharedApplication] registerForRemoteNotifications];
-    NSLog(@"register Push for iOS8 end");
+    MTLOG(@"register Push for iOS8 end");
 #endif
 }
 
@@ -563,7 +563,7 @@
         [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
 
         NSNumber* result = [msg_dic objectForKey:@"result"];
-        NSLog(@"friend request result: %@",result);
+        MTLOG(@"friend request result: %@",result);
         if ([result integerValue] == 1) {
             NSString* name = [msg_dic objectForKey:@"name"];
             NSString* email = [msg_dic objectForKey:@"email"];
@@ -583,7 +583,7 @@
         }
         else if ([result integerValue] == 0)
         {
-            NSLog(@"friend request is refused");
+            MTLOG(@"friend request is refused");
         }
         
         type = 1;
@@ -611,7 +611,7 @@
                                                             object:nil
                                                           userInfo:nil];
         type = -1;
-//        NSLog(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
+//        MTLOG(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
     else if (msg_cmd == NEW_VIDEO_COMMENT_REPLY || msg_cmd == NEW_PHOTO_COMMENT_REPLY || msg_cmd == NEW_COMMENT_REPLY || msg_cmd == NEW_LIKE_NOTIFICATION) {
         if (msg_cmd == NEW_LIKE_NOTIFICATION) {
@@ -656,11 +656,11 @@
             }
             if (msgNeed) [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             type = -1;
-            NSLog(@"有人@你： %@",msg_dic);
+            MTLOG(@"有人@你： %@",msg_dic);
         }else{
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             type = -1;
-            NSLog(@"有人@你： %@",msg_dic);
+            MTLOG(@"有人@你： %@",msg_dic);
         }
         
     }
@@ -738,7 +738,7 @@
     
     [userSettings setValue:[NSNumber numberWithBool:YES] forKey:@"openWithNotificationCenter"];
     NSInteger i = (type < 3 && type >= 0)? type : -1;
-    NSLog(@"新消息来了，message type: %ld", (long)i);
+    MTLOG(@"新消息来了，message type: %ld", (long)i);
     NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     
     if (!unRead_dic) {
@@ -763,7 +763,7 @@
     
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
-    NSLog(@"appdelegate， unRead_dic: %@", unRead_dic);
+    MTLOG(@"appdelegate， unRead_dic: %@", unRead_dic);
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:[NSArray arrayWithObject:message]];
@@ -771,7 +771,7 @@
     
     int flag = type;
     if (flag >= 0) {
-//        NSLog(@"收到新推送，显示消息中心红点");
+//        MTLOG(@"收到新推送，显示消息中心红点");
         [self.leftMenu showUpdateInRow:4];
         [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
     }
@@ -796,11 +796,11 @@
 
 -(void)synchronizePushSeqAndCallBack:(void(^)(NSNumber* min_seq, NSNumber* max_seq))block
 {
-    NSLog(@"开始同步消息");
+    MTLOG(@"开始同步消息");
     void(^returnResult)(NSData*) = ^(NSData* rData)
     {
         if (!rData) {
-            NSLog(@"服务器返回的消息为空");
+            MTLOG(@"服务器返回的消息为空");
             return;
         }
         NSString* temp = [NSString string];
@@ -813,7 +813,7 @@
         }
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
         int cmd = [[response objectForKey:@"cmd"]intValue];
-        NSLog(@"同步消息seq，返回结果: %@", response);
+        MTLOG(@"同步消息seq，返回结果: %@", response);
         switch (cmd) {
             case NORMAL_REPLY:
             {
@@ -843,7 +843,7 @@
                               [NSNumber numberWithInt:0], @"min_seq",
                               [NSNumber numberWithInt:0], @"max_seq",
                               nil];
-    NSLog(@"发送同步序号请求：%@",json_dic);
+    MTLOG(@"发送同步序号请求：%@",json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:returnResult];
@@ -854,7 +854,7 @@
     void(^getPushMessageDone)(NSData*) = ^(NSData* rData)
     {
         if (!rData) {
-            NSLog(@"服务器返回的消息为空");
+            MTLOG(@"服务器返回的消息为空");
             return;
         }
         NSString* temp = [NSString string];
@@ -867,7 +867,7 @@
         }
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
         int cmd = [[response objectForKey:@"cmd"]intValue];
-        NSLog(@"拉取的推送: %@", response);
+        MTLOG(@"拉取的推送: %@", response);
         switch (cmd) {
             case NORMAL_REPLY:
             {
@@ -931,7 +931,7 @@
                               min_seq, @"min_seq",
                               max_seq, @"max_seq",
                               nil];
-    NSLog(@"拉取消息请求: %@", json_dic);
+    MTLOG(@"拉取消息请求: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
@@ -942,7 +942,7 @@
     void(^feedbackDone)(NSData*) = ^(NSData* rData)
     {
         if (!rData) {
-            NSLog(@"服务器返回数据为空");
+            MTLOG(@"服务器返回数据为空");
             return ;
         }
         NSString* temp = [NSString string];
@@ -953,7 +953,7 @@
         {
             temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         }
-        NSLog(@"反馈推送的结果：%@",temp);
+        MTLOG(@"反馈推送的结果：%@",temp);
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
         if (block) {
             block(response);
@@ -979,7 +979,7 @@
     }
     void (^pullsysDone)(NSData*) = ^(NSData* rData){
         if (!rData) {
-            NSLog(@"服务器返回数据为空");
+            MTLOG(@"服务器返回数据为空");
             return ;
         }
         NSString* temp = [NSString string];
@@ -990,7 +990,7 @@
         {
             temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         }
-        NSLog(@"拉取系统推送的结果：%@",temp);
+        MTLOG(@"拉取系统推送的结果：%@",temp);
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
         NSArray* list = [response objectForKey:@"list"];
         if (list) {
@@ -1011,7 +1011,7 @@
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInt:3], @"operation",
                               seq, @"message_id",nil];
-    NSLog(@"拉取系统推送json: %@",json_dic);
+    MTLOG(@"拉取系统推送json: %@",json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:json_data withOperationCode:PUSH_MESSAGE finshedBlock:pullsysDone];
@@ -1072,7 +1072,7 @@
     
     [userDf setObject:userSettings forKey:key];
     [userDf synchronize];
-    NSLog(@"appdelegate， unRead_dic: %@", unRead_dic);
+    MTLOG(@"appdelegate， unRead_dic: %@", unRead_dic);
     
     if ([(UIViewController*)self.notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
         [self.notificationDelegate notificationDidReceive:[NSArray arrayWithObject:temp_message]];
@@ -1080,7 +1080,7 @@
     
     int flag = type;
     if (flag >= 0) {
-        //        NSLog(@"收到新推送，显示消息中心红点");
+        //        MTLOG(@"收到新推送，显示消息中心红点");
         [self.leftMenu showUpdateInRow:4];
         [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
     }
@@ -1124,7 +1124,7 @@
 
 - (void)netWorkTimerSelector:(NSTimer*)t
 {
-    NSLog(@"network timer selector fire");
+    MTLOG(@"network timer selector fire");
     if ([hostReach currentReachabilityStatus] != NotReachable) {
         [self hideNetworkNotification];
         isNetworkConnected = YES;
@@ -1144,14 +1144,14 @@
             [self showNetworkNotification:@"网络连接异常，请检查网络设置"];
             
             isNetworkConnected = NO;
-            NSLog(@"Network is not reachable");
+            MTLOG(@"Network is not reachable");
         }
         else
         {
             [self hideNetworkNotification];
             
             isNetworkConnected = YES;
-            NSLog(@"Network is reachable");
+            MTLOG(@"Network is reachable");
         }
 
     });
@@ -1169,14 +1169,14 @@
 
 -(void)showNetworkNotification:(NSString*)message
 {
-    NSLog(@"显示 network notification");
+    MTLOG(@"显示 network notification");
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
-//    NSLog(@"screen bounds.height: %f",[UIScreen mainScreen].bounds.size.height);
-//    NSLog(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
-//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
-//    NSLog(@"show-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
+//    MTLOG(@"screen bounds.height: %f",[UIScreen mainScreen].bounds.size.height);
+//    MTLOG(@"window.size.height: %f",[UIApplication sharedApplication].keyWindow.frame.size.height);
+//    MTLOG(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+//    MTLOG(@"show-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
     if ((networkStatusNotifier_view.frame.origin.y  != frame.size.height &&(networkStatusNotifier_view.frame.origin.y + networkStatusNotifier_view.frame.size.height) > frame.size.height) || [networkStatusNotifier_view superview] != nil || [networkStatusNotifier_view tag] == 1 ) {
-        NSLog(@"显示_没有执行");
+        MTLOG(@"显示_没有执行");
         return;
     }
     UILabel* label = (UILabel*)[networkStatusNotifier_view viewWithTag:110];
@@ -1200,12 +1200,12 @@
 -(void)hideNetworkNotification
 {
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
-    NSLog(@"隐藏 network notification");
-//    NSLog(@"hide-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
+    MTLOG(@"隐藏 network notification");
+//    MTLOG(@"hide-----superview: %@, tag: %ld", [networkStatusNotifier_view superview], [networkStatusNotifier_view tag]);
 
-//    NSLog(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
+//    MTLOG(@"notification bar, y: %f, height: %f",networkStatusNotifier_view.frame.origin.y, networkStatusNotifier_view.frame.size.height);
     if ((networkStatusNotifier_view.frame.origin.y + networkStatusNotifier_view.frame.size.height) > frame.size.height || [networkStatusNotifier_view superview] == nil || [networkStatusNotifier_view tag] == 0) {
-        NSLog(@"隐藏_没有执行");
+        MTLOG(@"隐藏_没有执行");
         return;
     }
     
@@ -1226,7 +1226,7 @@
 
 -(void)NetworkNotificationDidShow
 {
-    NSLog(@"network notification did show");
+    MTLOG(@"network notification did show");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         networkStatusNotifier_view.tag = 1;
     });
@@ -1235,7 +1235,7 @@
 
 -(void)NetworkNotificationDidHide
 {
-    NSLog(@"network notification did hide");
+    MTLOG(@"network notification did hide");
     [networkStatusNotifier_view removeFromSuperview];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 0.0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         networkStatusNotifier_view.tag = 0;
@@ -1269,13 +1269,13 @@
 
 - (void)onlineConfigCallBack:(NSNotification *)note {
     
-    NSLog(@"online config has fininshed and note = %@", note.userInfo);
+    MTLOG(@"online config has fininshed and note = %@", note.userInfo);
 }
 
 #pragma 密码验证失败 返回到登录页面
 - (void)forceQuitToLogin
 {
-    NSLog(@"切换账号");
+    MTLOG(@"切换账号");
     [XGPush unRegisterDevice];
     ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
 //    [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
@@ -1333,7 +1333,7 @@
             [[MTUser sharedInstance].friendRequestMsg insertObject:msg_dic atIndex:0];
             [[MTUser sharedInstance] synchronizeFriends];
             NSNumber* result = [msg_dic objectForKey:@"result"];
-            NSLog(@"friend request result: %@",result);
+            MTLOG(@"friend request result: %@",result);
             if ([result integerValue] == 1) {
                 NSString* name = [msg_dic objectForKey:@"name"];
                 NSString* email = [msg_dic objectForKey:@"email"];
@@ -1353,7 +1353,7 @@
             }
             else if ([result integerValue] == 0)
             {
-                NSLog(@"friend request is refused");
+                MTLOG(@"friend request is refused");
             }
             
             if (numOfSyncMessages <= 1) {
@@ -1382,7 +1382,7 @@
                                                               userInfo:nil];
             
             
-//            NSLog(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);
+//            MTLOG(@"新动态数量：%d",[MTUser sharedInstance].updateEventStatus.count);
             if (numOfSyncMessages <= 1) {
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 [self sendMessageArrivedNotification:[NSString stringWithFormat:@"\"%@\"活动更新啦",subject] andNumber:numOfSyncMessages withType:-1];
@@ -1394,7 +1394,7 @@
             if (numOfSyncMessages <= 1) {
                 [self sendMessageArrivedNotification:@"有人@你啦" andNumber:numOfSyncMessages withType:-1];
             }
-//            NSLog(@"有人@你： %@",msg_dic);
+//            MTLOG(@"有人@你： %@",msg_dic);
         }
         else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散
         {
@@ -1472,7 +1472,7 @@
                                          nil];
             NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
             [mySocket send:jsonData];
-//            NSLog(@"feedback send json: %@",json);
+//            MTLOG(@"feedback send json: %@",json);
             //            NSThread* thread = [[NSThread alloc]initWithTarget:self selector:@selector(handleReceivedNotifications) object:nil];
             //
             //            [thread start];
@@ -1563,7 +1563,7 @@
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:key]];
     BOOL flag = [[userSettings objectForKey:@"systemSetting1"] boolValue];
-    NSLog(@"system setting1 flag: %d",flag);
+    MTLOG(@"system setting1 flag: %d",flag);
 
     //发送通知
     UILocalNotification *notification=[[UILocalNotification alloc] init];
@@ -1588,7 +1588,7 @@
     }
 //    [((MenuViewController*)[SlideNavigationController sharedInstance].leftMenu) showUpdateInRow:4];
     int i = (type < 3 && type >= 0)? type : -1;
-    NSLog(@"新消息来了，message type: %d", i);
+    MTLOG(@"新消息来了，message type: %d", i);
     NSMutableDictionary* unRead_dic = [NSMutableDictionary dictionaryWithDictionary:[userSettings objectForKey:@"hasUnreadNotification1"]];
     
     if (!unRead_dic) {
@@ -1634,7 +1634,7 @@
     NSURLRequest* request = [[NSURLRequest alloc]initWithURL:url];
     mySocket = [[SRWebSocket alloc]initWithURLRequest:request];
     mySocket.delegate = self;
-    NSLog(@"Connecting...");
+    MTLOG(@"Connecting...");
     [mySocket open];
 }
 
@@ -1654,13 +1654,13 @@
     if (isConnected) {
         
         [mySocket send:@""];
-        NSLog(@"Heart beats_^_^_");
+        MTLOG(@"Heart beats_^_^_");
     }
     else
     {
         [self disconnect];
 //        [self connect];
-//        NSLog(@"Reconnecting...");
+//        MTLOG(@"Reconnecting...");
     }
     
 }
@@ -1669,7 +1669,7 @@
 {
     [self.mySocket close];
     [self unscheduleHeartBeat];
-    NSLog(@"Disconnected");
+    MTLOG(@"Disconnected");
 }
 
 #pragma mark - SRWebSocketDelegate
@@ -1679,16 +1679,16 @@
     NSData* temp = [[NSData alloc]init];
     if ([message isKindOfClass:[NSString class]]) {
         temp = [message dataUsingEncoding:NSUTF8StringEncoding];
-        NSLog(@"Get message(string): %@",message);
+        MTLOG(@"Get message(string): %@",message);
     }
     else if ([message isKindOfClass:[NSData class]])
     {
         temp = message;
-        NSLog(@"Get message(data): %@",message);
+        MTLOG(@"Get message(data): %@",message);
     }
-//    NSLog(@"Get message(data): %@",temp);
+//    MTLOG(@"Get message(data): %@",temp);
 //    NSString* temp2 = [[NSString alloc]initWithData:temp encoding:NSUTF8StringEncoding];
-//    NSLog(@"Transformed message(string): %@",temp2);
+//    MTLOG(@"Transformed message(string): %@",temp2);
 
     NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:temp options:NSJSONReadingMutableLeaves error:nil];
     
@@ -1698,7 +1698,7 @@
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
-    NSLog(@"Websocket Connected");
+    MTLOG(@"Websocket Connected");
     isConnected = YES;
     NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"uid",nil];
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
@@ -1708,28 +1708,28 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
-    NSLog(@":( Websocket Failed With Error %@", error);
+    MTLOG(@":( Websocket Failed With Error %@", error);
     isConnected = NO;
     [self disconnect];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
+    MTLOG(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
 //    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
 //        [self connect];
-//        NSLog(@"Reconnecting from fail...");
+//        MTLOG(@"Reconnecting from fail...");
 //    }
     
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-//    NSLog(@"WebSocket closed, code: %d,reason: %@",code,reason);
+//    MTLOG(@"WebSocket closed, code: %d,reason: %@",code,reason);
     isConnected = NO;
     [self disconnect];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    NSLog(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
+    MTLOG(@"isNetworkConnected: %d, login status: %@",isNetworkConnected, userStatus);
 //    if (isNetworkConnected && [userStatus isEqualToString:@"in"]) {
 //        [self connect];
-//        NSLog(@"Reconnecting from close...");
+//        MTLOG(@"Reconnecting from close...");
 //    }
 }
 //=============================================================================================
@@ -1775,11 +1775,11 @@
 	NSError *error;
 	if([httpServer start:&error])
 	{
-		NSLog(@"Started HTTP Server on port %hu", [httpServer listeningPort]);
+		MTLOG(@"Started HTTP Server on port %hu", [httpServer listeningPort]);
 	}
 	else
 	{
-		NSLog(@"Error starting HTTP Server: %@", error);
+		MTLOG(@"Error starting HTTP Server: %@", error);
 	}
 }
 

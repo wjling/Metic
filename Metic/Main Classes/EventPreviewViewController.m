@@ -116,7 +116,7 @@
         if (rData) {
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            NSLog(@"%@",cmd);
+            MTLOG(@"%@",cmd);
         }
     }
      ];
@@ -128,7 +128,7 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:[NSNumber numberWithInt:4] forKey:@"number"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_GOOD_PHOTOS finshedBlock:^(NSData *rData) {
@@ -302,7 +302,7 @@
                                  [MTUser sharedInstance].userid,@"id",
                                  eventid,@"event_id",
                                  nil];
-    NSLog(@"participate event okBtn, http json : %@",json );
+    MTLOG(@"participate event okBtn, http json : %@",json );
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
@@ -317,7 +317,7 @@
                     NSMutableDictionary* msg_dic = (NSMutableDictionary*)_eventInfo;
                     
                     NSInteger seq1 = [[msg_dic objectForKey:@"seq"]integerValue];
-                    NSLog(@"response event, seq: %ld",(long)seq1);
+                    MTLOG(@"response event, seq: %ld",(long)seq1);
                     NSInteger cmd1 = [[msg_dic objectForKey:@"cmd"]integerValue];
                     NSInteger event_id1 = [[msg_dic objectForKey:@"event_id"]integerValue];
                     [[MTDatabaseHelper sharedInstance] updateDataWithTableName:@"notification"
@@ -428,7 +428,7 @@
     }
     NSString* confirmMsg = _inputTextView.text;
     NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {

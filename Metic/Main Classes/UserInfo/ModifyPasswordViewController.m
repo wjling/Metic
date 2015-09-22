@@ -37,7 +37,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSLog(@"修改密码 view did load");
+    MTLOG(@"修改密码 view did load");
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
 }
@@ -50,7 +50,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"修改密码 view will appear");
+    MTLOG(@"修改密码 view will appear");
     currentPS_view.layer.cornerRadius = 4;
     currentPS_view.layer.masksToBounds = YES;
     modifyPS_view.layer.cornerRadius = 4;
@@ -68,7 +68,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"修改密码 view did appear");
+    MTLOG(@"修改密码 view did appear");
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -100,7 +100,7 @@
     NSDictionary *info = [notif userInfo];
     NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
-    NSLog(@"keyBoard:%f", keyboardSize.height);  //216
+    MTLOG(@"keyBoard:%f", keyboardSize.height);  //216
     CGRect frame = _confirm_btn.frame;
     float offset = self.view.frame.size.height - keyboardSize.height - frame.size.height + 20 - frame.origin.y;
     if (offset > 0) {
@@ -120,7 +120,7 @@
     
     NSValue *value = [info objectForKey:UIKeyboardFrameBeginUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
-    NSLog(@"keyboardWasHidden keyBoard:%f", keyboardSize.height);
+    MTLOG(@"keyboardWasHidden keyBoard:%f", keyboardSize.height);
     float offset = [UIScreen mainScreen].bounds.size.height - self.view.frame.origin.y - self.view.frame.size.height;
     [UIView beginAnimations:@"goDOWN" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -147,7 +147,7 @@
     NSString* currentPS = currentPS_textfield.text;
     NSString* modifyPS = modifyPS_textfield.text;
     NSString* conformPS = conformPS_textfield.text;
-//    NSLog(@"当前密码: %@, 修改密码: %@, 确认密码: %@",currentPS,modifyPS,conformPS);
+//    MTLOG(@"当前密码: %@, 修改密码: %@, 确认密码: %@",currentPS,modifyPS,conformPS);
     if (!currentPS || [currentPS isEqualToString:@""]) {
         [SVProgressHUD dismissWithError:@"请填写当前密码" afterDelay:1.5];
         return;
@@ -175,16 +175,16 @@
         }
         else
         {
-            NSLog(@"修改密码，收到的rData为空");
+            MTLOG(@"修改密码，收到的rData为空");
             UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
             [alertView show];
             [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
             return;
         }
-        NSLog(@"Received Data: %@",temp);
+        MTLOG(@"Received Data: %@",temp);
         NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber* cmd = [response1 objectForKey:@"cmd"];
-        NSLog(@"cmd: %@",cmd);
+        MTLOG(@"cmd: %@",cmd);
         if ([cmd integerValue] == NORMAL_REPLY) {
             [SVProgressHUD dismissWithSuccess:@"密码修改成功" afterDelay:1.5];
             NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
@@ -200,7 +200,7 @@
     };
     NSString* currentPS_md5;
     NSString* modifyPS_md5;
-    NSLog(@"修改密码, salt: %@",[MTUser sharedInstance].saltValue);
+    MTLOG(@"修改密码, salt: %@",[MTUser sharedInstance].saltValue);
     if ([MTUser sharedInstance].saltValue) {
         currentPS_md5 = [CommonUtils MD5EncryptionWithString:[currentPS stringByAppendingString:[MTUser sharedInstance].saltValue]];
         modifyPS_md5 = [CommonUtils MD5EncryptionWithString:[modifyPS stringByAppendingString:[MTUser sharedInstance].saltValue]];
@@ -210,7 +210,7 @@
                                      [MTUser sharedInstance].email, @"email",
                                      currentPS_md5,@"passwd",
                                      modifyPS_md5,@"newpw",nil];
-    NSLog(@"修改密码, json: %@",json_dic);
+    MTLOG(@"修改密码, json: %@",json_dic);
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendMessage:jsonData withOperationCode:CHANGE_PW finshedBlock:modifyPasswordDone];

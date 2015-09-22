@@ -44,12 +44,12 @@
 //    [self.navigationController setNavigationBarHidden:YES];
 //    NSUserDefaults *userDf = [NSUserDefaults standardUserDefaults];
 //    if ([userDf boolForKey:@"firstLaunched"]) {
-//        NSLog(@"welcomeviewcontroller: it is the first launch");
+//        MTLOG(@"welcomeviewcontroller: it is the first launch");
 //        
 //    }
 //    else
 //    {
-//        NSLog(@"welcomeviewcontroller: it is not the first launch");
+//        MTLOG(@"welcomeviewcontroller: it is not the first launch");
 //        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 //                                                             bundle: nil];
 //        UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
@@ -90,7 +90,7 @@
 //    self.page_scrollview.delaysContentTouches = NO;
     
     CGRect bounds = [UIScreen mainScreen].bounds;
-    NSLog(@"welcome_bounds: width: %f, height: %f",bounds.size.width, bounds.size.height);
+    MTLOG(@"welcome_bounds: width: %f, height: %f",bounds.size.width, bounds.size.height);
     CGFloat y;
     if (bounds.size.height <= 480) {
         y = 40;
@@ -104,7 +104,7 @@
     CGFloat view_width = self.view.frame.size.width;
     CGFloat view_height = self.view.frame.size.height;
     
-    NSLog(@"welcome_view: width: %f, height: %f",view_width,view_height);
+    MTLOG(@"welcome_view: width: %f, height: %f",view_width,view_height);
     scrollContentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,view_width * numberOfPages, view_height)];
     
     page1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
@@ -193,8 +193,8 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"启动页"];
     self.page_scrollview.contentSize = CGSizeMake(self.view.frame.size.width * numberOfPages, self.view.frame.size.height - 50);
-    NSLog(@"welcomeviewcontroller did appear");
-    NSLog(@"content size: width: %f, height: %f",self.page_scrollview.contentSize.width, self.page_scrollview.contentSize.height);
+    MTLOG(@"welcomeviewcontroller did appear");
+    MTLOG(@"content size: width: %f, height: %f",self.page_scrollview.contentSize.width, self.page_scrollview.contentSize.height);
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -212,7 +212,7 @@
 -(void)dismissWelcome
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    NSLog(@"dismiss welcome");
+    MTLOG(@"dismiss welcome");
 //    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 //                                                         bundle: nil];
 //    UIViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
@@ -244,7 +244,7 @@
 */
 //-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 //{
-//    NSLog(@"touched begin");
+//    MTLOG(@"touched begin");
 //}
 
 #pragma mark - UIScrollViewDelegate

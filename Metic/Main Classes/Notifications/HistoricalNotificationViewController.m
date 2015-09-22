@@ -208,7 +208,7 @@
         {
             frame.size.width = 180;
         }
-//        NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+//        MTLOG(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
         if (!cell.event_name_label) {
             cell.event_name_label = [[UILabel alloc]init];
             [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
@@ -218,7 +218,7 @@
         }
         [cell.event_name_label setFrame:frame];
         cell.event_name_label.text = subject;
-//        NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+//        MTLOG(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
         if (!cell.label1) {
             cell.label1 = [[UILabel alloc]init];
             [cell.contentView addSubview:cell.label1];
@@ -228,7 +228,7 @@
             cell.label1.text = @"活动";
         }
         [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
-//        NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+//        MTLOG(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
         
         
         
@@ -273,7 +273,7 @@
         {
             frame.size.width = 180;
         }
-        //                NSLog(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
+        //                MTLOG(@"活动%d邀请标题长度: %f",indexPath.row,size.width);
         if (!cell.event_name_label) {
             cell.event_name_label = [[UILabel alloc]init];
             [cell.event_name_label setBackgroundColor:[UIColor clearColor]];
@@ -283,7 +283,7 @@
         }
         [cell.event_name_label setFrame:frame];
         cell.event_name_label.text = subject;
-        //                NSLog(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
+        //                MTLOG(@"活动%d邀请标题实际长度: %f",indexPath.row,cell.event_name_button.frame.size.width);
         if (!cell.label1) {
             cell.label1 = [[UILabel alloc]init];
             [cell.label1 setBackgroundColor:[UIColor clearColor]];
@@ -293,7 +293,7 @@
             cell.label1.text = @"活动";
         }
         [cell.label1 setFrame:CGRectMake(frame.origin.x + frame.size.width + 1, frame.origin.y, 30, 15)];
-        //                NSLog(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
+        //                MTLOG(@"'活动'%d横坐标: %f",indexPath.row, cell.label1.frame.origin.x);
         
         if ([ishandled integerValue] == 0) {
             cell.remark_label.text = @"已忽略";

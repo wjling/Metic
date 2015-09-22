@@ -63,7 +63,7 @@
 }
 
 - (void)button_DetailPressed:(id)sender {
-    NSLog(@"pressed");
+    MTLOG(@"pressed");
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
 	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];

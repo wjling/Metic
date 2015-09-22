@@ -285,7 +285,6 @@
 
 -(void)setImgWallpoint
 {
-    NSLog(@"init button");
     if ([NotificationController visitPhotoWall:_eventId needClear:NO]) {
         UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
         if (!image) {
@@ -304,7 +303,6 @@
 
 -(void)setVideoWallpoint
 {
-    NSLog(@"init button");
     if ([NotificationController visitVideoWall:_eventId needClear:NO]) {
         UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
         if (!image) {

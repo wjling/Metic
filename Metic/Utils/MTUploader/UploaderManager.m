@@ -70,7 +70,7 @@
     [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
     
     RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"马上上传" action:^{
-        NSLog(@"%@",resultsArray);
+        MTLOG(@"%@",resultsArray);
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             for (int i = 0; i < resultsArray.count; i++) {
                 NSDictionary *task = resultsArray[i];

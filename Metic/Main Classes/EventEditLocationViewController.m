@@ -188,7 +188,7 @@
     [dictionary setValue:@999.999999 forKey:@"latitude"];
     [dictionary setValue:@999.999999 forKey:@"longitude"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
@@ -262,7 +262,7 @@
     [dictionary setValue:@(_pt.latitude) forKey:@"latitude"];
     [dictionary setValue:@(_pt.longitude) forKey:@"longitude"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:CHANGE_EVENT_INFO finshedBlock:^(NSData *rData) {
@@ -318,15 +318,15 @@
     BMKReverseGeoCodeOption* reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
     
     reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
-    NSLog(@"定位坐标为：%f %f",reverseGeocodeSearchOption.reverseGeoPoint.latitude,reverseGeocodeSearchOption.reverseGeoPoint.longitude);
+    MTLOG(@"定位坐标为：%f %f",reverseGeocodeSearchOption.reverseGeoPoint.latitude,reverseGeocodeSearchOption.reverseGeoPoint.longitude);
     BOOL flag = [_geocodesearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag)
     {
-        NSLog(@"反geo检索发送成功");
+        MTLOG(@"反geo检索发送成功");
     }
     else
     {
-        NSLog(@"反geo检索发送失败");
+        MTLOG(@"反geo检索发送失败");
     }
 }
 /**

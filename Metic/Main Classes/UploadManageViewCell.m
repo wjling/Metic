@@ -203,7 +203,7 @@ typedef enum {
 
 -(void)cancelUploadTask
 {
-    NSLog(@"取消上传任务");
+    MTLOG(@"取消上传任务");
     if (_timer) {
         [_timer invalidate];
         _timer = nil;
@@ -224,7 +224,7 @@ typedef enum {
 
 -(void)retryUploadTask
 {
-    NSLog(@"重试上传任务");
+    MTLOG(@"重试上传任务");
     [_photoInfo setValue:nil forKey:@"failed"];
     if ([_photoInfo valueForKey:@"alasset"]) {
         NSString* alassetStr = [_photoInfo valueForKey:@"alasset"];
@@ -256,7 +256,7 @@ typedef enum {
 
 - (void)cancelUploading
 {
-    NSLog(@"cancelUploading");
+    MTLOG(@"cancelUploading");
     if (self.uploadState == UPLOAD_WAITING) {
         if(_uploadTask){
             [_uploadTask cancel];

@@ -101,7 +101,7 @@
                         [SVProgressHUD dismissWithError:@"网络异常"];
                     }else{
                         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                        NSLog(@"Received Data: %@",temp);
+                        MTLOG(@"Received Data: %@",temp);
                         NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSNumber *cmd = [response valueForKey:@"cmd"];
                         switch ([cmd intValue]) {
@@ -134,7 +134,7 @@
 #pragma 处理收藏活动id数据
 -(NSArray*)processLikeEventID:(NSArray*)likeEventIdData
 {
-    NSLog(@"%@",likeEventIdData);
+    MTLOG(@"%@",likeEventIdData);
     
     NSMutableArray* eventIds = [[NSMutableArray alloc]init];
     for (int i = 0; i < likeEventIdData.count; i++) {
@@ -156,13 +156,13 @@
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:eventIds forKey:@"event_list"];
     [dictionary setValue:islike? @1:@0 forKey:@"operation"];
-//    NSLog(@"%@",dictionary);
+//    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:LIKE_EVENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -240,7 +240,7 @@
             [dictionary setValue:path forKey:@"object"];
             
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-            NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+//            MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
                 if (!rData){

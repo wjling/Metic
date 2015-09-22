@@ -110,7 +110,7 @@
                           [MTUser sharedInstance].userid,@"id",
                           message,@"content",
                           nil];
-    NSLog(@"feed back json : %@",json);
+    MTLOG(@"feed back json : %@",json);
 
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
     [http sendFeedBackMessage:json];
@@ -126,8 +126,8 @@
     UIFont *font = [UIFont systemFontOfSize:13.0];
     CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(mFrame.size.width-16, 9999) lineBreakMode:NSLineBreakByWordWrapping];
     [textView setFrame:CGRectMake(mFrame.origin.x, mFrame.origin.y, mFrame.size.width, size.height+font.capHeight+16)];
-//    NSLog(@"char height : %f",size.height);
-//    NSLog(@"textview height: %f",textView.frame.size.height);
+//    MTLOG(@"char height : %f",size.height);
+//    MTLOG(@"textview height: %f",textView.frame.size.height);
     return YES;
 }
 
@@ -138,23 +138,23 @@
     NSString* temp2 = [temp1 stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
     rData = [temp2 dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSLog(@"Received string1: %@",temp1);
-    NSLog(@"Received string2: %@",temp2);
+    MTLOG(@"Received string1: %@",temp1);
+    MTLOG(@"Received string2: %@",temp2);
     
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"response dic: %@",response1);
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"response dic: %@",response1);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
-            NSLog(@"意见反馈发送成功");
+            MTLOG(@"意见反馈发送成功");
             self.content_textView.text = @"";
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"意见反馈发送成功，非常感谢您的支持" WithDelegate:self WithCancelTitle:@"OK"];
         }
             break;
         default:
-            NSLog(@"意见反馈发送失败");
+            MTLOG(@"意见反馈发送失败");
             break;
     }
     

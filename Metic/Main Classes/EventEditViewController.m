@@ -55,7 +55,7 @@ const NSInteger rowCount = 4;
 
 -(void)dealloc
 {
-    NSLog(@"dealloc");
+    MTLOG(@"dealloc");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,7 +119,7 @@ const NSInteger rowCount = 4;
         if(_Bannercode >= 2 && _Bannercode == [[_eventInfo valueForKey:@"code"]integerValue])return;
         [SVProgressHUD showWithStatus:@"正在更改封面" maskType:SVProgressHUDMaskTypeClear];
         if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-            NSLog(@"没有网络");
+            MTLOG(@"没有网络");
             _Bannercode = -1;
             _uploadImage = nil;
             [SVProgressHUD dismissWithError:@"网络无连接，更改封面失败" afterDelay:1];
@@ -138,7 +138,7 @@ const NSInteger rowCount = 4;
             [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {
                 if (rData) {
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                    NSLog(@"%@",response1);
+                    MTLOG(@"%@",response1);
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY) {
                         [_eventInfo setValue:@(bannercode) forKey:@"code"];
@@ -414,7 +414,7 @@ const NSInteger rowCount = 4;
         [dictionary setValue:[NSNumber numberWithInteger:bannercode] forKey:@"code"];
         _Bannercode = -1;
         [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-        NSLog(@"%@",dictionary);
+        MTLOG(@"%@",dictionary);
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:SET_EVENT_BANNER finshedBlock:^(NSData *rData) {

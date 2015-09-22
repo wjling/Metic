@@ -40,7 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"fillin did load");
+    MTLOG(@"fillin did load");
     // Do any additional setup after loading the view.
     heights_arr = [[NSMutableArray alloc]init];
     for (NSInteger i = 0; i < 6; i++) {
@@ -77,13 +77,13 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
-    NSLog(@"fillin will apear");
+    MTLOG(@"fillin will apear");
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"fillin did appear, email: %@",email);
+    MTLOG(@"fillin did appear, email: %@",email);
     self.navigationController.navigationItem.leftBarButtonItem = nil;
     [self.info_tableview reloadData];
 }
@@ -187,7 +187,7 @@
                 label.textColor = textColor2;
                 [cell.contentView addSubview:label];
             }
-//            NSLog(@"昵称: %@",[MTUser sharedInstance].name);
+//            MTLOG(@"昵称: %@",[MTUser sharedInstance].name);
             label.text = name;
         }
         else if (row == 1)
@@ -208,7 +208,7 @@
                 label.textColor = textColor2;
                 [cell.contentView addSubview:label];
             }
-            NSLog(@"性别：%@",gender);
+            MTLOG(@"性别：%@",gender);
             if ([MTUser sharedInstance].gender) {
                 gender = [MTUser sharedInstance].gender;
             }
@@ -241,11 +241,11 @@
             
             if ([MTUser sharedInstance].location && ![[MTUser sharedInstance].location isEqual:[NSNull null]]) {
                 label.text = [MTUser sharedInstance].location;
-//                NSLog(@"所在地1:%@",[MTUser sharedInstance].location);
+//                MTLOG(@"所在地1:%@",[MTUser sharedInstance].location);
             }
             else
             {
-//                NSLog(@"所在地2:%@",[MTUser sharedInstance].location);
+//                MTLOG(@"所在地2:%@",[MTUser sharedInstance].location);
                 label.text = @"暂无地址";
             }
         }
@@ -276,9 +276,9 @@
                 label.textColor = textColor2;
                 [cell.contentView addSubview:label];
             }
-//            NSLog(@"个人描述:%@",[MTUser sharedInstance].sign);
+//            MTLOG(@"个人描述:%@",[MTUser sharedInstance].sign);
             if ([MTUser sharedInstance].sign && ![[MTUser sharedInstance].sign isEqual:[NSNull null]]) {
-                NSLog(@"%@",[MTUser sharedInstance].sign);
+                MTLOG(@"%@",[MTUser sharedInstance].sign);
                 label.text = [MTUser sharedInstance].sign;
             }
             else
@@ -366,11 +366,11 @@
                                       [NSNumber numberWithInteger:newGender],@"gender",
                                       [MTUser sharedInstance].userid,@"id",
                                       nil];
-                NSLog(@"gender modify json: %@",json);
+                MTLOG(@"gender modify json: %@",json);
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
                 [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS];
-                NSLog(@"click alert Button");
+                MTLOG(@"click alert Button");
             }
         }
         
@@ -385,20 +385,20 @@
 -(void)finishWithReceivedData:(NSData*) rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received Data: %@",temp);
+    MTLOG(@"Received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber* cmd = [response1 objectForKey:@"cmd"];
-    NSLog(@"cmd: %@",cmd);
+    MTLOG(@"cmd: %@",cmd);
     switch ([cmd integerValue]) {
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
-            NSLog(@"性别修改成功");
+            MTLOG(@"性别修改成功");
         }
             break;
             
         default:
-            NSLog(@"性别修改失败");
+            MTLOG(@"性别修改失败");
             [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因性别修改失败" WithDelegate:self WithCancelTitle:@"OK"];
             break;
     }
@@ -411,7 +411,7 @@
 //＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝UPLOAD AVATAR＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 -(void)changeAvatar
 {
-    NSLog(@"change avatar");
+    MTLOG(@"change avatar");
     UIActionSheet *sheet;
     
     // 判断是否支持相机

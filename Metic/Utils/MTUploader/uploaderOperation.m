@@ -240,7 +240,7 @@
         [library assetForURL:imageFileURL resultBlock:^(ALAsset *asset) {
             
             if (!asset) {
-                NSLog(@"图片已不存在");
+                MTLOG(@"图片已不存在");
                 [self removeuploadTaskInDB];
                 [self stop];
                 return ;
@@ -250,7 +250,7 @@
             [self performSelector:@selector(beginUpload) onThread:_thread withObject:nil waitUntilDone:NO];
             
         } failureBlock:^(NSError *error) {
-            NSLog(@"error : %@", error);
+            MTLOG(@"error : %@", error);
             [self removeuploadTaskInDB];
             [self stop];
         }];
@@ -274,7 +274,7 @@
         _width = [imgData valueForKey:@"width"];
         _height = [imgData valueForKey:@"height"];
         _imgData = compressedData;
-        NSLog(@"开始上传任务： %@  %@",_eventId,_imageName);
+        MTLOG(@"开始上传任务： %@  %@",_eventId,_imageName);
         NSString* Subpath = [NSString stringWithFormat:@"/images/%@.png",_imageName];
         [self getCloudFileURL:Subpath];
     }
@@ -288,7 +288,7 @@
     [dictionary setValue:path forKey:@"object"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
         if (!rData){
@@ -297,14 +297,14 @@
         }
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
                     _uploadURL = (NSString*)[response1 valueForKey:@"url"];
-                    NSLog(@"获得上传地址： %@",_uploadURL);
+                    MTLOG(@"获得上传地址： %@",_uploadURL);
                     [self uploadfile];
                 }
                     break;
@@ -338,10 +338,10 @@
     [request setHTTPBody:_imgData];
     
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"上传成功");
+        MTLOG(@"上传成功");
         [self performSelector:@selector(reportToServer) onThread:_thread withObject:nil waitUntilDone:NO];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"上传失败");
+        MTLOG(@"上传失败");
         _imgData = nil;
         _wait = NO;
         [self performSelector:@selector(stop) onThread:_thread withObject:nil waitUntilDone:NO];
@@ -353,7 +353,7 @@
                                  long long totalBytesWritten,
                                  long long totalBytesExpectedToWrite) {
         _progress = ((float)totalBytesWritten)/totalBytesExpectedToWrite*0.8f;
-        NSLog(@"图片:%@ 进度:%f ",fileName,_progress);
+        MTLOG(@"图片:%@ 进度:%f ",fileName,_progress);
     }];
     [requestOperation start];
 }
@@ -380,7 +380,7 @@
         }
         
         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        NSLog(@"received Data: %@",temp);
+        MTLOG(@"received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
@@ -433,7 +433,7 @@
 #pragma mark step8:stop
 -(void)stop
 {
-    NSLog(@"清理数据 && 退出线程");
+    MTLOG(@"清理数据 && 退出线程");
     _thread = nil;
     _uploadURL = nil;
     _imageALAsset = nil;

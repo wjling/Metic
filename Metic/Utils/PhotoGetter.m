@@ -99,7 +99,7 @@
     } failure:^(NSString *message) {
         if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
-        NSLog(@"%@",message);
+        MTLOG(@"%@",message);
     }];
 }
 
@@ -119,16 +119,16 @@
         if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
         if ([[MTUser sharedInstance].friendsIdSet containsObject:self.avatarId]) {
-            NSLog(@"获取头像方法1");
+            MTLOG(@"获取头像方法1");
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];
             
         }else{
-            NSLog(@"获取头像方法2");
+            MTLOG(@"获取头像方法2");
             [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];    }
     } failure:^(NSString *message) {
         if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
-        NSLog(@"%@",message);
+        MTLOG(@"%@",message);
         [self.imageView sd_setImageWithURL:nil placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed];
     }];
 }
@@ -147,7 +147,7 @@
     } failure:^(NSString *message) {
         if (![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
-        NSLog(@"%@",message);
+        MTLOG(@"%@",message);
     }];
 }
 
@@ -465,14 +465,14 @@
                         [SVProgressHUD dismissWithSuccess:@"修改头像成功" afterDelay:1.5];
                     }
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                    NSLog(@"Received Data: %@",temp);
+                    MTLOG(@"Received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd integerValue] == NORMAL_REPLY) {
                         if (updateAvatarFlag) {
                             
                             if (updateAvatarViewController && [updateAvatarViewController isKindOfClass:[UserInfoViewController class]]) {
-                                NSLog(@"上传头像后个人信息刷新");
+                                MTLOG(@"上传头像后个人信息刷新");
                                 [(UserInfoViewController*)updateAvatarViewController refresh];
                                 updateAvatarViewController = nil;
                                 
@@ -482,7 +482,7 @@
                                 
                             }
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
-                            NSLog(@"上传头像后刷新");
+                            MTLOG(@"上传头像后刷新");
                             
 //                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
 //                            [alertView show];
@@ -496,7 +496,7 @@
             }
             else if (self.type == 22)
             {
-                NSLog(@"removed image path: %@",path);
+                MTLOG(@"removed image path: %@",path);
                 
                 [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:mdata] forKey:path];
                 
@@ -512,7 +512,7 @@
                         [SVProgressHUD dismissWithSuccess:@"头像上传成功" afterDelay:1.5];
                     }
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                    NSLog(@"Received Data: %@",temp);
+                    MTLOG(@"Received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd integerValue] == NORMAL_REPLY) {
@@ -525,7 +525,7 @@
                                 
                             }
                             [(MenuViewController*)([SlideNavigationController sharedInstance].leftMenu) refresh];
-                            NSLog(@"上传头像后刷新");
+                            MTLOG(@"上传头像后刷新");
                             
 //                            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"头像上传成功" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
 //                            [alertView show];

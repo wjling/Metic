@@ -132,7 +132,7 @@
 {
     float stdH = (self.view.bounds.size.height - 64)/2 - 108;
     float wid = self.view.bounds.size.width;
-    NSLog(@"作图起始高度：%f",stdH);
+    MTLOG(@"作图起始高度：%f",stdH);
     
     UIView* up = [[UIView alloc]initWithFrame:CGRectMake(0, 0, wid, stdH)];
     up.backgroundColor =[UIColor blackColor];
@@ -231,7 +231,7 @@
             [dictionary setValue:@0 forKey:@"type"];
             [dictionary setValue:_result forKey:@"qrcode"];
             [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-            NSLog(@"%@",dictionary);
+            MTLOG(@"%@",dictionary);
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             NSInteger operNum = ++_operationNum;
@@ -239,13 +239,13 @@
                 if (operNum != _operationNum) return ;
                 if (rData) {
                     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                    NSLog(@"received Data: %@",temp);
+                    MTLOG(@"received Data: %@",temp);
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     switch ([cmd intValue]) {
                         case NORMAL_REPLY:
                         {
-                            NSLog(@"NORMAL_REPLY");
+                            MTLOG(@"NORMAL_REPLY");
                             [SVProgressHUD dismissWithSuccess:@"成功加入活动"];
                             //更新活动中心列表：
                             [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
@@ -259,7 +259,7 @@
                             break;
                         case EVENT_NOT_EXIST:
                         {
-                            NSLog(@"EVENT_NOT_EXIST");
+                            MTLOG(@"EVENT_NOT_EXIST");
                             [SVProgressHUD dismissWithError:@"活动不存在，加入失败"];
                             [_showView setHidden:YES];
                             [readerView start];
@@ -268,7 +268,7 @@
                             break;
                         case ALREADY_IN_EVENT:
                         {
-                            NSLog(@"ALREADY_IN_EVENT");
+                            MTLOG(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"你已在活动中"];
                             [self toEventDetail:_efid];
                             [_showView setHidden:YES];
@@ -278,8 +278,8 @@
                             break;
                         default:
                         {
-                            NSLog(@"error");
-                            NSLog(@"ALREADY_IN_EVENT");
+                            MTLOG(@"error");
+                            MTLOG(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"服务器异常"];
                             [_showView setHidden:YES];
                             [readerView start];
@@ -342,7 +342,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventid forKey:@"event_id"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     NSInteger operNum = ++_operationNum;
@@ -364,7 +364,7 @@
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:userid forKey:@"friendId"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"myId"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     NSInteger operNum = ++_operationNum;
@@ -572,7 +572,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -620,7 +620,7 @@
             break;
         case EVENT_NOT_EXIST:
         {
-            NSLog(@"EVENT_NOT_EXIST");
+            MTLOG(@"EVENT_NOT_EXIST");
             UIAlertView* alert =
             [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"此活动已经解散" WithDelegate:self WithCancelTitle:@"确定"];
             alert.tag = 10;
@@ -633,7 +633,7 @@
                 self.friend = friends[0];
                 [self showResult];
             }else{
-                NSLog(@"ALREADY_IN_EVENT");
+                MTLOG(@"ALREADY_IN_EVENT");
                 UIAlertView* alert =
                 [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户不存在" WithDelegate:self WithCancelTitle:@"确定"];
                 alert.tag = 10;
@@ -710,7 +710,7 @@
                     NSString* cm = [alertView textFieldAtIndex:0].text;
                     
                     NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",cm,@"confirm_msg", _efid,@"event_id",nil];
-                    NSLog(@"%@",dictionary);
+                    MTLOG(@"%@",dictionary);
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                     NSInteger operNum = ++_operationNum;
@@ -747,14 +747,14 @@
                         if (rData) {
                             [self finishWithReceivedData:rData];
                         }else {
-                            NSLog(@"ALREADY_IN_EVENT");
+                            MTLOG(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"网络异常"];
                             [_showView setHidden:YES];
                             [readerView start];
                             _isScaning = YES;
                         }
                     }];
-                    NSLog(@"add friend apply: %@",json);
+                    MTLOG(@"add friend apply: %@",json);
                     
                 }
             }

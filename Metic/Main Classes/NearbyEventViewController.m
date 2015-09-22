@@ -162,7 +162,7 @@
         [dictionary setValue:[NSNumber numberWithDouble:_coordinate.longitude] forKey:@"longitude"];
     }
     
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_RECOMMEND];
@@ -198,7 +198,7 @@
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [refreshView endRefreshing];
             [self renewEmptyAlert];
@@ -212,7 +212,7 @@
         return;
     }
     if (refreshView == _header) {
-        NSLog(@"header Begin");
+        MTLOG(@"header Begin");
         _Headeropen = YES;
         _clearIds = YES;
         if (_type == 0) {
@@ -250,7 +250,7 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"received Data: %@",temp);
+    MTLOG(@"received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
@@ -283,7 +283,7 @@
 {
     //cclocat
     _coordinate = userLocation.location.coordinate;
-    NSLog(@"%f   %f",_coordinate.latitude,_coordinate.longitude);
+    MTLOG(@"%f   %f",_coordinate.latitude,_coordinate.longitude);
     [_locService stopUserLocationService];
     _locService = nil;
     [self getNearbyEventIdsFromAir];

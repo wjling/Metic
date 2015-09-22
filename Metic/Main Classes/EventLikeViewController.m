@@ -157,14 +157,14 @@
     [dictionary setValue:text forKey:@"subject"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:@1 forKey:@"type"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -195,13 +195,13 @@
     [self.searchBar resignFirstResponder];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_LIKE_EVENT finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -250,7 +250,7 @@
 
 -(void)get_events:(BOOL)needClear
 {
-    NSLog(@"%lu", [_eventIds count] - [_events count]);
+    MTLOG(@"%lu", [_eventIds count] - [_events count]);
     NSUInteger restNum;
     if (needClear) {
         restNum = MIN(20, _eventIds.count);
@@ -276,7 +276,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -342,7 +342,7 @@
     [eventIds removeObject:eventId];
     _eventIds = [eventIds copy];
     
-    NSLog(@"deleteItem %@",eventId);
+    MTLOG(@"deleteItem %@",eventId);
 }
 
 #pragma mark - UISearchBar Delegate

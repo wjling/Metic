@@ -143,7 +143,7 @@
             vc.gender = gender;
         }
         vc.fromRegister = YES;
-        NSLog(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,vc.fromRegister);
+        MTLOG(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,vc.fromRegister);
     }
     
 }
@@ -168,7 +168,7 @@
         login.gender = gender;
     }
     login.fromRegister = YES;
-    NSLog(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,login.fromRegister);
+    MTLOG(@"register username: %@, password: %@, fromRegister: %d",self.textField_email.text,self.textField_password.text,login.fromRegister);
     [self.navigationController popToViewController:login animated:YES];
 }
 
@@ -198,7 +198,7 @@
     {
         gender = [NSNumber numberWithInt:0];
     }
-    //    NSLog(@"random String: %@",salt);
+    //    MTLOG(@"random String: %@",salt);
     if (![CommonUtils isEmailValid:email]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"邮箱格式不正确" WithDelegate:self WithCancelTitle:@"确定"];
         return;
@@ -215,7 +215,7 @@
         NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
         NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",md5_str,@"passwd",userName,@"name",gender,@"gender",salt,@"salt",nil];
         
-        NSLog(@"test packDictionary: %@",mDic);
+        MTLOG(@"test packDictionary: %@",mDic);
         
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -309,12 +309,12 @@
 -(void)finishWithReceivedData:(NSData *)rData
 {
     NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-    NSLog(@"Register received Data: %@",temp);
+    MTLOG(@"Register received Data: %@",temp);
     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
     NSNumber *cmd = [response1 valueForKey:@"cmd"];
     switch ([cmd intValue]) {
         case NORMAL_REPLY:
-            NSLog(@"register succeeded");
+            MTLOG(@"register succeeded");
             [SVProgressHUD dismissWithSuccess:@"注册成功" afterDelay:2];
             registerSucceeded = YES;
             [self jumpToLogin];
@@ -322,7 +322,7 @@
             break;
         case USER_EXIST:
         {
-            NSLog(@"user existed");
+            MTLOG(@"user existed");
             [SVProgressHUD dismissWithError:@"用户已存在" afterDelay:1.5];
 //            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"用户已存在" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
 //            [alertView show];
@@ -353,9 +353,9 @@
     CGRect frame;
     frame = [scrollView convertRect:button_signUp.frame toView:self.view];
     
-    NSLog(@"register frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+    MTLOG(@"register frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
     viewOffet = frame.origin.y + button_signUp.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
-    NSLog(@"textField offset: %f",viewOffet);
+    MTLOG(@"textField offset: %f",viewOffet);
     NSTimeInterval animationDuration = 0.30f;
     [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
     [UIView setAnimationDuration:animationDuration];

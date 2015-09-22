@@ -129,12 +129,12 @@
 }
 
 -(void)rotation:(float)n {
-    NSLog(@"%dth",_lastViewIndex);
+    MTLOG(@"%dth",_lastViewIndex);
     float offsetX = (int)n%180 == 0? self.view.bounds.size.width:self.view.bounds.size.height;
     CGPoint contentOffset = CGPointMake(_lastViewIndex*offsetX, 0);
     [UIView animateWithDuration:0.5 animations:^{
         
-        NSLog(@"aft %f  %f",self.view.frame.size.width,self.view.bounds.size.width);
+        MTLOG(@"aft %f  %f",self.view.frame.size.width,self.view.bounds.size.width);
         
         _scrollView.transform = CGAffineTransformMakeRotation(n*M_PI/180.0);
         _scrollView.frame = self.view.bounds;
@@ -158,19 +158,19 @@
     UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
     switch (o) {
         case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
-            NSLog(@"UIDeviceOrientationPortrait");
+            MTLOG(@"UIDeviceOrientationPortrait");
             [self rotation:0.0];
             break;
         case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
-            NSLog(@"UIDeviceOrientationPortraitUpsideDown");
+            MTLOG(@"UIDeviceOrientationPortraitUpsideDown");
             [self rotation:180.0];
             break;
         case UIDeviceOrientationLandscapeLeft:      // Device oriented horizontally, home button on the right
-            NSLog(@"UIDeviceOrientationLandscapeLeft");
+            MTLOG(@"UIDeviceOrientationLandscapeLeft");
             [self rotation:90.0];
             break;
         case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
-            NSLog(@"UIDeviceOrientationLandscapeRight");
+            MTLOG(@"UIDeviceOrientationLandscapeRight");
             [self rotation:90.0*3];
             break;
         default:
@@ -303,7 +303,7 @@
 
     return;
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"showOption");
+        MTLOG(@"showOption");
         if (!_shadowView) {
             CGRect frame = self.view.frame;
             frame.origin = CGPointMake(0, 0);
@@ -339,7 +339,7 @@
 
 -(void)dismissOption
 {
-    NSLog(@"dismissOption");
+    MTLOG(@"dismissOption");
     if (_shadowView) {
         [_shadowView removeFromSuperview];
         _shadowView = nil;
@@ -351,7 +351,7 @@
 }
 
 -(void)report{
-    NSLog(@"匿名投诉");
+    MTLOG(@"匿名投诉");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self performSegueWithIdentifier:@"photoToreport" sender:self];
     });
@@ -433,7 +433,7 @@
     [dictionary setValue:[NSNumber numberWithInt:isZan? 2:3]  forKey:@"operation"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    NSLog(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
         if (rData) {
@@ -479,7 +479,7 @@
 //{
 //    [self.goodButton setEnabled:YES];
 //    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//    NSLog(@"received Data: %@",temp);
+//    MTLOG(@"received Data: %@",temp);
 //    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
 //    NSNumber *cmd = [response1 valueForKey:@"cmd"];
 //    if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {

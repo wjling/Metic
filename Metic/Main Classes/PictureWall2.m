@@ -403,7 +403,7 @@
 
 -(void)toUploadManage
 {
-//    NSLog(@"toUploadManage");
+//    MTLOG(@"toUploadManage");
     UploadManageViewController* uploadManager = [[UploadManageViewController alloc]init];
     uploadManager.eventId = self.eventId;
     [self.navigationController pushViewController:uploadManager animated:YES];
@@ -412,7 +412,7 @@
 
 -(void)photoUploadFinished:(id)sender
 {
-    NSLog(@"photoUploadFinished receive: %@",sender);
+    MTLOG(@"photoUploadFinished receive: %@",sender);
     NSMutableDictionary* newPhotoInfo = (NSMutableDictionary*)[sender userInfo];
     if (newPhotoInfo) {
         dispatch_sync(sync_queue, ^{
@@ -431,7 +431,7 @@
 
 -(void)deletePhotoItem:(id)sender
 {
-    NSLog(@"deletePhotoItem receive: %@",sender);
+    MTLOG(@"deletePhotoItem receive: %@",sender);
     NSMutableDictionary* deleteItem = (NSMutableDictionary*)[sender userInfo];
     if (deleteItem) {
         dispatch_sync(sync_queue, ^{
@@ -459,7 +459,7 @@
     [dictionary setValue:sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:[NSNumber numberWithInt:photoNumToGet] forKey:@"number"];
-    NSLog(@"%@",dictionary);
+    MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     _isLoading = YES;
     static NSInteger operationNum = 0;
@@ -469,7 +469,7 @@
     [httpSender sendMessage:jsonData withOperationCode:GET_PHOTO_LIST finshedBlock:^(NSData *rData) {
         if (operNum != operationNum)
         {
-            NSLog(@"wuwuwuwuwu");
+            MTLOG(@"wuwuwuwuwu");
             if(_header.refreshing) [_header endRefreshing];
             return ;
         }
@@ -479,7 +479,7 @@
                 return ;
             }
             NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            NSLog(@"received Data: %@",temp);
+            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -554,7 +554,7 @@
             rH += RealHeight;
         }
     }
-    NSLog(@"lH: %f , rH: %f",lH,rH);
+    MTLOG(@"lH: %f , rH: %f",lH,rH);
     _h1 = lH - rH;
 }
 
@@ -695,7 +695,7 @@
 {
    
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        NSLog(@"没有网络");
+        MTLOG(@"没有网络");
         [refreshView endRefreshing];
         return;
     }
