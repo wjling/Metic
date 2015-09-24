@@ -17,6 +17,9 @@
  */
 @property (strong, nonatomic, readonly) NSURLRequest *request;
 
+
+@property (assign, nonatomic) BOOL shouldDecompressImages;
+
 /**
  * Whether the URL connection should consult the credential storage for authenticating the connection. `YES` by default.
  *
@@ -55,6 +58,6 @@
               options:(SDWebImageDownloaderOptions)options
              progress:(SDWebImageDownloaderProgressBlock)progressBlock
             completed:(SDWebImageDownloaderCompletedBlock)completedBlock
-            cancelled:(void (^)())cancelBlock;
+            cancelled:(SDWebImageNoParamsBlock)cancelBlock;
 
 @end

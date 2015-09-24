@@ -12,7 +12,7 @@
 @interface SDWebImageCombinedOperation : NSObject <SDWebImageOperation>
 
 @property (assign, nonatomic, getter = isCancelled) BOOL cancelled;
-@property (copy, nonatomic) void (^cancelBlock)();
+@property (copy, nonatomic) SDWebImageNoParamsBlock cancelBlock;
 @property (strong, nonatomic) NSOperation *cacheOperation;
 
 @end
@@ -71,12 +71,48 @@
     return [self.imageCache diskImageExistsWithKey:key];
 }
 
+- (void)cachedImageExistsForURL:(NSURL *)url
+                     completion:(SDWebImageCheckCacheCompletionBlock)completionBlock {
+    NSString *key = [self cacheKeyForURL:url];
+    
+    BOOL isInMemoryCache = ([self.imageCache imageFromMemoryCacheForKey:key] != nil);
+    
+    if (isInMemoryCache) {
+        // making sure we call the completion block on the main queue
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completionBlock) {
+                completionBlock(YES);
+            }
+        });
+        return;
+    }
+    
+    [self.imageCache diskImageExistsWithKey:key completion:^(BOOL isInDiskCache) {
+        // the completion block of checkDiskCacheForImageWithKey:completion: is always called on the main queue, no need to further dispatch
+        if (completionBlock) {
+            completionBlock(isInDiskCache);
+        }
+    }];
+}
+
+- (void)diskImageExistsForURL:(NSURL *)url
+                   completion:(SDWebImageCheckCacheCompletionBlock)completionBlock {
+    NSString *key = [self cacheKeyForURL:url];
+    
+    [self.imageCache diskImageExistsWithKey:key completion:^(BOOL isInDiskCache) {
+        // the completion block of checkDiskCacheForImageWithKey:completion: is always called on the main queue, no need to further dispatch
+        if (completionBlock) {
+            completionBlock(isInDiskCache);
+        }
+    }];
+}
+
 - (id <SDWebImageOperation>)downloadImageWithURL:(NSURL *)url
                                          options:(SDWebImageOptions)options
                                         progress:(SDWebImageDownloaderProgressBlock)progressBlock
                                        completed:(SDWebImageCompletionWithFinishedBlock)completedBlock {
     // Invoking this method without a completedBlock is pointless
-    NSParameterAssert(completedBlock);
+    NSAssert(completedBlock != nil, @"If you mean to prefetch the image, use -[SDWebImagePrefetcher prefetchURLs] instead");
 
     // Very common mistake is to send the URL using NSString object instead of NSURL. For some strange reason, XCode won't
     // throw any warning for this type mismatch. Here we failsafe this error by allowing URLs to be passed as NSString.
@@ -145,18 +181,22 @@
             }
             id <SDWebImageOperation> subOperation = [self.imageDownloader downloadImageWithURL:url options:downloaderOptions progress:progressBlock completed:^(UIImage *downloadedImage, NSData *data, NSError *error, BOOL finished) {
                 if (weakOperation.isCancelled) {
-                    dispatch_main_sync_safe(^{
-                        completedBlock(nil, nil, SDImageCacheTypeNone, finished, url);
-                    });
+                    // Do nothing if the operation was cancelled
+                    // See #699 for more details
+                    // if we would call the completedBlock, there could be a race condition between this block and another completedBlock for the same object, so if this one is called second, we will overwrite the new data
                 }
                 else if (error) {
                     dispatch_main_sync_safe(^{
-                        completedBlock(nil, error, SDImageCacheTypeNone, finished, url);
+                        if (!weakOperation.isCancelled) {
+                            completedBlock(nil, error, SDImageCacheTypeNone, finished, url);
+                        }
                     });
 
                     if (error.code != NSURLErrorNotConnectedToInternet && error.code != NSURLErrorCancelled && error.code != NSURLErrorTimedOut) {
                         @synchronized (self.failedURLs) {
-                            [self.failedURLs addObject:url];
+                            if (![self.failedURLs containsObject:url]) {
+                                [self.failedURLs addObject:url];
+                            }
                         }
                     }
                 }
@@ -166,8 +206,7 @@
                     if (options & SDWebImageRefreshCached && image && !downloadedImage) {
                         // Image refresh hit the NSURLCache cache, do not call the completion block
                     }
-                            // NOTE: We don't call transformDownloadedImage delegate method on animated images as most transformation code would mangle it
-                    else if (downloadedImage && !downloadedImage.images && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)]) {
+                    else if (downloadedImage && (!downloadedImage.images || (options & SDWebImageTransformAnimatedImage)) && [self.delegate respondsToSelector:@selector(imageManager:transformDownloadedImage:withURL:)]) {
                         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                             UIImage *transformedImage = [self.delegate imageManager:self transformDownloadedImage:downloadedImage withURL:url];
 
@@ -177,7 +216,9 @@
                             }
 
                             dispatch_main_sync_safe(^{
-                                completedBlock(transformedImage, nil, SDImageCacheTypeNone, finished, url);
+                                if (!weakOperation.isCancelled) {
+                                    completedBlock(transformedImage, nil, SDImageCacheTypeNone, finished, url);
+                                }
                             });
                         });
                     }
@@ -187,7 +228,9 @@
                         }
 
                         dispatch_main_sync_safe(^{
-                            completedBlock(downloadedImage, nil, SDImageCacheTypeNone, finished, url);
+                            if (!weakOperation.isCancelled) {
+                                completedBlock(downloadedImage, nil, SDImageCacheTypeNone, finished, url);
+                            }
                         });
                     }
                 }
@@ -208,7 +251,9 @@
         }
         else if (image) {
             dispatch_main_sync_safe(^{
-                completedBlock(image, nil, cacheType, YES, url);
+                if (!weakOperation.isCancelled) {
+                    completedBlock(image, nil, cacheType, YES, url);
+                }
             });
             @synchronized (self.runningOperations) {
                 [self.runningOperations removeObject:operation];
@@ -217,7 +262,9 @@
         else {
             // Image not in cache and download disallowed by delegate
             dispatch_main_sync_safe(^{
-                completedBlock(nil, nil, SDImageCacheTypeNone, YES, url);
+                if (!weakOperation.isCancelled) {
+                    completedBlock(nil, nil, SDImageCacheTypeNone, YES, url);
+                }
             });
             @synchronized (self.runningOperations) {
                 [self.runningOperations removeObject:operation];
@@ -237,8 +284,9 @@
 
 - (void)cancelAll {
     @synchronized (self.runningOperations) {
-        [self.runningOperations makeObjectsPerformSelector:@selector(cancel)];
-        [self.runningOperations removeAllObjects];
+        NSArray *copiedOperations = [self.runningOperations copy];
+        [copiedOperations makeObjectsPerformSelector:@selector(cancel)];
+        [self.runningOperations removeObjectsInArray:copiedOperations];
     }
 }
 
@@ -251,11 +299,14 @@
 
 @implementation SDWebImageCombinedOperation
 
-- (void)setCancelBlock:(void (^)())cancelBlock {
+- (void)setCancelBlock:(SDWebImageNoParamsBlock)cancelBlock {
+    // check if the operation is already cancelled, then we just call the cancelBlock
     if (self.isCancelled) {
-        if (cancelBlock) cancelBlock();
-    }
-    else {
+        if (cancelBlock) {
+            cancelBlock();
+        }
+        _cancelBlock = nil; // don't forget to nil the cancelBlock, otherwise we will get crashes
+    } else {
         _cancelBlock = [cancelBlock copy];
     }
 }
@@ -268,7 +319,11 @@
     }
     if (self.cancelBlock) {
         self.cancelBlock();
-        self.cancelBlock = nil;
+        
+        // TODO: this is a temporary fix to #809.
+        // Until we can figure the exact cause of the crash, going with the ivar instead of the setter
+//        self.cancelBlock = nil;
+        _cancelBlock = nil;
     }
 }
 

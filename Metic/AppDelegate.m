@@ -198,6 +198,10 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
+    [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
+    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+//    [[SDImageCache sharedImageCache] setMaxMemoryCost:10000];
+    
     SDWebImageManager.sharedManager.cacheKeyFilter = ^(NSURL *url) {
         NSString *path = url.path;
         if ([path hasPrefix:@"/whatsact"]) {

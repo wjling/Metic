@@ -395,7 +395,7 @@
 
 - (IBAction)uploadVideo:(id)sender {
     [_add disappear];
-    
+    [[SDImageCache sharedImageCache] clearMemory];
     BOAlertController *actionSheet = [[BOAlertController alloc] initWithTitle:@"选择视频" message:nil viewController:self];
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{

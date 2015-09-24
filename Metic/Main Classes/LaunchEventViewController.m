@@ -19,24 +19,24 @@
 
 
 @interface LaunchEventViewController ()
-@property (nonatomic,strong) UIDatePicker *datePicker;
-@property (nonatomic,strong) UIView *datePickerView;
-@property (nonatomic,strong) UITextField *seletedText;
-@property (nonatomic,strong) NSMutableSet *FriendsIds;
-@property (nonatomic,strong) NSMutableArray *FriendsIds_array;
-@property (nonatomic,strong) NSDictionary* positions;
-@property (nonatomic,strong) NSDictionary* locationInfo;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *getLocIndicator;
-@property (strong, nonatomic) IBOutlet UIButton *getLocButton;
-@property (strong, nonatomic) BMKGeoCodeSearch* geocodesearch;
+@property (nonatomic, strong) UIDatePicker *datePicker;
+@property (nonatomic, strong) UIView *datePickerView;
+@property (nonatomic, strong) UITextField *seletedText;
+@property (nonatomic, strong) NSMutableSet *FriendsIds;
+@property (nonatomic, strong) NSMutableArray *FriendsIds_array;
+@property (nonatomic, strong) NSDictionary* positions;
+@property (nonatomic, strong) NSDictionary* locationInfo;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *getLocIndicator;
+@property (nonatomic, strong) IBOutlet UIButton *getLocButton;
+@property (nonatomic, strong) BMKGeoCodeSearch* geocodesearch;
 @property (nonatomic, strong) BMKLocationService* locService;
-//@property (strong, nonatomic) BMKMapManager *mapManager;
-@property (strong, nonatomic) UIView* waitingView;
+//@property (nonatomic, strong) BMKMapManager *mapManager;
+@property (nonatomic, strong) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
 @property NSInteger visibility;
 @property BOOL isKeyBoard;
-@property (nonatomic,strong) UIView* InviteFriendsView;
-@property (nonatomic,strong) UIView* isAllowStrangerView;
+@property (nonatomic, strong) UIView* InviteFriendsView;
+@property (nonatomic, strong) UIView* isAllowStrangerView;
 
 
 

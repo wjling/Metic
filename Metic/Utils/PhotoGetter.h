@@ -21,7 +21,7 @@
 @end
 @interface PhotoGetter : NSObject <CloudOperationDelegate>
 @property(nonatomic,strong)id <PhotoGetterDelegate> mDelegate;
-@property(nonatomic,strong) UIImageView* imageView;
+@property(nonatomic,weak) UIImageView* imageView;
 @property int type;
 @property(nonatomic,strong) NSIndexPath* index;
 @property(nonatomic,strong) UITableView* tableView;

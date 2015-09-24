@@ -74,12 +74,21 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * By default, placeholder images are loaded while the image is loading. This flag will delay the loading
      * of the placeholder image until after the image has finished loading.
      */
-    SDWebImageDelayPlaceholder = 1 << 9
+    SDWebImageDelayPlaceholder = 1 << 9,
+
+    /**
+     * We usually don't call transformDownloadedImage delegate method on animated images,
+     * as most transformation code would mangle it.
+     * Use this flag to transform them anyway.
+     */
+    SDWebImageTransformAnimatedImage = 1 << 10,
 };
 
 typedef void(^SDWebImageCompletionBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL);
 
 typedef void(^SDWebImageCompletionWithFinishedBlock)(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL);
+
+typedef NSString *(^SDWebImageCacheKeyFilterBlock)(NSURL *url);
 
 
 @class SDWebImageManager;
@@ -157,7 +166,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
 
  * @endcode
  */
-@property (strong) NSString *(^cacheKeyFilter)(NSURL *url);
+@property (nonatomic, copy) SDWebImageCacheKeyFilterBlock cacheKeyFilter;
 
 /**
  * Returns global SDWebImageManager instance.
@@ -214,10 +223,45 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
 - (BOOL)isRunning;
 
 /**
- * Check if image has already been cached
+ *  Check if image has already been cached
+ *
+ *  @param url image url
+ *
+ *  @return if the image was already cached
  */
 - (BOOL)cachedImageExistsForURL:(NSURL *)url;
+
+/**
+ *  Check if image has already been cached on disk only
+ *
+ *  @param url image url
+ *
+ *  @return if the image was already cached (disk only)
+ */
 - (BOOL)diskImageExistsForURL:(NSURL *)url;
+
+/**
+ *  Async check if image has already been cached
+ *
+ *  @param url              image url
+ *  @param completionBlock  the block to be executed when the check is finished
+ *  
+ *  @note the completion block is always executed on the main queue
+ */
+- (void)cachedImageExistsForURL:(NSURL *)url
+                     completion:(SDWebImageCheckCacheCompletionBlock)completionBlock;
+
+/**
+ *  Async check if image has already been cached on disk only
+ *
+ *  @param url              image url
+ *  @param completionBlock  the block to be executed when the check is finished
+ *
+ *  @note the completion block is always executed on the main queue
+ */
+- (void)diskImageExistsForURL:(NSURL *)url
+                   completion:(SDWebImageCheckCacheCompletionBlock)completionBlock;
+
 
 /**
  *Return the cache key for a given URL

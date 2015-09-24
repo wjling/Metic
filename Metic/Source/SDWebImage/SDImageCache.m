@@ -11,7 +11,7 @@
 #import "UIImage+MultiFormat.h"
 #import <CommonCrypto/CommonDigest.h>
 
-static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 365 * 66; // 66 years
+static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 // PNG signature bytes and data (below)
 static unsigned char kPNGSignatureBytes[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
 static NSData *kPNGSignatureData = nil;
@@ -48,7 +48,6 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     static id instance;
     dispatch_once(&once, ^{
         instance = [self new];
-        kPNGSignatureData = [NSData dataWithBytes:kPNGSignatureBytes length:8];
     });
     return instance;
 }
@@ -60,6 +59,9 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 - (id)initWithNamespace:(NSString *)ns {
     if ((self = [super init])) {
         NSString *fullNamespace = [@"com.hackemist.SDWebImageCache." stringByAppendingString:ns];
+
+        // initialise PNG signature data
+        kPNGSignatureData = [NSData dataWithBytes:kPNGSignatureBytes length:8];
 
         // Create IO serial queue
         _ioQueue = dispatch_queue_create("com.hackemist.SDWebImageCache", DISPATCH_QUEUE_SERIAL);
@@ -74,6 +76,9 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         // Init the disk cache
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _diskCachePath = [paths[0] stringByAppendingPathComponent:fullNamespace];
+
+        // Set decompression to YES
+        _shouldDecompressImages = YES;
 
         dispatch_sync(_ioQueue, ^{
             _fileManager = [NSFileManager new];
@@ -147,7 +152,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         return;
     }
 
-    [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale];
+    [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale * image.scale];
 
     if (toDisk) {
         dispatch_async(self.ioQueue, ^{
@@ -200,12 +205,24 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (BOOL)diskImageExistsWithKey:(NSString *)key {
-    __block BOOL exists = NO;
-    dispatch_sync(_ioQueue, ^{
-        exists = [_fileManager fileExistsAtPath:[self defaultCachePathForKey:key]];
-    });
-
+    BOOL exists = NO;
+    
+    // this is an exception to access the filemanager on another queue than ioQueue, but we are using the shared instance
+    // from apple docs on NSFileManager: The methods of the shared NSFileManager object can be called from multiple threads safely.
+    exists = [[NSFileManager defaultManager] fileExistsAtPath:[self defaultCachePathForKey:key]];
+    
     return exists;
+}
+
+- (void)diskImageExistsWithKey:(NSString *)key completion:(SDWebImageCheckCacheCompletionBlock)completionBlock {
+    dispatch_async(_ioQueue, ^{
+        BOOL exists = [_fileManager fileExistsAtPath:[self defaultCachePathForKey:key]];
+        if (completionBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionBlock(exists);
+            });
+        }
+    });
 }
 
 - (UIImage *)imageFromMemoryCacheForKey:(NSString *)key {
@@ -222,7 +239,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     // Second check the disk cache...
     UIImage *diskImage = [self diskImageForKey:key];
     if (diskImage) {
-        CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+        CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale * diskImage.scale;
         [self.memCache setObject:diskImage forKey:key cost:cost];
     }
 
@@ -252,7 +269,9 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     if (data) {
         UIImage *image = [UIImage sd_imageWithData:data];
         image = [self scaledImageForKey:key image:image];
-        image = [UIImage decodedImageWithImage:image];
+        if (self.shouldDecompressImages) {
+            image = [UIImage decodedImageWithImage:image];
+        }
         return image;
     }
     else {
@@ -264,7 +283,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     return SDScaledImageForKey(key, image);
 }
 
-- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock {
+- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(SDWebImageQueryCompletedBlock)doneBlock {
     if (!doneBlock) {
         return nil;
     }
@@ -290,7 +309,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         @autoreleasepool {
             UIImage *diskImage = [self diskImageForKey:key];
             if (diskImage) {
-                CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+                CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale * diskImage.scale;
                 [self.memCache setObject:diskImage forKey:key cost:cost];
             }
 
@@ -304,18 +323,18 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (void)removeImageForKey:(NSString *)key {
-    [self removeImageForKey:key withCompletition:nil];
+    [self removeImageForKey:key withCompletion:nil];
 }
 
-- (void)removeImageForKey:(NSString *)key withCompletition:(void (^)())completion {
-    [self removeImageForKey:key fromDisk:YES withCompletition:completion];
+- (void)removeImageForKey:(NSString *)key withCompletion:(SDWebImageNoParamsBlock)completion {
+    [self removeImageForKey:key fromDisk:YES withCompletion:completion];
 }
 
 - (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk {
-    [self removeImageForKey:key fromDisk:fromDisk withCompletition:nil];
+    [self removeImageForKey:key fromDisk:fromDisk withCompletion:nil];
 }
 
-- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk withCompletition:(void (^)())completion {
+- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk withCompletion:(SDWebImageNoParamsBlock)completion {
     
     if (key == nil) {
         return;
@@ -355,7 +374,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self clearDiskOnCompletion:nil];
 }
 
-- (void)clearDiskOnCompletion:(void (^)())completion
+- (void)clearDiskOnCompletion:(SDWebImageNoParamsBlock)completion
 {
     dispatch_async(self.ioQueue, ^{
         [_fileManager removeItemAtPath:self.diskCachePath error:nil];
@@ -376,7 +395,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self cleanDiskWithCompletionBlock:nil];
 }
 
-- (void)cleanDiskWithCompletionBlock:(void (^)())completionBlock {
+- (void)cleanDiskWithCompletionBlock:(SDWebImageNoParamsBlock)completionBlock {
     dispatch_async(self.ioQueue, ^{
         NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
         NSArray *resourceKeys = @[NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey];
@@ -492,7 +511,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     return count;
 }
 
-- (void)calculateSizeWithCompletionBlock:(void (^)(NSUInteger fileCount, NSUInteger totalSize))completionBlock {
+- (void)calculateSizeWithCompletionBlock:(SDWebImageCalculateSizeBlock)completionBlock {
     NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
 
     dispatch_async(self.ioQueue, ^{
