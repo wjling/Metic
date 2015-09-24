@@ -589,11 +589,6 @@
                     [SVProgressHUD showErrorWithStatus:@"你已在活动中" duration:1];
                     [self toEventDetail:_efid];
                     [_showView setHidden:YES];
-//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//                        
-//                        [readerView start];
-//                        _isScaning = YES;
-//                    });
                     
                 }else if (!_need_auth) {
                     [self wantIn:nil];
@@ -612,8 +607,6 @@
                 [_showView setHidden:YES];
                 [readerView start];
                 _isScaning = YES;
-                
-
             }
             
         }
@@ -638,6 +631,16 @@
                 [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"用户不存在" WithDelegate:self WithCancelTitle:@"确定"];
                 alert.tag = 10;
             }
+        }
+            break;
+        case ALREADY_FRIENDS:
+        {
+            NSString* mesg = @"你们已经是好友了";
+            
+            [SVProgressHUD dismissWithSuccess:mesg];
+            [_showView setHidden:YES];
+            [readerView start];
+            _isScaning = YES;
         }
             break;
         case USER_NOT_FOUND:
@@ -754,7 +757,7 @@
                             _isScaning = YES;
                         }
                     }];
-                    MTLOG(@"add friend apply: %@",json);
+                    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeClear];
                     
                 }
             }
