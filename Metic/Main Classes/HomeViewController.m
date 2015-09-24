@@ -109,6 +109,10 @@
     });
 }
 
+-(void)didReceiveMemoryWarning
+{
+    [[SDImageCache sharedImageCache] clearMemory];
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
