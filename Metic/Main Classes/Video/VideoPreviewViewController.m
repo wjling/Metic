@@ -462,11 +462,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                     case EVENT_NOT_EXIST:{
                         UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"您不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
                         [alert setTag:103];
+                        
+                        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:_eventId,@"eventId", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
                         break;
                     }
                     case NOT_IN_EVENT:{
                         UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"您不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
                         [alert setTag:103];
+                        
+                        NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:_eventId,@"eventId", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
                         break;
                     }
                     default:
