@@ -200,6 +200,7 @@
     
     [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
     [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+    [[SDImageCache sharedImageCache] setMaxCacheAge:60 * 60 * 24 * 30 * 50]; // 50 years
 //    [[SDImageCache sharedImageCache] setMaxMemoryCost:10000];
     
     SDWebImageManager.sharedManager.cacheKeyFilter = ^(NSURL *url) {
