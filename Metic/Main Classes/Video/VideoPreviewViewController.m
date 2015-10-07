@@ -16,6 +16,7 @@
 #import "THProgressView.h"
 #import "../../Source/SDAVAssetExportSession.h"
 #import "../../Utils/Reachability.h"
+#import "AppDelegate.h"
 
 
 #define mp4Quality AVAssetExportPreset640x480
@@ -458,6 +459,16 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         
                     }
                         break;
+                    case EVENT_NOT_EXIST:{
+                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"您不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:103];
+                        break;
+                    }
+                    case NOT_IN_EVENT:{
+                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"您不在此活动中" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:103];
+                        break;
+                    }
                     default:
                     {
                         UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传失败" WithDelegate:self WithCancelTitle:@"确定"];
@@ -544,8 +555,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self removeWaitingView];
             });
-            
-            
+        }else if([alertView tag] == 103){
+            [_progressView setProgress:1.0f animated:YES];
+            [_confirmBtn setEnabled:YES];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self removeWaitingView];
+                NSArray *naviVC = [self.navigationController.viewControllers copy];
+                UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
+                if ([naviVC containsObject:home]) {
+                    [self.navigationController popToViewController:home animated:YES];
+                }
+            });
         }
         
     }
