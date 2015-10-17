@@ -192,6 +192,9 @@
         case 30:
             resultCode = @"get_event_recommend";
             break;
+        case 31:
+            resultCode = @"get_version_info";
+            break;
         case 33:
             resultCode = @"get_nearby_friends";
             break;

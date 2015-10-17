@@ -21,6 +21,7 @@
 #import "UploaderManager.h"
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
+#import "MTPackageControl.h"
 
 @interface HomeViewController ()
 
@@ -126,6 +127,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [MTPackageControl checkVersion];
     _updateEventStatus = [MTUser sharedInstance].updateEventStatus;
     _atMeEvents = [MTUser sharedInstance].atMeEvents;
     [MobClick beginLogPageView:@"活动主页"];

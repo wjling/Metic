@@ -122,12 +122,6 @@
     }
     
     [self UploadStatusTimerStart];
-//    if (!_isFirstIn && !_shouldReloadPhoto) {
-//        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//            [self pullPhotoInfosFromDB];
-//            [self pullUploadTasksfromDB];
-//        });
-//    }
     
     if (_shouldReloadPhoto && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
         _shouldReloadPhoto = NO;
@@ -215,8 +209,6 @@
         }
         NSMutableArray* photo_list_all_Tmp = [[NSMutableArray alloc]init];
         NSMutableArray* photo_list_Tmp = [[NSMutableArray alloc]init];
-//        [self.photo_list_all removeAllObjects];
-//        [self.photo_list removeAllObjects];
         for (int i = 0; i < resultsArray.count; i++) {
             NSDictionary* temp = [resultsArray objectAtIndex:i];
             NSString *tmpa = [temp valueForKey:@"photoInfo"];
@@ -230,7 +222,6 @@
                 [photo_list_all_Tmp addObject:photoInfo];
                 [photo_list_Tmp addObject:photoInfo];
             }
-            
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             _photo_list = photo_list_Tmp;

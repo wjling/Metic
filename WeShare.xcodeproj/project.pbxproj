@@ -394,6 +394,7 @@
 		F89442DB1B7F1E5C007F405E /* UIImageView+MTWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442DA1B7F1E5C007F405E /* UIImageView+MTWebCache.m */; };
 		F89442DE1B7F21FB007F405E /* UIButton+MTWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */; };
 		F89442E11B7F869A007F405E /* MegUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442E01B7F869A007F405E /* MegUtils.m */; };
+		F894FE1E1BC4F9E2004B6159 /* MTPackageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F894FE1D1BC4F9E2004B6159 /* MTPackageControl.m */; };
 		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
 		F8C109B71BA463890043650E /* AtMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B61BA463890043650E /* AtMeTableViewCell.m */; };
 		F8C109BA1BA465E70043650E /* AtMeGoodTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */; };
@@ -1174,6 +1175,8 @@
 		F89442DD1B7F21FB007F405E /* UIButton+MTWebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+MTWebCache.m"; sourceTree = "<group>"; };
 		F89442DF1B7F869A007F405E /* MegUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MegUtils.h; sourceTree = "<group>"; };
 		F89442E01B7F869A007F405E /* MegUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MegUtils.m; sourceTree = "<group>"; };
+		F894FE1C1BC4F9E2004B6159 /* MTPackageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPackageControl.h; sourceTree = "<group>"; };
+		F894FE1D1BC4F9E2004B6159 /* MTPackageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPackageControl.m; sourceTree = "<group>"; };
 		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
 		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
 		F8C109B51BA463890043650E /* AtMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMeTableViewCell.h; sourceTree = "<group>"; };
@@ -2120,6 +2123,7 @@
 		51581D291933575300943606 /* WeShare */ = {
 			isa = PBXGroup;
 			children = (
+				F894FE1B1BC4F9AC004B6159 /* General */,
 				08F7989D19AE449D002BA684 /* UIView */,
 				087759BB19A81B670034BB58 /* Category */,
 				04CB1B7C1977760200BC083C /* Custom Wedgets */,
@@ -2681,6 +2685,15 @@
 			path = fmdb;
 			sourceTree = "<group>";
 		};
+		F894FE1B1BC4F9AC004B6159 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				F894FE1C1BC4F9E2004B6159 /* MTPackageControl.h */,
+				F894FE1D1BC4F9E2004B6159 /* MTPackageControl.m */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
 		F8F51AF61BA9632A00DA5474 /* ImageGetter */ = {
 			isa = PBXGroup;
 			children = (
@@ -2911,6 +2924,7 @@
 				F810B7B31B0107C600843AAB /* EventEditTimeViewController.m in Sources */,
 				F83369451ACFF01E00B41435 /* MJPhotoLoadingView.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
+				F894FE1E1BC4F9E2004B6159 /* MTPackageControl.m in Sources */,
 				04B6F8B519A2607800229393 /* emotion_Keyboard.m in Sources */,
 				51F4CB1519E6307500E487F1 /* DDData.m in Sources */,
 				08293F8219C5DC3A009B637A /* THProgressView.m in Sources */,
