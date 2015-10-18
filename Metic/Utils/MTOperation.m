@@ -14,6 +14,7 @@
 #import "MTDatabaseAffairs.h"
 #import "SDImageCache.h"
 #import <objc/runtime.h>
+#import "MegUtils.h"
 
 @interface MTOperation ()<UIAlertViewDelegate>
 
@@ -240,7 +241,6 @@
             [dictionary setValue:path forKey:@"object"];
             
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//            MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
             HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
             [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
                 if (!rData){
@@ -276,8 +276,77 @@
             }];
         });
     });
-    
-    
+}
+
+-(void)getVideoUrlFromServerWith:(NSString*) videoName
+                success:(void (^)(NSString* url))success
+                failure:(void (^)(NSString* message))failure
+{
+    if (!videoName) {
+        if (failure) {
+            failure(@"参数错误");
+        }
+        return;
+    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        
+        //plan b 缓存视频
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if(![fileManager fileExistsAtPath:cachePath])
+        {
+            [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(@"existed");
+            });
+        }
+        
+        NSString *path = [MegUtils videoPathWithVideoName:videoName];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+            [dictionary setValue:@"GET" forKey:@"method"];
+            [dictionary setValue:path forKey:@"object"];
+            
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+            HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+            [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+                if (!rData){
+                    if (failure) {
+                        failure(@"网络异常");
+                    }
+                    return;
+                }
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY:
+                        {
+                            NSString* url = (NSString*)[response1 valueForKey:@"url"];
+                            if (url) {
+                                if (success) {
+                                    success(url);
+                                }
+                                return;
+                            }
+                        }
+                            break;
+                        default:
+                            if (failure) {
+                                failure(@"服务器异常");
+                            }
+                            return;
+                            break;
+                            
+                    }
+                }
+            }];
+        });
+    });
 }
 
 #pragma mark - Alert Delegate

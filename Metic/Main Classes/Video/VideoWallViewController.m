@@ -451,8 +451,6 @@
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
-    MTLOG(@"%f   %f   %f",scrollView.frame.size.height,self.view.frame.size.height,self.navigationController.view.frame.size.height);
-    
 }
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {

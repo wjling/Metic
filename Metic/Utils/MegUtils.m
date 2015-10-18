@@ -46,4 +46,11 @@
     return [NSString stringWithFormat:@"/video/%@.thumb",videoName];
 }
 
++(NSString *)videoPathWithVideoName:(NSString *)videoName
+{
+    if (!videoName || [videoName isEqualToString:@""])
+        return @"";
+    return [NSString stringWithFormat:@"/video/%@",videoName];
+}
+
 @end

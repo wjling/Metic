@@ -28,4 +28,8 @@ typedef void(^likeEventFinishBlock)(BOOL isSuccess,NSString* likeTime);
                  success:(void (^)(NSString* url))success
                  failure:(void (^)(NSString* message))failure;
 
+-(void)getVideoUrlFromServerWith:(NSString*) videoName
+                         success:(void (^)(NSString* url))success
+                         failure:(void (^)(NSString* message))failure;
+
 @end

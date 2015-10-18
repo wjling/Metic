@@ -20,4 +20,6 @@
 
 +(NSString *)videoThummbImagePathWithVideoName:(NSString *)videoName;
 
++(NSString *)videoPathWithVideoName:(NSString *)videoName;
+
 @end

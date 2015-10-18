@@ -20,6 +20,7 @@
 #import "../Main Classes/Video/MTVideoPlayerViewController.h"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
+#import "MTOperation.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -98,9 +99,13 @@
 
 - (IBAction)play:(id)sender {
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
-    NSString *url = [_videoInfo valueForKey:@"url"];
-    MTLOG(@"%@",url);
-    [self downloadVideo:videoName url:url];
+    [[MTOperation sharedInstance] getVideoUrlFromServerWith:videoName success:^(NSString *url) {
+        if ([[_videoInfo valueForKey:@"video_name"] isEqualToString:videoName]) {
+            [self downloadVideo:videoName url:url];
+        }
+    } failure:^(NSString *message) {
+        MTLOG(@"获取视频URL失败");
+    }];
 }
 
 -(void)setISZan:(BOOL)isZan
@@ -158,8 +163,6 @@
     [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
     [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
     [self setComment_buttonNum:[_videoInfo valueForKey:@"comment_num"]];
-    
-    NSString *url = [_videoInfo valueForKey:@"thumb"];
     
     [_video_button setImage:nil forState:UIControlStateNormal];
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
@@ -301,19 +304,11 @@
 
 
 - (void)downloadVideo:(NSString*)videoName url:(NSString*)url{
-    
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
     NSString *webPath = [CacheDirectory stringByAppendingPathComponent:@"VideoTemp"];
     NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
-
-    //plan b 缓存视频
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    if(![fileManager fileExistsAtPath:cachePath])
-    {
-        [fileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
-    }
-    if ([fileManager fileExistsAtPath:[cachePath stringByAppendingPathComponent:videoName]]) {
-        
+    
+    if([url isEqualToString:@"existed"]) {
         _playerViewController = [[MTMPMoviePlayerViewController alloc]initWithContentURL:[NSURL fileURLWithPath:[cachePath stringByAppendingPathComponent:videoName]]];
         
         _playerViewController.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -341,7 +336,6 @@
             return;
         }
 
-        
         else{
             
             __block unsigned long long totalBytes = 0;
@@ -384,7 +378,6 @@
             [request startAsynchronous];
             videoRequest = request;
         }
-        
     }
 }
 
