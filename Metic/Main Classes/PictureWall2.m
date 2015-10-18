@@ -45,7 +45,6 @@
 @end
 
 @implementation PictureWall2
-@synthesize quiltView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
@@ -69,23 +68,23 @@
 - (void)initUI
 {
     self.title = @"图片墙";
-    quiltView = [[TMQuiltView alloc] initWithFrame:self.view.bounds];
-    quiltView.delegate = self;
-    quiltView.dataSource = self;
-    quiltView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.quiltView = [[TMQuiltView alloc] initWithFrame:self.view.bounds];
+    self.quiltView.delegate = self;
+    self.quiltView.dataSource = self;
+    self.quiltView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
-    [self.view addSubview:quiltView];
-    [quiltView reloadData];
+    [self.view addSubview:self.quiltView];
+    [self.quiltView reloadData];
     
     self.view.backgroundColor = [UIColor colorWithWhite:242.0/255.0 alpha:1.0f];
     [CommonUtils addLeftButton:self isFirstPage:NO];
 
-    _add = [[MTAutoHideButton alloc]initWithScrollView:quiltView];
+    _add = [[MTAutoHideButton alloc]initWithScrollView:self.quiltView];
     [_add addTarget:self action:@selector(toUploadPhoto:) forControlEvents:UIControlEventTouchUpInside];
     //初始化下拉刷新功能
     _header = [[MJRefreshHeaderView alloc]init];
     _header.delegate = self;
-    _header.scrollView = (UIScrollView*)quiltView;
+    _header.scrollView = (UIScrollView*)self.quiltView;
     
 }
 
@@ -230,7 +229,7 @@
             [self resetPhoNum];
             [self calculateLRH];
             _uploadingTaskCount = 0;
-            [quiltView reloadData];
+            [self.quiltView reloadData];
             self.sequence = @-1;
             
             if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
@@ -353,11 +352,11 @@
                 [_uploadManageBtn setAlpha:1.0f];
                 _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
                 [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成，有%ld张图片上传失败",(long)uploadTaskCount] forState:UIControlStateNormal];
-                CGRect frame = quiltView.frame;
+                CGRect frame = self.quiltView.frame;
                 if (CGRectGetMinY(frame) != 30) {
                     frame.size.height -=30;
                     frame.origin.y = 30;
-                    [quiltView setFrame:frame];
+                    [self.quiltView setFrame:frame];
                 }
             }];
         }else{
@@ -366,11 +365,11 @@
                 [_uploadManageBtn setAlpha:1.0f];
                 _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
                 [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
-                CGRect frame = quiltView.frame;
+                CGRect frame = self.quiltView.frame;
                 if (CGRectGetMinY(frame) != 30) {
                     frame.size.height -=30;
                     frame.origin.y = 30;
-                    [quiltView setFrame:frame];
+                    [self.quiltView setFrame:frame];
                 }
             }];
         }
@@ -382,11 +381,11 @@
             [_uploadManageBtn setAlpha:0.0f];
             _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
             [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成"] forState:UIControlStateNormal];
-            CGRect frame = quiltView.frame;
+            CGRect frame = self.quiltView.frame;
             if (CGRectGetMinY(frame) != 0) {
                 frame.size.height +=30;
                 frame.origin.y = 0;
-                [quiltView setFrame:frame];
+                [self.quiltView setFrame:frame];
             }
         }];
     }
@@ -413,7 +412,7 @@
             [self calculateLRH];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [quiltView reloadData];
+                [self.quiltView reloadData];
             });
         });
         
@@ -435,7 +434,7 @@
             [self calculateLRH];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [quiltView reloadData];
+                [self.quiltView reloadData];
             });
         });
         
@@ -512,7 +511,7 @@
                     [self calculateLRH];
                     self.sequence = [response1 valueForKey:@"sequence"];
                     _haveLoadedPhoto = YES;
-                    [quiltView reloadData];
+                    [self.quiltView reloadData];
                     if(_header.refreshing) [_header endRefreshing];
                     
                 }
@@ -565,7 +564,7 @@
             float preHeight = CGRectGetHeight(preCell.frame);
             float preX = CGRectGetMinX(preCell.frame);
             float width = 300;
-            float height = (preHeight != 50)? 50 : abs(_h1) + 50;
+            float height = (preHeight != 50)? 50 : fabsf(_h1) + 50;
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-40, width*4/6, 40)];
             if (!_haveLoadedPhoto) {
                 label.text = @"正在加载 ...";
@@ -626,7 +625,7 @@
     
     float defaultHeight = _showPhoNum == 0? 200:50;
     if (indexPath.row == _showPhoNum) {
-        return abs(_h1) + defaultHeight;
+        return fabsf(_h1) + defaultHeight;
     }else if(indexPath.row == _showPhoNum + 1) return defaultHeight;
     
     
@@ -645,7 +644,6 @@
     if (indexPath.row >= _showPhoNum) {
         return;
     }
-    PhotoTableViewCell* cell = (PhotoTableViewCell*)[quiltView cellAtIndexPath:indexPath];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];

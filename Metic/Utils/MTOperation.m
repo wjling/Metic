@@ -302,6 +302,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 success(@"existed");
             });
+            return ;
         }
         
         NSString *path = [MegUtils videoPathWithVideoName:videoName];
