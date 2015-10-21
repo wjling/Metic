@@ -42,7 +42,9 @@
     UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
     _name_textField.layer.borderColor = color.CGColor;
     _name_textField.layer.borderWidth = 1;
-    _name_textField.layer.cornerRadius = 3.5;
+    _name_textField.layer.cornerRadius = 5;
+    _name_textField.leftView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 10, 10)];
+    _name_textField.leftViewMode = UITextFieldViewModeAlways;
     _name_textField.layer.masksToBounds = YES;
     
     note = [[UILabel alloc]init];
