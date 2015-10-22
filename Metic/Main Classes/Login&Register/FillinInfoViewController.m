@@ -7,8 +7,8 @@
 //
 
 #import "FillinInfoViewController.h"
-#import "UIImage+fixOrien.h"
 #import "UIImage+squareThumbail.h"
+#import "UzysAssetsPickerController.h"
 
 @interface FillinInfoViewController ()
 {
@@ -494,14 +494,46 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-	//[picker dismissViewControllerAnimated:YES completion:^{}];
-    UIImage *image = [info valueForKey:UIImagePickerControllerOriginalImage];
-    if (image) image = [UIImage fixOrientation:image];
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
     avatar = [image squareAndSmall];
-    [picker dismissViewControllerAnimated:YES completion:^{
-        [self openEditor:image];
-    }];
-    
+    NSURL *referenceURL = info[UIImagePickerControllerReferenceURL];
+    if (referenceURL) {
+        [[UzysAssetsPickerController defaultAssetsLibrary] assetForURL:referenceURL resultBlock:^(ALAsset *asset) {
+            
+            if (!asset) {
+                MTLOG(@"图片已不存在");
+                [picker dismissViewControllerAnimated:YES completion:NULL];
+                return ;
+            }
+            UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage
+                                               scale:asset.defaultRepresentation.scale
+                                         orientation:0];
+            [picker dismissViewControllerAnimated:YES completion:^{
+                [self openEditor:img];
+            }];
+        } failureBlock:^(NSError *error) {
+            [picker dismissViewControllerAnimated:YES completion:NULL];
+        }];
+    } else {
+        [[UzysAssetsPickerController defaultAssetsLibrary] writeImageToSavedPhotosAlbum:image.CGImage metadata:info[UIImagePickerControllerMediaMetadata] completionBlock:^(NSURL *assetURL, NSError *error) {
+            [[UzysAssetsPickerController defaultAssetsLibrary] assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                
+                if (!asset) {
+                    MTLOG(@"图片已不存在");
+                    [picker dismissViewControllerAnimated:YES completion:NULL];
+                    return ;
+                }
+                UIImage *img = [UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage
+                                                   scale:asset.defaultRepresentation.scale
+                                             orientation:0];
+                [picker dismissViewControllerAnimated:YES completion:^{
+                    [self openEditor:img];
+                }];
+            } failureBlock:^(NSError *error) {
+                [picker dismissViewControllerAnimated:YES completion:NULL];
+            }];
+        }];
+    }
 }
 
 #pragma mark - PECropViewControllerDelegate methods
@@ -509,7 +541,7 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
-    avatar = croppedImage;
+    avatar = [croppedImage squareAndSmall];;
     [self.info_tableview reloadData];
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:22 viewController:self];
     [getter uploadAvatar];

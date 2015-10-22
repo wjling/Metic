@@ -276,7 +276,7 @@
     self.isUpload = YES;
     UIImage* compressedImage1 = self.uploadImage;
     UIImage* compressedImage2 = self.uploadImage;
-    
+    self.uploadImage = nil;
     NSData* imageData1 = UIImageJPEGRepresentation(compressedImage1, 1.0);
 //    NSData* imageData2 = [[NSData alloc]initWithData:imageData1];
     NSData* imageData2 = UIImageJPEGRepresentation(compressedImage2, 1.0);
