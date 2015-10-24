@@ -432,8 +432,9 @@
         
     }
     //拉系统推送
-    [self pullSystemNotificationWithSeq:seq];
-    
+    if (cmd == SYSTEM_PUSH) {
+        [self pullSystemNotificationWithSeq:seq];
+    }
 }
 
 -(void)initApp
@@ -1031,9 +1032,11 @@
     if (cmd == SYSTEM_PUSH) {
         [[MTUser sharedInstance].systemMsg insertObject:temp_message atIndex:0];
         type = 2;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
-                                                            object:nil
-                                                          userInfo:nil];
+        if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
+                                                                object:nil
+                                                              userInfo:nil];
+        }
     }
     else
     {

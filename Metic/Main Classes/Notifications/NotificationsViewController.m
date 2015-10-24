@@ -1546,7 +1546,7 @@ enum Response_Type
             {
                 NSString* content = [msg_dic objectForKey:@"content"];
                 NSString* text;
-                text = content? @"无":[NSString stringWithFormat:@"%@",content];
+                text = content? [NSString stringWithFormat:@"%@",content]:@"无";
                 cell.title_label.text = @"系统消息";
                 cell.sys_msg_label.text = text;
             }
