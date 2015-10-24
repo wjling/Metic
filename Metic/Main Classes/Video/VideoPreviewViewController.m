@@ -227,7 +227,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     NSNumber* width,*height;
     AVAssetTrack* videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    if (_preViewImage.size.height > _preViewImage.size.width){
+    if (_preViewImage.size.height > _preViewImage.size.width && videoTrack.naturalSize.height < videoTrack.naturalSize.width){
         encoder.isVerticalVideo = YES;
 //        width = [NSNumber numberWithFloat:480];
 //        height = [NSNumber numberWithFloat:640];
