@@ -124,7 +124,7 @@
 
 - (void) initParams
 {
-    initialSectionForFriendList = 1;
+    initialSectionForFriendList = 0;
     self.friendList = [[NSMutableArray alloc]init];
     self.sortedFriendDic = [[NSMutableDictionary alloc]init];
     self.sectionArray = [[NSMutableArray alloc]init];
@@ -616,12 +616,12 @@
     }
     else if (tableView == self.friendTableView)
     {
-        if (indexPath.section == 0) {
-            if (indexPath.row == 0) {
-                [self performSegueWithIdentifier:@"friendCenter_friendRecommendation" sender:self];
-            }
-        }
-        else
+//        if (indexPath.section == 0) {
+//            if (indexPath.row == 0) {
+//                [self performSegueWithIdentifier:@"friendCenter_friendRecommendation" sender:self];
+//            }
+//        }
+//        else
         {
             [self performSegueWithIdentifier:@"FriendToFriendInfo" sender:self];
         }
@@ -636,7 +636,7 @@
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     if (tableView == friendTableView) {
-        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section+1]];
         NSDictionary* aFriend = [groupOfFriends objectAtIndex:row];
         MTLOG(@"afriend: %@",aFriend);
         selectedFriendID = [CommonUtils NSNumberWithNSString:[aFriend objectForKey:@"id"]];
@@ -689,7 +689,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView == friendTableView) {
-        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section]];
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[sectionArray objectAtIndex:section+1]];
         if (groupOfFriends) {
             return groupOfFriends.count;
         }
@@ -709,7 +709,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView == friendTableView) {
-        return sectionArray.count;
+        return sectionArray.count>0? sectionArray.count - 1:0;
     }
 //    else if (tableView == searchDisplayController.searchResultsTableView)
 //    {
@@ -729,7 +729,7 @@
         if (section >= self.sectionArray.count) {
             return [[UITableViewCell alloc]init];
         }
-        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section]];
+        NSArray* groupOfFriends = [sortedFriendDic objectForKey:(NSString*)[self.sectionArray objectAtIndex:section+1]];
         if (groupOfFriends) {
             if (row >= groupOfFriends.count) {
                 return [[UITableViewCell alloc]init];
@@ -738,20 +738,20 @@
             NSString* label = [aFriend objectForKey:@"name"];
             NSNumber* fid = [aFriend objectForKey:@"id"];
             
-            if (section == 0) {
-                if (row == 0)
-                {
-                    NotificationCenterCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"notificationcentercell"];
-                    if (nil == cell) {
-                        cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
-                    }
-                    cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
-                    cell.title.text = label;
-                    
-                    return cell ;
-                }
-            }
-            else
+//            if (section == 0) {
+//                if (row == 0)
+//                {
+//                    NotificationCenterCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"notificationcentercell"];
+//                    if (nil == cell) {
+//                        cell = [[NotificationCenterCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"notificationcentercell"];
+//                    }
+//                    cell.pic.image = [UIImage imageNamed:@"好友推荐icon.png"];
+//                    cell.title.text = label;
+//                    
+//                    return cell ;
+//                }
+//            }
+//            else
             {
                 FriendTableViewCell* cell = [self.friendTableView dequeueReusableCellWithIdentifier:@"friendcell"];
                 if (nil == cell) {
@@ -853,7 +853,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (tableView == friendTableView) {
-        return [self.sectionArray objectAtIndex:section];
+        return [self.sectionArray objectAtIndex:section+1];
     }
     else
     {
@@ -888,9 +888,7 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == friendTableView) {
-        if (indexPath.section != 0) {
-            return YES;
-        }
+        return YES;
     }
     return NO;
 }

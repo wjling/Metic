@@ -389,7 +389,7 @@ static MTUser *singletonInstance;
     
     [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"eventVideo" indexesWithProperties:@[@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo"]];
     
-    [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"width",@"height"]];
+    [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"imageDescription",@"width",@"height"]];
     
     
     

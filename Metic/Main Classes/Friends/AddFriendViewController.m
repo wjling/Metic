@@ -7,7 +7,8 @@
 //
 
 #import "AddFriendViewController.h"
-#import "../ScanViewController.h"
+#import "ScanViewController.h"
+#import "ContactsViewController.h"
 
 @interface AddFriendViewController () <UIAlertViewDelegate>
 
@@ -160,22 +161,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"Confrim Message" message:@"Please input confirm message:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-//    confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
-//    confirmAlert.tag = 0;
-//    friendPosition = indexPath.row;
-//    [confirmAlert show];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     if (section == 0) {
         if (row == 0) {
+            UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            ContactsViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"ContactsViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        } else if (row == 1) {
             [self performSegueWithIdentifier:@"addFriend_friendRecommend" sender:self];
-        }
-        else if (row == 1)
-        {
+        } else if (row == 2) {
             [self performSegueWithIdentifier:@"addfriend_sao" sender:self];
         }
+    } else if (section == 1) {
+        [self performSegueWithIdentifier:@"addfriend_sao" sender:self];
     }
 }
 
@@ -185,47 +186,29 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    MTLOG(@"searchFriendList.count: %lu",(unsigned long)self.searchFriendList.count);
-//    return self.searchFriendList.count;
-    return 2;
+    if (section == 0) {
+        return 3;
+    } else if (section == 1) {
+        return 1;
+    } else
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    SearchedFriendTableViewCell* cell = [self.searchedFriendsTableView dequeueReusableCellWithIdentifier:@"searchedfriendcell"];
-//    if (nil == cell) {
-////        MTLOG(@"create cell");
-//        cell = [[SearchedFriendTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"searchedfriendcell"];
-//    }
-//    NSDictionary* aFriend = [self.searchFriendList objectAtIndex:indexPath.row];
-//    //    MTLOG(@"a friend: %@",aFriend);
-//    NSString* name = [aFriend objectForKey:@"name"];
-//    MTLOG(@"friend name: %@",name);
-////    NSData* name = [aFriend objectForKey:@"name"];
-////    NSString* str_name = [[NSString alloc]initWithData:name encoding:NSUTF8StringEncoding];
-////    cell.avatar.image = [UIImage imageNamed:@"默认用户头像"];
-//    if (name) {
-//        cell.friendNameLabel.text = name;
-//    }
-//    else
-//    {
-//        cell.friendNameLabel.text = @"default";
-//    }
-//    
-//    //    cell.image = [[UIImage alloc]init];
-////    if (cell) {
-////        MTLOG(@"cell isn't nil");
-////    }
+
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (nil == cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    if (indexPath.row == 0) {
-        cell.textLabel.text = @"添加手机联系人";
-    }
-    else if (indexPath.row == 1)
-    {
+    if (indexPath.section == 1) {
         cell.textLabel.text = @"扫一扫";
+    }else  if (indexPath.row == 0) {
+        cell.textLabel.text = @"手机联系人";
+    }else  if (indexPath.row == 1) {
+        cell.textLabel.text = @"附近的人";
+    }else  if (indexPath.row == 2) {
+        cell.textLabel.text = @"随便看看";
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
@@ -233,7 +216,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 //
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -304,9 +287,4 @@
             break;
     }
 }
-
-
-
-
-
 @end
