@@ -9,6 +9,8 @@
 #import "AddFriendViewController.h"
 #import "ScanViewController.h"
 #import "ContactsViewController.h"
+#import "NearbyPeopleViewController.h"
+#import "KankanViewController.h"
 
 @interface AddFriendViewController () <UIAlertViewDelegate>
 
@@ -90,25 +92,6 @@
 - (void)search_friend
 {
     NSString* text = self.friendSearchBar.text;
-//    if ([CommonUtils isEmailValid:text]) {
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        dictionary = [CommonUtils packParamsInDictionary:text,@"email",self.user.userid,@"myId",nil];
-//        MTLOG(@"%@",dictionary);
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];
-//    }
-//    else
-//    {
-//        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-//        dictionary = [CommonUtils packParamsInDictionary:text,@"name",self.user.userid,@"myId",nil];
-//        MTLOG(@"%@",dictionary);
-//        
-//        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-//        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-//        [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND];;
-//    }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     dictionary = [CommonUtils packParamsInDictionary:text,@"name",[MTUser sharedInstance].userid,@"myId",nil];
     MTLOG(@"%@",dictionary);
@@ -143,9 +126,6 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                     // called when keyboard search button pressed
 {
-//    [self search_friend];
-//    [searchBar resignFirstResponder];
-//    [self.searchedFriendsTableView reloadData];
     [self performSegueWithIdentifier:@"addfriend_searchfriend" sender:self];
 }
 
@@ -171,9 +151,14 @@
             [self.navigationController pushViewController:vc animated:YES];
             
         } else if (row == 1) {
-            [self performSegueWithIdentifier:@"addFriend_friendRecommend" sender:self];
+            UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            NearbyPeopleViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"NearbyPeopleViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
+            
         } else if (row == 2) {
-            [self performSegueWithIdentifier:@"addfriend_sao" sender:self];
+            UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            KankanViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"KankanViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
         }
     } else if (section == 1) {
         [self performSegueWithIdentifier:@"addfriend_sao" sender:self];

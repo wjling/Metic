@@ -9,8 +9,24 @@
 #import "ContactsViewController.h"
 #import "FriendInfoViewController.h"
 #import "SVProgressHUD.h"
+#import <AddressBook/AddressBook.h>
+#import "ContactsRecommendTableViewCell.h"
+#import "CommonUtils.h"
+#import "HttpSender.h"
+#import "PhotoGetter.h"
+#import "AddFriendConfirmViewController.h"
 
-@interface ContactsViewController ()
+@interface ContactsViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UIView *tabPage1_view;
+@property (strong, nonatomic) IBOutlet UIView *noUpload_view;
+@property (strong, nonatomic) IBOutlet UIButton *addContacts_button;
+@property (strong, nonatomic) IBOutlet UIView *hasUpload_view;
+@property (strong, nonatomic) IBOutlet UITableView *contacts_tableview;
+
+@property (strong, nonatomic) NSMutableArray* contacts_arr;
+@property (strong, nonatomic) NSMutableArray* contactFriends_arr;
+@property (strong, nonatomic) NSMutableArray* phoneNumbers;
 
 @end
 
@@ -32,10 +48,8 @@
 #pragma mark - Life Cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [super viewDidLoad];
     self.title = @"通讯录";
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
     
     contacts_arr = [[NSMutableArray alloc] init];
     contactFriends_arr = [[NSMutableArray alloc] init];
@@ -102,9 +116,7 @@
     UIColor* bgColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.949 alpha:1];
 
     [self.addContacts_button addTarget:self action:@selector(uploadContacts:) forControlEvents:UIControlEventTouchUpInside];
-    
     self.contacts_tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
-
     [self.tabPage1_view setBackgroundColor:bgColor];
     [self.contacts_tableview setBackgroundColor:bgColor];
 }
@@ -216,7 +228,7 @@
     [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:getContactFriendsDone];
     MTLOG(@"doing getContactFriends, json: %@",json_dic);
     [SVProgressHUD showWithStatus:@"请稍候"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!isFinish) {
             [SVProgressHUD dismiss];
         }

@@ -396,6 +396,8 @@
 		F89442E11B7F869A007F405E /* MegUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F89442E01B7F869A007F405E /* MegUtils.m */; };
 		F894FE1E1BC4F9E2004B6159 /* MTPackageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F894FE1D1BC4F9E2004B6159 /* MTPackageControl.m */; };
 		F8A518CD1BEB325000743000 /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A518CB1BEB325000743000 /* ContactsViewController.m */; };
+		F8A518D11BEC958700743000 /* NearbyPeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A518D01BEC958700743000 /* NearbyPeopleViewController.m */; };
+		F8A518D41BECF98600743000 /* KankanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A518D31BECF98600743000 /* KankanViewController.m */; };
 		F8AEED1A1AEE3AF100289F15 /* MTTableViewCellBase.m in Sources */ = {isa = PBXBuildFile; fileRef = F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */; };
 		F8C109B71BA463890043650E /* AtMeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B61BA463890043650E /* AtMeTableViewCell.m */; };
 		F8C109BA1BA465E70043650E /* AtMeGoodTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C109B91BA465E70043650E /* AtMeGoodTableViewCell.m */; };
@@ -1180,6 +1182,10 @@
 		F894FE1D1BC4F9E2004B6159 /* MTPackageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPackageControl.m; sourceTree = "<group>"; };
 		F8A518CA1BEB325000743000 /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ContactsViewController.h; path = AddFriend/ContactsViewController.h; sourceTree = "<group>"; };
 		F8A518CB1BEB325000743000 /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ContactsViewController.m; path = AddFriend/ContactsViewController.m; sourceTree = "<group>"; };
+		F8A518CF1BEC958700743000 /* NearbyPeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NearbyPeopleViewController.h; path = AddFriend/NearbyPeopleViewController.h; sourceTree = "<group>"; };
+		F8A518D01BEC958700743000 /* NearbyPeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NearbyPeopleViewController.m; path = AddFriend/NearbyPeopleViewController.m; sourceTree = "<group>"; };
+		F8A518D21BECF98600743000 /* KankanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KankanViewController.h; path = AddFriend/KankanViewController.h; sourceTree = "<group>"; };
+		F8A518D31BECF98600743000 /* KankanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KankanViewController.m; path = AddFriend/KankanViewController.m; sourceTree = "<group>"; };
 		F8AEED181AEE3AF100289F15 /* MTTableViewCellBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTableViewCellBase.h; sourceTree = "<group>"; };
 		F8AEED191AEE3AF100289F15 /* MTTableViewCellBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTableViewCellBase.m; sourceTree = "<group>"; };
 		F8C109B51BA463890043650E /* AtMeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMeTableViewCell.h; sourceTree = "<group>"; };
@@ -2703,6 +2709,10 @@
 				0435EF2C19B45C54003BB2F6 /* AddFriendViewController.m */,
 				F8A518CA1BEB325000743000 /* ContactsViewController.h */,
 				F8A518CB1BEB325000743000 /* ContactsViewController.m */,
+				F8A518CF1BEC958700743000 /* NearbyPeopleViewController.h */,
+				F8A518D01BEC958700743000 /* NearbyPeopleViewController.m */,
+				F8A518D21BECF98600743000 /* KankanViewController.h */,
+				F8A518D31BECF98600743000 /* KankanViewController.m */,
 			);
 			name = AddFriend;
 			sourceTree = "<group>";
@@ -3046,6 +3056,7 @@
 				08DB69A219541F3A00F80F3F /* AFNetworkReachabilityManager.m in Sources */,
 				F813B2F31BB3B9BA0066BC37 /* SDImageCache.m in Sources */,
 				0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */,
+				F8A518D11BEC958700743000 /* NearbyPeopleViewController.m in Sources */,
 				081B6DAA1A7685D80044D623 /* qrinput.c in Sources */,
 				08FC57F919E4377100D1BC66 /* EventPhotosTableViewCell.m in Sources */,
 				04B6F8B219A25FCC00229393 /* BannerViewController.m in Sources */,
@@ -3170,6 +3181,7 @@
 				0821828B1AA6DEED00EBD156 /* PEResizeControl.m in Sources */,
 				F813B2D31BB3B9A70066BC37 /* SDWebImageManager+MJ.m in Sources */,
 				08DB69B719541F3A00F80F3F /* UIWebView+AFNetworking.m in Sources */,
+				F8A518D41BECF98600743000 /* KankanViewController.m in Sources */,
 				51F4CB0919E6307500E487F1 /* ASIAuthenticationDialog.m in Sources */,
 				F810B7AC1B00B17800843AAB /* EventEditViewController.m in Sources */,
 				F89442E11B7F869A007F405E /* MegUtils.m in Sources */,
