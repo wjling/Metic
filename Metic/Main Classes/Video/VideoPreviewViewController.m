@@ -197,6 +197,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 
 - (void)encodeVideo
 {
+    [_textView resignFirstResponder];
     _alert = [[UIAlertView alloc] init];
     [_alert setTitle:@"视频处理中,请稍候"];
     

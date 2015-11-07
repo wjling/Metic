@@ -135,15 +135,36 @@ typedef enum {
     if (!_progressView) {
         _progressView = [[UIView alloc]initWithFrame:self.bounds];
         _progressView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
-
-        SDLoopProgressView* progreView = [SDLoopProgressView progressView];
+        [self addSubview:_progressView];
+    }
+    
+    SDLoopProgressView* progreView = (SDLoopProgressView*)[_progressView viewWithTag:330];
+    if (!progreView) {
+        progreView = [SDLoopProgressView progressView];
         progreView.frame = CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 25, 50, 50);
         [progreView setTag:330];
+        if(!progreView){
+            NSLog(@"error");
+        }
         [progreView setHidden:YES];
         progreView.progress = 0;
         [_progressView addSubview:progreView];
-        
-        UIButton* retry = [UIButton buttonWithType:UIButtonTypeCustom];
+    }
+    
+    UIButton* cancel = (UIButton*)[_progressView viewWithTag:340];
+    if (!cancel) {
+        cancel = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancel setFrame:CGRectMake(self.bounds.size.width - 40, -10, 50, 50)];
+        [cancel setImage:[UIImage imageNamed:@"上传任务删除"] forState:UIControlStateNormal];
+        [cancel setTag:340];
+        [cancel setHidden:YES];
+        [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
+        [_progressView addSubview:cancel];
+    }
+    
+    UIButton* retry = (UIButton*)[_progressView viewWithTag:350];
+    if (!retry) {
+        retry = [UIButton buttonWithType:UIButtonTypeCustom];
         [retry setFrame:CGRectMake(self.bounds.size.width/2 - 25, self.bounds.size.height/2 - 40, 50, 70)];
         [retry setImage:[UIImage imageNamed:@"重新上传"] forState:UIControlStateNormal];
         [retry setTag:350];
@@ -151,26 +172,17 @@ typedef enum {
         [retry addTarget:self action:@selector(retryUploadTask) forControlEvents:UIControlEventTouchUpInside];
         [_progressView addSubview:retry];
         
-        UIButton* cancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancel setFrame:CGRectMake(self.bounds.size.width - 40, -10, 50, 50)];
-        [cancel setImage:[UIImage imageNamed:@"上传任务删除"] forState:UIControlStateNormal];
-        [cancel setTag:340];
-        [cancel setHidden:YES];
-        [cancel addTarget:self action:@selector(cancelUploadTask) forControlEvents:UIControlEventTouchUpInside];
-        [_progressView addSubview:cancel];
-        
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 50, 50, 20)];
         [label setText:@"重新上传"];
         [label setFont:[UIFont systemFontOfSize:12]];
         [label setTextColor:[UIColor whiteColor]];
         [label setTextAlignment:NSTextAlignmentCenter];
         [retry addSubview:label];
-        [self addSubview:_progressView];
     }
-    SDLoopProgressView* progreView = (SDLoopProgressView*)[_progressView viewWithTag:330];
-    UIButton* cancel = (UIButton*)[_progressView viewWithTag:340];
-    UIButton* retry = (UIButton*)[_progressView viewWithTag:350];
-    
+    if (!progreView) {
+        NSLog(@"error");
+    }
+
     if(_uploadState == UPLOAD_WAITING){
         [progreView setHidden:YES];
         [cancel setHidden:YES];

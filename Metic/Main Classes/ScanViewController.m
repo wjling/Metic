@@ -450,6 +450,7 @@
         [_resultView setFrame:frame];
         [_resultView addSubview:cell];
         [_resultView setHidden:NO];
+        [_showView setHidden:NO];
         frame = _controlView.frame;
         frame.origin.y = CGRectGetMaxY(_resultView.frame);
         _controlView.frame = frame;
@@ -491,6 +492,7 @@
         frame.origin.y = (self.view.frame.size.height - 210 - _controlView.frame.size.height)/2;
         [_resultView setFrame:frame];
         [_resultView setHidden:NO];
+        [_showView setHidden:NO];
         frame = _controlView.frame;
         frame.origin.y = CGRectGetMaxY(_resultView.frame);;
         _controlView.frame = frame;
@@ -663,7 +665,7 @@
         _isScaning = NO;
         [readerView stop];
     }
-    [_showView setHidden:NO];
+//    [_showView setHidden:NO];
     [self resultAnalysis];
     
 }

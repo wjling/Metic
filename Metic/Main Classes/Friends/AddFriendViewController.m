@@ -126,6 +126,7 @@
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                     // called when keyboard search button pressed
 {
+    [searchBar resignFirstResponder];
     [self performSegueWithIdentifier:@"addfriend_searchfriend" sender:self];
 }
 
