@@ -389,7 +389,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
             duration = [NSString stringWithFormat:@"%d秒",dis];
         }
         
-        timeInfo = [NSString stringWithFormat:@"活动持续时间：%@",duration];
+        timeInfo = [NSString stringWithFormat:@"活动持续时间: %@",duration];
         while (timeInfo.length < 15) {
             timeInfo = [timeInfo stringByAppendingString:@" "];
         }
