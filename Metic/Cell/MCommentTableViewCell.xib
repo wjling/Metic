@@ -102,7 +102,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(0)" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="i2g-0Y-byj">
-                                <rect key="frame" x="16" y="0.0" width="24" height="20"/>
+                                <rect key="frame" x="16" y="0.0" width="24" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" red="0.97647064924240112" green="0.54901963472366333" blue="0.40784317255020142" alpha="1" colorSpace="deviceRGB"/>
