@@ -3694,7 +3694,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYE-6F-F8Y">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhs-FR-Rkb">
@@ -5457,18 +5457,18 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
         <segue reference="rIK-Ci-sAS"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="vrP-dE-x9J"/>
-        <segue reference="ib8-0I-OZA"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="fLJ-gw-aSw"/>
+        <segue reference="0y8-RS-ijM"/>
         <segue reference="fCb-08-jP0"/>
-        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="KQw-JA-BHy"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="06u-oh-4gy"/>
-        <segue reference="kIc-uU-eUg"/>
+        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="06u-oh-4gy"/>
         <segue reference="eBE-9B-Hp2"/>
     </inferredMetricsTieBreakers>
 </document>

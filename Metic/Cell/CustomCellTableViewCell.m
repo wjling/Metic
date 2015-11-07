@@ -134,8 +134,22 @@
     if (launcher == nil || [launcher isEqual:[NSNull null]] || [launcher isEqualToString:@""]) {
         launcher = [data valueForKey:@"launcher"];
     }
-    
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
+    NSInteger visibility = [data[@"visibility"] integerValue];
+    switch (visibility) {
+        case 0:
+            self.eventType.text = @"活动类型：私人";
+            break;
+        case 1:
+            self.eventType.text = @"活动类型：公开(内容不可见)";
+            break;
+        case 2:
+            self.eventType.text = @"活动类型：公开(内容可见)";
+            break;
+        default:
+            break;
+    }
+    
     self.eventId = [data valueForKey:@"event_id"];
     self.launcherId = [data valueForKey:@"launcher_id"];
     //cell.avatar.layer.masksToBounds = YES;

@@ -33,6 +33,7 @@
     IBOutlet TTTAttributedLabel *member_count;
     IBOutlet UIView *commentInputView;
     IBOutlet UIButton *addPaticipator;
+    IBOutlet UILabel *eventType;
     
 }
 
@@ -52,6 +53,7 @@
 @property(nonatomic,strong) UIImageView* launcherImg;
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *eventName;
+@property(nonatomic,strong) UILabel *eventType;
 @property(nonatomic,strong) UILabel *beginDate;
 @property(nonatomic,strong) UILabel *endDate;
 @property(nonatomic,strong) UILabel *beginTime;

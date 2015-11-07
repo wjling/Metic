@@ -108,6 +108,20 @@
         launcher = [data valueForKey:@"launcher"];
     }
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
+    NSInteger visibilityNum = [data[@"visibility"] integerValue];
+    switch (visibilityNum) {
+        case 0:
+            self.eventType.text = @"活动类型：私人";
+            break;
+        case 1:
+            self.eventType.text = @"活动类型：公开(内容不可见)";
+            break;
+        case 2:
+            self.eventType.text = @"活动类型：公开(内容可见)";
+            break;
+        default:
+            break;
+    }
     BOOL isMine = [[data valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
     BOOL visibility = [[data valueForKey:@"isIn"] boolValue] && ([[data valueForKey:@"visibility"] boolValue] || isMine);
     if (visibility) {
@@ -125,7 +139,7 @@
     frame.size.height = commentHeight;
     [self.eventDetail setFrame:frame];
     frame = self.frame;
-    frame.size.height = 303 + commentHeight;
+    frame.size.height = 321 + commentHeight;
     self.frame = frame;
     
     NSNumber* launcherId = [data valueForKey:@"launcher_id"];

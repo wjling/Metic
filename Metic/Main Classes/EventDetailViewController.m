@@ -11,11 +11,11 @@
 #import "Event2DcodeViewController.h"
 #import "EventEditViewController.h"
 #import "BannerSelectorViewController.h"
+#import "HomeViewController.h"
 #import "MTUser.h"
 #import "PictureWall2.h"
 #import "VideoWallViewController.h"
 #import "Report/ReportViewController.h"
-#import "../Cell/CustomCellTableViewCell.h"
 #import "../Cell/MCommentTableViewCell.h"
 #import "../Cell/SCommentTableViewCell.h"
 #import "../Cell/EventCellTableViewCell.h"
@@ -1636,7 +1636,7 @@
         if (text && [text isEqualToString:@""]) {
 //            commentHeight = 10;
         }else if(text) commentHeight += 5;
-        return 303.0 + commentHeight;
+        return 321.0 + commentHeight;
     }
     else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];

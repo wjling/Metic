@@ -545,7 +545,7 @@
         if (text && [text isEqualToString:@""]) {
 //            commentHeight = 10;
         }else if(text) commentHeight += 5;
-        return 262 + commentHeight;
+        return 280 + commentHeight;
     }
     else {
         if (_shouldShowPhoto && _bestPhotos.count > 0) return 131;

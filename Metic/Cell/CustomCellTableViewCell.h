@@ -28,6 +28,7 @@
     IBOutlet UIButton *videoWall;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
+    IBOutlet UILabel *eventType;
     IBOutlet TTTAttributedLabel *member_count;
     
 }
@@ -42,6 +43,7 @@
 @property(nonatomic,weak) HomeViewController* homeController;
 @property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;
+@property(nonatomic,strong) UILabel *eventType;
 @property(nonatomic,strong) UIImageView *themePhoto;
 @property(nonatomic,strong) UILabel *beginDate;
 @property(nonatomic,strong) UILabel *endDate;
