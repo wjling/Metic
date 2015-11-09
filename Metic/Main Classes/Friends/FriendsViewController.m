@@ -471,11 +471,11 @@
 {
     [SVProgressHUD showWithStatus:@"正在处理..." maskType:SVProgressHUDMaskTypeClear];
 //    [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(timerCancel:) userInfo:nil repeats:NO];
-    if (indexPath.section >= sectionArray.count) {
+    if (indexPath.section >= sectionArray.count - 1) {
         MTLOG(@"删除好友的indexpath.section错误, section: %li", (long)indexPath.section);
         return;
     }
-    NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section];
+    NSString* key = (NSString*)[sectionArray objectAtIndex:indexPath.section + 1];
     __block NSMutableArray* groupFriends = [sortedFriendDic objectForKey:key];
     if (indexPath.row < groupFriends.count) {
         NSMutableDictionary* friend = [groupFriends objectAtIndex:indexPath.row];
