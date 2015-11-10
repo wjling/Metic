@@ -14,10 +14,10 @@
 #import "MTMPMoviePlayerViewController.h"
 #import "MobClick.h"
 #import "THProgressView.h"
+#import "SVProgressHUD.h"
 #import "../../Source/SDAVAssetExportSession.h"
 #import "../../Utils/Reachability.h"
 #import "AppDelegate.h"
-
 
 #define mp4Quality AVAssetExportPreset640x480
 
@@ -79,6 +79,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频预览"];
+    [SVProgressHUD dismiss];
 }
 - (void)didReceiveMemoryWarning
 {
@@ -198,19 +199,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 - (void)encodeVideo
 {
     [_textView resignFirstResponder];
-    _alert = [[UIAlertView alloc] init];
-    [_alert setTitle:@"视频处理中,请稍候"];
-    
-    UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-
-
-    activity.frame = CGRectMake(140,
-                                80,
-                                CGRectGetWidth(_alert.frame),
-                                CGRectGetHeight(_alert.frame));
-    [_alert addSubview:activity];
-    [activity startAnimating];
-    [_alert show];
+    [SVProgressHUD showWithStatus:@"视频处理中,请稍候"];
 
     // output file
     NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
@@ -230,15 +219,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     AVAssetTrack* videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     if (_preViewImage.size.height > _preViewImage.size.width && videoTrack.naturalSize.height < videoTrack.naturalSize.width){
         encoder.isVerticalVideo = YES;
-//        width = [NSNumber numberWithFloat:480];
-//        height = [NSNumber numberWithFloat:640];
         width = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
         height = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
     }
     else{
         encoder.isVerticalVideo = NO;
-//        width = [NSNumber numberWithFloat:640];
-//        height = [NSNumber numberWithFloat:480];
         width = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
         height = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
     }
@@ -276,11 +261,11 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
          _videoURL = [NSURL fileURLWithPath:outputPath];
          if (encoder.status == AVAssetExportSessionStatusCompleted)
          {
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [_alert dismissWithClickedButtonIndex:0 animated:YES];
-             });
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [self upload];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [SVProgressHUD dismissWithSuccess:@"转码成功" afterDelay:1.0f];
+                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                     [self upload];
+                 });
              });
              _hasEncode = YES;
              MTLOG(@"Video export succeeded");
@@ -292,10 +277,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
          }
          else
          {
-             MTLOG(@"Video export failed with error: %@ (%d)", encoder.error.localizedDescription, encoder.error.code);
              _confirmBtn.enabled = YES;
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 [_alert dismissWithClickedButtonIndex:0 animated:YES];
+                 [SVProgressHUD dismiss];
                  [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频无法处理" WithDelegate:nil WithCancelTitle:@"确定"];
                  [self.navigationController popViewControllerAnimated:YES];
              });
@@ -313,7 +297,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         return;
     }
     MTMPMoviePlayerViewController *movie = [[MTMPMoviePlayerViewController alloc]initWithContentURL:_videoURL];
-    
     [movie.moviePlayer prepareToPlay];
     [self presentMoviePlayerViewControllerAnimated:movie];
     [movie.moviePlayer setControlStyle:MPMovieControlStyleFullscreen];
@@ -322,15 +305,10 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     [[NSNotificationCenter defaultCenter] removeObserver:movie
                                                     name:MPMoviePlayerPlaybackDidFinishNotification object:movie.moviePlayer];
     [[NSNotificationCenter defaultCenter]addObserver:self
-     
                                             selector:@selector(movieFinishedCallback:)
-     
                                                 name:MPMoviePlayerPlaybackDidFinishNotification
-     
                                               object:movie.moviePlayer];
-    
 }
-
 
 -(void)showWaitingView
 {
@@ -341,18 +319,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         [_waitingView setAlpha:0.7f];
         [self.view addSubview:_waitingView];
         
-        _progressView = [[THProgressView alloc] initWithFrame:CGRectMake(CGRectGetMidX(_waitingView.frame) - progressViewSize.width / 2.0f,
-                                                                                           CGRectGetMidY(_waitingView.frame) - progressViewSize.height / 2.0f,
-                                                                                           progressViewSize.width,
-                                                                                           progressViewSize.height)];
+        _progressView = [[THProgressView alloc] initWithFrame:
+                         CGRectMake(CGRectGetMidX(_waitingView.frame) - progressViewSize.width / 2.0f,
+                         CGRectGetMidY(_waitingView.frame) - progressViewSize.height / 2.0f,
+                         progressViewSize.width,
+                         progressViewSize.height)];
         _progressView.borderTintColor = [UIColor whiteColor];
         _progressView.progressTintColor = [UIColor whiteColor];
         [_progressView setProgress:0 animated:NO];
         [_waitingView addSubview:_progressView];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(modifyProgress:) name: @"uploadFile" object:nil];
-        
-        
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [[UIApplication sharedApplication].keyWindow addSubview:_waitingView];
     }
@@ -388,17 +365,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         MPMoviePlayerController* theMovie = [notify object];
         
         [[NSNotificationCenter defaultCenter]removeObserver:self
-         
                                                        name:MPMoviePlayerPlaybackDidFinishNotification
-         
                                                      object:theMovie];
-        
         [self dismissMoviePlayerViewControllerAnimated];
     }else if(value == MPMovieFinishReasonPlaybackEnded){
         [theMovie play];
         [theMovie pause];
     }
-    
 }
 
 #pragma mark - PhotoGetterDelegate
@@ -426,9 +399,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {
-//                        UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频上传成功" WithDelegate:self WithCancelTitle:@"确定"];
-//                        [alert setTag:100];
-//
                         //复制tmp.mp4到videocache文件夹
                         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
@@ -482,7 +452,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         [alert setTag:102];
                     }
                 }
-
             }
         }];
         
@@ -535,11 +504,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     frame = _videoView.frame;
     frame.origin.y = _textView.frame.origin.y + _textView.frame.size.height + 10;
     [_videoView setFrame:frame];
-    
-//    float y = _textView.frame.size.height - 70;
-//    if (y<0) y = 0;
-//    [_scrollView setContentOffset:CGPointMake(0, y) animated:YES];
-    
+
     float height = _textView.frame.size.height + _videoView.frame.size.height + 30;
     if (height < self.view.frame.size.height + _scrollView.contentOffset.y) height = self.view.frame.size.height + _scrollView.contentOffset.y;
     [_scrollView setContentSize:CGSizeMake(self.view.bounds.size.width, height)];
