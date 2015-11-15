@@ -168,6 +168,8 @@ enum Return_Code
     
 };
 
+static const CGFloat MTCommentSendTimeout = 15.f;
+
 #endif
 
 

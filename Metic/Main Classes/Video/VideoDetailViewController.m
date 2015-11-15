@@ -584,7 +584,7 @@
     [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
 
     [_tableView reloadData];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(waitingComment && [[waitingComment valueForKey:@"vcomment_id"] intValue]== -1){
             [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
@@ -715,7 +715,7 @@
     [_tableView reloadData];
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(newComment && [[newComment valueForKey:@"vcomment_id"] intValue]== -1){
             [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
             [_tableView reloadData];
