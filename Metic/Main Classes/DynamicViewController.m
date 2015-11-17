@@ -9,7 +9,7 @@
 #import "DynamicViewController.h"
 #import "EventDetailViewController.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "MobClick.h"
 #import "PhotoDetailViewController.h"
 #import "VideoDetailViewController.h"

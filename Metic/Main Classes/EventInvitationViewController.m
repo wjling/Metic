@@ -8,11 +8,11 @@
 
 #import "EventInvitationViewController.h"
 #import "MenuViewController.h"
-#import "../Cell/EventInvitationTableViewCell.h"
+#import "EventInvitationTableViewCell.h"
 #import "PhotoGetter.h"
 #import "MTUser.h"
 #import "MobClick.h"
-#import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "MTDatabaseHelper.h"
 #import "MegUtils.h"
 

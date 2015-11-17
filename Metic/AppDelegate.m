@@ -10,7 +10,6 @@
 #import "UMSocialWechatHandler.h"
 //#import "UMSocialSinaSSOHandler.h"
 #import "UMSocialQQHandler.h"
-#import "Source/security/SFHFKeychainUtils.h"
 #import "Main Classes/MTMPMoviePlayerViewController.h"
 #import "Main Classes/BannerViewController.h"
 #import "Main Classes/MTUser.h"

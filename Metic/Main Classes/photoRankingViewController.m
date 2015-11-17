@@ -10,7 +10,7 @@
 #import "PhotoRankingTableViewCell.h"
 #import "MTUser.h"
 #import "MobClick.h"
-#import "../Utils/Reachability.h"
+#import "Reachability.h"
 
 @interface photoRankingViewController ()
 @property(nonatomic,strong) NSMutableArray* photos_all;

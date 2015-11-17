@@ -7,11 +7,11 @@
 //
 
 #import "EventSearchViewController.h"
-#import "../Cell/nearbyEventTableViewCell.h"
+#import "nearbyEventTableViewCell.h"
 #import "showParticipatorsViewController.h"
-#import "../Utils/CommonUtils.h"
+#import "CommonUtils.h"
 #import "PhotoGetter.h"
-#import "../Source/SDWebImage/UIImageView+WebCache.h"
+#import "UIImageView+WebCache.h"
 #import "MobClick.h"
 #import "EventDetailViewController.h"
 #import "EventPreviewViewController.h"

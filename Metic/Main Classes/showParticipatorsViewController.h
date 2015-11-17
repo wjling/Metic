@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Utils/HttpSender.h"
+#import "HttpSender.h"
 
 @interface showParticipatorsViewController : UIViewController<UICollectionViewDataSource,UICollectionViewDelegate,HttpSenderDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;

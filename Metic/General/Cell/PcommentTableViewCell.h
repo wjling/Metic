@@ -1,16 +1,16 @@
 //
-//  VcommentTableViewCell.h
-//  WeShare
+//  PcommentTableViewCell.h
+//  Metic
 //
-//  Created by ligang6 on 14-9-2.
+//  Created by ligang6 on 14-7-6.
 //  Copyright (c) 2014年 dishcool. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "../Source/MLEmoji/MLEmojiLabel.h"
-#import "VideoDetailViewController.h"
+#import "MLEmojiLabel.h"
+#import "PhotoDetailViewController.h"
 
-@interface VcommentTableViewCell : UITableViewCell
+@interface PcommentTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) MLEmojiLabel *comment;
@@ -18,12 +18,12 @@
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSNumber *authorId;
-@property (strong, nonatomic) NSNumber *vcomment_id;
+@property (strong, nonatomic) NSNumber *pcomment_id;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property (strong, nonatomic) IBOutlet UIButton *resend_Button;
 @property (strong, nonatomic) UIView* background;
-@property (weak, nonatomic) VideoDetailViewController* controller;
-@property (nonatomic,strong) NSDictionary* VcommentDict;
+@property(nonatomic,strong) NSDictionary* PcommentDict;
+@property (weak, nonatomic) PhotoDetailViewController* controller;
 - (IBAction)resend:(id)sender;
 
 

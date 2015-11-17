@@ -9,10 +9,10 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoGetter.h"
-#import "../../MJRefresh/MJRefreshFooterView.h"
-#import "../../UIView/MTMessageTextView.h"
-#import "../../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
-#import "../../Cell/VideoWallTableViewCell.h"
+#import "MJRefreshFooterView.h"
+#import "MTMessageTextView.h"
+#import "ASIHTTPRequest.h"
+#import "VideoWallTableViewCell.h"
 #import "VideoWallViewController.h"
 
 @interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>{

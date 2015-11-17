@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "PhotoGetter.h"
-#import "../MJRefresh/MJRefreshFooterView.h"
+#import "MJRefreshFooterView.h"
 #import "UMSocial.h"
-#import "../UIView/MTMessageTextView.h"
+#import "MTMessageTextView.h"
 #import "PictureWall2.h"
 
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>

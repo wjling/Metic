@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Utils/HttpSender.h"
-#import "../Utils/PhotoGetter.h"
+#import "HttpSender.h"
+#import "PhotoGetter.h"
 #import "UIImageView+MTWebCache.h"
 #import "PictureWall2.h"
 

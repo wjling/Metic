@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HttpSender.h"
 #import "BMapKit.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "FlatDatePicker.h"
 
 @interface LaunchEventViewController : UIViewController<UICollectionViewDataSource,UIScrollViewDelegate,UICollectionViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate,UIGestureRecognizerDelegate>

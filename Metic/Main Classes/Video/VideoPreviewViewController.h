@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
-#import "../../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 
 @interface VideoPreviewViewController : UIViewController<UITextViewDelegate,PhotoGetterDelegate>
 {

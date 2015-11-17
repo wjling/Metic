@@ -12,7 +12,7 @@
 #import "PictureWall2.h"
 #import "VideoWallViewController.h"
 #import "showParticipatorsViewController.h"
-#import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "MTShowTextViewController.h"
 #import "MegUtils.h"
 

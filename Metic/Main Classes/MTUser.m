@@ -7,7 +7,7 @@
 //
 
 #import "MTUser.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "SDImageCache.h"
 #import "XGPush.h"
 #import "AppDelegate.h"

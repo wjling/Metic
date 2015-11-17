@@ -7,7 +7,7 @@
 //
 
 #import "ReportViewController.h"
-#import "../../Utils/HttpSender.h"
+#import "HttpSender.h"
 #import "CommonUtils.h"
 #import "MobClick.h"
 #import "MTUser.h"

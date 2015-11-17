@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "PECropViewController.h"
 #import "UzysAssetsPickerController.h"
 

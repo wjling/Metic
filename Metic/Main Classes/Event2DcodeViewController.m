@@ -8,7 +8,7 @@
 
 #import "Event2DcodeViewController.h"
 #import "UMSocial.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "MobClick.h"
 #import "QRCodeGenerator.h"
 

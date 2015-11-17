@@ -8,9 +8,9 @@
 
 #import "PhotoUploadViewController.h"
 #import "PictureWall2.h"
-#import "../Utils/CommonUtils.h"
+#import "CommonUtils.h"
 #import "MobClick.h"
-#import "../Utils/Reachability.h"
+#import "Reachability.h"
 #import "BOAlertController.h"
 #import "SVProgressHUD.h"
 #import "UploaderManager.h"

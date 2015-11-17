@@ -19,8 +19,8 @@
 #import "MJRefreshFooterView.h"
 
 #import "AppDelegate.h"
-#import "../Utils/CloudOperation.h"
-#import "../Cell/MTTableView.h"
+#import "CloudOperation.h"
+#import "MTTableView.h"
 
 
 

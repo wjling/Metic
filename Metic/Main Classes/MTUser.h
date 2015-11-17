@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "HttpSender.h"
 #import "AppConstants.h"
-#import "../Utils/HttpSender.h"
+#import "HttpSender.h"
 #import "CommonUtils.h"
 
 @interface MTUser : NSObject<HttpSenderDelegate,NSCoding>

@@ -7,9 +7,9 @@
 //
 
 #import "CustomCellTableViewCell.h"
-#import "../Main Classes/PictureWall2.h"
-#import "../Main Classes/Video/VideoWallViewController.h"
-#import "../Source/SVProgressHUD/SVProgressHUD.h"
+#import "PictureWall2.h"
+#import "VideoWallViewController.h"
+#import "SVProgressHUD.h"
 #import "UIImageView+MTWebCache.h"
 #import "MegUtils.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import "AdViewController.h"
-#import "../Utils/CommonUtils.h"
+#import "CommonUtils.h"
 #import "MobClick.h"
 #import "MTUser.h"
 

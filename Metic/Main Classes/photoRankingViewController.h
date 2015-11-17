@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PictureWall2.h"
-#import "../MJRefresh/MJRefresh.h"
+#import "MJRefresh.h"
 
 @interface photoRankingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property(nonatomic,strong) UITableView* tableView;

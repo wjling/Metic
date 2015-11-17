@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PictureWall2.h"
-#import "../Source/TMQuiltView/TMQuiltViewCell.h"
+#import "TMQuiltViewCell.h"
 
 @interface PhotoTableViewCell : TMQuiltViewCell
 @property (strong, nonatomic) UIImageView *avatar;

@@ -7,9 +7,9 @@
 //
 
 #import "ScanViewController.h"
-#import "../Utils/CommonUtils.h"
-#import "../Cell/CustomCellTableViewCell.h"
-#import "../Cell/UserTableViewCell.h"
+#import "CommonUtils.h"
+#import "CustomCellTableViewCell.h"
+#import "UserTableViewCell.h"
 #import "SVProgressHUD.h"
 #import "EventDetailViewController.h"
 #import "MegUtils.h"
