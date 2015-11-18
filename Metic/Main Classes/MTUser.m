@@ -14,6 +14,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTOperation.h"
 #import "MegUtils.h"
+#import "MTPushMessageHandler.h"
 
 
 @interface MTUser ()
@@ -252,7 +253,7 @@ static MTUser *singletonInstance;
     [XGPush setAccount:account];
     
     
-     [(AppDelegate*)([UIApplication sharedApplication].delegate) registerPush];
+     [MTPushMessageHandler registerPush];
     
     [self systemSettingsInit:user_id];
     [self getAliasFromDB];
@@ -267,9 +268,9 @@ static MTUser *singletonInstance;
         if (!min_seq || !max_seq) {
             return;
         }
-        [(AppDelegate*)([UIApplication sharedApplication].delegate) pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
+        [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
     };
-    [(AppDelegate*)([UIApplication sharedApplication].delegate) synchronizePushSeqAndCallBack:synchronizeDone];
+    [MTPushMessageHandler synchronizePushSeqAndCallBack:synchronizeDone];
 }
 
 - (void)initUserDir

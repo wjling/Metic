@@ -402,6 +402,7 @@
 		F8B5DE101BFB8B1C00E1F713 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51581D351933575300943606 /* Main_iPhone.storyboard */; };
 		F8B5DE181BFB8D5300E1F713 /* libXG-SDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE141BFB8D5300E1F713 /* libXG-SDK.a */; };
 		F8B5DE191BFB8D5300E1F713 /* ReleaseNotes.txt in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE151BFB8D5300E1F713 /* ReleaseNotes.txt */; };
+		F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1196,6 +1197,8 @@
 		F8B5DE151BFB8D5300E1F713 /* ReleaseNotes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReleaseNotes.txt; sourceTree = "<group>"; };
 		F8B5DE161BFB8D5300E1F713 /* XGPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGPush.h; sourceTree = "<group>"; };
 		F8B5DE171BFB8D5300E1F713 /* XGSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XGSetting.h; sourceTree = "<group>"; };
+		F8B5DE1A1BFC2E4E00E1F713 /* MTPushMessageHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPushMessageHandler.h; sourceTree = "<group>"; };
+		F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPushMessageHandler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2587,6 +2590,8 @@
 			children = (
 				F8B5DD7B1BFB83EA00E1F713 /* MTPackageControl.h */,
 				F8B5DD7C1BFB83EA00E1F713 /* MTPackageControl.m */,
+				F8B5DE1A1BFC2E4E00E1F713 /* MTPushMessageHandler.h */,
+				F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */,
 			);
 			path = module;
 			sourceTree = "<group>";
@@ -2925,6 +2930,7 @@
 				F83614901ADB6A0F004CDEA1 /* EventPreviewViewController.m in Sources */,
 				51DDBF7A19A328010051B88C /* AdViewController.m in Sources */,
 				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
+				F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */,
 				0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */,
 				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
 				0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */,

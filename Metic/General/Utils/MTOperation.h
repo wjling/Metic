@@ -12,7 +12,6 @@
 @interface MTOperation : NSObject
 + (MTOperation *)sharedInstance;
 
-
 typedef void(^likeEventFinishBlock)(BOOL isSuccess,NSString* likeTime);
 
 //添加那些把自己删掉的好友

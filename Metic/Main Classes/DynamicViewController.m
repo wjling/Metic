@@ -62,7 +62,7 @@ enum pos{
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
+    [MTPushMessageHandler sharedInstance].notificationDelegate = self;
     [_dynamic_tableView reloadData];
     [_atMe_tableView reloadData];
     

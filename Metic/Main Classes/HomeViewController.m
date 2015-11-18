@@ -120,8 +120,7 @@
     [super viewWillAppear:animated];
     [self.shadowView setAlpha:0];
     
-    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
-    
+    [MTPushMessageHandler sharedInstance].notificationDelegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated

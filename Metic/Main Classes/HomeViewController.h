@@ -18,7 +18,7 @@
 #import "MJRefreshHeaderView.h"
 #import "MJRefreshFooterView.h"
 
-#import "AppDelegate.h"
+#import "MTPushMessageHandler.h"
 #import "CloudOperation.h"
 #import "MTTableView.h"
 
