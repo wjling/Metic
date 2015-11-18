@@ -227,7 +227,7 @@
     
     [MobClick setAppVersion:currentVersion];
 //    [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
-    [MobClick checkUpdateWithDelegate:self selector:@selector(callBackSelectorWithDictionary:)];
+//    [MobClick checkUpdateWithDelegate:self selector:@selector(callBackSelectorWithDictionary:)];
     UITableViewCell* cell = [settings_tableview cellForRowAtIndexPath:clickedIndexPath];
     UIActivityIndicatorView* acView = (UIActivityIndicatorView*)[cell.contentView viewWithTag:21];
     [acView startAnimating];
@@ -295,7 +295,7 @@
     if (update) {
 //        [MobClick checkUpdate:@"有新版本更新啦!" cancelButtonTitle:@"待会更新" otherButtonTitles:@"立刻更新"];
 //        [MobClick checkUpdate];
-        [MobClick checkUpdateWithDelegate:nil selector:@selector(callBackSelectorWithDictionary:)];
+//        [MobClick checkUpdateWithDelegate:nil selector:@selector(callBackSelectorWithDictionary:)];
     }
     else
     {
