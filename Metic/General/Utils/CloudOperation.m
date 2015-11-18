@@ -9,8 +9,8 @@
 #import "CloudOperation.h"
 #import "HttpSender.h"
 #import "UIImageView+MTWebCache.h"
+#import "MTUser.h"
 
-#import "../Main Classes/MTUser.h"
 @interface CloudOperation()
 @property BOOL shouldExit;
 @property (nonatomic,strong) NSNumber* authorId;

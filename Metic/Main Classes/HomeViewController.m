@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Aryan Ghassemi. All rights reserved.
 //
 
-#import "../Cell/CustomCellTableViewCell.h"
+#import "CustomCellTableViewCell.h"
 #import "HomeViewController.h"
 #import "MenuViewController.h"
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "Video/VideoWallViewController.h"
 #import "LaunchEventViewController.h"
 #import "DynamicViewController.h"
@@ -120,8 +120,7 @@
     [super viewWillAppear:animated];
     [self.shadowView setAlpha:0];
     
-    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
-    
+    [MTPushMessageHandler sharedInstance].notificationDelegate = self;
 }
 
 -(void)viewDidAppear:(BOOL)animated

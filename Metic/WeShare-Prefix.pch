@@ -13,6 +13,7 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "AppConstants.h"
 
 #ifdef DEBUG
 #define MTLOG(...) NSLog(__VA_ARGS__);

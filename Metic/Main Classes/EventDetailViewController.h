@@ -12,10 +12,10 @@
 #import "CommonUtils.h"
 #import "MJRefreshHeaderView.h"
 #import "MJRefreshFooterView.h"
-#import "../Utils/PhotoGetter.h"
-#import "../Source/MLEmoji/MLEmojiLabel.h"
-#import "../UIView/MTMessageTextView.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
+#import "MLEmojiLabel.h"
+#import "MTMessageTextView.h"
+#import "PhotoGetter.h"
 
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate,PhotoGetterDelegate>
 

@@ -10,8 +10,8 @@
 #import "PhotoDetailViewController.h"
 #import "PhotoGetter.h"
 #import "UIImageView+MTWebCache.h"
-#import "../Main Classes/UserInfo/UserInfoViewController.h"
-#import "../Main Classes/Friends/FriendInfoViewController.h"
+#import "UserInfoViewController.h"
+#import "FriendInfoViewController.h"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 

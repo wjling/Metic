@@ -9,14 +9,14 @@
 #import "VideoPreviewViewController.h"
 #import "VideoWallViewController.h"
 #import "CommonUtils.h"
-#import "../../UIView/MTMessageTextView.h"
+#import "MTMessageTextView.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "MTMPMoviePlayerViewController.h"
 #import "MobClick.h"
 #import "THProgressView.h"
 #import "SVProgressHUD.h"
-#import "../../Source/SDAVAssetExportSession.h"
-#import "../../Utils/Reachability.h"
+#import "SDAVAssetExportSession.h"
+#import "Reachability.h"
 #import "AppDelegate.h"
 
 #define mp4Quality AVAssetExportPreset640x480

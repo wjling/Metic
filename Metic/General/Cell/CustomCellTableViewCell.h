@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/HomeViewController.h"
+#import "HomeViewController.h"
 #import "TTTAttributedLabel.h"
 #import "MTTableViewCellBase.h"
 

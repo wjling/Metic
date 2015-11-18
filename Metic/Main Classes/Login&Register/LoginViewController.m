@@ -7,11 +7,11 @@
 //
 
 #import "LoginViewController.h"
-#import "SFHFKeychainUtils.h"
 #import "MenuViewController.h"
 #import "GetBackPasswordViewController.h"
 #import "CommonUtils.h"
 #import "MobClick.h"
+#import "MTPushMessageHandler.h"
 
 @interface LoginViewController ()
 {
@@ -645,9 +645,9 @@
                 void(^getPushMessageDone)(NSDictionary*) = ^(NSDictionary* response)
                 {
                     //反馈给服务器
-                    [appDelegate feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:nil];
+                    [MTPushMessageHandler feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:nil];
                 };
-                [appDelegate pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:getPushMessageDone];
+                [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:getPushMessageDone];
             }
             if ([logintime isEqualToString:@"None"]) {
                 [self jumpToFillinInfo];

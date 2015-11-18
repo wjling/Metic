@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SlideNavigationController.h"
 #import "PhotoGetter.h"
-#import "../Utils/CloudOperation.h"
 //#import "Notifications/NotificationsViewController.h"
 
-@interface MenuViewController : UIViewController <UITableViewDelegate,CloudOperationDelegate>
+@interface MenuViewController : UIViewController <UITableViewDelegate>
 
 @property (nonatomic, strong) NSString *cellIdentifier;
 @property (strong, nonatomic) IBOutlet UIView *UserInfoView;

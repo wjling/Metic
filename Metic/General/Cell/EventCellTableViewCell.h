@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/EventDetailViewController.h"
+#import "EventDetailViewController.h"
 #import "MTTableViewCellBase.h"
 
 @interface EventCellTableViewCell : MTTableViewCellBase

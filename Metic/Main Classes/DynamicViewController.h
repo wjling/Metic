@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
+#import "MTPushMessageHandler.h"
 
 @interface DynamicViewController : UIViewController<UIScrollViewDelegate,NotificationDelegate>
 @property (strong, nonatomic) IBOutlet UIButton *dynamics_button;

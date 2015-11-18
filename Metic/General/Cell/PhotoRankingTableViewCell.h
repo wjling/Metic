@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/photoRankingViewController.h"
+#import "photoRankingViewController.h"
 #import "PictureWall2.h"
 
 

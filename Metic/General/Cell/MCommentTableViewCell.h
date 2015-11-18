@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/MTUser.h"
-#import "../Utils/CommonUtils.h"
-#import "../Utils/HttpSender.h"
-#import "../Main Classes/EventDetailViewController.h"
+#import "MTUser.h"
+#import "CommonUtils.h"
+#import "HttpSender.h"
+#import "EventDetailViewController.h"
 #import "MLEmojiLabel.h"
 
 @interface MCommentTableViewCell : UITableViewCell

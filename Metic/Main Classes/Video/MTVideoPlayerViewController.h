@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "VideoWallViewController.h"
-#import "../../Cell/VideoWallTableViewCell.h"
+#import "VideoWallTableViewCell.h"
 
 @interface MTVideoPlayerViewController : UIViewController
 

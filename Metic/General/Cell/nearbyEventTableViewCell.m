@@ -8,9 +8,9 @@
 
 #import "nearbyEventTableViewCell.h"
 #import "NearbyEventViewController.h"
-#import "../Main Classes/EventSearchViewController.h"
-#import "../Utils/HttpSender.h"
-#import "../Utils/CommonUtils.h"
+#import "EventSearchViewController.h"
+#import "HttpSender.h"
+#import "CommonUtils.h"
 #import "MTUser.h"
 #import "AppConstants.h"
 

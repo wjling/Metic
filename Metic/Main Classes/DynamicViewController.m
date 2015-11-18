@@ -9,7 +9,7 @@
 #import "DynamicViewController.h"
 #import "EventDetailViewController.h"
 #import "../Source/MLEmoji/TTTAttributedLabel/TTTAttributedLabel.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "MobClick.h"
 #import "PhotoDetailViewController.h"
 #import "VideoDetailViewController.h"
@@ -62,7 +62,7 @@ enum pos{
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    ((AppDelegate*)[UIApplication sharedApplication].delegate).notificationDelegate = self;
+    [MTPushMessageHandler sharedInstance].notificationDelegate = self;
     [_dynamic_tableView reloadData];
     [_atMe_tableView reloadData];
     

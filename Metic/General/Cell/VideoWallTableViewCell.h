@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "../Main Classes/Video/VideoWallViewController.h"
-#import "../Source/ASIHTTPRequest2/ASIHTTPRequest.h"
+#import "VideoWallViewController.h"
+#import "ASIHTTPRequest.h"
 
 @interface VideoWallTableViewCell : UITableViewCell<ASIHTTPRequestDelegate>{
     ASIHTTPRequest *videoRequest;

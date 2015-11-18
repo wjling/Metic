@@ -8,7 +8,7 @@
 
 #import "showParticipatorsViewController.h"
 #import "InviteFriendViewController.h"
-#import "../Utils/PhotoGetter.h"
+#import "PhotoGetter.h"
 #import "UserInfo/UserInfoViewController.h"
 #import "FriendInfoViewController.h"
 #import "AvatarCollectionViewCell.h"
