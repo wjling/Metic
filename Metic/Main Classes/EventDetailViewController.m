@@ -39,7 +39,6 @@
 
 @interface EventDetailViewController ()<UITextViewDelegate>
 @property(nonatomic,strong) NSMutableArray *comment_list;
-@property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
@@ -189,7 +188,6 @@
 -(void)initData
 {
     [NotificationController visitEvent:_eventId];
-    self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
     self.Bannercode = -1;
     self.mainCommentId = 0;
@@ -1334,7 +1332,7 @@
         }
         [self.inputTextView becomeFirstResponder];
         self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.mainCommentId = [cell.commentid longValue];
         self.Selete_section = indexPath.section;
         self.repliedId = nil;
     }else{
@@ -1351,7 +1349,7 @@
         }
         [self.inputTextView becomeFirstResponder];
         self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.mainCommentId = [cell.mainCommentId longValue];
         self.repliedId = cell.authorid;
         self.Selete_section = indexPath.section;
         self.herName = cell.author;
@@ -1470,7 +1468,6 @@
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
         }
-        [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[mainCom valueForKey:@"author_id"]];
         [avatarGetter getAvatar];
@@ -1505,6 +1502,7 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
+        NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         cell.McommentArr = self.comment_list[indexPath.section - 1];
         cell.ScommentDict = subCom;
         //显示备注名
@@ -1569,6 +1567,7 @@
         [shadow setFrame:frame];
         [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
+        cell.mainCommentId = [mainCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = author;
         cell.controller = self;

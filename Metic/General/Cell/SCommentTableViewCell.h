@@ -18,6 +18,7 @@
 @property(strong,nonatomic) NSString* author;
 @property(strong,nonatomic) NSNumber* authorid;
 @property(strong,nonatomic) NSNumber* commentid;
+@property(strong,nonatomic) NSNumber* mainCommentId;
 @property(strong,nonatomic) NSString* originComment;
 @property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
