@@ -86,8 +86,6 @@
     [self fixStack];
     [self initData];
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -977,49 +975,34 @@
     }
     
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(waitingComment && [[waitingComment valueForKey:@"comment_id"] intValue]== -1){
-            [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-            [_tableView reloadData];
-            
-        }
-    });
-    
+
     void (^resendCommentBlock)(void) = ^(void){
         //再次发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
-            if (rData) {
-                NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                MTLOG(@"%@",content);
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
-                    [waitingComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
-                    [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                    if (row == 0) {
-                        [_comment_list removeObject:comments];
-                        [_comment_list insertObject:comments atIndex:0];
+            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                if (rData) {
+                    NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    MTLOG(@"%@",content);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
+                        [waitingComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                        [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                        [_tableView reloadData];
                     }else{
-                        [comments removeObject:waitingComment];
-                        [comments insertObject:waitingComment atIndex:1];
+                        [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                        [_tableView reloadData];
                     }
-                    [_tableView reloadData];
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                     [_tableView reloadData];
                 }
-            }else{
-                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
-            }
+            });
         }];
     };
-    
-    
-    
     
     //检查token
     if([waitingComment valueForKey:@"token"]){
@@ -1032,34 +1015,33 @@
         NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
         [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-            if (rData) {
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                    NSString* token = [response1 valueForKey:@"token"];
-                    @synchronized(self)
-                    {
-                        if (![waitingComment valueForKey:@"token"]) {
-                            [waitingComment setValue:token forKey:@"token"];
+            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                if (rData) {
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                        NSString* token = [response1 valueForKey:@"token"];
+                        @synchronized(self)
+                        {
+                            if (![waitingComment valueForKey:@"token"]) {
+                                [waitingComment setValue:token forKey:@"token"];
+                            }
                         }
+                        [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
+                        resendCommentBlock();
+                        
+                    }else{
+                        [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                        [_tableView reloadData];
                     }
-                    [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
-                    resendCommentBlock();
-                    
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                     [_tableView reloadData];
                 }
-            }else{
-                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
-            }
+            });
         }];
     }
-
 }
-
-
 
 - (IBAction)publishComment:(id)sender {
     NSString *comment = _inputTextView.text;
@@ -1069,7 +1051,6 @@
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
 
-    
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
@@ -1113,13 +1094,6 @@
         }
             break;
     }
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if(newComment && [[newComment valueForKey:@"comment_id"] intValue]== -1){
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-            [_tableView reloadData];
-            
-        }
-    });
 
     [_tableView reloadData];
     self.inputTextView.text = @"";
@@ -1137,33 +1111,27 @@
         MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
-            if (rData) {
-                NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                MTLOG(@"%@",content);
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
-                    {
-                        [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
-                        [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                        if (commentType == 0) {
-                            [_comment_list removeObject:newComments];
-                            [_comment_list insertObject:newComments atIndex:0];
-                        }else{
-                            [newComments removeObject:newComment];
-                            [newComments insertObject:newComment atIndex:1];
+            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                if (rData) {
+                    NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    MTLOG(@"%@",content);
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
+                        {
+                            [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                            [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                            [_tableView reloadData];
                         }
+                    }else{
+                        [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                         [_tableView reloadData];
                     }
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                     [_tableView reloadData];
                 }
-            }else{
-                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
-            }
-            
+            });
         }];
     };
     
@@ -1173,30 +1141,32 @@
     NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-        if (rData) {
-            NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            MTLOG(@"%@",content);
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                NSString* token = [response1 valueForKey:@"token"];
-                @synchronized(self)
-                {
-                    if (![newComment valueForKey:@"token"]) {
-                        [newComment setValue:token forKey:@"token"];
+        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+            if (rData) {
+                NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                MTLOG(@"%@",content);
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                    NSString* token = [response1 valueForKey:@"token"];
+                    @synchronized(self)
+                    {
+                        if (![newComment valueForKey:@"token"]) {
+                            [newComment setValue:token forKey:@"token"];
+                        }
                     }
+                    [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
+                    sendCommentBlock();
+                    
+                }else{
+                    [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
+                    [_tableView reloadData];
                 }
-                [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
-                sendCommentBlock();
-                
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
                 [_tableView reloadData];
             }
-        }else{
-            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-            [_tableView reloadData];
-        }
+        });
     }];
     
 }
