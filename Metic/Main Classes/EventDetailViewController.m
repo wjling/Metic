@@ -989,14 +989,19 @@
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
                         [waitingComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
                         [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                        [_tableView reloadData];
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
+                }
+                
+                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
+                NSInteger section = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
+                if ([indexPaths containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             });
         }];
@@ -1027,14 +1032,20 @@
                         }
                         [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
                         resendCommentBlock();
-                        
+                        return ;
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
+                }
+                
+                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
+                NSInteger section = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
+                if ([indexPaths containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             });
         }];
@@ -1116,19 +1127,23 @@
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
-                        {
-                            [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
-                            [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                            [_tableView reloadData];
-                        }
+                        [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                        [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
                     }else{
                         [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                
+                NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
+                NSInteger section = [_comment_list indexOfObject:newComments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
+                if ([indexPaths containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+
             });
         }];
     };
@@ -1155,15 +1170,22 @@
                     }
                     [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
                     sendCommentBlock();
-                    
+                    return ;
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
             }
+            
+            NSInteger row = newComments.count - [newComments indexOfObject:newComment];
+            NSInteger section = [_comment_list indexOfObject:newComments] + 1;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
+            if ([indexPaths containsObject:indexPath]) {
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            
         });
     }];
     
