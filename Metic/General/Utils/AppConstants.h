@@ -168,7 +168,6 @@ enum Return_Code
     
 };
 
-static const CGFloat MTCommentSendTimeout = 40.f;
-static const CGFloat MTRequestSendTimeout = 20.f;
+static const CGFloat MTRequestSendTimeout = 30.f;
 #endif
 
