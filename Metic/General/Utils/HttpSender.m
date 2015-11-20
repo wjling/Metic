@@ -309,7 +309,7 @@
     [request setHTTPBody:postData];
     
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 
     
@@ -343,7 +343,7 @@
     [request setHTTPBody:postData];
     
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     
     
@@ -357,7 +357,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     //MTLOG(@"request sent");
     
@@ -372,7 +372,7 @@
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 //    MTLOG(@"URL: %@ ",httpURL);
     
@@ -387,7 +387,7 @@
     [request setHTTPMethod:method];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 //    MTLOG(@"URL: %@ ",httpURL);
     
@@ -409,7 +409,7 @@
     [request setHTTPBody:jsonData];
     NSString *postLength = [NSString stringWithFormat:@"%d",[jsonData length]];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
@@ -423,7 +423,7 @@
     
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setTimeoutInterval:12];
+    [request setTimeoutInterval:MTRequestSendTimeout];
     myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
 }
 
