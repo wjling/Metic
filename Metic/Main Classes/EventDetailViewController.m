@@ -950,8 +950,13 @@
         cell = [cell superview];
     }
     
-    NSInteger row = [_tableView indexPathForCell:cell].row;
-    NSInteger section = [_tableView indexPathForCell:cell].section;
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    if (!indexPath) {
+        return;
+    }
+    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
+    
     NSMutableDictionary *waitingComment;
     NSMutableArray *comments = _comment_list[section-1];
     if (row == 0) {
@@ -971,9 +976,7 @@
         [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     }
     
-
-    
-    [_tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(waitingComment && [[waitingComment valueForKey:@"comment_id"] intValue]== -1){
             [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];

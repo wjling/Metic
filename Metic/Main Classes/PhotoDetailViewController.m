@@ -501,8 +501,13 @@
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
     }
+    NSIndexPath *indexPath = [_tableView indexPathForCell:cell];
+    if (!indexPath) {
+        return;
+    }
+    
     NSString *comment = ((PcommentTableViewCell*)cell).comment.text;
-    NSInteger row = [_tableView indexPathForCell:cell].row;
+    NSInteger row = indexPath.row;
     NSDictionary* waitingComment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - row ]:self.pcomment_list[_pcomment_list.count - row + 1];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"pcomment_id"];
     
@@ -514,7 +519,7 @@
     [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     
     
-    [_tableView reloadData];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(MTCommentSendTimeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if(waitingComment && [[waitingComment valueForKey:@"pcomment_id"] intValue]== -1){
             [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
