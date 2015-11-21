@@ -39,7 +39,6 @@
 
 @interface EventDetailViewController ()<UITextViewDelegate>
 @property(nonatomic,strong) NSMutableArray *comment_list;
-@property(nonatomic,strong) NSMutableArray *commentIds;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
@@ -189,7 +188,6 @@
 -(void)initData
 {
     [NotificationController visitEvent:_eventId];
-    self.commentIds = [[NSMutableArray alloc]init];
     self.comment_list = [[NSMutableArray alloc]init];
     self.Bannercode = -1;
     self.mainCommentId = 0;
@@ -991,15 +989,17 @@
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
                         [waitingComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
                         [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                        [_tableView reloadData];
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                
+                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
+                NSInteger section = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     };
@@ -1029,22 +1029,26 @@
                         }
                         [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
                         resendCommentBlock();
-                        
+                        return ;
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                
+                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
+                NSInteger section = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     }
 }
 
 - (IBAction)publishComment:(id)sender {
-    NSString *comment = _inputTextView.text;
+//    NSString *comment = _inputTextView.text;
+    NSString *comment = @"test test test /赞";
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         _inputTextView.text = @"";
         return;
@@ -1078,12 +1082,17 @@
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
     NSMutableArray*newComments;
     long commentType = _mainCommentId;
+    NSInteger row = 0;
+    NSInteger section = 0;
+    
     switch (commentType) {
         case 0:{
             
             //加入到评论数组里
             newComments = [[NSMutableArray alloc] initWithObjects:newComment, nil];
             [_comment_list insertObject:newComments atIndex:0];
+            row = 0;
+            section = 1;
             
         }
             break;
@@ -1091,11 +1100,19 @@
         default:{
             newComments = _comment_list[_Selete_section-1];
             [newComments insertObject:newComment atIndex:1];
+            row = newComments.count - 1;
+            section = _Selete_section;
         }
             break;
     }
-
-    [_tableView reloadData];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [_tableView beginUpdates];
+    if (commentType == 0) {
+        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
+    }else {
+        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+    [_tableView endUpdates];
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
@@ -1118,19 +1135,19 @@
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"comment_id"]) {
-                        {
-                            [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
-                            [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                            [_tableView reloadData];
-                        }
+                        [newComment setValue:[response1 valueForKey:@"comment_id"] forKey:@"comment_id"];
+                        [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
                     }else{
                         [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                
+                NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
+                NSInteger section = [_comment_list indexOfObject:newComments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     };
@@ -1157,15 +1174,18 @@
                     }
                     [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
                     sendCommentBlock();
-                    
+                    return ;
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
             }else{
                 [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
             }
+            
+            NSInteger row = newComments.count - [newComments indexOfObject:newComment];
+            NSInteger section = [_comment_list indexOfObject:newComments] + 1;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         });
     }];
     
@@ -1334,7 +1354,7 @@
         }
         [self.inputTextView becomeFirstResponder];
         self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.mainCommentId = [cell.commentid longValue];
         self.Selete_section = indexPath.section;
         self.repliedId = nil;
     }else{
@@ -1351,7 +1371,7 @@
         }
         [self.inputTextView becomeFirstResponder];
         self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",cell.author];
-        self.mainCommentId = ([self.commentIds[indexPath.section - 1] longValue]);
+        self.mainCommentId = [cell.mainCommentId longValue];
         self.repliedId = cell.authorid;
         self.Selete_section = indexPath.section;
         self.herName = cell.author;
@@ -1470,7 +1490,6 @@
             [cell.zanView setHidden:NO];
             [cell.resend_Button setHidden:YES];
         }
-        [self.commentIds setObject:[mainCom valueForKey:@"comment_id"] atIndexedSubscript:indexPath.section-1];
         
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[mainCom valueForKey:@"author_id"]];
         [avatarGetter getAvatar];
@@ -1505,6 +1524,7 @@
         }
         SCommentTableViewCell *cell = (SCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:sCellIdentifier];
         NSDictionary *subCom = self.comment_list[indexPath.section - 1][[self.comment_list[indexPath.section - 1] count] - indexPath.row];
+        NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         cell.McommentArr = self.comment_list[indexPath.section - 1];
         cell.ScommentDict = subCom;
         //显示备注名
@@ -1569,6 +1589,7 @@
         [shadow setFrame:frame];
         [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
+        cell.mainCommentId = [mainCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = author;
         cell.controller = self;
