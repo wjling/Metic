@@ -999,10 +999,7 @@
                 NSInteger row = comments.count - [comments indexOfObject:waitingComment];
                 NSInteger section = [_comment_list indexOfObject:comments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
-                if ([indexPaths containsObject:indexPath]) {
-                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     };
@@ -1043,17 +1040,15 @@
                 NSInteger row = comments.count - [comments indexOfObject:waitingComment];
                 NSInteger section = [_comment_list indexOfObject:comments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
-                if ([indexPaths containsObject:indexPath]) {
-                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     }
 }
 
 - (IBAction)publishComment:(id)sender {
-    NSString *comment = _inputTextView.text;
+//    NSString *comment = _inputTextView.text;
+    NSString *comment = @"test test test /赞";
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         _inputTextView.text = @"";
         return;
@@ -1087,12 +1082,17 @@
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
     NSMutableArray*newComments;
     long commentType = _mainCommentId;
+    NSInteger row = 0;
+    NSInteger section = 0;
+    
     switch (commentType) {
         case 0:{
             
             //加入到评论数组里
             newComments = [[NSMutableArray alloc] initWithObjects:newComment, nil];
             [_comment_list insertObject:newComments atIndex:0];
+            row = 0;
+            section = 1;
             
         }
             break;
@@ -1100,11 +1100,19 @@
         default:{
             newComments = _comment_list[_Selete_section-1];
             [newComments insertObject:newComment atIndex:1];
+            row = newComments.count - 1;
+            section = _Selete_section;
         }
             break;
     }
-
-    [_tableView reloadData];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [_tableView beginUpdates];
+    if (commentType == 0) {
+        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
+    }else {
+        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+    [_tableView endUpdates];
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
@@ -1139,11 +1147,7 @@
                 NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
                 NSInteger section = [_comment_list indexOfObject:newComments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
-                if ([indexPaths containsObject:indexPath]) {
-                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }
-
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             });
         }];
     };
@@ -1181,11 +1185,7 @@
             NSInteger row = newComments.count - [newComments indexOfObject:newComment];
             NSInteger section = [_comment_list indexOfObject:newComments] + 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            NSArray *indexPaths = [self.tableView indexPathsForVisibleRows];
-            if ([indexPaths containsObject:indexPath]) {
-                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            }
-            
+            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         });
     }];
     
