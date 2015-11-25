@@ -18,10 +18,10 @@
 -(id)initWithDelegate:(id)delegate
 {
     self = [super init];
-    URL_mainServer = @[@"http://203.195.243.84:10087/",@"http://app.whatsact.com:10087/"][Server];
-    PHOTO_mainServer = @[@"http://203.195.243.84:20000/",@"http://app.whatsact.com:20000/"][Server];
-    VIDEO_mainServer = @[@"http://203.195.243.84:20001/",@"http://app.whatsact.com:20001/"][Server];
-    FeedBack_mainServer = @[@"http://203.195.243.84:10089/",@"http://app.whatsact.com:10089/"][Server];
+    URL_mainServer = @[@"http://appdev.whatsact.com:10087/",@"http://app.whatsact.com:10087/"][Server];
+    PHOTO_mainServer = @[@"http://appdev.whatsact.com:20000/",@"http://app.whatsact.com:20000/"][Server];
+    VIDEO_mainServer = @[@"http://appdev.whatsact.com:20001/",@"http://app.whatsact.com:20001/"][Server];
+    FeedBack_mainServer = @[@"http://appdev.whatsact.com:10089/",@"http://app.whatsact.com:10089/"][Server];
     HttpURL = @"";
     mDelegate = delegate;
     return self;

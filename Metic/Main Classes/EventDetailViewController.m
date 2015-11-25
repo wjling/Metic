@@ -137,7 +137,7 @@
                     [SVProgressHUD dismissWithError:@"网络异常，更改封面失败"];
                 }
             }];
-
+            
         }else if (_Bannercode == 0){
             PhotoGetter *getter = [[PhotoGetter alloc]initUploadMethod:self.uploadImage type:1];
             getter.mDelegate = self;
@@ -255,6 +255,7 @@
     }else if(_commentView){
         return;
     }
+    
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -274,7 +275,7 @@
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
     [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
-    [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
+    [sendBtn addTarget:self action:@selector(publish100Comment:) forControlEvents:UIControlEventTouchUpInside];
     [commentV addSubview:sendBtn];
     
     [self.view addSubview:commentV];
@@ -355,7 +356,6 @@
     textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     textView.layer.borderWidth = 0.65f;
     textView.layer.cornerRadius = 6.0f;
-    
 }
 
 -(void)showMenu
@@ -384,10 +384,10 @@
                                                            target:self
                                                            action:@selector(editEvent)],
                                              
-//                                             [KxMenuItem menuItem:@"更换封面"
-//                                                            image:nil
-//                                                           target:self
-//                                                           action:@selector(changeBanner)],
+                                             //                                             [KxMenuItem menuItem:@"更换封面"
+                                             //                                                            image:nil
+                                             //                                                           target:self
+                                             //                                                           action:@selector(changeBanner)],
                                              
                                              [KxMenuItem menuItem:@"解散活动"
                                                             image:nil
@@ -436,7 +436,7 @@
     CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
     width = labelsize.width;
     return width;
-
+    
 }
 
 
@@ -453,12 +453,12 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:VIEW_EVENT finshedBlock:^(NSData *rData) {
-            if (rData) {
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                MTLOG(@"%@",cmd);
-            }
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            MTLOG(@"%@",cmd);
         }
+    }
      ];
 }
 
@@ -467,7 +467,7 @@
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
         
-
+        
         
     }
     if (!_isEmotionOpen) {
@@ -597,7 +597,7 @@
         }else{
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         }
-
+        
     }];
 }
 
@@ -619,7 +619,7 @@
             
         }
     }];
-
+    
 }
 
 -(void)pullEventFromAir
@@ -632,8 +632,8 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
         if (rData) {
-//            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//            MTLOG(@"received Data: %@",temp);
+            //            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            //            MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -675,7 +675,7 @@
                 default:
                     break;
             }
-        
+            
             
             
         }
@@ -768,7 +768,7 @@
 - (IBAction)more:(id)sender {
     [self showMenu];
     return;
-
+    
 }
 
 - (void)setupLikeState
@@ -865,8 +865,8 @@
         if (!rData) {
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         }
-//        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//        MTLOG(@"received Data: %@",temp);
+        //        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        //        MTLOG(@"received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
@@ -925,7 +925,7 @@
         else{
             
         }
-
+        
     }];
     
     [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
@@ -973,7 +973,7 @@
     }
     
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
+    
     void (^resendCommentBlock)(void) = ^(void){
         //再次发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -1047,14 +1047,14 @@
 }
 
 - (IBAction)publishComment:(id)sender {
-//    NSString *comment = _inputTextView.text;
+    //    NSString *comment = _inputTextView.text;
     NSString *comment = @"test test test /赞";
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         _inputTextView.text = @"";
         return;
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-
+    
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
@@ -1105,14 +1105,14 @@
         }
             break;
     }
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [_tableView beginUpdates];
-    if (commentType == 0) {
-        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
-    }else {
-        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    }
-    [_tableView endUpdates];
+    //    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    //    [_tableView beginUpdates];
+    //    if (commentType == 0) {
+    //        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
+    //    }else {
+    //        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    //    }
+    //    [_tableView endUpdates];
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
@@ -1154,7 +1154,7 @@
     
     //获取token
     NSMutableDictionary *token_dict = [[NSMutableDictionary alloc] init];
-//    [token_dict setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    //    [token_dict setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
@@ -1191,15 +1191,23 @@
     
 }
 
-- (void)show2Dcode:(id)sender {
+- (IBAction)publish100Comment:(id)sender {
+    for(int i = 0; i < 100; i++) {
+        [self publishComment:nil];
+    }
+    [self.tableView reloadData];
+}
 
+
+- (void)show2Dcode:(id)sender {
+    
     [self performSegueWithIdentifier:@"2Dcode" sender:self];
 }
 
 - (void)report:(id)sender {
-
+    
     [self performSegueWithIdentifier:@"EventToReport" sender:self];
-
+    
 }
 
 - (void)editEvent
@@ -1429,7 +1437,7 @@
         NSString* text = [mainCom valueForKey:@"content"];
         cell.origincomment = text;
         NSString*alias1,*alias2;
-
+        
         if ([[mainCom valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
             alias1 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[mainCom valueForKey:@"author_id"]]];
@@ -1461,7 +1469,7 @@
         frame = cell.frame;
         frame.size.height = 60 + commentHeight;
         [cell setFrame:frame];
-
+        
         
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.eventId = _eventId;
@@ -1484,7 +1492,7 @@
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:NO];
             [cell.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
-
+            
         }else{
             [cell.waitView stopAnimating];
             [cell.zanView setHidden:NO];
@@ -1515,7 +1523,7 @@
             return cell;
             
         }
-
+        
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
             UINib *nib = [UINib nibWithNibName:NSStringFromClass([SCommentTableViewCell class]) bundle:nil];
@@ -1563,7 +1571,7 @@
         
         cell.comment.emojiText = text;
         //[((MLEmojiLabel*)cell.comment) setText:hintString1];
-
+        
         if ([[subCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [cell.waitView startAnimating];
             [cell.resend_Button setHidden:YES];
@@ -1593,7 +1601,7 @@
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = author;
         cell.controller = self;
-
+        
         return cell;
     }
     
@@ -1628,7 +1636,7 @@
         float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-//            commentHeight = 10;
+            //            commentHeight = 10;
         }else if(text) commentHeight += 5;
         return 321.0 + commentHeight;
     }
@@ -1736,7 +1744,7 @@
     
     // commit animations
     [UIView commitAnimations];
-
+    
 }
 
 -(void) keyboardWillHide:(NSNotification *)note{
@@ -1748,7 +1756,7 @@
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-
+    
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
