@@ -217,11 +217,11 @@
                 [self removeuploadTaskInDB];
                 [self stop];
             }
-            while(_wait) {
-                
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-                
-            }
+//            while(_wait) {
+//                
+//                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+//                
+//            }
 
         }
         
@@ -315,11 +315,11 @@
             }
             
         }
-        while(_wait) {
-            
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-            
-        }
+//        while(_wait) {
+//            
+//            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
+//            
+//        }
     }];
     
 }
@@ -409,13 +409,7 @@
                 [self stop];
             }
         }
-        
     }];
-    while(_wait) {
-        
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:2]];
-        
-    }
 }
 
 #pragma mark step7:savePhotoToCache

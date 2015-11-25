@@ -8,95 +8,47 @@
 
 #import "HttpSender.h"
 #import "AppConstants.h"
+#import "AFHTTPRequestOperationManager.h"
 
 @implementation HttpSender
 
 @synthesize myConnection;
 @synthesize mDelegate;
-@synthesize responseData;
-//@synthesize myDelegates;
-//@synthesize delegate_method;
-
-//
-//-(id)init
-//{
-//    serverURL = @"http://222.200.182.183:10087/";
-//    httpURL = @"";
-//    responseData = [[NSMutableData alloc]init];
-//    myDelegates = [[NSMutableSet alloc]init];
-//    delegate_method = [[NSMutableDictionary alloc]init];
-//    return self;
-//}
 
 -(id)initWithDelegate:(id)delegate
 {
     self = [super init];
-//    URL_mainServer = @"http://222.200.182.183:10087/";
-//    URL_mainServer = @"http://115.29.103.9:10087/";
-    
-//    URL_mainServer = @"http://182.254.176.64:10087/";//阿里云//测试服
-//    URL_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:10087/";//腾讯//正式服
     URL_mainServer = @[@"http://203.195.153.211:10087/",@"http://app.whatsact.com:10087/"][Server];
-    
-//    PHOTO_mainServer = @"http://182.254.176.64:20000/";//测试服
-//    PHOTO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20000/";//正式服
     PHOTO_mainServer = @[@"http://203.195.153.211:20000/",@"http://app.whatsact.com:20000/"][Server];
-    
-//    VIDEO_mainServer = @"http://182.254.176.64:20001/";//测试服
-//    VIDEO_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:20001/";//正式服
     VIDEO_mainServer = @[@"http://203.195.153.211:20001/",@"http://app.whatsact.com:20001/"][Server];
-    
-//    feedBack_mainServer = @"http://182.254.176.64:10089/";//测试服
-//    feedBack_mainServer = @"http://whatsact.gz.1251096186.clb.myqcloud.com:10089/";//正式服
-    feedBack_mainServer = @[@"http://203.195.153.211:10089/",@"http://app.whatsact.com:10089/"][Server];
-    
-    httpURL = @"";
-    responseData = [[NSMutableData alloc]init];
+    FeedBack_mainServer = @[@"http://203.195.153.211:10089/",@"http://app.whatsact.com:10089/"][Server];
+    HttpURL = @"";
     mDelegate = delegate;
     return self;
 }
 
-//-(void)addDelegate:(id)myDelegate whithDelegateName:(NSString*)myDelegateName withCallbackMethodName:(NSString*)methodName
-//{
-//    [myDelegates addObject:myDelegate];
-//    [delegate_method setValue:methodName forKey:myDelegateName];
-//}
-//
-//-(void)removeDelegate:(id)myDelegate withDelegateName:(NSString*)myDelegateName
-//{
-//    [myDelegates removeObject:myDelegate];
-//    [delegate_method removeObjectForKey:myDelegateName];
-//}
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+-(NSString*)parseMethodCode:(MTHttpMethod)methodCode
 {
-    if (self.finishBlock) {
-        self.finishBlock(nil);
-        self.finishBlock = nil;
+    NSString* resultCode;
+    switch (methodCode) {
+        case HTTP_GET:
+            resultCode = @"GET";
+            break;
+        case HTTP_POST:
+            resultCode = @"POST";
+            break;
+        case HTTP_PUT:
+            resultCode = @"PUT";
+            break;
+        case HTTP_DELETE:
+            resultCode = @"DELETE";
+            break;
+        default:
+            resultCode = @"";
+            break;
     }
+    return resultCode;
 }
--(void)connection:(NSURLConnection*)connection didReceiveData:(NSData *)data
-{
-//    MTLOG(@"didReceiveData");
-    [responseData appendData:data];
-}
-
-
--(void)connectionDidFinishLoading:(NSURLConnection*)connection
-{
-//    MTLOG(@"connectionDidFinishLoading");
-    if (self.finishBlock) {
-        self.finishBlock(responseData);
-        self.finishBlock = nil;
-    }else
-    {
-        if ([(UIViewController*)self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)])
-        {
-            [self.mDelegate finishWithReceivedData:responseData];
-        }
-        
-    }
-}
-
 
 -(NSString*)parseOperationCode:(int)operationCode
 {
@@ -277,154 +229,142 @@
     return resultCode;
 }
 
--(void)sendPhotoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+#pragma mark - Send Message To Server
+-(void)sendPhotoMessage:(NSDictionary *)parameter withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
-    self.finishBlock = block;
-    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
-    //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
-//    MTLOG(@"%@",httpURL);
-    [request setHTTPMethod:@"POST"];
-    NSString *body=@"";
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
-    //upload
-    if ([dictionary valueForKey:@"width"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"width",[dictionary valueForKey:@"width"]]];
-    if ([dictionary valueForKey:@"height"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"height",[dictionary valueForKey:@"height"]]];
-    if ([dictionary valueForKey:@"photos"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"photos",[dictionary valueForKey:@"photos"]]];
-    if ([dictionary valueForKey:@"specification"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"specification",[dictionary valueForKey:@"specification"]]];
-    //delete
-    if ([dictionary valueForKey:@"photo_id"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"photo_id",[dictionary valueForKey:@"photo_id"]]];
+    NSString* parsingOperationCode = [self parseOperationCode:operation_Code];
+    NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    HttpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
-    [request setHTTPBody:postData];
-    
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-
-    
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject);
+        }else if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            block(nil);
+        }
+    }];
+    [requestOperation start];
 }
 
--(void)sendVideoMessage:(NSDictionary *)dictionary withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
+-(void)sendVideoMessage:(NSDictionary *)parameter withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
-    self.finishBlock = block;
-    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
-    //[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
-//    MTLOG(@"%@",httpURL);
-    [request setHTTPMethod:@"POST"];
-    NSString *body=@"";
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[dictionary valueForKey:@"id"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"event_id",[dictionary valueForKey:@"event_id"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"cmd",[dictionary valueForKey:@"cmd"]]];
-    //delete
-    if ([dictionary valueForKey:@"video_id"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"video_id",[dictionary valueForKey:@"video_id"]]];
-    //upload
-    if ([dictionary valueForKey:@"video_name"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"video_name",[dictionary valueForKey:@"video_name"]]];
-    if ([dictionary valueForKey:@"title"])
-        body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"title",[dictionary valueForKey:@"title"]]];
+    NSString* parsingOperationCode = [self parseOperationCode:operation_Code];
+    NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    HttpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
     
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    NSData *postData = [body dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%d",[postData length]];
-    [request setHTTPBody:postData];
-    
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    
-    
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject);
+        }else if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            block(nil);
+        }
+    }];
+    [requestOperation start];
 }
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
 {
-    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    //MTLOG(@"request sent");
-    
+    [self sendMessage:jsonData withOperationCode:operation_Code HttpMethod:HTTP_POST finshedBlock:nil];
 }
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
 {
-    self.finishBlock = block;
-    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-//    MTLOG(@"URL: %@ ",httpURL);
-    
+    [self sendMessage:jsonData withOperationCode:operation_Code HttpMethod:HTTP_POST finshedBlock:block];
 }
 
--(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code HttpMethod:(NSString*)method finshedBlock:(FinishBlock)block
+-(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code HttpMethod:(MTHttpMethod)method finshedBlock:(FinishBlock)block
 {
-    self.finishBlock = block;
-    NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
-    [request setHTTPMethod:method];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:jsonData];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-//    MTLOG(@"URL: %@ ",httpURL);
+    NSString* parsingOperationCode = [self parseOperationCode:operation_Code];
+    NSString* parsingMethodCode = [self parseMethodCode:method];
+    HttpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
+    NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
     
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    
+     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject);
+        }else if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            block(nil);
+        }
+    }];
+    [requestOperation start];
 }
 
 
 -(void)sendFeedBackMessage:(NSDictionary *)json
 {
-    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,@"user_feedback"];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,@"user_feedback"];
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     
-    NSString *body=@"";
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@&",@"id",[json valueForKey:@"id"]]];
-    body = [body stringByAppendingString:[NSString stringWithFormat:@"%@=%@",@"content",[json valueForKey:@"content"]]];
-    NSData* jsonData = [body dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [request setHTTPMethod:@"POST"];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:json error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:jsonData];
-    NSString *postLength = [NSString stringWithFormat:@"%d",[jsonData length]];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+    [requestOperation start];
 }
 
 -(void)sendGetPosterMessage:(int)operation_Code finshedBlock:(FinishBlock)block
 {
-    self.finishBlock = block;
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
-    httpURL = [NSString stringWithFormat:@"%@%@",feedBack_mainServer,parsingOperationCode];
-//    MTLOG(@"%@",httpURL);
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:httpURL]];
+    NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,parsingOperationCode];
     
-    [request setHTTPMethod:@"POST"];
+    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:nil error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setTimeoutInterval:MTRequestSendTimeout];
-    myConnection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (block) {
+            block(responseObject);
+        }else if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:responseObject];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (block) {
+            block(nil);
+        }
+    }];
+    [requestOperation start];
 }
 
 @end

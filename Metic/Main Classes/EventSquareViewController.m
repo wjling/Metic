@@ -468,14 +468,10 @@
             }else{
                 [SVProgressHUD dismissWithError:@"此活动已经解散"];
             }
-            
         }else{
             [SVProgressHUD dismissWithError:@"网络异常"];
         }
-        
     }];
-    
-    
 }
 
 -(void)getPoster
@@ -495,7 +491,6 @@
                         _posterList[i] = dictionary;
                     }
                     [self initScrollView];
-                    
                 }
                     break;
                 default:
