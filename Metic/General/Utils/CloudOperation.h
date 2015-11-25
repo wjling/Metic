@@ -22,6 +22,7 @@
 
 #import "AFNetworking.h"
 #import "AppConstants.h"
+#import "HttpSender.h"
 
 @protocol CloudOperationDelegate
 

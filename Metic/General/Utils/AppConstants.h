@@ -22,9 +22,12 @@
 #ifndef Metis_AppConstants_h
 #define Metis_AppConstants_h
 
-#import "HttpSender.h"
-
-HttpSender* httpSender;
+typedef NS_ENUM(NSUInteger, MTHttpMethod) {
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+};
 
 enum Server_code{
     Server = 0,//测试服
@@ -168,6 +171,6 @@ enum Return_Code
     
 };
 
-static const CGFloat MTRequestSendTimeout = 30.f;
+static const CGFloat MTREQUEST_TIMEOUT = 30.f;
 #endif
 
