@@ -980,7 +980,7 @@
         MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
-            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+//            dispatch_barrier_async(dispatch_get_main_queue(), ^{
                 if (rData) {
                     NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                     MTLOG(@"%@",content);
@@ -999,8 +999,11 @@
                 NSInteger row = comments.count - [comments indexOfObject:waitingComment];
                 NSInteger section = [_comment_list indexOfObject:comments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            });
+                NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                if ([visibleIndexPath containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+//            });
         }];
     };
     
@@ -1015,7 +1018,7 @@
         NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
         [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+//            dispatch_barrier_async(dispatch_get_main_queue(), ^{
                 if (rData) {
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
@@ -1040,8 +1043,11 @@
                 NSInteger row = comments.count - [comments indexOfObject:waitingComment];
                 NSInteger section = [_comment_list indexOfObject:comments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            });
+                NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                if ([visibleIndexPath containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+//            });
         }];
     }
 }
@@ -1128,7 +1134,7 @@
         MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:ADD_COMMENT finshedBlock:^(NSData *rData) {
-            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+//            dispatch_barrier_async(dispatch_get_main_queue(), ^{
                 if (rData) {
                     NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                     MTLOG(@"%@",content);
@@ -1147,8 +1153,11 @@
                 NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
                 NSInteger section = [_comment_list indexOfObject:newComments] + 1;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            });
+                NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                if ([visibleIndexPath containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+//            });
         }];
     };
     
@@ -1158,7 +1167,7 @@
     NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+//        dispatch_barrier_async(dispatch_get_main_queue(), ^{
             if (rData) {
                 NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
                 MTLOG(@"%@",content);
@@ -1185,8 +1194,11 @@
             NSInteger row = newComments.count - [newComments indexOfObject:newComment];
             NSInteger section = [_comment_list indexOfObject:newComments] + 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        });
+            NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+            if ([visibleIndexPath containsObject:indexPath]) {
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }
+//        });
     }];
     
 }
