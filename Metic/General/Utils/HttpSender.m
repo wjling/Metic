@@ -10,6 +10,9 @@
 #import "AppConstants.h"
 #import "AFHTTPRequestOperationManager.h"
 
+static const CGFloat MTREQUEST_TIMEOUT = 2.f;
+static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 1;
+
 @implementation HttpSender
 
 @synthesize myConnection;
@@ -18,10 +21,10 @@
 -(id)initWithDelegate:(id)delegate
 {
     self = [super init];
-    URL_mainServer = @[@"http://appdev.whatsact.com:10087/",@"http://app.whatsact.com:10087/"][Server];
-    PHOTO_mainServer = @[@"http://appdev.whatsact.com:20000/",@"http://app.whatsact.com:20000/"][Server];
-    VIDEO_mainServer = @[@"http://appdev.whatsact.com:20001/",@"http://app.whatsact.com:20001/"][Server];
-    FeedBack_mainServer = @[@"http://appdev.whatsact.com:10089/",@"http://app.whatsact.com:10089/"][Server];
+    URL_mainServer = @[@"http://120.25.103.72:10087/",@"http://app.whatsact.com:10087/"][Server];
+    PHOTO_mainServer = @[@"http://120.25.103.72:20000/",@"http://app.whatsact.com:20000/"][Server];
+    VIDEO_mainServer = @[@"http://120.25.103.72:20001/",@"http://app.whatsact.com:20001/"][Server];
+    FeedBack_mainServer = @[@"http://120.25.103.72:10089/",@"http://app.whatsact.com:10089/"][Server];
     HttpURL = @"";
     mDelegate = delegate;
     return self;
@@ -236,9 +239,13 @@
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    static AFHTTPRequestOperationManager *manager;
+    if (!manager) {
+        manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    }
     
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -262,9 +269,13 @@
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
     
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    static AFHTTPRequestOperationManager *manager;
+    if (!manager) {
+        manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    }
     
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -299,10 +310,14 @@
     HttpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
     NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
     
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    static AFHTTPRequestOperationManager *manager;
+    if (!manager) {
+        manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+        manager.requestSerializer = [AFJSONRequestSerializer serializer];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    }
     
      NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -325,9 +340,13 @@
 {
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,@"user_feedback"];
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    static AFHTTPRequestOperationManager *manager;
+    if (!manager) {
+        manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    }
     
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:json error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -347,9 +366,13 @@
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,parsingOperationCode];
     
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    static AFHTTPRequestOperationManager *manager;
+    if (!manager) {
+        manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
+        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
+    }
     
     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:nil error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];

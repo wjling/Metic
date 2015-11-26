@@ -171,6 +171,5 @@ enum Return_Code
     
 };
 
-static const CGFloat MTREQUEST_TIMEOUT = 30.f;
 #endif
 
