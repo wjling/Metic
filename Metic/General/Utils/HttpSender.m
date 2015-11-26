@@ -10,6 +10,9 @@
 #import "AppConstants.h"
 #import "AFHTTPRequestOperationManager.h"
 
+static const CGFloat MTREQUEST_TIMEOUT = 45.f;
+static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 5;
+
 @implementation HttpSender
 
 @synthesize myConnection;
@@ -18,10 +21,10 @@
 -(id)initWithDelegate:(id)delegate
 {
     self = [super init];
-    URL_mainServer = @[@"http://appdev.whatsact.com:10087/",@"http://app.whatsact.com:10087/"][Server];
-    PHOTO_mainServer = @[@"http://appdev.whatsact.com:20000/",@"http://app.whatsact.com:20000/"][Server];
-    VIDEO_mainServer = @[@"http://appdev.whatsact.com:20001/",@"http://app.whatsact.com:20001/"][Server];
-    FeedBack_mainServer = @[@"http://appdev.whatsact.com:10089/",@"http://app.whatsact.com:10089/"][Server];
+    URL_mainServer = @[@"http://120.25.103.72:10087/",@"http://app.whatsact.com:10087/"][Server];
+    PHOTO_mainServer = @[@"http://120.25.103.72:20000/",@"http://app.whatsact.com:20000/"][Server];
+    VIDEO_mainServer = @[@"http://120.25.103.72:20001/",@"http://app.whatsact.com:20001/"][Server];
+    FeedBack_mainServer = @[@"http://120.25.103.72:10089/",@"http://app.whatsact.com:10089/"][Server];
     HttpURL = @"";
     mDelegate = delegate;
     return self;

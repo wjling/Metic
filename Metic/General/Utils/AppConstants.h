@@ -171,7 +171,5 @@ enum Return_Code
     
 };
 
-static const CGFloat MTREQUEST_TIMEOUT = 30.f;
-static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 5;
 #endif
 
