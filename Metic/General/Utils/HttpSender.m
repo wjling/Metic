@@ -10,17 +10,29 @@
 #import "AppConstants.h"
 #import "AFHTTPRequestOperationManager.h"
 
-static const CGFloat MTREQUEST_TIMEOUT = 45.f;
+static const CGFloat MTREQUEST_TIMEOUT = 30.f;
 static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
+static NSOperationQueue *requestQueue;
 
 @implementation HttpSender
 
 @synthesize myConnection;
 @synthesize mDelegate;
 
--(id)initWithDelegate:(id)delegate
+- (instancetype)init
 {
     self = [super init];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        requestQueue = [[NSOperationQueue alloc] init];
+        requestQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
+    });
+    return self;
+}
+
+-(id)initWithDelegate:(id)delegate
+{
+    self = [self init];
     URL_mainServer = @[@"http://120.25.103.72:10087/",@"http://app.whatsact.com:10087/"][Server];
     PHOTO_mainServer = @[@"http://120.25.103.72:20000/",@"http://app.whatsact.com:20000/"][Server];
     VIDEO_mainServer = @[@"http://120.25.103.72:20001/",@"http://app.whatsact.com:20001/"][Server];
@@ -242,7 +254,6 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
         manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
@@ -260,7 +271,7 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
             block(nil);
         }
     }];
-    [requestOperation start];
+    [requestQueue addOperation:requestOperation];
 }
 
 -(void)sendVideoMessage:(NSDictionary *)parameter withOperationCode:(int)operation_Code finshedBlock:(FinishBlock)block
@@ -272,7 +283,6 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
         manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
@@ -290,7 +300,7 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
             block(nil);
         }
     }];
-    [requestOperation start];
+    [requestQueue addOperation:requestOperation];
 }
 
 -(void)sendMessage:(NSData *)jsonData withOperationCode:(int)operation_Code
@@ -313,7 +323,6 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
         manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
         manager.requestSerializer = [AFJSONRequestSerializer serializer];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
@@ -332,7 +341,7 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
             block(nil);
         }
     }];
-    [requestOperation start];
+    [requestQueue addOperation:requestOperation];
 }
 
 
@@ -343,7 +352,6 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
         manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
@@ -357,7 +365,7 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];
-    [requestOperation start];
+    [requestQueue addOperation:requestOperation];
 }
 
 -(void)sendGetPosterMessage:(int)operation_Code finshedBlock:(FinishBlock)block
@@ -369,7 +377,6 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
         manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@""]];
-        manager.operationQueue.maxConcurrentOperationCount = MT_MAX_CONCURRENT_OPERATION_COUNT;
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
@@ -387,7 +394,7 @@ static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
             block(nil);
         }
     }];
-    [requestOperation start];
+    [requestQueue addOperation:requestOperation];
 }
 
 @end
