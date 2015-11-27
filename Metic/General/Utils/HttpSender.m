@@ -10,8 +10,8 @@
 #import "AppConstants.h"
 #import "AFHTTPRequestOperationManager.h"
 
-static const CGFloat MTREQUEST_TIMEOUT = 2.f;
-static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 1;
+static const CGFloat MTREQUEST_TIMEOUT = 45.f;
+static const NSUInteger MT_MAX_CONCURRENT_OPERATION_COUNT = 10;
 
 @implementation HttpSender
 

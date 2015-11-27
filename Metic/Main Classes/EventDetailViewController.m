@@ -1191,7 +1191,7 @@
         }
         
         dispatch_barrier_async(dispatch_get_main_queue(), ^{
-            NSInteger row = newComments.count - [newComments indexOfObject:newComment];
+            NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
             NSInteger section = [_comment_list indexOfObject:newComments] + 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
