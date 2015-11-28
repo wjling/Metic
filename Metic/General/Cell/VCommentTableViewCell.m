@@ -1,5 +1,5 @@
 //
-//  VcommentTableViewCell.m
+//  VCommentTableViewCell.m
 //  WeShare
 //
 //  Created by ligang6 on 14-9-2.
@@ -7,13 +7,13 @@
 //
 
 
-#import "VcommentTableViewCell.h"
+#import "VCommentTableViewCell.h"
 #import "ReportViewController.h"
 #import "UserInfoViewController.h"
 #import "FriendInfoViewController.h"
 #import "LCAlertView.h"
 
-@implementation VcommentTableViewCell
+@implementation VCommentTableViewCell
 
 - (void)awakeFromNib
 {

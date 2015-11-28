@@ -8,7 +8,7 @@
 
 #import "VideoDetailViewController.h"
 #import "VideoWallViewController.h"
-#import "VcommentTableViewCell.h"
+#import "VCommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "CommonUtils.h"
 #import "MobClick.h"
@@ -148,7 +148,7 @@
     textView.delegate = self;
     
     [self.commentView addSubview:textView];
-	_inputTextView = textView;
+    _inputTextView = textView;
     
     _inputTextView.frame = CGRectMake(38, 5, 240, 35);
     _inputTextView.backgroundColor = [UIColor clearColor];
@@ -193,7 +193,7 @@
     BOOL ret = NO;
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"videoInfo", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",self.videoId],@"video_id", nil];
-//    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
+    //    NSMutableArray *result = [sql queryTable:@"eventVideo" withSelect:seletes andWhere:wheres];
     [[MTDatabaseHelper sharedInstance] queryTable:@"eventVideo" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
         if (resultsArray.count) {
             NSString *tmpa = [resultsArray[0] valueForKey:@"videoInfo"];
@@ -237,7 +237,7 @@
                         [alert setTag:1];
                     }
                 }
-                break;
+                    break;
             }
         }
     }];
@@ -282,13 +282,13 @@
                                                         name:MPMoviePlayerPlaybackDidFinishNotification object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self
          
-                                                selector:@selector(movieFinishedCallback:)
+                                                 selector:@selector(movieFinishedCallback:)
          
-                                                    name:MPMoviePlayerPlaybackDidFinishNotification
+                                                     name:MPMoviePlayerPlaybackDidFinishNotification
          
-                                                  object:_playerViewController.moviePlayer];
+                                                   object:_playerViewController.moviePlayer];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playTheMPMoviePlayer:) name: @"playTheMPMoviePlayer" object:nil];
-
+        
         videoRequest = nil;
     }else{
         if (videoRequest){
@@ -577,7 +577,7 @@
         return;
     }
     
-    NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
+    NSString *comment = ((VCommentTableViewCell*)cell).comment.text;
     NSInteger row = indexPath.row;
     NSDictionary* waitingComment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - row ]:self.vcomment_list[_vcomment_list.count - row + 1];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
@@ -588,7 +588,7 @@
     [dictionary setValue:self.eventId forKey:@"event_id"];
     [dictionary setValue:comment forKey:@"content"];
     [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
-
+    
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     void (^resendCommentBlock)(void) = ^(void){
@@ -613,16 +613,25 @@
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"vcomment_id"]) {
                         [waitingComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
                         [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                        [_tableView reloadData];
                         [self commentNumPlus];
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
-                    [_tableView reloadData];
                 }
+                
+                dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                    NSInteger row = self.vcomment_list.count - [self.vcomment_list indexOfObject:waitingComment];
+                    if ([_sequence integerValue] != -1)
+                        row ++;
+                    NSInteger section = 0;
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                    NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                    if ([visibleIndexPath containsObject:indexPath]) {
+                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                });
             });
         }];
     };
@@ -638,34 +647,40 @@
         NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
         [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-            dispatch_barrier_async(dispatch_get_main_queue(), ^{
-                if (rData) {
-                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                        NSString* token = [response1 valueForKey:@"token"];
-                        @synchronized(self)
-                        {
-                            if (![waitingComment valueForKey:@"token"]) {
-                                [waitingComment setValue:token forKey:@"token"];
-                            }
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                    NSString* token = [response1 valueForKey:@"token"];
+                    @synchronized(self)
+                    {
+                        if (![waitingComment valueForKey:@"token"]) {
+                            [waitingComment setValue:token forKey:@"token"];
                         }
-                        [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
-                        resendCommentBlock();
-                        
-                    }else{
-                        [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
-                }else {
-                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
+                    [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
+                    resendCommentBlock();
+                    
+                }else{
+                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
+                }
+            }else {
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
+            }
+            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                NSInteger row = self.vcomment_list.count - [self.vcomment_list indexOfObject:waitingComment];
+                if ([_sequence integerValue] != -1)
+                    row ++;
+                NSInteger section = 0;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                if ([visibleIndexPath containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             });
         }];
     }
 }
-
 
 - (IBAction)publishComment:(id)sender {
     if (!_videoInfo) return;
@@ -706,13 +721,20 @@
     [newComment setValue:time forKey:@"time"];
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
-
+    
     if ([_vcomment_list isKindOfClass:[NSArray class]]) {
         _vcomment_list = [[NSMutableArray alloc]initWithArray:_vcomment_list];
     }
     [_vcomment_list insertObject:newComment atIndex:0];
     
-    [_tableView reloadData];
+    NSInteger row = self.vcomment_list.count;
+    if ([_sequence integerValue] != -1)
+        row ++;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    [_tableView beginUpdates];
+    [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView endUpdates];
+    
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];
     
@@ -739,17 +761,25 @@
                         {
                             [newComment setValue:[response1 valueForKey:@"vcomment_id"] forKey:@"vcomment_id"];
                             [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                            [_tableView reloadData];
                             [self commentNumPlus];
                         }
                     }else{
                         [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
-                    [_tableView reloadData];
                 }
+                dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                    NSInteger row = self.vcomment_list.count - [self.vcomment_list indexOfObject:newComment];
+                    if ([_sequence integerValue] != -1)
+                        row ++;
+                    NSInteger section = 0;
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                    NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                    if ([visibleIndexPath containsObject:indexPath]) {
+                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                });
             });
         }];
     };
@@ -760,30 +790,37 @@
     NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-        dispatch_barrier_async(dispatch_get_main_queue(), ^{
-            if (rData) {
-                NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                MTLOG(@"%@",content);
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                    NSString* token = [response1 valueForKey:@"token"];
-                    @synchronized(self)
-                    {
-                        if (![newComment valueForKey:@"token"]) {
-                            [newComment setValue:token forKey:@"token"];
-                        }
+        if (rData) {
+            NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"%@",content);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                NSString* token = [response1 valueForKey:@"token"];
+                @synchronized(self)
+                {
+                    if (![newComment valueForKey:@"token"]) {
+                        [newComment setValue:token forKey:@"token"];
                     }
-                    [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
-                    sendCommentBlock();
-                    
-                }else{
-                    [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
+                sendCommentBlock();
+                
             }else{
-                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
+            }
+        }else{
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"vcomment_id"];
+        }
+        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+            NSInteger row = self.vcomment_list.count - [self.vcomment_list indexOfObject:newComment];
+            if ([_sequence integerValue] != -1)
+                row ++;
+            NSInteger section = 0;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+            if ([visibleIndexPath containsObject:indexPath]) {
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }
         });
     }];
@@ -828,7 +865,7 @@
 
 - (void)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-															 bundle: nil];
+                                                             bundle: nil];
     if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
         UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
         userInfoView.needPopBack = YES;
@@ -839,7 +876,7 @@
         friendView.fid = [self.videoInfo valueForKey:@"author_id"];
         [self.navigationController pushViewController:friendView animated:YES];
     }
-	
+    
 }
 
 
@@ -865,7 +902,7 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-
+        
         float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
         if (videoRequest) {
             self.progressOverlayView.hidden = YES;
@@ -977,45 +1014,45 @@
             [cell addSubview:label];
             return cell;
         }
-
-        static NSString *CellIdentifier = @"vCommentCell";
+        
+        static NSString *CellIdentifier = @"VCommentTableViewCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
-            UINib *nib = [UINib nibWithNibName:NSStringFromClass([VcommentTableViewCell class]) bundle:nil];
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([VCommentTableViewCell class]) bundle:nil];
             [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
             nibsRegistered = YES;
         }
-        cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        cell = (VCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
             alias = [Vcomment valueForKey:@"author"];
         }
-        ((VcommentTableViewCell *)cell).VcommentDict = Vcomment;
-        ((VcommentTableViewCell *)cell).author.text = alias;
-        ((VcommentTableViewCell *)cell).authorName = alias;
-        ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
-        ((VcommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
-        ((VcommentTableViewCell *)cell).controller = self;
-        ((VcommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((VCommentTableViewCell *)cell).VcommentDict = Vcomment;
+        ((VCommentTableViewCell *)cell).author.text = alias;
+        ((VCommentTableViewCell *)cell).authorName = alias;
+        ((VCommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
+        ((VCommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
+        ((VCommentTableViewCell *)cell).controller = self;
+        ((VCommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         float commentWidth = 0;
-        ((VcommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
+        ((VCommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
         if ([[Vcomment valueForKey:@"vcomment_id"] intValue] == -1 ) {
             commentWidth = 230;
-            [((VcommentTableViewCell *)cell).waitView startAnimating];
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
+            [((VCommentTableViewCell *)cell).waitView startAnimating];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:YES];
         }else if([[Vcomment valueForKey:@"vcomment_id"] intValue] == -2 ){
-            [((VcommentTableViewCell *)cell).waitView stopAnimating];
+            [((VCommentTableViewCell *)cell).waitView stopAnimating];
             commentWidth = 230;
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:NO];
-            [((VcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:NO];
+            [((VCommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }else{
             commentWidth = 255;
-            [((VcommentTableViewCell *)cell).waitView stopAnimating];
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
+            [((VCommentTableViewCell *)cell).waitView stopAnimating];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
         
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((VcommentTableViewCell *)cell).avatar authorId:[Vcomment valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((VCommentTableViewCell *)cell).avatar authorId:[Vcomment valueForKey:@"author_id"]];
         [getter getAvatar];
         
         NSString* text = [Vcomment valueForKey:@"content"];
@@ -1031,10 +1068,10 @@
         
         int height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
         
-        MLEmojiLabel* comment =((VcommentTableViewCell *)cell).comment;
+        MLEmojiLabel* comment =((VCommentTableViewCell *)cell).comment;
         if (!comment){
             comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, commentWidth, height)];
-            ((VcommentTableViewCell *)cell).comment = comment;
+            ((VCommentTableViewCell *)cell).comment = comment;
         }
         else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
         [comment setDisableThreeCommon:YES];
@@ -1047,10 +1084,10 @@
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
         
-        UIView* backguand = ((VcommentTableViewCell *)cell).background;
+        UIView* backguand = ((VCommentTableViewCell *)cell).background;
         if (!backguand){
             backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
-            ((VcommentTableViewCell *)cell).background = backguand;
+            ((VCommentTableViewCell *)cell).background = backguand;
         }
         else [backguand setFrame:CGRectMake(10, 0, 300, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
@@ -1083,7 +1120,7 @@
             return 45;
         }
         NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
-
+        
         float commentWidth = 0;
         NSString* commentText = [Vcomment valueForKey:@"content"];
         NSString*alias2;
@@ -1132,7 +1169,7 @@
             return ;
         }
         if(!_canManage)return;
-        VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        VCommentTableViewCell *cell = (VCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];
@@ -1295,7 +1332,7 @@
                             {
                                 [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:1];
                             }
-                            
+                                
                         }
                         
                     }else{

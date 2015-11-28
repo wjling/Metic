@@ -996,9 +996,9 @@
             }
             
             dispatch_barrier_async(dispatch_get_main_queue(), ^{
-                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
-                NSInteger section = [_comment_list indexOfObject:comments] + 1;
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSInteger nRow = row == 0? 0 : comments.count - [comments indexOfObject:waitingComment];;
+                NSInteger nSection = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nRow inSection:nSection];
                 NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
                 if ([visibleIndexPath containsObject:indexPath]) {
                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -1040,9 +1040,9 @@
             }
             
             dispatch_barrier_async(dispatch_get_main_queue(), ^{
-                NSInteger row = comments.count - [comments indexOfObject:waitingComment];
-                NSInteger section = [_comment_list indexOfObject:comments] + 1;
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSInteger nRow = row == 0? 0 : comments.count - [comments indexOfObject:waitingComment];;
+                NSInteger nSection = [_comment_list indexOfObject:comments] + 1;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:nRow inSection:nSection];
                 NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
                 if ([visibleIndexPath containsObject:indexPath]) {
                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -1191,7 +1191,7 @@
         }
         
         dispatch_barrier_async(dispatch_get_main_queue(), ^{
-            NSInteger row = newComments.count - [newComments indexOfObject:newComment];
+            NSInteger row = commentType == 0? 0 : newComments.count - [newComments indexOfObject:newComment];
             NSInteger section = [_comment_list indexOfObject:newComments] + 1;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
             NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;

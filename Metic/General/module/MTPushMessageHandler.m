@@ -414,7 +414,7 @@
     MTLOG(@"发送同步序号请求：%@",json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:returnResult];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:HTTP_POST finshedBlock:returnResult];
 }
 
 + (void)pullAndHandlePushMessageWithMinSeq:(NSNumber*)min_seq andMaxSeq:(NSNumber*)max_seq andCallBackBlock:(void(^)(NSDictionary* response))block
@@ -454,8 +454,10 @@
                 
                 for (int i = 0; i < list.count; i++) {
                     NSDictionary* message = [list objectAtIndex:i];
-                    [self handlePushMessage:message andFeedBack:YES];
+                    [self handlePushMessage:message andFeedBack:NO];
                 }
+                //反馈给服务器
+                [self feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:nil];
                 
             }
                 break;
@@ -466,7 +468,7 @@
             block(response);
         }
     };
-    
+    NSNumber *localMinSeq = [min_seq copy];
     if ([MTUser sharedInstance].userid) {
         NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
         if (maxSeqDict) {
@@ -485,48 +487,46 @@
                     [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }else{
-                    min_seq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
+                    localMinSeq = [NSNumber numberWithInteger:[localMaxSeq integerValue]+1];
                 }
             }
         }
     }
     
-    
-    
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInt:1], @"operation",
                               [MTUser sharedInstance].userid, @"id",
-                              min_seq, @"min_seq",
+                              localMinSeq, @"min_seq",
                               max_seq, @"max_seq",
                               nil];
     MTLOG(@"拉取消息请求: %@", json_dic);
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:getPushMessageDone];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:HTTP_POST finshedBlock:getPushMessageDone];
 }
 
 + (void)feedBackPushMessagewithMinSeq:(NSNumber*)min_seq andMaxSeq:(NSNumber*)max_seq andCallBack:(void(^)(NSDictionary* response))block
 {
-    void(^feedbackDone)(NSData*) = ^(NSData* rData)
-    {
-        if (!rData) {
-            MTLOG(@"服务器返回数据为空");
-            return ;
-        }
-        NSString* temp = [NSString string];
-        if ([rData isKindOfClass:[NSString class]]) {
-            temp = (NSString*)rData;
-        }
-        else if ([rData isKindOfClass:[NSData class]])
-        {
-            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        }
-        MTLOG(@"反馈推送的结果：%@",temp);
-        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
-        if (block) {
-            block(response);
-        }
-    };
+//    void(^feedbackDone)(NSData*) = ^(NSData* rData)
+//    {
+//        if (!rData) {
+//            MTLOG(@"服务器返回数据为空");
+//            return ;
+//        }
+//        NSString* temp = [NSString string];
+//        if ([rData isKindOfClass:[NSString class]]) {
+//            temp = (NSString*)rData;
+//        }
+//        else if ([rData isKindOfClass:[NSData class]])
+//        {
+//            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+//        }
+//        MTLOG(@"反馈推送的结果：%@",temp);
+//        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+//        if (block) {
+//            block(response);
+//        }
+//    };
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInteger:0], @"operation",
                               [MTUser sharedInstance].userid, @"id",
@@ -535,7 +535,7 @@
                               nil];
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:@"POST" finshedBlock:feedbackDone];
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:HTTP_POST finshedBlock:NULL];
     
 }
 
