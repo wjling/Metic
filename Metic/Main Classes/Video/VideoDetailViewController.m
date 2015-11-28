@@ -95,6 +95,7 @@
     [self closeMoreview];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
+        [self keyboardWillHide:nil];
         return;
     }
     if (self.isEmotionOpen) {
