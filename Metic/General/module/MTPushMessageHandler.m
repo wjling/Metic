@@ -230,11 +230,13 @@
             type = -1;
             MTLOG(@"有人@你： %@",msg_dic);
         }else{
+            if ([[MTUser sharedInstance].atMeEvents containsObject:msg_dic]) {
+                return;
+            }
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             type = -1;
             MTLOG(@"有人@你： %@",msg_dic);
         }
-        
     }
     else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散QUIT_EVENT_NOTIFICATION
     {
