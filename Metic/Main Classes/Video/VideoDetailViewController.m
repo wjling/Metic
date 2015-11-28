@@ -8,7 +8,7 @@
 
 #import "VideoDetailViewController.h"
 #import "VideoWallViewController.h"
-#import "VcommentTableViewCell.h"
+#import "VCommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "CommonUtils.h"
 #import "MobClick.h"
@@ -577,7 +577,7 @@
         return;
     }
     
-    NSString *comment = ((VcommentTableViewCell*)cell).comment.text;
+    NSString *comment = ((VCommentTableViewCell*)cell).comment.text;
     NSInteger row = indexPath.row;
     NSDictionary* waitingComment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - row ]:self.vcomment_list[_vcomment_list.count - row + 1];
     [waitingComment setValue:[NSNumber numberWithInt:-1] forKey:@"vcomment_id"];
@@ -978,44 +978,44 @@
             return cell;
         }
 
-        static NSString *CellIdentifier = @"vCommentCell";
+        static NSString *CellIdentifier = @"VCommentTableViewCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
-            UINib *nib = [UINib nibWithNibName:NSStringFromClass([VcommentTableViewCell class]) bundle:nil];
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([VCommentTableViewCell class]) bundle:nil];
             [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
             nibsRegistered = YES;
         }
-        cell = (VcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        cell = (VCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
             alias = [Vcomment valueForKey:@"author"];
         }
-        ((VcommentTableViewCell *)cell).VcommentDict = Vcomment;
-        ((VcommentTableViewCell *)cell).author.text = alias;
-        ((VcommentTableViewCell *)cell).authorName = alias;
-        ((VcommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
-        ((VcommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
-        ((VcommentTableViewCell *)cell).controller = self;
-        ((VcommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((VCommentTableViewCell *)cell).VcommentDict = Vcomment;
+        ((VCommentTableViewCell *)cell).author.text = alias;
+        ((VCommentTableViewCell *)cell).authorName = alias;
+        ((VCommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
+        ((VCommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
+        ((VCommentTableViewCell *)cell).controller = self;
+        ((VCommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         float commentWidth = 0;
-        ((VcommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
+        ((VCommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
         if ([[Vcomment valueForKey:@"vcomment_id"] intValue] == -1 ) {
             commentWidth = 230;
-            [((VcommentTableViewCell *)cell).waitView startAnimating];
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
+            [((VCommentTableViewCell *)cell).waitView startAnimating];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:YES];
         }else if([[Vcomment valueForKey:@"vcomment_id"] intValue] == -2 ){
-            [((VcommentTableViewCell *)cell).waitView stopAnimating];
+            [((VCommentTableViewCell *)cell).waitView stopAnimating];
             commentWidth = 230;
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:NO];
-            [((VcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:NO];
+            [((VCommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }else{
             commentWidth = 255;
-            [((VcommentTableViewCell *)cell).waitView stopAnimating];
-            [((VcommentTableViewCell *)cell).resend_Button setHidden:YES];
+            [((VCommentTableViewCell *)cell).waitView stopAnimating];
+            [((VCommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
         
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((VcommentTableViewCell *)cell).avatar authorId:[Vcomment valueForKey:@"author_id"]];
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((VCommentTableViewCell *)cell).avatar authorId:[Vcomment valueForKey:@"author_id"]];
         [getter getAvatar];
         
         NSString* text = [Vcomment valueForKey:@"content"];
@@ -1031,10 +1031,10 @@
         
         int height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
         
-        MLEmojiLabel* comment =((VcommentTableViewCell *)cell).comment;
+        MLEmojiLabel* comment =((VCommentTableViewCell *)cell).comment;
         if (!comment){
             comment = [[MLEmojiLabel alloc]initWithFrame:CGRectMake(50, 24, commentWidth, height)];
-            ((VcommentTableViewCell *)cell).comment = comment;
+            ((VCommentTableViewCell *)cell).comment = comment;
         }
         else [comment setFrame:CGRectMake(50, 24, commentWidth, height)];
         [comment setDisableThreeCommon:YES];
@@ -1047,10 +1047,10 @@
         [comment setBackgroundColor:[UIColor clearColor]];
         [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
         
-        UIView* backguand = ((VcommentTableViewCell *)cell).background;
+        UIView* backguand = ((VCommentTableViewCell *)cell).background;
         if (!backguand){
             backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
-            ((VcommentTableViewCell *)cell).background = backguand;
+            ((VCommentTableViewCell *)cell).background = backguand;
         }
         else [backguand setFrame:CGRectMake(10, 0, 300, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
@@ -1132,7 +1132,7 @@
             return ;
         }
         if(!_canManage)return;
-        VcommentTableViewCell *cell = (VcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        VCommentTableViewCell *cell = (VCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         [cell.background setAlpha:0.5];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];

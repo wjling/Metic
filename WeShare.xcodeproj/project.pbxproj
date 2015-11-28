@@ -344,7 +344,6 @@
 		F8B5DDE21BFB83EA00E1F713 /* UserTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DD621BFB83EA00E1F713 /* UserTableViewCell.m */; };
 		F8B5DDE31BFB83EA00E1F713 /* UserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD631BFB83EA00E1F713 /* UserTableViewCell.xib */; };
 		F8B5DDE41BFB83EA00E1F713 /* VCommentTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DD651BFB83EA00E1F713 /* VCommentTableViewCell.m */; };
-		F8B5DDE51BFB83EA00E1F713 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8B5DDE61BFB83EA00E1F713 /* VideoWallTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DD681BFB83EA00E1F713 /* VideoWallTableViewCell.m */; };
 		F8B5DDE71BFB83EA00E1F713 /* VideoWallTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD691BFB83EA00E1F713 /* VideoWallTableViewCell.xib */; };
 		F8B5DDE81BFB83EA00E1F713 /* CustomIOS7AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DD6D1BFB83EA00E1F713 /* CustomIOS7AlertView.m */; };
@@ -406,6 +405,7 @@
 		F8B5DE511BFCA0FF00E1F713 /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3D1BFCA0FE00E1F713 /* libSocialWechat.a */; };
 		F8B5DE521BFCA0FF00E1F713 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3E1BFCA0FE00E1F713 /* libWeChatSDK.a */; };
 		F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */; };
+		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2844,6 +2844,7 @@
 				083FF69919D02962001BB61E /* flag.jpg in Resources */,
 				519C65991989F61B00710B26 /* 7夜店.jpg in Resources */,
 				08C97F281AAF2C7000ABA19C /* UzysAssetPickerController.bundle in Resources */,
+				F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */,
 				51F06C1D197E0109000E8428 /* zbar-help.html in Resources */,
 				04D61296197BD40000159190 /* FlatDatePicker-Icon-Check.png in Resources */,
 				04B6F89919A25D5C00229393 /* face10.png in Resources */,
@@ -2911,7 +2912,6 @@
 				04D61297197BD40000159190 /* FlatDatePicker-Icon-Check@2x.png in Resources */,
 				F8B5DDD61BFB83EA00E1F713 /* MCommentTableViewCell.xib in Resources */,
 				04B6F89F19A25D5C00229393 /* face16.png in Resources */,
-				F8B5DDE51BFB83EA00E1F713 /* VCommentTableViewCell.xib in Resources */,
 				04B6F89719A25D5C00229393 /* face08.png in Resources */,
 				F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */,
 				04B6F8A119A25D5C00229393 /* face18.png in Resources */,

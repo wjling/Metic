@@ -1,5 +1,5 @@
 //
-//  VcommentTableViewCell.h
+//  VCommentTableViewCell.h
 //  WeShare
 //
 //  Created by ligang6 on 14-9-2.
@@ -10,7 +10,7 @@
 #import "MLEmojiLabel.h"
 #import "VideoDetailViewController.h"
 
-@interface VcommentTableViewCell : UITableViewCell
+@interface VCommentTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *author;
 @property (strong, nonatomic) MLEmojiLabel *comment;
