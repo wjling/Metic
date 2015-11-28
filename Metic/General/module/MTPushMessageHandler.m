@@ -230,11 +230,13 @@
             type = -1;
             MTLOG(@"有人@你： %@",msg_dic);
         }else{
+            if ([[MTUser sharedInstance].atMeEvents containsObject:msg_dic]) {
+                return;
+            }
             [[MTUser sharedInstance].atMeEvents addObject:msg_dic];
             type = -1;
             MTLOG(@"有人@你： %@",msg_dic);
         }
-        
     }
     else if (msg_cmd == QUIT_EVENT_NOTIFICATION) //活动被解散QUIT_EVENT_NOTIFICATION
     {
@@ -440,16 +442,8 @@
             case NORMAL_REPLY:
             {
                 NSArray* list = [response objectForKey:@"list"];
-                if (list && list.count > 0) {
-                    if ([MTUser sharedInstance].userid) {
-                        NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-                        NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
-                        maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
-                        [maxSeqDict setObject:remoteMaxSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                        
-                        [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
+                if (!list || list.count == 0) {
+                    return;
                 }
                 
                 for (int i = 0; i < list.count; i++) {
@@ -457,8 +451,19 @@
                     [self handlePushMessage:message andFeedBack:NO];
                 }
                 //反馈给服务器
-                [self feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:nil];
-                
+                [self feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:^(NSDictionary *response) {
+                    if ([response[@"cmd"] integerValue] == NORMAL_REPLY) {
+                        if ([MTUser sharedInstance].userid) {
+                            NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+                            NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
+                            maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+                            [maxSeqDict setObject:remoteMaxSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+                            
+                            [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                        }
+                    }
+                }];
             }
                 break;
             default:
@@ -507,26 +512,26 @@
 
 + (void)feedBackPushMessagewithMinSeq:(NSNumber*)min_seq andMaxSeq:(NSNumber*)max_seq andCallBack:(void(^)(NSDictionary* response))block
 {
-//    void(^feedbackDone)(NSData*) = ^(NSData* rData)
-//    {
-//        if (!rData) {
-//            MTLOG(@"服务器返回数据为空");
-//            return ;
-//        }
-//        NSString* temp = [NSString string];
-//        if ([rData isKindOfClass:[NSString class]]) {
-//            temp = (NSString*)rData;
-//        }
-//        else if ([rData isKindOfClass:[NSData class]])
-//        {
-//            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//        }
-//        MTLOG(@"反馈推送的结果：%@",temp);
-//        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
-//        if (block) {
-//            block(response);
-//        }
-//    };
+    void(^feedbackDone)(NSData*) = ^(NSData* rData)
+    {
+        if (!rData) {
+            MTLOG(@"服务器返回数据为空");
+            return ;
+        }
+        NSString* temp = [NSString string];
+        if ([rData isKindOfClass:[NSString class]]) {
+            temp = (NSString*)rData;
+        }
+        else if ([rData isKindOfClass:[NSData class]])
+        {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        }
+        MTLOG(@"反馈推送的结果：%@",temp);
+        NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
+        if (block) {
+            block(response);
+        }
+    };
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInteger:0], @"operation",
                               [MTUser sharedInstance].userid, @"id",
@@ -535,8 +540,7 @@
                               nil];
     NSData* json_data = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:HTTP_POST finshedBlock:NULL];
-    
+    [http sendMessage:json_data withOperationCode:PUSH_MESSAGE HttpMethod:HTTP_POST finshedBlock:feedbackDone];
 }
 
 #pragma mark - System Push

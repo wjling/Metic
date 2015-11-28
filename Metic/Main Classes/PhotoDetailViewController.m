@@ -86,6 +86,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
+        [self keyboardWillHide:nil];
         return;
     }
     if (self.isEmotionOpen) {
