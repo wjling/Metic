@@ -108,7 +108,7 @@
 - (void)dealloc
 
 {
-//    [_footer free];
+    //    [_footer free];
 }
 
 -(void) initButtons
@@ -186,10 +186,10 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-//    //初始化上拉加载更多
-//    _footer = [[MJRefreshFooterView alloc]init];
-//    _footer.delegate = self;
-//    _footer.scrollView = _tableView;
+    //    //初始化上拉加载更多
+    //    _footer = [[MJRefreshFooterView alloc]init];
+    //    _footer.delegate = self;
+    //    _footer.scrollView = _tableView;
     
     if (!_photoInfo) [self pullPhotoInfoFromDB];
     [self pullPhotoInfoFromAir];
@@ -214,7 +214,7 @@
             });
         }
     }];
-
+    
 }
 
 -(void)pullPhotoInfoFromAir
@@ -258,19 +258,14 @@
                     
                 }
             }
-            
         }
     }];
-
 }
 
 - (IBAction)button_Emotionpress:(id)sender {
     if(!_canManage)return;
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
-        
-        
-        
     }
     if (!_isEmotionOpen) {
         _isEmotionOpen = YES;
@@ -313,8 +308,6 @@
         [UIView commitAnimations];
         //[_emotionKeyboard removeFromSuperview];
     }
-    
-    
 }
 
 
@@ -355,7 +348,7 @@
                         }
                         _isLoading = NO;
                         [self.tableView reloadData];
-//                        [self closeRJ];
+                        //                        [self closeRJ];
                         //
                     }
                 }
@@ -408,7 +401,7 @@
         [self.good_button setEnabled:YES];
         return;
     }
-
+    
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -437,10 +430,8 @@
                     [alert setTag:1];
                 }
                 return ;
-                
             }
         }
-        
     }];
     
     BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
@@ -457,8 +448,6 @@
 
 - (IBAction)comment:(id)sender {
     if (!_canManage) return;
-    //[self.commentView setHidden:NO];
-    //[self.view bringSubviewToFront:self.commentView];
     self.inputTextView.placeHolder = @"说点什么吧";
     [self.inputTextView becomeFirstResponder];
 }
@@ -482,8 +471,6 @@
         [self.download_button setEnabled:NO];
         UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     }
-    
-    //UIImageWriteToSavedPhotosAlbum(self.photo, self, @selector(downloadComplete),nil);
 }
 
 -(void)deletePhoto:(UIButton*)button
@@ -491,7 +478,6 @@
     if (!_canManage) return;
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这张照片？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
-    
 }
 
 -(void)resendComment:(id)sender
@@ -518,7 +504,6 @@
     [dictionary setValue:comment forKey:@"content"];
     [dictionary setValue:[waitingComment valueForKey:@"replied"] forKey:@"replied"];
     
-    
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     void (^resendCommentBlock)(void) = ^(void){
@@ -541,20 +526,27 @@
                         return;
                     }
                     if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
-                        {
-                            [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
-                            [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                            [_tableView reloadData];
-                            [self commentNumPlus];
-                        }
+                        [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
+                        [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
+                        [self commentNumPlus];
                     }else{
                         [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
-                    [_tableView reloadData];
                 }
+                
+                dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                    NSInteger row = self.pcomment_list.count - [self.pcomment_list indexOfObject:waitingComment];
+                    if ([_sequence integerValue] != -1)
+                        row ++;
+                    NSInteger section = 0;
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                    NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                    if ([visibleIndexPath containsObject:indexPath]) {
+                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                });
             });
         }];
     };
@@ -570,28 +562,36 @@
         NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
         [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-            dispatch_barrier_async(dispatch_get_main_queue(), ^{
-                if (rData) {
-                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                        NSString* token = [response1 valueForKey:@"token"];
-                        @synchronized(self)
-                        {
-                            if (![waitingComment valueForKey:@"token"]) {
-                                [waitingComment setValue:token forKey:@"token"];
-                            }
+            if (rData) {
+                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                    NSString* token = [response1 valueForKey:@"token"];
+                    @synchronized(self)
+                    {
+                        if (![waitingComment valueForKey:@"token"]) {
+                            [waitingComment setValue:token forKey:@"token"];
                         }
-                        [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
-                        resendCommentBlock();
-                        
-                    }else{
-                        [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                        [_tableView reloadData];
                     }
-                }else {
-                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
+                    [dictionary setValue:[waitingComment valueForKey:@"token"] forKey:@"token"];
+                    resendCommentBlock();
+                    return ;
+                }else{
+                    [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+                }
+            }else {
+                [waitingComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            }
+            
+            dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                NSInteger row = self.pcomment_list.count - [self.pcomment_list indexOfObject:waitingComment];
+                if ([_sequence integerValue] != -1)
+                    row ++;
+                NSInteger section = 0;
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                if ([visibleIndexPath containsObject:indexPath]) {
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
             });
         }];
@@ -629,7 +629,7 @@
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
     NSString*time = [dateFormatter stringFromDate:[NSDate date]];
-
+    
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"good"];
     [newComment setValue:_photoId forKey:@"photo_id"];
     [newComment setValue:[MTUser sharedInstance].name forKey:@"author"];
@@ -639,16 +639,23 @@
     [newComment setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
     [newComment setValue:[NSNumber numberWithInt:0] forKey:@"isZan"];
     
-
+    
     if ([_pcomment_list isKindOfClass:[NSArray class]]) {
         _pcomment_list = [[NSMutableArray alloc]initWithArray:_pcomment_list];
     }
     [_pcomment_list insertObject:newComment atIndex:0];
-
-    [_tableView reloadData];
+    
+    NSInteger row = self.pcomment_list.count;
+    if ([_sequence integerValue] != -1)
+        row ++;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    [_tableView beginUpdates];
+    [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [_tableView endUpdates];
+    
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];
-
+    
     void (^sendCommentBlock)(void) = ^(void){
         //发送评论
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -672,17 +679,26 @@
                         {
                             [newComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
                             [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
-                            [_tableView reloadData];
                             [self commentNumPlus];
                         }
                     }else{
                         [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
-                        [_tableView reloadData];
                     }
                 }else{
                     [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
-                    [_tableView reloadData];
                 }
+                
+                dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                    NSInteger row = self.pcomment_list.count - [self.pcomment_list indexOfObject:newComment];
+                    if ([_sequence integerValue] != -1)
+                        row ++;
+                    NSInteger section = 0;
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                    NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+                    if ([visibleIndexPath containsObject:indexPath]) {
+                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                });
             });
         }];
     };
@@ -693,30 +709,39 @@
     NSData *jsonData1 = [NSJSONSerialization dataWithJSONObject:token_dict options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender1 = [[HttpSender alloc]initWithDelegate:self];
     [httpSender1 sendMessage:jsonData1 withOperationCode:TOKEN finshedBlock:^(NSData *rData) {
-        dispatch_barrier_async(dispatch_get_main_queue(), ^{
-            if (rData) {
-                NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-                MTLOG(@"%@",content);
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
-                    NSString* token = [response1 valueForKey:@"token"];
-                    @synchronized(self)
-                    {
-                        if (![newComment valueForKey:@"token"]) {
-                            [newComment setValue:token forKey:@"token"];
-                        }
+        if (rData) {
+            NSString* content = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"%@",content);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                NSString* token = [response1 valueForKey:@"token"];
+                @synchronized(self)
+                {
+                    if (![newComment valueForKey:@"token"]) {
+                        [newComment setValue:token forKey:@"token"];
                     }
-                    [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
-                    sendCommentBlock();
-                    
-                }else{
-                    [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                    [_tableView reloadData];
                 }
+                [dictionary setValue:[newComment valueForKey:@"token"] forKey:@"token"];
+                sendCommentBlock();
+                return;
+                
             }else{
-                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"comment_id"];
-                [_tableView reloadData];
+                [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+            }
+        }else{
+            [newComment setValue:[NSNumber numberWithInt:-2] forKey:@"pcomment_id"];
+        }
+        
+        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+            NSInteger row = self.pcomment_list.count - [self.pcomment_list indexOfObject:newComment];
+            if ([_sequence integerValue] != -1)
+                row ++;
+            NSInteger section = 0;
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            NSArray *visibleIndexPath = self.tableView.indexPathsForVisibleRows;
+            if ([visibleIndexPath containsObject:indexPath]) {
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             }
         });
     }];
@@ -758,14 +783,14 @@
 
 -(void)closeRJ
 {
-//    if (_Headeropen) {
-//        _Headeropen = NO;
-//        [_header endRefreshing];
-//    }
-//    if (_Footeropen) {
-//        _Footeropen = NO;
-//        [_footer endRefreshing];
-//    }
+    //    if (_Headeropen) {
+    //        _Headeropen = NO;
+    //        [_header endRefreshing];
+    //    }
+    //    if (_Footeropen) {
+    //        _Footeropen = NO;
+    //        [_footer endRefreshing];
+    //    }
     [self.tableView reloadData];
 }
 
@@ -785,22 +810,22 @@
     }
     [[NSNotificationCenter defaultCenter]postNotificationName:@"deletePhotoItem" object:nil userInfo:self.photoInfo];
     
-//    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
-//        NSInteger index = -1;
-//        index = [self.controller.photo_list indexOfObject:_photoInfo];
-//        if (index >= 0 && index < self.controller.photo_list.count) {
-//            [self.controller.photo_list removeObject:_photoInfo];
-//            self.controller.showPhoNum --;
-//            [self.controller calculateLRH];
-//            [self.controller.quiltView beginUpdates];
-//            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-//            [self.controller.quiltView endUpdates];
-//        }
-//        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
-//        if (index >= 0 && index < self.controller.photo_list_all.count) {
-//            [self.controller.photo_list_all removeObject:_photoInfo];
-//        }
-//    }
+    //    if (_controller && [_controller isKindOfClass:[PictureWall2 class]]) {
+    //        NSInteger index = -1;
+    //        index = [self.controller.photo_list indexOfObject:_photoInfo];
+    //        if (index >= 0 && index < self.controller.photo_list.count) {
+    //            [self.controller.photo_list removeObject:_photoInfo];
+    //            self.controller.showPhoNum --;
+    //            [self.controller calculateLRH];
+    //            [self.controller.quiltView beginUpdates];
+    //            [self.controller.quiltView deleteCellAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    //            [self.controller.quiltView endUpdates];
+    //        }
+    //        index = [self.controller.photo_list_all indexOfObject:_photoInfo];
+    //        if (index >= 0 && index < self.controller.photo_list_all.count) {
+    //            [self.controller.photo_list_all removeObject:_photoInfo];
+    //        }
+    //    }
 }
 
 - (void)deletePhotoInfoFromDB
@@ -812,7 +837,7 @@
 
 - (void)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-															 bundle: nil];
+                                                             bundle: nil];
     if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
         UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
         userInfoView.needPopBack = YES;
@@ -823,7 +848,7 @@
         friendView.fid = [self.photoInfo valueForKey:@"author_id"];
         [self.navigationController pushViewController:friendView animated:YES];
     }
-	
+    
 }
 
 
@@ -870,7 +895,7 @@
         [back setFrame:imageView.frame];
         [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:back];
-
+        
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_photoInfo valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
@@ -926,8 +951,8 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         return cell;
-    
-    
+        
+        
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
             
@@ -944,7 +969,7 @@
             [cell addSubview:label];
             return cell;
         }
-
+        
         static NSString *CellIdentifier = @"pCommentCell";
         BOOL nibsRegistered = NO;
         if (!nibsRegistered) {
@@ -953,8 +978,9 @@
             nibsRegistered = YES;
         }
         cell = (PcommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
         NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
-
+        
         //显示备注名
         NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
         if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
@@ -974,18 +1000,17 @@
             commentWidth = 230;
             [((PcommentTableViewCell *)cell).waitView startAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
-        }else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
+        } else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
             commentWidth = 230;
             [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
             [((PcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else{
+        } else{
             commentWidth = 255;
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
-
+        
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:((PcommentTableViewCell *)cell).avatar authorId:[Pcomment valueForKey:@"author_id"]];
         [getter getAvatar];
         
@@ -1013,9 +1038,6 @@
         comment.font = [UIFont systemFontOfSize:12.0f];
         comment.backgroundColor = [UIColor clearColor];
         comment.lineBreakMode = NSLineBreakByCharWrapping;
-        
-        
-
         comment.emojiText = text;
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
@@ -1035,9 +1057,7 @@
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setUserInteractionEnabled:YES];
         return cell;
-        
     }
-    
 }
 
 #pragma mark - Table view delegate
@@ -1285,7 +1305,7 @@
                     
                 }];
             }
-
+            
         }
             break;
         case 1:{
@@ -1311,7 +1331,7 @@
     }else{
         [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
     }
-
+    
 }
 
 #pragma mark - TextView view delegate
