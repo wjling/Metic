@@ -12,6 +12,7 @@
 #import "CommonUtils.h"
 #import "MobClick.h"
 #import "MTPushMessageHandler.h"
+#import "TPKeyboardAvoidingScrollView.h"
 
 @interface LoginViewController ()
 {
@@ -22,11 +23,7 @@
     };
     UIViewController* launchV;
     UIView *blackView;
-    CGRect originFrame;
-    CGFloat viewOffet;
-    UITapGestureRecognizer* tapRecognizer;
     AppDelegate* appDelegate;
-    
 }
 @property (strong, nonatomic) UIView* waitingView;
 @property (strong, nonatomic) NSTimer* timer;
@@ -36,6 +33,7 @@
 
 @synthesize textField_password;
 @synthesize textField_userName;
+@synthesize forgetPS_btn;
 @synthesize button_login;
 @synthesize button_register;
 @synthesize logInEmail;
@@ -59,75 +57,23 @@
 {
     [super viewDidLoad];
     MTLOG(@"login did load, fromRegister: %d",fromRegister);
-    
-    UIButton* forgetPS_btn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width - 60 - 10, 275, 60, 25)];
-    [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
-    [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:forgetPS_btn];
-    
+    [self setupUI];
     [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (!fromRegister) {
-        if ([userDf boolForKey:@"firstLaunched"]) {
+        if (![userDf boolForKey:@"hadShowWelcomePage"]) {
             MTLOG(@"login: it is the first launch");
-//            [self showBlackView];
-//            [userDf setValue:[NSNumber numberWithBool:NO] forKey:@"firstLaunched"];
-//            [userDf synchronize];
+            [userDf setBool:YES forKey:@"hadShowWelcomePage"];
             UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
             WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
-            {
-                
-                [self presentViewController:vc animated:NO completion:nil];
-                
-            }
-        }
-        else
-        {
+            [self presentViewController:vc animated:NO completion:nil];
+        } else {
             MTLOG(@"login: it is not the first launch");
             [self showLaunchView];
-//            [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
         }
-
     }
-    
-    //AppDelegate *myDelegate = [[UIApplication sharedApplication]delegate];
-//    self.rootView.myDelegate = self;
-    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
-    [self.view setBackgroundColor:backgroundColor];
-    
-//    self.Img_userName.layer.cornerRadius = 10;
-//    self.Img_userName.layer.masksToBounds = YES;
-//    self.Img_password.layer.cornerRadius = 3;
-    self.Img_register.layer.cornerRadius = 3;
-    self.textField_userName.tag = Tag_userName;
-    self.textField_userName.returnKeyType = UIReturnKeyDone;
-    self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_userName.delegate = self;
-    self.textField_userName.placeholder = @"请输入您的邮箱";
-    self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
-    self.textField_userName.text = text_userName? text_userName:@"";
-    
-    self.textField_password.tag = Tag_password;
-    self.textField_password.returnKeyType = UIReturnKeyDone;
-    self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_password.delegate = self;
-    self.textField_password.placeholder = @"请输入密码";
-    self.textField_password.secureTextEntry = YES;
-//    self.textField_password.text = @"";
-    //[self checkPreUP];
-    self.textField_password.text = text_password? text_password:@"";
-   
-    tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backgroundBtn:)];
-    [self.view addGestureRecognizer:tapRecognizer];
-
-    [CommonUtils addLeftButton:self isFirstPage:NO];
 }
 
 //返回上一层
@@ -141,21 +87,13 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     MTLOG(@"login will apear");
     if (fromRegister) {
-//        [self.view setHidden:NO];
-//        [self dismissBlackView];
         fromRegister = NO;
-//        text_password = nil;
-//        text_userName = nil;
         textField_userName.text = text_userName;
         textField_password.text = text_password;
     }
     else{
-//        [self.view setHidden:YES];
-//        [self showBlackView];
         [self checkPreUP];
     }
-//    [(AppDelegate*)([UIApplication sharedApplication].delegate) initViews];
-//    [super viewWillAppear:animated];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -173,24 +111,62 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    
     if ([segue.destinationViewController isKindOfClass:[FillinInfoViewController class]]) {
         FillinInfoViewController* vc = segue.destinationViewController;
         vc.gender = gender;
         vc.email = [textField_userName text];
         MTLOG(@"register gender: %@",vc.gender);
     }
+}
+
+#pragma mark - Private Methods
+- (void)setupUI
+{
+    [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
+    [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
+    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
+    [self.view setBackgroundColor:backgroundColor];
     
+    self.Img_register.layer.cornerRadius = 3;
+    
+    UILabel *userNameLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+    userNameLeftView.text = @"账号";
+    userNameLeftView.font = [UIFont systemFontOfSize:15];
+    userNameLeftView.textAlignment = NSTextAlignmentCenter;
+    
+    self.textField_userName.tag = Tag_userName;
+//    self.textField_userName.returnKeyType = UIReturnKeyNext;
+    self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.textField_userName.placeholder = @"请输入您的邮箱";
+    self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
+    self.textField_userName.text = text_userName? text_userName:@"";
+    self.textField_userName.leftView = userNameLeftView;
+    self.textField_userName.leftViewMode = UITextFieldViewModeAlways;
+    
+    UILabel *passwordLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
+    passwordLeftView.text = @"密码";
+    passwordLeftView.font = [UIFont systemFontOfSize:15];
+    passwordLeftView.textAlignment = NSTextAlignmentCenter;
+    
+    self.textField_password.tag = Tag_password;
+//    self.textField_password.returnKeyType = UIReturnKeyDone;
+    self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.textField_password.delegate = self;
+    self.textField_password.placeholder = @"请输入密码";
+    self.textField_password.secureTextEntry = YES;
+    self.textField_password.text = text_password? text_password:@"";
+    self.textField_password.leftView = passwordLeftView;
+    self.textField_password.leftViewMode = UITextFieldViewModeAlways;
 }
 
 -(void)forgetPSBtnClick:(id)sender
@@ -200,20 +176,6 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
--(void)backgroundBtn:(id)sender
-{
-    if (viewOffet != 0) {
-        viewOffet = 0;
-        [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
-        NSTimeInterval animationDuration = 0.30f;
-        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
-        self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-        [UIView commitAnimations];
-    }
-}
-
-
 #pragma mark - ShowViews
 -(void)showLaunchView
 {
@@ -221,16 +183,13 @@
     CGFloat y;
     if (bounds.size.height <= 480) {
         y = 40;
-    }
-    else
-    {
+    } else {
         y = 70;
     }
     CGFloat view_width = bounds.size.width;
     CGFloat view_height = bounds.size.height;
     UIColor* bgColor = [CommonUtils colorWithValue:0x57caab];
     launchV = [[UIViewController alloc]init];
-//    [launchV.view setBackgroundColor:[UIColor greenColor]];
     UIView* page4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
     UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
     UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
@@ -246,7 +205,6 @@
      ^{
          [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
      }];
-    
 }
 
 -(void)dismissLaunchView
@@ -279,7 +237,6 @@
 -(void)removeWaitingView
 {
     if (_waitingView) {
-        //[((UIActivityIndicatorView*)[_waitingView viewWithTag:101]) stopAnimating];
         [_waitingView removeFromSuperview];
     }
 }
@@ -327,14 +284,6 @@
             MTLOG(@"有网络，验证密码");
             [self checkPassWord];
         }
-//        else
-//        {
-//            MTLOG(@"没网络，跳过验证密码");
-//            [self removeWaitingView];
-//            [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-//            [button_login setEnabled:YES];
-//            [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
-//        }
         [self removeWaitingView];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
         [button_login setEnabled:YES];
@@ -343,25 +292,16 @@
     }
     else if ([userStatus isEqualToString:@"change"])
     {
-//        [self.view setHidden:NO];
-//        [self dismissBlackView];
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    else
-    {
-//        [self dismissBlackView];
-//        [self showLaunchView];
-//        [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
-    }
+    
     if (userName && password) {
         self.textField_userName.text = userName;
         self.textField_password.text = password;
         self.logInEmail = userName;
         self.logInPassword = password;
         [self.button_login setEnabled:YES];
-//        _timer = [NSTimer scheduledTimerWithTimeInterval:6.0f target:self selector:@selector(loginFail) userInfo:nil repeats:NO];
-//        [self login];
     }else [self.button_login setEnabled:YES];
 }
 
@@ -382,8 +322,6 @@
         [dictionary setValue:@"" forKey:@"passwd"];
         [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
         
-//        MTLOG(@"%@",dictionary);
-        
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
         [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
@@ -401,7 +339,6 @@
                     NSString *salt = [response1 valueForKey:@"salt"];
                     NSString *str = [self.logInPassword stringByAppendingString:salt];
                     [MTUser sharedInstance].saltValue = salt;
-//                    MTLOG(@"password+salt: %@",str);怎么能打log！！
                     
                     //MD5 encrypt
                     NSMutableString *md5_str = [NSMutableString string];
@@ -412,8 +349,6 @@
                     [params setValue:md5_str forKey:@"passwd"];
                     [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
-//                    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);怎么能打log！！
-                    
                     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
                     [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
                         if (!rData) {
@@ -428,9 +363,6 @@
                             case LOGIN_SUC:
                             {
                                 appDelegate.hadCheckPassWord = YES;
-//                                [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-//                                [button_login setEnabled:YES];
-//                                [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
                                 MTLOG(@"验证密码成功");
                             }
                                 break;
@@ -441,7 +373,6 @@
                                 [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                             }
                         }
-//                        [self removeWaitingView];
                     }];
                     
                 }
@@ -450,7 +381,6 @@
                 {
                     //通知退出到登录页面
                     MTLOG(@"获取盐值失败，强制退出到登录页面");
-//                    [self removeWaitingView];
                     [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
                 }
             }
@@ -463,49 +393,9 @@
     [button_login setEnabled:YES];
 }
 
--(BOOL)isTextFieldEmpty
-{
-    if ([(UITextField *)[self.view viewWithTag:Tag_userName] text] == nil || [[(UITextField *)[self.view viewWithTag:Tag_userName] text] isEqualToString:@""]) {
-        
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"User name can't be empty" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-        [alert show];
-        
-        return NO;
-    }
-    if ([(UITextField *)[self.view viewWithTag:Tag_password] text] == nil || [[(UITextField *)[self.view viewWithTag:Tag_password] text] isEqualToString:@""]) {
-        
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Password can't be empty" delegate:self cancelButtonTitle:@"OK,I know" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    return YES;
-    
-}
-
 - (void)jumpToMainView
 {
-//    NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
-//    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-//    NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
-//    BOOL openNC = [[userSettings valueForKey:@"openWithNotificationCenter"]boolValue];
-//    [userSettings setValue:[NSNumber numberWithBool:NO] forKey:@"openWithNotificationCenter"];
-//    [userDf setObject:userSettings forKey:key];
-//    [userDf synchronize];
-//    if (openNC) {
-//        [appDelegate.leftMenu showNotificationCenter];
-//    }
-//    else
-//    {
-//         [self performSegueWithIdentifier:@"loginTohome" sender:self];
-//    }
-    
     [self performSegueWithIdentifier:@"loginTohome" sender:self];
-    
-//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-//															 bundle: nil];
-//    UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"HomeViewController"];
-//    
-//    [[SlideNavigationController sharedInstance] switchToViewController:vc withCompletion:nil];
-    
 }
 
 - (void)jumpToRegisterView
@@ -515,11 +405,6 @@
 
 -(void)jumpToFillinInfo
 {
-//    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-//															 bundle: nil];
-//    FillinInfoViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
-//    vc.email = [textField_userName text];
-//    [self.navigationController pushViewController:vc animated:YES];
     [self performSegueWithIdentifier:@"login_fillinInfo" sender:self];
 }
 
@@ -559,7 +444,7 @@
 }
 
 -(void)login{
-    [self backgroundBtn:self];
+//    [self backgroundBtn:self];
     [self showWaitingView];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:self.logInEmail forKey:@"email"];
@@ -597,8 +482,6 @@
             NSString *salt = [response1 valueForKey:@"salt"];
             NSString *str = [self.logInPassword stringByAppendingString:salt];
             [MTUser sharedInstance].saltValue = salt;
-//            MTLOG(@"password+salt: %@",str);
-            
             //MD5 encrypt
             NSMutableString *md5_str = [NSMutableString string];
             md5_str = [CommonUtils MD5EncryptionWithString:str];
@@ -703,56 +586,6 @@
     {
         [self removeWaitingView];
     }
-}
-
-#pragma mark - UITextFieldDelegate
-
-//开始编辑输入框的时候，软键盘出现，执行此事件
--(void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if (viewOffet > 0) {
-        return;
-    }
-    originFrame = self.view.frame;
-    CGRect frame;
-    frame = button_login.frame;
-    
-    MTLOG(@"login frame: x: %f, y: %f, width: %f, height: %f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
-    viewOffet = frame.origin.y + button_login.frame.size.height - (self.view.frame.size.height - 216.0 - 25);//键盘高度216
-    MTLOG(@"textField offset: %f",viewOffet);
-    NSTimeInterval animationDuration = 0.30f;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    
-    //将视图的Y坐标向上移动offset个单位，以使下面腾出地方用于软键盘的显示
-    if(viewOffet > 0)
-        self.view.frame = CGRectMake(0.0f, self.view.frame.origin.y - viewOffet, self.view.frame.size.width, self.view.frame.size.height);
-    
-    [UIView commitAnimations];
-}
-
-//当用户按下return键或者按回车键，keyboard消失
--(BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    NSTimeInterval animationDuration = 0.30f;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:animationDuration];
-    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    [UIView commitAnimations];
-
-    return YES;
-}
-
-//输入框编辑完成以后，将视图恢复到原始状态
--(void)textFieldDidEndEditing:(UITextField *)textField
-{
-//    NSTimeInterval animationDuration = 0.30f;
-//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-//    [UIView setAnimationDuration:animationDuration];
-//    self.view.frame = originFrame; //CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-//    [UIView commitAnimations];
-    
 }
 
 @end

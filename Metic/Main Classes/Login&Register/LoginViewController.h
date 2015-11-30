@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
+@property (weak, nonatomic) IBOutlet UIButton* forgetPS_btn;
 @property (weak, nonatomic) IBOutlet UIButton *button_login;
 @property (weak, nonatomic) IBOutlet UIButton *button_register;
 @property (strong, nonatomic) IBOutlet UIImageView *Img_userName;
@@ -34,7 +35,6 @@
 @property (strong, nonatomic) NSNumber* gender; //用于注册后的信息
 
 -(void)login;
-- (BOOL)isTextFieldEmpty;
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerBtnClicked:(id)sender;
 //- (IBAction)backgroundBtn:(id)sender;

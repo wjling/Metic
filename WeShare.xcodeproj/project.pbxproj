@@ -406,6 +406,11 @@
 		F8B5DE521BFCA0FF00E1F713 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3E1BFCA0FE00E1F713 /* libWeChatSDK.a */; };
 		F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
+		F8EA73611C0C61C000190832 /* MTLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTLoginManager.m */; };
+		F8EA73781C0C919000190832 /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73711C0C919000190832 /* TPKeyboardAvoidingCollectionView.m */; };
+		F8EA73791C0C919000190832 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73731C0C919000190832 /* TPKeyboardAvoidingScrollView.m */; };
+		F8EA737A1C0C919000190832 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73751C0C919000190832 /* TPKeyboardAvoidingTableView.m */; };
+		F8EA737B1C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73771C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1206,6 +1211,16 @@
 		F8B5DE411BFCA0FE00E1F713 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		F8B5DE431BFCA0FE00E1F713 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		F8EA735F1C0C61C000190832 /* MTLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLoginManager.h; sourceTree = "<group>"; };
+		F8EA73601C0C61C000190832 /* MTLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLoginManager.m; sourceTree = "<group>"; };
+		F8EA73701C0C919000190832 /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
+		F8EA73711C0C919000190832 /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
+		F8EA73721C0C919000190832 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		F8EA73731C0C919000190832 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		F8EA73741C0C919000190832 /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		F8EA73751C0C919000190832 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
+		F8EA73761C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		F8EA73771C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1930,6 +1945,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F8EA736F1C0C919000190832 /* TPKeyboardAvoiding */,
 				F8A329A91C07EFB5008FFB17 /* AFNetworking-2.6.3 */,
 				F864C0EA1AE0EC1A00E2EB23 /* fmdb */,
 				043E1A701ADA248300D1D39F /* SDProgressView */,
@@ -2533,6 +2549,8 @@
 				F8B5DD7C1BFB83EA00E1F713 /* MTPackageControl.m */,
 				F8B5DE1A1BFC2E4E00E1F713 /* MTPushMessageHandler.h */,
 				F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */,
+				F8EA735F1C0C61C000190832 /* MTLoginManager.h */,
+				F8EA73601C0C61C000190832 /* MTLoginManager.m */,
 			);
 			path = module;
 			sourceTree = "<group>";
@@ -2751,6 +2769,21 @@
 			path = Wechat;
 			sourceTree = "<group>";
 		};
+		F8EA736F1C0C919000190832 /* TPKeyboardAvoiding */ = {
+			isa = PBXGroup;
+			children = (
+				F8EA73701C0C919000190832 /* TPKeyboardAvoidingCollectionView.h */,
+				F8EA73711C0C919000190832 /* TPKeyboardAvoidingCollectionView.m */,
+				F8EA73721C0C919000190832 /* TPKeyboardAvoidingScrollView.h */,
+				F8EA73731C0C919000190832 /* TPKeyboardAvoidingScrollView.m */,
+				F8EA73741C0C919000190832 /* TPKeyboardAvoidingTableView.h */,
+				F8EA73751C0C919000190832 /* TPKeyboardAvoidingTableView.m */,
+				F8EA73761C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				F8EA73771C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			path = TPKeyboardAvoiding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2945,6 +2978,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8EA73791C0C919000190832 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				0435EF1B19AF702F003BB2F6 /* LoginViewController.m in Sources */,
 				F813B2F51BB3B9BA0066BC37 /* SDWebImageDecoder.m in Sources */,
 				081B6DAD1A7685D80044D623 /* split.c in Sources */,
@@ -2963,6 +2997,7 @@
 				F8B5DDE61BFB83EA00E1F713 /* VideoWallTableViewCell.m in Sources */,
 				F83369451ACFF01E00B41435 /* MJPhotoLoadingView.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
+				F8EA73781C0C919000190832 /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				F8B5DDCD1BFB83EA00E1F713 /* CustomCellTableViewCell.m in Sources */,
 				F8A329DE1C07EFB5008FFB17 /* AFURLResponseSerialization.m in Sources */,
 				F8B5DDDF1BFB83EA00E1F713 /* PhotoTableViewCell.m in Sources */,
@@ -3034,6 +3069,7 @@
 				04E657C0197978080091524F /* LocationSettingViewController.m in Sources */,
 				F8A329E31C07EFB5008FFB17 /* UIButton+AFNetworking.m in Sources */,
 				081B6DB01A76861F0044D623 /* QRCodeGenerator.m in Sources */,
+				F8EA73611C0C61C000190832 /* MTLoginManager.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				F8B5DDF41BFB83EA00E1F713 /* MTShowTextViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
@@ -3046,6 +3082,7 @@
 				F8A329E61C07EFB5008FFB17 /* UIRefreshControl+AFNetworking.m in Sources */,
 				51F4CB1E19E6307500E487F1 /* HTTPAuthenticationRequest.m in Sources */,
 				F83369541AD00AE100B41435 /* MBProgressHUD.m in Sources */,
+				F8EA737B1C0C919000190832 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				08E248A919C740CC0042B30F /* EventSquareViewController.m in Sources */,
 				F8B5DDED1BFB83EA00E1F713 /* myScrollView.m in Sources */,
 				0435EF3E19B45C54003BB2F6 /* NotificationCenterCell.m in Sources */,
@@ -3191,6 +3228,7 @@
 				F813B2F71BB3B9BA0066BC37 /* SDWebImageDownloaderOperation.m in Sources */,
 				F813B2F41BB3B9BA0066BC37 /* SDWebImageCompat.m in Sources */,
 				08FE3F66197A7F21009EA7C7 /* Event2DcodeViewController.m in Sources */,
+				F8EA737A1C0C919000190832 /* TPKeyboardAvoidingTableView.m in Sources */,
 				08B8D64119B89C9400552663 /* VideoPreviewViewController.m in Sources */,
 				F8B5DDEF1BFB83EA00E1F713 /* MTPackageControl.m in Sources */,
 				F8A329DF1C07EFB5008FFB17 /* AFURLSessionManager.m in Sources */,
