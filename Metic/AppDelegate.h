@@ -44,8 +44,6 @@
 @property (nonatomic) BOOL isNetworkConnected;
 @property (nonatomic) BOOL isLogined;
 @property (nonatomic) BOOL isInBackground;
-@property (nonatomic) BOOL hadCheckPassWord;
-
 -(void)initViews;
 -(void)initApp;
 +(void)refreshMenu;
