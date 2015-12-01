@@ -138,4 +138,40 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
         }
     }];
 }
+
++ (void)thirdPartyLoginWithOpenId:(NSString *)openId
+                             type:(enum MTAccountThirdPartyType)thirdPartyType
+                          success:(void (^)(MTAccount *user))success
+                          failure:(void (^)(enum MTLoginResult result, NSString *message))failure
+{
+    NSDictionary *dict = @{@"openid":openId,
+                           @"third_type":@(thirdPartyType)};
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:THIRD_PARTY_LOGIN finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(MTLoginResultFailure,@"网络异常，请重试");
+            return ;
+        }
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    }];
+}
+
++ (void)thirdPartyRegistWithOpenId:(NSString *)openId
+                             type:(enum MTAccountThirdPartyType)thirdPartyType
+                          success:(void (^)(MTAccount *user))success
+                          failure:(void (^)(enum MTLoginResult result, NSString *message))failure
+{
+    NSDictionary *dict = @{@"openid":openId,
+                           @"third_type":@(thirdPartyType)};
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:THIRD_PARTY_REGIST finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(MTLoginResultFailure,@"网络异常，请重试");
+            return ;
+        }
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+    }];
+}
 @end

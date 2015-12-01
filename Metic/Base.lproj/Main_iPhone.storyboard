@@ -3086,7 +3086,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ih-w5-aq5">
-                                <rect key="frame" x="60" y="326" width="60" height="60"/>
+                                <rect key="frame" x="50" y="326" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Vad-hw-KRG"/>
                                     <constraint firstAttribute="width" constant="60" id="bZQ-Em-Thn"/>
@@ -3114,7 +3114,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LV3-nX-fRR">
-                                <rect key="frame" x="200" y="326" width="60" height="60"/>
+                                <rect key="frame" x="210" y="326" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="aDM-Pp-m19"/>
                                     <constraint firstAttribute="width" constant="60" id="hfY-Lv-VRO"/>
@@ -3142,9 +3142,9 @@
                             <constraint firstItem="Ypz-aV-JES" firstAttribute="leading" secondItem="3yY-CU-vOh" secondAttribute="leading" constant="15" id="K9E-lL-I2o"/>
                             <constraint firstItem="g9y-HK-245" firstAttribute="leading" secondItem="3yY-CU-vOh" secondAttribute="leading" constant="15" id="Txs-8W-Tbc"/>
                             <constraint firstAttribute="centerX" secondItem="muJ-hA-5Uz" secondAttribute="centerX" id="YPS-Xh-5RK"/>
-                            <constraint firstAttribute="centerX" secondItem="7ih-w5-aq5" secondAttribute="centerX" constant="70" id="ehp-We-Mq5"/>
+                            <constraint firstAttribute="centerX" secondItem="7ih-w5-aq5" secondAttribute="centerX" constant="80" id="ehp-We-Mq5"/>
                             <constraint firstItem="od8-4V-RI7" firstAttribute="top" secondItem="7ih-w5-aq5" secondAttribute="bottom" constant="30" id="fml-Un-cmk"/>
-                            <constraint firstAttribute="centerX" secondItem="LV3-nX-fRR" secondAttribute="centerX" constant="-70" id="gLd-LN-Is1"/>
+                            <constraint firstAttribute="centerX" secondItem="LV3-nX-fRR" secondAttribute="centerX" constant="-80" id="gLd-LN-Is1"/>
                             <constraint firstItem="b2Z-i4-6Ex" firstAttribute="top" secondItem="g9y-HK-245" secondAttribute="bottom" constant="15" id="gRe-oF-ukE"/>
                             <constraint firstItem="g9y-HK-245" firstAttribute="top" secondItem="kgi-Wx-Csu" secondAttribute="bottom" constant="15" id="kmq-HC-6X0"/>
                             <constraint firstItem="LV3-nX-fRR" firstAttribute="top" secondItem="pfA-Y1-a4q" secondAttribute="bottom" constant="20" id="ptI-Tj-oaQ"/>

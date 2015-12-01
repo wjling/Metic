@@ -15,6 +15,8 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "MTAccountManager.h"
 #import "SVProgressHUD.h"
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
 
 @interface LoginViewController ()
 {
@@ -300,44 +302,54 @@
 }
 
 - (IBAction)QQLogin:(id)sender {
-    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToQQ];
-    
-    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
-        
-        if (response.responseCode == UMSResponseCodeSuccess) {
-            
-            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToQQ];
-            
-            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-        }
-    });
+    [ShareSDK getUserInfo:SSDKPlatformTypeQQ
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
+     {
+         if (state == SSDKResponseStateSuccess) {
+             NSString *openId = user.uid;
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeQQ];
+         } else {
+             NSLog(@"%@",error);
+         }
+     }];
 }
 
 - (IBAction)WeiXinLogin:(id)sender {
-    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
-    
-    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
-        if (response.responseCode == UMSResponseCodeSuccess) {
-            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
-            
-            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-        }
-    });
+    [ShareSDK getUserInfo:SSDKPlatformTypeWechat
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
+     {
+         if (state == SSDKResponseStateSuccess) {
+             NSString *openId = user.uid;
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeWeChat];
+         } else {
+             NSLog(@"%@",error);
+         }
+     }];
 }
 
 - (IBAction)WeiBoLogin:(id)sender {
-    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];
-    
-    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
-        if (response.responseCode == UMSResponseCodeSuccess) {
-            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToSina];
-            
-            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
-            
-        }});
+    [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
+     {
+         if (state == SSDKResponseStateSuccess) {
+             NSString *openId = user.uid;
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeWeiBo];
+         } else {
+             NSLog(@"%@",error);
+         }
+     }];
 }
 
--(void)login{
+- (void)thirdPartyLoginWithOpenId:(NSString *)openId type:(enum MTAccountThirdPartyType)type {
+    [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
+    [MTAccountManager thirdPartyRegistWithOpenId:openId type:type success:^(MTAccount *user) {
+        //
+    } failure:^(enum MTLoginResult result, NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:1.f];
+    }];
+}
+
+- (void)login{
     [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
     [MTAccountManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTAccount *user) {
         MTLOG(@"login succeeded");
