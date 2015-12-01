@@ -77,7 +77,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     MTLOG(@"login will apear");
     [self checkPreUP];
 }
@@ -113,43 +112,48 @@
 #pragma mark - Private Methods
 - (void)setupUI
 {
+    self.title = @"登陆";
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
     [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [forgetPS_btn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
     [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
     [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
-    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
-    [self.view setBackgroundColor:backgroundColor];
-    
-    self.Img_register.layer.cornerRadius = 3;
+//    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
+//    [self.view setBackgroundColor:backgroundColor];
     
     UILabel *userNameLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
     userNameLeftView.text = @"账号";
     userNameLeftView.font = [UIFont systemFontOfSize:15];
     userNameLeftView.textAlignment = NSTextAlignmentCenter;
     
-//    self.textField_userName.returnKeyType = UIReturnKeyNext;
     self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_userName.placeholder = @"请输入您的邮箱";
+    self.textField_userName.placeholder = @"请输入邮箱／手机号";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
     self.textField_userName.text = text_userName? text_userName:@"";
     self.textField_userName.leftView = userNameLeftView;
     self.textField_userName.leftViewMode = UITextFieldViewModeAlways;
+    self.textField_userName.layer.cornerRadius = 5.f;
+    self.textField_userName.layer.borderColor = [CommonUtils colorWithValue:0xDDDDDD].CGColor;
+    self.textField_userName.layer.borderWidth = 2;
+    self.textField_userName.layer.masksToBounds = YES;
     
     UILabel *passwordLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
     passwordLeftView.text = @"密码";
     passwordLeftView.font = [UIFont systemFontOfSize:15];
     passwordLeftView.textAlignment = NSTextAlignmentCenter;
     
-//    self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = text_password? text_password:@"";
     self.textField_password.leftView = passwordLeftView;
     self.textField_password.leftViewMode = UITextFieldViewModeAlways;
+    self.textField_password.layer.cornerRadius = 5.f;
+    self.textField_password.layer.borderColor = [CommonUtils colorWithValue:0xDDDDDD].CGColor;
+    self.textField_password.layer.borderWidth = 2;
+    self.textField_password.layer.masksToBounds = YES;
 }
 
 -(void)forgetPSBtnClick:(id)sender
@@ -278,7 +282,7 @@
     if (![CommonUtils isEmailValid: textField_userName.text]) {
         [SVProgressHUD showErrorWithStatus:@"邮箱格式不正确" duration:1.f];
         return;
-    } else if ([[textField_password text] length] < 6) {
+    } else if ([[textField_password text] length] < 5) {
         [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
         return;
     }
@@ -293,6 +297,44 @@
 - (IBAction)registerBtnClicked:(id)sender
 {
     [self jumpToRegisterView];
+}
+
+- (IBAction)QQLogin:(id)sender {
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToQQ];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            
+            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToQQ];
+            
+            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
+        }
+    });
+}
+
+- (IBAction)WeiXinLogin:(id)sender {
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary]valueForKey:UMShareToWechatSession];
+            
+            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
+        }
+    });
+}
+
+- (IBAction)WeiBoLogin:(id)sender {
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            UMSocialAccountEntity *snsAccount = [[UMSocialAccountManager socialAccountDictionary] valueForKey:UMShareToSina];
+            
+            NSLog(@"username is %@, uid is %@, token is %@ url is %@",snsAccount.userName,snsAccount.usid,snsAccount.accessToken,snsAccount.iconURL);
+            
+        }});
 }
 
 -(void)login{

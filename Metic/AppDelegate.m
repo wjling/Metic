@@ -79,9 +79,8 @@
                                                          instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	leftMenu.cellIdentifier = @"leftMenuCell";
 
-//	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
-//    [leftMenu tableView:leftMenu.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+    
     [self initApp];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
@@ -108,19 +107,6 @@
 //    [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://www.sina.com"];
     [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
     [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
-//    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-   
-    //running in background
-//    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
-//    NSError *setCategoryErr = nil;
-//    NSError *activationErr  = nil;
-//    [[AVAudioSession sharedInstance]
-//     setCategory: AVAudioSessionCategoryPlayback
-//     error: &setCategoryErr];
-//    [[AVAudioSession sharedInstance]
-//     setActive: YES
-//     error: &activationErr];
     
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -133,22 +119,6 @@
     //开启本地视频服务
     [self initLocalVideoServer];
     
-    //判断是否由远程消息通知触发应用程序启动
-//    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
-//        //获取应用程序消息通知标记数
-//        int badge = [UIApplication sharedApplication].applicationIconBadgeNumber;
-//        if (badge > 0) {
-//            badge--;
-//            [UIApplication sharedApplication].applicationIconBadgeNumber = badge;
-//        }
-//        
-//    }
-//    
-//    //消息推送注册
-//    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-//     UIRemoteNotificationTypeSound |
-//     UIRemoteNotificationTypeAlert |
-//     UIRemoteNotificationTypeBadge];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     /* 信鸽推送 */

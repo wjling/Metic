@@ -23,7 +23,6 @@
 @property (weak, nonatomic) IBOutlet UIButton* forgetPS_btn;
 @property (weak, nonatomic) IBOutlet UIButton *button_login;
 @property (weak, nonatomic) IBOutlet UIButton *button_register;
-@property (strong, nonatomic) IBOutlet UIButton *Img_register;
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
@@ -36,5 +35,8 @@
 - (IBAction)registerBtnClicked:(id)sender;
 - (void)jumpToMainView;
 - (void)jumpToRegisterView;
+- (IBAction)QQLogin:(id)sender;
+- (IBAction)WeiXinLogin:(id)sender;
+- (IBAction)WeiBoLogin:(id)sender;
 
 @end

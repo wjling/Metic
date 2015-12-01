@@ -3558,6 +3558,8 @@
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.2.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/QQSDK",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";
@@ -3604,6 +3606,8 @@
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/Metic/Vendors/UMAnalytics_Sdk_3.6.5",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/SinaWeiboSDK",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/WeChatSDK",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;
@@ -3634,6 +3638,8 @@
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.2.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Source",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/QQSDK",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";
@@ -3680,6 +3686,8 @@
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/TencentOpenAPI",
 					"$(PROJECT_DIR)/Metic/Vendors/UMSocial_Sdk_4.3/UMSocial_Sdk_Extra_Frameworks/Wechat",
 					"$(PROJECT_DIR)/Metic/Vendors/UMAnalytics_Sdk_3.6.5",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/SinaWeiboSDK",
+					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-simple-3.1.4/extends/WeChatSDK",
 				);
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = NO;

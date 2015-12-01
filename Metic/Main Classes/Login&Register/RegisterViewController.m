@@ -37,15 +37,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBar.hidden = NO;
     // Do any additional setup after loading the view.
-    
-    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
-    [self.view setBackgroundColor:backgroundColor];
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    self.title = @"邮箱注册";
+    [self.view setBackgroundColor:[UIColor whiteColor]];
     
     textField_email.placeholder = @"请输入您的邮箱";
-    textField_password.placeholder = @"请输入您的密码，至少6位";
+    textField_password.placeholder = @"请输入您的密码，至少5位";
     
     textField_email.keyboardType = UIKeyboardTypeEmailAddress;
     textField_password.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
@@ -124,7 +121,7 @@
     if (![CommonUtils isEmailValid: textField_email.text]) {
         [SVProgressHUD showErrorWithStatus:@"邮箱格式不正确" duration:1.f];
         return;
-    } else if ([[textField_password text] length] < 6) {
+    } else if ([[textField_password text] length] < 5) {
         [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
         return;
     }

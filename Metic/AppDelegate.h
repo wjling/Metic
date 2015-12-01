@@ -26,7 +26,7 @@
 //友盟统计 appkey
 #define UMENG_APPKEY @"53f2af05fd98c59abf001eb8"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,SRWebSocketDelegate,BMKGeneralDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,BMKGeneralDelegate>
 {
     HTTPServer *httpServer;
 }
@@ -44,21 +44,21 @@
 @property (nonatomic) BOOL isNetworkConnected;
 @property (nonatomic) BOOL isLogined;
 @property (nonatomic) BOOL isInBackground;
--(void)initViews;
+//-(void)initViews;
 -(void)initApp;
 +(void)refreshMenu;
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;
 
-- (void)connect;
-- (void)scheduleHeartBeat;
-- (void)unscheduleHeartBeat;
-- (void)sendHeartBeatMessage;
-- (void)disconnect;
+//- (void)connect;
+//- (void)scheduleHeartBeat;
+//- (void)unscheduleHeartBeat;
+//- (void)sendHeartBeatMessage;
+//- (void)disconnect;
 
 - (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath;
-- (void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type;
+//- (void)sendMessageArrivedNotification:(NSString*)text andNumber:(int)num withType:(int)type;
 
 
 @end
