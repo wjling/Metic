@@ -406,7 +406,7 @@
 		F8B5DE521BFCA0FF00E1F713 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3E1BFCA0FE00E1F713 /* libWeChatSDK.a */; };
 		F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
-		F8EA73611C0C61C000190832 /* MTLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTLoginManager.m */; };
+		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
 		F8EA737F1C0CA73B00190832 /* MTAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA737E1C0CA73B00190832 /* MTAccount.m */; };
 		F8EA73E11C0CBB2F00190832 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */; };
 		F8EA73E21C0CBB2F00190832 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73C11C0CBB2F00190832 /* EXTScope.m */; };
@@ -1229,8 +1229,8 @@
 		F8B5DE411BFCA0FE00E1F713 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		F8B5DE431BFCA0FE00E1F713 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
-		F8EA735F1C0C61C000190832 /* MTLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLoginManager.h; sourceTree = "<group>"; };
-		F8EA73601C0C61C000190832 /* MTLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLoginManager.m; sourceTree = "<group>"; };
+		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
+		F8EA73601C0C61C000190832 /* MTAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccountManager.m; sourceTree = "<group>"; };
 		F8EA737D1C0CA73B00190832 /* MTAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccount.h; sourceTree = "<group>"; };
 		F8EA737E1C0CA73B00190832 /* MTAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccount.m; sourceTree = "<group>"; };
 		F8EA73BD1C0CBB2F00190832 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTKeyPathCoding.h; sourceTree = "<group>"; };
@@ -2607,8 +2607,8 @@
 				F8B5DD7C1BFB83EA00E1F713 /* MTPackageControl.m */,
 				F8B5DE1A1BFC2E4E00E1F713 /* MTPushMessageHandler.h */,
 				F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */,
-				F8EA735F1C0C61C000190832 /* MTLoginManager.h */,
-				F8EA73601C0C61C000190832 /* MTLoginManager.m */,
+				F8EA735F1C0C61C000190832 /* MTAccountManager.h */,
+				F8EA73601C0C61C000190832 /* MTAccountManager.m */,
 			);
 			path = module;
 			sourceTree = "<group>";
@@ -3192,7 +3192,7 @@
 				F8A329E31C07EFB5008FFB17 /* UIButton+AFNetworking.m in Sources */,
 				081B6DB01A76861F0044D623 /* QRCodeGenerator.m in Sources */,
 				F8EA73E21C0CBB2F00190832 /* EXTScope.m in Sources */,
-				F8EA73611C0C61C000190832 /* MTLoginManager.m in Sources */,
+				F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				F8B5DDF41BFB83EA00E1F713 /* MTShowTextViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,

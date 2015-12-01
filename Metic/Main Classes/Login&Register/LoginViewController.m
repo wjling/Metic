@@ -13,7 +13,7 @@
 #import "MobClick.h"
 #import "MTPushMessageHandler.h"
 #import "TPKeyboardAvoidingScrollView.h"
-#import "MTLoginManager.h"
+#import "MTAccountManager.h"
 #import "SVProgressHUD.h"
 
 @interface LoginViewController ()
@@ -36,7 +36,6 @@
 @synthesize logInEmail;
 @synthesize logInPassword;
 @synthesize rootView;
-@synthesize fromRegister;
 @synthesize text_userName;
 @synthesize text_password;
 @synthesize gender; 
@@ -53,23 +52,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    MTLOG(@"login did load, fromRegister: %d",fromRegister);
     [self setupUI];
     [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    if (!fromRegister) {
-        if (![userDf boolForKey:@"hadShowWelcomePage"]) {
-            MTLOG(@"login: it is the first launch");
-            [userDf setBool:YES forKey:@"hadShowWelcomePage"];
-            UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                                 bundle: nil];
-            WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-            [self presentViewController:vc animated:NO completion:nil];
-        } else {
-            MTLOG(@"login: it is not the first launch");
-            [self showLaunchView];
-        }
+    if (![userDf boolForKey:@"hadShowWelcomePage"]) {
+        MTLOG(@"login: it is the first launch");
+        [userDf setBool:YES forKey:@"hadShowWelcomePage"];
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+        [self presentViewController:vc animated:NO completion:nil];
+    } else {
+        MTLOG(@"login: it is not the first launch");
+        [self showLaunchView];
     }
 }
 
@@ -83,13 +79,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     MTLOG(@"login will apear");
-    if (fromRegister) {
-        fromRegister = NO;
-        textField_userName.text = text_userName;
-        textField_password.text = text_password;
-    } else{
-        [self checkPreUP];
-    }
+    [self checkPreUP];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -155,7 +145,6 @@
     
 //    self.textField_password.returnKeyType = UIReturnKeyDone;
     self.textField_password.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_password.delegate = self;
     self.textField_password.placeholder = @"请输入密码";
     self.textField_password.secureTextEntry = YES;
     self.textField_password.text = text_password? text_password:@"";
@@ -257,7 +246,7 @@
 
 -(void)checkPassWordWithAccount:(NSString *)account Password:(NSString *)password
 {
-    [MTLoginManager loginWithAccount:account password:password success:^(MTAccount *user) {
+    [MTAccountManager loginWithAccount:account password:password success:^(MTAccount *user) {
     } failure:^(enum MTLoginResult result, NSString *message) {
         if (result == MTLoginResultPasswordInvalid) {
             MTLOG(@"验证密码失败，强制退出到登录页面");
@@ -289,7 +278,7 @@
     if (![CommonUtils isEmailValid: textField_userName.text]) {
         [SVProgressHUD showErrorWithStatus:@"邮箱格式不正确" duration:1.f];
         return;
-    } else if ([[textField_password text] length] < 5) {
+    } else if ([[textField_password text] length] < 6) {
         [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
         return;
     }
@@ -308,7 +297,7 @@
 
 -(void)login{
     [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
-    [MTLoginManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTAccount *user) {
+    [MTAccountManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTAccount *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
         //保存信息

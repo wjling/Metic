@@ -1,5 +1,5 @@
 //
-//  MTLoginManager.h
+//  MTAccountManager.h
 //  WeShare
 //
 //  Created by 俊健 on 15/11/30.
@@ -17,7 +17,7 @@ NS_ENUM(NSInteger, MTLoginResult) {
     MTLoginResultCancel = 4,
 };
 
-@interface MTLoginManager : NSObject
+@interface MTAccountManager : NSObject
 
 @property (nonatomic) BOOL hadCheckPassWord;
 
@@ -32,11 +32,11 @@ NS_ENUM(NSInteger, MTLoginResult) {
 
 /**
  *
- *  Regist weshare
+ *  Regist weshare With Email
  *  @param success the success callback
  *  @param failure the failure callback
  */
-+ (void)regist:(NSString *)username
++ (void)registWithAccount:(NSString *)account
       password:(NSString *)password
        success:(void (^)(MTAccount *user))success
        failure:(void (^)(enum MTLoginResult result, NSString *message))failure;

@@ -16,20 +16,17 @@
 #import "WelcomePageViewController.h"
 #import "FillinInfoViewController.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *textField_userName;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
 @property (weak, nonatomic) IBOutlet UIButton* forgetPS_btn;
 @property (weak, nonatomic) IBOutlet UIButton *button_login;
 @property (weak, nonatomic) IBOutlet UIButton *button_register;
-@property (strong, nonatomic) IBOutlet UIImageView *Img_userName;
-@property (strong, nonatomic) IBOutlet UIImageView *Img_password;
 @property (strong, nonatomic) IBOutlet UIButton *Img_register;
 @property (nonatomic,retain) NSString* logInEmail;
 @property (nonatomic, retain) NSString* logInPassword;
 @property (strong, nonatomic) IBOutlet InputHandleView *rootView;
-@property (nonatomic)BOOL fromRegister;
 @property (strong,nonatomic) NSString* text_userName;
 @property (strong,nonatomic) NSString* text_password;
 @property (strong, nonatomic) NSNumber* gender; //用于注册后的信息
@@ -37,8 +34,6 @@
 -(void)login;
 - (IBAction)loginButtonClicked:(id)sender;
 - (IBAction)registerBtnClicked:(id)sender;
-//- (IBAction)backgroundBtn:(id)sender;
-//- (IBAction)text_Clear:(id)sender;
 - (void)jumpToMainView;
 - (void)jumpToRegisterView;
 

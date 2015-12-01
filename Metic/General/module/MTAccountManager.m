@@ -1,19 +1,19 @@
 //
-//  MTLoginManager.m
+//  MTAccountManager.m
 //  WeShare
 //
 //  Created by 俊健 on 15/11/30.
 //  Copyright (c) 2015年 WeShare. All rights reserved.
 //
 
-#import "MTLoginManager.h"
+#import "MTAccountManager.h"
 #import "MTAccount.h"
 #import "HttpSender.h"
 #import "CommonUtils.h"
 
 typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 
-@implementation MTLoginManager
+@implementation MTAccountManager
 
 + (void)loginWithAccount:(NSString *)account
                 password:(NSString *)password
@@ -100,4 +100,42 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
     }];
 }
 
++ (void)registWithAccount:(NSString *)account
+                 password:(NSString *)password
+                  success:(void (^)(MTAccount *user))success
+                  failure:(void (^)(enum MTLoginResult result, NSString *message))failure
+{
+    NSString* salt = [CommonUtils randomStringWithLength:6];
+    NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
+    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:account,@"email",md5_str,@"passwd",account,@"name",@1,@"gender",salt,@"salt",nil];
+
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:REGISTER finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(MTLoginResultFailure,@"网络异常，请重试");
+            return ;
+        }
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY: {
+                MTLOG(@"注册成功");
+//                MTAccount *user = [MTLJSONAdapter modelOfClass:[MTAccount class]
+//                                            fromJSONDictionary:response1
+//                                                         error:nil];
+                success(nil);
+            }
+                break;
+            case USER_EXIST: {
+                MTLOG(@"user existed");
+                failure(MTLoginResultFailure,@"用户已存在");
+            }
+                break;
+            default:
+                MTLOG(@"server error");
+                failure(MTLoginResultUnknown,@"服务器异常");
+        }
+    }];
+}
 @end
