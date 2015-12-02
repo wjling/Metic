@@ -9,6 +9,7 @@
 #import "FillinInfoViewController.h"
 #import "UIImage+squareThumbail.h"
 #import "UzysAssetsPickerController.h"
+#import "MTAccount.h"
 
 @interface FillinInfoViewController ()
 {
@@ -111,6 +112,9 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
+    MTAccount *account = [MTAccount singleInstance];
+    account.hadCompleteInfo = YES;
+    [account saveAccount];
     [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
 //    [self.navigationController popViewControllerAnimated:NO];
 }

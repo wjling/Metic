@@ -7,13 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTLoginResponse.h"
 #import "MTAccount.h"
-
-NS_ENUM(NSInteger, MTAccountThirdPartyType) {
-    MTAccountThirdPartyTypeWeiBo = 0,
-    MTAccountThirdPartyTypeQQ = 1,
-    MTAccountThirdPartyTypeWeChat = 2,
-};
 
 NS_ENUM(NSInteger, MTLoginResult) {
     MTLoginResultSuccess = 0,
@@ -32,7 +27,7 @@ NS_ENUM(NSInteger, MTLoginResult) {
  */
 + (void)loginWithAccount:(NSString *)account
                 password:(NSString *)password
-                 success:(void (^)(MTAccount *user))success
+                 success:(void (^)(MTLoginResponse *user))success
                  failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
 /**
@@ -43,23 +38,15 @@ NS_ENUM(NSInteger, MTLoginResult) {
  */
 + (void)registWithAccount:(NSString *)account
       password:(NSString *)password
-       success:(void (^)(MTAccount *user))success
+       success:(void (^)(MTLoginResponse *user))success
        failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
 /**
  *  Third Party Login weshare
  */
 + (void)thirdPartyLoginWithOpenId:(NSString *)openId
-                             type:(enum MTAccountThirdPartyType)thirdPartyType
-                          success:(void (^)(MTAccount *user))success
-                          failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
-
-/**
- *  Third Party Login weshare
- */
-+ (void)thirdPartyRegistWithOpenId:(NSString *)openId
-                             type:(enum MTAccountThirdPartyType)thirdPartyType
-                          success:(void (^)(MTAccount *user))success
+                             type:(enum MTAccountType)thirdPartyType
+                          success:(void (^)(MTLoginResponse *user))success
                           failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
 

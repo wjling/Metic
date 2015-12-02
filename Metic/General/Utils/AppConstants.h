@@ -106,8 +106,7 @@ enum Operation_Code
     GET_LIKE_EVENT = 55,
     LIKE_EVENT = 56,
     TOKEN = 57,
-    THIRD_PARTY_REGIST = 58,
-    THIRD_PARTY_LOGIN = 59,
+    THIRD_PARTY_LOGIN = 58,
 };
 
 enum CloudOperation_Code

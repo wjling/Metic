@@ -407,7 +407,6 @@
 		F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
-		F8EA737F1C0CA73B00190832 /* MTAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA737E1C0CA73B00190832 /* MTAccount.m */; };
 		F8EA73E11C0CBB2F00190832 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */; };
 		F8EA73E21C0CBB2F00190832 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73C11C0CBB2F00190832 /* EXTScope.m */; };
 		F8EA73E31C0CBB2F00190832 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8EA73C31C0CBB2F00190832 /* Info.plist */; };
@@ -446,6 +445,12 @@
 		F8EA74D01C0DAF3200190832 /* ShareSDKExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8EA74C31C0DAF3100190832 /* ShareSDKExtension.framework */; };
 		F8EA74D11C0DAF3200190832 /* ShareSDKUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8EA74C41C0DAF3100190832 /* ShareSDKUI.bundle */; };
 		F8EA74D21C0DAF3200190832 /* ShareSDKUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8EA74C51C0DAF3100190832 /* ShareSDKUI.framework */; };
+		F8EA74D61C0DD63B00190832 /* RegisterWithPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */; };
+		F8EA74D71C0DD63B00190832 /* RegisterWithPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */; };
+		F8EA74DB1C0EA48800190832 /* MTLoginResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA74DA1C0EA48800190832 /* MTLoginResponse.m */; };
+		F8EA74DE1C0EA5B300190832 /* MTAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA74DD1C0EA5B300190832 /* MTAccount.m */; };
+		F8EA75551C0EAF9300190832 /* FXKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA75531C0EAF9300190832 /* FXKeychain.m */; };
+		F8EA75561C0EAF9300190832 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8EA75541C0EAF9300190832 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1248,8 +1253,6 @@
 		F8B5DE431BFCA0FE00E1F713 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
 		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
 		F8EA73601C0C61C000190832 /* MTAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccountManager.m; sourceTree = "<group>"; };
-		F8EA737D1C0CA73B00190832 /* MTAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccount.h; sourceTree = "<group>"; };
-		F8EA737E1C0CA73B00190832 /* MTAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccount.m; sourceTree = "<group>"; };
 		F8EA73BD1C0CBB2F00190832 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTKeyPathCoding.h; sourceTree = "<group>"; };
 		F8EA73BE1C0CBB2F00190832 /* EXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTRuntimeExtensions.m; sourceTree = "<group>"; };
@@ -1325,6 +1328,16 @@
 		F8EA74C31C0DAF3100190832 /* ShareSDKExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKExtension.framework; sourceTree = "<group>"; };
 		F8EA74C41C0DAF3100190832 /* ShareSDKUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKUI.bundle; sourceTree = "<group>"; };
 		F8EA74C51C0DAF3100190832 /* ShareSDKUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKUI.framework; sourceTree = "<group>"; };
+		F8EA74D31C0DD63B00190832 /* RegisterWithPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RegisterWithPhoneViewController.h; path = "Login&Register/RegisterWithPhoneViewController.h"; sourceTree = "<group>"; };
+		F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RegisterWithPhoneViewController.m; path = "Login&Register/RegisterWithPhoneViewController.m"; sourceTree = "<group>"; };
+		F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RegisterWithPhoneViewController.xib; path = "Login&Register/RegisterWithPhoneViewController.xib"; sourceTree = "<group>"; };
+		F8EA74D91C0EA48800190832 /* MTLoginResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLoginResponse.h; sourceTree = "<group>"; };
+		F8EA74DA1C0EA48800190832 /* MTLoginResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLoginResponse.m; sourceTree = "<group>"; };
+		F8EA74DC1C0EA5B300190832 /* MTAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccount.h; sourceTree = "<group>"; };
+		F8EA74DD1C0EA5B300190832 /* MTAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccount.m; sourceTree = "<group>"; };
+		F8EA75521C0EAF9300190832 /* FXKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXKeychain.h; sourceTree = "<group>"; };
+		F8EA75531C0EAF9300190832 /* FXKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXKeychain.m; sourceTree = "<group>"; };
+		F8EA75541C0EAF9300190832 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1404,6 +1417,9 @@
 				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
 				04AC63FF1AA1C8D500A863D6 /* GetBackPasswordViewController.h */,
 				04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */,
+				F8EA74D31C0DD63B00190832 /* RegisterWithPhoneViewController.h */,
+				F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */,
+				F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -2065,6 +2081,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F8EA75511C0EAF9200190832 /* FXKeychain */,
 				F8EA73F21C0CC09900190832 /* TPKeyboardAvoiding */,
 				F8EA73BB1C0CBB2F00190832 /* Mantle */,
 				F8A329A91C07EFB5008FFB17 /* AFNetworking-2.6.3 */,
@@ -2445,6 +2462,7 @@
 		F894FE1B1BC4F9AC004B6159 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				F8EA74D81C0EA45100190832 /* Response */,
 				F8EA737C1C0CA72B00190832 /* Model */,
 				F8B5DD2C1BFB83EA00E1F713 /* Category */,
 				F8B5DD391BFB83EA00E1F713 /* Cell */,
@@ -2895,8 +2913,8 @@
 		F8EA737C1C0CA72B00190832 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F8EA737D1C0CA73B00190832 /* MTAccount.h */,
-				F8EA737E1C0CA73B00190832 /* MTAccount.m */,
+				F8EA74DC1C0EA5B300190832 /* MTAccount.h */,
+				F8EA74DD1C0EA5B300190832 /* MTAccount.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3031,6 +3049,25 @@
 				F8EA74BE1C0DAF3100190832 /* WXApiObject.h */,
 			);
 			path = WeChatSDK;
+			sourceTree = "<group>";
+		};
+		F8EA74D81C0EA45100190832 /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				F8EA74D91C0EA48800190832 /* MTLoginResponse.h */,
+				F8EA74DA1C0EA48800190832 /* MTLoginResponse.m */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		F8EA75511C0EAF9200190832 /* FXKeychain */ = {
+			isa = PBXGroup;
+			children = (
+				F8EA75521C0EAF9300190832 /* FXKeychain.h */,
+				F8EA75531C0EAF9300190832 /* FXKeychain.m */,
+				F8EA75541C0EAF9300190832 /* Info.plist */,
+			);
+			path = FXKeychain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3174,10 +3211,12 @@
 				F8B5DE4C1BFCA0FF00E1F713 /* UMSnsAccountViewController.xib in Resources */,
 				F8B5DE191BFB8D5300E1F713 /* ReleaseNotes.txt in Resources */,
 				F8EA74D11C0DAF3200190832 /* ShareSDKUI.bundle in Resources */,
+				F8EA74D71C0DD63B00190832 /* RegisterWithPhoneViewController.xib in Resources */,
 				F8B5DDDC1BFB83EA00E1F713 /* PcommentTableViewCell.xib in Resources */,
 				085A5D4719C7FF85005FEEF9 /* square_3.jpg in Resources */,
 				04D61299197BD40000159190 /* FlatDatePicker-Icon-Close@2x.png in Resources */,
 				08D5E8C31A22050800D368D8 /* MTVideoPlayerViewController.xib in Resources */,
+				F8EA75561C0EAF9300190832 /* Info.plist in Resources */,
 				51F06C1F197E0109000E8428 /* zbar-samples.png in Resources */,
 				F8EA73E31C0CBB2F00190832 /* Info.plist in Resources */,
 				51F06C1E197E0109000E8428 /* zbar-helpicons.png in Resources */,
@@ -3339,6 +3378,7 @@
 				0821828C1AA6DEED00EBD156 /* UIImage+PECrop.m in Sources */,
 				08C97F2C1AAF2C7000ABA19C /* UzysGroupPickerView.m in Sources */,
 				F8A329E61C07EFB5008FFB17 /* UIRefreshControl+AFNetworking.m in Sources */,
+				F8EA75551C0EAF9300190832 /* FXKeychain.m in Sources */,
 				51F4CB1E19E6307500E487F1 /* HTTPAuthenticationRequest.m in Sources */,
 				F83369541AD00AE100B41435 /* MBProgressHUD.m in Sources */,
 				08E248A919C740CC0042B30F /* EventSquareViewController.m in Sources */,
@@ -3398,10 +3438,12 @@
 				F813B2FF1BB3B9BA0066BC37 /* UIView+WebCacheOperation.m in Sources */,
 				F8A329DA1C07EFB5008FFB17 /* AFNetworkReachabilityManager.m in Sources */,
 				08775A0719A8F7840034BB58 /* ReportViewController.m in Sources */,
+				F8EA74DB1C0EA48800190832 /* MTLoginResponse.m in Sources */,
 				0435EF2019B3585B003BB2F6 /* AboutPageViewController.m in Sources */,
 				08C97F2F1AAF2C7000ABA19C /* UzysWrapperPickerController.m in Sources */,
 				F8B5DE011BFB83EA00E1F713 /* MySqlite.m in Sources */,
 				0435EF1C19AF702F003BB2F6 /* RegisterViewController.m in Sources */,
+				F8EA74DE1C0EA5B300190832 /* MTAccount.m in Sources */,
 				08C97F291AAF2C7000ABA19C /* UzysAssetsPickerController.m in Sources */,
 				51F06C88197FA2F3000E8428 /* ScanViewController.m in Sources */,
 				51F4CB0D19E6307500E487F1 /* ASIFormDataRequest.m in Sources */,
@@ -3471,7 +3513,6 @@
 				F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */,
 				0821828A1AA6DEED00EBD156 /* PECropViewController.m in Sources */,
 				0435EF3B19B45C54003BB2F6 /* FriendInfoViewController.m in Sources */,
-				F8EA737F1C0CA73B00190832 /* MTAccount.m in Sources */,
 				F8B5DDFA1BFB83EA00E1F713 /* MTDatabaseAffairs.m in Sources */,
 				F8B5DE051BFB83EA00E1F713 /* ChineseToPinyinResource.m in Sources */,
 				51F4CB1C19E6307500E487F1 /* GCDAsyncSocket.m in Sources */,
@@ -3511,6 +3552,7 @@
 				F8B5DDE01BFB83EA00E1F713 /* SCommentTableViewCell.m in Sources */,
 				043E1A751ADA24B400D1D39F /* SDBaseProgressView.m in Sources */,
 				51F4CB1D19E6307500E487F1 /* HTTPAsyncFileResponse.m in Sources */,
+				F8EA74D61C0DD63B00190832 /* RegisterWithPhoneViewController.m in Sources */,
 				F8B5DDC51BFB83EA00E1F713 /* UIImage+fixOrien.m in Sources */,
 				F8B5DDCC1BFB83EA00E1F713 /* AvatarCollectionViewCell.m in Sources */,
 				0435EF3919B45C54003BB2F6 /* AddFriendViewController.m in Sources */,

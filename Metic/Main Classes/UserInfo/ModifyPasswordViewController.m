@@ -8,6 +8,7 @@
 
 #import "ModifyPasswordViewController.h"
 #import "SVProgressHUD.h"
+#import "MTAccount.h"
 
 @interface ModifyPasswordViewController ()
 {
@@ -187,10 +188,9 @@
         MTLOG(@"cmd: %@",cmd);
         if ([cmd integerValue] == NORMAL_REPLY) {
             [SVProgressHUD dismissWithSuccess:@"密码修改成功" afterDelay:1.5];
-            NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
-            NSArray *Array = [NSArray arrayWithObjects:[MTUser sharedInstance].email, modifyPS, nil];
-            [NSKeyedArchiver archiveRootObject:Array toFile:MtsecretPath];
-
+            MTAccount *account = [MTAccount singleInstance];
+            account.password = modifyPS;
+            [account saveAccount];
             [self.navigationController popViewControllerAnimated:YES];
         }
         else

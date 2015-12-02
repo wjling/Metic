@@ -25,6 +25,10 @@
 		<dict>
 			<key>CFBundleURLName</key>
 			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>whatsact-weshare</string>
+			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>

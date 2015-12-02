@@ -7,7 +7,6 @@
 //
 
 #import "MTAccountManager.h"
-#import "MTAccount.h"
 #import "HttpSender.h"
 #import "CommonUtils.h"
 
@@ -17,7 +16,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 
 + (void)loginWithAccount:(NSString *)account
                 password:(NSString *)password
-                 success:(void (^)(MTAccount *user))success
+                 success:(void (^)(MTLoginResponse *user))success
                  failure:(void (^)(enum MTLoginResult result, NSString *message))failure
 {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -65,7 +64,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                         case LOGIN_SUC:
                         {
                             MTLOG(@"验证密码成功");
-                            MTAccount *user = [MTLJSONAdapter modelOfClass:[MTAccount class]
+                            MTLoginResponse *user = [MTLJSONAdapter modelOfClass:[MTLoginResponse class]
                                                         fromJSONDictionary:response1
                                                                      error:nil];
                             success(user);
@@ -102,7 +101,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 
 + (void)registWithAccount:(NSString *)account
                  password:(NSString *)password
-                  success:(void (^)(MTAccount *user))success
+                  success:(void (^)(MTLoginResponse *user))success
                   failure:(void (^)(enum MTLoginResult result, NSString *message))failure
 {
     NSString* salt = [CommonUtils randomStringWithLength:6];
@@ -140,8 +139,8 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 }
 
 + (void)thirdPartyLoginWithOpenId:(NSString *)openId
-                             type:(enum MTAccountThirdPartyType)thirdPartyType
-                          success:(void (^)(MTAccount *user))success
+                             type:(enum MTAccountType)thirdPartyType
+                          success:(void (^)(MTLoginResponse *user))success
                           failure:(void (^)(enum MTLoginResult result, NSString *message))failure
 {
     NSDictionary *dict = @{@"openid":openId,
@@ -154,24 +153,36 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
             return ;
         }
         NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case LOGIN_SUC:
+            {
+                MTLOG(@"登录成功");
+                MTLoginResponse *user = [MTLJSONAdapter modelOfClass:[MTLoginResponse class]
+                                            fromJSONDictionary:response
+                                                         error:nil];
+                success(user);
+            }
+                break;
+            case USER_NOT_FOUND:
+            {
+                MTLOG(@"用户不存在");
+                failure(MTLoginResultPasswordInvalid,@"用户不存在");
+            }
+                break;
+            case REQUEST_DATA_ERROR:
+            {
+                MTLOG(@"请求参数错误");
+                failure(MTLoginResultPasswordInvalid,@"请求参数错误");
+            }
+                break;
+            default:
+            {
+                MTLOG(@"其他错误");
+                failure(MTLoginResultPasswordInvalid,@"未知错误");
+            }
+        }
     }];
 }
 
-+ (void)thirdPartyRegistWithOpenId:(NSString *)openId
-                             type:(enum MTAccountThirdPartyType)thirdPartyType
-                          success:(void (^)(MTAccount *user))success
-                          failure:(void (^)(enum MTLoginResult result, NSString *message))failure
-{
-    NSDictionary *dict = @{@"openid":openId,
-                           @"third_type":@(thirdPartyType)};
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:THIRD_PARTY_REGIST finshedBlock:^(NSData *rData) {
-        if (!rData) {
-            failure(MTLoginResultFailure,@"网络异常，请重试");
-            return ;
-        }
-        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-    }];
-}
 @end

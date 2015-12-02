@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "RegisterWithPhoneViewController.h"
 #import "MenuViewController.h"
 #import "GetBackPasswordViewController.h"
 #import "CommonUtils.h"
@@ -79,14 +80,14 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    MTLOG(@"login will apear");
-    [self checkPreUP];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"登录"];
+    [self.navigationController setNavigationBarHidden:NO];
+    [self checkPreUP];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -115,16 +116,15 @@
 - (void)setupUI
 {
     self.title = @"登陆";
+    [self.navigationController setNavigationBarHidden:YES];
     [self.view setBackgroundColor:[UIColor whiteColor]];
+    [CommonUtils addLeftButton:self isFirstPage:NO];
     
     [forgetPS_btn setTitle:@"忘记密码?" forState:UIControlStateNormal];
     forgetPS_btn.titleLabel.font = [UIFont systemFontOfSize:13];
     [forgetPS_btn setBackgroundColor:[UIColor clearColor]];
     [forgetPS_btn addTarget:self action:@selector(forgetPSBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
-//    UIColor *backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"背景颜色方格.png"]];
-//    [self.view setBackgroundColor:backgroundColor];
-    
     UILabel *userNameLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
     userNameLeftView.text = @"账号";
     userNameLeftView.font = [UIFont systemFontOfSize:15];
@@ -220,44 +220,60 @@
 
 -(void)checkPreUP
 {
-//    NSString *userName = [SFHFKeychainUtils getPasswordForUsername:@"MeticUserName"andServiceName:@"Metic0713" error:nil];
-//    NSString *password = [SFHFKeychainUtils getPasswordForUsername:@"MeticPassword"andServiceName:@"Metic0713" error:nil];
-//    NSString *userStatus = [SFHFKeychainUtils getPasswordForUsername:@"MeticStatus"andServiceName:@"Metic0713" error:nil];
-    
-    NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
-    NSArray *arr = [NSKeyedUnarchiver unarchiveObjectWithFile: MtsecretPath];
-    NSString *userName = [arr objectAtIndex:0];
-    NSString *password =  [arr objectAtIndex:1];
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    if ([userStatus isEqualToString:@"in"]) {
-        //处理登录状态下，直接跳转 需要读取默认信息。
-        MTLOG(@"用户 %@ 在线", userName);
+    if ([userStatus isEqualToString:@"in"] && [MTAccount isExist]) {
+        MTAccount *account = [MTAccount singleInstance];
+        enum MTAccountType type = account.type;
+        if (type == MTAccountTypeEmail) {
+            [self checkPassWordWithAccount:account.email Password:account.password];
+        }else if (type == MTAccountTypePhoneNumber) {
+            [self checkPassWordWithAccount:account.phoneNumber Password:account.password];
+        }else if(type == MTAccountTypeQQ || type == MTAccountTypeWeChat || type == MTAccountTypeWeiBo) {
+            [self thirdPartyLoginWithOpenIdOnBackground:account.openId type:type];
+        }
         appDelegate.isLogined = YES;
-        [self checkPassWordWithAccount:userName Password:password];
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
-        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
-    
-    } else if ([userStatus isEqualToString:@"change"]) {
+
+        BOOL hadCompleteInfo= account.hadCompleteInfo;
+        if (!hadCompleteInfo) {
+            [self performSelectorOnMainThread:@selector(jumpToFillinInfo) withObject:nil waitUntilDone:YES];
+        } else {
+            [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
+        }
+        
+    } else {
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
-    if (userName && password) {
-        self.textField_userName.text = userName;
-        self.textField_password.text = password;
-        self.logInEmail = userName;
-        self.logInPassword = password;
+        [[MTAccount singleInstance] deleteAccount];
     }
 }
 
 -(void)checkPassWordWithAccount:(NSString *)account Password:(NSString *)password
 {
-    [MTAccountManager loginWithAccount:account password:password success:^(MTAccount *user) {
+    [MTAccountManager loginWithAccount:account password:password success:^(MTLoginResponse *user) {
     } failure:^(enum MTLoginResult result, NSString *message) {
         if (result == MTLoginResultPasswordInvalid) {
             MTLOG(@"验证密码失败，强制退出到登录页面");
             [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
         }
+    }];
+}
+
+- (void)thirdPartyLoginWithOpenIdOnBackground:(NSString *)openId type:(enum MTAccountType)type {
+    [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
+        MTLOG(@"login succeeded");
+        ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
+        //保存账户信息
+        [[MenuViewController sharedInstance] dianReset];
+        [[MenuViewController sharedInstance] refresh];
+        [[appDelegate leftMenu] clearVC];
+        
+        NSNumber* min_seq = user.minMegSeq;
+        NSNumber* max_seq = user.maxMegSeq;
+        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
+        }
+    } failure:^(enum MTLoginResult result, NSString *message) {
     }];
 }
 
@@ -298,7 +314,8 @@
 
 - (IBAction)registerBtnClicked:(id)sender
 {
-    [self jumpToRegisterView];
+    RegisterWithPhoneViewController *vc = [[RegisterWithPhoneViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)QQLogin:(id)sender {
@@ -307,7 +324,7 @@
      {
          if (state == SSDKResponseStateSuccess) {
              NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeQQ];
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeQQ];
          } else {
              NSLog(@"%@",error);
          }
@@ -320,7 +337,7 @@
      {
          if (state == SSDKResponseStateSuccess) {
              NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeWeChat];
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeWeChat];
          } else {
              NSLog(@"%@",error);
          }
@@ -333,33 +350,28 @@
      {
          if (state == SSDKResponseStateSuccess) {
              NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountThirdPartyTypeWeiBo];
+             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeWeiBo];
          } else {
              NSLog(@"%@",error);
          }
      }];
 }
 
-- (void)thirdPartyLoginWithOpenId:(NSString *)openId type:(enum MTAccountThirdPartyType)type {
+- (void)thirdPartyLoginWithOpenId:(NSString *)openId type:(enum MTAccountType)type {
     [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
-    [MTAccountManager thirdPartyRegistWithOpenId:openId type:type success:^(MTAccount *user) {
-        //
-    } failure:^(enum MTLoginResult result, NSString *message) {
-        [SVProgressHUD dismissWithError:message afterDelay:1.f];
-    }];
-}
-
-- (void)login{
-    [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
-    [MTAccountManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTAccount *user) {
+    [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
-        //保存信息
-        NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
-        NSArray *Array = [NSArray arrayWithObjects:self.logInEmail, self.logInPassword, nil];
+        //保存账户信息
+        BOOL hadCompleteInfo= [user.hadCompleteInfo boolValue];
+        MTAccount *account = [MTAccount singleInstance];
+        account.openId = openId;
+        account.type = type;
+        account.hadCompleteInfo = hadCompleteInfo;
+        [account saveAccount];
+        
         [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [NSKeyedArchiver archiveRootObject:Array toFile:MtsecretPath];
         
         NSNumber *userid = user.userId;
         [[MTUser sharedInstance] setUid:userid];
@@ -367,14 +379,56 @@
         [[MenuViewController sharedInstance] dianReset];
         [[MenuViewController sharedInstance] refresh];
         [[appDelegate leftMenu] clearVC];
-        NSString* logintime = user.lastLoginTime;
+
         NSNumber* min_seq = user.minMegSeq;
         NSNumber* max_seq = user.maxMegSeq;
         if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
             [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
         }
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
-        if ([logintime isEqualToString:@"None"]) {
+        
+        if (!hadCompleteInfo) {
+            [self jumpToFillinInfo];
+        } else {
+            [self jumpToMainView];
+        }
+    } failure:^(enum MTLoginResult result, NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:1.f];
+    }];
+}
+
+- (void)login{
+    [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
+    [MTAccountManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTLoginResponse *user) {
+        MTLOG(@"login succeeded");
+        ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
+        
+        //保存账户信息
+        BOOL hadCompleteInfo= [user.hadCompleteInfo boolValue];
+        MTAccount *account = [MTAccount singleInstance];
+        account.email = self.logInEmail;
+        account.password = self.logInPassword;
+        account.type = MTAccountTypeEmail;
+        account.hadCompleteInfo = hadCompleteInfo;
+        [account saveAccount];
+        [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSNumber *userid = user.userId;
+        [[MTUser sharedInstance] setUid:userid];
+        
+        [[MenuViewController sharedInstance] dianReset];
+        [[MenuViewController sharedInstance] refresh];
+        [[appDelegate leftMenu] clearVC];
+        
+        NSNumber* min_seq = user.minMegSeq;
+        NSNumber* max_seq = user.maxMegSeq;
+        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
+        }
+        [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
+        
+        if (!hadCompleteInfo) {
             [self jumpToFillinInfo];
         } else {
             [self jumpToMainView];

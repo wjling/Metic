@@ -126,7 +126,7 @@
         return;
     }
     
-    [MTAccountManager registWithAccount:email password:password success:^(MTAccount *user) {
+    [MTAccountManager registWithAccount:email password:password success:^(MTLoginResponse *user) {
         AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
         appDelegate.isLogined = YES;
         //保存信息

@@ -242,9 +242,6 @@ static NSOperationQueue *requestQueue;
             resultCode = @"token";
             break;
         case 58:
-            resultCode = @"third_party_regist";
-            break;
-        case 59:
             resultCode = @"third_party_login";
             break;
         default:

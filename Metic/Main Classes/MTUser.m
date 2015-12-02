@@ -174,7 +174,6 @@ static MTUser *singletonInstance;
             }
         }
     }];
-
 }
 
 -(void)updateAvatarList
@@ -203,7 +202,6 @@ static MTUser *singletonInstance;
             }
         }
     }];
-    
 }
 
 -(void)updateAvatar
@@ -399,14 +397,13 @@ static MTUser *singletonInstance;
 
 - (void)initWithData:(NSDictionary *)mdictionary
 {
-    self.userid = [mdictionary valueForKey:@"id"];
-    self.name = [mdictionary valueForKey:@"name"];
-    self.gender = [mdictionary valueForKey:@"gender"];
-    self.sign = [mdictionary valueForKey:@"sign"];
-    self.phone = [mdictionary valueForKey:@"phone"];
-    self.location = [mdictionary valueForKey:@"location"];
-    self.email = [mdictionary valueForKey:@"email"];
-    
+    self.userid = [mdictionary objectForKey:@"id"] != [NSNull null]? [mdictionary objectForKey:@"id"]:nil;
+    self.name = [mdictionary objectForKey:@"name"] != [NSNull null]? [mdictionary objectForKey:@"name"]:nil;
+    self.gender = [mdictionary objectForKey:@"gender"] != [NSNull null]? [mdictionary objectForKey:@"gender"]:nil;
+    self.sign = [mdictionary objectForKey:@"sign"] != [NSNull null]? [mdictionary objectForKey:@"sign"]:nil;
+    self.phone = [mdictionary objectForKey:@"phone"] != [NSNull null]? [mdictionary objectForKey:@"phone"]:nil;
+    self.location = [mdictionary objectForKey:@"location"] != [NSNull null]? [mdictionary objectForKey:@"location"]:nil;
+    self.email = [mdictionary objectForKey:@"email"] != [NSNull null]? [mdictionary objectForKey:@"email"]:nil;
 }
 
 -(void)systemSettingsInit:(NSNumber*)uid
