@@ -8,6 +8,14 @@
 
 #import "RegisterWithPhoneViewController.h"
 #import "CommonUtils.h"
+#import "SVProgressHUD.h"
+#import "MTAccountManager.h"
+#import "AppDelegate.h"
+#import "MenuViewController.h"
+#import "FillinInfoViewController.h"
+#import "MTPushMessageHandler.h"
+
+#import <SMS_SDK/SMSSDK.h>
 
 @interface RegisterWithPhoneViewController ()
 
@@ -62,12 +70,49 @@
     self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
 }
 
+- (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber
+{
+    NSString *rule = @"^1(3|5|7|8|4)\\d{9}";
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",rule];
+    BOOL isMatch = [pred evaluateWithObject:phoneNumber];
+    return isMatch;
+}
+
+- (void)resignKeyboard
+{
+    [self.phoneTextField resignFirstResponder];
+    [self.verificationCodeTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+}
+
 - (IBAction)getVerificationCode:(id)sender {
+    [self resignKeyboard];
+    if (![self isPhoneNumberVaild:self.phoneTextField.text]) {
+        [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
+        return;
+    }
     [sender setEnabled:NO];
     NSNumber *waitingTime = @60;
     NSMutableDictionary *dict = [@{@"waitingTime":waitingTime} mutableCopy];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshWaitingCount:) userInfo:dict repeats:YES];
     [timer fire];
+    
+    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.phoneTextField.text
+                                   zone:@"+86"
+                       customIdentifier:nil
+                                 result:^(NSError *error)
+     {
+         if (!error) {
+             NSLog(@"验证码发送成功");
+             [SVProgressHUD showSuccessWithStatus:@"验证码已发送" duration:1.f];
+         } else {
+             NSLog(@"验证码发送失败");
+             [timer invalidate];
+             [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+             [self.getVerificationCodeBtn setEnabled:YES];
+             [SVProgressHUD showErrorWithStatus:@"获取失败，请重试" duration:1.f];
+         }
+     }];
 }
 
 - (void)refreshWaitingCount:(id)sender {
@@ -80,15 +125,78 @@
         NSString *title = [NSString stringWithFormat:@"%@秒后重试",waitingTime];
         [self.getVerificationCodeBtn setTitle:title forState:UIControlStateNormal];
     }else {
+        [timer invalidate];
         [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [self.getVerificationCodeBtn setEnabled:YES];
-        [timer invalidate];
     }
 }
 
 - (IBAction)regist:(id)sender {
+    [self resignKeyboard];
+    NSString *phoneNumber = self.phoneTextField.text;
+    NSString *password = self.passwordTextField.text;
+    if (![self isPhoneNumberVaild:phoneNumber]) {
+        [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
+        return;
+    }
+    [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    [SMSSDK commitVerificationCode:self.verificationCodeTextField.text phoneNumber:self.phoneTextField.text zone:@"+86" result:^(NSError *error) {
+        if (!error) {
+            NSLog(@"验证成功");
+            [self loginWithPhoneNumber:phoneNumber Password:password];
+        } else {
+            NSLog(@"验证失败");
+            [SVProgressHUD dismissWithError:@"验证码错误"];
+        }
+    }];
 }
 
 - (IBAction)registWithMail:(id)sender {
+    
+}
+
+- (void)loginWithPhoneNumber:(NSString *)phoneNumber Password:(NSString *)password{
+    
+    [MTAccountManager registWithPhoneNumber:phoneNumber password:password success:^(MTLoginResponse *user) {
+        MTLOG(@"login succeeded");
+        AppDelegate *appDelegate =  (AppDelegate *)([UIApplication sharedApplication].delegate);
+        appDelegate.isLogined = YES;
+        
+        //保存账户信息
+        MTAccount *account = [MTAccount singleInstance];
+        account.phoneNumber = phoneNumber;
+        account.password = password;
+        account.type = MTAccountTypePhoneNumber;
+        account.hadCompleteInfo = NO;
+        [account saveAccount];
+        [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        NSNumber *userid = user.userId;
+        [[MTUser sharedInstance] setUid:userid];
+        
+        [[MenuViewController sharedInstance] dianReset];
+        [[MenuViewController sharedInstance] refresh];
+        [[appDelegate leftMenu] clearVC];
+        
+        NSNumber* min_seq = user.minMegSeq;
+        NSNumber* max_seq = user.maxMegSeq;
+        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
+        }
+        [SVProgressHUD dismissWithSuccess:@"注册成功" afterDelay:1.f];
+        [self jumpToFillinInfo];
+
+    } failure:^(enum MTLoginResult result, NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:1.f];
+    }];
+}
+
+#pragma mark - push ViewController
+- (void)jumpToFillinInfo
+{
+    UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

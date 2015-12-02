@@ -137,7 +137,7 @@
         [SVProgressHUD dismissWithError:message afterDelay:1.f];
     }];
     
-    [SVProgressHUD showWithStatus:@"正在注册，请稍后" maskType:SVProgressHUDMaskTypeGradient];
+    [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeGradient];
 }
 
 - (IBAction)backToLoginButtonClicked:(id)sender

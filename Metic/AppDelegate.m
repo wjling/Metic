@@ -37,6 +37,9 @@
 //新浪微博SDK头文件
 #import "WeiboSDK.h"
 
+//shareSDK SMS
+#import <SMS_SDK/SMSSDK.h>
+
 #define _IPHONE80_ 80000
 
 @implementation AppDelegate
@@ -119,6 +122,9 @@
     
     // 初始化ShareSDK
     [self initShareSDK];
+    
+    //初始化ShareSDK SMS
+    [self initShareSDKSMS];
     
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -419,7 +425,7 @@
 
 }
 
-+(void)refreshMenu
++ (void)refreshMenu
 {
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
 //    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
@@ -1237,6 +1243,10 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
      }];
 }
 
-
+#pragma mark - shareSDK SMS Init
+- (void)initShareSDKSMS {
+    [SMSSDK registerApp:@"c51b91b2ff20"
+             withSecret:@"912f0b53eac7ecc424254abf88aa6b46"];
+}
 
 @end

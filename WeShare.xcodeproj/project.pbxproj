@@ -451,6 +451,9 @@
 		F8EA74DE1C0EA5B300190832 /* MTAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA74DD1C0EA5B300190832 /* MTAccount.m */; };
 		F8EA75551C0EAF9300190832 /* FXKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA75531C0EAF9300190832 /* FXKeychain.m */; };
 		F8EA75561C0EAF9300190832 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8EA75541C0EAF9300190832 /* Info.plist */; };
+		F8EA755D1C0EE90300190832 /* SMS_SDKLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F8EA75581C0EE90300190832 /* SMS_SDKLocalizable.strings */; };
+		F8EA755E1C0EE90300190832 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8EA755A1C0EE90300190832 /* MOBFoundation.framework */; };
+		F8EA755F1C0EE90300190832 /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8EA755B1C0EE90300190832 /* SMS_SDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1338,6 +1341,10 @@
 		F8EA75521C0EAF9300190832 /* FXKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXKeychain.h; sourceTree = "<group>"; };
 		F8EA75531C0EAF9300190832 /* FXKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXKeychain.m; sourceTree = "<group>"; };
 		F8EA75541C0EAF9300190832 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F8EA75591C0EE90300190832 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SMS_SDKLocalizable.strings; sourceTree = "<group>"; };
+		F8EA755A1C0EE90300190832 /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
+		F8EA755B1C0EE90300190832 /* SMS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SMS_SDK.framework; sourceTree = "<group>"; };
+		F8EA755C1C0EE90300190832 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SMS_SDKLocalizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1356,7 +1363,9 @@
 				F8B5DE4F1BFCA0FF00E1F713 /* TencentOpenAPI.framework in Frameworks */,
 				F8EA74CE1C0DAF3100190832 /* ShareSDK.framework in Frameworks */,
 				04AF99EB1A582AA300C9ED8C /* AdSupport.framework in Frameworks */,
+				F8EA755F1C0EE90300190832 /* SMS_SDK.framework in Frameworks */,
 				F8B5DE511BFCA0FF00E1F713 /* libSocialWechat.a in Frameworks */,
+				F8EA755E1C0EE90300190832 /* MOBFoundation.framework in Frameworks */,
 				F8EA74CC1C0DAF3100190832 /* MOBFoundation.framework in Frameworks */,
 				045A77B31A807DF10036BDC4 /* libbaidumapapi.a in Frameworks */,
 				08B8D63C19B87FB100552663 /* AssetsLibrary.framework in Frameworks */,
@@ -2558,6 +2567,7 @@
 				F8EA74A61C0DAF3100190832 /* ShareSDK-iOS-simple-3.1.4 */,
 				F8B5DE131BFB8D5300E1F713 /* xg-sdk */,
 				F8B5DE1D1BFCA0FE00E1F713 /* UMSocial_Sdk_4.3 */,
+				F8EA75571C0EE90300190832 /* SMS_SDK */,
 				F8182F5E1BFCB32B0049FD1F /* UMAnalytics_Sdk_3.6.5 */,
 			);
 			path = Vendors;
@@ -3070,6 +3080,16 @@
 			path = FXKeychain;
 			sourceTree = "<group>";
 		};
+		F8EA75571C0EE90300190832 /* SMS_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				F8EA75581C0EE90300190832 /* SMS_SDKLocalizable.strings */,
+				F8EA755A1C0EE90300190832 /* MOBFoundation.framework */,
+				F8EA755B1C0EE90300190832 /* SMS_SDK.framework */,
+			);
+			path = SMS_SDK;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3247,6 +3267,7 @@
 				04B6F8A619A25D5C00229393 /* face23.png in Resources */,
 				04B6F89B19A25D5C00229393 /* face12.png in Resources */,
 				519C65981989F61B00710B26 /* 6听课.jpg in Resources */,
+				F8EA755D1C0EE90300190832 /* SMS_SDKLocalizable.strings in Resources */,
 				04B6F8AB19A25D5C00229393 /* ic_content_backspace.png in Resources */,
 				04B6F89C19A25D5C00229393 /* face13.png in Resources */,
 				04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */,
@@ -3630,6 +3651,15 @@
 			name = UMSocialLocalizable.strings;
 			sourceTree = "<group>";
 		};
+		F8EA75581C0EE90300190832 /* SMS_SDKLocalizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F8EA75591C0EE90300190832 /* en */,
+				F8EA755C1C0EE90300190832 /* zh-Hans */,
+			);
+			name = SMS_SDKLocalizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -3744,6 +3774,7 @@
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1/Extend/QQConnectSDK",
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1",
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1/UI",
+					"$(PROJECT_DIR)/Metic/Vendors/SMS_SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";
@@ -3832,6 +3863,7 @@
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1/Extend/QQConnectSDK",
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1",
 					"$(PROJECT_DIR)/Metic/Vendors/ShareSDK-iOS-2.12.1/UI",
+					"$(PROJECT_DIR)/Metic/Vendors/SMS_SDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Metic/WeShare-Prefix.pch";

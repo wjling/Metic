@@ -218,6 +218,14 @@
     [blackView removeFromSuperview];
 }
 
+- (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber
+{
+    NSString *rule = @"^1(3|5|7|8|4)\\d{9}";
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",rule];
+    BOOL isMatch = [pred evaluateWithObject:phoneNumber];
+    return isMatch;
+}
+
 -(void)checkPreUP
 {
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
@@ -225,8 +233,12 @@
         MTAccount *account = [MTAccount singleInstance];
         enum MTAccountType type = account.type;
         if (type == MTAccountTypeEmail) {
+            self.textField_userName.text = account.email;
+            self.textField_password.text = account.password;
             [self checkPassWordWithAccount:account.email Password:account.password];
         }else if (type == MTAccountTypePhoneNumber) {
+            self.textField_userName.text = account.phoneNumber;
+            self.textField_password.text = account.password;
             [self checkPassWordWithAccount:account.phoneNumber Password:account.password];
         }else if(type == MTAccountTypeQQ || type == MTAccountTypeWeChat || type == MTAccountTypeWeiBo) {
             [self thirdPartyLoginWithOpenIdOnBackground:account.openId type:type];
@@ -296,9 +308,9 @@
 - (IBAction)loginButtonClicked:(id)sender {
     [self.textField_userName resignFirstResponder];
     [self.textField_password resignFirstResponder];
-    
-    if (![CommonUtils isEmailValid: textField_userName.text]) {
-        [SVProgressHUD showErrorWithStatus:@"邮箱格式不正确" duration:1.f];
+
+    if (![CommonUtils isEmailValid: textField_userName.text] && ![self isPhoneNumberVaild:textField_userName.text]) {
+        [SVProgressHUD showErrorWithStatus:@"账号格式不正确" duration:1.f];
         return;
     } else if ([[textField_password text] length] < 5) {
         [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
@@ -358,7 +370,7 @@
 }
 
 - (void)thirdPartyLoginWithOpenId:(NSString *)openId type:(enum MTAccountType)type {
-    [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:@"正在登录，请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
@@ -398,17 +410,18 @@
 }
 
 - (void)login{
-    [SVProgressHUD showWithStatus:@"正在登录，请稍后" maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:@"正在登录，请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [MTAccountManager loginWithAccount:self.logInEmail password:self.logInPassword success:^(MTLoginResponse *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
         
         //保存账户信息
         BOOL hadCompleteInfo= [user.hadCompleteInfo boolValue];
+        BOOL isPhoneNumber = [self isPhoneNumberVaild:self.logInEmail];
         MTAccount *account = [MTAccount singleInstance];
         account.email = self.logInEmail;
         account.password = self.logInPassword;
-        account.type = MTAccountTypeEmail;
+        account.type = isPhoneNumber? MTAccountTypePhoneNumber : MTAccountTypeEmail;
         account.hadCompleteInfo = hadCompleteInfo;
         [account saveAccount];
         [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];

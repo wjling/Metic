@@ -26,7 +26,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
+    [httpSender sendMessage:jsonData withOperationCode:LOGIN_DJANGO finshedBlock:^(NSData *rData) {
         if (!rData) {
             failure(MTLoginResultFailure,@"网络异常，请重试");
             return;
@@ -51,7 +51,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 [params setValue:[NSNumber numberWithBool:YES] forKey:@"has_salt"];
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-                [httpSender sendMessage:jsonData withOperationCode:LOGIN finshedBlock:^(NSData *rData) {
+                [httpSender sendMessage:jsonData withOperationCode:LOGIN_DJANGO finshedBlock:^(NSData *rData) {
                     if (!rData) {
                         failure(MTLoginResultFailure,@"网络异常，请重试");
                         return;
@@ -124,6 +124,45 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 //                                            fromJSONDictionary:response1
 //                                                         error:nil];
                 success(nil);
+            }
+                break;
+            case USER_EXIST: {
+                MTLOG(@"user existed");
+                failure(MTLoginResultFailure,@"用户已存在");
+            }
+                break;
+            default:
+                MTLOG(@"server error");
+                failure(MTLoginResultUnknown,@"服务器异常");
+        }
+    }];
+}
+
++ (void)registWithPhoneNumber:(NSString *)phone
+                     password:(NSString *)password
+                      success:(void (^)(MTLoginResponse *user))success
+                      failure:(void (^)(enum MTLoginResult result, NSString *message))failure
+{
+    NSString* salt = [CommonUtils randomStringWithLength:6];
+    NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
+    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",md5_str,@"passwd",salt,@"salt",nil];
+    
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:REGISTER_BY_PHONE finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(MTLoginResultFailure,@"网络异常，请重试");
+            return ;
+        }
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY: {
+                MTLOG(@"注册成功");
+                MTLoginResponse *user = [MTLJSONAdapter modelOfClass:[MTLoginResponse class]
+                                            fromJSONDictionary:response1
+                                                         error:nil];
+                success(user);
             }
                 break;
             case USER_EXIST: {

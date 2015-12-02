@@ -107,6 +107,8 @@ enum Operation_Code
     LIKE_EVENT = 56,
     TOKEN = 57,
     THIRD_PARTY_LOGIN = 58,
+    LOGIN_DJANGO = 59,
+    REGISTER_BY_PHONE = 60,
 };
 
 enum CloudOperation_Code

@@ -42,6 +42,17 @@ NS_ENUM(NSInteger, MTLoginResult) {
        failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
 /**
+ *
+ *  Regist weshare With PhoneNumber
+ *  @param success the success callback
+ *  @param failure the failure callback
+ */
++ (void)registWithPhoneNumber:(NSString *)phone
+                     password:(NSString *)password
+                      success:(void (^)(MTLoginResponse *user))success
+                      failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
+
+/**
  *  Third Party Login weshare
  */
 + (void)thirdPartyLoginWithOpenId:(NSString *)openId
