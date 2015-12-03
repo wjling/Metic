@@ -1245,8 +1245,8 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
 
 #pragma mark - shareSDK SMS Init
 - (void)initShareSDKSMS {
-    [SMSSDK registerApp:@"c51b91b2ff20"
-             withSecret:@"912f0b53eac7ecc424254abf88aa6b46"];
+    [SMSSDK registerApp:@"c51be96fe46d"
+             withSecret:@"19ed0e085d6b4f92dacfdc2e99f19ff6"];
 }
 
 @end
