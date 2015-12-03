@@ -64,7 +64,16 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:email];
-    
+}
+
++ (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber
+{
+    if (phoneNumber == nil || [phoneNumber length]== 0)
+        return NO;
+    NSString *rule = @"^1(3|5|7|8|4)\\d{9}";
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",rule];
+    BOOL isMatch = [pred evaluateWithObject:phoneNumber];
+    return isMatch;
 }
 
 

@@ -70,14 +70,6 @@
     self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
 }
 
-- (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber
-{
-    NSString *rule = @"^1(3|5|7|8|4)\\d{9}";
-    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",rule];
-    BOOL isMatch = [pred evaluateWithObject:phoneNumber];
-    return isMatch;
-}
-
 - (void)resignKeyboard
 {
     [self.phoneTextField resignFirstResponder];
@@ -87,7 +79,7 @@
 
 - (IBAction)getVerificationCode:(id)sender {
     [self resignKeyboard];
-    if (![self isPhoneNumberVaild:self.phoneTextField.text]) {
+    if (![CommonUtils isPhoneNumberVaild:self.phoneTextField.text]) {
         [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
         return;
     }
@@ -135,7 +127,7 @@
     [self resignKeyboard];
     NSString *phoneNumber = self.phoneTextField.text;
     NSString *password = self.passwordTextField.text;
-    if (![self isPhoneNumberVaild:phoneNumber]) {
+    if (![CommonUtils isPhoneNumberVaild:phoneNumber]) {
         [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
         return;
     }
@@ -197,6 +189,7 @@
 {
     UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
+    vc.gender = @1;
     [self.navigationController pushViewController:vc animated:YES];
 }
 @end

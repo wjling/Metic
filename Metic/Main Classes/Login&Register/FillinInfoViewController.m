@@ -8,8 +8,10 @@
 
 #import "FillinInfoViewController.h"
 #import "UIImage+squareThumbail.h"
+#import "SVProgressHUD.h"
 #import "UzysAssetsPickerController.h"
 #import "MTAccount.h"
+#import "SDWebImageManager.h"
 
 @interface FillinInfoViewController ()
 {
@@ -57,7 +59,6 @@
         }
     }
     
-    avatar = [UIImage imageNamed:@"默认用户头像"];
     name = @"";
     
     info_tableview.delegate = self;
@@ -65,6 +66,7 @@
     
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
+    [self preLoadingUserInfo];
 }
 
 //返回上一层
@@ -95,16 +97,46 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)preLoadingUserInfo{
+    [SVProgressHUD showWithStatus:@"正在加载..." maskType:SVProgressHUDMaskTypeBlack];
+    if (self.ssUser) {
+        //修改用户名
+        NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",self.ssUser.nickname,@"name",nil  ];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+        [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS finshedBlock:^(NSData *rData) {
+            if (!rData) {
+            }else {
+                NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber* cmd = [response objectForKey:@"cmd"];
+                MTLOG(@"cmd: %@",cmd);
+                switch ([cmd integerValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        [MTUser sharedInstance].name = self.ssUser.nickname;
+                        [AppDelegate refreshMenu];
+                        self.name = self.ssUser.nickname;
+                        [self.info_tableview reloadData];
+                        MTLOG(@"昵称修改成功");
+                    }
+                        break;
+                    default:
+                        MTLOG(@"昵称修改失败");
+                        break;
+                }
+            }
+        }];
+        //上传图片
+        NSString *iconURL = self.ssUser.icon;
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:iconURL] options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            //
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            avatar = [image squareAndSmall];
+            PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:image type:22 viewController:self];
+            [getter uploadAvatar];
+        }];
+    }
 }
-*/
 
 - (IBAction)okBtnClicked:(id)sender {
     
@@ -116,7 +148,6 @@
     account.hadCompleteInfo = YES;
     [account saveAccount];
     [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
-//    [self.navigationController popViewControllerAnimated:NO];
 }
 
 #pragma mark - UITableViewDataSource
@@ -165,7 +196,7 @@
                 imageview.tag = 01;
                 [cell addSubview:imageview];
             }
-            imageview.image = avatar;
+            imageview.image = avatar? avatar:[UIImage imageNamed:@"默认用户头像"];
             
             cell.textLabel.text = @"头像";
             cell.textLabel.textColor = textColor1;
@@ -545,7 +576,7 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
-    avatar = [croppedImage squareAndSmall];;
+    avatar = [croppedImage squareAndSmall];
     [self.info_tableview reloadData];
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:22 viewController:self];
     [getter uploadAvatar];
@@ -553,7 +584,6 @@
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
 {
-    avatar = [UIImage imageNamed:@"默认用户头像"];
     [self.info_tableview reloadData];
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }

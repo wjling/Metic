@@ -218,19 +218,14 @@
     [blackView removeFromSuperview];
 }
 
-- (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber
-{
-    NSString *rule = @"^1(3|5|7|8|4)\\d{9}";
-    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",rule];
-    BOOL isMatch = [pred evaluateWithObject:phoneNumber];
-    return isMatch;
-}
-
 -(void)checkPreUP
 {
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     if ([userStatus isEqualToString:@"in"] && [MTAccount isExist]) {
         MTAccount *account = [MTAccount singleInstance];
+        BOOL hadCompleteInfo= account.hadCompleteInfo;
+        if (!hadCompleteInfo)
+            return;
         enum MTAccountType type = account.type;
         if (type == MTAccountTypeEmail) {
             self.textField_userName.text = account.email;
@@ -246,12 +241,7 @@
         appDelegate.isLogined = YES;
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
 
-        BOOL hadCompleteInfo= account.hadCompleteInfo;
-        if (!hadCompleteInfo) {
-            [self performSelectorOnMainThread:@selector(jumpToFillinInfo) withObject:nil waitUntilDone:YES];
-        } else {
-            [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
-        }
+        [self performSelectorOnMainThread:@selector(jumpToMainView) withObject:nil waitUntilDone:YES];
         
     } else {
         [[NSUserDefaults standardUserDefaults] setValue:@"out" forKey:@"MeticStatus"];
@@ -299,9 +289,17 @@
     [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
 }
 
--(void)jumpToFillinInfo
+-(void)jumpToFillinInfo:(SSDKUser *)user
 {
-    [self performSegueWithIdentifier:@"login_fillinInfo" sender:self];
+    if (![user isKindOfClass:[SSDKUser class]]) {
+        user = nil;
+    }
+    UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
+    vc.gender = @1;
+    vc.name = user.nickname;
+    vc.ssUser = user;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Button click
@@ -309,7 +307,7 @@
     [self.textField_userName resignFirstResponder];
     [self.textField_password resignFirstResponder];
 
-    if (![CommonUtils isEmailValid: textField_userName.text] && ![self isPhoneNumberVaild:textField_userName.text]) {
+    if (![CommonUtils isEmailValid: textField_userName.text] && ![CommonUtils isPhoneNumberVaild:textField_userName.text]) {
         [SVProgressHUD showErrorWithStatus:@"账号格式不正确" duration:1.f];
         return;
     } else if ([[textField_password text] length] < 5) {
@@ -331,46 +329,50 @@
 }
 
 - (IBAction)QQLogin:(id)sender {
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeQQ
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
          if (state == SSDKResponseStateSuccess) {
-             NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeQQ];
+             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeQQ];
          } else {
              NSLog(@"%@",error);
+             [SVProgressHUD dismissWithError:@"第三方登录失败"];
          }
      }];
 }
 
 - (IBAction)WeiXinLogin:(id)sender {
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeWechat
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
          if (state == SSDKResponseStateSuccess) {
-             NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeWeChat];
+             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeWeChat];
          } else {
              NSLog(@"%@",error);
+             [SVProgressHUD dismissWithError:@"第三方登录失败"];
          }
      }];
 }
 
 - (IBAction)WeiBoLogin:(id)sender {
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
          if (state == SSDKResponseStateSuccess) {
-             NSString *openId = user.uid;
-             [self thirdPartyLoginWithOpenId:openId type:MTAccountTypeWeiBo];
+             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeWeiBo];
          } else {
              NSLog(@"%@",error);
+             [SVProgressHUD dismissWithError:@"第三方登录失败"];
          }
      }];
 }
 
-- (void)thirdPartyLoginWithOpenId:(NSString *)openId type:(enum MTAccountType)type {
+- (void)thirdPartyLoginWithOpenId:(SSDKUser *)ssUser type:(enum MTAccountType)type {
     [SVProgressHUD showWithStatus:@"正在登录，请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    NSString *openId = ssUser.uid;
     [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
@@ -400,7 +402,7 @@
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
         
         if (!hadCompleteInfo) {
-            [self jumpToFillinInfo];
+            [self jumpToFillinInfo:ssUser];
         } else {
             [self jumpToMainView];
         }
@@ -417,7 +419,7 @@
         
         //保存账户信息
         BOOL hadCompleteInfo= [user.hadCompleteInfo boolValue];
-        BOOL isPhoneNumber = [self isPhoneNumberVaild:self.logInEmail];
+        BOOL isPhoneNumber = [CommonUtils isPhoneNumberVaild:self.logInEmail];
         MTAccount *account = [MTAccount singleInstance];
         account.email = self.logInEmail;
         account.password = self.logInPassword;
@@ -441,8 +443,8 @@
         }
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
         
-        if (!hadCompleteInfo) {
-            [self jumpToFillinInfo];
+        if (YES || !hadCompleteInfo) {
+            [self jumpToFillinInfo:nil];
         } else {
             [self jumpToMainView];
         }
