@@ -428,8 +428,6 @@
 + (void)refreshMenu
 {
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
-//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
-
 }
 
 

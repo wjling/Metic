@@ -16,12 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField_email;
 @property (weak, nonatomic) IBOutlet UITextField *textField_password;
 @property (weak, nonatomic) IBOutlet UIButton *button_signUp;
-@property (weak, nonatomic) IBOutlet UIButton *button_backToLogin;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 -(IBAction)signUpButtonClicked:(id)sender;
--(IBAction)backToLoginButtonClicked:(id)sender;
-
-- (void)jumpToLogin;
 - (void)jumpToMain;
 @end

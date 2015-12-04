@@ -70,7 +70,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                             if (user.isActive && [user.isActive integerValue]) {
                                 success(user);
                             }else {
-                                failure(MTLoginResultFailure,@"此账户尚未激活");
+                                failure(MTLoginResultNotActive,@"此账户尚未激活");
                             }
                             
                         }
@@ -104,36 +104,43 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
     }];
 }
 
-+ (void)registWithAccount:(NSString *)account
-                 password:(NSString *)password
-                  success:(void (^)(MTLoginResponse *user))success
-                  failure:(void (^)(enum MTLoginResult result, NSString *message))failure
++ (void)registWithEmail:(NSString *)email
+               password:(NSString *)password
+                success:(void (^)(MTLoginResponse *user))success
+                failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 {
     NSString* salt = [CommonUtils randomStringWithLength:6];
     NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
-    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:account,@"email",md5_str,@"passwd",account,@"name",@1,@"gender",salt,@"salt",nil];
+    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",md5_str,@"passwd",salt,@"salt",nil];
 
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:REGISTER finshedBlock:^(NSData *rData) {
+    [httpSender sendMessage:jsonData withOperationCode:REGISTER_DJANGO finshedBlock:^(NSData *rData) {
         if (!rData) {
             failure(MTLoginResultFailure,@"网络异常，请重试");
             return ;
         }
-        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response valueForKey:@"cmd"];
         switch ([cmd intValue]) {
             case NORMAL_REPLY: {
                 MTLOG(@"注册成功");
-//                MTAccount *user = [MTLJSONAdapter modelOfClass:[MTAccount class]
-//                                            fromJSONDictionary:response1
-//                                                         error:nil];
                 success(nil);
             }
                 break;
             case USER_EXIST: {
                 MTLOG(@"user existed");
-                failure(MTLoginResultFailure,@"用户已存在");
+                BOOL isActive = [response[@"is_active"] boolValue];
+                if (!isActive) {
+                    failure(MTLoginResultNotActive,@"此账户尚未激活");
+                }else {
+                    failure(MTLoginResultFailure,@"用户已存在");
+                }
+            }
+                break;
+            case REQUEST_DATA_ERROR: {
+                MTLOG(@"request data error");
+                failure(MTLoginResultFailure,@"未知错误");
             }
                 break;
             default:

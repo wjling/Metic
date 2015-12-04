@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "MenuViewController.h"
 #import "FillinInfoViewController.h"
+#import "RegisterViewController.h"
 #import "MTPushMessageHandler.h"
 
 #import <SMS_SDK/SMSSDK.h>
@@ -144,7 +145,9 @@
 }
 
 - (IBAction)registWithMail:(id)sender {
-    
+    UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    RegisterViewController* vc = [sb instantiateViewControllerWithIdentifier:@"RegisterViewController"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)loginWithPhoneNumber:(NSString *)phoneNumber Password:(NSString *)password{
@@ -160,6 +163,7 @@
         account.password = password;
         account.type = MTAccountTypePhoneNumber;
         account.hadCompleteInfo = NO;
+        account.isActive = YES;
         [account saveAccount];
         [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -173,6 +177,7 @@
         
         NSNumber* min_seq = user.minMegSeq;
         NSNumber* max_seq = user.maxMegSeq;
+        [MTPushMessageHandler setupMaxNotificationSeq:min_seq];
         if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
             [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
         }

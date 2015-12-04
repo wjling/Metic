@@ -98,9 +98,9 @@
 }
 
 - (void)preLoadingUserInfo{
-    [SVProgressHUD showWithStatus:@"正在加载..." maskType:SVProgressHUDMaskTypeBlack];
     if (self.ssUser) {
         //修改用户名
+        [SVProgressHUD showWithStatus:@"正在加载..." maskType:SVProgressHUDMaskTypeBlack];
         NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",self.ssUser.nickname,@"name",nil  ];
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* http = [[HttpSender alloc]initWithDelegate:self];

@@ -167,7 +167,6 @@ static MTUser *singletonInstance;
             case NORMAL_REPLY:
             {
                 if ([response1 valueForKey:@"name"]) {//更新用户信息
-                    
                     [[MTUser sharedInstance] initWithData:response1];
                     [AppDelegate refreshMenu];
                 }
@@ -241,8 +240,6 @@ static MTUser *singletonInstance;
 - (void)setUid:(NSNumber*) user_id
 {
     userid = user_id;
-//    MTLOG(@"set user id: %@", self.userid);
-//    DB_path = [NSString stringWithFormat:@"%@/db",self.userid];
     [MTDatabaseHelper refreshDatabaseFile];
     [self initUserDir];
     
@@ -259,16 +256,16 @@ static MTUser *singletonInstance;
     [NSThread detachNewThreadSelector:@selector(getMsgFromDataBase) toTarget:self withObject:nil];
 //    [NSThread detachNewThreadSelector:@selector(systemSettingsInit:) toTarget:self withObject:user_id];
     
-    //同步推送消息
-    MTLOG(@"开始同步消息");
-    void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
-    {
-        if (!min_seq || !max_seq) {
-            return;
-        }
-        [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
-    };
-    [MTPushMessageHandler synchronizePushSeqAndCallBack:synchronizeDone];
+//    //同步推送消息
+//    MTLOG(@"开始同步消息");
+//    void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
+//    {
+//        if (!min_seq || !max_seq) {
+//            return;
+//        }
+//        [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
+//    };
+//    [MTPushMessageHandler synchronizePushSeqAndCallBack:synchronizeDone];
 }
 
 - (void)initUserDir
@@ -319,14 +316,6 @@ static MTUser *singletonInstance;
         
         if (result <= 0) {
             MTLOG(@"升级数据库，原数据库版本：%@",version);
-//                [sql openMyDB:path];
-//                [sql createTableWithTableName:@"uploadIMGtasks" andIndexWithProperties:@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",nil];
-//                [sql table:@"uploadIMGtasks" addsColumn:@"width" withDefault:nil];
-//                [sql table:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil];
-//                [sql table:@"event" addsColumn:@"beginTime" withDefault:nil];
-//                [sql table:@"event" addsColumn:@"joinTime" withDefault:nil];
-//                [sql closeMyDB];
-            
             [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset"]];
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"uploadIMGtasks" addsColumn:@"width" withDefault:nil];
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"uploadIMGtasks" addsColumn:@"height" withDefault:nil];
@@ -355,14 +344,10 @@ static MTUser *singletonInstance;
             [[MTDatabaseHelper sharedInstance] addsColumntoTable:@"uploadIMGtasks" addsColumn:@"imageDescription" withDefault:nil];
         }
         
-
         version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
         [userDfs synchronize];
-
     }
-    
-    
 }
 
 - (void)initUserDB
@@ -372,9 +357,6 @@ static MTUser *singletonInstance;
     NSString* version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [userDfs setObject:version forKey:[NSString stringWithFormat:@"%@DB_version",self.userid]];
     [userDfs synchronize];
-    
-    
-    
     
     [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"event" indexesWithProperties:@[@"event_id INTEGER PRIMARY KEY UNIQUE",@"beginTime",@"joinTime",@"updateTime",@"likeTime",@"islike",@"event_info"]];
     
@@ -389,10 +371,6 @@ static MTUser *singletonInstance;
     [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"eventVideo" indexesWithProperties:@[@"video_id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"videoInfo"]];
     
     [[MTDatabaseHelper sharedInstance] createTableWithTableName:@"uploadIMGtasks" indexesWithProperties:@[@"id INTEGER PRIMARY KEY UNIQUE",@"event_id",@"imgName",@"alasset",@"imageDescription",@"width",@"height"]];
-    
-    
-    
-    //self.logined = YES;
 }
 
 - (void)initWithData:(NSDictionary *)mdictionary

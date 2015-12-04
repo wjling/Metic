@@ -108,7 +108,8 @@ enum Operation_Code
     TOKEN = 57,
     THIRD_PARTY_LOGIN = 58,
     LOGIN_DJANGO = 59,
-    REGISTER_BY_PHONE = 60,
+    REGISTER_DJANGO = 60,
+    REGISTER_BY_PHONE = 61,
 };
 
 enum CloudOperation_Code

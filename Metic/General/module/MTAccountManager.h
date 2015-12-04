@@ -12,10 +12,11 @@
 
 NS_ENUM(NSInteger, MTLoginResult) {
     MTLoginResultSuccess = 0,
-    MTLoginResultFailure = 1,
-    MTLoginResultUnknown = 2,
-    MTLoginResultPasswordInvalid = 3,
-    MTLoginResultCancel = 4,
+    MTLoginResultFailure,
+    MTLoginResultUnknown,
+    MTLoginResultNotActive,
+    MTLoginResultPasswordInvalid,
+    MTLoginResultCancel,
 };
 
 @interface MTAccountManager : NSObject
@@ -36,10 +37,10 @@ NS_ENUM(NSInteger, MTLoginResult) {
  *  @param success the success callback
  *  @param failure the failure callback
  */
-+ (void)registWithAccount:(NSString *)account
-      password:(NSString *)password
-       success:(void (^)(MTLoginResponse *user))success
-       failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
++ (void)registWithEmail:(NSString *)email
+               password:(NSString *)password
+                success:(void (^)(MTLoginResponse *user))success
+                failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
 /**
  *

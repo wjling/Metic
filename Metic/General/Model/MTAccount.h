@@ -25,6 +25,7 @@ NS_ENUM(NSInteger, MTAccountType) {
 @property (nonatomic, strong) NSString *openId;
 @property (nonatomic) enum MTAccountType type;
 @property (nonatomic) BOOL hadCompleteInfo;
+@property (nonatomic) BOOL isActive;
 
 + (BOOL)isExist;
 + (MTAccount *)singleInstance;

@@ -52,20 +52,19 @@
     return self;
 }
 
+#pragma mark - Life Cycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setupUI];
     [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
+    
     appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (![userDf boolForKey:@"hadShowWelcomePage"]) {
         MTLOG(@"login: it is the first launch");
         [userDf setBool:YES forKey:@"hadShowWelcomePage"];
-        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                             bundle: nil];
-        WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-        [self presentViewController:vc animated:NO completion:nil];
+        [self showWelcomePage];
     } else {
         MTLOG(@"login: it is not the first launch");
         [self showLaunchView];
@@ -80,6 +79,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self checkPreUP];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -87,7 +87,6 @@
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"登录"];
     [self.navigationController setNavigationBarHidden:NO];
-    [self checkPreUP];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -102,14 +101,35 @@
 }
 
 #pragma mark - Navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)showWelcomePage
 {
-    if ([segue.destinationViewController isKindOfClass:[FillinInfoViewController class]]) {
-        FillinInfoViewController* vc = segue.destinationViewController;
-        vc.gender = gender;
-        vc.email = [textField_userName text];
-        MTLOG(@"register gender: %@",vc.gender);
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                         bundle: nil];
+    WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
+    [self presentViewController:vc animated:NO completion:nil];
+}
+
+- (void)jumpToMainView
+{
+    [self performSegueWithIdentifier:@"loginTohome" sender:self];
+}
+
+- (void)jumpToRegisterView
+{
+    [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
+}
+
+-(void)jumpToFillinInfo:(SSDKUser *)user
+{
+    if (![user isKindOfClass:[SSDKUser class]]) {
+        user = nil;
     }
+    UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
+    vc.gender = @1;
+    vc.name = user.nickname;
+    vc.ssUser = user;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Private Methods
@@ -137,7 +157,7 @@
     self.textField_userName.leftView = userNameLeftView;
     self.textField_userName.leftViewMode = UITextFieldViewModeAlways;
     self.textField_userName.layer.cornerRadius = 5.f;
-    self.textField_userName.layer.borderColor = [CommonUtils colorWithValue:0xDDDDDD].CGColor;
+    self.textField_userName.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.textField_userName.layer.borderWidth = 2;
     self.textField_userName.layer.masksToBounds = YES;
     
@@ -153,7 +173,7 @@
     self.textField_password.leftView = passwordLeftView;
     self.textField_password.leftViewMode = UITextFieldViewModeAlways;
     self.textField_password.layer.cornerRadius = 5.f;
-    self.textField_password.layer.borderColor = [CommonUtils colorWithValue:0xDDDDDD].CGColor;
+    self.textField_password.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.textField_password.layer.borderWidth = 2;
     self.textField_password.layer.masksToBounds = YES;
 }
@@ -192,14 +212,12 @@
     launchV.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self.navigationController presentViewController:launchV animated:NO completion:
      ^{
-         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(dismissLaunchView) userInfo:nil repeats:NO];
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             [launchV dismissViewControllerAnimated:YES completion:nil];
+             [blackView removeFromSuperview];
+             blackView = nil;
+         });
      }];
-}
-
--(void)dismissLaunchView
-{
-    [self dismissBlackView];
-    [launchV dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)showBlackView
@@ -210,33 +228,42 @@
         [blackView setBackgroundColor:[UIColor blackColor]];
     }
     [self.view addSubview:blackView];
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(dismissBlackView) userInfo:nil repeats:NO];
-}
-
--(void)dismissBlackView
-{
-    [blackView removeFromSuperview];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [blackView removeFromSuperview];
+        blackView = nil;
+    });
 }
 
 -(void)checkPreUP
 {
+    if (blackView) {
+        return;
+    }
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    if ([userStatus isEqualToString:@"in"] && [MTAccount isExist]) {
+    BOOL isIn = [userStatus isEqualToString:@"in"];
+    if ([MTAccount isExist]) {
         MTAccount *account = [MTAccount singleInstance];
         BOOL hadCompleteInfo= account.hadCompleteInfo;
-        if (!hadCompleteInfo)
-            return;
+        BOOL isActive = account.isActive;
         enum MTAccountType type = account.type;
         if (type == MTAccountTypeEmail) {
             self.textField_userName.text = account.email;
             self.textField_password.text = account.password;
+            if (!hadCompleteInfo || !isActive || !isIn)
+                return;
             [self checkPassWordWithAccount:account.email Password:account.password];
-        }else if (type == MTAccountTypePhoneNumber) {
+        } else if (type == MTAccountTypePhoneNumber) {
             self.textField_userName.text = account.phoneNumber;
             self.textField_password.text = account.password;
+            if (!hadCompleteInfo || !isActive || !isIn)
+                return;
             [self checkPassWordWithAccount:account.phoneNumber Password:account.password];
-        }else if(type == MTAccountTypeQQ || type == MTAccountTypeWeChat || type == MTAccountTypeWeiBo) {
+        } else if(type == MTAccountTypeQQ || type == MTAccountTypeWeChat || type == MTAccountTypeWeiBo) {
+            if (!hadCompleteInfo || !isActive || !isIn)
+                return;
             [self thirdPartyLoginWithOpenIdOnBackground:account.openId type:type];
+        } else {
+            return;
         }
         appDelegate.isLogined = YES;
         [[MTUser sharedInstance] setUid:[MTUser sharedInstance].userid];
@@ -248,58 +275,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
         [[MTAccount singleInstance] deleteAccount];
     }
-}
-
--(void)checkPassWordWithAccount:(NSString *)account Password:(NSString *)password
-{
-    [MTAccountManager loginWithAccount:account password:password success:^(MTLoginResponse *user) {
-    } failure:^(enum MTLoginResult result, NSString *message) {
-        if (result == MTLoginResultPasswordInvalid) {
-            MTLOG(@"验证密码失败，强制退出到登录页面");
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
-        }
-    }];
-}
-
-- (void)thirdPartyLoginWithOpenIdOnBackground:(NSString *)openId type:(enum MTAccountType)type {
-    [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
-        MTLOG(@"login succeeded");
-        ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
-        //保存账户信息
-        [[MenuViewController sharedInstance] dianReset];
-        [[MenuViewController sharedInstance] refresh];
-        [[appDelegate leftMenu] clearVC];
-        
-        NSNumber* min_seq = user.minMegSeq;
-        NSNumber* max_seq = user.maxMegSeq;
-        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
-            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
-        }
-    } failure:^(enum MTLoginResult result, NSString *message) {
-    }];
-}
-
-- (void)jumpToMainView
-{
-    [self performSegueWithIdentifier:@"loginTohome" sender:self];
-}
-
-- (void)jumpToRegisterView
-{
-    [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
-}
-
--(void)jumpToFillinInfo:(SSDKUser *)user
-{
-    if (![user isKindOfClass:[SSDKUser class]]) {
-        user = nil;
-    }
-    UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
-    vc.gender = @1;
-    vc.name = user.nickname;
-    vc.ssUser = user;
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Button click
@@ -370,6 +345,7 @@
      }];
 }
 
+#pragma mark - Login
 - (void)thirdPartyLoginWithOpenId:(SSDKUser *)ssUser type:(enum MTAccountType)type {
     [SVProgressHUD showWithStatus:@"正在登录，请稍候" maskType:SVProgressHUDMaskTypeBlack];
     NSString *openId = ssUser.uid;
@@ -381,6 +357,7 @@
         MTAccount *account = [MTAccount singleInstance];
         account.openId = openId;
         account.type = type;
+        account.isActive = YES;
         account.hadCompleteInfo = hadCompleteInfo;
         [account saveAccount];
         
@@ -396,6 +373,7 @@
 
         NSNumber* min_seq = user.minMegSeq;
         NSNumber* max_seq = user.maxMegSeq;
+        [MTPushMessageHandler setupMaxNotificationSeq:min_seq];
         if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
             [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
         }
@@ -425,6 +403,7 @@
         account.password = self.logInPassword;
         account.type = isPhoneNumber? MTAccountTypePhoneNumber : MTAccountTypeEmail;
         account.hadCompleteInfo = hadCompleteInfo;
+        account.isActive = YES;
         [account saveAccount];
         [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -438,6 +417,7 @@
         
         NSNumber* min_seq = user.minMegSeq;
         NSNumber* max_seq = user.maxMegSeq;
+        [MTPushMessageHandler setupMaxNotificationSeq:min_seq];
         if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
             [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
         }
@@ -450,6 +430,46 @@
         }
     } failure:^(enum MTLoginResult result, NSString *message) {
         [SVProgressHUD dismissWithError:message afterDelay:1.f];
+    }];
+}
+
+#pragma mark - Login in Background
+-(void)checkPassWordWithAccount:(NSString *)account Password:(NSString *)password
+{
+    [MTAccountManager loginWithAccount:account password:password success:^(MTLoginResponse *user) {
+    //同步推送消息
+        MTLOG(@"开始同步消息");
+        void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
+        {
+            if (!min_seq || !max_seq) {
+                return;
+            }
+            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:nil];
+        };
+        [MTPushMessageHandler synchronizePushSeqAndCallBack:synchronizeDone];
+    } failure:^(enum MTLoginResult result, NSString *message) {
+        if (result == MTLoginResultPasswordInvalid) {
+            MTLOG(@"验证密码失败，强制退出到登录页面");
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"forceQuitToLogin" object:nil];
+        }
+    }];
+}
+
+- (void)thirdPartyLoginWithOpenIdOnBackground:(NSString *)openId type:(enum MTAccountType)type {
+    [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
+        MTLOG(@"login succeeded");
+        ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
+        //保存账户信息
+        [[MenuViewController sharedInstance] dianReset];
+        [[MenuViewController sharedInstance] refresh];
+        [[appDelegate leftMenu] clearVC];
+        
+        NSNumber* min_seq = user.minMegSeq;
+        NSNumber* max_seq = user.maxMegSeq;
+        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
+            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
+        }
+    } failure:^(enum MTLoginResult result, NSString *message) {
     }];
 }
 

@@ -105,6 +105,18 @@
 #endif
 }
 
++ (void)setupMaxNotificationSeq:(NSNumber *)maxNotificationSeq
+{
+    if ([MTUser sharedInstance].userid) {
+        NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
+        maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+        [maxSeqDict setObject:maxNotificationSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 #pragma mark - Normal Push
 + (void)handlePushMessage:(NSDictionary*)message andFeedBack:(BOOL)feedback
 {
@@ -471,15 +483,8 @@
                 //反馈给服务器
                 [self feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:^(NSDictionary *response) {
                     if ([response[@"cmd"] integerValue] == NORMAL_REPLY) {
-                        if ([MTUser sharedInstance].userid) {
-                            NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-                            NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
-                            maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
-                            [maxSeqDict setObject:remoteMaxSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                        }
+                        NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
+                        [self setupMaxNotificationSeq:remoteMaxSeq];
                     }
                 }];
             }

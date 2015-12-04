@@ -248,6 +248,9 @@ static NSOperationQueue *requestQueue;
             resultCode = @"login_django";
             break;
         case 60:
+            resultCode = @"register_django";
+            break;
+        case 61:
             resultCode = @"register_by_phone";
             break;
         default:

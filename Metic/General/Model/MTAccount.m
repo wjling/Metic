@@ -20,6 +20,7 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
 @synthesize openId;
 @synthesize type;
 @synthesize hadCompleteInfo;
+@synthesize isActive;
 
 + (MTAccount *)singleInstance {
     static dispatch_once_t once;
@@ -46,6 +47,7 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
         openId = [aDecoder decodeObjectForKey:@"openId"];
         type = [[aDecoder decodeObjectForKey:@"type"] integerValue];
         hadCompleteInfo = [[aDecoder decodeObjectForKey:@"hadCompleteInfo"] boolValue];
+        isActive = [[aDecoder decodeObjectForKey:@"isActive"] boolValue];
     }
     
     return self;
@@ -59,6 +61,7 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
     [aCoder encodeObject:self.openId forKey:@"openId"];
     [aCoder encodeObject:@(self.type) forKey:@"type"];
     [aCoder encodeObject:@(self.hadCompleteInfo) forKey:@"hadCompleteInfo"];
+    [aCoder encodeObject:@(self.isActive) forKey:@"isActive"];
 }
 
 + (BOOL)isExist
@@ -76,6 +79,7 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
     self.openId = account.openId;
     self.type = account? account.type:MTAccountTypeEmpty;
     self.hadCompleteInfo = account.hadCompleteInfo;
+    self.isActive = account.isActive;
 }
 
 - (void)saveAccount
@@ -88,15 +92,11 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
     phoneNumber = nil;
     password = nil;
     openId = nil;
+    hadCompleteInfo = NO;
+    isActive = NO;
     type = MTAccountTypeEmpty;
     
     [[FXKeychain defaultKeychain] removeObjectForKey:MTACCOUNT_KEYCHAIN];
-    
-//    [[FXKeychain defaultKeychain] removeObjectForKey:EMAIL_KEYCHAIN];
-//    [[FXKeychain defaultKeychain] removeObjectForKey:PHONE_NUMBER_KEYCHAIN];
-//    [[FXKeychain defaultKeychain] removeObjectForKey:PASSWORD_KEYCHAIN];
-//    [[FXKeychain defaultKeychain] removeObjectForKey:OPENID_KEYCHAIN];
-//    [FXKeychain defaultKeychain][TYPE_KEYCHAIN] = @(MTAccountTypeEmpty);
 }
 
 @end
