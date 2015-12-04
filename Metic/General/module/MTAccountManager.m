@@ -67,7 +67,12 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                             MTLoginResponse *user = [MTLJSONAdapter modelOfClass:[MTLoginResponse class]
                                                         fromJSONDictionary:response1
                                                                      error:nil];
-                            success(user);
+                            if (user.isActive && [user.isActive integerValue]) {
+                                success(user);
+                            }else {
+                                failure(MTLoginResultFailure,@"此账户尚未激活");
+                            }
+                            
                         }
                             break;
                         case PASSWD_NOT_CORRECT:
