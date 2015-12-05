@@ -17,7 +17,6 @@
              @"lastLoginTime": @"logintime",
              @"minMegSeq": @"min_seq",
              @"maxMegSeq": @"max_seq",
-             @"isActive" : @"is_active"
              };
 }
 @end

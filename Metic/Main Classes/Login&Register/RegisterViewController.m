@@ -156,6 +156,16 @@
         
     } failure:^(enum MTLoginResult result, NSString *message) {
         [SVProgressHUD dismissWithError:message afterDelay:1.f];
+        if (result == MTLoginResultNotActive) {
+            MTAccount *account = [MTAccount singleInstance];
+            account.email = email;
+            account.password = password;
+            account.type = MTAccountTypeEmail;
+            account.isActive = NO;
+            account.hadCompleteInfo = NO;
+            [account saveAccount];
+            //Todo:跳转至激活页
+        }
     }];
     
     [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeGradient];

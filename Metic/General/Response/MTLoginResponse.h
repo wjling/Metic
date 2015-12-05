@@ -17,6 +17,5 @@
 @property (nonatomic, strong) NSString *lastLoginTime;
 @property (nonatomic, strong) NSNumber *minMegSeq;
 @property (nonatomic, strong) NSNumber *maxMegSeq;
-@property (nonatomic, strong) NSNumber *isActive;
 
 @end

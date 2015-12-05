@@ -67,7 +67,7 @@
                         <viewControllerLayoutGuide type="top" id="JGQ-sh-nFz"/>
                         <viewControllerLayoutGuide type="bottom" id="C8K-GH-Txv"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zg6-Yk-N9i">
+                    <view key="view" contentMode="scaleToFill" id="zg6-Yk-N9i" customClass="TPKeyboardAvoidingScrollView">
                         <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -109,6 +109,7 @@
                             <constraint firstAttribute="trailing" secondItem="wDi-rx-JXd" secondAttribute="trailing" constant="15" id="A7y-Pi-S60"/>
                             <constraint firstItem="Kb0-q9-C9k" firstAttribute="leading" secondItem="zg6-Yk-N9i" secondAttribute="leading" constant="15" id="AZi-TM-6iB"/>
                             <constraint firstItem="wDi-rx-JXd" firstAttribute="top" secondItem="Kb0-q9-C9k" secondAttribute="bottom" constant="15" id="HTw-O9-GLp"/>
+                            <constraint firstAttribute="centerX" secondItem="wDi-rx-JXd" secondAttribute="centerX" id="JoW-JV-j1N"/>
                             <constraint firstItem="wDi-rx-JXd" firstAttribute="leading" secondItem="zg6-Yk-N9i" secondAttribute="leading" constant="15" id="LTS-Ta-jUY"/>
                             <constraint firstAttribute="trailing" secondItem="wzI-aE-aIF" secondAttribute="trailing" constant="15" id="MTV-MT-gfC"/>
                             <constraint firstItem="wzI-aE-aIF" firstAttribute="leading" secondItem="zg6-Yk-N9i" secondAttribute="leading" constant="15" id="bCH-4g-kVQ"/>
@@ -3000,7 +3001,7 @@
                         <viewControllerLayoutGuide type="top" id="PGv-6k-UuT"/>
                         <viewControllerLayoutGuide type="bottom" id="od8-4V-RI7"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3yY-CU-vOh">
+                    <view key="view" contentMode="scaleToFill" id="3yY-CU-vOh" customClass="TPKeyboardAvoidingScrollView">
                         <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -3129,6 +3130,7 @@
                             <constraint firstAttribute="trailing" secondItem="b2Z-i4-6Ex" secondAttribute="trailing" constant="15" id="AFg-W5-UTu"/>
                             <constraint firstAttribute="trailing" secondItem="g9y-HK-245" secondAttribute="trailing" constant="15" id="BEP-yM-RAq"/>
                             <constraint firstAttribute="centerX" secondItem="pfA-Y1-a4q" secondAttribute="centerX" id="BV4-aI-Jmg"/>
+                            <constraint firstAttribute="centerX" secondItem="b2Z-i4-6Ex" secondAttribute="centerX" id="C9n-bY-DKn"/>
                             <constraint firstItem="Ypz-aV-JES" firstAttribute="top" secondItem="b2Z-i4-6Ex" secondAttribute="bottom" constant="8" id="CnY-hx-xwP"/>
                             <constraint firstAttribute="trailing" secondItem="kgi-Wx-Csu" secondAttribute="trailing" constant="15" id="IR5-Ty-eiq"/>
                             <constraint firstItem="Ypz-aV-JES" firstAttribute="leading" secondItem="3yY-CU-vOh" secondAttribute="leading" constant="15" id="K9E-lL-I2o"/>

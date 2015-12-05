@@ -405,6 +405,8 @@
 		F8B5DE511BFCA0FF00E1F713 /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3D1BFCA0FE00E1F713 /* libSocialWechat.a */; };
 		F8B5DE521BFCA0FF00E1F713 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8B5DE3E1BFCA0FE00E1F713 /* libWeChatSDK.a */; };
 		F8B5DE531BFCA0FF00E1F713 /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */; };
+		F8C9CCA21C12C48A005E0A74 /* EnactiveAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */; };
+		F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
 		F8EA73E11C0CBB2F00190832 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */; };
@@ -1254,6 +1256,9 @@
 		F8B5DE411BFCA0FE00E1F713 /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		F8B5DE421BFCA0FE00E1F713 /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		F8B5DE431BFCA0FE00E1F713 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnactiveAccountViewController.h; path = "Login&Register/EnactiveAccountViewController.h"; sourceTree = "<group>"; };
+		F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnactiveAccountViewController.m; path = "Login&Register/EnactiveAccountViewController.m"; sourceTree = "<group>"; };
+		F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EnactiveAccountViewController.xib; path = "Login&Register/EnactiveAccountViewController.xib"; sourceTree = "<group>"; };
 		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
 		F8EA73601C0C61C000190832 /* MTAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccountManager.m; sourceTree = "<group>"; };
 		F8EA73BD1C0CBB2F00190832 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTKeyPathCoding.h; sourceTree = "<group>"; };
@@ -1429,6 +1434,9 @@
 				F8EA74D31C0DD63B00190832 /* RegisterWithPhoneViewController.h */,
 				F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */,
 				F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */,
+				F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */,
+				F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */,
+				F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -3272,6 +3280,7 @@
 				04B6F89C19A25D5C00229393 /* face13.png in Resources */,
 				04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */,
 				04B6F89519A25D5C00229393 /* face06.png in Resources */,
+				F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */,
 				04B6F8A219A25D5C00229393 /* face19.png in Resources */,
 				04B6F8A819A25D5C00229393 /* face25.png in Resources */,
 				F8B5DDE11BFB83EA00E1F713 /* SCommentTableViewCell.xib in Resources */,
@@ -3298,6 +3307,7 @@
 				081B6DAD1A7685D80044D623 /* split.c in Sources */,
 				F83614901ADB6A0F004CDEA1 /* EventPreviewViewController.m in Sources */,
 				51DDBF7A19A328010051B88C /* AdViewController.m in Sources */,
+				F8C9CCA21C12C48A005E0A74 /* EnactiveAccountViewController.m in Sources */,
 				04D6128E197B90D500159190 /* SignSetttingViewController.m in Sources */,
 				F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */,
 				0435EF5019B49DA2003BB2F6 /* NotificationsSystemMessageTableViewCell.m in Sources */,

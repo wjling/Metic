@@ -65,14 +65,14 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                         {
                             MTLOG(@"验证密码成功");
                             MTLoginResponse *user = [MTLJSONAdapter modelOfClass:[MTLoginResponse class]
-                                                        fromJSONDictionary:response1
-                                                                     error:nil];
-                            if (user.isActive && [user.isActive integerValue]) {
-                                success(user);
-                            }else {
-                                failure(MTLoginResultNotActive,@"此账户尚未激活");
-                            }
-                            
+                                                              fromJSONDictionary:response1
+                                                                           error:nil];
+                            success(user);
+                        }
+                            break;
+                        case USER_NOT_ACTIVE:
+                        {
+                            failure(MTLoginResultNotActive,@"此账户尚未激活");
                         }
                             break;
                         case PASSWD_NOT_CORRECT:
@@ -94,6 +94,11 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                     }
                 }];
                 
+            }
+                break;
+            case USER_NOT_ACTIVE:
+            {
+                failure(MTLoginResultNotActive,@"此账户尚未激活");
             }
                 break;
             default:
@@ -130,12 +135,11 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 break;
             case USER_EXIST: {
                 MTLOG(@"user existed");
-                BOOL isActive = [response[@"is_active"] boolValue];
-                if (!isActive) {
-                    failure(MTLoginResultNotActive,@"此账户尚未激活");
-                }else {
-                    failure(MTLoginResultFailure,@"用户已存在");
-                }
+                failure(MTLoginResultFailure,@"用户已存在");
+            }
+                break;
+            case USER_NOT_ACTIVE: {
+                failure(MTLoginResultNotActive,@"此账户尚未激活");
             }
                 break;
             case REQUEST_DATA_ERROR: {

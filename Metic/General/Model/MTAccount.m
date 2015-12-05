@@ -8,6 +8,7 @@
 
 #import "MTAccount.h"
 #import "FXKeychain.h"
+#import <ShareSDK/ShareSDK.h>
 
 #pragma mark KeyChain Configuration
 static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
@@ -97,6 +98,10 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
     type = MTAccountTypeEmpty;
     
     [[FXKeychain defaultKeychain] removeObjectForKey:MTACCOUNT_KEYCHAIN];
+    
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
+    [ShareSDK cancelAuthorize:SSDKPlatformTypeQQ];
 }
 
 @end

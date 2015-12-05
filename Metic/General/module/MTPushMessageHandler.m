@@ -107,9 +107,15 @@
 
 + (void)setupMaxNotificationSeq:(NSNumber *)maxNotificationSeq
 {
+    if (!maxNotificationSeq) {
+        maxNotificationSeq = @0;
+    }
     if ([MTUser sharedInstance].userid) {
-        NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-        maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
+        NSMutableDictionary* maxSeqDict = [[[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"] mutableCopy];
+        if (!maxSeqDict) {
+            maxSeqDict = [[NSMutableDictionary alloc] init];
+        }
+        
         [maxSeqDict setObject:maxNotificationSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
         
         [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
