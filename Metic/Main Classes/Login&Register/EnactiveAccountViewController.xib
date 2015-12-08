@@ -16,59 +16,66 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="请您登录注册邮箱按指示进行激活操作后，点击“我已激活”按钮" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJs-Ad-135">
-                    <rect key="frame" x="30" y="154" width="260" height="100"/>
+                    <rect key="frame" x="30" y="159" width="260" height="80"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="100" id="TZs-Us-Ogb"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4as-qc-43X">
-                    <rect key="frame" x="105" y="262" width="110" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="110" id="IMX-Hm-CMN"/>
-                        <constraint firstAttribute="height" constant="44" id="bAM-5k-3jd"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <state key="normal" title="我已激活" backgroundImage="登录界面按钮">
-                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <state key="highlighted" backgroundImage="登录界面按钮按下效果"/>
-                </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="如果没收到激活邮件，请" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVj-7O-4Ac">
-                    <rect key="frame" x="50" y="344" width="170" height="20"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="170" id="aIv-uW-zLV"/>
-                        <constraint firstAttribute="height" constant="20" id="q1R-K2-Wzl"/>
+                        <constraint firstAttribute="height" constant="80" id="V6d-YV-QG0"/>
+                        <constraint firstAttribute="width" constant="260" id="gqy-7z-2Rw"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HyQ-Vf-2za">
-                    <rect key="frame" x="220" y="339" width="85" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VS5-ze-iAs">
+                    <rect key="frame" x="105" y="264" width="110" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="UvE-dn-urS"/>
-                        <constraint firstAttribute="width" constant="90" id="VHi-RY-IC2"/>
+                        <constraint firstAttribute="height" constant="40" id="o1W-bO-0g5"/>
+                        <constraint firstAttribute="width" constant="110" id="twj-wq-8Ku"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <state key="normal" title="我已激活" backgroundImage="登录界面按钮">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="登录界面按钮按下效果"/>
+                    <connections>
+                        <action selector="checkActivation:" destination="-1" eventType="touchUpInside" id="VYj-rA-NtO"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="如果没收到激活邮件，请" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Eh-mq-XWR">
+                    <rect key="frame" x="66" y="371" width="154" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="154" id="0SS-OS-Cy2"/>
+                        <constraint firstAttribute="height" constant="29" id="i3T-wS-Uaa"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gkq-Nc-e1K">
+                    <rect key="frame" x="221" y="371" width="84" height="29"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="84" id="62B-42-Z0W"/>
+                        <constraint firstAttribute="height" constant="29" id="nXn-jJ-Ksr"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="重新发送邮件">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="resendEmail:" destination="-1" eventType="touchUpInside" id="dsf-8F-hV5"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="4as-qc-43X" secondAttribute="centerY" id="0Yy-kA-hIo"/>
-                <constraint firstAttribute="centerX" secondItem="4as-qc-43X" secondAttribute="centerX" id="1nO-L8-4rW"/>
-                <constraint firstAttribute="trailing" secondItem="fJs-Ad-135" secondAttribute="trailing" constant="30" id="3VV-S2-mGA"/>
-                <constraint firstAttribute="centerY" secondItem="tVj-7O-4Ac" secondAttribute="centerY" constant="-70" id="8FR-AL-rht"/>
-                <constraint firstAttribute="centerY" secondItem="fJs-Ad-135" secondAttribute="centerY" constant="80" id="ERc-Az-eFy"/>
-                <constraint firstAttribute="trailing" secondItem="tVj-7O-4Ac" secondAttribute="trailing" constant="100" id="hhV-aS-KKl"/>
-                <constraint firstAttribute="centerY" secondItem="HyQ-Vf-2za" secondAttribute="centerY" constant="-70" id="rJw-TS-rey"/>
-                <constraint firstAttribute="trailing" secondItem="HyQ-Vf-2za" secondAttribute="trailing" constant="10" id="rhp-sL-1KF"/>
-                <constraint firstItem="fJs-Ad-135" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="30" id="wnJ-uP-elO"/>
+                <constraint firstItem="8Eh-mq-XWR" firstAttribute="top" secondItem="VS5-ze-iAs" secondAttribute="bottom" constant="67" id="3L3-Iz-aCX"/>
+                <constraint firstItem="VS5-ze-iAs" firstAttribute="top" secondItem="fJs-Ad-135" secondAttribute="bottom" constant="25" id="KYI-ME-J21"/>
+                <constraint firstAttribute="centerY" secondItem="VS5-ze-iAs" secondAttribute="centerY" id="Kry-i4-c5c"/>
+                <constraint firstItem="gkq-Nc-e1K" firstAttribute="leading" secondItem="8Eh-mq-XWR" secondAttribute="trailing" constant="1" id="UIO-bM-Wee"/>
+                <constraint firstAttribute="centerX" secondItem="fJs-Ad-135" secondAttribute="centerX" id="W6l-N6-Jqw"/>
+                <constraint firstItem="gkq-Nc-e1K" firstAttribute="top" secondItem="VS5-ze-iAs" secondAttribute="bottom" constant="67" id="ZO4-7U-hA4"/>
+                <constraint firstAttribute="centerX" secondItem="VS5-ze-iAs" secondAttribute="centerX" id="mey-oz-d0T"/>
+                <constraint firstAttribute="trailing" secondItem="gkq-Nc-e1K" secondAttribute="trailing" constant="15" id="wAs-01-asz"/>
             </constraints>
             <point key="canvasLocation" x="289" y="208"/>
         </view>

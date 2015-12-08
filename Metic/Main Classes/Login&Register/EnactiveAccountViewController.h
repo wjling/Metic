@@ -9,5 +9,10 @@
 #import <UIKit/UIKit.h>
 
 @interface EnactiveAccountViewController : UIViewController
+@property (nonatomic, strong) NSString *email;
+@property (nonatomic, strong) NSString *passwd;
 
+- (IBAction)checkActivation:(id)sender;
+- (IBAction)resendEmail:(id)sender;
+-(void)setEmail:(NSString *)email AndPasswd:(NSString *)passwd;
 @end

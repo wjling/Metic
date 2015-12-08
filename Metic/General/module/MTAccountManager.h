@@ -44,6 +44,15 @@ NS_ENUM(NSInteger, MTLoginResult) {
 
 /**
  *
+ *  Resend Activate Email
+ *  @param success the success callback
+ *  @param failure the failure callback
+ */
++ (void)resendActivateEmail:(NSString *)email
+                success:(void (^)())success
+                failure:(void (^)(NSString *message))failure;
+/**
+ *
  *  Regist weshare With PhoneNumber
  *  @param success the success callback
  *  @param failure the failure callback

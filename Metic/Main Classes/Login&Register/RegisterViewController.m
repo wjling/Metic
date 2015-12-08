@@ -8,6 +8,7 @@
 
 #import "RegisterViewController.h"
 #import "MenuViewController.h"
+#import "EnactiveAccountViewController.h"
 #import "AppDelegate.h"
 #import "MobClick.h"
 #import "SVProgressHUD.h"
@@ -157,6 +158,7 @@
     } failure:^(enum MTLoginResult result, NSString *message) {
         [SVProgressHUD dismissWithError:message afterDelay:1.f];
         if (result == MTLoginResultNotActive) {
+            [SVProgressHUD dismiss];
             MTAccount *account = [MTAccount singleInstance];
             account.email = email;
             account.password = password;
@@ -165,11 +167,12 @@
             account.hadCompleteInfo = NO;
             [account saveAccount];
             //Todo:跳转至激活页
+            EnactiveAccountViewController *vc = [[EnactiveAccountViewController alloc] init];
+            [vc setEmail:email AndPasswd:password];
+            [self.navigationController pushViewController:vc animated:YES];
         }
     }];
     
     [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeGradient];
 }
-
-
 @end

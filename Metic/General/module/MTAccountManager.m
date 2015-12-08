@@ -154,6 +154,34 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
     }];
 }
 
++ (void)resendActivateEmail:(NSString *)email
+                    success:(void (^)())success
+                    failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",nil];
+    
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:REGISTER_RESEND finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(@"网络异常，请重试");
+            return ;
+        }
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY: {
+                MTLOG(@"发送成功，请激活");
+                success();
+            }
+                break;
+            default:
+                MTLOG(@"发送失败");
+                failure(@"发送失败");
+        }
+    }];
+}
+
 + (void)registWithPhoneNumber:(NSString *)phone
                      password:(NSString *)password
                       success:(void (^)(MTLoginResponse *user))success
