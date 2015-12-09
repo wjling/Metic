@@ -224,6 +224,14 @@
             }
 //            MTLOG(@"昵称: %@",[MTUser sharedInstance].name);
             label.text = name;
+            if (!name || [name isEqualToString:@""]) {
+                cell.layer.borderColor = [UIColor redColor].CGColor;
+                cell.layer.borderWidth = 2;
+                cell.layer.masksToBounds = YES;
+                cell.layer.cornerRadius = 5;
+            } else {
+                cell.layer.borderWidth = 0;
+            }
         }
         else if (row == 1)
         {
