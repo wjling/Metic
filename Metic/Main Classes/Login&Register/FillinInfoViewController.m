@@ -12,6 +12,7 @@
 #import "UzysAssetsPickerController.h"
 #import "MTAccount.h"
 #import "SDWebImageManager.h"
+#import "BOAlertController.h"
 
 @interface FillinInfoViewController ()
 {
@@ -126,6 +127,37 @@
                 }
             }
         }];
+        
+        //设置性别
+        NSNumber *ssGender = self.ssUser.gender == SSDKGenderMale? @1:@0;
+        NSDictionary* dict = [CommonUtils packParamsInDictionary:ssGender,@"gender",[MTUser sharedInstance].userid,@"id",
+                              nil];
+        MTLOG(@"gender modify json: %@",dict);
+        NSData* dictData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:dictData withOperationCode:CHANGE_SETTINGS finshedBlock:^(NSData *rData) {
+            if (!rData) {
+            }else {
+                NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber* cmd = [response objectForKey:@"cmd"];
+                MTLOG(@"cmd: %@",cmd);
+                switch ([cmd integerValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        [MTUser sharedInstance].gender = ssGender;
+                        [AppDelegate refreshMenu];
+                        self.gender = gender;
+                        newGender = [gender integerValue];
+                        [self.info_tableview reloadData];
+                        MTLOG(@"性别修改成功");
+                    }
+                        break;
+                    default:
+                        MTLOG(@"性别修改失败");
+                        break;
+                }
+            }
+        }];
         //上传图片
         NSString *iconURL = self.ssUser.icon;
         [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:iconURL] options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
@@ -144,10 +176,23 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
-    MTAccount *account = [MTAccount singleInstance];
-    account.hadCompleteInfo = YES;
-    [account saveAccount];
-    [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
+    
+    NSString* message = @"确定之后无法再修改性别哦，是否要继续此操作？";
+    
+    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        
+    }];
+    [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
+        MTAccount *account = [MTAccount singleInstance];
+        account.hadCompleteInfo = YES;
+        [account saveAccount];
+        [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
+    }];
+    [alertView addButton:okItem type:RIButtonItemType_Other];
+    [alertView show];
 }
 
 #pragma mark - UITableViewDataSource
@@ -595,8 +640,4 @@
     [self.info_tableview reloadData];
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }
-
-
-
-
 @end

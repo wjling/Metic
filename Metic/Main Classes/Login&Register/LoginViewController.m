@@ -126,7 +126,7 @@
     }
     UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
-    vc.gender = @1;
+    vc.gender = user.gender == SSDKGenderMale? @1:@0;
     vc.name = user.nickname;
     vc.ssUser = user;
     [self.navigationController pushViewController:vc animated:YES];
@@ -227,7 +227,7 @@
         blackView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
         [blackView setBackgroundColor:[UIColor blackColor]];
     }
-    [self.view addSubview:blackView];
+    [self.view.window addSubview:blackView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [blackView removeFromSuperview];
         blackView = nil;
@@ -237,7 +237,7 @@
 -(void)checkPreUP
 {
     if (blackView) {
-        return;
+//        return;
     }
     NSString *userStatus =  [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
     BOOL isIn = [userStatus isEqualToString:@"in"];
@@ -309,6 +309,7 @@
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
          if (state == SSDKResponseStateSuccess) {
+             user.icon = user.rawData[@"figureurl_qq_2"];
              [self thirdPartyLoginWithOpenId:user type:MTAccountTypeQQ];
          } else {
              NSLog(@"%@",error);
