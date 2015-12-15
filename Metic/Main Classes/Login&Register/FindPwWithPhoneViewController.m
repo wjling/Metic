@@ -6,23 +6,18 @@
 //  Copyright (c) 2015年 WeShare. All rights reserved.
 //
 
-#import "RegisterWithPhoneViewController.h"
+#import "FindPwWithPhoneViewController.h"
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
 #import "MTAccountManager.h"
-#import "AppDelegate.h"
-#import "MenuViewController.h"
-#import "FillinInfoViewController.h"
-#import "RegisterViewController.h"
-#import "MTPushMessageHandler.h"
 
 #import <SMS_SDK/SMSSDK.h>
 
-@interface RegisterWithPhoneViewController ()
+@interface FindPwWithPhoneViewController ()
 
 @end
 
-@implementation RegisterWithPhoneViewController
+@implementation FindPwWithPhoneViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,7 +29,7 @@
 }
 
 - (void)setupUI {
-    self.title = @"手机注册";
+    self.title = @"手机找回密码";
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     UILabel *phoneLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 38)];
@@ -125,7 +120,7 @@
     }
 }
 
-- (IBAction)regist:(id)sender {
+- (IBAction)resetPassword:(id)sender {
     [self resignKeyboard];
     NSString *phoneNumber = self.phoneTextField.text;
     NSString *password = self.passwordTextField.text;
@@ -140,11 +135,12 @@
         [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
         return;
     }
-    [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    
+    [SVProgressHUD showWithStatus:@"正在重置密码，请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [SMSSDK commitVerificationCode:verificationCode phoneNumber:self.phoneTextField.text zone:@"+86" result:^(NSError *error) {
         if (!error) {
             NSLog(@"验证成功");
-            [self loginWithPhoneNumber:phoneNumber Password:password];
+            [self resetPwWithPhoneNumber:phoneNumber Password:password];
         } else {
             NSLog(@"验证失败");
             [SVProgressHUD dismissWithError:@"验证码错误"];
@@ -152,57 +148,23 @@
     }];
 }
 
-- (IBAction)registWithMail:(id)sender {
-    UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    RegisterViewController* vc = [sb instantiateViewControllerWithIdentifier:@"RegisterViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)loginWithPhoneNumber:(NSString *)phoneNumber Password:(NSString *)password{
+- (void)resetPwWithPhoneNumber:(NSString *)phoneNumber Password:(NSString *)password{
     
-    [MTAccountManager registWithPhoneNumber:phoneNumber password:password success:^(MTLoginResponse *user) {
+    [MTAccountManager resetPwWithPhoneNumber:phoneNumber password:password success:^() {
         MTLOG(@"login succeeded");
-        AppDelegate *appDelegate =  (AppDelegate *)([UIApplication sharedApplication].delegate);
-        appDelegate.isLogined = YES;
-        
+        [SVProgressHUD dismissWithSuccess:@"密码重置成功，请重新登录" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
         account.phoneNumber = phoneNumber;
         account.password = password;
         account.type = MTAccountTypePhoneNumber;
         account.hadCompleteInfo = NO;
-        account.isActive = YES;
+        account.isActive = NO;
         [account saveAccount];
-        [[NSUserDefaults standardUserDefaults] setObject:@"in" forKey:@"MeticStatus"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        
-        NSNumber *userid = user.userId;
-        [[MTUser sharedInstance] setUid:userid];
-        
-        [[MenuViewController sharedInstance] dianReset];
-        [[MenuViewController sharedInstance] refresh];
-        [[appDelegate leftMenu] clearVC];
-        
-        NSNumber* min_seq = user.minMegSeq;
-        NSNumber* max_seq = user.maxMegSeq;
-        [MTPushMessageHandler setupMaxNotificationSeq:min_seq];
-        if (min_seq && max_seq && [min_seq integerValue] != 0 && [max_seq integerValue] != 0) {
-            [MTPushMessageHandler pullAndHandlePushMessageWithMinSeq:min_seq andMaxSeq:max_seq andCallBackBlock:NULL];
-        }
-        [SVProgressHUD dismissWithSuccess:@"注册成功" afterDelay:1.f];
-        [self jumpToFillinInfo];
+        [self.navigationController popToRootViewControllerAnimated:YES];
 
-    } failure:^(enum MTLoginResult result, NSString *message) {
+    } failure:^(NSString *message) {
         [SVProgressHUD dismissWithError:message afterDelay:1.f];
     }];
-}
-
-#pragma mark - push ViewController
-- (void)jumpToFillinInfo
-{
-    UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
-    vc.gender = @1;
-    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

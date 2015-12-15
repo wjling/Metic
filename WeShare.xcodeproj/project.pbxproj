@@ -267,6 +267,8 @@
 		F8182F621BFCB32B0049FD1F /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8182F5F1BFCB32B0049FD1F /* libMobClickLibrary.a */; };
 		F82D608C1C1FE8E700B5AB1B /* FindPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D608A1C1FE8E700B5AB1B /* FindPasswordViewController.m */; };
 		F82D608D1C1FE8E700B5AB1B /* FindPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */; };
+		F82D60921C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D608F1C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib */; };
+		F82D60931C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D60901C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -992,6 +994,9 @@
 		F82D60891C1FE8E700B5AB1B /* FindPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FindPasswordViewController.h; path = "Login&Register/FindPasswordViewController.h"; sourceTree = "<group>"; };
 		F82D608A1C1FE8E700B5AB1B /* FindPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FindPasswordViewController.m; path = "Login&Register/FindPasswordViewController.m"; sourceTree = "<group>"; };
 		F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FindPasswordViewController.xib; path = "Login&Register/FindPasswordViewController.xib"; sourceTree = "<group>"; };
+		F82D608F1C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FindPwWithPhoneViewController.xib; path = "Login&Register/FindPwWithPhoneViewController.xib"; sourceTree = "<group>"; };
+		F82D60901C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FindPwWithPhoneViewController.m; path = "Login&Register/FindPwWithPhoneViewController.m"; sourceTree = "<group>"; };
+		F82D60911C1FF63B00B5AB1B /* FindPwWithPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FindPwWithPhoneViewController.h; path = "Login&Register/FindPwWithPhoneViewController.h"; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -1435,6 +1440,7 @@
 				F82D60871C1FE89800B5AB1B /* RegisterWithPhoneViewController */,
 				F82D60881C1FE8AA00B5AB1B /* EnactiveAccountViewController */,
 				F82D608E1C1FE8F500B5AB1B /* FindPasswordViewController */,
+				F82D60941C1FF69B00B5AB1B /* FindPwWithPhoneViewController */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -2470,6 +2476,16 @@
 			name = FindPasswordViewController;
 			sourceTree = "<group>";
 		};
+		F82D60941C1FF69B00B5AB1B /* FindPwWithPhoneViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F82D60911C1FF63B00B5AB1B /* FindPwWithPhoneViewController.h */,
+				F82D60901C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m */,
+				F82D608F1C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib */,
+			);
+			name = FindPwWithPhoneViewController;
+			sourceTree = "<group>";
+		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -3275,6 +3291,7 @@
 				F8B5DE4D1BFCA0FF00E1F713 /* UMSShareListController.xib in Resources */,
 				085A5D4619C7FF85005FEEF9 /* square_2.jpg in Resources */,
 				04B6F89D19A25D5C00229393 /* face14.png in Resources */,
+				F82D60921C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib in Resources */,
 				085A5D4519C7FF85005FEEF9 /* square_1.jpg in Resources */,
 				089337A8197579CE00AD940B /* PEPhotoCropEditor.bundle in Resources */,
 				04B6F89619A25D5C00229393 /* face07.png in Resources */,
@@ -3506,6 +3523,7 @@
 				08BEE9C41A2DEFAA00132F18 /* TMQuiltView.m in Sources */,
 				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
 				F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */,
+				F82D60931C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m in Sources */,
 				F813B2F31BB3B9BA0066BC37 /* SDImageCache.m in Sources */,
 				0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */,
 				F8A518D11BEC958700743000 /* NearbyPeopleViewController.m in Sources */,

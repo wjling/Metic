@@ -70,5 +70,12 @@ NS_ENUM(NSInteger, MTLoginResult) {
                           success:(void (^)(MTLoginResponse *user))success
                           failure:(void (^)(enum MTLoginResult result, NSString *message))failure;
 
+/**
+ *  Reset Password With PhoneNumber
+ */
++ (void)resetPwWithPhoneNumber:(NSString *)phone
+                     password:(NSString *)password
+                      success:(void (^)())success
+                      failure:(void (^)(NSString *message))failure;
 
 @end

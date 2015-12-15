@@ -111,6 +111,7 @@ enum Operation_Code
     REGISTER_DJANGO = 60,
     REGISTER_BY_PHONE = 61,
     REGISTER_RESEND = 62,
+    RESET_PASSWD_PHONE = 63,
 };
 
 enum CloudOperation_Code

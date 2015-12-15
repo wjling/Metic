@@ -256,6 +256,9 @@ static NSOperationQueue *requestQueue;
         case 62:
             resultCode = @"register_resend";
             break;
+        case 63:
+            resultCode = @"reset_passwd_phone";
+            break;
         default:
             resultCode = @"json";
             break;

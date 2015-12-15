@@ -8,6 +8,7 @@
 
 #import "FindPasswordViewController.h"
 #import "GetBackPasswordViewController.h"
+#import "FindPwWithPhoneViewController.h"
 #import "CommonUtils.h"
 
 @interface FindPasswordViewController ()
@@ -43,7 +44,8 @@
 }
 
 - (IBAction)verificateWithTel:(id)sender {
-    
+    FindPwWithPhoneViewController *vc = [[FindPwWithPhoneViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (IBAction)verificateWithEmailButton:(id)sender {
