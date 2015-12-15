@@ -265,6 +265,8 @@
 		F813B2FE1BB3B9BA0066BC37 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2EF1BB3B9BA0066BC37 /* UIImageView+WebCache.m */; };
 		F813B2FF1BB3B9BA0066BC37 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2F11BB3B9BA0066BC37 /* UIView+WebCacheOperation.m */; };
 		F8182F621BFCB32B0049FD1F /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F8182F5F1BFCB32B0049FD1F /* libMobClickLibrary.a */; };
+		F82D608C1C1FE8E700B5AB1B /* FindPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D608A1C1FE8E700B5AB1B /* FindPasswordViewController.m */; };
+		F82D608D1C1FE8E700B5AB1B /* FindPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -987,6 +989,9 @@
 		F8182F5F1BFCB32B0049FD1F /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		F8182F601BFCB32B0049FD1F /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		F8182F611BFCB32B0049FD1F /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
+		F82D60891C1FE8E700B5AB1B /* FindPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FindPasswordViewController.h; path = "Login&Register/FindPasswordViewController.h"; sourceTree = "<group>"; };
+		F82D608A1C1FE8E700B5AB1B /* FindPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FindPasswordViewController.m; path = "Login&Register/FindPasswordViewController.m"; sourceTree = "<group>"; };
+		F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FindPasswordViewController.xib; path = "Login&Register/FindPasswordViewController.xib"; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -1423,20 +1428,13 @@
 		0435EF1119AF6DC1003BB2F6 /* Login&Register */ = {
 			isa = PBXGroup;
 			children = (
-				0435EF1719AF702F003BB2F6 /* LoginViewController.h */,
-				0435EF1819AF702F003BB2F6 /* LoginViewController.m */,
-				0435EF1919AF702F003BB2F6 /* RegisterViewController.h */,
-				0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */,
-				0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */,
-				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
-				04AC63FF1AA1C8D500A863D6 /* GetBackPasswordViewController.h */,
-				04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */,
-				F8EA74D31C0DD63B00190832 /* RegisterWithPhoneViewController.h */,
-				F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */,
-				F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */,
-				F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */,
-				F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */,
-				F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */,
+				F82D60831C1FE84600B5AB1B /* LoginViewController */,
+				F82D60841C1FE86000B5AB1B /* RegisterViewController */,
+				F82D60851C1FE87A00B5AB1B /* FillinInfoViewController */,
+				F82D60861C1FE88100B5AB1B /* GetBackPasswordViewController */,
+				F82D60871C1FE89800B5AB1B /* RegisterWithPhoneViewController */,
+				F82D60881C1FE8AA00B5AB1B /* EnactiveAccountViewController */,
+				F82D608E1C1FE8F500B5AB1B /* FindPasswordViewController */,
 			);
 			name = "Login&Register";
 			sourceTree = "<group>";
@@ -2406,6 +2404,72 @@
 			path = UMAnalytics_Sdk_3.6.5;
 			sourceTree = "<group>";
 		};
+		F82D60831C1FE84600B5AB1B /* LoginViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0435EF1719AF702F003BB2F6 /* LoginViewController.h */,
+				0435EF1819AF702F003BB2F6 /* LoginViewController.m */,
+			);
+			name = LoginViewController;
+			sourceTree = "<group>";
+		};
+		F82D60841C1FE86000B5AB1B /* RegisterViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0435EF1919AF702F003BB2F6 /* RegisterViewController.h */,
+				0435EF1A19AF702F003BB2F6 /* RegisterViewController.m */,
+			);
+			name = RegisterViewController;
+			sourceTree = "<group>";
+		};
+		F82D60851C1FE87A00B5AB1B /* FillinInfoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0435EF1419AF6FBF003BB2F6 /* FillinInfoViewController.h */,
+				0435EF1519AF6FBF003BB2F6 /* FillinInfoViewController.m */,
+			);
+			name = FillinInfoViewController;
+			sourceTree = "<group>";
+		};
+		F82D60861C1FE88100B5AB1B /* GetBackPasswordViewController */ = {
+			isa = PBXGroup;
+			children = (
+				04AC63FF1AA1C8D500A863D6 /* GetBackPasswordViewController.h */,
+				04AC64001AA1C8D500A863D6 /* GetBackPasswordViewController.m */,
+			);
+			name = GetBackPasswordViewController;
+			sourceTree = "<group>";
+		};
+		F82D60871C1FE89800B5AB1B /* RegisterWithPhoneViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F8EA74D31C0DD63B00190832 /* RegisterWithPhoneViewController.h */,
+				F8EA74D41C0DD63B00190832 /* RegisterWithPhoneViewController.m */,
+				F8EA74D51C0DD63B00190832 /* RegisterWithPhoneViewController.xib */,
+			);
+			name = RegisterWithPhoneViewController;
+			sourceTree = "<group>";
+		};
+		F82D60881C1FE8AA00B5AB1B /* EnactiveAccountViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */,
+				F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */,
+				F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */,
+			);
+			name = EnactiveAccountViewController;
+			sourceTree = "<group>";
+		};
+		F82D608E1C1FE8F500B5AB1B /* FindPasswordViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F82D60891C1FE8E700B5AB1B /* FindPasswordViewController.h */,
+				F82D608A1C1FE8E700B5AB1B /* FindPasswordViewController.m */,
+				F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */,
+			);
+			name = FindPasswordViewController;
+			sourceTree = "<group>";
+		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -3283,6 +3347,7 @@
 				F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */,
 				04B6F8A219A25D5C00229393 /* face19.png in Resources */,
 				04B6F8A819A25D5C00229393 /* face25.png in Resources */,
+				F82D608D1C1FE8E700B5AB1B /* FindPasswordViewController.xib in Resources */,
 				F8B5DDE11BFB83EA00E1F713 /* SCommentTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3504,6 +3569,7 @@
 				F8B5DDF91BFB83EA00E1F713 /* MegUtils.m in Sources */,
 				08A68E2419FE62D000A9EB76 /* KxMenu.m in Sources */,
 				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
+				F82D608C1C1FE8E700B5AB1B /* FindPasswordViewController.m in Sources */,
 				F891BC3A1B3AA3F800E59126 /* AvatarViewController.m in Sources */,
 				081B6DA91A7685D80044D623 /* qrencode.c in Sources */,
 				0435EF3C19B45C54003BB2F6 /* FriendsViewController.m in Sources */,

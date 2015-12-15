@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "RegisterWithPhoneViewController.h"
 #import "MenuViewController.h"
-#import "GetBackPasswordViewController.h"
+#import "FindPasswordViewController.h"
 #import "CommonUtils.h"
 #import "MobClick.h"
 #import "MTPushMessageHandler.h"
@@ -180,8 +180,7 @@
 
 -(void)forgetPSBtnClick:(id)sender
 {
-    UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    GetBackPasswordViewController* vc = [sb instantiateViewControllerWithIdentifier:@"GetBackPasswordViewController"];
+    FindPasswordViewController *vc = [[FindPasswordViewController alloc] init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
