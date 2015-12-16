@@ -141,6 +141,7 @@
             case NORMAL_REPLY:
             {
                 [SVProgressHUD  dismissWithSuccess:@"操作成功，请查收邮件" afterDelay:1.5];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }
                 break;
             case SERVER_ERROR:

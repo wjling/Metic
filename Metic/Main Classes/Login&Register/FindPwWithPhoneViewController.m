@@ -37,6 +37,7 @@
     phoneLeftView.font = [UIFont systemFontOfSize:15];
     phoneLeftView.textAlignment = NSTextAlignmentCenter;
     
+    self.phoneTextField.keyboardType = UIKeyboardTypeNumberPad;
     self.phoneTextField.layer.borderWidth = 1.f;
     self.phoneTextField.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.phoneTextField.layer.cornerRadius = 5;
@@ -46,6 +47,7 @@
     
     UIView *leftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 38)];
     
+    self.verificationCodeTextField.keyboardType = UIKeyboardTypeNumberPad;
     self.verificationCodeTextField.layer.borderWidth = 1.f;
     self.verificationCodeTextField.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.verificationCodeTextField.layer.cornerRadius = 5;

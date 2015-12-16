@@ -101,6 +101,10 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 failure(MTLoginResultNotActive,@"此账户尚未激活");
             }
                 break;
+            case USER_NOT_FOUND: {
+                MTLOG(@"user not existed");
+                failure(MTLoginResultFailure,@"用户不存在");
+            }
             default:
             {
                 failure(MTLoginResultFailure,@"网络异常，请重试");
@@ -274,35 +278,74 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                        success:(void (^)())success
                        failure:(void (^)(NSString *message))failure
 {
-//    NSString* salt = [CommonUtils randomStringWithLength:6];
-//    NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
-//    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",md5_str,@"passwd",salt,@"salt",nil];
-    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",password,@"passwd",nil];
-
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:phone forKey:@"email"];
+    [dictionary setValue:@"" forKey:@"passwd"];
+    [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
     
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:RESET_PASSWD_PHONE finshedBlock:^(NSData *rData) {
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:LOGIN_DJANGO finshedBlock:^(NSData *rData) {
         if (!rData) {
             failure(@"网络异常，请重试");
-            return ;
+            return;
         }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        MTLOG(@"Received Data: %@",temp);
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
-            case NORMAL_REPLY: {
-                MTLOG(@"密码重置成功");
-                success();
+            case GET_SALT:
+            {
+                NSString *salt = [response1 valueForKey:@"salt"];
+                NSString *str = [password stringByAppendingString:salt];
+                
+                //MD5 encrypt
+                NSMutableString *md5_str = [NSMutableString string];
+                md5_str = [CommonUtils MD5EncryptionWithString:str];
+                NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",md5_str,@"passwd",nil];
+                
+                
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode:RESET_PASSWD_PHONE finshedBlock:^(NSData *rData) {
+                    if (!rData) {
+                        failure(@"网络异常，请重试");
+                        return ;
+                    }
+                    NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY: {
+                            MTLOG(@"密码重置成功");
+                            success();
+                        }
+                            break;
+                        case USER_NOT_FOUND: {
+                            MTLOG(@"user not existed");
+                            failure(@"用户不存在");
+                        }
+                            break;
+                        default:
+                            MTLOG(@"server error");
+                            failure(@"服务器异常");
+                    }
+                }];
+            }
+                break;
+            case USER_NOT_ACTIVE:
+            {
+                failure(@"此账户尚未激活");
             }
                 break;
             case USER_NOT_FOUND: {
                 MTLOG(@"user not existed");
                 failure(@"用户不存在");
             }
-                break;
             default:
-                MTLOG(@"server error");
+            {
                 failure(@"服务器异常");
+            }
         }
     }];
 }
