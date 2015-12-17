@@ -112,6 +112,7 @@ enum Operation_Code
     REGISTER_BY_PHONE = 61,
     REGISTER_RESEND = 62,
     RESET_PASSWD_PHONE = 63,
+    BIND_PHONE = 64,
 };
 
 enum CloudOperation_Code
@@ -148,6 +149,7 @@ enum Return_Code
     USER_ALREADY_ONLINE = 121,
     USER_LOGOUT_SUC = 122,
     USER_NOT_ACTIVE = 123,
+    BIND_PHONE_ERROR = 125,
     
     NEED_CONFIRM=198,
     INCOME_CONFIRM=199,

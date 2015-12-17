@@ -269,6 +269,10 @@
 		F82D608D1C1FE8E700B5AB1B /* FindPasswordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D608B1C1FE8E700B5AB1B /* FindPasswordViewController.xib */; };
 		F82D60921C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D608F1C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib */; };
 		F82D60931C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D60901C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m */; };
+		F82D60981C21398C00B5AB1B /* BindPhoneNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D60961C21398C00B5AB1B /* BindPhoneNumberViewController.m */; };
+		F82D609E1C2139B400B5AB1B /* DebindPhoneNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D609C1C2139B400B5AB1B /* DebindPhoneNumberViewController.m */; };
+		F82D609F1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D609D1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib */; };
+		F82D60A21C213AE300B5AB1B /* BindPhoneNumberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D60A11C213AE300B5AB1B /* BindPhoneNumberViewController.xib */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -997,6 +1001,12 @@
 		F82D608F1C1FF63B00B5AB1B /* FindPwWithPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FindPwWithPhoneViewController.xib; path = "Login&Register/FindPwWithPhoneViewController.xib"; sourceTree = "<group>"; };
 		F82D60901C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FindPwWithPhoneViewController.m; path = "Login&Register/FindPwWithPhoneViewController.m"; sourceTree = "<group>"; };
 		F82D60911C1FF63B00B5AB1B /* FindPwWithPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FindPwWithPhoneViewController.h; path = "Login&Register/FindPwWithPhoneViewController.h"; sourceTree = "<group>"; };
+		F82D60951C21398C00B5AB1B /* BindPhoneNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BindPhoneNumberViewController.h; path = UserInfo/BindPhoneNumberViewController.h; sourceTree = "<group>"; };
+		F82D60961C21398C00B5AB1B /* BindPhoneNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BindPhoneNumberViewController.m; path = UserInfo/BindPhoneNumberViewController.m; sourceTree = "<group>"; };
+		F82D609B1C2139B400B5AB1B /* DebindPhoneNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DebindPhoneNumberViewController.h; path = UserInfo/DebindPhoneNumberViewController.h; sourceTree = "<group>"; };
+		F82D609C1C2139B400B5AB1B /* DebindPhoneNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DebindPhoneNumberViewController.m; path = UserInfo/DebindPhoneNumberViewController.m; sourceTree = "<group>"; };
+		F82D609D1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DebindPhoneNumberViewController.xib; path = UserInfo/DebindPhoneNumberViewController.xib; sourceTree = "<group>"; };
+		F82D60A11C213AE300B5AB1B /* BindPhoneNumberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BindPhoneNumberViewController.xib; path = UserInfo/BindPhoneNumberViewController.xib; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -1602,6 +1612,8 @@
 				0435EF5A19B623BD003BB2F6 /* BindingPhoneViewController.m */,
 				F891BC381B3AA3F800E59126 /* AvatarViewController.h */,
 				F891BC391B3AA3F800E59126 /* AvatarViewController.m */,
+				F82D609A1C21399100B5AB1B /* BindPhoneNumberViewController */,
+				F82D60A01C2139B800B5AB1B /* DebindPhoneNumberViewController */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -2486,6 +2498,26 @@
 			name = FindPwWithPhoneViewController;
 			sourceTree = "<group>";
 		};
+		F82D609A1C21399100B5AB1B /* BindPhoneNumberViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F82D60951C21398C00B5AB1B /* BindPhoneNumberViewController.h */,
+				F82D60961C21398C00B5AB1B /* BindPhoneNumberViewController.m */,
+				F82D60A11C213AE300B5AB1B /* BindPhoneNumberViewController.xib */,
+			);
+			name = BindPhoneNumberViewController;
+			sourceTree = "<group>";
+		};
+		F82D60A01C2139B800B5AB1B /* DebindPhoneNumberViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F82D609B1C2139B400B5AB1B /* DebindPhoneNumberViewController.h */,
+				F82D609C1C2139B400B5AB1B /* DebindPhoneNumberViewController.m */,
+				F82D609D1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib */,
+			);
+			name = DebindPhoneNumberViewController;
+			sourceTree = "<group>";
+		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -3309,6 +3341,7 @@
 				F8A329D61C07EFB5008FFB17 /* .travis.yml in Resources */,
 				04B6F89019A25D5C00229393 /* face01.png in Resources */,
 				F8B5DDE31BFB83EA00E1F713 /* UserTableViewCell.xib in Resources */,
+				F82D60A21C213AE300B5AB1B /* BindPhoneNumberViewController.xib in Resources */,
 				F8EA74CD1C0DAF3100190832 /* ShareSDK.bundle in Resources */,
 				519C65961989F61B00710B26 /* 4喝酒.jpg in Resources */,
 				F8B5DE501BFCA0FF00E1F713 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -3338,6 +3371,7 @@
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
 				51F06C1C197E0109000E8428 /* zbar-back.png in Resources */,
 				51581D2E1933575300943606 /* InfoPlist.strings in Resources */,
+				F82D609F1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib in Resources */,
 				F8B5DE4A1BFCA0FF00E1F713 /* UMShareEditViewControlleriPad.xib in Resources */,
 				F8B5DDE71BFB83EA00E1F713 /* VideoWallTableViewCell.xib in Resources */,
 				04B6F8AA19A25D5C00229393 /* face27.png in Resources */,
@@ -3396,6 +3430,7 @@
 				085E7A0D19828AAA001E99E4 /* DynamicViewController.m in Sources */,
 				F8EA73E81C0CBB2F00190832 /* MTLTransformerErrorHandling.m in Sources */,
 				0435EF2A19B45B55003BB2F6 /* SecurityCenterViewController.m in Sources */,
+				F82D609E1C2139B400B5AB1B /* DebindPhoneNumberViewController.m in Sources */,
 				085EAF3A19FBC24D00BFDA10 /* DAProgressOverlayView.m in Sources */,
 				51F4CB2319E6307500E487F1 /* HTTPFileResponse.m in Sources */,
 				51F4CB1F19E6307500E487F1 /* HTTPConnection.m in Sources */,
@@ -3404,6 +3439,7 @@
 				F8B5DDE61BFB83EA00E1F713 /* VideoWallTableViewCell.m in Sources */,
 				F83369451ACFF01E00B41435 /* MJPhotoLoadingView.m in Sources */,
 				0435EF1619AF6FBF003BB2F6 /* FillinInfoViewController.m in Sources */,
+				F82D60981C21398C00B5AB1B /* BindPhoneNumberViewController.m in Sources */,
 				F8B5DDCD1BFB83EA00E1F713 /* CustomCellTableViewCell.m in Sources */,
 				F8A329DE1C07EFB5008FFB17 /* AFURLResponseSerialization.m in Sources */,
 				F8B5DDDF1BFB83EA00E1F713 /* PhotoTableViewCell.m in Sources */,

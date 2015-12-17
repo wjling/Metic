@@ -86,6 +86,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                             MTLOG(@"user not found");
                             failure(MTLoginResultFailure,@"此用户不存在，请先注册");
                         }
+                            break;
                         default:
                         {
                             MTLOG(@"server error");
@@ -105,6 +106,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 MTLOG(@"user not existed");
                 failure(MTLoginResultFailure,@"用户不存在");
             }
+                break;
             default:
             {
                 failure(MTLoginResultFailure,@"网络异常，请重试");
@@ -342,6 +344,7 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 MTLOG(@"user not existed");
                 failure(@"用户不存在");
             }
+                break;
             default:
             {
                 failure(@"服务器异常");
@@ -350,4 +353,132 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
     }];
 }
 
++ (void)modifyPwWithAccount:(NSString *)account
+                oldPassword:(NSString *)oldPassword
+                newPassword:(NSString *)newPassword
+                    success:(void (^)())success
+                    failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:account forKey:@"email"];
+    [dictionary setValue:@"" forKey:@"passwd"];
+    [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:LOGIN_DJANGO finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(@"网络异常，请重试");
+            return;
+        }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        MTLOG(@"Received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case GET_SALT:
+            {
+                NSString *salt = [response1 valueForKey:@"salt"];
+                NSString *currentPS_md5 = [CommonUtils MD5EncryptionWithString:[oldPassword stringByAppendingString:salt]];
+                NSString *modifyPS_md5 = [CommonUtils MD5EncryptionWithString:[newPassword stringByAppendingString:salt]];
+                
+                NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                                 account, @"email",
+                                                 currentPS_md5,@"passwd",
+                                                 modifyPS_md5,@"newpw",nil];
+
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:jsonData withOperationCode:CHANGE_PW finshedBlock:^(NSData *rData) {
+                    NSString* temp = @"";
+                    if (rData) {
+                        temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    } else {
+                        MTLOG(@"修改密码，收到的rData为空");
+                        failure(@"网络异常，请重试");
+                        return;
+                    }
+                    MTLOG(@"Received Data: %@",temp);
+                    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+                    MTLOG(@"cmd: %@",cmd);
+                    if ([cmd integerValue] == NORMAL_REPLY) {
+                        success();
+                    } else {
+                        failure(@"修改密码失败");
+                    }
+                }];
+            }
+                break;
+            case USER_NOT_ACTIVE:
+            {
+                failure(@"此账户尚未激活");
+            }
+                break;
+            case USER_NOT_FOUND: {
+                MTLOG(@"user not existed");
+                failure(@"用户不存在");
+            }
+                break;
+            default:
+            {
+                failure(@"服务器异常");
+            }
+        }
+    }];
+}
+
++ (void)bindPhoneWithUserId:(NSNumber *)userId
+                phoneNumber:(NSString *)phoneNumber
+                     toBind:(BOOL)toBind
+                    success:(void (^)())success
+                    failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
+                                     userId, @"id",
+                                     phoneNumber,@"my_phone",
+                                     @(toBind),@"bind",nil];
+    
+    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+    [http sendMessage:jsonData withOperationCode:BIND_PHONE finshedBlock:^(NSData *rData) {
+        NSString* temp = @"";
+        if (rData) {
+            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        } else {
+            MTLOG(@"修改密码，收到的rData为空");
+            failure(@"网络异常，请重试");
+            return;
+        }
+        MTLOG(@"Received Data: %@",temp);
+        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber* cmd = [response1 objectForKey:@"cmd"];
+        MTLOG(@"cmd: %@",cmd);
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+                success();
+                break;
+            case DATABASE_ERROR:
+                MTLOG(@"database error");
+                failure(@"服务器发生错误");
+                break;
+            case REQUEST_DATA_ERROR:
+                MTLOG(@"request data error");
+                failure(@"请求错误");
+                break;
+            case BIND_PHONE_ERROR:
+                MTLOG(@"request data error");
+                if (toBind) {
+                    failure(@"绑定失败，此手机号已被绑定");
+                }else {
+                    failure(@"解绑失败");
+                }
+                break;
+            default:
+            {
+                failure(@"服务器异常");
+            }
+        }
+    }];
+}
 @end

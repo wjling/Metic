@@ -78,4 +78,22 @@ NS_ENUM(NSInteger, MTLoginResult) {
                       success:(void (^)())success
                       failure:(void (^)(NSString *message))failure;
 
+/**
+ *  Modify Password With Account
+ */
++ (void)modifyPwWithAccount:(NSString *)account
+                oldPassword:(NSString *)oldPassword
+                newPassword:(NSString *)newPassword
+                    success:(void (^)())success
+                    failure:(void (^)(NSString *message))failure;
+
+/**
+ *  Bind Phone With Account
+ */
++ (void)bindPhoneWithUserId:(NSNumber *)userId
+                phoneNumber:(NSString *)phoneNumber
+                     toBind:(BOOL)toBind
+                    success:(void (^)())success
+                    failure:(void (^)(NSString *message))failure;
+
 @end
