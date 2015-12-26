@@ -122,7 +122,11 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 {
     NSString* salt = [CommonUtils randomStringWithLength:6];
     NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
-    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",md5_str,@"passwd",salt,@"salt",nil];
+
+    NSMutableDictionary* mDic = [[NSMutableDictionary alloc] init];
+    if (email) mDic[@"email"] = email;
+    if (md5_str) mDic[@"passwd"] = md5_str;
+    if (salt) mDic[@"salt"] = salt;
 
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -164,7 +168,8 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                     success:(void (^)())success
                     failure:(void (^)(NSString *message))failure
 {
-    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:email,@"email",nil];
+    NSMutableDictionary* mDic = [[NSMutableDictionary alloc] init];
+    if (email) mDic[@"email"] = email;
     
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -195,7 +200,10 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 {
     NSString* salt = [CommonUtils randomStringWithLength:6];
     NSMutableString* md5_str = [CommonUtils MD5EncryptionWithString:[[NSString alloc]initWithFormat:@"%@%@",password,salt]];
-    NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",md5_str,@"passwd",salt,@"salt",nil];
+    NSMutableDictionary* mDic = [[NSMutableDictionary alloc] init];
+    if (phone) mDic[@"phone"] = phone;
+    if (md5_str) mDic[@"passwd"] = md5_str;
+    if (salt) mDic[@"salt"] = salt;
     
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -305,8 +313,11 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 //MD5 encrypt
                 NSMutableString *md5_str = [NSMutableString string];
                 md5_str = [CommonUtils MD5EncryptionWithString:str];
-                NSMutableDictionary* mDic = [CommonUtils packParamsInDictionary:phone,@"phone",md5_str,@"passwd",nil];
-                
+
+                NSMutableDictionary *mDic = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:phone forKey:@"phone"];
+                [dictionary setValue:md5_str forKey:@"passwd"];
+
                 
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -382,10 +393,12 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 NSString *currentPS_md5 = [CommonUtils MD5EncryptionWithString:[oldPassword stringByAppendingString:salt]];
                 NSString *modifyPS_md5 = [CommonUtils MD5EncryptionWithString:[newPassword stringByAppendingString:salt]];
                 
-                NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
-                                                 account, @"email",
-                                                 currentPS_md5,@"passwd",
-                                                 modifyPS_md5,@"newpw",nil];
+                NSMutableDictionary *json_dic = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:account forKey:@"email"];
+                [dictionary setValue:currentPS_md5 forKey:@"passwd"];
+                [dictionary setValue:modifyPS_md5 forKey:@"newpw"];
+                [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
+                
 
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
                 HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
@@ -430,53 +443,105 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
 
 + (void)bindPhoneWithUserId:(NSNumber *)userId
                 phoneNumber:(NSString *)phoneNumber
-                     toBind:(BOOL)toBind
+                   password:(NSString *)password
+                     toBind:(enum MTPhoneBindSataus)toBind
                     success:(void (^)())success
-                    failure:(void (^)(NSString *message))failure
+                    failure:(void (^)(enum Return_Code errorCode, NSString *message))failure
 {
-    NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
-                                     userId, @"id",
-                                     phoneNumber,@"my_phone",
-                                     @(toBind),@"bind",nil];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:phoneNumber forKey:@"email"];
+    [dictionary setValue:@"" forKey:@"passwd"];
+    [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
     
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:jsonData withOperationCode:BIND_PHONE finshedBlock:^(NSData *rData) {
-        NSString* temp = @"";
-        if (rData) {
-            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        } else {
-            MTLOG(@"修改密码，收到的rData为空");
-            failure(@"网络异常，请重试");
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:LOGIN_DJANGO finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(REQUEST_FAIL,@"网络异常，请重试");
             return;
         }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         MTLOG(@"Received Data: %@",temp);
-        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber* cmd = [response1 objectForKey:@"cmd"];
-        MTLOG(@"cmd: %@",cmd);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
-            case NORMAL_REPLY:
-                success();
-                break;
-            case DATABASE_ERROR:
-                MTLOG(@"database error");
-                failure(@"服务器发生错误");
-                break;
-            case REQUEST_DATA_ERROR:
-                MTLOG(@"request data error");
-                failure(@"请求错误");
-                break;
-            case BIND_PHONE_ERROR:
-                MTLOG(@"request data error");
-                if (toBind) {
-                    failure(@"绑定失败，此手机号已被绑定");
-                }else {
-                    failure(@"解绑失败");
+            case GET_SALT:
+            {
+                NSString *salt = [response1 valueForKey:@"salt"];
+                if (!salt || [salt isEqualToString:@""] || [salt isEqual:[NSNull null]]) {
+                    salt = [CommonUtils randomStringWithLength:5];
                 }
+                NSString *PS_md5 = password? [CommonUtils MD5EncryptionWithString:[password stringByAppendingString:salt]]:nil;
+                NSMutableDictionary* json_dic = [[NSMutableDictionary alloc] init];
+                
+                if(userId) json_dic[@"id"] = userId;
+                if(phoneNumber) json_dic[@"my_phone"] = phoneNumber;
+                if(PS_md5) {
+                    json_dic[@"passwd"] = PS_md5;
+                    json_dic[@"salt"] = salt;
+                }
+                json_dic[@"bind"] = @(toBind);
+                
+                NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+                [http sendMessage:jsonData withOperationCode:BIND_PHONE finshedBlock:^(NSData *rData) {
+                    NSString* temp = @"";
+                    if (rData) {
+                        temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+                    } else {
+                        MTLOG(@"修改密码，收到的rData为空");
+                        failure(REQUEST_FAIL,@"网络异常，请重试");
+                        return;
+                    }
+                    MTLOG(@"Received Data: %@",temp);
+                    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                    NSNumber* cmd = [response1 objectForKey:@"cmd"];
+                    MTLOG(@"cmd: %@",cmd);
+                    switch ([cmd intValue]) {
+                        case NORMAL_REPLY:
+                            success();
+                            break;
+                        case DATABASE_ERROR:
+                            MTLOG(@"database error");
+                            failure(DATABASE_ERROR,@"服务器发生错误");
+                            break;
+                        case REQUEST_DATA_ERROR:
+                            MTLOG(@"request data error");
+                            failure(REQUEST_DATA_ERROR, @"请求错误");
+                            break;
+                        case BIND_PHONE_ERROR:
+                            MTLOG(@"request data error");
+                            if (toBind) {
+                                failure(BIND_PHONE_ERROR, @"绑定失败，此手机号已被绑定");
+                            }else {
+                                failure(BIND_PHONE_ERROR, @"解绑失败");
+                            }
+                            break;
+                        case PASSWD_NOT_SETTING:
+                            failure(PASSWD_NOT_SETTING, @"请设置登录密码");
+                            break;
+                        default:
+                        {
+                            failure(REQUEST_FAIL, @"服务器异常");
+                        }
+                    }
+                }];
+                
+            }
+                break;
+            case USER_NOT_ACTIVE:
+            {
+                failure(USER_NOT_ACTIVE, @"此账户尚未激活");
+            }
+                break;
+            case USER_NOT_FOUND: {
+                MTLOG(@"user not existed");
+                failure(USER_NOT_FOUND, @"用户不存在");
+            }
                 break;
             default:
             {
-                failure(@"服务器异常");
+                failure(SERVER_ERROR, @"服务器异常");
             }
         }
     }];

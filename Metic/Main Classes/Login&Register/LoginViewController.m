@@ -56,11 +56,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     [self setupUI];
     [self showBlackView];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    
-    appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     if (![userDf boolForKey:@"hadShowWelcomePage"]) {
         MTLOG(@"login: it is the first launch");
         [userDf setBool:YES forKey:@"hadShowWelcomePage"];
@@ -106,7 +105,10 @@
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                          bundle: nil];
     WelcomePageViewController* vc = [storyboard instantiateViewControllerWithIdentifier:@"WelcomePageViewController"];
-    [self presentViewController:vc animated:NO completion:nil];
+    [self presentViewController:vc animated:NO completion:^{
+        [blackView removeFromSuperview];
+        blackView = nil;
+    }];
 }
 
 - (void)jumpToMainView
@@ -211,10 +213,11 @@
     launchV.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self.navigationController presentViewController:launchV animated:NO completion:
      ^{
+         [blackView removeFromSuperview];
+         blackView = nil;
          dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
              [launchV dismissViewControllerAnimated:YES completion:nil];
-             [blackView removeFromSuperview];
-             blackView = nil;
+
          });
      }];
 }
@@ -226,8 +229,9 @@
         blackView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
         [blackView setBackgroundColor:[UIColor blackColor]];
     }
-    [self.view.window addSubview:blackView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    UIWindow *window = appDelegate.window;
+    [window addSubview:blackView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [blackView removeFromSuperview];
         blackView = nil;
     });

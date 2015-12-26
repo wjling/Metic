@@ -273,6 +273,8 @@
 		F82D609E1C2139B400B5AB1B /* DebindPhoneNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D609C1C2139B400B5AB1B /* DebindPhoneNumberViewController.m */; };
 		F82D609F1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D609D1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib */; };
 		F82D60A21C213AE300B5AB1B /* BindPhoneNumberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D60A11C213AE300B5AB1B /* BindPhoneNumberViewController.xib */; };
+		F82D60AB1C2A8BBF00B5AB1B /* PasswordSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82D60A91C2A8BBF00B5AB1B /* PasswordSettingViewController.m */; };
+		F82D60AC1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F82D60AA1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib */; };
 		F83369421ACFF01E00B41435 /* MJPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369361ACFF01E00B41435 /* MJPhoto.m */; };
 		F83369431ACFF01E00B41435 /* MJPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */; };
 		F83369441ACFF01E00B41435 /* MJPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369391ACFF01E00B41435 /* MJPhotoBrowser.m */; };
@@ -1007,6 +1009,9 @@
 		F82D609C1C2139B400B5AB1B /* DebindPhoneNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DebindPhoneNumberViewController.m; path = UserInfo/DebindPhoneNumberViewController.m; sourceTree = "<group>"; };
 		F82D609D1C2139B400B5AB1B /* DebindPhoneNumberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DebindPhoneNumberViewController.xib; path = UserInfo/DebindPhoneNumberViewController.xib; sourceTree = "<group>"; };
 		F82D60A11C213AE300B5AB1B /* BindPhoneNumberViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BindPhoneNumberViewController.xib; path = UserInfo/BindPhoneNumberViewController.xib; sourceTree = "<group>"; };
+		F82D60A81C2A8BBF00B5AB1B /* PasswordSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PasswordSettingViewController.h; path = UserInfo/PasswordSettingViewController.h; sourceTree = "<group>"; };
+		F82D60A91C2A8BBF00B5AB1B /* PasswordSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PasswordSettingViewController.m; path = UserInfo/PasswordSettingViewController.m; sourceTree = "<group>"; };
+		F82D60AA1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PasswordSettingViewController.xib; path = UserInfo/PasswordSettingViewController.xib; sourceTree = "<group>"; };
 		F83369351ACFF01E00B41435 /* MJPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJPhoto.h; sourceTree = "<group>"; };
 		F83369361ACFF01E00B41435 /* MJPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJPhoto.m; sourceTree = "<group>"; };
 		F83369371ACFF01E00B41435 /* MJPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MJPhotoBrowser.bundle; sourceTree = "<group>"; };
@@ -1614,6 +1619,7 @@
 				F891BC391B3AA3F800E59126 /* AvatarViewController.m */,
 				F82D609A1C21399100B5AB1B /* BindPhoneNumberViewController */,
 				F82D60A01C2139B800B5AB1B /* DebindPhoneNumberViewController */,
+				F82D60AD1C2A8BCB00B5AB1B /* PasswordSettingViewController */,
 			);
 			name = UserInfo;
 			sourceTree = "<group>";
@@ -2518,6 +2524,16 @@
 			name = DebindPhoneNumberViewController;
 			sourceTree = "<group>";
 		};
+		F82D60AD1C2A8BCB00B5AB1B /* PasswordSettingViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F82D60A81C2A8BBF00B5AB1B /* PasswordSettingViewController.h */,
+				F82D60A91C2A8BBF00B5AB1B /* PasswordSettingViewController.m */,
+				F82D60AA1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib */,
+			);
+			name = PasswordSettingViewController;
+			sourceTree = "<group>";
+		};
 		F83369341ACFF01E00B41435 /* MJPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -3309,6 +3325,7 @@
 				04B6F89919A25D5C00229393 /* face10.png in Resources */,
 				04B6F89419A25D5C00229393 /* face05.png in Resources */,
 				F8B5DD271BFB83C000E1F713 /* MJRefresh.bundle in Resources */,
+				F82D60AC1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib in Resources */,
 				04B6F89219A25D5C00229393 /* face03.png in Resources */,
 				F8B5DDDA1BFB83EA00E1F713 /* nearbyEventTableViewCell.xib in Resources */,
 				F8B5DDD21BFB83EA00E1F713 /* EventInvitationTableViewCell.xib in Resources */,
@@ -3553,6 +3570,7 @@
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				F8B5DE021BFB83EA00E1F713 /* NotificationController.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
+				F82D60AB1C2A8BBF00B5AB1B /* PasswordSettingViewController.m in Sources */,
 				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
 				081B6DAC1A7685D80044D623 /* rscode.c in Sources */,
 				F8B5DDFB1BFB83EA00E1F713 /* MTDatabaseHelper.m in Sources */,

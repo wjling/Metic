@@ -7,6 +7,7 @@
 //
 
 #import "BindPhoneNumberViewController.h"
+#import "PasswordSettingViewController.h"
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
 #import "MTAccountManager.h"
@@ -135,8 +136,7 @@
 }
 
 - (void)bindPhoneNumber:(NSString *)phoneNumber {
-    
-    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber toBind:YES success:^{
+    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:nil toBind:MTPhoneBindSatausToBind success:^{
         [SVProgressHUD dismissWithSuccess:@"绑定成功" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
@@ -145,8 +145,13 @@
         MTUser *user = [MTUser sharedInstance];
         user.phone = phoneNumber;
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *message) {
+    } failure:^(enum Return_Code errorCode, NSString *message) {
         [SVProgressHUD dismissWithSuccess:message afterDelay:1.f];
+        if (errorCode == PASSWD_NOT_SETTING) {
+            PasswordSettingViewController *vc = [[PasswordSettingViewController alloc] init];
+            vc.verificatedPhone = phoneNumber;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
     }];
 }
 @end

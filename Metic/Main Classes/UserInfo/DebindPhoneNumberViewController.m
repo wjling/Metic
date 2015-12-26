@@ -55,11 +55,6 @@
     self.verificationCodeTextField.layer.masksToBounds = YES;
     self.verificationCodeTextField.leftView = leftView;
     self.verificationCodeTextField.leftViewMode = UITextFieldViewModeAlways;
-    
-    UILabel *passwordLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 38)];
-    passwordLeftView.text = @"密码";
-    passwordLeftView.font = [UIFont systemFontOfSize:15];
-    passwordLeftView.textAlignment = NSTextAlignmentCenter;
 }
 
 - (void)resignKeyboard
@@ -141,7 +136,7 @@
 
 - (void)debindPhoneNumber:(NSString *)phoneNumber{
     
-    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber toBind:NO success:^{
+    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:nil toBind:MTPhoneBindSatausToDebind success:^{
         [SVProgressHUD dismissWithSuccess:@"解绑成功" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
@@ -151,9 +146,9 @@
         }
         [account saveAccount];
         MTUser *user = [MTUser sharedInstance];
-        user.phone = phoneNumber;
+        user.phone = nil;
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSString *message) {
+    } failure:^(enum Return_Code errorCode, NSString *message) {
         [SVProgressHUD dismissWithSuccess:message afterDelay:1.f];
     }];
 }

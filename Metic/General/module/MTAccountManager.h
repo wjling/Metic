@@ -19,6 +19,11 @@ NS_ENUM(NSInteger, MTLoginResult) {
     MTLoginResultCancel,
 };
 
+NS_ENUM(NSInteger, MTPhoneBindSataus) {
+    MTPhoneBindSatausToDebind = 0,
+    MTPhoneBindSatausToBind,
+};
+
 @interface MTAccountManager : NSObject
 
 @property (nonatomic) BOOL hadCheckPassWord;
@@ -92,8 +97,9 @@ NS_ENUM(NSInteger, MTLoginResult) {
  */
 + (void)bindPhoneWithUserId:(NSNumber *)userId
                 phoneNumber:(NSString *)phoneNumber
-                     toBind:(BOOL)toBind
+                   password:(NSString *)password
+                     toBind:(enum MTPhoneBindSataus)toBind
                     success:(void (^)())success
-                    failure:(void (^)(NSString *message))failure;
+                    failure:(void (^)(enum Return_Code errorCode, NSString *message))failure;
 
 @end
