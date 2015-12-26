@@ -255,7 +255,7 @@ static SlideNavigationController *singletonInstance;
 //    if (self.leftbarButtonItem)
     {
         dian.hidden = NO;
-        NSLog(@"显示左上角的红点");
+        MTLOG(@"显示左上角的红点");
     }
     
 }
@@ -266,7 +266,7 @@ static SlideNavigationController *singletonInstance;
     {
         dian.hidden = YES;
     }
-    NSLog(@"隐藏左上角的红点");
+    MTLOG(@"隐藏左上角的红点");
 }
 
 #pragma mark - Private Methods -

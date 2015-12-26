@@ -159,7 +159,11 @@
         NSNumber* gender = [friend objectForKey:@"gender"];
         NSString* location = [friend objectForKey:@"location"];
         
-        cell.friendNameLabel.text = fname;
+        if ([fname isEqual:[NSNull null]]) {
+            cell.friendNameLabel.text = @"未知";
+        } else {
+            cell.friendNameLabel.text = fname;
+        }
         if ([location isEqual: [NSNull null]]) {
             cell.location_label.text = @"暂无地址信息";
         }

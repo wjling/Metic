@@ -8,7 +8,11 @@
 
 #import "FillinInfoViewController.h"
 #import "UIImage+squareThumbail.h"
+#import "SVProgressHUD.h"
 #import "UzysAssetsPickerController.h"
+#import "MTAccount.h"
+#import "SDWebImageManager.h"
+#import "BOAlertController.h"
 
 @interface FillinInfoViewController ()
 {
@@ -56,7 +60,6 @@
         }
     }
     
-    avatar = [UIImage imageNamed:@"默认用户头像"];
     name = @"";
     
     info_tableview.delegate = self;
@@ -64,6 +67,7 @@
     
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [[MTUser sharedInstance] getInfo:[MTUser sharedInstance].userid myid:[MTUser sharedInstance].userid delegateId:self];
+    [self preLoadingUserInfo];
 }
 
 //返回上一层
@@ -94,16 +98,77 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)preLoadingUserInfo{
+    if (self.ssUser) {
+        //修改用户名
+        [SVProgressHUD showWithStatus:@"正在加载..." maskType:SVProgressHUDMaskTypeBlack];
+        NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",self.ssUser.nickname,@"name",nil  ];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
+        [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS finshedBlock:^(NSData *rData) {
+            if (!rData) {
+            }else {
+                NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber* cmd = [response objectForKey:@"cmd"];
+                MTLOG(@"cmd: %@",cmd);
+                switch ([cmd integerValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        [MTUser sharedInstance].name = self.ssUser.nickname;
+                        [AppDelegate refreshMenu];
+                        self.name = self.ssUser.nickname;
+                        [self.info_tableview reloadData];
+                        MTLOG(@"昵称修改成功");
+                    }
+                        break;
+                    default:
+                        MTLOG(@"昵称修改失败");
+                        break;
+                }
+            }
+        }];
+        
+        //设置性别
+        NSNumber *ssGender = self.ssUser.gender == SSDKGenderMale? @1:@0;
+        NSDictionary* dict = [CommonUtils packParamsInDictionary:ssGender,@"gender",[MTUser sharedInstance].userid,@"id",
+                              nil];
+        MTLOG(@"gender modify json: %@",dict);
+        NSData* dictData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+        HttpSender* httpSender = [[HttpSender alloc]initWithDelegate:self];
+        [httpSender sendMessage:dictData withOperationCode:CHANGE_SETTINGS finshedBlock:^(NSData *rData) {
+            if (!rData) {
+            }else {
+                NSDictionary *response = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                NSNumber* cmd = [response objectForKey:@"cmd"];
+                MTLOG(@"cmd: %@",cmd);
+                switch ([cmd integerValue]) {
+                    case NORMAL_REPLY:
+                    {
+                        [MTUser sharedInstance].gender = ssGender;
+                        [AppDelegate refreshMenu];
+                        self.gender = gender;
+                        newGender = [gender integerValue];
+                        [self.info_tableview reloadData];
+                        MTLOG(@"性别修改成功");
+                    }
+                        break;
+                    default:
+                        MTLOG(@"性别修改失败");
+                        break;
+                }
+            }
+        }];
+        //上传图片
+        NSString *iconURL = self.ssUser.icon;
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:iconURL] options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+            //
+        } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            avatar = [image squareAndSmall];
+            PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:image type:22 viewController:self];
+            [getter uploadAvatar];
+        }];
+    }
 }
-*/
 
 - (IBAction)okBtnClicked:(id)sender {
     
@@ -111,8 +176,23 @@
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请填写您的昵称" WithDelegate:self WithCancelTitle:@"确定"];
         return;
     }
-    [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
-//    [self.navigationController popViewControllerAnimated:NO];
+    
+    NSString* message = @"确定之后无法再修改性别哦，是否要继续此操作？";
+    
+    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:message viewController:[SlideNavigationController sharedInstance]];
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+        
+    }];
+    [alertView addButton:cancelItem type:RIButtonItemType_Cancel];
+    
+    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
+        MTAccount *account = [MTAccount singleInstance];
+        account.hadCompleteInfo = YES;
+        [account saveAccount];
+        [self performSegueWithIdentifier:@"fillinInfo_home" sender:sender];
+    }];
+    [alertView addButton:okItem type:RIButtonItemType_Other];
+    [alertView show];
 }
 
 #pragma mark - UITableViewDataSource
@@ -161,7 +241,7 @@
                 imageview.tag = 01;
                 [cell addSubview:imageview];
             }
-            imageview.image = avatar;
+            imageview.image = avatar? avatar:[UIImage imageNamed:@"默认用户头像"];
             
             cell.textLabel.text = @"头像";
             cell.textLabel.textColor = textColor1;
@@ -189,6 +269,14 @@
             }
 //            MTLOG(@"昵称: %@",[MTUser sharedInstance].name);
             label.text = name;
+            if (!name || [name isEqualToString:@""]) {
+                cell.layer.borderColor = [UIColor redColor].CGColor;
+                cell.layer.borderWidth = 2;
+                cell.layer.masksToBounds = YES;
+                cell.layer.cornerRadius = 5;
+            } else {
+                cell.layer.borderWidth = 0;
+            }
         }
         else if (row == 1)
         {
@@ -541,7 +629,7 @@
 - (void)cropViewController:(PECropViewController *)controller didFinishCroppingImage:(UIImage *)croppedImage
 {
     [controller dismissViewControllerAnimated:YES completion:NULL];
-    avatar = [croppedImage squareAndSmall];;
+    avatar = [croppedImage squareAndSmall];
     [self.info_tableview reloadData];
     PhotoGetter* getter = [[PhotoGetter alloc]initUploadAvatarMethod:croppedImage type:22 viewController:self];
     [getter uploadAvatar];
@@ -549,12 +637,7 @@
 
 - (void)cropViewControllerDidCancel:(PECropViewController *)controller
 {
-    avatar = [UIImage imageNamed:@"默认用户头像"];
     [self.info_tableview reloadData];
     [controller dismissViewControllerAnimated:YES completion:NULL];
 }
-
-
-
-
 @end

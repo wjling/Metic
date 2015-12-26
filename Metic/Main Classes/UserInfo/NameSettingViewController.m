@@ -153,26 +153,21 @@
             [AppDelegate refreshMenu];
             [self synName:newName];
             MTLOG(@"昵称修改成功");
-            [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:2];
-//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改成功" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:1.f];
             [self.navigationController popViewControllerAnimated:YES];
         }
             break;
         case USER_NAME_EXIST:  //120
         {
-            [SVProgressHUD dismissWithError:@"该昵称已存在" afterDelay:2];
-//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"该昵称已存在，请重试" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithError:@"该昵称已存在" afterDelay:1.f];
         }
             break;
             
         default:
             MTLOG(@"昵称修改失败");
-            [SVProgressHUD dismissWithError:@"昵称修改失败，请检查是否包含非法字符" afterDelay:1.5];
-//            [CommonUtils showToastWithTitle:@"系统提示" withMessage:@"昵称修改失败，请重试" withDelegate:self withDuaration:1.5];
+            [SVProgressHUD dismissWithError:@"昵称修改失败，请检查是否包含非法字符" afterDelay:1.f];
             break;
     }
-    
-    
 }
 
 -(void)textFieldEditChanged:(NSNotification*)obj

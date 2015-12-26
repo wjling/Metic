@@ -7,9 +7,11 @@
 //
 
 #import "SecurityCenterViewController.h"
+#import "BOAlertController.h"
+#import "MTUser.h"
 
 @interface SecurityCenterViewController ()
-
+@property (nonatomic,strong) UITableView *security_tableview;
 @end
 
 @implementation SecurityCenterViewController
@@ -28,12 +30,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    UITableView* security_tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
-    [self.view addSubview:security_tableview];
-    security_tableview.delegate = self;
-    security_tableview.dataSource = self;
-    security_tableview.scrollEnabled = NO;
+    self.security_tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+    [self.view addSubview:self.security_tableview];
+    self.security_tableview.delegate = self;
+    self.security_tableview.dataSource = self;
+    self.security_tableview.scrollEnabled = NO;
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.security_tableview reloadData];
 }
 //返回上一层
 -(void)MTpopViewController{
@@ -64,7 +71,22 @@
     switch (indexPath.section) {
         case 0:
         {
-            [self performSegueWithIdentifier:@"securitycenter_modifypassword" sender:self];
+            MTUser *user = [MTUser sharedInstance];
+            if (user.email.length || user.phone.length) {
+                [self performSegueWithIdentifier:@"securitycenter_modifypassword" sender:self];
+            }else {
+                BOAlertController *alert = [[BOAlertController alloc] initWithTitle:@"温馨提示" message:@"暂时无法修改密码，请先绑定手机号" viewController:self];
+                RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"取消" action:^{
+                    
+                }];
+                [alert addButton:cancelItem type:RIButtonItemType_Cancel];
+                
+                RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
+                    [self performSegueWithIdentifier:@"securitycenter_modifyphone" sender:self];
+                }];
+                [alert addButton:okItem type:RIButtonItemType_Other];
+                [alert show];
+            }
         }
             break;
         case 1:
@@ -105,7 +127,12 @@
             break;
         case 1:
         {
-            cell.textLabel.text = @"更换绑定手机";
+            MTUser *user = [MTUser sharedInstance];
+            if (user.phone.length) {
+                cell.textLabel.text = @"更换绑定手机";
+            } else {
+                cell.textLabel.text = @"绑定手机";
+            }
         }
             break;
             

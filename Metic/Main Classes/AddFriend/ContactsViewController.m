@@ -63,22 +63,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    MTLOG(@"friend recommendation view will appear");
-    
-    NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    NSMutableDictionary* userSettings = [[NSMutableDictionary alloc]initWithDictionary:[userDf objectForKey:[NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid]]];
-    NSString* userPhoneNumber = [userSettings objectForKey:@"userPhoneNumber"];
-    if (!userPhoneNumber || [userPhoneNumber isEqualToString:@""]) {
-        self.noUpload_view.hidden = NO;
-        self.hasUpload_view.hidden = YES;
-    }
-    else
-    {
-        self.noUpload_view.hidden = YES;
-        self.hasUpload_view.hidden = NO;
-        [self getContactFriends];
-    }
+    self.noUpload_view.hidden = YES;
+    self.hasUpload_view.hidden = NO;
+    [self getContactFriends];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -200,9 +187,7 @@
         else
         {
             MTLOG(@"获取通讯录好友，收到的rData为空");
-            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
+            [SVProgressHUD dismissWithError:@"服务器未响应，有可能是网络未连接" afterDelay:1.f];
             return;
         }
         MTLOG(@"get contactfriends done, received Data: %@",temp);
@@ -228,17 +213,6 @@
     [http sendMessage:jsonData withOperationCode:UPLOAD_PHONEBOOK finshedBlock:getContactFriendsDone];
     MTLOG(@"doing getContactFriends, json: %@",json_dic);
     [SVProgressHUD showWithStatus:@"请稍候"];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (!isFinish) {
-            [SVProgressHUD dismiss];
-        }
-    });
-}
-
--(void)dismissAlert:(NSTimer*)timer
-{
-    UIAlertView* alert = [timer userInfo];
-    [alert dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 #pragma mark - UITableViewDelegate
@@ -277,6 +251,9 @@
         MTLOG(@"isFriend: %d",[isFriend boolValue]);
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getAvatar];
+        if (!fname || [fname isEqual: [NSNull null]]) {
+            fname = @"未知";
+        }
         cell.name_label.text = fname;
         if ([isFriend boolValue]) {
             cell.add_button.hidden = YES;

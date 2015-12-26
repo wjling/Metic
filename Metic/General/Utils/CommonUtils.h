@@ -18,7 +18,10 @@
 +(NSMutableDictionary*)packParamsInDictionary:(id) params,...;
 
 //验证邮箱格式是不是正确
-+(BOOL)isEmailValid:(NSString*) email;
++ (BOOL)isEmailValid:(NSString*) email;
+
+//验证电话号码是不是正确
++ (BOOL)isPhoneNumberVaild:(NSString *)phoneNumber;
 
 //生成随机字符串，包括数字和大小写的字母
 +(NSString*)randomStringWithLength:(int)length;

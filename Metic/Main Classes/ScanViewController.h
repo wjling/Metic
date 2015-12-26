@@ -12,13 +12,12 @@
 #import "HttpSender.h"
 #import "MenuViewController.h"
 
-@interface ScanViewController : UIViewController<ZBarReaderViewDelegate,HttpSenderDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate>
+@interface ScanViewController : UIViewController<HttpSenderDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *showView;
 @property (strong, nonatomic) IBOutlet UIView *resultView;
 @property (strong, nonatomic) IBOutlet UIView *GUI;
-@property (nonatomic, retain) ZBarReaderView *readerView;
 @property (strong, nonatomic) IBOutlet UIButton *inButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) IBOutlet UIView *controlView;

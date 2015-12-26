@@ -34,6 +34,9 @@
 //信鸽推送相关
 + (void)registerPush;
 
+//设置本地已接受最大消息序号
++ (void)setupMaxNotificationSeq:(NSNumber *)maxNotificationSeq;
+
 #pragma mark - Normal Push
 + (void)handlePushMessage:(NSDictionary*)message andFeedBack:(BOOL)feedback;
 + (void)synchronizePushSeqAndCallBack:(void(^)(NSNumber* min_seq, NSNumber* max_seq))block;

@@ -11,6 +11,7 @@
 #import "XGPush.h"
 #import "UMSocial.h"
 #import "BOAlertController.h"
+#import "MTAccount.h"
 
 @interface SystemSettingsViewController ()<UMSocialUIDelegate>
 {
@@ -319,6 +320,7 @@
     if (alertView == quitAlert) {
         if (buttonIndex == 1) {
             MTLOG(@"退出程序");
+            [[MTAccount singleInstance] deleteAccount];
             [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             MTLOG(@"Metic被用户残忍杀死了");
@@ -344,8 +346,8 @@
             MTLOG(@"切换账号");
             [XGPush unRegisterDevice];
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
-//            [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
             [[MTUser alloc]init];
+            [[MTAccount singleInstance] deleteAccount];
             [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             [self.navigationController popToRootViewControllerAnimated:YES];
@@ -572,6 +574,4 @@
         [self.view sendSubviewToBack:self.shadowView];
     }
 }
-
-
 @end

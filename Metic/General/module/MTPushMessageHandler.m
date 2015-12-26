@@ -105,6 +105,24 @@
 #endif
 }
 
++ (void)setupMaxNotificationSeq:(NSNumber *)maxNotificationSeq
+{
+    if (!maxNotificationSeq) {
+        maxNotificationSeq = @0;
+    }
+    if ([MTUser sharedInstance].userid) {
+        NSMutableDictionary* maxSeqDict = [[[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"] mutableCopy];
+        if (!maxSeqDict) {
+            maxSeqDict = [[NSMutableDictionary alloc] init];
+        }
+        
+        [maxSeqDict setObject:maxNotificationSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
 #pragma mark - Normal Push
 + (void)handlePushMessage:(NSDictionary*)message andFeedBack:(BOOL)feedback
 {
@@ -179,9 +197,12 @@
         pvStatus = [NSMutableArray arrayWithArray:pvStatus];
         pvStatus[(msg_cmd - 990)] = [NSNumber numberWithBool:YES];
         [[MTUser sharedInstance].updatePVStatus setObject:pvStatus forKey:[msg_dic valueForKey:@"event_id"]];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
-                                                            object:nil
-                                                          userInfo:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshPVRPStatus"
+                                                                object:nil
+                                                              userInfo:nil];
+        });
+        
         type = -1;
         //        MTLOG(@"新动态数量：%lu",(unsigned long)[MTUser sharedInstance].updateEventStatus.count);
     }
@@ -249,7 +270,9 @@
         
         
         NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
+        });
         
     }
     else if (msg_cmd == KICK_EVENT_NOTIFICATION) //被踢出活动984
@@ -264,8 +287,9 @@
         
         
         NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:event_id1,@"eventId", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"deleteItem" object:nil userInfo:dict];
+        });
     }
     else if (msg_cmd == ADD_FRIEND_NOTIFICATION)
     {
@@ -278,7 +302,9 @@
         [[MTUser sharedInstance].systemMsg insertObject:msg_dic atIndex:0];
         type = 2;
         if([[msg_dic valueForKey:@"result"] boolValue]){
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"reloadEvent" object:nil userInfo:nil];
+            });
         }
     }
     else if (msg_cmd == NEW_EVENT_NOTIFICATION || msg_cmd == REQUEST_EVENT)
@@ -337,25 +363,33 @@
     MTLOG(@"appdelegate， unRead_dic: %@", unRead_dic);
     
     if ([(UIViewController*)[MTPushMessageHandler sharedInstance].notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
-        [[MTPushMessageHandler sharedInstance].notificationDelegate notificationDidReceive:[NSArray arrayWithObject:message]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[MTPushMessageHandler sharedInstance].notificationDelegate notificationDidReceive:[NSArray arrayWithObject:message]];
+        });
     }
     
     int flag = type;
     if (flag >= 0) {
         //        MTLOG(@"收到新推送，显示消息中心红点");
-        [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showUpdateInRow:4];
-        [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showUpdateInRow:4];
+            [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
+        });
     }
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (delegate.isInBackground) {
-        [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showNotificationCenter];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showNotificationCenter];
+        });
     }
     
     NSDictionary* pack = [CommonUtils packParamsInDictionary:
                           [NSNumber numberWithInteger:type], @"type",
                           msg_dic, @"msg",
                           nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
+    });
     
     if (feedback) {
         //反馈给服务器
@@ -445,23 +479,18 @@
                 if (!list || list.count == 0) {
                     return;
                 }
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                    for (int i = 0; i < list.count; i++) {
+                        NSDictionary* message = [list objectAtIndex:i];
+                        [self handlePushMessage:message andFeedBack:NO];
+                    }
+                });
                 
-                for (int i = 0; i < list.count; i++) {
-                    NSDictionary* message = [list objectAtIndex:i];
-                    [self handlePushMessage:message andFeedBack:NO];
-                }
                 //反馈给服务器
                 [self feedBackPushMessagewithMinSeq:min_seq andMaxSeq:max_seq andCallBack:^(NSDictionary *response) {
                     if ([response[@"cmd"] integerValue] == NORMAL_REPLY) {
-                        if ([MTUser sharedInstance].userid) {
-                            NSMutableDictionary* maxSeqDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"maxNotificationSeq"];
-                            NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
-                            maxSeqDict = [[NSMutableDictionary alloc]initWithDictionary:maxSeqDict];
-                            [maxSeqDict setObject:remoteMaxSeq forKey:[CommonUtils NSStringWithNSNumber:[MTUser sharedInstance].userid]];
-                            
-                            [[NSUserDefaults standardUserDefaults] setObject:maxSeqDict forKey:@"maxNotificationSeq"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                        }
+                        NSNumber* remoteMaxSeq = @(MAX([min_seq integerValue], [max_seq integerValue]));
+                        [self setupMaxNotificationSeq:remoteMaxSeq];
                     }
                 }];
             }
@@ -566,18 +595,18 @@
         NSDictionary* response = [CommonUtils NSDictionaryWithNSString:temp];
         NSArray* list = [response objectForKey:@"list"];
         if (list) {
-            for (int i = 0; i < list.count; i++) {
-                NSDictionary* list_item = [list objectAtIndex:i];
-                if (!list_item || [list_item isEqual:[NSNull null]]) {
-                    continue;
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                for (int i = 0; i < list.count; i++) {
+                    NSDictionary* list_item = [list objectAtIndex:i];
+                    if (!list_item || [list_item isEqual:[NSNull null]]) {
+                        continue;
+                    }
+                    NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:list_item];
+                    [response_mul setValue:seq forKey:@"seq"];
+                    [self handleSystemPushMessage:response_mul];
                 }
-                NSMutableDictionary* response_mul = [[NSMutableDictionary alloc]initWithDictionary:list_item];
-                [response_mul setValue:seq forKey:@"seq"];
-                [self handleSystemPushMessage:response_mul];
-            }
-            
+            });
         }
-        
     };
     
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
@@ -649,27 +678,34 @@
     MTLOG(@"appdelegate， unRead_dic: %@", unRead_dic);
     
     if ([(UIViewController*)[MTPushMessageHandler sharedInstance].notificationDelegate respondsToSelector:@selector(notificationDidReceive:)]) {
-        [[MTPushMessageHandler sharedInstance].notificationDelegate notificationDidReceive:[NSArray arrayWithObject:temp_message]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[MTPushMessageHandler sharedInstance].notificationDelegate notificationDidReceive:[NSArray arrayWithObject:temp_message]];
+        });
     }
     
     int flag = type;
     if (flag >= 0) {
         //        MTLOG(@"收到新推送，显示消息中心红点");
-        [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showUpdateInRow:4];
-        [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showUpdateInRow:4];
+            [[SlideNavigationController sharedInstance] showLeftBarButtonDian];
+        });
     }
     
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     if (delegate.isInBackground) {
-        [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showNotificationCenter];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [(MenuViewController *)[SlideNavigationController sharedInstance].leftMenu showNotificationCenter];
+        });
     }
     
     NSDictionary* pack = [CommonUtils packParamsInDictionary:
                           [NSNumber numberWithInteger:type], @"type",
                           temp_message, @"msg",
                           nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pull_message" object:nil userInfo:pack];
+    });
     //反馈给服务器
     [self feedBackPushMessagewithMinSeq:seq andMaxSeq:seq andCallBack:nil];
 }

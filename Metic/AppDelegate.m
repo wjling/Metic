@@ -24,6 +24,22 @@
 #import "SDWebImageManager.h"
 #import "MTPushMessageHandler.h"
 
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+
+//腾讯开放平台（对应QQ和QQ空间）SDK头文件
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+
+//微信SDK头文件
+#import "WXApi.h"
+
+//新浪微博SDK头文件
+#import "WeiboSDK.h"
+
+//shareSDK SMS
+#import <SMS_SDK/SMSSDK.h>
+
 #define _IPHONE80_ 80000
 
 @implementation AppDelegate
@@ -41,7 +57,6 @@
 @synthesize networkStatusNotifier_view;
 @synthesize isNetworkConnected;
 @synthesize isLogined;
-@synthesize hadCheckPassWord;
 @synthesize leftMenu;
 @synthesize isInBackground;
 //@synthesize operationQueue;
@@ -76,21 +91,17 @@
         [userDf synchronize];
     }
 	
-	leftMenu = (MenuViewController*)[mainStoryboard
-                                                         instantiateViewControllerWithIdentifier: @"MenuViewController"];
+	leftMenu = (MenuViewController*)[mainStoryboard instantiateViewControllerWithIdentifier: @"MenuViewController"];
 	leftMenu.cellIdentifier = @"leftMenuCell";
 
-//	[SlideNavigationController sharedInstance].righMenu = rightMenu;
 	[SlideNavigationController sharedInstance].leftMenu = leftMenu;
-//    [leftMenu tableView:leftMenu.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+    
     [self initApp];
     self.syncMessages = [[NSMutableArray alloc]init];
     numOfSyncMessages = -1;
     isNetworkConnected = YES;
     isInBackground = NO;
     isLogined = NO;
-    hadCheckPassWord = NO;
-//    [self initApp];
     
     _mapManager = [[BMKMapManager alloc]init];
     BOOL ret;
@@ -105,24 +116,15 @@
 	if (!ret) {
 		MTLOG(@"manager start failed!");
 	}
-    [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
-    [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" appSecret:@"975f26374a1ade1290b1d4dfa767ed1f" url:@"http://www.whatsact.com"];
-//    [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://www.sina.com"];
-    [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
-    [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
-//    DB_path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-   
-    //running in background
-//    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
-//    NSError *setCategoryErr = nil;
-//    NSError *activationErr  = nil;
-//    [[AVAudioSession sharedInstance]
-//     setCategory: AVAudioSessionCategoryPlayback
-//     error: &setCategoryErr];
-//    [[AVAudioSession sharedInstance]
-//     setActive: YES
-//     error: &activationErr];
+    
+    //初始化Umeng
+    [self initUmeng];
+    
+    // 初始化ShareSDK
+    [self initShareSDK];
+    
+    //初始化ShareSDK SMS
+    [self initShareSDKSMS];
     
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -135,47 +137,11 @@
     //开启本地视频服务
     [self initLocalVideoServer];
     
-    //判断是否由远程消息通知触发应用程序启动
-//    if ([launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey] != nil) {
-//        //获取应用程序消息通知标记数
-//        int badge = [UIApplication sharedApplication].applicationIconBadgeNumber;
-//        if (badge > 0) {
-//            badge--;
-//            [UIApplication sharedApplication].applicationIconBadgeNumber = badge;
-//        }
-//        
-//    }
-//    
-//    //消息推送注册
-//    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-//     UIRemoteNotificationTypeSound |
-//     UIRemoteNotificationTypeAlert |
-//     UIRemoteNotificationTypeBadge];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"shouldIgnoreTurnToNotifiPage"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    /* 信鸽推送 */
-    if (isEnterprise == 0) {
-        [XGPush startApp:2200086281 appKey:@"IHI87C3K71YC"];//上架版本
-    }else if (isEnterprise == 1){
-        [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//企业版本
-    }else if (isEnterprise == 2){
-        [XGPush startApp:2200107997 appKey:@"I2MC33N3Z6UZ"];//企业版本测试服
-    }
     
-    
-    
-    //推送反馈回调版本示例
-    void (^successBlock)(void) = ^(void){
-        //成功之后的处理
-        MTLOG(@"[XGPush]handleLaunching's successBlock");
-    };
-    
-    void (^errorBlock)(void) = ^(void){
-        //失败之后的处理
-        MTLOG(@"[XGPush]handleLaunching's errorBlock");
-    };
-    
-    [XGPush handleLaunching:launchOptions successCallback:successBlock errorCallback:errorBlock];
+    //初始化信鸽推送
+    [self initXGPush:launchOptions];
     
     NSDictionary*userInfo = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
@@ -459,11 +425,9 @@
 
 }
 
-+(void)refreshMenu
++ (void)refreshMenu
 {
     [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
-//    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu clearVC];
-
 }
 
 
@@ -1188,4 +1152,99 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
         return UIInterfaceOrientationMaskPortrait;
     }
 }
+
+- (void)initXGPush:(NSDictionary *)launchOptions
+{
+    /* 信鸽推送 */
+    if (isEnterprise == 0) {
+        [XGPush startApp:2200086281 appKey:@"IHI87C3K71YC"];//上架版本
+    }else if (isEnterprise == 1){
+        [XGPush startApp:2200076416 appKey:@"ISVQ96G3S43K"];//企业版本
+    }else if (isEnterprise == 2){
+        [XGPush startApp:2200107997 appKey:@"I2MC33N3Z6UZ"];//企业版本测试服
+    }
+    
+    //推送反馈回调版本示例
+    void (^successBlock)(void) = ^(void){
+        //成功之后的处理
+        MTLOG(@"[XGPush]handleLaunching's successBlock");
+    };
+    
+    void (^errorBlock)(void) = ^(void){
+        //失败之后的处理
+        MTLOG(@"[XGPush]handleLaunching's errorBlock");
+    };
+    
+    [XGPush handleLaunching:launchOptions successCallback:successBlock errorCallback:errorBlock];
+}
+
+#pragma mark - umeng Init
+- (void)initUmeng
+{
+    [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
+    [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" appSecret:@"975f26374a1ade1290b1d4dfa767ed1f" url:@"http://www.whatsact.com"];
+    //    [UMSocialSinaSSOHandler openNewSinaSSOWithRedirectURL:@"http://www.sina.com"];
+    [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
+    [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+}
+
+#pragma mark - shareSDK Init
+- (void)initShareSDK
+{
+    [ShareSDK registerApp:@"ce2c74fa5630"
+     
+          activePlatforms:@[
+                            @(SSDKPlatformTypeSinaWeibo),
+                            @(SSDKPlatformTypeWechat),
+                            @(SSDKPlatformTypeQQ),]
+                 onImport:^(SSDKPlatformType platformType)
+     {
+         switch (platformType)
+         {
+             case SSDKPlatformTypeWechat:
+                 [ShareSDKConnector connectWeChat:[WXApi class]];
+                 break;
+             case SSDKPlatformTypeQQ:
+                 [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
+                 break;
+             case SSDKPlatformTypeSinaWeibo:
+                 [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+                 break;
+             default:
+                 break;
+         }
+     }
+          onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
+     {
+         
+         switch (platformType)
+         {
+             case SSDKPlatformTypeSinaWeibo:
+                 //设置新浪微博应用信息,其中authType设置为使用SSO＋Web形式授权
+                 [appInfo SSDKSetupSinaWeiboByAppKey:@"1312051023"
+                                           appSecret:@"6f39d1c54b182992680b4949a0c00c87"
+                                         redirectUri:@"http://www.sina.com"
+                                            authType:SSDKAuthTypeBoth];
+                 break;
+             case SSDKPlatformTypeWechat:
+                 [appInfo SSDKSetupWeChatByAppId:@"wx6f7ea17b99ab01e7"
+                                       appSecret:@"975f26374a1ade1290b1d4dfa767ed1f"];
+                 break;
+             case SSDKPlatformTypeQQ:
+                 [appInfo SSDKSetupQQByAppId:@"1102021463"
+                                      appKey:@"9KXHG6HqBWrjonAd"
+                                    authType:SSDKAuthTypeBoth];
+                 break;
+             default:
+                 break;
+         }
+     }];
+}
+
+#pragma mark - shareSDK SMS Init
+- (void)initShareSDKSMS {
+    [SMSSDK registerApp:@"c51be96fe46d"
+             withSecret:@"19ed0e085d6b4f92dacfdc2e99f19ff6"];
+}
+
 @end

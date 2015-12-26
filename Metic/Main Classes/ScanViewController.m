@@ -13,8 +13,12 @@
 #import "SVProgressHUD.h"
 #import "EventDetailViewController.h"
 #import "MegUtils.h"
+#import <AVFoundation/AVFoundation.h>
 
-@interface ScanViewController ()
+@interface ScanViewController ()<AVCaptureMetadataOutputObjectsDelegate>
+@property(nonatomic,strong) AVCaptureSession *session; // 二维码生成的绘画
+@property(nonatomic,strong) AVCaptureVideoPreviewLayer *previewLayer;  // 二维码生成的图层
+
 @property(nonatomic,strong)NSString* result;
 @property(nonatomic,strong)NSString* type;
 @property(nonatomic,strong)NSNumber* efid;
@@ -29,7 +33,6 @@
 @end
 
 @implementation ScanViewController
-@synthesize readerView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -44,26 +47,20 @@
 {
     [super viewDidLoad];
     [self initUI];
+    [self initScanner];
     _need_auth = YES;
     _operationNum = 0;
-    readerView = [[ZBarReaderView alloc]init];
-    readerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    [self.view addSubview:readerView];
-    [self.view sendSubviewToBack:readerView];
     [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
-    readerView.readerDelegate = self;
     _isScaning = NO;
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [readerView.scanner setSymbology:ZBAR_I25 config:ZBAR_CFG_ENABLE to:0];
-    readerView.torchMode=0;
     
     if (!_isScaning) {
         _isScaning = YES;
-        [readerView start];
+        [self run];
     }
     if (!_timer) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation) userInfo:nil repeats:YES];
@@ -75,7 +72,7 @@
     [super viewWillDisappear:animated];
     if (_isScaning) {
         _isScaning = NO;
-        [readerView stop];
+        [self pause];
     }
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
@@ -110,10 +107,8 @@
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
-    [readerView start];
+    [self run];
     _isScaning = YES;
-    
-    
     
     return;
     UIViewController *vc = _menu.homeViewController;
@@ -215,6 +210,65 @@
     _timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation) userInfo:nil repeats:YES];
 }
 
+- (void)initScanner
+{
+    // 1. 摄像头设备
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    // 2. 设置输入
+    NSError *error = nil;
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
+    if (error) {
+        MTLOG(@"没有摄像头-%@", error.localizedDescription);
+        return;
+    }
+    // 3. 设置输出(Metadata元数据)
+    AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc] init];
+    
+    // 3.1 设置输出的代理
+    // 说明：使用主线程队列，响应比较同步，使用其他队列，响应不同步，容易让用户产生不好的体验
+    [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+    //    [output setMetadataObjectsDelegate:self queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
+    
+    // 4. 拍摄会话
+    AVCaptureSession *session = [[AVCaptureSession alloc] init];
+    // 添加session的输入和输出
+    [session addInput:input];
+    [session addOutput:output];
+    
+    // 4.1 设置输出的格式
+    // 提示：一定要先设置会话的输出为output之后，再指定输出的元数据类型！
+    [output setMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
+    
+    // 5. 设置预览图层（用来让用户能够看到扫描情况）
+    AVCaptureVideoPreviewLayer *preview = [AVCaptureVideoPreviewLayer layerWithSession:session];
+    
+    // 5.1 设置preview图层的属性
+    [preview setVideoGravity:AVLayerVideoGravityResizeAspect];
+    
+    // 5.2 设置preview图层的大小
+    [preview setFrame:self.view.bounds];
+    
+    // 5.3 将图层添加到视图的图层
+    [self.view.layer insertSublayer:preview atIndex:0];
+    self.previewLayer = preview;
+    
+    // 6. 启动会话
+    [session startRunning];
+    
+    self.session = session;
+}
+
+- (void)run;
+{
+    [self.session startRunning];
+}
+
+- (void)pause;
+{
+    [self.session stopRunning];
+}
+
+
 - (IBAction)wantIn:(id)sender {
     if ([_type isEqualToString: @"event"]) {
         if (_need_auth) {
@@ -262,7 +316,7 @@
                             MTLOG(@"EVENT_NOT_EXIST");
                             [SVProgressHUD dismissWithError:@"活动不存在，加入失败"];
                             [_showView setHidden:YES];
-                            [readerView start];
+                            [self run];
                             _isScaning = YES;
                         }
                             break;
@@ -272,8 +326,6 @@
                             [SVProgressHUD dismissWithError:@"你已在活动中"];
                             [self toEventDetail:_efid];
                             [_showView setHidden:YES];
-//                            [readerView start];
-//                            _isScaning = YES;
                         }
                             break;
                         default:
@@ -282,14 +334,14 @@
                             MTLOG(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"服务器异常"];
                             [_showView setHidden:YES];
-                            [readerView start];
+                            [self run];
                             _isScaning = YES;
                         }
                     }
                 }else{
                     [SVProgressHUD dismissWithError:@"网络异常"];
                     [_showView setHidden:YES];
-                    [readerView start];
+                    [self run];
                     _isScaning = YES;
                 }
             }];
@@ -322,7 +374,7 @@
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
-    [readerView stop];
+    [self pause];
     _isScaning = NO;
     
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
@@ -353,7 +405,7 @@
         }else{
             [SVProgressHUD dismissWithError:@"网络异常"];
             [_showView setHidden:YES];
-            [readerView start];
+            [self run];
             _isScaning = YES;
         }
     }];
@@ -375,7 +427,7 @@
         }else{
             [SVProgressHUD dismissWithError:@"网络异常"];
             [_showView setHidden:YES];
-            [readerView start];
+            [self run];
             _isScaning = YES;
         }
     }];
@@ -607,7 +659,7 @@
                 
                 [SVProgressHUD dismissWithSuccess:mesg];
                 [_showView setHidden:YES];
-                [readerView start];
+                [self run];
                 _isScaning = YES;
             }
             
@@ -641,7 +693,7 @@
             
             [SVProgressHUD dismissWithSuccess:mesg];
             [_showView setHidden:YES];
-            [readerView start];
+            [self run];
             _isScaning = YES;
         }
             break;
@@ -654,22 +706,48 @@
             break;
     }
 }
-#pragma mark - ZBarReaderView Delegate -
--(void)readerView:(ZBarReaderView *)readerView didReadSymbols:(ZBarSymbolSet *)symbols fromImage:(UIImage *)image
-{
-    for(ZBarSymbol *sym in symbols) {
-        _result = sym.data;
-        break;
-    }
-    if (_isScaning) {
-        _isScaning = NO;
-        [readerView stop];
-    }
-//    [_showView setHidden:NO];
-    [self resultAnalysis];
-    
-}
 
+#pragma mark AVCaptureMetadataOutputObjectsDelegate
+// 此方法是在识别到QRCode，并且完成转换
+// 如果QRCode的内容越大，转换需要的时间就越长
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
+{
+    for(AVMetadataObject *metadataObject in metadataObjects)
+    {
+        if ([metadataObject isKindOfClass:[AVMetadataMachineReadableCodeObject class]]) {
+            AVMetadataMachineReadableCodeObject *readableObject = (AVMetadataMachineReadableCodeObject *)[self.previewLayer transformedMetadataObjectForMetadataObject:metadataObject];
+            BOOL foundMatch = readableObject.stringValue != nil;
+            NSArray *corners = readableObject.corners;
+            if (corners.count == 4 && foundMatch) {
+                
+//                CGPoint topLeftPoint = [self pointFromArray:corners atIndex:0];
+//                CGPoint bottomLeftPoint = [self pointFromArray:corners atIndex:1];
+//                CGPoint bottomRightPoint = [self pointFromArray:corners atIndex:2];
+//                CGPoint topRightPoint = [self pointFromArray:corners atIndex:3];
+//                
+//                UIView *focusBoxView = self.shadowView.focusBoxView;
+//                
+//                if (CGRectContainsPoint(focusBoxView.bounds, topLeftPoint) &&
+//                    CGRectContainsPoint(focusBoxView.bounds, topRightPoint) &&
+//                    CGRectContainsPoint(focusBoxView.bounds, bottomLeftPoint) &&
+//                    CGRectContainsPoint(focusBoxView.bounds, bottomRightPoint))
+//                {
+                    // 1. 如果扫描完成，停止会话
+                
+                
+                // 2. 设置界面显示扫描结果
+                if (metadataObjects.count > 0) {
+                    AVMetadataMachineReadableCodeObject *obj = metadataObjects[0];
+                    // 提示：如果需要对url或者名片等信息进行扫描，可以在此进行扩展！
+                    self.result = obj.stringValue;
+                    [self pause];
+                    _isScaning = NO;
+                    [self resultAnalysis];
+                }
+            }
+        }
+    }
+}
 
 #pragma mark - SlideNavigationController Methods -
 
@@ -726,7 +804,7 @@
                         }else{
                             [SVProgressHUD dismissWithError:@"网络异常"];
                             [_showView setHidden:YES];
-                            [readerView start];
+                            [self run];
                             _isScaning = YES;
                         }
                     }];
@@ -755,7 +833,7 @@
                             MTLOG(@"ALREADY_IN_EVENT");
                             [SVProgressHUD dismissWithError:@"网络异常"];
                             [_showView setHidden:YES];
-                            [readerView start];
+                            [self run];
                             _isScaning = YES;
                         }
                     }];
@@ -768,7 +846,7 @@
             break;
         case 10:{
             [_showView setHidden:YES];
-            [readerView start];
+            [self run];
             _isScaning = YES;
         }
             break;
@@ -792,7 +870,7 @@
             _result = symbol.data;
             if (_isScaning) {
                 _isScaning = NO;
-                [readerView stop];
+                [self pause];
             }
             [_showView setHidden:NO];
             [self resultAnalysis];
@@ -809,7 +887,7 @@
     [_resultView setHidden:YES];
     [_controlView setHidden:YES];
     [_showView setHidden:YES];
-    [readerView start];
+    [self run];
     _isScaning = YES;
 }
 

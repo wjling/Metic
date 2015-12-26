@@ -37,6 +37,10 @@ static NSOperationQueue *requestQueue;
     PHOTO_mainServer = @[@"http://120.25.103.72:20000/",@"http://app.whatsact.com:20000/"][Server];
     VIDEO_mainServer = @[@"http://120.25.103.72:20001/",@"http://app.whatsact.com:20001/"][Server];
     FeedBack_mainServer = @[@"http://120.25.103.72:10089/",@"http://app.whatsact.com:10089/"][Server];
+//    URL_mainServer = @[@"http://172.18.219.186:10087/",@"http://app.whatsact.com:10087/"][Server];
+//    PHOTO_mainServer = @[@"http://120.25.103.72:20000/",@"http://app.whatsact.com:20000/"][Server];
+//    VIDEO_mainServer = @[@"http://120.25.103.72:20001/",@"http://app.whatsact.com:20001/"][Server];
+//    FeedBack_mainServer = @[@"http://120.25.103.72:10089/",@"http://app.whatsact.com:10089/"][Server];
     HttpURL = @"";
     mDelegate = delegate;
     return self;
@@ -236,6 +240,27 @@ static NSOperationQueue *requestQueue;
             break;
         case 57:
             resultCode = @"token";
+            break;
+        case 58:
+            resultCode = @"third_party_login";
+            break;
+        case 59:
+            resultCode = @"login_django";
+            break;
+        case 60:
+            resultCode = @"register_django";
+            break;
+        case 61:
+            resultCode = @"register_by_phone";
+            break;
+        case 62:
+            resultCode = @"register_resend";
+            break;
+        case 63:
+            resultCode = @"reset_passwd_phone";
+            break;
+        case 64:
+            resultCode = @"bind_phone";
             break;
         default:
             resultCode = @"json";

@@ -8,6 +8,8 @@
 
 #import "ModifyPasswordViewController.h"
 #import "SVProgressHUD.h"
+#import "MTAccount.h"
+#import "MTAccountManager.h"
 
 @interface ModifyPasswordViewController ()
 {
@@ -130,24 +132,11 @@
     [UIView commitAnimations];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (IBAction)okBtnClicked:(id)sender {
     [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeNone];
-    timer = [NSTimer scheduledTimerWithTimeInterval:6.0 target:self selector:@selector(dismissHUD:) userInfo:nil repeats:NO];
     NSString* currentPS = currentPS_textfield.text;
     NSString* modifyPS = modifyPS_textfield.text;
     NSString* conformPS = conformPS_textfield.text;
-//    MTLOG(@"当前密码: %@, 修改密码: %@, 确认密码: %@",currentPS,modifyPS,conformPS);
     if (!currentPS || [currentPS isEqualToString:@""]) {
         [SVProgressHUD dismissWithError:@"请填写当前密码" afterDelay:1.5];
         return;
@@ -161,70 +150,28 @@
         return;
     }
     if (![modifyPS isEqualToString:conformPS]) {
-//        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"两次填写的新密码不一样" WithDelegate:self WithCancelTitle:@"确定"];
         [SVProgressHUD dismissWithError:@"填写的新密码不一致" afterDelay:1.5];
         return;
     }
-    
-    void (^modifyPasswordDone)(NSData*) = ^(NSData* rData)
-    {
-        [timer invalidate];
-        NSString* temp = @"";
-        if (rData) {
-            temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        }
-        else
-        {
-            MTLOG(@"修改密码，收到的rData为空");
-            UIAlertView* alertView = [[UIAlertView alloc]initWithTitle:@"系统提示" message:@"服务器未响应，有可能是网络未连接" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
-            [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(dismissAlert:) userInfo:alertView repeats:NO];
-            return;
-        }
-        MTLOG(@"Received Data: %@",temp);
-        NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber* cmd = [response1 objectForKey:@"cmd"];
-        MTLOG(@"cmd: %@",cmd);
-        if ([cmd integerValue] == NORMAL_REPLY) {
-            [SVProgressHUD dismissWithSuccess:@"密码修改成功" afterDelay:1.5];
-            NSString* MtsecretPath= [NSString stringWithFormat:@"%@/Documents/Meticdata", NSHomeDirectory()];
-            NSArray *Array = [NSArray arrayWithObjects:[MTUser sharedInstance].email, modifyPS, nil];
-            [NSKeyedArchiver archiveRootObject:Array toFile:MtsecretPath];
-
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-        else
-        {
-            [SVProgressHUD dismissWithError:@"出错啦~请重试" afterDelay:1.5];
-        }
-    };
-    NSString* currentPS_md5;
-    NSString* modifyPS_md5;
-    MTLOG(@"修改密码, salt: %@",[MTUser sharedInstance].saltValue);
-    if ([MTUser sharedInstance].saltValue) {
-        currentPS_md5 = [CommonUtils MD5EncryptionWithString:[currentPS stringByAppendingString:[MTUser sharedInstance].saltValue]];
-        modifyPS_md5 = [CommonUtils MD5EncryptionWithString:[modifyPS stringByAppendingString:[MTUser sharedInstance].saltValue]];
+    MTUser *user = [MTUser sharedInstance];
+    NSString *account = nil;
+    if (user.email && user.email.length) {
+        account = user.email;
+    } else if (user.phone && user.phone.length) {
+        account = user.phone;
+    } else {
+        [SVProgressHUD dismissWithError:@"操作失败" afterDelay:1.5];
+        return;
     }
     
-    NSMutableDictionary* json_dic = [CommonUtils packParamsInDictionary:
-                                     [MTUser sharedInstance].email, @"email",
-                                     currentPS_md5,@"passwd",
-                                     modifyPS_md5,@"newpw",nil];
-    MTLOG(@"修改密码, json: %@",json_dic);
-    NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
-    [http sendMessage:jsonData withOperationCode:CHANGE_PW finshedBlock:modifyPasswordDone];
-    
-}
-
--(void)dismissHUD:(NSTimer*)timer
-{
-    [SVProgressHUD dismissWithError:@"服务器未响应"];
-}
-
--(void)dismissAlert:(NSTimer*)t
-{
-    UIAlertView* alert = [t userInfo];
-    [alert dismissWithClickedButtonIndex:0 animated:YES];
+    [MTAccountManager modifyPwWithAccount:account oldPassword:currentPS newPassword:modifyPS success:^{
+        [SVProgressHUD dismissWithSuccess:@"密码修改成功" afterDelay:1.5];
+        MTAccount *account = [MTAccount singleInstance];
+        account.password = modifyPS;
+        [account saveAccount];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:1.5];
+    }];
 }
 @end

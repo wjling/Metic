@@ -18,8 +18,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *name_textField;
 @property (strong, nonatomic) IBOutlet UIButton *confirm_barButton;
 
-
-
 - (IBAction)confirmClicked:(id)sender;
 
 @end
