@@ -123,4 +123,7 @@
 
 //将数字序列转换成数组样式的字符串
 +(NSString*)arrayStyleStringfromNummerArray:(id)numbers;
+
+//请求参数加签名字段
++ (NSDictionary *)parameterSignature:(NSDictionary *)dict;
 @end

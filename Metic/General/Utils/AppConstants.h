@@ -149,6 +149,7 @@ enum Return_Code
     USER_ALREADY_ONLINE = 121,
     USER_LOGOUT_SUC = 122,
     USER_NOT_ACTIVE = 123,
+    SIGN_FAIL = 124,
     BIND_PHONE_ERROR = 125,
     PASSWD_NOT_SETTING = 126,
     
@@ -180,6 +181,8 @@ enum Return_Code
     CHANGE_EVENT_INFO_NOTIFICATION = 990, //活动信息修改通知推送
     
 };
+
+static NSString * const MTPortCheckKey = @"cdbcde030cdfdef7";//此为 字符串“whatsact”计算16位MD5的结果
 
 #endif
 
