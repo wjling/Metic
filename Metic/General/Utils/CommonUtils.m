@@ -589,4 +589,43 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     return arrayString;
 }
 
++ (NSDictionary *)parameterSignature:(NSDictionary *)dict
+{
+    NSMutableDictionary *parameterSign = [dict mutableCopy];
+    NSDate *date = [NSDate date];
+    long timestamp = [date timeIntervalSince1970];
+    [parameterSign setValue:@(timestamp) forKey:@"timestamp"];
+    
+    
+    NSArray *keys = [parameterSign allKeys];
+    keys = [keys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString *str1 = obj1;
+        NSString *str2 = obj2;
+        return [str1 compare:str2];
+    }];
+    
+    NSString *sign = @"";
+    
+    for (NSString *key in keys) {
+        id value = [parameterSign valueForKey:key];
+        
+        if([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]){
+            NSString *valueStr = value? [NSString stringWithFormat:@"%@",value]:nil;
+            if (valueStr) {
+                sign = [sign stringByAppendingString:valueStr];
+            }
+        }
+    }
+    
+    NSLog(@"MD5 原串：%@",sign);
+
+    NSString *signature = [sign stringByAppendingString:MTPortCheckKey];
+    
+    signature = [CommonUtils MD5EncryptionWithString:signature];
+    
+//    [parameterSign setValue:[sign stringByAppendingString:MTPortCheckKey] forKey:@"unsign"];
+    [parameterSign setValue:signature forKey:@"sign"];
+    
+    return [parameterSign copy];
+}
 @end

@@ -8,6 +8,7 @@
 
 #import "HttpSender.h"
 #import "AppConstants.h"
+#import "CommonUtils.h"
 #import "AFHTTPRequestOperationManager.h"
 
 static const CGFloat MTREQUEST_TIMEOUT = 30.f;
@@ -274,6 +275,8 @@ static NSOperationQueue *requestQueue;
 {
     NSString* parsingOperationCode = [self parseOperationCode:operation_Code];
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    NSDictionary *parameterSign = [CommonUtils parameterSignature:parameter];
+
     HttpURL = [NSString stringWithFormat:@"%@%@",PHOTO_mainServer,parsingOperationCode];
     
     static AFHTTPRequestOperationManager *manager;
@@ -283,7 +286,7 @@ static NSOperationQueue *requestQueue;
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
     
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameterSign error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (block) {
@@ -303,6 +306,8 @@ static NSOperationQueue *requestQueue;
 {
     NSString* parsingOperationCode = [self parseOperationCode:operation_Code];
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
+    NSDictionary *parameterSign = [CommonUtils parameterSignature:parameter];
+
     HttpURL = [NSString stringWithFormat:@"%@%@",VIDEO_mainServer,parsingOperationCode];
     
     static AFHTTPRequestOperationManager *manager;
@@ -312,7 +317,7 @@ static NSOperationQueue *requestQueue;
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
     
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameterSign error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (block) {
@@ -344,6 +349,7 @@ static NSOperationQueue *requestQueue;
     NSString* parsingMethodCode = [self parseMethodCode:method];
     HttpURL = [NSString stringWithFormat:@"%@%@",URL_mainServer,parsingOperationCode];
     NSDictionary *parameter = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableLeaves error:nil];
+    NSDictionary *parameterSign = [CommonUtils parameterSignature:parameter];
     
     static AFHTTPRequestOperationManager *manager;
     if (!manager) {
@@ -353,7 +359,7 @@ static NSOperationQueue *requestQueue;
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
     
-     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameter error:nil];
+     NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameterSign error:nil];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
      AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (block) {
@@ -372,6 +378,7 @@ static NSOperationQueue *requestQueue;
 
 -(void)sendFeedBackMessage:(NSDictionary *)json
 {
+    NSDictionary *parameterSign = [CommonUtils parameterSignature:json];
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,@"user_feedback"];
     static AFHTTPRequestOperationManager *manager;
@@ -381,7 +388,7 @@ static NSOperationQueue *requestQueue;
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
     
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:json error:nil];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameterSign error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
@@ -395,6 +402,7 @@ static NSOperationQueue *requestQueue;
 
 -(void)sendGetPosterMessage:(int)operation_Code finshedBlock:(FinishBlock)block
 {
+    NSDictionary *parameterSign = [CommonUtils parameterSignature:nil];
     NSString* parsingOperationCode = [self parseOperationCode: operation_Code];
     NSString* parsingMethodCode = [self parseMethodCode:HTTP_POST];
     HttpURL = [NSString stringWithFormat:@"%@%@",FeedBack_mainServer,parsingOperationCode];
@@ -406,7 +414,7 @@ static NSOperationQueue *requestQueue;
         manager.requestSerializer.timeoutInterval = MTREQUEST_TIMEOUT ;
     }
     
-    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:nil error:nil];
+    NSMutableURLRequest *request = [manager.requestSerializer requestWithMethod:parsingMethodCode URLString:HttpURL parameters:parameterSign error:nil];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     AFHTTPRequestOperation *requestOperation = [manager HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (block) {
