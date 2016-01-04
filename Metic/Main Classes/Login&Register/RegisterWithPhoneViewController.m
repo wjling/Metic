@@ -35,6 +35,7 @@
 
 - (void)setupUI {
     self.title = @"手机注册";
+    self.passwdInputView.hidden = YES;
     [CommonUtils addLeftButton:self isFirstPage:NO];
     
     UILabel *phoneLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 38)];
@@ -127,10 +128,9 @@
     }
 }
 
-- (IBAction)regist:(id)sender {
+- (IBAction)verificatePhoneNumber:(id)sender {
     [self resignKeyboard];
     NSString *phoneNumber = self.phoneTextField.text;
-    NSString *password = self.passwordTextField.text;
     NSString *verificationCode = self.verificationCodeTextField.text;
     if (![CommonUtils isPhoneNumberVaild:phoneNumber]) {
         [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
@@ -138,20 +138,35 @@
     }else if ([verificationCode length] == 0) {
         [SVProgressHUD showErrorWithStatus:@"请输入验证码" duration:1.f];
         return;
-    }else if ([password length] < 5) {
-        [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
-        return;
     }
-    [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    
+    [SVProgressHUD showWithStatus:@"正在验证手机号，请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [SMSSDK commitVerificationCode:verificationCode phoneNumber:self.phoneTextField.text zone:@"+86" result:^(NSError *error) {
         if (!error) {
             NSLog(@"验证成功");
-            [self loginWithPhoneNumber:phoneNumber Password:password];
+            [SVProgressHUD dismissWithSuccess:@"验证成功，请输入登录密码"];
+            [self.passwdInputView setHidden:NO];
         } else {
             NSLog(@"验证失败");
             [SVProgressHUD dismissWithError:@"验证码错误"];
         }
     }];
+}
+
+- (IBAction)regist:(id)sender {
+    [self resignKeyboard];
+    NSString *phoneNumber = self.phoneTextField.text;
+    NSString *password = self.passwordTextField.text;
+    if (![CommonUtils isPhoneNumberVaild:phoneNumber]) {
+        [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
+        self.passwdInputView.hidden = YES;
+        return;
+    }else if ([password length] < 5) {
+        [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
+        return;
+    }
+    [SVProgressHUD showWithStatus:@"正在注册，请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    [self loginWithPhoneNumber:phoneNumber Password:password];
 }
 
 - (IBAction)registWithMail:(id)sender {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -8,7 +8,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RegisterWithPhoneViewController">
             <connections>
                 <outlet property="getVerificationCodeBtn" destination="Xoq-vO-UvB" id="VLt-LH-vYn"/>
-                <outlet property="passwordTextField" destination="PgI-rW-KCi" id="c8h-b0-HqT"/>
+                <outlet property="passwdInputView" destination="fdk-2b-v0D" id="G47-sm-WRY"/>
+                <outlet property="passwordTextField" destination="S6S-LB-kd6" id="EgE-SL-zso"/>
                 <outlet property="phoneTextField" destination="72b-yr-wyw" id="DcY-cb-LSD"/>
                 <outlet property="verificationCodeTextField" destination="gk2-Y4-lZZ" id="du8-s3-PuG"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -38,14 +39,6 @@
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码，至少5位" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PgI-rW-KCi">
-                            <rect key="frame" x="15" y="121" width="290" height="38"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="38" id="FxC-eA-LIP"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xoq-vO-UvB">
                             <rect key="frame" x="205" y="68" width="100" height="38"/>
                             <constraints>
@@ -64,22 +57,22 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SS7-dx-i8V">
-                            <rect key="frame" x="15" y="174" width="290" height="40"/>
+                            <rect key="frame" x="15" y="121" width="290" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="gOT-Oj-Ok4"/>
                             </constraints>
-                            <state key="normal" title="注册" backgroundImage="登录界面按钮">
+                            <state key="normal" title="确定" backgroundImage="登录界面按钮">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="selected" backgroundImage="登录界面按钮按下效果"/>
                             <state key="highlighted" backgroundImage="登录界面按钮按下效果"/>
                             <connections>
-                                <action selector="regist:" destination="-1" eventType="touchUpInside" id="ds3-rz-zwh"/>
+                                <action selector="verificatePhoneNumber:" destination="-1" eventType="touchUpInside" id="hlh-vo-UT8"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MqI-OC-z0m">
-                            <rect key="frame" x="221" y="214" width="84" height="44"/>
+                            <rect key="frame" x="221" y="161" width="84" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="Ux6-FJ-Faj"/>
                                 <constraint firstAttribute="width" constant="84" id="qHk-5J-rSI"/>
@@ -96,29 +89,81 @@
                     <constraints>
                         <constraint firstItem="gk2-Y4-lZZ" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="2cp-8J-Igl"/>
                         <constraint firstAttribute="trailing" secondItem="Xoq-vO-UvB" secondAttribute="trailing" constant="15" id="3pC-kj-4Uu"/>
-                        <constraint firstItem="SS7-dx-i8V" firstAttribute="top" secondItem="PgI-rW-KCi" secondAttribute="bottom" constant="15" id="8L4-Tp-vmF"/>
                         <constraint firstItem="Xoq-vO-UvB" firstAttribute="top" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="15" id="8za-eF-fk6"/>
                         <constraint firstItem="Xoq-vO-UvB" firstAttribute="leading" secondItem="gk2-Y4-lZZ" secondAttribute="trailing" constant="15" id="E6q-qA-Dlr"/>
                         <constraint firstAttribute="trailing" secondItem="72b-yr-wyw" secondAttribute="trailing" constant="15" id="JyY-OR-r4H"/>
                         <constraint firstAttribute="trailing" secondItem="SS7-dx-i8V" secondAttribute="trailing" constant="15" id="Mxi-3a-uvy"/>
                         <constraint firstItem="72b-yr-wyw" firstAttribute="top" secondItem="ron-a6-Jv9" secondAttribute="top" constant="15" id="Mxu-Ff-2Dq"/>
-                        <constraint firstItem="PgI-rW-KCi" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="UQv-Mw-G8X"/>
                         <constraint firstItem="MqI-OC-z0m" firstAttribute="top" secondItem="SS7-dx-i8V" secondAttribute="bottom" id="X92-uC-YJs"/>
                         <constraint firstItem="72b-yr-wyw" firstAttribute="centerX" secondItem="ron-a6-Jv9" secondAttribute="centerX" id="Z0X-gR-8ub"/>
-                        <constraint firstItem="PgI-rW-KCi" firstAttribute="top" secondItem="Xoq-vO-UvB" secondAttribute="bottom" constant="15" id="h3i-5K-jkB"/>
                         <constraint firstItem="72b-yr-wyw" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="l0d-cp-4Hd"/>
                         <constraint firstItem="SS7-dx-i8V" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="syX-zK-zHB"/>
-                        <constraint firstAttribute="trailing" secondItem="PgI-rW-KCi" secondAttribute="trailing" constant="15" id="vFQ-KN-P5Y"/>
+                        <constraint firstItem="SS7-dx-i8V" firstAttribute="top" secondItem="gk2-Y4-lZZ" secondAttribute="bottom" constant="15" id="xB3-fS-hi5"/>
                         <constraint firstItem="gk2-Y4-lZZ" firstAttribute="top" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="15" id="yBC-Ze-bN1"/>
                         <constraint firstAttribute="trailing" secondItem="MqI-OC-z0m" secondAttribute="trailing" constant="15" id="yPx-KJ-djF"/>
                         <constraint firstAttribute="bottom" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="300" id="yXB-Fh-FJY"/>
                     </constraints>
                 </scrollView>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdk-2b-v0D" customClass="TPKeyboardAvoidingScrollView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码，至少5位" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S6S-LB-kd6">
+                            <rect key="frame" x="15" y="55" width="290" height="38"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="38" id="bzp-vt-xTD"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Fh-Ja-r84">
+                            <rect key="frame" x="15" y="108" width="290" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="cwT-OF-rAt"/>
+                            </constraints>
+                            <state key="normal" title="注册" backgroundImage="登录界面按钮">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="selected" backgroundImage="登录界面按钮按下效果"/>
+                            <state key="highlighted" backgroundImage="登录界面按钮按下效果"/>
+                            <connections>
+                                <action selector="regist:" destination="-1" eventType="touchUpInside" id="VoB-1Y-t5G"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请输入登录密码" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thr-44-Cus" userLabel="请输入登录密码">
+                            <rect key="frame" x="15" y="15" width="290" height="25"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="25" id="jcr-Cp-4Oi"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1690269344" green="0.1690269344" blue="0.1690269344" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="0Fh-Ja-r84" secondAttribute="bottom" constant="100" id="84x-Rf-Yh5"/>
+                        <constraint firstItem="S6S-LB-kd6" firstAttribute="leading" secondItem="fdk-2b-v0D" secondAttribute="leading" constant="15" id="BD9-Hh-EA0"/>
+                        <constraint firstItem="thr-44-Cus" firstAttribute="leading" secondItem="fdk-2b-v0D" secondAttribute="leading" constant="15" id="K3z-wk-Vlp"/>
+                        <constraint firstItem="0Fh-Ja-r84" firstAttribute="leading" secondItem="fdk-2b-v0D" secondAttribute="leading" constant="15" id="Zgt-py-nZ6"/>
+                        <constraint firstItem="S6S-LB-kd6" firstAttribute="top" secondItem="thr-44-Cus" secondAttribute="bottom" constant="15" id="dan-TF-3he"/>
+                        <constraint firstAttribute="trailing" secondItem="thr-44-Cus" secondAttribute="trailing" constant="15" id="ddi-ni-fGi"/>
+                        <constraint firstItem="0Fh-Ja-r84" firstAttribute="top" secondItem="S6S-LB-kd6" secondAttribute="bottom" constant="15" id="f9l-hn-bxk"/>
+                        <constraint firstAttribute="centerX" secondItem="thr-44-Cus" secondAttribute="centerX" id="j02-Gk-9IQ"/>
+                        <constraint firstAttribute="trailing" secondItem="0Fh-Ja-r84" secondAttribute="trailing" constant="15" id="jPq-Wg-0TI"/>
+                        <constraint firstAttribute="trailing" secondItem="S6S-LB-kd6" secondAttribute="trailing" constant="15" id="kES-fX-EpJ"/>
+                        <constraint firstItem="thr-44-Cus" firstAttribute="top" secondItem="fdk-2b-v0D" secondAttribute="top" constant="15" id="zb5-KU-oTV"/>
+                    </constraints>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="fdk-2b-v0D" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="0x2-Pl-Gzy"/>
+                <constraint firstItem="fdk-2b-v0D" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="7z5-Mu-LsN"/>
                 <constraint firstItem="ron-a6-Jv9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DSr-AB-trc"/>
                 <constraint firstItem="ron-a6-Jv9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Gzf-pK-zjz"/>
+                <constraint firstAttribute="trailing" secondItem="fdk-2b-v0D" secondAttribute="trailing" id="Zde-1J-0wK"/>
+                <constraint firstAttribute="bottom" secondItem="fdk-2b-v0D" secondAttribute="bottom" id="mAn-nV-1bR"/>
                 <constraint firstAttribute="bottom" secondItem="ron-a6-Jv9" secondAttribute="bottom" id="pAX-zI-c2F"/>
                 <constraint firstAttribute="trailing" secondItem="ron-a6-Jv9" secondAttribute="trailing" id="tl8-xH-VFn"/>
             </constraints>
