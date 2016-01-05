@@ -13,7 +13,9 @@
 @property (strong, nonatomic) IBOutlet UITextField *verificationCodeTextField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (strong, nonatomic) IBOutlet UIButton *getVerificationCodeBtn;
+@property (strong, nonatomic) IBOutlet UIView *passwdInputView;
 - (IBAction)getVerificationCode:(id)sender;
 - (IBAction)resetPassword:(id)sender;
+- (IBAction)verificatePhoneNumber:(id)sender;
 
 @end

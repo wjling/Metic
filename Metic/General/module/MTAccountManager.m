@@ -311,6 +311,9 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
             case GET_SALT:
             {
                 NSString *salt = [response1 valueForKey:@"salt"];
+                if ([salt isEqual:[NSNull null]]) {
+                    salt = @"";
+                }
                 NSString *str = [password stringByAppendingString:salt];
                 
                 //MD5 encrypt

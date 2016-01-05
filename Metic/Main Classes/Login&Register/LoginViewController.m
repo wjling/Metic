@@ -249,13 +249,13 @@
         BOOL hadCompleteInfo= account.hadCompleteInfo;
         BOOL isActive = account.isActive;
         enum MTAccountType type = account.type;
-        if (type == MTAccountTypeEmail) {
+        if (type == MTAccountTypeEmail && account.email && account.password) {
             self.textField_userName.text = account.email;
             self.textField_password.text = account.password;
             if (!hadCompleteInfo || !isActive || !isIn)
                 return;
             [self checkPassWordWithAccount:account.email Password:account.password];
-        } else if (type == MTAccountTypePhoneNumber) {
+        } else if (type == MTAccountTypePhoneNumber && account.phoneNumber && account.password) {
             self.textField_userName.text = account.phoneNumber;
             self.textField_password.text = account.password;
             if (!hadCompleteInfo || !isActive || !isIn)
@@ -266,6 +266,7 @@
                 return;
             [self thirdPartyLoginWithOpenIdOnBackground:account.openId type:type];
         } else {
+            [account deleteAccount];
             return;
         }
         appDelegate.isLogined = YES;
