@@ -617,7 +617,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         }
     }
     
-    NSLog(@"MD5 原串：%@",sign);
+//    NSLog(@"MD5 原串：%@",sign);
 
     NSString *signature = [sign stringByAppendingString:MTPortCheckKey];
     
