@@ -624,7 +624,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     signature = [CommonUtils MD5EncryptionWithString:signature];
     
 //    [parameterSign setValue:[sign stringByAppendingString:MTPortCheckKey] forKey:@"unsign"];
-    [parameterSign setValue:signature forKey:@"sign"];
+    [parameterSign setValue:signature forKey:@"signature"];
     
     return [parameterSign copy];
 }
