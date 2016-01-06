@@ -440,7 +440,9 @@
         }
         
     };
-    
+    if (![MTUser sharedInstance].userid) {
+        return;
+    }
     NSDictionary* json_dic = [CommonUtils packParamsInDictionary:
                               [NSNumber numberWithInteger:2], @"operation",
                               [MTUser sharedInstance].userid, @"id",

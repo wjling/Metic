@@ -320,9 +320,9 @@
     if (alertView == quitAlert) {
         if (buttonIndex == 1) {
             MTLOG(@"退出程序");
-            [[MTAccount singleInstance] deleteAccount];
-            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+//            [[MTAccount singleInstance] deleteAccount];
+//            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
             MTLOG(@"Metic被用户残忍杀死了");
             NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
             if ([MTUser sharedInstance]) {
