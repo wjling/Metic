@@ -922,9 +922,7 @@
     if(flag)
     {
         MTLOG(@"反geo检索发送成功");
-    }
-    else
-    {
+    } else {
         [self.getLocIndicator stopAnimating];
         [self.getLocButton setImage:[UIImage imageNamed:@"地图定位后icon"] forState:UIControlStateNormal];
         [self.getLocButton removeTarget:self action:@selector(getLoc:) forControlEvents:UIControlEventAllEvents];
