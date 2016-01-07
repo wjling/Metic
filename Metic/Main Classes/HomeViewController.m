@@ -22,6 +22,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
 #import "MTPackageControl.h"
+#import "SVProgressHUD.h"
 
 @interface HomeViewController ()
 
@@ -763,9 +764,9 @@
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         MTLOG(@"没有网络");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [SVProgressHUD showErrorWithStatus:@"网络异常" duration:1.f];
             [refreshView endRefreshing];
         });
-        
         return;
     }
     if (_Headeropen || _Footeropen) {
