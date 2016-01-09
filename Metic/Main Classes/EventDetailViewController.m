@@ -275,7 +275,7 @@
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
     [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
-    [sendBtn addTarget:self action:@selector(publish100Comment:) forControlEvents:UIControlEventTouchUpInside];
+    [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
     [commentV addSubview:sendBtn];
     
     [self.view addSubview:commentV];
@@ -1053,8 +1053,8 @@
 }
 
 - (IBAction)publishComment:(id)sender {
-    //    NSString *comment = _inputTextView.text;
-    NSString *comment = @"test test test /赞";
+    NSString *comment = _inputTextView.text;
+//    NSString *comment = @"test test test /赞";
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         _inputTextView.text = @"";
         return;
@@ -1111,14 +1111,16 @@
         }
             break;
     }
-    //    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    //    [_tableView beginUpdates];
-    //    if (commentType == 0) {
-    //        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
-    //    }else {
-    //        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    //    }
-    //    [_tableView endUpdates];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+    [_tableView beginUpdates];
+    if (commentType == 0) {
+        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
+    }else {
+        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+    [_tableView endUpdates];
+    
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];

@@ -103,19 +103,8 @@
     isInBackground = NO;
     isLogined = NO;
     
-    _mapManager = [[BMKMapManager alloc]init];
-    BOOL ret;
-    if (isEnterprise == 0) {
-        ret = [_mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];//上架版本
-    }else if(isEnterprise == 1){
-        ret = [_mapManager start:@"oHzEkwMGSfXfqGcBF0B0vWK5" generalDelegate:nil];//企业版本
-    }else if (isEnterprise == 2)
-    {
-        ret = [_mapManager start:@"qF8lbnGm6cIaAVe0tUTTBnyg" generalDelegate:nil];//企业版本测试服
-    }
-	if (!ret) {
-		MTLOG(@"manager start failed!");
-	}
+    //初始化百度地图SDK
+    [self initBaiduMap];
     
     //初始化Umeng
     [self initUmeng];
@@ -1153,6 +1142,24 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     }
 }
 
+#pragma mark - BaiduMap Init
+- (void)initBaiduMap
+{
+    _mapManager = [[BMKMapManager alloc] init];
+    BOOL ret;
+    if (isEnterprise == 0) {
+        ret = [_mapManager start:@"mk9WfL1PxXjguCdYsdW7xQYc" generalDelegate:nil];//上架版本
+    }else if(isEnterprise == 1){
+        ret = [_mapManager start:@"oHzEkwMGSfXfqGcBF0B0vWK5" generalDelegate:nil];//企业版本
+    }else if (isEnterprise == 2){
+        ret = [_mapManager start:@"qF8lbnGm6cIaAVe0tUTTBnyg" generalDelegate:nil];//企业版本测试服
+    }
+    if (!ret) {
+        MTLOG(@"manager start failed!");
+    }
+}
+
+#pragma mark - XGPush Init
 - (void)initXGPush:(NSDictionary *)launchOptions
 {
     /* 信鸽推送 */

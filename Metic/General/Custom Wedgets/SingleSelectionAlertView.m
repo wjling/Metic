@@ -114,6 +114,33 @@
     return contentView;
 }
 
+- (void)selectItemAtIndex:(NSInteger)index
+{
+    if (index < 0 || index >= selectionItems.count) {
+        return;
+    }
+    
+    if (lastSelected != -1) {
+        UIView* last = [selectionItems objectAtIndex:lastSelected];
+        for (UIView* v in [last subviews]) {
+            if ([v isKindOfClass:[UIButton class]]) {
+                [(UIButton*)v setSelected:NO];
+                break;
+            }
+        }
+    }
+    
+    UIView* this = [selectionItems objectAtIndex:index];
+    for (UIView* v in [this subviews]) {
+        if ([v isKindOfClass:[UIButton class]]) {
+            [(UIButton*)v setSelected:YES];
+            break;
+        }
+    }
+    
+    lastSelected = index;
+}
+
 - (void)changeButtonStateAfterClicked:(id)sender
 {
 

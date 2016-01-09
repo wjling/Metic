@@ -457,7 +457,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         
         
     }else if (type == 106){
-        [self removeWaitingView];
         UIAlertView* alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         [alert setTag:102];
     }
@@ -522,15 +521,13 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
             controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
         }else if([alertView tag] == 102){
-            [_progressView setProgress:1.0f animated:YES];
             [_confirmBtn setEnabled:YES];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self removeWaitingView];
             });
         }else if([alertView tag] == 103){
-            [_progressView setProgress:1.0f animated:YES];
             [_confirmBtn setEnabled:YES];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self removeWaitingView];
                 NSArray *naviVC = [self.navigationController.viewControllers copy];
                 UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
@@ -539,7 +536,6 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                 }
             });
         }
-        
     }
 }
 

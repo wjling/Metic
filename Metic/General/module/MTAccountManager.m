@@ -321,8 +321,8 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 md5_str = [CommonUtils MD5EncryptionWithString:str];
 
                 NSMutableDictionary *mDic = [[NSMutableDictionary alloc] init];
-                [dictionary setValue:phone forKey:@"phone"];
-                [dictionary setValue:md5_str forKey:@"passwd"];
+                [mDic setValue:phone forKey:@"phone"];
+                [mDic setValue:md5_str forKey:@"passwd"];
 
                 
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:mDic options:NSJSONWritingPrettyPrinted error:nil];
