@@ -38,6 +38,7 @@
 
 - (id)initWithContentSize:(CGSize)size withTitle:(NSString*)title withOptions:(NSArray*)theOptions;
 - (void)set_Options:(NSArray *)theOptions;
+- (void)selectItemAtIndex:(NSInteger)index;
 - (void)changeButtonStateAfterClicked:(id)sender;
 - (NSInteger)getSelectedIndex;
 - (void)show;

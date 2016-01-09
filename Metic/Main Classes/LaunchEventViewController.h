@@ -12,7 +12,7 @@
 #import "PhotoGetter.h"
 #import "FlatDatePicker.h"
 
-@interface LaunchEventViewController : UIViewController<UICollectionViewDataSource,UIScrollViewDelegate,UICollectionViewDelegate,UITextFieldDelegate,HttpSenderDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate,UIGestureRecognizerDelegate>
+@interface LaunchEventViewController : UIViewController<UICollectionViewDataSource,UIScrollViewDelegate,UICollectionViewDelegate,UITextFieldDelegate,UITextViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,PhotoGetterDelegate,FlatDatePickerDelegate,UIGestureRecognizerDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UITextField *event_text;
 @property (strong, nonatomic) IBOutlet UITextField *begin_time_text;
@@ -29,6 +29,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *banner_button;
 @property (strong, nonatomic) IBOutlet UIButton *launch_button;
 @property (strong, nonatomic) IBOutletCollection(UIView) NSArray *roundCornerView;
+@property (strong, nonatomic) IBOutlet UIButton *eventTypeMenuView;
+
 @property (nonatomic) CLLocationCoordinate2D pt;
 @property (nonatomic,strong) NSString *positionInfo;
 @property (strong, nonatomic) UIViewController* controller;
@@ -36,6 +38,6 @@
 @property BOOL canLeave;
 @property NSInteger code;
 
-
+- (IBAction)changeEventType:(id)sender;
 
 @end

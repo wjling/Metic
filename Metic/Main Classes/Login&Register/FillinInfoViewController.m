@@ -424,6 +424,7 @@
         {
             NSArray* arr = [[NSArray alloc]initWithObjects:@"女",@"男", nil];
             alert =  [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改性别" withOptions:arr];
+            [alert selectItemAtIndex:[self.gender integerValue]];
             alert.kDelegate = self;
             alert.tag = 0;
             [alert show];

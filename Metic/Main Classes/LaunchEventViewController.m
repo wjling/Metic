@@ -16,9 +16,9 @@
 #import "CommonUtils.h"
 #import "SVProgressHUD.h"
 #import "MTOperation.h"
+#import "SingleSelectionAlertView.h"
 
-
-@interface LaunchEventViewController ()
+@interface LaunchEventViewController () <SingleSelectionAlertViewDelegate>
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) UIView *datePickerView;
 @property (nonatomic, strong) UITextField *seletedText;
@@ -30,15 +30,13 @@
 @property (nonatomic, strong) IBOutlet UIButton *getLocButton;
 @property (nonatomic, strong) BMKGeoCodeSearch* geocodesearch;
 @property (nonatomic, strong) BMKLocationService* locService;
+@property (nonatomic, strong) SingleSelectionAlertView *typeSelectView;
 //@property (nonatomic, strong) BMKMapManager *mapManager;
 @property (nonatomic, strong) UIView* waitingView;
 @property (nonatomic, strong) FlatDatePicker *flatDatePicker;
-@property NSInteger visibility;
+@property (nonatomic) NSInteger visibility;
 @property BOOL isKeyBoard;
 @property (nonatomic, strong) UIView* InviteFriendsView;
-@property (nonatomic, strong) UIView* isAllowStrangerView;
-
-
 
 @property (strong,nonatomic) UICollectionView *collectionView;
 @property (nonatomic, strong) CLLocationManager  *locationManager;
@@ -62,41 +60,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [CommonUtils addLeftButton:self isFirstPage:NO];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldEditChanged:)
-                                                name:@"UITextFieldTextDidChangeNotification"
-                                              object:self.subject_text];
-    [self drawLeftButton];
-    [self turnRoundCorner];
-    self.scrollView.delegate = self;
-    self.begin_time_text.delegate = self;
-    self.end_time_text.delegate = self;
-    self.event_text.delegate = self;
-    self.location_text.delegate = self;
-    self.detail_text.delegate = self;
-    [self initInviteFriendsView];
-    [self initEventType];
-    _code = -1;
-    _canLeave = NO;
-    _isKeyBoard = NO;
-    _canLeave = NO;
-    self.FriendsIds = [[NSMutableSet alloc]init];
-    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
-    
-    self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
-    self.positionInfo = @"";
-    self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
-    self.flatDatePicker.delegate = self;
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
-    tap.delegate = self;
-    [self.view addGestureRecognizer:tap];
-    
-    [self loadDraft];
-
-    
-    
-    // Do any additional setup after loading the view.
+    [self setupUI];
+    [self setupData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -160,6 +125,14 @@
     }else [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - setupUI
+- (void)setupUI
+{
+    [CommonUtils addLeftButton:self isFirstPage:NO];
+    [self drawLeftButton];
+    [self turnRoundCorner];
+}
+
 - (void)drawLeftButton{
     UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton setFrame:CGRectMake(0, 0, 71, 33)];
@@ -171,6 +144,47 @@
     self.navigationItem.leftBarButtonItem = leftButtonItem;
 }
 
+-(void)turnRoundCorner
+{
+    for (int i = 0; i < self.roundCornerView.count; i++) {
+        UIView* view = [self.roundCornerView objectAtIndex:i];
+        view.layer.cornerRadius = 5;
+    }
+}
+
+#pragma mark - setupData
+- (void)setupData
+{
+    self.scrollView.delegate = self;
+    self.begin_time_text.delegate = self;
+    self.end_time_text.delegate = self;
+    self.event_text.delegate = self;
+    self.location_text.delegate = self;
+    self.detail_text.delegate = self;
+    [self initInviteFriendsView];
+    _code = -1;
+    _canLeave = NO;
+    _isKeyBoard = NO;
+    _visibility = 2;
+    _canLeave = NO;
+    self.FriendsIds = [[NSMutableSet alloc]init];
+    _geocodesearch = [[BMKGeoCodeSearch alloc]init];
+    
+    self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
+    self.positionInfo = @"";
+    self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
+    self.flatDatePicker.delegate = self;
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
+    
+    [self loadDraft];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(textFieldEditChanged:)
+                                                name:@"UITextFieldTextDidChangeNotification"
+                                              object:self.subject_text];
+}
 
 -(void)MTdismissKeyboard
 {
@@ -251,7 +265,7 @@
 
 -(void)initInviteFriendsView
 {
-    _InviteFriendsView = [[UIView alloc]initWithFrame:CGRectMake(20, 560, 280, 70)];
+    _InviteFriendsView = [[UIView alloc]initWithFrame:CGRectMake(20, 625, 280, 70)];
     [_InviteFriendsView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0]];
     _InviteFriendsView.layer.cornerRadius = 5;
     [_scrollView addSubview:_InviteFriendsView];
@@ -267,123 +281,6 @@
     [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"participantCell"];
     [_collectionView setBackgroundColor:[UIColor clearColor]];
     [_InviteFriendsView addSubview:_collectionView];
-}
-
--(void)initEventType
-{
-    _isAllowStrangerView = [[UIView alloc]initWithFrame:CGRectMake(20, 640, 280, 70)];
-    [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
-    [_scrollView addSubview:_isAllowStrangerView];
-    
-    UIButton* button1 = [[UIButton alloc]initWithFrame:CGRectMake(5, 0, 26, 26)];
-    button1.tag = 1;
-    [button1 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button1 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button1];
-    
-    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(35, 0, 80, 30)];
-    label1.tag = 2;
-    [label1 setBackgroundColor:[UIColor clearColor]];
-    label1.text = @"公开活动";
-    [label1 setFont:[UIFont systemFontOfSize:16]];
-    [label1 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label1];
-    
-    UIButton* button2 = [[UIButton alloc]initWithFrame:CGRectMake(145, 0, 26, 26)];
-    button2.tag = 3;
-    [button2 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button2 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button2];
-    
-    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(175, 0, 80, 30)];
-    label2.tag = 4;
-    [label2 setBackgroundColor:[UIColor clearColor]];
-    label2.text = @"私密活动";
-    [label2 setFont:[UIFont systemFontOfSize:16]];
-    [label2 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label2];
-    
-    UIButton* button3 = [[UIButton alloc]initWithFrame:CGRectMake(5, 35, 26, 26)];
-    button3.tag = 5;
-    [button3 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button3 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button3];
-    
-    UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(35, 35, 80, 30)];
-    label3.tag = 6;
-    [label3 setBackgroundColor:[UIColor clearColor]];
-    label3.text = @"内容公开";
-    [label3 setFont:[UIFont systemFontOfSize:16]];
-    [label3 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label3];
-    
-    UIButton* button4 = [[UIButton alloc]initWithFrame:CGRectMake(145, 35, 26, 26)];
-    button4.tag = 7;
-    [button4 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button4 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button4];
-    
-    UILabel *label4 = [[UILabel alloc]initWithFrame:CGRectMake(175, 35, 80, 30)];
-    label4.tag = 8;
-    [label4 setBackgroundColor:[UIColor clearColor]];
-    label4.text = @"内容不公开";
-    [label4 setFont:[UIFont systemFontOfSize:16]];
-    [label4 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label4];
-    
-    _visibility = 2;
-    [self changeAllowStangerStage:button3];
-}
-
--(void)changeAllowStangerStage:(UIButton*)sender
-{
-    switch (sender.tag) {
-        case 1:
-            if (_visibility == 0) {
-                _visibility = 2;
-            }
-            break;
-        case 3:
-            _visibility = 0;
-            break;
-        case 5:
-            _visibility = 2;
-            break;
-        case 7:
-            _visibility = 1;
-            break;
-            
-        default:
-            break;
-    }
-    if (_visibility == 0) {
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = YES;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = YES;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = YES;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = YES;
-    }else if(_visibility == 1){
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
-    }else if(_visibility == 2){
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
-    }
 }
 
 -(void)copyFriendsId
@@ -405,25 +302,13 @@
     frame.size.height = ceilf(count/5)*70;
     _InviteFriendsView.frame = frame;
     
-    frame = _isAllowStrangerView.frame;
-    frame.origin.y = 570 + ceilf(count/5)*70;
-    _isAllowStrangerView.frame = frame;
-    
-    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80 > _scrollView.contentSize.height) {
+    if (CGRectGetMaxY(self.InviteFriendsView.frame) + 15 != _scrollView.contentSize.height) {
         CGSize size = _scrollView.contentSize;
-        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80;
+        size.height = CGRectGetMaxY(self.InviteFriendsView.frame) + 15;
         _scrollView.contentSize = size;
-        
     }
 }
 
--(void)turnRoundCorner
-{
-    for (int i = 0; i < self.roundCornerView.count; i++) {
-        UIView* view = [self.roundCornerView objectAtIndex:i];
-        view.layer.cornerRadius = 5;
-    }
-}
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     [self.scrollView setContentOffset:CGPointMake(0, textView.frame.origin.y - 55) animated:YES];
@@ -553,6 +438,26 @@
         self.end_time_text.text = @"";
     }
     
+}
+
+- (void)setVisibility:(NSInteger)visibility
+{
+    _visibility = visibility;
+    NSArray *arr = @[@"公开（内容公开）", @"公开（内容不公开）",@"私人"];
+    if (visibility >= 0 && visibility < arr.count) {
+        NSString *title = arr[2-visibility];
+        [self.eventTypeMenuView setTitle:title forState:UIControlStateNormal];
+    }
+}
+
+- (IBAction)changeEventType:(id)sender {
+    NSArray *arr = @[@"公开活动（内容公开）", @"公开活动（内容不公开）",@"私人"];
+    NSInteger index = 2 - _visibility;
+    self.typeSelectView = [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改活动类型" withOptions:arr];
+    self.typeSelectView.kDelegate = self;
+    self.typeSelectView.tag = 0;
+    [self.typeSelectView selectItemAtIndex:index];
+    [self.typeSelectView show];
 }
 
 - (IBAction)launch:(id)sender {
@@ -693,9 +598,9 @@
 #pragma mark - CollectionViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (_InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80 > _scrollView.contentSize.height) {
+    if (CGRectGetMaxY(self.InviteFriendsView.frame) + 15 != _scrollView.contentSize.height) {
         CGSize size = _scrollView.contentSize;
-        size.height = _InviteFriendsView.frame.size.height + _InviteFriendsView.frame.origin.y + 80;
+        size.height = CGRectGetMaxY(self.InviteFriendsView.frame) + 15 ;
         _scrollView.contentSize = size;
         
     }
@@ -974,5 +879,18 @@
     
 }
 
-
+#pragma mark - SingleSelectionAlertView Delegate
+- (void)SingleSelectionAlertView:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView isKindOfClass:[CustomIOS7AlertView class]]) {
+        if (((CustomIOS7AlertView*)alertView).tag == 0) {
+            if (buttonIndex == 1) {
+                NSInteger type = [self.typeSelectView getSelectedIndex];
+                self.visibility = 2 - type;
+            }
+        }
+    } else if ([alertView isKindOfClass:[UIButton class]]) {
+        
+    }
+}
 @end
