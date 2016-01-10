@@ -102,4 +102,11 @@ NS_ENUM(NSInteger, MTPhoneBindSataus) {
                     success:(void (^)())success
                     failure:(void (^)(enum Return_Code errorCode, NSString *message))failure;
 
+
+/**
+ *  Bind Phone With Account
+ */
++ (void)checkPhoneInUse:(NSString *)phoneNumber
+                success:(void (^)(BOOL isInused))success
+                failure:(void (^)(NSString *message))failure;
 @end

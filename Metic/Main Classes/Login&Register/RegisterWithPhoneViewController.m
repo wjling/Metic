@@ -84,7 +84,8 @@
 
 - (IBAction)getVerificationCode:(id)sender {
     [self resignKeyboard];
-    if (![CommonUtils isPhoneNumberVaild:self.phoneTextField.text]) {
+    NSString *phone = self.phoneTextField.text;
+    if (![CommonUtils isPhoneNumberVaild:phone]) {
         [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
         return;
     }
@@ -94,22 +95,37 @@
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshWaitingCount:) userInfo:dict repeats:YES];
     [timer fire];
     
-    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.phoneTextField.text
-                                   zone:@"+86"
-                       customIdentifier:nil
-                                 result:^(NSError *error)
-     {
-         if (!error) {
-             NSLog(@"验证码发送成功");
-             [SVProgressHUD showSuccessWithStatus:@"验证码已发送" duration:1.f];
-         } else {
-             NSLog(@"验证码发送失败");
-             [timer invalidate];
-             [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
-             [self.getVerificationCodeBtn setEnabled:YES];
-             [SVProgressHUD showErrorWithStatus:@"获取失败，请重试" duration:1.f];
-         }
-     }];
+    [MTAccountManager checkPhoneInUse:phone success:^(BOOL isInused) {
+        if (!isInused) {
+            [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phone
+                                           zone:@"+86"
+                               customIdentifier:nil
+                                         result:^(NSError *error)
+             {
+                 if (!error) {
+                     NSLog(@"验证码发送成功");
+                     [SVProgressHUD showSuccessWithStatus:@"验证码已发送" duration:1.f];
+                 } else {
+                     NSLog(@"验证码发送失败");
+                     [timer invalidate];
+                     [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+                     [self.getVerificationCodeBtn setEnabled:YES];
+                     [SVProgressHUD showErrorWithStatus:@"获取失败，请重试" duration:1.f];
+                 }
+             }];
+        }else {
+            [timer invalidate];
+            [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+            [self.getVerificationCodeBtn setEnabled:YES];
+            [SVProgressHUD showErrorWithStatus:@"此手机号已被使用" duration:1.f];
+        }
+        
+    } failure:^(NSString *message) {
+        [timer invalidate];
+        [self.getVerificationCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [self.getVerificationCodeBtn setEnabled:YES];
+        [SVProgressHUD showErrorWithStatus:message duration:1.f];
+    }];
 }
 
 - (void)refreshWaitingCount:(id)sender {

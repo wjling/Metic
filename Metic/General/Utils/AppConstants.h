@@ -113,6 +113,7 @@ enum Operation_Code
     REGISTER_RESEND = 62,
     RESET_PASSWD_PHONE = 63,
     BIND_PHONE = 64,
+    CHECK_PHONE_AVAIL = 65,
 };
 
 enum CloudOperation_Code
@@ -152,6 +153,8 @@ enum Return_Code
     SIGN_FAIL = 124,
     BIND_PHONE_ERROR = 125,
     PASSWD_NOT_SETTING = 126,
+    PHONE_INVALID = 130,
+    PHONE_AVAIL = 131,
     
     NEED_CONFIRM=198,
     INCOME_CONFIRM=199,

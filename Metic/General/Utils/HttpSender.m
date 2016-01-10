@@ -263,6 +263,9 @@ static NSOperationQueue *requestQueue;
         case 64:
             resultCode = @"bind_phone";
             break;
+        case 65:
+            resultCode = @"check_phone_avail";
+            break;
         default:
             resultCode = @"json";
             break;

@@ -65,7 +65,8 @@
 
 - (IBAction)getVerificationCode:(id)sender {
     [self resignKeyboard];
-    if (![CommonUtils isPhoneNumberVaild:self.phoneTextField.text]) {
+    NSString *phone = self.phoneTextField.text;
+    if (![CommonUtils isPhoneNumberVaild:phone]) {
         [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
         return;
     }
@@ -75,7 +76,7 @@
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(refreshWaitingCount:) userInfo:dict repeats:YES];
     [timer fire];
     
-    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.phoneTextField.text
+    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phone
                                    zone:@"+86"
                        customIdentifier:nil
                                  result:^(NSError *error)

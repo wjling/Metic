@@ -552,4 +552,40 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
         }
     }];
 }
+
++ (void)checkPhoneInUse:(NSString *)phoneNumber
+                    success:(void (^)(BOOL isInused))success
+                    failure:(void (^)(NSString *message))failure
+{
+    if (!phoneNumber || ![phoneNumber isKindOfClass:[NSString class]] || [phoneNumber isEqualToString:@""]) {
+        failure(@"输入错误");
+        return;
+    }
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:phoneNumber forKey:@"phone"];
+    [dictionary setValue:@"" forKey:@"passwd"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHECK_PHONE_AVAIL finshedBlock:^(NSData *rData) {
+        if (!rData) {
+            failure(@"网络异常，请重试");
+            return;
+        }
+        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+        MTLOG(@"Received Data: %@",temp);
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        switch ([cmd intValue]) {
+            case PHONE_AVAIL:
+                success(NO);
+                break;
+            case PHONE_INVALID:
+                success(YES);
+                break;
+            default:
+                failure(@"服务器异常");
+        }
+    }];
+}
 @end
