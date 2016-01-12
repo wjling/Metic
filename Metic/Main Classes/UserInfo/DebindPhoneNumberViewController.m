@@ -77,7 +77,7 @@
     [timer fire];
     
     [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phone
-                                   zone:@"+86"
+                                   zone:@"86"
                        customIdentifier:nil
                                  result:^(NSError *error)
      {
