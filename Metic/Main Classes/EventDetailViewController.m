@@ -711,7 +711,9 @@
             NSString *oldUpdateTime = [resultsArray[0] valueForKey:@"updateTime"];
             if ([oldUpdateTime isKindOfClass:[NSString class]] && [oldUpdateTime isEqualToString:updateTime]) {
                 MTLOG(@"no need update banner");
-            }else{
+            }else if ([oldUpdateTime isEqual:[NSNull null]]){
+                [self updateUpdateTimeToDB:updateTime];
+            }else {
                 MTLOG(@"update banner");
                 NSString* bannerPath = [MegUtils bannerImagePathWithEventId:_eventId];
                 [[SDImageCache sharedImageCache] removeImageForKey:bannerPath];

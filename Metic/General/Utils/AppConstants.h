@@ -30,8 +30,8 @@ typedef NS_ENUM(NSUInteger, MTHttpMethod) {
 };
 
 enum Server_code{
-    Server = 0,//测试服
-//    Server = 1,//正式服
+//    Server = 0,//测试服
+    Server = 1,//正式服
 };
 
 enum Enterprise_code{
@@ -155,6 +155,7 @@ enum Return_Code
     PASSWD_NOT_SETTING = 126,
     PHONE_INVALID = 130,
     PHONE_AVAIL = 131,
+    BIND_PHONE_ALREADY = 132,
     
     NEED_CONFIRM=198,
     INCOME_CONFIRM=199,

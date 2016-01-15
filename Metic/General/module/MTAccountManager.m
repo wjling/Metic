@@ -400,10 +400,10 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                 NSString *modifyPS_md5 = [CommonUtils MD5EncryptionWithString:[newPassword stringByAppendingString:salt]];
                 
                 NSMutableDictionary *json_dic = [[NSMutableDictionary alloc] init];
-                [dictionary setValue:account forKey:@"email"];
-                [dictionary setValue:currentPS_md5 forKey:@"passwd"];
-                [dictionary setValue:modifyPS_md5 forKey:@"newpw"];
-                [dictionary setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
+                [json_dic setValue:account forKey:@"email"];
+                [json_dic setValue:currentPS_md5 forKey:@"passwd"];
+                [json_dic setValue:modifyPS_md5 forKey:@"newpw"];
+                [json_dic setValue:[NSNumber numberWithBool:NO] forKey:@"has_salt"];
                 
 
                 NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json_dic options:NSJSONWritingPrettyPrinted error:nil];
@@ -514,6 +514,14 @@ typedef void(^MTLoginCompletedBlock)(BOOL isValid, NSString *errMeg);
                         case REQUEST_DATA_ERROR:
                             MTLOG(@"request data error");
                             failure(REQUEST_DATA_ERROR, @"请求错误");
+                            break;
+                        case BIND_PHONE_ALREADY:
+                            MTLOG(@"bind phone already");
+                            if (toBind) {
+                                failure(BIND_PHONE_ALREADY, @"绑定失败，此账号已经绑定另一手机号");
+                            }else {
+                                failure(BIND_PHONE_ALREADY, @"手机注册用户暂时不开通解绑功能");
+                            }
                             break;
                         case BIND_PHONE_ERROR:
                             MTLOG(@"request data error");

@@ -83,35 +83,13 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
     CGFloat width = CGRectGetWidth(rect);
     CGFloat height = CGRectGetHeight(rect);
     
-//    CGFloat outerRadius = [self outerRadius];
     CGFloat innerRadius = [self innerRadius];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextTranslateCTM(context, width / 2., height / 2.);
     CGContextScaleCTM(context, 1., -1.);
     CGContextSetRGBFillColor(context, 0., 0., 0., 0.5);
     CGContextSetFillColorWithColor(context, self.overlayColor.CGColor);
-    
-//    CGMutablePathRef path0 = CGPathCreateMutable();
-//    CGPathMoveToPoint(path0, NULL, width / 2., 0.);
-//    CGPathAddLineToPoint(path0, NULL, width / 2., height / 2.);
-//    CGPathAddLineToPoint(path0, NULL, -width / 2., height / 2.);
-//    CGPathAddLineToPoint(path0, NULL, -width / 2., 0.);
-//    CGPathAddLineToPoint(path0, NULL, (cosf(M_PI) * outerRadius), 0.);
-//    CGPathAddArc(path0, NULL, 0., 0., outerRadius, M_PI, 0., 1.);
-//    CGPathAddLineToPoint(path0, NULL, width / 2., 0.);
-//    CGPathCloseSubpath(path0);
-//    
-//    CGMutablePathRef path1 = CGPathCreateMutable();
-//    CGAffineTransform rotation = CGAffineTransformMakeScale(1., -1.);
-//    CGPathAddPath(path1, &rotation, path0);
-//    
-//    CGContextAddPath(context, path0);
-//    CGContextFillPath(context);
-//    CGPathRelease(path0);
-//    
-//    CGContextAddPath(context, path1);
-//    CGContextFillPath(context);
-//    CGPathRelease(path1);
+    CGContextSetStrokeColorWithColor(context, self.overlayColor.CGColor);
     
     if (_progress < 1.) {
         CGFloat angle = (360. * _progress);
@@ -125,16 +103,10 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
         CGContextFillPath(context);
         CGPathRelease(path2);
         
-        CGAffineTransform transform3 = CGAffineTransformMakeRotation(M_PI_2);
-        CGMutablePathRef path3 = CGPathCreateMutable();
-        CGPathMoveToPoint(path3, &transform3, innerRadius, 0.);
-        CGPathAddArc(path3, &transform3, 0., 0., innerRadius*1.1, 0.,-2 * M_PI, YES);
-        CGPathAddArc(path3, &transform3, 0., 0., innerRadius*1, 0.,-2 * M_PI, NO);
-        CGContextAddPath(context, path3);
-        CGContextFillPath(context);
-        CGPathRelease(path3);
-    }
-}
+        CGContextSetLineWidth(context, innerRadius*0.1f);//线的宽度
+        CGContextAddArc(context, 0, 0, innerRadius*1.1f, 0, 2*M_PI, 0); //添加一个圆
+        CGContextDrawPath(context, kCGPathStroke); //绘制路径
+    }}
 
 - (void)setInnerRadiusRatio:(CGFloat)innerRadiusRatio
 {
