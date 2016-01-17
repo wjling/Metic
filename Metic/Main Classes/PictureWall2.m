@@ -509,7 +509,11 @@
                     }
                     
                     [self calculateLRH];
-                    self.sequence = [response1 valueForKey:@"sequence"];
+                    if (newphoto_list_origin.count < 20) {
+                        self.sequence = @(-1);
+                    }else {
+                        self.sequence = [response1 valueForKey:@"sequence"];
+                    }
                     _haveLoadedPhoto = YES;
                     [self.quiltView reloadData];
                     if(_header.refreshing) [_header endRefreshing];

@@ -69,6 +69,39 @@
                                 <action selector="debindPhone:" destination="-1" eventType="touchUpInside" id="VXz-dj-aSR"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8dB-4z-Pk6">
+                            <rect key="frame" x="15" y="176" width="290" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="60" id="GL7-dR-kzj"/>
+                            </constraints>
+                            <attributedString key="attributedText">
+                                <fragment content="温馨提示：">
+                                    <attributes>
+                                        <color key="NSColor" red="0.37647058820000001" green="0.37647058820000001" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <font key="NSFont" size="14" name="STHeitiSC-Light"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="6"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                    <attributes>
+                                        <color key="NSColor" red="0.37647058820000001" green="0.37647058820000001" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="6"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="手机注册用户暂时无法解绑手机号码。">
+                                    <attributes>
+                                        <color key="NSColor" red="0.37647058820000001" green="0.37647058820000001" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <font key="NSFont" size="14" name="STHeitiSC-Light"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="6"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstItem="gk2-Y4-lZZ" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="2cp-8J-Igl"/>
@@ -80,10 +113,13 @@
                         <constraint firstItem="72b-yr-wyw" firstAttribute="top" secondItem="ron-a6-Jv9" secondAttribute="top" constant="15" id="Mxu-Ff-2Dq"/>
                         <constraint firstItem="SS7-dx-i8V" firstAttribute="top" secondItem="Xoq-vO-UvB" secondAttribute="bottom" constant="15" id="O5l-Na-H5w"/>
                         <constraint firstItem="72b-yr-wyw" firstAttribute="centerX" secondItem="ron-a6-Jv9" secondAttribute="centerX" id="Z0X-gR-8ub"/>
+                        <constraint firstAttribute="trailing" secondItem="8dB-4z-Pk6" secondAttribute="trailing" constant="15" id="Zfa-j3-dhZ"/>
                         <constraint firstItem="72b-yr-wyw" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="l0d-cp-4Hd"/>
                         <constraint firstItem="SS7-dx-i8V" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="syX-zK-zHB"/>
+                        <constraint firstItem="8dB-4z-Pk6" firstAttribute="top" secondItem="SS7-dx-i8V" secondAttribute="bottom" constant="15" id="udl-jB-3hA"/>
                         <constraint firstItem="gk2-Y4-lZZ" firstAttribute="top" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="15" id="yBC-Ze-bN1"/>
                         <constraint firstAttribute="bottom" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="300" id="yXB-Fh-FJY"/>
+                        <constraint firstItem="8dB-4z-Pk6" firstAttribute="leading" secondItem="ron-a6-Jv9" secondAttribute="leading" constant="15" id="zmA-S4-TPC"/>
                     </constraints>
                 </scrollView>
             </subviews>

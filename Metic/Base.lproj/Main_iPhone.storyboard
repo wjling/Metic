@@ -1082,7 +1082,7 @@
                                 <color key="textColor" red="0.48531092780000001" green="0.48259969349999998" blue="0.48802216199999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQk-dd-cZO">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQk-dd-cZO">
                                 <rect key="frame" x="15" y="280" width="290" height="40"/>
                                 <state key="normal" title="查看手机通讯录" backgroundImage="登录按钮">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1093,12 +1093,13 @@
                                     <action selector="checkContactClicked:" destination="noD-0Q-lGD" eventType="touchUpInside" id="b7J-Fs-FMa"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e2w-KC-xOI">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e2w-KC-xOI">
                                 <rect key="frame" x="15" y="340" width="290" height="40"/>
-                                <state key="normal" title="更换手机号" backgroundImage="灰色按钮条">
+                                <state key="normal" title="更换手机号" backgroundImage="登录按钮">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <state key="selected" backgroundImage="登录按钮按下效果"/>
                                 <connections>
                                     <action selector="changeNumberClicked:" destination="noD-0Q-lGD" eventType="touchUpInside" id="d56-8l-4gx"/>
                                 </connections>
@@ -4643,10 +4644,10 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hcD-J7-89T">
                                 <rect key="frame" x="0.0" y="341" width="320" height="75"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQw-52-1ih">
                                         <rect key="frame" x="0.0" y="40" width="320" height="35"/>
                                         <subviews>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c84-4Q-aVr">
@@ -4703,7 +4704,7 @@
                                             <constraint firstAttribute="height" constant="35" id="Wh5-OH-bVl"/>
                                         </constraints>
                                     </view>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-Te-c2F">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
                                         <color key="backgroundColor" red="0.22352942819999999" green="0.2117647231" blue="0.1764705926" alpha="0.88" colorSpace="deviceRGB"/>
                                         <constraints>
@@ -5544,19 +5545,19 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="mCC-Hp-8GT"/>
         <segue reference="cOi-1F-viY"/>
+        <segue reference="mCC-Hp-8GT"/>
         <segue reference="5EZ-nf-AfT"/>
         <segue reference="wTn-dU-wbL"/>
+        <segue reference="vrP-dE-x9J"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="a7Z-Ie-XBp"/>
         <segue reference="0y8-RS-ijM"/>
         <segue reference="EEO-gR-a4J"/>
-        <segue reference="06u-oh-4gy"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="fCb-08-jP0"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="z1d-kw-SOt"/>
         <segue reference="KQw-JA-BHy"/>
+        <segue reference="QDz-81-eMP"/>
+        <segue reference="06u-oh-4gy"/>
         <segue reference="UXj-VV-omZ"/>
-        <segue reference="vrP-dE-x9J"/>
     </inferredMetricsTieBreakers>
 </document>
