@@ -222,7 +222,10 @@
                 [photo_list_Tmp addObject:photoInfo];
             }
         }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            
             _photo_list = photo_list_Tmp;
             _photo_list_all = photo_list_all_Tmp;
             _haveLoadedPhoto = YES;
@@ -231,6 +234,10 @@
             _uploadingTaskCount = 0;
             [self.quiltView reloadData];
             self.sequence = @-1;
+            if(photo_list_Tmp.count) {
+                NSDictionary *photoInfo = [_photo_list lastObject];
+                self.sequence = photoInfo[@"photo_id"];
+            }
             
             if ([NotificationController visitPhotoWall:_eventId needClear:NO] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
                 [_header beginRefreshing];

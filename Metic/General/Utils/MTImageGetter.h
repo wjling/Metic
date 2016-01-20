@@ -21,5 +21,6 @@ typedef enum : NSUInteger {
 
 -(instancetype)initWithImageView:(UIImageView*)imageView imageId:(NSNumber *)imageId imageName:(NSString *)imageName type:(MTImageGetterType)type;
 -(void)getImage;
+-(void)getImageFitSize;
 -(void)getImageComplete:(MTImageGetterCompletionBlock)completedBlock;
 @end

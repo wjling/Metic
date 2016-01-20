@@ -215,6 +215,38 @@
     }];
 }
 
+-(void)checkPhotoFromServer:(NSString*) path
+                       size:(CGSize)size
+                    success:(void (^)(NSString* scalePath))success
+                    failure:(void (^)(NSString* savePath, CGSize saveSize))failure;
+{
+    if (!path) {
+        if (failure) {
+            failure(nil,CGSizeZero);
+        }
+        return;
+    }
+    
+    static CGFloat scale = -1;
+    if (scale == -1) {
+        scale = [[UIScreen mainScreen] scale];
+    }
+    
+    CGSize scaleSize = CGSizeMake((long)(size.width * scale), (long)(size.height * scale));
+    
+    NSString *thumbPath = [NSString stringWithFormat:@"%@%ld%ld", path, (long)(scaleSize.width), (long)(scaleSize.height)];
+    
+    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:thumbPath]) {
+        if (success) {
+            success(thumbPath);
+        }
+        return;
+    }else {
+        failure(thumbPath, scaleSize);
+    }
+    
+}
+
 -(void)getUrlFromServer:(NSString*) path
                  success:(void (^)(NSString* url))success
                  failure:(void (^)(NSString* message))failure

@@ -111,7 +111,12 @@
     [avatarGetter getAvatar];
 
     MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.imgView imageId:nil imageName:data[@"photo_name"] type:MTImageGetterTypePhoto];
-    [imageGetter getImage];
+//    [imageGetter getImage];
+    if (CGSizeEqualToSize(self.imgView.bounds.size, CGSizeZero)) {
+        [imageGetter getImage];
+    }else {
+        [imageGetter getImageFitSize];
+    }
 
     int width = [[data valueForKey:@"width"] intValue];
     int height = [[data valueForKey:@"height"] intValue];

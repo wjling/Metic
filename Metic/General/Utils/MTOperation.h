@@ -23,6 +23,11 @@ typedef void(^likeEventFinishBlock)(BOOL isSuccess,NSString* likeTime);
 //收藏／取消收藏活动操作
 -(void)likeEventOperation:(NSArray*)eventIds like:(BOOL)islike finishBlock:(likeEventFinishBlock)finishBlock;
 
+-(void)checkPhotoFromServer:(NSString*) path
+                       size:(CGSize)size
+                    success:(void (^)(NSString* scalePath))success
+                    failure:(void (^)(NSString* savePath, CGSize saveSize))failure;
+
 -(void)getUrlFromServer:(NSString*) path
                  success:(void (^)(NSString* url))success
                  failure:(void (^)(NSString* message))failure;

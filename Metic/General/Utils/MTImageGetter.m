@@ -9,6 +9,7 @@
 #import "MTImageGetter.h"
 #import "MegUtils.h"
 #import "UIImageView+MTTag.h"
+#import "UIImage+UIImageExtras.h"
 #import "MTOperation.h"
 
 @interface MTImageGetter ()
@@ -54,12 +55,19 @@
     }
 }
 
--(void)getImage
-{
-    [self getImageComplete:NULL];
+-(void)getImage {
+    [self getImageFitSize:NO Complete:NULL];
 }
 
--(void)getImageComplete:(MTImageGetterCompletionBlock)completedBlock
+-(void)getImageFitSize {
+    [self getImageFitSize:YES Complete:NULL];
+}
+
+-(void)getImageComplete:(MTImageGetterCompletionBlock)completedBlock {
+    [self getImageFitSize:NO Complete:completedBlock];
+}
+
+-(void)getImageFitSize:(BOOL)fitSize Complete:(MTImageGetterCompletionBlock)completedBlock
 {
     [self.imageView sd_cancelCurrentImageLoad];
     static UIImage *defaultPhotoImg;
@@ -115,26 +123,141 @@
         [self.imageView setContentMode:UIViewContentModeScaleAspectFit];
     }else return;
     
-    [[MTOperation sharedInstance] getUrlFromServer:self.path success:^(NSString *url) {
-        if (![self.imageView.downloadName isEqualToString:self.imageName])
-            return ;
-        [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (completedBlock) {
-                completedBlock(image,error,cacheType,imageURL);
-            }else {
-                if (image) {
-                    [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
-                }else{
-                    self.imageView.image = placeHolderFail;
+    if (fitSize) {
+        [[MTOperation sharedInstance] checkPhotoFromServer:self.path size:self.imageView.bounds.size success:^(NSString *scalePath) {
+            if (![self.imageView.downloadName isEqualToString:self.imageName])
+                return ;
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:scalePath] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (completedBlock) {
+                    completedBlock(image,error,cacheType,imageURL);
+                }else {
+                    if (image) {
+                        [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    }else{
+                        self.imageView.image = placeHolderFail;
+                    }
                 }
+                
+            }];
+        } failure:^(NSString *savePath, CGSize saveSize) {
+            if (!savePath) {
+                return ;
             }
-            
+            [[MTOperation sharedInstance] getUrlFromServer:self.path success:^(NSString *url) {
+                if (![self.imageView.downloadName isEqualToString:self.imageName])
+                    return ;
+                [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    if (![self.imageView.downloadName isEqualToString:self.imageName])
+                        return ;
+
+                    if (completedBlock) {
+                        completedBlock(image,error,cacheType,imageURL);
+                    }else {
+                        if (image) {
+                            [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                        }else{
+                            self.imageView.image = placeHolderFail;
+                        }
+                    }
+
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        UIImage *thumbImage = [image imageByScalingToSize:saveSize];
+                        [[SDImageCache sharedImageCache] storeImage:thumbImage forKey:savePath];
+                    });
+                }];
+            } failure:^(NSString *message) {
+                if (![self.imageView.downloadName isEqualToString:self.imageName])
+                    return ;
+                MTLOG(@"%@",message);
+            }];
         }];
-    } failure:^(NSString *message) {
-        if (![self.imageView.downloadName isEqualToString:self.imageName])
-            return ;
-        MTLOG(@"%@",message);
-    }];
+    } else {
+        [[MTOperation sharedInstance] getUrlFromServer:self.path success:^(NSString *url) {
+            if (![self.imageView.downloadName isEqualToString:self.imageName])
+                return ;
+            [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeHolder cloudPath:self.path completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                
+                if (completedBlock) {
+                    completedBlock(image,error,cacheType,imageURL);
+                }else {
+                    if (image) {
+                        [self.imageView setContentMode:UIViewContentModeScaleAspectFill];
+                    }else{
+                        self.imageView.image = placeHolderFail;
+                    }
+                }
+                
+            }];
+        } failure:^(NSString *message) {
+            if (![self.imageView.downloadName isEqualToString:self.imageName])
+                return ;
+            MTLOG(@"%@",message);
+        }];
+    }
+}
+
+- (UIImage *)thumbnailWithImageWithoutScale:(UIImage *)image size:(CGSize)asize
+
+{
+    
+    UIImage *newimage;
+    
+    if (nil == image) {
+        
+        newimage = nil;
+        
+    }
+    
+    else{
+        
+        CGSize oldsize = image.size;
+        
+        CGRect rect;
+        
+        if (asize.width/asize.height > oldsize.width/oldsize.height) {
+            
+            rect.size.width = asize.height*oldsize.width/oldsize.height;
+            
+            rect.size.height = asize.height;
+            
+            rect.origin.x = (asize.width - rect.size.width)/2;
+            
+            rect.origin.y = 0;
+            
+        }
+        
+        else{
+            
+            rect.size.width = asize.width;
+            
+            rect.size.height = asize.width*oldsize.height/oldsize.width;
+            
+            rect.origin.x = 0;
+            
+            rect.origin.y = (asize.height - rect.size.height)/2;
+            
+        }
+        
+        NSLog(@"%f %f",asize.width,asize.height);
+        
+        UIGraphicsBeginImageContext(asize);
+        
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        CGContextSetFillColorWithColor(context, [[UIColor clearColor] CGColor]);
+        
+        UIRectFill(CGRectMake(0, 0, asize.width, asize.height));//clear background
+        
+        [image drawInRect:rect];
+        
+        newimage = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+    }
+    
+    return newimage;
+    
 }
 
 @end

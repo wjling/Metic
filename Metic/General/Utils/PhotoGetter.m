@@ -29,8 +29,10 @@
 @property(nonatomic,strong) NSString* imgName;
 @property(nonatomic,strong) NSString* videoName;
 @property(nonatomic,strong) NSString* videoFilePath;
+@property(nonatomic,weak) CloudOperation * cloudUploadOp;
 @property CGSize uploadPhotoSize;
 @property BOOL isUpload;
+@property BOOL shouldCancelUpload;
 
 @end
 
@@ -59,6 +61,7 @@
         self = [super init];
         self.uploadImage = aImage;
         self.type = type;
+        self.shouldCancelUpload = NO;
     }
     return self;
 }
@@ -412,7 +415,11 @@
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     cloudOP.mineType = @"image/jpeg";
     NSString* uploadfilePath = filePath;
+    if (self.shouldCancelUpload) {
+        return;
+    }
     [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:uploadfilePath container:nil authorId:nil];
+    self.cloudUploadOp = cloudOP;
 }
 
 -(void)uploadVideo
@@ -423,9 +430,20 @@
     CloudOperation * cloudOP = [[CloudOperation alloc]initWithDelegate:self];
     cloudOP.mineType = @"video/mp4";
     cloudOP.shouldRecordProgress = YES;
+    if (self.shouldCancelUpload) {
+        return;
+    }
     [cloudOP CloudToDo:UPLOAD path:self.path uploadPath:_videoFilePath container:nil authorId:nil];
+    self.cloudUploadOp = cloudOP;
 }
 
+-(void)cancelUploadViedo {
+    self.shouldCancelUpload = YES;
+    if (self.cloudUploadOp) {
+        [self.cloudUploadOp cancelOperation];
+    }
+    
+}
 
 -(void)finishwithOperationStatus:(BOOL)status type:(int)type data:(NSData *)mdata path:(NSString *)path
 {

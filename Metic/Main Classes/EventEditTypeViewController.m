@@ -11,11 +11,16 @@
 #import "SVProgressHUD.h"
 #import "MTUser.h"
 #import "MTDatabaseAffairs.h"
+#import "SingleSelectionAlertView.h"
 
-@interface EventEditTypeViewController ()
-@property(nonatomic,strong) UIView* isAllowStrangerView;
-@property(nonatomic,strong) UILabel* tips;
-@property NSInteger visibility;
+
+@interface EventEditTypeViewController () <SingleSelectionAlertViewDelegate>
+
+@property (nonatomic, strong) UIButton *eventType;
+@property (nonatomic, strong) UILabel* tips;
+@property (nonatomic, strong) SingleSelectionAlertView *typeSelectView;
+
+@property (nonatomic) NSInteger visibility;
 
 @end
 
@@ -38,10 +43,32 @@
     self.view.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     self.title = @"修改活动类型";
     
-    [self initRightBtn];
-    [self initEventType];
     
-    UILabel* tips = [[UILabel alloc]initWithFrame:CGRectMake(40, CGRectGetMaxY(_isAllowStrangerView.frame) + 10, CGRectGetWidth(self.view.frame) - 20, 30)];
+    UILabel* lab1 = [[UILabel alloc]initWithFrame:CGRectMake(10, 10 + 0, CGRectGetWidth(self.view.frame) - 20, 25)];
+    
+    lab1.text = @"活动类型";
+    lab1.numberOfLines = 1;
+    lab1.textAlignment = NSTextAlignmentLeft;
+    lab1.font = [UIFont systemFontOfSize:16];
+    lab1.textColor = [UIColor colorWithWhite:0.42f alpha:1.0f];
+    [self.view addSubview:lab1];
+    
+    UILabel *paddingView1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 25)];
+    paddingView1.text = @" ";
+    paddingView1.textColor = [UIColor darkGrayColor];
+    paddingView1.backgroundColor = [UIColor clearColor];
+    
+    self.eventType = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.eventType.frame = CGRectMake(10, 40, CGRectGetWidth(self.view.frame) - 20, 40);
+    [self.eventType setTitleColor:[UIColor colorWithWhite:0.3 alpha:1.0f] forState:UIControlStateNormal];
+    [self.eventType setBackgroundColor:[UIColor whiteColor]];
+    self.eventType.layer.cornerRadius = 6;
+    self.eventType.layer.masksToBounds = YES;
+    [self.eventType addTarget:self action:@selector(changeEventType:) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.view addSubview:self.eventType];
+    
+    UILabel* tips = [[UILabel alloc]initWithFrame:CGRectMake(40, CGRectGetMaxY(self.eventType.frame) + 10, CGRectGetWidth(self.view.frame) - 20, 30)];
     tips = tips;
     tips.text = @"修改活动描述后会通知所有活动参与者。";
     tips.numberOfLines = 2;
@@ -53,149 +80,41 @@
 
 -(void)initData
 {
-    _visibility = [[_eventInfo valueForKey:@"visibility"]integerValue];
-    [self changeAllowStangerStage:nil];
-}
-
--(void)initEventType
-{
-    _isAllowStrangerView = [[UIView alloc]initWithFrame:CGRectMake(20, 20, 280, 70)];
-    [_isAllowStrangerView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:_isAllowStrangerView];
-
-    UIButton* button1 = [[UIButton alloc]initWithFrame:CGRectMake(15, 0, 26, 26)];
-    button1.tag = 1;
-    [button1 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button1 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button1];
-
-    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(45, 0, 80, 30)];
-    label1.tag = 2;
-    [label1 setBackgroundColor:[UIColor clearColor]];
-    label1.text = @"公开活动";
-    [label1 setFont:[UIFont systemFontOfSize:16]];
-    [label1 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label1];
-
-    UIButton* button2 = [[UIButton alloc]initWithFrame:CGRectMake(155, 0, 26, 26)];
-    button2.tag = 3;
-    [button2 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button2 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button2];
-
-    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(185, 0, 80, 30)];
-    label2.tag = 4;
-    [label2 setBackgroundColor:[UIColor clearColor]];
-    label2.text = @"私密活动";
-    [label2 setFont:[UIFont systemFontOfSize:16]];
-    [label2 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label2];
-
-    UIButton* button3 = [[UIButton alloc]initWithFrame:CGRectMake(15, 35, 26, 26)];
-    button3.tag = 5;
-    [button3 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button3 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button3];
-
-    UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(45, 35, 80, 30)];
-    label3.tag = 6;
-    [label3 setBackgroundColor:[UIColor clearColor]];
-    label3.text = @"内容公开";
-    [label3 setFont:[UIFont systemFontOfSize:16]];
-    [label3 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label3];
-
-    UIButton* button4 = [[UIButton alloc]initWithFrame:CGRectMake(155, 35, 26, 26)];
-    button4.tag = 7;
-    [button4 setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-    [button4 addTarget:self action:@selector(changeAllowStangerStage:) forControlEvents:UIControlEventTouchUpInside];
-    [_isAllowStrangerView addSubview:button4];
-
-    UILabel *label4 = [[UILabel alloc]initWithFrame:CGRectMake(185, 35, 80, 30)];
-    label4.tag = 8;
-    [label4 setBackgroundColor:[UIColor clearColor]];
-    label4.text = @"内容不公开";
-    [label4 setFont:[UIFont systemFontOfSize:16]];
-    [label4 setTextAlignment:NSTextAlignmentLeft];
-    [_isAllowStrangerView addSubview:label4];
+    self.visibility = [[_eventInfo valueForKey:@"visibility"]integerValue];
 
 }
 
--(void)changeAllowStangerStage:(UIButton*)sender
+- (void)setVisibility:(NSInteger)visibility
 {
-    switch (sender.tag) {
-        case 1:
-            if (_visibility == 0) {
-                _visibility = 2;
-            }
-            break;
-        case 3:
-            _visibility = 0;
-            break;
-        case 5:
-            _visibility = 2;
-            break;
-        case 7:
-            _visibility = 1;
-            break;
-        default:
-            break;
-    }
-    if (_visibility == 0) {
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = YES;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = YES;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = YES;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = YES;
-    }else if(_visibility == 1){
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
-    }else if(_visibility == 2){
-        [(UIButton*)[_isAllowStrangerView viewWithTag:1] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:3] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        [(UIButton*)[_isAllowStrangerView viewWithTag:5] setBackgroundImage:[UIImage imageNamed:@"允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:5]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:6]).hidden = NO;
-        [(UIButton*)[_isAllowStrangerView viewWithTag:7] setBackgroundImage:[UIImage imageNamed:@"不允许陌生人"] forState:UIControlStateNormal];
-        ((UIButton*)[_isAllowStrangerView viewWithTag:7]).hidden = NO;
-        ((UILabel*)[_isAllowStrangerView viewWithTag:8]).hidden = NO;
+    _visibility = visibility;
+    NSArray *arr = @[@"公开（内容公开）", @"公开（内容不公开）",@"私人"];
+    if (visibility >= 0 && visibility < arr.count) {
+        NSString *title = arr[2-visibility];
+        [self.eventType setTitle:title forState:UIControlStateNormal];
     }
 }
 
-- (void)initRightBtn
-{
-    UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
-    [rightButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
-    [rightButton setTitle:@"确定" forState:UIControlStateNormal];
-    [rightButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [rightButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
-    [rightButton addTarget:self action:@selector(confirm) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:rightButton];
-    self.navigationItem.rightBarButtonItem = rightButtonItem;
+- (void)changeEventType:(id)sender {
+    NSArray *arr = @[@"公开活动（内容公开）", @"公开活动（内容不公开）",@"私人"];
+    NSInteger index = 2 - _visibility;
+    self.typeSelectView = [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改活动类型" withOptions:arr];
+    self.typeSelectView.kDelegate = self;
+    self.typeSelectView.tag = 0;
+    [self.typeSelectView selectItemAtIndex:index];
+    [self.typeSelectView show];
 }
 
--(void)confirm
+-(void)changeEventTypeWithVisibility:(NSInteger)visibility
 {
     [SVProgressHUD showWithStatus:@"处理中" maskType:SVProgressHUDMaskTypeClear];
-    NSInteger lvisibility = _visibility;
-    if (lvisibility == [[_eventInfo valueForKey:@"visibility"]integerValue]) {
+    if (visibility == [[_eventInfo valueForKey:@"visibility"]integerValue]) {
         [self.navigationController popViewControllerAnimated:YES];
         [SVProgressHUD dismissWithSuccess:@"修改成功"];
         return;
     }
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[_eventInfo valueForKey:@"event_id"] forKey:@"event_id"];
-    [dictionary setValue:@(lvisibility) forKey:@"visibility"];
+    [dictionary setValue:@(visibility) forKey:@"visibility"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
@@ -207,9 +126,9 @@
                 case NORMAL_REPLY:
                 {
                     [SVProgressHUD dismissWithSuccess:@"修改成功"];
-                    [_eventInfo setValue:@(lvisibility) forKey:@"visibility"];
+                    [_eventInfo setValue:@(visibility) forKey:@"visibility"];
+                    self.visibility = visibility;
                     [[MTDatabaseAffairs sharedInstance]saveEventToDB:_eventInfo];
-                    [self.navigationController popViewControllerAnimated:YES];
                 }
                     break;
                 case EVENT_NOT_EXIST:
@@ -236,5 +155,19 @@
     
 }
 
-
+#pragma mark - SingleSelectionAlertView Delegate
+- (void)SingleSelectionAlertView:(id)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView isKindOfClass:[CustomIOS7AlertView class]]) {
+        if (((CustomIOS7AlertView*)alertView).tag == 0) {
+            if (buttonIndex == 1) {
+                NSInteger type = [self.typeSelectView getSelectedIndex];
+                NSInteger visibility = 2 - type;
+                [self changeEventTypeWithVisibility:visibility];
+            }
+        }
+    } else if ([alertView isKindOfClass:[UIButton class]]) {
+        
+    }
+}
 @end

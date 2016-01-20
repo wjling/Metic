@@ -13,6 +13,8 @@
 
 @interface CloudOperation()
 @property BOOL shouldExit;
+@property BOOL shouldCancel;
+@property (nonatomic, strong) AFHTTPRequestOperation *operation;
 @property (nonatomic,strong) NSNumber* authorId;
 
 @end
@@ -32,6 +34,7 @@
     responseData = [[NSMutableData alloc]init];
     mDelegate = delegate;
     _shouldExit = NO;
+    _shouldCancel = NO;
     return self;
 }
 
@@ -64,8 +67,7 @@
     uploadFilePath = uploadpath;
     _authorId = authorId;
     
-    
-    
+
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[self parseOperationCode:type] forKey:@"method"];
     [dictionary setValue:path forKey:@"object"];
@@ -88,7 +90,9 @@
                         case 1:
                             break;
                         case 2:
-                            [self uploadfile:httpURL path:uploadFilePath];
+                            if (!self.shouldCancel) {
+                                [self uploadfile:httpURL path:uploadFilePath];
+                            }
                             break;
                         case 3:
                             [self deletefile:httpURL];
@@ -140,9 +144,11 @@
         [self.mDelegate finishwithOperationStatus:YES type:2 data:fileData path:mpath];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         MTLOG(@"上传失败");
-        [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
+        if (![operation isCancelled]) {
+            [self.mDelegate finishwithOperationStatus:NO type:2 data:nil path:mpath];
+        }
     }];
-    
+
     [requestOperation setUploadProgressBlock:^(NSUInteger __unused bytesWritten,
                                         long long totalBytesWritten,
                                         long long totalBytesExpectedToWrite) {
@@ -156,6 +162,7 @@
         
     }];
     [requestOperation start];
+    self.operation = requestOperation;
 }
 
 -(void)deletefile:(NSString*)url
@@ -238,5 +245,9 @@
     }
 }
 
+-(void)cancelOperation {
+    self.shouldCancel = YES;
+    [self.operation cancel];
+}
 
 @end

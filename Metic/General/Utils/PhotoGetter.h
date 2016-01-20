@@ -48,5 +48,6 @@
 -(void)uploadBanner:(NSNumber*)eventId;
 -(void)uploadVideoThumb;
 -(void)uploadVideo;
+-(void)cancelUploadViedo;
 @end
 

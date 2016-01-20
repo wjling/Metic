@@ -18,13 +18,14 @@
 #import "SDAVAssetExportSession.h"
 #import "Reachability.h"
 #import "AppDelegate.h"
+#import "BOAlertController.h"
 
 #define mp4Quality AVAssetExportPreset640x480
 
-static const CGSize progressViewSize = { 200.0f, 30.0f };
+static const CGSize progressViewSize = { 180.0f, 30.0f };
 
 
-@interface VideoPreviewViewController ()
+@interface VideoPreviewViewController () <UIAlertViewDelegate>
 @property(nonatomic,strong) UIScrollView* scrollView;
 @property(nonatomic,strong) MTMessageTextView* textView;
 @property(nonatomic,strong) UIView* videoView;
@@ -33,6 +34,8 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 @property(nonatomic,strong) UIImage* preViewImage;
 @property(nonatomic,strong) UIView* waitingView;
 @property(nonatomic,strong) THProgressView *progressView;
+@property(nonatomic,strong) PhotoGetter *uploader;
+@property(nonatomic,strong) UIAlertView *alertView;
 @property BOOL isKeyBoard;
 @property BOOL hasEncode;
 @end
@@ -191,9 +194,9 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     
     [_textView resignFirstResponder];
     [self showWaitingView];
-    PhotoGetter *uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
-    uploader.mDelegate = self;
-    [uploader uploadVideoThumb];
+    self.uploader = [[PhotoGetter alloc]initUploadMethod:self.preViewImage type:1];
+    self.uploader.mDelegate = self;
+    [self.uploader uploadVideoThumb];
 }
 
 - (void)encodeVideo
@@ -314,25 +317,35 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
 {
     if (!_waitingView) {
         CGRect frame = [UIScreen mainScreen].bounds;
-        _waitingView = [[UIView alloc]initWithFrame:frame];
+        _waitingView = [[UIView alloc] initWithFrame:frame];
         [_waitingView setBackgroundColor:[UIColor blackColor]];
         [_waitingView setAlpha:0.7f];
         [self.view addSubview:_waitingView];
         
-        _progressView = [[THProgressView alloc] initWithFrame:
-                         CGRectMake(CGRectGetMidX(_waitingView.frame) - progressViewSize.width / 2.0f,
-                         CGRectGetMidY(_waitingView.frame) - progressViewSize.height / 2.0f,
-                         progressViewSize.width,
-                         progressViewSize.height)];
+        _progressView = [[THProgressView alloc] initWithFrame:CGRectMake(0, 0, progressViewSize.width, progressViewSize.height)];
+        _progressView.center = CGPointMake(_waitingView.center.x - 10, _waitingView.center.y);
         _progressView.borderTintColor = [UIColor whiteColor];
         _progressView.progressTintColor = [UIColor whiteColor];
         [_progressView setProgress:0 animated:NO];
         [_waitingView addSubview:_progressView];
         
+        UIButton *cancelUploadBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        [cancelUploadBtn setTag:130];
+        [cancelUploadBtn setTintColor:[UIColor whiteColor]];
+        [cancelUploadBtn setFrame:CGRectMake(0, 0, 28, 28)];
+        [cancelUploadBtn setImage:[UIImage imageNamed:@"cancelUpload"] forState:UIControlStateNormal];
+        [cancelUploadBtn setTitle:@"" forState:UIControlStateNormal];
+        [cancelUploadBtn setCenter:CGPointMake(CGRectGetMaxX(_progressView.frame) + 20, CGRectGetMidY(_progressView.frame))];
+        [cancelUploadBtn addTarget:self action:@selector(cancelUpload) forControlEvents:UIControlEventTouchUpInside];
+        [cancelUploadBtn setHidden:NO];
+        [_waitingView addSubview:cancelUploadBtn];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(modifyProgress:) name: @"uploadFile" object:nil];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
         [[UIApplication sharedApplication].keyWindow addSubview:_waitingView];
     }
+    UIView *cancelUploadBtn  = [_waitingView viewWithTag:130];
+    [cancelUploadBtn setHidden:NO];
 }
 
 -(void)removeWaitingView
@@ -344,6 +357,17 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
         _waitingView = nil;
     }
     _confirmBtn.enabled = YES;
+}
+
+- (void)cancelUpload {
+    self.alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"确定要停止上传吗" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"停止上传", nil];
+    [self.alertView show];
+}
+
+- (void)cannotCancel {
+    UIView *cancelUploadBtn  = [_waitingView viewWithTag:130];
+    [cancelUploadBtn setHidden:YES];
+    [self.alertView dismissWithClickedButtonIndex:self.alertView.cancelButtonIndex animated:YES];
 }
 
 -(void)modifyProgress:(id)sender
@@ -399,6 +423,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                 switch ([cmd intValue]) {
                     case NORMAL_REPLY:
                     {
+                        [self cannotCancel];
                         //复制tmp.mp4到videocache文件夹
                         NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
                         NSString* mp4path = [docFolder stringByAppendingPathComponent:@"tmp.mp4"];
@@ -421,7 +446,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                             [self removeWaitingView];
-                            int index = self.navigationController.viewControllers.count - 2;
+                            NSUInteger index = self.navigationController.viewControllers.count - 2;
                             VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
                             controller.shouldReload = YES;
                             [self.navigationController popViewControllerAnimated:YES];
@@ -516,7 +541,7 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     if (buttonIndex == 0)
     {
         if ([alertView tag] == 100) {
-            int index = self.navigationController.viewControllers.count - 2;
+            NSUInteger index = self.navigationController.viewControllers.count - 2;
             VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
             controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
@@ -564,5 +589,15 @@ static const CGSize progressViewSize = { 200.0f, 30.0f };
     _isKeyBoard = NO;
 }
 
+#pragma mark - UIAlertView Delegate 
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex != alertView.cancelButtonIndex) {
+        [self.uploader cancelUploadViedo];
+        [_confirmBtn setEnabled:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self removeWaitingView];
+        });
+    }
+}
 
 @end
