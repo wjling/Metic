@@ -404,9 +404,15 @@
         BOOL hadCompleteInfo= [user.hadCompleteInfo boolValue];
         BOOL isPhoneNumber = [CommonUtils isPhoneNumberVaild:self.logInEmail];
         MTAccount *account = [MTAccount singleInstance];
+        if(isPhoneNumber) {
+            account.phoneNumber = self.logInEmail;
+            account.type = MTAccountTypePhoneNumber;
+        } else {
+            account.email = self.logInEmail;
+            account.type = MTAccountTypeEmail;
+        }
         account.email = self.logInEmail;
         account.password = self.logInPassword;
-        account.type = isPhoneNumber? MTAccountTypePhoneNumber : MTAccountTypeEmail;
         account.hadCompleteInfo = hadCompleteInfo;
         account.isActive = YES;
         [account saveAccount];
