@@ -23,15 +23,6 @@
 @synthesize checkContact_button;
 @synthesize changeNumber_button;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -49,6 +40,12 @@
     [super viewWillAppear:animated];
     MTUser *user = [MTUser sharedInstance];
     NSString* phone = user.phone;
+    phone = @"13711730641";
+    if (phone.length == 11) {
+        phone = [NSString stringWithFormat:@"%@*****%@",[phone substringToIndex:3],[phone substringFromIndex:8]];
+    } else {
+        phone = nil;
+    }
     if (phone && ![phone isEqualToString:@""]) {
         hint1_textfield.hidden = NO;
         hint2_label.hidden = NO;

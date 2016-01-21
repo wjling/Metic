@@ -56,6 +56,7 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     [CommonUtils addLeftButton:self isFirstPage:!_needPopBack];
+
     [self initParams];
 }
 
@@ -165,10 +166,10 @@
     [self.banner_UIview addSubview:self.banner_imageView];
     [self.banner_UIview sendSubviewToBack:self.banner_imageView];
     [self.banner_UIview addSubview:self.gender_imageView];
+    
     self.info_tableView.delegate = self;
     self.info_tableView.dataSource = self;
     self.info_tableView.scrollEnabled = YES;
-    
 }
 
 

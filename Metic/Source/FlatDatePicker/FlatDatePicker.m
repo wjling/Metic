@@ -180,9 +180,9 @@
         _months = [self getMonths];
         _days = [self getDaysInMonth:[NSDate date]];
         
-        [self buildSelectorDaysOffsetX:0.0 andWidth:kFlatDatePickerScrollViewDaysWidth];
-        [self buildSelectorMonthsOffsetX:(_scollViewDays.frame.size.width + kFlatDatePickerScrollViewLeftMargin) andWidth:kFlatDatePickerScrollViewMonthWidth];
-        [self buildSelectorYearsOffsetX:(_scollViewMonths.frame.origin.x + _scollViewMonths.frame.size.width + kFlatDatePickerScrollViewLeftMargin) andWidth:(self.frame.size.width - (_scollViewMonths.frame.origin.x + _scollViewMonths.frame.size.width + kFlatDatePickerScrollViewLeftMargin))];
+        [self buildSelectorDaysOffsetX:CGRectGetWidth(self.frame) - kFlatDatePickerScrollViewDaysWidth andWidth:kFlatDatePickerScrollViewDaysWidth];
+        [self buildSelectorMonthsOffsetX:(CGRectGetMinX(_scollViewDays.frame) - kFlatDatePickerScrollViewLeftMargin - kFlatDatePickerScrollViewMonthWidth) andWidth:kFlatDatePickerScrollViewMonthWidth];
+        [self buildSelectorYearsOffsetX:0.0 andWidth:(CGRectGetMinX(_scollViewMonths.frame) - kFlatDatePickerScrollViewLeftMargin)];
     }
     
     // Time Selectors :

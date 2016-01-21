@@ -7,6 +7,7 @@
 //
 
 #import "SecurityCenterViewController.h"
+#import "BindingPhoneViewController.h"
 #import "BOAlertController.h"
 #import "MTUser.h"
 
@@ -82,7 +83,7 @@
                 [alert addButton:cancelItem type:RIButtonItemType_Cancel];
                 
                 RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
-                    [self performSegueWithIdentifier:@"securitycenter_modifyphone" sender:self];
+                    [self performSegueWithIdentifier:@"securitycenter_modifyphon" sender:self];
                 }];
                 [alert addButton:okItem type:RIButtonItemType_Other];
                 [alert show];
@@ -91,7 +92,10 @@
             break;
         case 1:
         {
-            [self performSegueWithIdentifier:@"securitycenter_modifyphone" sender:self];
+            UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+            BindingPhoneViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"BindingPhoneViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
+//            [self performSegueWithIdentifier:@"securitycenter_modifyphon" sender:self];
         }
             break;
             
