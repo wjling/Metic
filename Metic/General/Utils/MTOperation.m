@@ -229,22 +229,22 @@
     
     static CGFloat scale = -1;
     if (scale == -1) {
-        scale = [[UIScreen mainScreen] scale];
+        scale = [[UIScreen mainScreen] scale] * 1;
     }
     
     CGSize scaleSize = CGSizeMake((long)(size.width * scale), (long)(size.height * scale));
     
     NSString *thumbPath = [NSString stringWithFormat:@"%@%ld%ld", path, (long)(scaleSize.width), (long)(scaleSize.height)];
     
-    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:thumbPath]) {
-        if (success) {
-            success(thumbPath);
+    [[SDImageCache sharedImageCache] diskImageExistsWithKey:thumbPath completion:^(BOOL isInCache) {
+        if (isInCache) {
+            if (success) {
+                success(thumbPath);
+            }
+        } else {
+            failure(thumbPath, scaleSize);
         }
-        return;
-    }else {
-        failure(thumbPath, scaleSize);
-    }
-    
+    }];
 }
 
 -(void)getUrlFromServer:(NSString*) path
@@ -257,52 +257,54 @@
         }
         return;
     }
-    if ([[SDImageCache sharedImageCache]diskImageExistsWithKey:path]) {
-        if (success) {
-            success(path);
-        }
-        return;
-    }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-        [dictionary setValue:@"GET" forKey:@"method"];
-        [dictionary setValue:path forKey:@"object"];
-        
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-        HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-        [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
-            if (!rData){
-                if (failure) {
-                    failure(@"网络异常");
-                }
-                return;
+    [[SDImageCache sharedImageCache] diskImageExistsWithKey:path completion:^(BOOL isInCache) {
+        if (isInCache) {
+            if (success) {
+                success(path);
             }
-            if (rData) {
-                NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-                NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                switch ([cmd intValue]) {
-                    case NORMAL_REPLY:
-                    {
-                        NSString* url = (NSString*)[response1 valueForKey:@"url"];
-                        if (url) {
-                            if (success) {
-                                success(url);
-                            }
-                            return;
-                        }
-                    }
-                        break;
-                    default:
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+                [dictionary setValue:@"GET" forKey:@"method"];
+                [dictionary setValue:path forKey:@"object"];
+                
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+                HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+                [httpSender sendMessage:jsonData withOperationCode: GET_FILE_URL finshedBlock:^(NSData *rData) {
+                    if (!rData){
                         if (failure) {
-                            failure(@"服务器异常");
+                            failure(@"网络异常");
                         }
                         return;
-                        break;
-                }
-            }
-        }];
-    });
+                    }
+                    if (rData) {
+                        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+                        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+                        switch ([cmd intValue]) {
+                            case NORMAL_REPLY:
+                            {
+                                NSString* url = (NSString*)[response1 valueForKey:@"url"];
+                                if (url) {
+                                    if (success) {
+                                        success(url);
+                                    }
+                                    return;
+                                }
+                            }
+                                break;
+                            default:
+                                if (failure) {
+                                    failure(@"服务器异常");
+                                }
+                                return;
+                                break;
+                        }
+                    }
+                }];
+            });
+        }
+    }];
 }
 
 -(void)getVideoUrlFromServerWith:(NSString*) videoName

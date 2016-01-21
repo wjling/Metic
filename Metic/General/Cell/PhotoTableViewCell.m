@@ -106,17 +106,6 @@
     self.avatar.layer.masksToBounds = YES;
     [self.avatar.layer setCornerRadius:5];
     self.photo_id = [data valueForKey:@"photo_id"];
-    
-    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"author_id"]];
-    [avatarGetter getAvatar];
-
-    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.imgView imageId:nil imageName:data[@"photo_name"] type:MTImageGetterTypePhoto];
-//    [imageGetter getImage];
-    if (CGSizeEqualToSize(self.imgView.bounds.size, CGSizeZero)) {
-        [imageGetter getImage];
-    }else {
-        [imageGetter getImageFitSize];
-    }
 
     int width = [[data valueForKey:@"width"] intValue];
     int height = [[data valueForKey:@"height"] intValue];
@@ -124,6 +113,17 @@
     
     [self.imgView setFrame:CGRectMake(0, 0, 145, RealHeight)];
     [self.infoView setFrame:CGRectMake(0, RealHeight, 145, 33)];
+    
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"author_id"]];
+    [avatarGetter getAvatar];
+    
+    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.imgView imageId:nil imageName:data[@"photo_name"] type:MTImageGetterTypePhoto];
+    //    [imageGetter getImage];
+    if (CGSizeEqualToSize(self.imgView.bounds.size, CGSizeZero)) {
+        [imageGetter getImage];
+    }else {
+        [imageGetter getImageFitSize];
+    }
 }
 
 @end

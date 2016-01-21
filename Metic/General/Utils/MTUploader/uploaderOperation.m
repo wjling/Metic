@@ -417,7 +417,8 @@
 {
     NSString *imageName = [NSString stringWithFormat:@"%@.png",_imageName];
     NSString *photoPath = [MegUtils photoImagePathWithImageName:imageName];
-    [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] forKey:photoPath];
+//    [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] forKey:photoPath];
+    [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:_imgData] recalculateFromImage:NO imageData:_imgData forKey:photoPath toDisk:YES];
     _imgData = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"photoUploadFinished" object:nil userInfo:self.photoInfo];
     [self stop];

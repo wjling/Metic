@@ -161,8 +161,11 @@
                     }
 
                     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                        UIImage *thumbImage = [image imageByScalingToSize:saveSize];
-                        [[SDImageCache sharedImageCache] storeImage:thumbImage forKey:savePath];
+                        if (image) {
+                            UIImage *thumbImage = [image imageByScalingToSize:saveSize];
+                            NSData *thumbImageData = UIImageJPEGRepresentation(thumbImage, 0.7f);
+                            [[SDImageCache sharedImageCache] storeImage:[UIImage imageWithData:thumbImageData] recalculateFromImage:NO imageData:thumbImageData forKey:savePath toDisk:YES];
+                        }
                     });
                 }];
             } failure:^(NSString *message) {
