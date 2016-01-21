@@ -2,6 +2,42 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<dict>
+		<key>item1</key>
+		<string>weibo</string>
+		<key>item2</key>
+		<string>sinaweibohd</string>
+		<key>item3</key>
+		<string>sinaweibosso</string>
+		<key>item4</key>
+		<string>sinaweibohdsso</string>
+		<key>item5</key>
+		<string>weibosdk</string>
+		<key>item6</key>
+		<string>weibosdk2.5</string>
+		<key>item7</key>
+		<string>wechat</string>
+		<key>item8</key>
+		<string>weixin</string>
+		<key>item9</key>
+		<string>mqqOpensdkSSoLogin</string>
+		<key>item10</key>
+		<string>mqqopensdkapiV2</string>
+		<key>item11</key>
+		<string>mqqopensdkapiV3</string>
+		<key>item12</key>
+		<string>wtloginmqq2</string>
+		<key>item13</key>
+		<string>mqq</string>
+		<key>item14</key>
+		<string>mqqapi</string>
+	</dict>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
