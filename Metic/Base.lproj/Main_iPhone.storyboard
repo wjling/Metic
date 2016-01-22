@@ -2216,65 +2216,12 @@
                                             <constraint firstItem="9cs-5m-AVU" firstAttribute="leading" secondItem="BcV-gY-bfT" secondAttribute="leading" id="bBA-eb-d66"/>
                                         </constraints>
                                     </view>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DFZ-9N-cgi">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="看看手机联系人中哪些人在用活动宝？" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OjC-ys-RzT">
-                                                <rect key="frame" x="20" y="40" width="280" height="21"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="21" id="F20-No-9Pa"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="deviceRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L0c-YS-pKP">
-                                                <rect key="frame" x="20" y="100" width="280" height="40"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="ZuG-U2-S1R"/>
-                                                </constraints>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <state key="normal" title="添加通讯录朋友" backgroundImage="登录按钮">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <state key="selected" backgroundImage="登录按钮按下效果">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                            </button>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="活动宝请求访问你的手机通讯录，帮你找到手机通讯录中已在使用活动宝的朋友。我们不会保存你的手机通讯录内容，仅使用特征码作匹配识别。" translatesAutoresizingMaskIntoConstraints="NO" id="aVF-7Q-F53">
-                                                <rect key="frame" x="20" y="160" width="280" height="60"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="1zh-Ir-8xF"/>
-                                                </constraints>
-                                                <color key="textColor" red="0.57647058819999997" green="0.57647058819999997" blue="0.57647058819999997" alpha="1" colorSpace="deviceRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            </textView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="L0c-YS-pKP" firstAttribute="top" secondItem="OjC-ys-RzT" secondAttribute="bottom" constant="39" id="1w1-KR-vnS"/>
-                                            <constraint firstItem="OjC-ys-RzT" firstAttribute="leading" secondItem="DFZ-9N-cgi" secondAttribute="leading" constant="20" id="5wE-al-GPd"/>
-                                            <constraint firstItem="L0c-YS-pKP" firstAttribute="leading" secondItem="DFZ-9N-cgi" secondAttribute="leading" constant="20" id="66l-Cn-r11"/>
-                                            <constraint firstItem="aVF-7Q-F53" firstAttribute="leading" secondItem="DFZ-9N-cgi" secondAttribute="leading" constant="20" id="7qG-MO-eNy"/>
-                                            <constraint firstItem="aVF-7Q-F53" firstAttribute="top" secondItem="L0c-YS-pKP" secondAttribute="bottom" constant="20" id="Vdr-wQ-bOe"/>
-                                            <constraint firstAttribute="trailing" secondItem="aVF-7Q-F53" secondAttribute="trailing" constant="20" id="ceU-gZ-xEL"/>
-                                            <constraint firstAttribute="trailing" secondItem="L0c-YS-pKP" secondAttribute="trailing" constant="20" id="iE2-Gv-YdP"/>
-                                            <constraint firstItem="OjC-ys-RzT" firstAttribute="top" secondItem="DFZ-9N-cgi" secondAttribute="top" constant="40" id="pXg-86-KiW"/>
-                                            <constraint firstAttribute="trailing" secondItem="OjC-ys-RzT" secondAttribute="trailing" constant="20" id="uMf-2j-Heq"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="BcV-gY-bfT" secondAttribute="bottom" id="8rh-We-w1P"/>
-                                    <constraint firstItem="DFZ-9N-cgi" firstAttribute="leading" secondItem="TGF-4G-iNR" secondAttribute="leading" id="DiF-b6-kjE"/>
-                                    <constraint firstAttribute="bottom" secondItem="DFZ-9N-cgi" secondAttribute="bottom" id="QWZ-4m-C8o"/>
-                                    <constraint firstAttribute="trailing" secondItem="DFZ-9N-cgi" secondAttribute="trailing" id="RrS-fh-e0O"/>
                                     <constraint firstItem="BcV-gY-bfT" firstAttribute="top" secondItem="TGF-4G-iNR" secondAttribute="top" id="W79-m9-PuA"/>
                                     <constraint firstAttribute="trailing" secondItem="BcV-gY-bfT" secondAttribute="trailing" id="c2H-RD-Hox"/>
-                                    <constraint firstItem="DFZ-9N-cgi" firstAttribute="top" secondItem="TGF-4G-iNR" secondAttribute="top" id="mcb-uO-bhV"/>
                                     <constraint firstItem="BcV-gY-bfT" firstAttribute="leading" secondItem="TGF-4G-iNR" secondAttribute="leading" id="ykZ-YE-qPC"/>
                                 </constraints>
                             </view>
@@ -2288,10 +2235,8 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="addContacts_button" destination="L0c-YS-pKP" id="bAT-P4-TDs"/>
                         <outlet property="contacts_tableview" destination="9cs-5m-AVU" id="ezj-n5-KbZ"/>
                         <outlet property="hasUpload_view" destination="BcV-gY-bfT" id="vtN-SF-43c"/>
-                        <outlet property="noUpload_view" destination="DFZ-9N-cgi" id="2rg-0l-NZu"/>
                         <outlet property="tabPage1_view" destination="TGF-4G-iNR" id="Gsj-zL-ljC"/>
                     </connections>
                 </viewController>
@@ -4275,12 +4220,11 @@
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-Ng-NR1">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-Ng-NR1">
                                                 <rect key="frame" x="87" y="8" width="180" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="yZm-UQ-6qk"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="STHeitiSC-Light" family="Heiti SC" pointSize="14"/>
                                                 <state key="normal" title="公开（内容可见）">
                                                     <color key="titleColor" red="0.1690269344" green="0.1690269344" blue="0.1690269344" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
