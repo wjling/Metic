@@ -92,10 +92,7 @@
             break;
         case 1:
         {
-            UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-            BindingPhoneViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"BindingPhoneViewController"];
-            [self.navigationController pushViewController:vc animated:YES];
-//            [self performSegueWithIdentifier:@"securitycenter_modifyphon" sender:self];
+            [self performSegueWithIdentifier:@"securitycenter_modifyphon" sender:self];
         }
             break;
             

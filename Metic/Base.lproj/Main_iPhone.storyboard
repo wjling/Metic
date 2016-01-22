@@ -1189,6 +1189,7 @@
                         <outlet property="changeNumber_button" destination="e2w-KC-xOI" id="dPg-2H-QhR"/>
                         <outlet property="checkContact_button" destination="XQk-dd-cZO" id="8PV-GS-men"/>
                         <outlet property="gou_imageview" destination="yNH-qo-OI6" id="DuF-xJ-gmJ"/>
+                        <outlet property="hint1_label" destination="F7n-Oh-61J" id="vTB-P7-gda"/>
                         <outlet property="hint2_label" destination="Fim-Yg-y5q" id="ScO-lg-MOD"/>
                         <segue destination="SWe-qF-jqe" kind="push" identifier="bindphone_friendrecommend" id="z1d-kw-SOt"/>
                     </connections>

@@ -17,7 +17,7 @@
 
 @implementation BindingPhoneViewController
 @synthesize gou_imageview;
-@synthesize hint1_textfield;
+@synthesize hint1_label;
 @synthesize bindingNumber_label;
 @synthesize hint2_label;
 @synthesize checkContact_button;
@@ -40,20 +40,19 @@
     [super viewWillAppear:animated];
     MTUser *user = [MTUser sharedInstance];
     NSString* phone = user.phone;
-    phone = @"13711730641";
     if (phone.length == 11) {
         phone = [NSString stringWithFormat:@"%@*****%@",[phone substringToIndex:3],[phone substringFromIndex:8]];
     } else {
         phone = nil;
     }
     if (phone && ![phone isEqualToString:@""]) {
-        hint1_textfield.hidden = NO;
+        hint1_label.hidden = NO;
         hint2_label.hidden = NO;
         gou_imageview.hidden = NO;
         bindingNumber_label.text = [NSString stringWithFormat:@"绑定的手机号：%@",phone];
         [changeNumber_button setTitle:@"更换绑定手机" forState:UIControlStateNormal];
     } else {
-        hint1_textfield.hidden = YES;
+        hint1_label.hidden = YES;
         hint2_label.hidden = YES;
         gou_imageview.hidden = YES;
         bindingNumber_label.text = @"当前还未绑定手机号";

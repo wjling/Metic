@@ -362,15 +362,19 @@
 {
     NSMutableArray *menuItems = [[NSMutableArray alloc]init];
     if (_event) {
-        if (_eventId && [_eventId intValue]!=0) {
+        if (_eventId && [_eventId intValue]!=0 && [[_event valueForKey:@"isIn"]boolValue]) {
             [menuItems addObjectsFromArray:@[
                                              
                                              [KxMenuItem menuItem:@"查看二维码"
                                                             image:nil
                                                            target:self
                                                            action:@selector(show2Dcode:)],
+                                             ]];
+        }
+        if (_eventId && [_eventId intValue]!=0) {
+            [menuItems addObjectsFromArray:@[
                                              
-                                             [KxMenuItem menuItem:@"举报活动"
+                                            [KxMenuItem menuItem:@"举报活动"
                                                             image:nil
                                                            target:self
                                                            action:@selector(report:)],

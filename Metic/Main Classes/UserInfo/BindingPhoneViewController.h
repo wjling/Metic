@@ -13,7 +13,7 @@
 
 @interface BindingPhoneViewController : UIViewController<UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UIImageView *gou_imageview;
-@property (strong, nonatomic) IBOutlet UITextView *hint1_textfield;
+@property (strong, nonatomic) IBOutlet UILabel *hint1_label;
 @property (strong, nonatomic) IBOutlet UILabel *bindingNumber_label;
 @property (strong, nonatomic) IBOutlet UILabel *hint2_label;
 @property (strong, nonatomic) IBOutlet UIButton *checkContact_button;
