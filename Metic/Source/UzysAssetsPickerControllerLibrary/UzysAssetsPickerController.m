@@ -825,18 +825,13 @@
 {
     if (index >= _seletedPhotos.count) return;
     NSIndexPath* indexPath = _seletedPhotos[index];
-    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-    if (cell) {
-        if (cell.isSelected) {
-            [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
-            [self collectionView:self.collectionView didDeselectItemAtIndexPath:indexPath];
-        }else{
-            [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-            [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
-        }
+    if ([[self.collectionView indexPathsForSelectedItems] containsObject:indexPath]) {
+        [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
+        [self collectionView:self.collectionView didDeselectItemAtIndexPath:indexPath];
+    } else {
+        [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:indexPath];
     }
-
-
 }
 
 #pragma mark - UIImagerPickerDelegate
