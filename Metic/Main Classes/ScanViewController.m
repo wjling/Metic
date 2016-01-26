@@ -391,6 +391,7 @@
 
 - (void) searchEvent: (NSNumber *)eventid
 {
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:eventid forKey:@"event_id"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -401,6 +402,7 @@
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_EVENT finshedBlock:^(NSData *rData) {
         if (operNum != _operationNum) return ;
         if (rData) {
+            [SVProgressHUD dismiss];
             [self finishWithReceivedData:rData];
         }else{
             [SVProgressHUD dismissWithError:@"网络异常"];
@@ -413,6 +415,7 @@
 
 - (void) searchUser: (NSNumber *)userid
 {
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:userid forKey:@"friendId"];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"myId"];
@@ -423,6 +426,7 @@
     [httpSender sendMessage:jsonData withOperationCode:SEARCH_FRIEND finshedBlock:^(NSData *rData) {
         if (operNum != _operationNum) return ;
         if (rData) {
+            [SVProgressHUD dismiss];
             [self finishWithReceivedData:rData];
         }else{
             [SVProgressHUD dismissWithError:@"网络异常"];

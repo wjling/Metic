@@ -411,7 +411,7 @@
             imagePickerController.videoQuality = UIImagePickerControllerQualityType640x480;
             NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
             imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
-            imagePickerController.videoMaximumDuration = 20;
+            imagePickerController.videoMaximumDuration = 600;
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"shouldIgnoreTurnToNotifiPage"];
             [self presentViewController:imagePickerController animated:YES completion:^{}];
         }];
