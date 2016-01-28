@@ -24,10 +24,16 @@
 #import "SVProgressHUD.H"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
+#import "MTOperation.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
+@property (nonatomic,strong)UIButton * edit_button;
+@property (nonatomic,strong)UIButton * editFinishButton;
 @property (nonatomic,strong)UIButton * delete_button;
+@property (nonatomic,strong)UILabel *specification;
+@property (nonatomic,strong)UIButton *shadow;
+@property (nonatomic,strong)UITextField *specificationEditTextfield;
 @property (strong, nonatomic) IBOutlet UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
@@ -106,12 +112,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)dealloc
-
-{
-    //    [_footer free];
-}
-
 -(void) initButtons
 {
     for (int i = 0; i < self.buttons.count; i++) {
@@ -187,11 +187,6 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    //    //初始化上拉加载更多
-    //    _footer = [[MJRefreshFooterView alloc]init];
-    //    _footer.delegate = self;
-    //    _footer.scrollView = _tableView;
-    
     if (!_photoInfo) [self pullPhotoInfoFromDB];
     [self pullPhotoInfoFromAir];
 }
@@ -294,23 +289,25 @@
         // commit animations
         [UIView commitAnimations];
     }else {
-        _isEmotionOpen = NO;
-        CGRect containerFrame = self.commentView.frame;
-        containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-        // animations settings
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        [UIView setAnimationDuration:0.25];
-        [UIView setAnimationCurve:7];
-        self.commentView.frame = containerFrame;
-        CGRect frame = _emotionKeyboard.frame;
-        frame.origin.y = self.view.frame.size.height;
-        [_emotionKeyboard setFrame:frame];
-        [UIView commitAnimations];
-        //[_emotionKeyboard removeFromSuperview];
+        [self hiddenCommentViewAndEmotionView];
     }
 }
 
+- (void)hiddenCommentViewAndEmotionView {
+    _isEmotionOpen = NO;
+    CGRect containerFrame = self.commentView.frame;
+    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    // animations settings
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:0.25];
+    [UIView setAnimationCurve:7];
+    self.commentView.frame = containerFrame;
+    CGRect frame = _emotionKeyboard.frame;
+    frame.origin.y = self.view.frame.size.height;
+    [_emotionKeyboard setFrame:frame];
+    [UIView commitAnimations];
+}
 
 -(void) setGoodButton
 {
@@ -472,6 +469,95 @@
         [self.download_button setEnabled:NO];
         UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     }
+}
+
+-(void)editSpecification:(UIButton*)button
+{
+    if (!_canManage) return;
+    //进入编辑模式
+    if (!self.specificationEditTextfield) {
+        [self hiddenCommentViewAndEmotionView];
+        self.specification.hidden = YES;
+        if (!self.editFinishButton) {
+            self.editFinishButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.editFinishButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
+            [self.editFinishButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
+            [self.editFinishButton setTitle:@"确定" forState:UIControlStateNormal];
+            [self.editFinishButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+            [self.editFinishButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+            [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
+        }
+        UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
+        self.navigationItem.rightBarButtonItem = rightButtonItem;
+        
+        self.tableView.scrollEnabled = NO;
+        float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
+        [self.tableView setContentOffset:CGPointMake(0, height) animated:YES];
+        if (!self.shadow) {
+            UIButton *shadow = [UIButton buttonWithType:UIButtonTypeCustom];
+            shadow.frame = self.view.bounds;
+            [shadow addTarget:self action:@selector(editSpecification:) forControlEvents:UIControlEventTouchUpInside];
+            shadow.userInteractionEnabled = YES;
+            self.shadow = shadow;
+        }
+        [self.view addSubview:self.shadow];
+        
+        if (!self.specificationEditTextfield) {
+            CGRect textfieldFrame = self.specification.frame;
+            textfieldFrame.size.height = 30;
+            textfieldFrame.origin.y = CGRectGetMinY(self.specification.frame) - height;
+            UITextField* specificationEditTextfield = [[UITextField alloc]initWithFrame:textfieldFrame];
+            specificationEditTextfield.placeholder = @"请输入新的图片描述";
+            [specificationEditTextfield setFont:[UIFont systemFontOfSize:12]];
+            specificationEditTextfield.text = [self.photoInfo valueForKey:@"specification"];
+            [specificationEditTextfield setBackgroundColor:[UIColor whiteColor]];
+            specificationEditTextfield.hidden = YES;
+            specificationEditTextfield.layer.borderColor = [UIColor colorWithWhite:0.9f alpha:1.0f].CGColor;
+            specificationEditTextfield.layer.borderWidth = 1;
+            specificationEditTextfield.layer.cornerRadius = 4;
+            specificationEditTextfield.layer.masksToBounds = YES;
+            specificationEditTextfield.leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+            specificationEditTextfield.leftViewMode = UITextFieldViewModeAlways;
+            specificationEditTextfield.rightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+            specificationEditTextfield.rightViewMode = UITextFieldViewModeAlways;
+            self.specificationEditTextfield = specificationEditTextfield;
+        }
+        [self.shadow addSubview:self.specificationEditTextfield];
+        [self.specificationEditTextfield becomeFirstResponder];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.specificationEditTextfield.hidden = NO;
+        });
+    } else {
+        
+        [self.specificationEditTextfield removeFromSuperview];
+        [self.specificationEditTextfield resignFirstResponder];
+        self.specificationEditTextfield = nil;
+        [self.shadow removeFromSuperview];
+        self.specification.hidden = NO;
+        self.navigationItem.rightBarButtonItem = nil;
+        self.tableView.scrollEnabled = YES;
+        [self.tableView setContentOffset:CGPointZero animated:YES];
+    }
+}
+
+- (void)finishEdit {
+    [self.specificationEditTextfield resignFirstResponder];
+    NSString *newSpecification = self.specificationEditTextfield.text;
+    if (!newSpecification) {
+        [SVProgressHUD showErrorWithStatus:@"请输入图片描述" duration:1.f];
+        return;
+    }
+    [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
+    [[MTOperation sharedInstance] modifyPhotoSpecification:newSpecification withPhotoId:self.photoId success:^{
+        [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
+        self.specification.text = newSpecification;
+        [self.photoInfo setValue:newSpecification forKey:@"specification"];
+        [PictureWall2 updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self editSpecification:nil];
+    } failure:^(NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:1.f];
+    }];
 }
 
 -(void)deletePhoto:(UIButton*)button
@@ -901,21 +987,43 @@
         [cell addSubview:date];
         
         MTLOG(@"%f",self.specificationHeight);
-        UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, height+38, 260, self.specificationHeight+15)];
-        [specification setFont:[UIFont systemFontOfSize:12]];
-        [specification setNumberOfLines:0];
-        specification.text = [self.photoInfo valueForKey:@"specification"];
-        [specification setBackgroundColor:[UIColor clearColor]];
-        [cell addSubview:specification];
+        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
+        if (!self.specification) {
+            UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
+            [specification setFont:[UIFont systemFontOfSize:12]];
+            [specification setNumberOfLines:0];
+            specification.text = [self.photoInfo valueForKey:@"specification"];
+            [specification setBackgroundColor:[UIColor clearColor]];
+            self.specification = specification;
+        }
+        [self.specification setFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
+        [cell addSubview:self.specification];
+        
+        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+            if (!self.edit_button) {
+                self.edit_button = [UIButton buttonWithType:UIButtonTypeCustom];
+                [self.edit_button setImage:[UIImage imageNamed:@"图片视频描述修改"] forState:UIControlStateNormal];
+                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 16, 11, 6)];
+                [self.edit_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
+                [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
+                [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
+                [self.edit_button addTarget:self action:@selector(editSpecification:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            [self.edit_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 40 - 5, height + 3 + 2, 40, 40)];
+            [cell addSubview:self.edit_button];
+        }
         
         if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
-            self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.delete_button setFrame:CGRectMake(275, height+53+self.specificationHeight, 35, 20)];
-            [self.delete_button setTitle:@" 删除" forState:UIControlStateNormal];
-            [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
-            [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-            [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+            if (!self.delete_button) {
+                self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
+                [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
+                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 5, 10, 15)];
+                [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
+                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
+                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
+                [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            [self.delete_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 5, height + 3 + 2, 40, 40)];
             [cell addSubview:self.delete_button];
         }
         
@@ -1051,14 +1159,18 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        self.specificationHeight = _photoInfo? [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:260.0 fontSize:12.0 isEmotion:YES]:0;
+        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
+        self.specificationHeight = _photoInfo? [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:specificationWidth fontSize:12.0 isEmotion:NO]:0;
+        if (self.specificationHeight < 18) {
+            self.specificationHeight = 18;
+        }
         MTLOG(@"%f",self.specificationHeight);
         height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         height += 3;
         height += 50;
-        height += 30;//delete button
         height += self.specificationHeight;
-        
+        height += 5;//margin
+
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
             return 45;
@@ -1160,6 +1272,9 @@
     if (self.isEmotionOpen) {
         [self button_Emotionpress:nil];
     }
+    if (self.specificationEditTextfield) {
+        return;
+    }
     // get keyboard size and loctaion
     CGRect keyboardBounds;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
@@ -1188,6 +1303,9 @@
 
 -(void) keyboardWillHide:(NSNotification *)note{
     self.isKeyBoard = NO;
+    if (self.specificationEditTextfield) {
+        return;
+    }
     //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];

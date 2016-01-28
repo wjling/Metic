@@ -266,6 +266,12 @@ static NSOperationQueue *requestQueue;
         case 65:
             resultCode = @"check_phone_avail";
             break;
+        case 66:
+            resultCode = @"change_photo_title";
+            break;
+        case 67:
+            resultCode = @"change_video_title";
+            break;
         default:
             resultCode = @"json";
             break;
