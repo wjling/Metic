@@ -81,7 +81,7 @@
         NSNumber *userid = user.userId;
         [[MTUser sharedInstance] setUid:userid];
         
-        [[MenuViewController sharedInstance] dianReset];
+        [MenuViewController dianReset];
         [[MenuViewController sharedInstance] refresh];
         [[appDelegate leftMenu] clearVC];
         

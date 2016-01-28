@@ -46,6 +46,11 @@
 
 static MenuViewController *singletonInstance;
 
+-(instancetype)init {
+    self = [super init];
+    return self;
+}
+
 + (MenuViewController *)sharedInstance
 {
     return singletonInstance;
@@ -54,6 +59,10 @@ static MenuViewController *singletonInstance;
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
+    for (NSInteger i = 0; i < numberOfMenus; i++) {
+        notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
+    }
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleUIApplicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
     self.view.backgroundColor = [UIColor blackColor];
     if (![[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
@@ -86,25 +95,23 @@ static MenuViewController *singletonInstance;
     [[NSNotificationCenter defaultCenter]removeObserver:self name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
--(void)dianReset
++ (void)dianReset
 {
-    notificationSigns_arr = [[NSMutableArray alloc]initWithCapacity:numberOfMenus];
-    for (NSInteger i = 0; i < numberOfMenus; i++) {
-        notificationSigns_arr[i] = [NSNumber numberWithBool:NO];
-    }
-    
+    MenuViewController *menu = [MenuViewController sharedInstance];
     NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
     NSDictionary* userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     NSDictionary* unRead_dic = [userSettings objectForKey:@"hasUnreadNotification1"];
+    NSInteger tab_0 = [[unRead_dic objectForKey:@"tab_0"] integerValue];
+    NSInteger tab_1 = [[unRead_dic objectForKey:@"tab_1"] integerValue];
+    NSInteger tab_2 = [[unRead_dic objectForKey:@"tab_2"] integerValue];
     NSInteger tab_show = [[unRead_dic objectForKey:@"tab_show"] integerValue];
+
     MTLOG(@"user %@ menu dianReset, tab_show： %ld", [MTUser sharedInstance].userid,(long)tab_show);
-    if (tab_show >= 0) {
-        [self showUpdateInRow:4];
+    if (tab_0 + tab_1 + tab_2 > 0) {
+        [menu showUpdateInRow:4];
         [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
-    }
-    else
-    {
-        [self hideUpdateInRow:4];
+    } else {
+        [menu hideUpdateInRow:4];
         [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
     }
 }
@@ -114,14 +121,7 @@ static MenuViewController *singletonInstance;
 {
     [super viewWillAppear:animated];
     MTLOG(@"menuviewcontroller will appear");
-    NSString *key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
-    NSMutableDictionary* userSettings = [[NSUserDefaults standardUserDefaults]objectForKey:key];
-    NSNumber* flag = [[userSettings valueForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"];
-    MTLOG(@"侧边栏，viewWillAppear, hasUnreadNotification1: %@", flag);
-    if (flag && [flag integerValue]>= 0) {
-        [self showUpdateInRow:4];
-        [[SlideNavigationController sharedInstance]showLeftBarButtonDian];
-    }
+    [MenuViewController dianReset];
 }
 
 -(void)viewDidAppear:(BOOL)animated

@@ -278,11 +278,16 @@ static SlideNavigationController *singletonInstance;
         dian.image = [UIImage imageNamed:@"选择点图标"];
         dian.tag = 111;
         
-        NSString* key = [NSString stringWithFormat:@"USER%@", [MTUser sharedInstance].userid];
-        NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-        NSMutableDictionary* userSettings = [NSMutableDictionary dictionaryWithDictionary:[userDf objectForKey:key]];
-        int flag = [[[userSettings objectForKey:@"hasUnreadNotification1"] objectForKey:@"tab_show"] integerValue];
-        if (flag < 0) {
+        NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
+        NSDictionary* userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        NSDictionary* unRead_dic = [userSettings objectForKey:@"hasUnreadNotification1"];
+        NSInteger tab_0 = [[unRead_dic objectForKey:@"tab_0"] integerValue];
+        NSInteger tab_1 = [[unRead_dic objectForKey:@"tab_1"] integerValue];
+        NSInteger tab_2 = [[unRead_dic objectForKey:@"tab_2"] integerValue];
+        
+        if (tab_0 + tab_1 + tab_2 > 0) {
+            dian.hidden = NO;
+        } else {
             dian.hidden = YES;
         }
     }

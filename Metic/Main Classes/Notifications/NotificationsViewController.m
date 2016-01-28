@@ -195,9 +195,7 @@ enum Response_Type
     [userDfs setObject:userSettings forKey:key];
     [userDfs synchronize];
     
-    [self.appListener.leftMenu hideUpdateInRow:4];
-    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
-    
+    [MenuViewController dianReset];
 }
 
 -(void)handleNewMessage:(id)sender
@@ -332,8 +330,7 @@ enum Response_Type
     [userDfs synchronize];
 
     MTLOG(@"消息中心收到推送，隐藏消息中心红点");
-    [[MenuViewController sharedInstance] hideUpdateInRow:4];
-    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
+    [MenuViewController dianReset];
 }
 
 #pragma mark - Navigation
@@ -1025,8 +1022,7 @@ enum Response_Type
     [userDfs setObject:userSettings forKey:key];
     [userDfs synchronize];
     
-    [[MenuViewController sharedInstance] hideUpdateInRow:4];
-    [[SlideNavigationController sharedInstance] hideLeftBarButtonDian];
+    [MenuViewController dianReset];
 }
 
 

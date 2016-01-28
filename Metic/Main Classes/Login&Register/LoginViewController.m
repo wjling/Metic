@@ -372,7 +372,7 @@
         NSNumber *userid = user.userId;
         [[MTUser sharedInstance] setUid:userid];
         
-        [[MenuViewController sharedInstance] dianReset];
+        [MenuViewController dianReset];
         [[MenuViewController sharedInstance] refresh];
         [[appDelegate leftMenu] clearVC];
 
@@ -422,7 +422,7 @@
         NSNumber *userid = user.userId;
         [[MTUser sharedInstance] setUid:userid];
         
-        [[MenuViewController sharedInstance] dianReset];
+        [MenuViewController dianReset];
         [[MenuViewController sharedInstance] refresh];
         [[appDelegate leftMenu] clearVC];
         
@@ -450,6 +450,9 @@
     [MTAccountManager loginWithAccount:account password:password success:^(MTLoginResponse *user) {
     //同步推送消息
         MTLOG(@"开始同步消息");
+        [MenuViewController dianReset];
+        [[MenuViewController sharedInstance] refresh];
+        [[appDelegate leftMenu] clearVC];
         void(^synchronizeDone)(NSNumber*, NSNumber*) = ^(NSNumber* min_seq, NSNumber* max_seq)
         {
             if (!min_seq || !max_seq) {
@@ -471,7 +474,7 @@
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
         //保存账户信息
-        [[MenuViewController sharedInstance] dianReset];
+        [MenuViewController dianReset];
         [[MenuViewController sharedInstance] refresh];
         [[appDelegate leftMenu] clearVC];
         
