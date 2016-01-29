@@ -27,13 +27,23 @@ typedef void(^modifySpecificationFinishBlock)(BOOL isSuccess,NSString* likeTime)
 -(void)likeEventOperation:(NSArray*)eventIds like:(BOOL)islike finishBlock:(likeEventFinishBlock)finishBlock;
 
 //修改图片描述操作
--(void)modifyPhotoSpecification:(NSString *)specification withPhotoId:(NSNumber *)photoId
+-(void)modifyPhotoSpecification:(NSString *)specification
+                    withPhotoId:(NSNumber *)photoId
+                        eventId:(NSNumber *)eventId
                         success:(void (^)())success
                         failure:(void (^)(NSString *message))failure;
 
 //修改视频描述操作
--(void)modifyVideoSpecification:(NSString *)specification withVideoId:(NSNumber *)videoId
+-(void)modifyVideoSpecification:(NSString *)specification
+                    withVideoId:(NSNumber *)videoId
+                        eventId:(NSNumber *)eventId
                         success:(void (^)())success
+                        failure:(void (^)(NSString *message))failure;
+
+//获取视频分享链接
+-(void)getVideoShareLinkEventId:(NSNumber *)eventId
+                        videoId:(NSNumber *)videoId
+                        success:(void (^)(NSString *shareLink))success
                         failure:(void (^)(NSString *message))failure;
 
 -(void)checkPhotoFromServer:(NSString*) path

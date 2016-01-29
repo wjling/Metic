@@ -272,6 +272,9 @@ static NSOperationQueue *requestQueue;
         case 67:
             resultCode = @"change_video_title";
             break;
+        case 68:
+            resultCode = @"get_video_share";
+            break;
         default:
             resultCode = @"json";
             break;

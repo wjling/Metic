@@ -30,8 +30,8 @@ typedef NS_ENUM(NSUInteger, MTHttpMethod) {
 };
 
 enum Server_code{
-//    Server = 0,//测试服
-    Server = 1,//正式服
+    Server = 0,//测试服
+//    Server = 1,//正式服
 };
 
 enum Enterprise_code{
@@ -116,6 +116,7 @@ enum Operation_Code
     CHECK_PHONE_AVAIL = 65,
     CHANGE_PHOTO_TITLE = 66,
     CHANGE_VIDEO_TITLE = 67,
+    GET_VIDEO_SHARE = 68,
 };
 
 enum CloudOperation_Code

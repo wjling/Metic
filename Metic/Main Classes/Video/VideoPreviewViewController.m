@@ -24,7 +24,6 @@
 
 static const CGSize progressViewSize = { 180.0f, 30.0f };
 
-
 @interface VideoPreviewViewController () <UIAlertViewDelegate>
 @property(nonatomic,strong) UIScrollView* scrollView;
 @property(nonatomic,strong) MTMessageTextView* textView;
@@ -202,7 +201,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
 - (void)encodeVideo
 {
     [_textView resignFirstResponder];
-    [SVProgressHUD showWithStatus:@"视频处理中,请稍候"];
+    [SVProgressHUD showWithStatus:@"视频处理中,请稍候" maskType:SVProgressHUDMaskTypeBlack];
 
     // output file
     NSString* docFolder = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
@@ -288,7 +287,6 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
              });
          }
      }];
-  
 }
 
 -(void)play:(id)sender

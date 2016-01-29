@@ -548,7 +548,7 @@
         return;
     }
     [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
-    [[MTOperation sharedInstance] modifyPhotoSpecification:newSpecification withPhotoId:self.photoId success:^{
+    [[MTOperation sharedInstance] modifyPhotoSpecification:newSpecification withPhotoId:self.photoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
         self.specification.text = newSpecification;
         [self.photoInfo setValue:newSpecification forKey:@"specification"];
@@ -999,11 +999,11 @@
         [self.specification setFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
         [cell addSubview:self.specification];
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             if (!self.edit_button) {
                 self.edit_button = [UIButton buttonWithType:UIButtonTypeCustom];
                 [self.edit_button setImage:[UIImage imageNamed:@"图片视频描述修改"] forState:UIControlStateNormal];
-                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 16, 11, 6)];
+                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 13, 11, 9)];
                 [self.edit_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
                 [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
                 [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
@@ -1017,7 +1017,7 @@
             if (!self.delete_button) {
                 self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
                 [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
-                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 5, 10, 15)];
+                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
                 [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
                 [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
                 [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
@@ -1037,8 +1037,6 @@
         [avatarBtn setBackgroundColor:[UIColor clearColor]];
         [avatarBtn addTarget:self action:@selector(pushToFriendView:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:avatarBtn];
-        
-        
         
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];

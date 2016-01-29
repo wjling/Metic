@@ -217,10 +217,12 @@
 
 #pragma 修改图片描述操作
 -(void)modifyPhotoSpecification:(NSString *)specification withPhotoId:(NSNumber *)photoId
+                        eventId:(NSNumber *)eventId
                         success:(void (^)())success
                         failure:(void (^)(NSString *message))failure {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:eventId forKey:@"event_id"];
     [dictionary setValue:photoId forKey:@"photo_id"];
     [dictionary setValue:specification forKey:@"title"];
     
@@ -256,11 +258,13 @@
 
 #pragma 修改视频描述操作
 -(void)modifyVideoSpecification:(NSString *)specification withVideoId:(NSNumber *)videoId
+                        eventId:(NSNumber *)eventId
                         success:(void (^)())success
                         failure:(void (^)(NSString *message))failure {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"author_id"];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:videoId forKey:@"video_id"];
+    [dictionary setValue:eventId forKey:@"event_id"];
     [dictionary setValue:specification forKey:@"title"];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -275,6 +279,52 @@
                 case NORMAL_REPLY:{
                     if (success) {
                         success();
+                    }
+                }
+                    break;
+                default:{
+                    if (failure) {
+                        failure(@"服务器异常");
+                    }
+                }
+                    break;
+            }
+        }else{
+            if (failure) {
+                failure(@"网络异常");
+            }
+        }
+    }];
+}
+
+//获取视频分享链接
+-(void)getVideoShareLinkEventId:(NSNumber *)eventId
+                        videoId:(NSNumber *)videoId
+                        success:(void (^)(NSString *shareLink))success
+                        failure:(void (^)(NSString *message))failure {
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:videoId forKey:@"video_id"];
+    [dictionary setValue:eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_VIDEO_SHARE finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    NSString *url = [response1 valueForKey:@"url"];
+                    if (url && success) {
+                        success(url);
+                    }else {
+                        if (failure) {
+                            failure(@"服务器异常");
+                        }
                     }
                 }
                     break;

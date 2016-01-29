@@ -27,24 +27,26 @@
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
+#import "LCAlertView.h"
 
 #define chooseArray @[@[@"举报视频"]]
-@interface VideoDetailViewController ()
+@interface VideoDetailViewController ()<UMSocialUIDelegate>
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
 @property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
 @property BOOL isVideoReady;
 @property (nonatomic,strong)NSNumber* sequence;
-@property (nonatomic,strong)UIButton * edit_button;
-@property (nonatomic,strong)UIButton * editFinishButton;
-@property (nonatomic,strong)UIButton * delete_button;
+@property (nonatomic,strong)UIButton *edit_button;
+@property (nonatomic,strong)UIButton *editFinishButton;
+@property (nonatomic,strong)UIButton *shareButton;
+@property (nonatomic,strong)UIButton *delete_button;
 @property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
+@property (nonatomic,strong)NSString *videoShareLink;
 @property float specificationHeight;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
-@property (nonatomic,strong) UIView* moreView;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
 @property (strong, nonatomic) UIButton *video_button;
 @property (strong, nonatomic) UIImageView *videoPlayImg;
@@ -97,7 +99,6 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self closeMoreview];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
         [self keyboardWillHide:nil];
@@ -168,6 +169,9 @@
     [self.view addSubview:_emotionKeyboard];
     _emotionKeyboard.textView = _inputTextView;
     [_emotionKeyboard initCollectionView];
+    
+    //右上角按钮
+    [self tabbarButtonShare];
     
 }
 
@@ -397,51 +401,7 @@
     }
 }
 
-- (IBAction)more:(id)sender {
-    if (_isKeyBoard) {
-        [_inputTextView resignFirstResponder];
-    }
-    if (_isEmotionOpen) {
-        [self button_Emotionpress:nil];
-    }
-    if (_moreView) {
-        //删除
-        [_moreView removeFromSuperview];
-        _moreView = nil;
-    }else{
-        //创建
-        _moreView = [[UIView alloc]initWithFrame:self.view.bounds];
-        [_moreView setBackgroundColor:[UIColor clearColor]];
-        UITapGestureRecognizer*tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeMoreview)];
-        [self.view addSubview:_moreView];
-        [self.moreView addGestureRecognizer:tap];
-        
-        CGRect frame = _moreView.frame;
-        UIButton* moreItem = [UIButton buttonWithType:UIButtonTypeCustom];
-        moreItem.frame = CGRectMake(CGRectGetWidth(frame)*0.6,5, CGRectGetWidth(frame)*0.35 , 45);
-        
-        [moreItem setBackgroundColor:[UIColor whiteColor]];
-        
-        [moreItem.titleLabel setFont:[UIFont systemFontOfSize:16]];
-        [moreItem setTitle:@"举报视频" forState:UIControlStateNormal];
-        [moreItem addTarget:self action:@selector(report:) forControlEvents:UIControlEventTouchUpInside];
-        [moreItem setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [moreItem setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5] forState:UIControlStateHighlighted];
-        moreItem.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-        moreItem.layer.shadowRadius = 5;
-        moreItem.layer.shadowPath = [UIBezierPath bezierPathWithRect:moreItem.bounds].CGPath;
-        moreItem.layer.shadowOpacity = 1;
-        
-        [_moreView addSubview:moreItem];
-    }
-}
-
-- (void)closeMoreview {
-    if (_moreView) {
-        [self more:nil];
-    }
-}
-
+#pragma 跳转到举报页面
 - (void)report:(id)sender {
     
     [self performSegueWithIdentifier:@"VideoToReport" sender:self];
@@ -571,18 +531,8 @@
     if (!self.specificationEditTextfield) {
         [self hiddenCommentViewAndEmotionView];
         self.specification.hidden = YES;
-        if (!self.editFinishButton) {
-            self.editFinishButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.editFinishButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
-            [self.editFinishButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
-            [self.editFinishButton setTitle:@"确定" forState:UIControlStateNormal];
-            [self.editFinishButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
-            [self.editFinishButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
-            [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
-        }
-        UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
-        self.navigationItem.rightBarButtonItem = rightButtonItem;
         
+        [self tabbarButtonEdit];
         self.tableView.scrollEnabled = NO;
         float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
         [self.tableView setContentOffset:CGPointMake(0, height) animated:YES];
@@ -600,7 +550,7 @@
             textfieldFrame.size.height = 30;
             textfieldFrame.origin.y = CGRectGetMinY(self.specification.frame) - height;
             UITextField* specificationEditTextfield = [[UITextField alloc]initWithFrame:textfieldFrame];
-            specificationEditTextfield.placeholder = @"请输入新的图片描述";
+            specificationEditTextfield.placeholder = @"请输入新的视频描述";
             [specificationEditTextfield setFont:[UIFont systemFontOfSize:12]];
             specificationEditTextfield.text = [self.videoInfo valueForKey:@"title"];
             [specificationEditTextfield setBackgroundColor:[UIColor whiteColor]];
@@ -627,7 +577,7 @@
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
         self.specification.hidden = NO;
-        self.navigationItem.rightBarButtonItem = nil;
+        [self tabbarButtonShare];
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
     }
@@ -641,7 +591,7 @@
         return;
     }
     [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
-    [[MTOperation sharedInstance] modifyVideoSpecification:newSpecification withVideoId:self.videoId success:^{
+    [[MTOperation sharedInstance] modifyVideoSpecification:newSpecification withVideoId:self.videoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
         self.specification.text = newSpecification;
         [self.videoInfo setValue:newSpecification forKey:@"title"];
@@ -652,6 +602,73 @@
     }];
 }
 
+- (void)tabbarButtonEdit {
+    if (!self.editFinishButton) {
+        self.editFinishButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.editFinishButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
+        [self.editFinishButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
+        [self.editFinishButton setTitle:@"确定" forState:UIControlStateNormal];
+        [self.editFinishButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [self.editFinishButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+        [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
+    }
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
+    self.navigationItem.rightBarButtonItem = rightButtonItem;
+}
+
+- (void)tabbarButtonShare {
+    if (!self.shareButton) {
+        self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.shareButton setFrame:CGRectMake(0, 0, 40, 40)];
+        [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(7, 7, 7, 7)];
+        [self.shareButton setImage:[UIImage imageNamed:@"video_share_btn"] forState:UIControlStateNormal];
+        [self.shareButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
+        [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
+    }
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.shareButton];
+    self.navigationItem.rightBarButtonItem = rightButtonItem;
+}
+
+- (void)shareVideo {
+    void (^share)(NSString *shareLink) = ^(NSString *shareLink){
+        NSString *author = self.videoInfo[@"author"];
+        if (!author || ![author isKindOfClass:[NSString class]]) {
+            author = @"";
+        } else {
+            author =  [NSString stringWithFormat:@"【%@】", author];
+        }
+        NSString *shareText = [NSString stringWithFormat:@"用户%@给你分享一个趣味视频，点击打开观看", author];
+        
+        [UMSocialData defaultData].extConfig.wechatSessionData.url = shareLink;
+        [UMSocialData defaultData].extConfig.wechatTimelineData.url = shareLink;
+        [UMSocialData defaultData].extConfig.qqData.url = shareLink;
+        [UMSocialData defaultData].extConfig.sinaData.urlResource.url = shareLink;
+        
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+        [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:shareText
+                                         shareImage:self.video_thumb?self.video_thumb:[UIImage imageNamed:@"AppIcon57x57"]
+                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSms]
+                                           delegate:self];
+        [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝视频分享】";
+    };
+    
+    if ([self.videoShareLink isKindOfClass:[NSString class]] && ![self.videoShareLink isEqualToString:@""]) {
+        share(self.videoShareLink);
+    } else {
+        [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
+        [[MTOperation sharedInstance] getVideoShareLinkEventId:self.eventId videoId:self.videoId success:^(NSString *shareLink) {
+            self.videoShareLink = shareLink;
+            [SVProgressHUD dismiss];
+            share(shareLink);
+        } failure:^(NSString *message) {
+            [SVProgressHUD dismissWithError:message afterDelay:1.5f];
+        }];
+    }
+}
+
 -(void)deleteVideo:(UIButton*)button
 {
     if(!_canManage)return;
@@ -660,6 +677,25 @@
     [alert show];
 }
 
+#pragma 长按菜单
+-(void)showOption:(UIGestureRecognizer*)sender
+{
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    NSNumber* authorId = [self.videoInfo valueForKey:@"author_id"];
+    if ([authorId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+
+    }else{
+        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
+        alert.alertAction = ^(NSInteger buttonIndex){
+            if (buttonIndex == 1) {
+                [self report:nil];
+            }
+        };
+        [alert show];
+    }
+}
+
+#pragma mark - 发评论
 -(void)resendComment:(id)sender
 {
     if (!_videoInfo) return;
@@ -1016,6 +1052,10 @@
             
         }
         
+        //长按手势
+        UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
+        [video addGestureRecognizer:longRecognizer];
+        
         MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:video.imageView imageId:nil imageName:_videoInfo[@"video_name"] type:MTImageGetterTypeVideoThumb];
         [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
@@ -1068,11 +1108,11 @@
         self.specification.frame = CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15);
         [cell addSubview:self.specification];
         
-        if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
             if (!self.edit_button) {
                 self.edit_button = [UIButton buttonWithType:UIButtonTypeCustom];
                 [self.edit_button setImage:[UIImage imageNamed:@"图片视频描述修改"] forState:UIControlStateNormal];
-                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 16, 11, 6)];
+                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 13, 11, 9)];
                 [self.edit_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
                 [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
                 [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
@@ -1086,7 +1126,7 @@
             if (!self.delete_button) {
                 self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
                 [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
-                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 5, 10, 15)];
+                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
                 [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
                 [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
                 [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
@@ -1407,9 +1447,7 @@
     }
 }
 
-
 #pragma mark - UIAlertViewDelegate
-
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     switch (alertView.tag) {
@@ -1458,7 +1496,6 @@
                             {
                                 [SVProgressHUD dismissWithError:@"服务器异常" afterDelay:1];
                             }
-                                
                         }
                         
                     }else{
@@ -1555,6 +1592,17 @@
             nextViewController.event = self.eventName;
             nextViewController.type = 5;
         }
+    }
+}
+
+#pragma mark - UMSocialUIDelegate 友盟推荐回调
+//实现回调方法（可选）：
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        [SVProgressHUD showSuccessWithStatus:@"分享成功" duration:2.f];
     }
 }
 
