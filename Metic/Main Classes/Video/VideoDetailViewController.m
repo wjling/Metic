@@ -191,13 +191,39 @@
     [self pullVideoInfoFromAir];
 }
 
-- (void)deleteLocalData
-{
-    if (_videoId) {
-        [self deleteVideoInfoFromDB];
+#pragma mark - Navigation
+- (void)pushToFriendView:(id)sender {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
+        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
+        userInfoView.needPopBack = YES;
+        [self.navigationController pushViewController:userInfoView animated:YES];
+        
+    }else{
+        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+        friendView.fid = [self.videoInfo valueForKey:@"author_id"];
+        [self.navigationController pushViewController:friendView animated:YES];
     }
 }
 
+- (void)report:(id)sender {
+    
+    [self performSegueWithIdentifier:@"VideoToReport" sender:self];
+}
+
+-(void)back
+{
+    NSInteger index = self.navigationController.viewControllers.count - 2;
+    NSArray * controllers = self.navigationController.viewControllers;
+    if (controllers.count > index+1 && [controllers[index] isKindOfClass:[VideoWallViewController class]]) {
+        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
+        controller.shouldReload = YES;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - videoInfo
 -(BOOL)pullVideoInfoFromDB
 {
     BOOL ret = NO;
@@ -227,8 +253,6 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:GET_OBJECT_INFO finshedBlock:^(NSData *rData) {
         if(rData){
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            MTLOG(@"received Data: %@",temp);
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
             switch ([cmd intValue]) {
@@ -252,6 +276,33 @@
         }
     }];
 }
+
+- (void)updateVideoInfo {
+    if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
+        [_controller.tableView reloadRowsAtIndexPaths:@[self.index] withRowAnimation:UITableViewRowAnimationNone];
+    }
+    [VideoWallViewController updateVideoInfoToDB:@[self.videoInfo] eventId:_eventId];
+}
+
+-(void)closeRJ
+{
+    [self.tableView reloadData];
+}
+
+- (void)deleteVideoInfoFromDB
+{
+    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_videoId],@"video_id", nil];
+    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
+}
+
+- (void)deleteLocalData
+{
+    if (_videoId) {
+        [self deleteVideoInfoFromDB];
+    }
+}
+
+#pragma mark - video play
 
 - (void)play:(id)sender {
     if (_isKeyBoard) {
@@ -401,31 +452,11 @@
     }
 }
 
-#pragma 跳转到举报页面
-- (void)report:(id)sender {
-    
-    [self performSegueWithIdentifier:@"VideoToReport" sender:self];
-}
-
--(void)back
-{
-    NSInteger index = self.navigationController.viewControllers.count - 2;
-    NSArray * controllers = self.navigationController.viewControllers;
-    if (controllers.count > index+1 && [controllers[index] isKindOfClass:[VideoWallViewController class]]) {
-        VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
-        controller.shouldReload = YES;
-    }
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
+#pragma mark - Function
 - (IBAction)button_Emotionpress:(id)sender {
     if(!_canManage)return;
     if (!_emotionKeyboard) {
         _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
-        
-        
-        
     }
     if (!_isEmotionOpen) {
         _isEmotionOpen = YES;
@@ -469,59 +500,6 @@
     frame.origin.y = self.view.frame.size.height;
     [_emotionKeyboard setFrame:frame];
     [UIView commitAnimations];
-}
-
-
-- (void)pullMainCommentFromAir
-{
-    _isLoading = YES;
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    long sequence = [self.sequence longValue];
-    [dictionary setValue:self.sequence forKey:@"sequence"];
-    [dictionary setValue:self.videoId forKey:@"video_id"];
-    MTLOG(@"%@",dictionary);
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:GET_VCOMMENTS finshedBlock:^(NSData *rData) {
-        if(rData){
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            MTLOG(@"received Data: %@",temp);
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            switch ([cmd intValue]) {
-                case NORMAL_REPLY:
-                {
-                    if ([response1 valueForKey:@"vcomment_list"]) {
-                        NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"vcomment_list"]];
-                        if ([_sequence longValue] == sequence) {
-                            if (sequence == 0) [self.vcomment_list removeAllObjects];
-                            [self.vcomment_list addObjectsFromArray:newComments] ;
-                            if (newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
-                            else self.sequence = [response1 valueForKey:@"sequence"];
-                        }
-                        _isLoading = NO;
-                        [self.tableView reloadData];
-                    }
-                }
-                    break;
-                case VIDEO_NOT_EXIST:{
-                    if (_shouldExit == NO) {
-                        _shouldExit = YES;
-                        [self deleteLocalData];
-                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                        [alert setTag:1];
-                    }
-                }
-                    break;
-                default:
-                {
-                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-                }
-            }
-        }
-        _isLoading = NO;
-    }];
 }
 
 -(void)editSpecification:(UIButton*)button
@@ -619,13 +597,15 @@
 - (void)tabbarButtonShare {
     if (!self.shareButton) {
         self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.shareButton setFrame:CGRectMake(0, 0, 40, 40)];
-        [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(7, 7, 7, 7)];
+        [self.shareButton setFrame:CGRectMake(20, 0, 70, 40)];
+        [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(7, 14, 7, 0)];
         [self.shareButton setImage:[UIImage imageNamed:@"video_share_btn"] forState:UIControlStateNormal];
         [self.shareButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
         [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
     }
-    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.shareButton];
+    UIView *container = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 70, 40)];
+    [container addSubview:self.shareButton];
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:container];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
 }
 
@@ -695,7 +675,59 @@
     }
 }
 
-#pragma mark - 发评论
+#pragma mark - 评论
+- (void)pullMainCommentFromAir
+{
+    _isLoading = YES;
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    long sequence = [self.sequence longValue];
+    [dictionary setValue:self.sequence forKey:@"sequence"];
+    [dictionary setValue:self.videoId forKey:@"video_id"];
+    MTLOG(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_VCOMMENTS finshedBlock:^(NSData *rData) {
+        if(rData){
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:
+                {
+                    if ([response1 valueForKey:@"vcomment_list"]) {
+                        NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"vcomment_list"]];
+                        if ([_sequence longValue] == sequence) {
+                            if (sequence == 0) [self.vcomment_list removeAllObjects];
+                            [self.vcomment_list addObjectsFromArray:newComments] ;
+                            if (newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                            else self.sequence = [response1 valueForKey:@"sequence"];
+                        }
+                        _isLoading = NO;
+                        [self.tableView reloadData];
+                    }
+                }
+                    break;
+                case VIDEO_NOT_EXIST:{
+                    if (_shouldExit == NO) {
+                        _shouldExit = YES;
+                        [self deleteLocalData];
+                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"视频已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                        [alert setTag:1];
+                    }
+                }
+                    break;
+                default:
+                {
+                    [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                }
+            }
+        }
+        _isLoading = NO;
+    }];
+}
+
 -(void)resendComment:(id)sender
 {
     if (!_videoInfo) return;
@@ -975,48 +1007,7 @@
     [self updateVideoInfo];
 }
 
-- (void)updateVideoInfo {
-    if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
-        [_controller.tableView reloadRowsAtIndexPaths:@[self.index] withRowAnimation:UITableViewRowAnimationNone];
-    }
-    [VideoWallViewController updateVideoInfoToDB:@[self.videoInfo] eventId:_eventId];
-}
-
--(void)closeRJ
-{
-    [self.tableView reloadData];
-}
-
-- (void)deleteVideoInfoFromDB
-{
-    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@",_videoId],@"video_id", nil];
-    [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
-}
-
-
-- (void)pushToFriendView:(id)sender {
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
-                                                             bundle: nil];
-    if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [self.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = [self.videoInfo valueForKey:@"author_id"];
-        [self.navigationController pushViewController:friendView animated:YES];
-    }
-    
-}
-
-
-#pragma mark - HttpSenderDelegate
-
-
 #pragma mark - Table view data source
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger comment_num = 0;

@@ -153,7 +153,7 @@
     userNameLeftView.textAlignment = NSTextAlignmentCenter;
     
     self.textField_userName.clearButtonMode = UITextFieldViewModeWhileEditing;
-    self.textField_userName.placeholder = @"请输入邮箱／手机号";
+    self.textField_userName.placeholder = @"请输入邮箱/手机号";
     self.textField_userName.keyboardType = UIKeyboardTypeEmailAddress;
     self.textField_userName.text = text_userName? text_userName:@"";
     self.textField_userName.leftView = userNameLeftView;
