@@ -452,9 +452,16 @@
 
 - (IBAction)share:(id)sender {
     if (_photo) {
+        NSString *shareText = self.photoInfo[@"specification"];
+        if (![shareText isKindOfClass:[NSString class]] || shareText.length == 0) {
+            shareText = @" ";
+        }
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.title = @"【活动宝图片分享】";
         [UMSocialData defaultData].extConfig.sinaData.urlResource = nil;
+        [UMSocialData defaultData].extConfig.smsData.urlResource = nil;
+        
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline]];
         NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
         if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
@@ -462,7 +469,7 @@
         }
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
-                                          shareText:@""
+                                          shareText:shareText
                                          shareImage:self.photo
                                     shareToSnsNames:shareToSns
                                            delegate:self];

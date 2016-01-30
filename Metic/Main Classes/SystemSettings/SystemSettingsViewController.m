@@ -501,9 +501,16 @@
             [alertView show];
 
         }else if (row == 2){
+            [UMSocialData defaultData].extConfig.wechatSessionData.url = @"http://www.whatsact.com";
+            [UMSocialData defaultData].extConfig.wechatTimelineData.url = @"http://www.whatsact.com";
             [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+            [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用【活动宝】";
             [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
+            [UMSocialData defaultData].extConfig.qqData.title = @"推荐你使用【活动宝】";
+            [UMSocialData defaultData].extConfig.qqData.url = @"http://www.whatsact.com";
             [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:@"http://www.whatsact.com"]];
+            [UMSocialData defaultData].extConfig.smsData.urlResource = nil;
+            [UMSocialData defaultData].extConfig.smsData.shareText = nil;
             [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
             NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
             if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
@@ -515,7 +522,6 @@
                                              shareImage:[UIImage imageNamed:@"AppIcon57x57"]
                                         shareToSnsNames:shareToSns
                                                delegate:self];
-            [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
         }else if (row == 3){
             [self aboutApp];
         }

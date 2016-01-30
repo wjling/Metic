@@ -622,10 +622,14 @@
         
         [UMSocialData defaultData].extConfig.wechatSessionData.url = shareLink;
         [UMSocialData defaultData].extConfig.wechatTimelineData.url = shareLink;
+        [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝视频分享】";
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
         [UMSocialData defaultData].extConfig.qqData.url = shareLink;
+        [UMSocialData defaultData].extConfig.qqData.title = @"【活动宝视频分享】";
         [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeVideo url:shareLink]];
+        [UMSocialData defaultData].extConfig.smsData.urlResource = nil;
+        [UMSocialData defaultData].extConfig.smsData.shareText = [NSString stringWithFormat:@"%@ %@",shareText,shareLink];
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
 
@@ -639,7 +643,6 @@
                                          shareImage:self.video_thumb?self.video_thumb:[UIImage imageNamed:@"AppIcon57x57"]
                                     shareToSnsNames:shareToSns
                                            delegate:self];
-        [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝视频分享】";
     };
     
     if ([self.videoShareLink isKindOfClass:[NSString class]] && ![self.videoShareLink isEqualToString:@""]) {
