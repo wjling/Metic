@@ -115,12 +115,13 @@
 
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+        [UMSocialData defaultData].extConfig.sinaData.urlResource = nil;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:@""
                                          shareImage:friendQRcode
-                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSms]
+                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
                                            delegate:self];
     }
 }

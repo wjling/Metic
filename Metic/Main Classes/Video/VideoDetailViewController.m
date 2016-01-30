@@ -91,14 +91,13 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频详情"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     if (self.isKeyBoard) {
         [self.inputTextView resignFirstResponder];
         [self keyboardWillHide:nil];
@@ -611,26 +610,28 @@
 
 - (void)shareVideo {
     void (^share)(NSString *shareLink) = ^(NSString *shareLink){
-        NSString *author = self.videoInfo[@"author"];
-        if (!author || ![author isKindOfClass:[NSString class]]) {
-            author = @"";
+        NSString *user = [MTUser sharedInstance].name;
+        if (!user || ![user isKindOfClass:[NSString class]]) {
+            user = @"";
         } else {
-            author =  [NSString stringWithFormat:@"【%@】", author];
+            user =  [NSString stringWithFormat:@"【%@】", user];
         }
-        NSString *shareText = [NSString stringWithFormat:@"用户%@给你分享一个趣味视频，点击打开观看", author];
+        NSString *shareText = [NSString stringWithFormat:@"%@分享了活动宝的一个视频给你，点击观看", user];
         
         [UMSocialData defaultData].extConfig.wechatSessionData.url = shareLink;
         [UMSocialData defaultData].extConfig.wechatTimelineData.url = shareLink;
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
         [UMSocialData defaultData].extConfig.qqData.url = shareLink;
-        [UMSocialData defaultData].extConfig.sinaData.urlResource.url = shareLink;
-        
+        [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeVideo url:shareLink]];
+
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
                                          shareImage:self.video_thumb?self.video_thumb:[UIImage imageNamed:@"AppIcon57x57"]
-                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSms]
+                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
                                            delegate:self];
         [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝视频分享】";
     };
