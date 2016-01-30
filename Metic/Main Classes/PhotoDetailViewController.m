@@ -25,6 +25,7 @@
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
+#import "SocialSnsApi.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber* sequence;
@@ -82,7 +83,6 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"图片主页"];
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -456,11 +456,15 @@
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
         [UMSocialData defaultData].extConfig.sinaData.urlResource = nil;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline]];
+        NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+        if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+            [shareToSns addObject:UMShareToSms];
+        }
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:@""
                                          shareImage:self.photo
-                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
+                                    shareToSnsNames:shareToSns
                                            delegate:self];
     }
 }

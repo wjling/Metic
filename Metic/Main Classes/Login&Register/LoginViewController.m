@@ -18,6 +18,7 @@
 #import "SVProgressHUD.h"
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKConnector/ShareSDKConnector.h>
+#import "SocialSnsApi.h"
 
 @interface LoginViewController ()
 {
@@ -178,6 +179,25 @@
     self.textField_password.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.textField_password.layer.borderWidth = 2;
     self.textField_password.layer.masksToBounds = YES;
+    
+    if ([WXApi isWXAppInstalled]) {
+        [self.weixinLoginBtn setImage:[UIImage imageNamed:@"loading_wechat"] forState:UIControlStateNormal];
+    } else {
+        [self.weixinLoginBtn setImage:[UIImage imageNamed:@"loading_wechat_gray"] forState:UIControlStateNormal];
+    }
+    
+    if ([WeiboSDK isWeiboAppInstalled]) {
+        [self.weiboLoginBtn setImage:[UIImage imageNamed:@"loading_weibo"] forState:UIControlStateNormal];
+    } else {
+        [self.weiboLoginBtn setImage:[UIImage imageNamed:@"loading_weibo_gray"] forState:UIControlStateNormal];
+    }
+    
+    if ([QQApiInterface isQQInstalled]) {
+        [self.qqLoginBtn setImage:[UIImage imageNamed:@"loading_qq"] forState:UIControlStateNormal];
+    } else {
+        [self.qqLoginBtn setImage:[UIImage imageNamed:@"loading_qq_gray"] forState:UIControlStateNormal];
+    }
+    
 }
 
 -(void)forgetPSBtnClick:(id)sender
@@ -308,6 +328,10 @@
 }
 
 - (IBAction)QQLogin:(id)sender {
+    if (![QQApiInterface isQQInstalled]) {
+        [SVProgressHUD showErrorWithStatus:@"请先安装QQ客户端" duration:1.5f];
+        return;
+    }
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeQQ
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
@@ -323,6 +347,12 @@
 }
 
 - (IBAction)WeiXinLogin:(id)sender {
+    
+    if (![WXApi isWXAppInstalled]) {
+        [SVProgressHUD showErrorWithStatus:@"请先安装微信客户端" duration:1.5f];
+        return;
+    }
+    
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeWechat
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
@@ -337,6 +367,12 @@
 }
 
 - (IBAction)WeiBoLogin:(id)sender {
+    
+    if (![WeiboSDK isWeiboAppInstalled]) {
+        [SVProgressHUD showErrorWithStatus:@"请先安装微博客户端" duration:1.5f];
+        return;
+    }
+    
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)

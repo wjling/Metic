@@ -1193,6 +1193,8 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
     [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"1312051023" RedirectURL:@"http://www.sina.com"];
     [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+    [UMSocialConfig setFinishToastIsHidden:YES position:UMSocialiToastPositionCenter];
+    
 }
 
 #pragma mark - shareSDK Init

@@ -29,6 +29,9 @@
 @property (strong,nonatomic) NSString* text_userName;
 @property (strong,nonatomic) NSString* text_password;
 @property (strong, nonatomic) NSNumber* gender; //用于注册后的信息
+@property (strong, nonatomic) IBOutlet UIButton *qqLoginBtn;
+@property (strong, nonatomic) IBOutlet UIButton *weixinLoginBtn;
+@property (strong, nonatomic) IBOutlet UIButton *weiboLoginBtn;
 
 -(void)login;
 - (IBAction)loginButtonClicked:(id)sender;

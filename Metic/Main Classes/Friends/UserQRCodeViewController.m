@@ -8,6 +8,7 @@
 
 #import "UserQRCodeViewController.h"
 #import "QRCodeGenerator.h"
+#import "SocialSnsApi.h"
 
 @interface UserQRCodeViewController ()
 {
@@ -117,11 +118,15 @@
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
         [UMSocialData defaultData].extConfig.sinaData.urlResource = nil;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+        NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+        if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+            [shareToSns addObject:UMShareToSms];
+        }
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:@""
                                          shareImage:friendQRcode
-                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
+                                    shareToSnsNames:shareToSns
                                            delegate:self];
     }
 }

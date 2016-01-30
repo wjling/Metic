@@ -998,6 +998,7 @@
 		F803181D1C5C9997008C1E49 /* WeiboSDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WeiboSDK.bundle; sourceTree = "<group>"; };
 		F803181E1C5C9997008C1E49 /* WeiboSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboSDK.h; sourceTree = "<group>"; };
 		F803181F1C5C9997008C1E49 /* WeiboUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeiboUser.h; sourceTree = "<group>"; };
+		F80318231C5CBA40008C1E49 /* SocialSnsApi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocialSnsApi.h; sourceTree = "<group>"; };
 		F80DD19F1AF7A36000DC1CA3 /* SquareTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareTableView.h; sourceTree = "<group>"; };
 		F80DD1A01AF7A36000DC1CA3 /* SquareTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareTableView.m; sourceTree = "<group>"; };
 		F80DD1A21AF7A4A000DC1CA3 /* SquareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareTableViewCell.h; sourceTree = "<group>"; };
@@ -3028,6 +3029,7 @@
 				F8B5DDBE1BFB83EA00E1F713 /* SocketRocket */,
 				F8B5DDC21BFB83EA00E1F713 /* UIImage+UIImageExtras.h */,
 				F8B5DDC31BFB83EA00E1F713 /* UIImage+UIImageExtras.m */,
+				F80318231C5CBA40008C1E49 /* SocialSnsApi.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

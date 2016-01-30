@@ -3170,9 +3170,12 @@
                         <outlet property="button_login" destination="b2Z-i4-6Ex" id="8UY-7a-lLh"/>
                         <outlet property="button_register" destination="y6K-RO-Ldz" id="1Nj-YQ-TtF"/>
                         <outlet property="forgetPS_btn" destination="Ypz-aV-JES" id="jBn-qf-SC0"/>
+                        <outlet property="qqLoginBtn" destination="7ih-w5-aq5" id="TX1-1u-DyD"/>
                         <outlet property="rootView" destination="3yY-CU-vOh" id="v2Z-uZ-9JW"/>
                         <outlet property="textField_password" destination="g9y-HK-245" id="5bf-l5-v0K"/>
                         <outlet property="textField_userName" destination="kgi-Wx-Csu" id="evf-H2-uTR"/>
+                        <outlet property="weiboLoginBtn" destination="LV3-nX-fRR" id="kAZ-N8-qTL"/>
+                        <outlet property="weixinLoginBtn" destination="muJ-hA-5Uz" id="TuF-TJ-GPd"/>
                         <segue destination="cDI-rw-2Dm" kind="push" identifier="LoginToFriends" id="6hY-qj-DR3"/>
                         <segue destination="hMX-YH-n10" kind="push" identifier="loginToNotificationCenter" id="Lay-DH-g1S"/>
                         <segue destination="Zgx-3f-tRL" kind="push" identifier="LoginToRegister" id="M1c-HX-njF"/>

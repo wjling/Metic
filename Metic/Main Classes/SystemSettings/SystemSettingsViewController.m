@@ -12,6 +12,7 @@
 #import "UMSocial.h"
 #import "BOAlertController.h"
 #import "MTAccount.h"
+#import "SocialSnsApi.h"
 
 @interface SystemSettingsViewController ()<UMSocialUIDelegate>
 {
@@ -504,11 +505,15 @@
             [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
             [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeImage url:@"http://www.whatsact.com"]];
             [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+            NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+            if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+                [shareToSns addObject:UMShareToSms];
+            }
             [UMSocialSnsService presentSnsIconSheetView:self
                                                  appKey:@"53bb542e56240ba6e80a4bfb"
                                               shareText:@"活动宝，是一款以“活动”为主题提倡用户进行线上线下活动的社交管理工具。"
                                              shareImage:[UIImage imageNamed:@"AppIcon57x57"]
-                                        shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
+                                        shareToSnsNames:shareToSns
                                                delegate:self];
             [UMSocialData defaultData].extConfig.wechatSessionData.title = @"推荐你使用[活动宝]";
         }else if (row == 3){

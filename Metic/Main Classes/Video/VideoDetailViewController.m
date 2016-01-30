@@ -28,6 +28,7 @@
 #import "MTImageGetter.h"
 #import "MTOperation.h"
 #import "LCAlertView.h"
+#import "SocialSnsApi.h"
 
 #define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()<UMSocialUIDelegate>
@@ -609,6 +610,7 @@
 }
 
 - (void)shareVideo {
+    [self.inputTextView resignFirstResponder];
     void (^share)(NSString *shareLink) = ^(NSString *shareLink){
         NSString *user = [MTUser sharedInstance].name;
         if (!user || ![user isKindOfClass:[NSString class]]) {
@@ -624,14 +626,18 @@
         [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
         [UMSocialData defaultData].extConfig.qqData.url = shareLink;
         [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeVideo url:shareLink]];
-
         [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
         [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+
+        NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+        if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+            [shareToSns addObject:UMShareToSms];
+        }
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
                                          shareImage:self.video_thumb?self.video_thumb:[UIImage imageNamed:@"AppIcon57x57"]
-                                    shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina]
+                                    shareToSnsNames:shareToSns
                                            delegate:self];
         [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝视频分享】";
     };
