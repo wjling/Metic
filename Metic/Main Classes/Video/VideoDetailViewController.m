@@ -597,15 +597,13 @@
 - (void)tabbarButtonShare {
     if (!self.shareButton) {
         self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.shareButton setFrame:CGRectMake(20, 0, 70, 40)];
-        [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(7, 14, 7, 0)];
+        [self.shareButton setFrame:CGRectMake(0, 0, 70, 43)];
+        [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(8, 34, 8, -20)];
         [self.shareButton setImage:[UIImage imageNamed:@"video_share_btn"] forState:UIControlStateNormal];
         [self.shareButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
         [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
     }
-    UIView *container = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 70, 40)];
-    [container addSubview:self.shareButton];
-    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:container];
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.shareButton];
     self.navigationItem.rightBarButtonItem = rightButtonItem;
 }
 
