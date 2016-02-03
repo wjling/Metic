@@ -704,6 +704,7 @@ enum Response_Type
     [userDfs synchronize];
     
     [self hideDian:index];
+    [MenuViewController dianReset];
 }
 
 -(void)scrollTabIndicator:(CGRect)frame
@@ -756,7 +757,6 @@ enum Response_Type
 
 -(void)clearCurrentPage
 {
-//    [mySql openMyDB:DB_path];
     if (tab_index == 0) {
         for (NSDictionary* msg in MTUser_eventRequestMsg) {
             NSNumber* seq = [msg objectForKey:@"seq"];
@@ -820,6 +820,7 @@ enum Response_Type
     if (dian) {
         [dian removeFromSuperview];
     }
+    
 }
 //==========================================================================================
 
@@ -2252,7 +2253,7 @@ enum Response_Type
         [userDfs synchronize];
         
         [self hideDian:tab_index];
-        
+        [MenuViewController dianReset];
     }
 }
 

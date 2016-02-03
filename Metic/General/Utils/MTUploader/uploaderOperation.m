@@ -387,7 +387,8 @@
             case NORMAL_REPLY:
             {
                 self.photoInfo = [[NSMutableDictionary alloc]initWithDictionary:response1];
-                _progress = 0.9f;
+                [self.photoInfo setValue:self.eventId forKey:@"eventId"];
+                self.progress = 0.9f;
                 [self DBprocessionAfterUpload:response1 eventId:_eventId];
                 [self savePhotoToCache];
 

@@ -411,6 +411,10 @@
 {
     MTLOG(@"photoUploadFinished receive: %@",sender);
     NSMutableDictionary* newPhotoInfo = (NSMutableDictionary*)[sender userInfo];
+    NSNumber *photoEventId = [newPhotoInfo valueForKey:@"eventId"];
+    if(![photoEventId isKindOfClass:[NSNumber class]] || ![photoEventId isEqualToNumber:self.eventId]) {
+        return;
+    }
     if (newPhotoInfo) {
         dispatch_sync(sync_queue, ^{
             [_photo_list insertObject:newPhotoInfo atIndex:0];
@@ -422,7 +426,6 @@
                 [self.quiltView reloadData];
             });
         });
-        
     }
 }
 
@@ -430,6 +433,10 @@
 {
     MTLOG(@"deletePhotoItem receive: %@",sender);
     NSMutableDictionary* deleteItem = (NSMutableDictionary*)[sender userInfo];
+    NSNumber *photoEventId = [deleteItem valueForKey:@"eventId"];
+    if(![photoEventId isKindOfClass:[NSNumber class]] || ![photoEventId isEqualToNumber:self.eventId]) {
+        return;
+    }
     if (deleteItem) {
         dispatch_sync(sync_queue, ^{
             [_photo_list removeObject:deleteItem];
