@@ -205,8 +205,9 @@
             NSString *tmpa = [resultsArray[0] valueForKey:@"photoInfo"];
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
             self.photoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [_tableView reloadData];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
             });
         }
     }];
@@ -1004,11 +1005,11 @@
             UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
             [specification setFont:[UIFont systemFontOfSize:12]];
             [specification setNumberOfLines:0];
-            specification.text = [self.photoInfo valueForKey:@"specification"];
             [specification setBackgroundColor:[UIColor clearColor]];
             self.specification = specification;
         }
         [self.specification setFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
+        self.specification.text = [self.photoInfo valueForKey:@"specification"];
         [cell addSubview:self.specification];
         
         if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {

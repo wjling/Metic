@@ -235,7 +235,9 @@
             NSString *tmpa = [resultsArray[0] valueForKey:@"videoInfo"];
             NSData *tmpb = [tmpa dataUsingEncoding:NSUTF8StringEncoding];
             self.videoInfo =  [NSJSONSerialization JSONObjectWithData:tmpb options:NSJSONReadingMutableContainers error:nil];
-            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
     }];
     return ret;
@@ -1100,11 +1102,11 @@
             UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
             [specification setFont:[UIFont systemFontOfSize:12]];
             [specification setNumberOfLines:0];
-            specification.text = [self.videoInfo valueForKey:@"title"];
             [specification setBackgroundColor:[UIColor clearColor]];
             self.specification = specification;
         }
         self.specification.frame = CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15);
+        self.specification.text = [self.videoInfo valueForKey:@"title"];
         [cell addSubview:self.specification];
         
         if ([[self.videoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
