@@ -219,15 +219,38 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     encoder.outputURL = [NSURL fileURLWithPath:outputPath];
     NSNumber* width,*height;
     AVAssetTrack* videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    
+    CGFloat widthValue = videoTrack.naturalSize.width;
+    CGFloat heightValue = videoTrack.naturalSize.height;
+    
+//    CGFloat maxWidth = 640.0;
+    CGFloat maxHeight = 480;
+    
+    CGFloat heightRatio;
+    
+    if (widthValue > heightValue) {
+//        widthRatio = maxWidth / widthValue;
+        heightRatio = maxHeight / heightValue;
+    } else {
+        heightRatio = maxHeight / widthValue;
+//        heightRatio = maxWidth / heightValue;
+    }
+    
+//    CGFloat ratio = MIN(widthRatio, heightRatio);
+    if (heightRatio < 1) {
+        widthValue = ceil(widthValue * heightRatio);
+        heightValue = ceil(heightValue * heightRatio);
+    }
+    
     if (_preViewImage.size.height > _preViewImage.size.width && videoTrack.naturalSize.height < videoTrack.naturalSize.width){
         encoder.isVerticalVideo = YES;
-        width = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
-        height = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
+        width = [NSNumber numberWithFloat:heightValue];
+        height = [NSNumber numberWithFloat:widthValue];
     }
     else{
         encoder.isVerticalVideo = NO;
-        width = [NSNumber numberWithFloat:videoTrack.naturalSize.width];
-        height = [NSNumber numberWithFloat:videoTrack.naturalSize.height];
+        width = [NSNumber numberWithFloat:widthValue];
+        height = [NSNumber numberWithFloat:heightValue];
     }
     encoder.videoSettings = @
     {
@@ -239,7 +262,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
         {
         AVVideoAverageNonDroppableFrameRateKey:@15,
         AVVideoAverageBitRateKey: @800000,
-        AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline30,
+        AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel,
         },
     };
     
@@ -263,9 +286,10 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
          _videoURL = [NSURL fileURLWithPath:outputPath];
          if (encoder.status == AVAssetExportSessionStatusCompleted)
          {
+             
              dispatch_async(dispatch_get_main_queue(), ^{
                  [SVProgressHUD dismissWithSuccess:@"转码成功" afterDelay:1.0f];
-                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                      [self upload];
                  });
              });

@@ -427,7 +427,7 @@
             imagePickerController.sourceType =UIImagePickerControllerSourceTypePhotoLibrary;
         }else imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         
-        imagePickerController.videoQuality = UIImagePickerControllerQualityType640x480;
+        imagePickerController.videoQuality = UIImagePickerControllerQualityTypeHigh;
         NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
         imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
         imagePickerController.videoMaximumDuration = 20;

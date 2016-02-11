@@ -258,7 +258,8 @@
         if (photoViewIndex == index) {
             selePhotoView = photoView;
         }else if(photoViewIndex > index){
-            [photoView setTag:photoViewIndex - 1];
+            [photoView setTag:[photoView tag] - 1];
+            [photoView removeImg];
         }
     }
     if (selePhotoView) {
