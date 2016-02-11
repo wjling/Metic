@@ -77,16 +77,22 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name: @"uploadFile" object:nil];
 }
+
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"视频预览"];
     [SVProgressHUD dismiss];
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    [self clearVideoFile];
 }
 
 -(void)initData
@@ -286,10 +292,9 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
          _videoURL = [NSURL fileURLWithPath:outputPath];
          if (encoder.status == AVAssetExportSessionStatusCompleted)
          {
-             
              dispatch_async(dispatch_get_main_queue(), ^{
                  [SVProgressHUD dismissWithSuccess:@"转码成功" afterDelay:1.0f];
-                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                      [self upload];
                  });
              });
@@ -303,14 +308,21 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
          }
          else
          {
-             _confirmBtn.enabled = YES;
              dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                  [SVProgressHUD dismiss];
                  [CommonUtils showSimpleAlertViewWithTitle:@"提示" WithMessage:@"视频无法处理" WithDelegate:nil WithCancelTitle:@"确定"];
                  [self.navigationController popViewControllerAnimated:YES];
              });
+             [self clearVideoFile];
          }
      }];
+}
+
+- (void)clearVideoFile {
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    if (self.videoURL) {
+        [fileManager removeItemAtURL:self.videoURL error:nil];
+    }
 }
 
 -(void)play:(id)sender
@@ -464,6 +476,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
                             [fileManager removeItemAtPath:mp4path error:nil];
                         if ([fileManager fileExistsAtPath:mp4Thumbpath])
                             [fileManager removeItemAtPath:mp4Thumbpath error:nil];
+                        [self clearVideoFile];
                         
                         [_progressView setProgress:1.0f animated:YES];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -567,6 +580,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
             VideoWallViewController* controller = (VideoWallViewController*)self.navigationController.viewControllers[index];
             controller.shouldReload = YES;
             [self.navigationController popViewControllerAnimated:YES];
+            [self clearVideoFile];
         }else if([alertView tag] == 102){
             [_confirmBtn setEnabled:YES];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -580,6 +594,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
                 UIViewController* home = ((AppDelegate*)[UIApplication sharedApplication].delegate).homeViewController;
                 if ([naviVC containsObject:home]) {
                     [self.navigationController popToViewController:home animated:YES];
+                    [self clearVideoFile];
                 }
             });
         }
