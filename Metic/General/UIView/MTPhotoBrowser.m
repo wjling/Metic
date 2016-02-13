@@ -252,24 +252,23 @@
 - (void)removePhotoViewAtIndex:(NSInteger)index
 {
     NSInteger photoViewIndex;
-    MJPhotoView *selePhotoView;
+    NSMutableArray *removeItems = [NSMutableArray array];
     for (MJPhotoView *photoView in _visiblePhotoViews) {
         photoViewIndex = kPhotoViewIndex(photoView);
-        if (photoViewIndex == index) {
-            selePhotoView = photoView;
-        }else if(photoViewIndex > index){
-            [photoView setTag:[photoView tag] - 1];
-            [photoView removeImg];
+        if (photoViewIndex >= index) {
+            [removeItems addObject:photoView];
         }
     }
-    if (selePhotoView) {
-        [_visiblePhotoViews removeObject:selePhotoView];
-        [selePhotoView removeFromSuperview];
+    
+    for (MJPhotoView *photoView in removeItems) {
+        [photoView removeImg];
+        [_visiblePhotoViews removeObject:photoView];
+        [photoView removeFromSuperview];
     }
     
     NSMutableArray* tmp = [NSMutableArray arrayWithArray:self.photos];
     [tmp removeObjectAtIndex:index];
-    self.photos = tmp;
+    _photos = tmp;
     _toolbar.photos = tmp;
     CGRect frame = self.view.bounds;
     _photoScrollView.contentSize = CGSizeMake((frame.size.width + 20) * _photos.count, 0);
