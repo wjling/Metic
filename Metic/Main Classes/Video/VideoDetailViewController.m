@@ -168,7 +168,6 @@
     _emotionKeyboard.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_emotionKeyboard];
     _emotionKeyboard.textView = _inputTextView;
-    [_emotionKeyboard initCollectionView];
     
     //右上角按钮
     [self tabbarButtonShare];
@@ -490,17 +489,28 @@
 
 - (void)hiddenCommentViewAndEmotionView {
     _isEmotionOpen = NO;
+    [self clearCommentView];
+    
     CGRect containerFrame = self.commentView.frame;
+    containerFrame.size.height = 45.f;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    
+    CGRect inputViewFrame = self.inputTextView.frame;
+    inputViewFrame.size.height = 36.f;
+    
+    CGRect emotionFrame = _emotionKeyboard.frame;
+    emotionFrame.origin.y = self.view.frame.size.height;
+    
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:0.25];
     [UIView setAnimationCurve:7];
+    
     self.commentView.frame = containerFrame;
-    CGRect frame = _emotionKeyboard.frame;
-    frame.origin.y = self.view.frame.size.height;
-    [_emotionKeyboard setFrame:frame];
+    self.inputTextView.frame = inputViewFrame;
+    self.emotionKeyboard.frame = emotionFrame;
+    
     [UIView commitAnimations];
 }
 
@@ -867,7 +877,7 @@
     if (_isEmotionOpen) [self button_Emotionpress:nil];
     self.inputTextView.text = @"";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self textViewDidChange:nil];
+        [self textViewDidChange:self.inputTextView];
         self.inputTextView.text = @"";
     });
     MTLOG(comment,nil);
@@ -998,6 +1008,13 @@
             }
         });
     }];
+}
+
+- (void)clearCommentView {
+    self.inputTextView.text = @"";
+    self.inputTextView.placeHolder = @"说点什么吧";
+    self.herName = @"";
+    self.repliedId = nil;
 }
 
 - (void)commentNumPlus
@@ -1367,7 +1384,7 @@
 -(void) keyboardWillShow:(NSNotification *)note{
     self.isKeyBoard = YES;
     if (self.isEmotionOpen) {
-        [self button_Emotionpress:nil];
+        self.isEmotionOpen = NO;
     }
     if (self.specificationEditTextfield) {
         return;
@@ -1378,12 +1395,18 @@
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
+    if (CGRectGetHeight(keyboardBounds) == 0) {
+        return;
+    }
     // Need to translate the bounds to account for rotation.
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
+    
+    CGRect emotionFrame = _emotionKeyboard.frame;
+    emotionFrame.origin.y = self.view.frame.size.height;
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -1392,7 +1415,7 @@
     
     // set views with new info
     self.commentView.frame = containerFrame;
-    
+    self.emotionKeyboard.frame = emotionFrame;
     
     // commit animations
     [UIView commitAnimations];
@@ -1403,13 +1426,21 @@
     if (self.specificationEditTextfield) {
         return;
     }
+    if(self.isEmotionOpen) {
+        return;
+    }
+    [self clearCommentView];
     //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
+    containerFrame.size.height = 45.f;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    
+    CGRect inputViewFrame = self.inputTextView.frame;
+    inputViewFrame.size.height = 36.f;
     
     // animations settings
     [UIView beginAnimations:nil context:NULL];
@@ -1419,6 +1450,7 @@
     
     // set views with new info
     self.commentView.frame = containerFrame;
+    self.inputTextView.frame = inputViewFrame;
     
     // commit animations
     [UIView commitAnimations];

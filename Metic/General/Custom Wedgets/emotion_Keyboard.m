@@ -48,8 +48,6 @@
     _emotionImgDictionary = [CommonUtils dictionaryFromFile:@"expressionImage.plist"];
     _emotionImgArray = [CommonUtils arrayFromFile:@"expression.plist"];
     
-    
-    
     UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
     flowLayout.itemSize=CGSizeMake(45,50);
     flowLayout.minimumLineSpacing = 0;
@@ -58,11 +56,8 @@
     
     _emotionCollection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 200) collectionViewLayout:flowLayout];
     
-    
     _emotionCollection.delegate = self;
     _emotionCollection.dataSource = self;
-    
-    
     
     [_emotionCollection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"emotionCell"];
     [_emotionCollection setBackgroundColor:[UIColor colorWithWhite:250.0/255.0 alpha:1.0f]];
@@ -70,14 +65,11 @@
     [_emotionCollection reloadData];
 }
 
-
-
 #pragma mark - CollectionViewDelegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return 28;
 }
-
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -113,33 +105,51 @@
             NSString* emotionExpression = _emotionImgArray[indexPath.row];
             if (_textField){
                 _textField.text = [_textField.text stringByAppendingString:emotionExpression];
+                
             }
             if (_textView){
                 _textView.text = [_textView.text stringByAppendingString:emotionExpression];
+                if (_textView.delegate && [_textView.delegate respondsToSelector:@selector(textViewDidChange:)]) {
+                    [_textView.delegate textViewDidChange:_textView];
+                }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     CGPoint bottomOffset = CGPointMake(0.0f, _textView.contentSize.height - _textView.bounds.size.height);
                     [_textView setContentOffset:bottomOffset animated:YES];
                 });
-                
             }
         }
-    }else
-    {
+    } else {
+        void (^deleteEmotion)(NSMutableString *text) = ^(NSMutableString *text) {
+            if (text.length > 0) {
+                BOOL isSuccess = NO;
+                NSRange range = [text rangeOfString:@"/" options:NSBackwardsSearch];
+                if (range.location != NSNotFound) {
+                    NSString *section = [text substringFromIndex:range.location];
+                    if ([self.emotionImgDictionary valueForKey:section]) {
+                        range.length = text.length - range.location;
+                        [text deleteCharactersInRange:range];
+                        isSuccess = YES;
+                    }
+                }
+                if (!isSuccess) {
+                    [text deleteCharactersInRange:NSMakeRange(text.length-1, 1)];
+                }
+            }
+        };
         if (_textField && _textField.text.length > 0){
-            _textField.text = [_textField.text substringToIndex:(_textField.text.length - 1)];
+            NSMutableString *text = [_textField.text mutableCopy];
+            deleteEmotion(text);
+            _textField.text = text;
         }
         if (_textView && _textView.text.length > 0){
-            _textView.text = [_textView.text substringToIndex:(_textView.text.length - 1)];
+            NSMutableString *text = [_textView.text mutableCopy];
+            deleteEmotion(text);
+            _textView.text = text;
+            if (_textView.delegate && [_textView.delegate respondsToSelector:@selector(textViewDidChange:)]) {
+                [_textView.delegate textViewDidChange:_textView];
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
 
 @end
