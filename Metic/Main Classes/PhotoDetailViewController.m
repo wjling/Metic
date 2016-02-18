@@ -762,6 +762,7 @@
     [_tableView beginUpdates];
     [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
+    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];

@@ -1126,6 +1126,9 @@
         [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
     [_tableView endUpdates];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    });
     
     self.inputTextView.text = @"";
     if (_isKeyBoard) [self.inputTextView resignFirstResponder];
