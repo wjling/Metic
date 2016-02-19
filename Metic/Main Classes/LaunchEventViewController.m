@@ -18,10 +18,13 @@
 #import "MTOperation.h"
 #import "SingleSelectionAlertView.h"
 
+static NSString * const defaultDetail = @"输入活动描述，让其他人更好了解您的活动内容";
+
 @interface LaunchEventViewController () <SingleSelectionAlertViewDelegate>
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) UIView *datePickerView;
-@property (nonatomic, strong) UITextField *seletedText;
+@property (nonatomic, strong) UITextField *seletedTextField;
+@property (nonatomic, strong) NSString *seletedText;
 @property (nonatomic, strong) NSMutableSet *FriendsIds;
 @property (nonatomic, strong) NSMutableArray *FriendsIds_array;
 @property (nonatomic, strong) NSDictionary* positions;
@@ -81,7 +84,6 @@
 {
     [super viewDidAppear:animated];
     _geocodesearch.delegate = self;
-    _flatDatePicker.delegate = self;
     if (![self.positionInfo isEqualToString:@""]) {
         self.location_text.text = self.positionInfo;
     }
@@ -131,6 +133,9 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self drawLeftButton];
     [self turnRoundCorner];
+    
+    self.detail_text.text = defaultDetail;
+    self.detail_text.textColor = [UIColor lightGrayColor];
 }
 
 - (void)drawLeftButton{
@@ -161,6 +166,7 @@
     self.event_text.delegate = self;
     self.location_text.delegate = self;
     self.detail_text.delegate = self;
+    
     [self initInviteFriendsView];
     _code = -1;
     _canLeave = NO;
@@ -173,7 +179,6 @@
     self.pt = (CLLocationCoordinate2D){999.999999, 999.999999};
     self.positionInfo = @"";
     self.flatDatePicker = [[FlatDatePicker alloc] initWithParentView:self.view];
-    self.flatDatePicker.delegate = self;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MTdismissKeyboard)];
     tap.delegate = self;
@@ -213,7 +218,7 @@
         return YES;
     }
     
-    if (![_detail_text.text isEqualToString:@""]) {
+    if (![_detail_text.text isEqualToString:@""] && ![_detail_text.text isEqualToString:defaultDetail]) {
         return YES;
     }
     
@@ -351,6 +356,7 @@
         [self.scrollView setContentOffset:CGPointMake(0, textField.superview.frame.origin.y - 100) animated:YES];
         [self.scrollView setUserInteractionEnabled:NO];
         [_launch_button setEnabled:NO];
+        self.flatDatePicker.delegate = self;
         self.flatDatePicker.title = @"请选择活动日期";
         NSDate *date;
         if (![textField.text isEqualToString:@""]) {
@@ -361,7 +367,8 @@
             MTLOG(@"#%@#",textField.text);
             date= [dateFormatter dateFromString:textField.text];
         }else date = [NSDate date];
-        self.seletedText = textField;
+        self.seletedTextField = textField;
+        self.seletedText = textField.text;
         [self.flatDatePicker setMaximumDate:[NSDate dateWithTimeIntervalSinceNow:15768000000]];
         self.flatDatePicker.datePickerMode = FlatDatePickerModeDate;
         [self.flatDatePicker setDate:date animated:NO];
@@ -413,8 +420,8 @@
     
     NSString *formateDateString = [formate stringFromDate:curDate];
     MTLOG(@"%@",formateDateString);
-    self.seletedText.enabled = YES;
-    self.seletedText.text = formateDateString;
+    self.seletedTextField.enabled = YES;
+    self.seletedTextField.text = formateDateString;
     
     [_datePickerView removeFromSuperview ];
 }
@@ -508,14 +515,19 @@
             return;
         }
     }
-
+    
+    NSString *remark = self.detail_text.text;
+    if (!remark || [remark isEqualToString:defaultDetail]) {
+        remark = @"";
+    }
+    
     [SVProgressHUD showWithStatus:@"正在发布..." maskType:SVProgressHUDMaskTypeGradient];
     [sender setEnabled:NO];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.subject_text.text forKey:@"subject"];
     [dictionary setValue:beg_Time forKey:@"time"];
     [dictionary setValue:end_Time forKey:@"endTime"];
-    [dictionary setValue:self.detail_text.text forKey:@"remark"];
+    [dictionary setValue:remark forKey:@"remark"];
     [dictionary setValue:location forKey:@"location"];
     [dictionary setValue:[NSNumber numberWithInt:duration] forKey:@"duration"];
     [dictionary setValue:[NSNumber numberWithDouble:_pt.longitude] forKey:@"longitude"];
@@ -597,15 +609,29 @@
     
 }
 
-#pragma mark - CollectionViewDelegate
+#pragma mark - UITextView Delegate
+-(void)textViewDidBeginEditing:(UITextView *)textView {
+    if ([textView.text isEqualToString:defaultDetail]) {
+        textView.textColor = [UIColor blackColor];
+        textView.text = @"";
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    if (textView.text.length < 1) {
+        textView.textColor = [UIColor grayColor];
+        textView.text = defaultDetail;
+    }
+}
+#pragma mark - ScrollView Delegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     if (CGRectGetMaxY(self.InviteFriendsView.frame) + 15 != _scrollView.contentSize.height) {
         CGSize size = _scrollView.contentSize;
         size.height = CGRectGetMaxY(self.InviteFriendsView.frame) + 15 ;
         _scrollView.contentSize = size;
-        
     }
+    [self MTdismissKeyboard];
 }
 
 #pragma mark - CollectionViewDelegate
@@ -705,20 +731,21 @@
     if (datePicker.datePickerMode == FlatDatePickerModeDate) {
         [dateFormatter setDateFormat:@"yyyy-MM-dd"];
         NSString *value = [dateFormatter stringFromDate:date];
-        self.seletedText.text = value;
+        self.seletedTextField.text = value;
     } else{
-        if ([self.seletedText.text isEqualToString:@""]) {
+        if ([self.seletedTextField.text isEqualToString:@""]) {
             return;
         }
         [dateFormatter setDateFormat:@" HH:mm"];
         NSString *value = [dateFormatter stringFromDate:date];
-        value = [[self.seletedText.text substringToIndex:10] stringByAppendingString:value];
-        self.seletedText.text = value;
+        value = [[self.seletedTextField.text substringToIndex:10] stringByAppendingString:value];
+        self.seletedTextField.text = value;
     }
 }
 
 - (void)flatDatePicker:(FlatDatePicker*)datePicker didCancel:(UIButton*)sender {
-    self.seletedText.text = @"";
+    datePicker.delegate = nil;
+    self.seletedTextField.text = self.seletedText;
     [_launch_button setEnabled:YES];
     [self.scrollView setUserInteractionEnabled:YES];
 }
@@ -734,6 +761,7 @@
         //[datePicker setDatePickerMode:FlatDatePickerModeDate];
         [_launch_button setEnabled:YES];
         [self.scrollView setUserInteractionEnabled:YES];
+        datePicker.delegate = nil;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self checkTimeValid];
         });

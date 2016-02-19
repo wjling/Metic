@@ -90,16 +90,16 @@ typedef NS_ENUM(NSInteger, FlatDatePickerMode) {
     NSMutableArray *_labelsSeconds;
     
     // Date selected :
-    int _selectedDay;
-    int _selectedMonth;
-    int _selectedYear;
+    NSInteger _selectedDay;
+    NSInteger _selectedMonth;
+    NSInteger _selectedYear;
     
-    int _selectedDate;
+    NSInteger _selectedDate;
     
     // Time selected :
-    int _selectedHour;
-    int _selectedMinute;
-    int _selectedSecond;
+    NSInteger _selectedHour;
+    NSInteger _selectedMinute;
+    NSInteger _selectedSecond;
     
     // First init flag :
     BOOL _isInitialized;
