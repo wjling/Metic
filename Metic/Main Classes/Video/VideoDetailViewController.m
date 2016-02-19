@@ -384,11 +384,19 @@
             }];
             
             [request setCompletionBlock:^{
-                [self closeProgressOverlayView];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self closeProgressOverlayView];
                     // my video player
                     if (self && self.navigationController.viewControllers.lastObject == self ) {
-                        [self downloadVideo:videoName url:url];
+                        [self downloadVideo:videoName url:@"existed"];
+                    }
+                });
+                return;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self closeProgressOverlayView];
+                    // my video player
+                    if (self && self.navigationController.viewControllers.lastObject == self ) {
+                        [self downloadVideo:videoName url:@"existed"];
                     }
                 });
             }];
@@ -428,7 +436,6 @@
                                               object:playerViewController.moviePlayer];
 }
 
-
 -(void)readyProgressOverlayView
 {
     [self.videoPlayImg setHidden:YES];
@@ -442,6 +449,7 @@
 
 -(void)closeProgressOverlayView
 {
+    [self.videoPlayImg setHidden:NO];
     if (self.progressOverlayView) {
         [self.progressOverlayView displayOperationDidFinishAnimation];
         double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
