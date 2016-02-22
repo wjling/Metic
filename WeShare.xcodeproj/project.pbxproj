@@ -434,6 +434,8 @@
 		F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */; };
 		F8C9CCA21C12C48A005E0A74 /* EnactiveAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */; };
 		F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */; };
+		F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */; };
+		F8DB8AD81C79D51500DAC951 /* PhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
 		F8EA73E11C0CBB2F00190832 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */; };
@@ -1332,6 +1334,10 @@
 		F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnactiveAccountViewController.h; path = "Login&Register/EnactiveAccountViewController.h"; sourceTree = "<group>"; };
 		F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnactiveAccountViewController.m; path = "Login&Register/EnactiveAccountViewController.m"; sourceTree = "<group>"; };
 		F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EnactiveAccountViewController.xib; path = "Login&Register/EnactiveAccountViewController.xib"; sourceTree = "<group>"; };
+		F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserViewController.h; sourceTree = "<group>"; };
+		F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserViewController.m; sourceTree = "<group>"; };
+		F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserCell.h; sourceTree = "<group>"; };
+		F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserCell.m; sourceTree = "<group>"; };
 		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
 		F8EA73601C0C61C000190832 /* MTAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccountManager.m; sourceTree = "<group>"; };
 		F8EA73BD1C0CBB2F00190832 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTKeyPathCoding.h; sourceTree = "<group>"; };
@@ -1693,6 +1699,10 @@
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
 				08905A701A2E096B0089CF08 /* PictureWall2.h */,
 				08905A711A2E096B0089CF08 /* PictureWall2.m */,
+				F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */,
+				F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */,
+				F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */,
+				F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -3616,6 +3626,7 @@
 				081B6DB01A76861F0044D623 /* QRCodeGenerator.m in Sources */,
 				F8EA73E21C0CBB2F00190832 /* EXTScope.m in Sources */,
 				F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */,
+				F8DB8AD81C79D51500DAC951 /* PhotoBrowserCell.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				F8B5DDF41BFB83EA00E1F713 /* MTShowTextViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
@@ -3783,6 +3794,7 @@
 				F8A329DD1C07EFB5008FFB17 /* AFURLRequestSerialization.m in Sources */,
 				F8A329DB1C07EFB5008FFB17 /* AFSecurityPolicy.m in Sources */,
 				F8B5DE071BFB83EA00E1F713 /* NSString+PinYin4Cocoa.m in Sources */,
+				F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */,
 				08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */,

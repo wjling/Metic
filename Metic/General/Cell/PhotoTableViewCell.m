@@ -54,8 +54,8 @@
     _publish_date.textColor = [UIColor colorWithWhite:145.0/255.0 alpha:1.0f];
     [_infoView addSubview:_publish_date];
     
-    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(button_DetailPressed:)];
-    [self.infoView addGestureRecognizer:tapRecognizer];
+//    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(button_DetailPressed:)];
+//    [self.infoView addGestureRecognizer:tapRecognizer];
     
     [self.imgView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
     
@@ -64,6 +64,12 @@
 
 - (void)button_DetailPressed:(id)sender {
     MTLOG(@"pressed");
+    
+    
+    
+    
+    
+    return;
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
 	PhotoDetailViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDetailViewController"];
@@ -73,8 +79,6 @@
     viewcontroller.eventLauncherId = _PhotoWall.eventLauncherId;
     viewcontroller.photoInfo = self.photoInfo;
     viewcontroller.eventName = _PhotoWall.eventName;
-    viewcontroller.controller = self.PhotoWall;
-    viewcontroller.type = 2;
     viewcontroller.canManage = [[_PhotoWall.eventInfo valueForKey:@"isIn"]boolValue];
     [self.PhotoWall.navigationController pushViewController:viewcontroller animated:YES];
 

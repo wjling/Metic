@@ -29,8 +29,7 @@
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
-@property (strong, nonatomic) PictureWall2* controller;
-@property int type;
+
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
 @property BOOL canManage;

@@ -17,6 +17,7 @@
 #import "PhotoDisplayViewController.h"
 #import "photoRankingViewController.h"
 #import "PhotoUploadViewController.h"
+#import "PhotoBrowserViewController.h"
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTAutoHideButton.h"
@@ -658,6 +659,12 @@
     if (indexPath.row >= _showPhoNum) {
         return;
     }
+    
+    PhotoBrowserViewController *photoBrowser = [[PhotoBrowserViewController alloc] initWithEventInfo:self.eventInfo PhotoDists:[self.photo_list copy] showPhotoIndex:indexPath.row];
+    [self.navigationController pushViewController:photoBrowser animated:YES];
+    
+    
+    return;
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];

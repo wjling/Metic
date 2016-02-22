@@ -162,8 +162,6 @@
     viewcontroller.eventId = self.eventId;
     viewcontroller.photoInfo = self.photoInfo;
     viewcontroller.eventName = _controller.eventName;
-    viewcontroller.controller = self.controller.pictureWallController;
-    viewcontroller.type = 2;
     viewcontroller.canManage = self.controller.canManage;
     [self.controller.navigationController pushViewController:viewcontroller animated:YES];
     

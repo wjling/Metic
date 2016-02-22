@@ -10,6 +10,7 @@
 #import "PhotoDisplayViewController.h"
 #import "Friends/FriendInfoViewController.h"
 #import "UserInfoViewController.h"
+#import "PhotoBrowserViewController.h"
 #import "BannerViewController.h"
 #import "PcommentTableViewCell.h"
 #import "HomeViewController.h"
@@ -28,7 +29,8 @@
 #import "SocialSnsApi.h"
 
 @interface PhotoDetailViewController ()
-@property (nonatomic,strong)NSNumber* sequence;
+@property (nonatomic,strong)NSNumber *sequence;
+@property (nonatomic,strong)UIImageView *photoView;
 @property (nonatomic,strong)UIButton * edit_button;
 @property (nonatomic,strong)UIButton * editFinishButton;
 @property (nonatomic,strong)UIButton * delete_button;
@@ -75,8 +77,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.inputTextView resignFirstResponder];
     [MobClick beginLogPageView:@"图片主页"];
-    self.sequence = [NSNumber numberWithInt:0];
-    [self pullMainCommentFromAir];
+    self.sequence = @0;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self pullMainCommentFromAir];
+    });
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -176,7 +180,7 @@
 
 -(void)initData
 {
-    self.sequence = [NSNumber numberWithInt:0];
+    self.sequence = @0;
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
@@ -186,8 +190,10 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    if (!_photoInfo) [self pullPhotoInfoFromDB];
-    [self pullPhotoInfoFromAir];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!_photoInfo) [self pullPhotoInfoFromDB];
+        [self pullPhotoInfoFromAir];
+    });
 }
 
 -(void)setPhotoInfo:(NSMutableDictionary *)photoInfo
@@ -499,6 +505,11 @@
     if (!_canManage) return;
     //进入编辑模式
     if (!self.specificationEditTextfield) {
+        //图片浏览页停止滑动
+        PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
+        if (browser) {
+            [browser setTableViewScrollEnabled:NO];
+        }
         [self hiddenCommentViewAndEmotionView];
         self.specification.hidden = YES;
         if (!self.editFinishButton) {
@@ -511,7 +522,8 @@
             [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
         }
         UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
-        self.navigationItem.rightBarButtonItem = rightButtonItem;
+        UIViewController *vc = self.parentViewController? self.parentViewController:self;
+        vc.navigationItem.rightBarButtonItem = rightButtonItem;
         
         self.tableView.scrollEnabled = NO;
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
@@ -551,13 +563,18 @@
             self.specificationEditTextfield.hidden = NO;
         });
     } else {
-        
+        //图片浏览页恢复滑动
+        PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
+        if (browser) {
+            [browser setTableViewScrollEnabled:YES];
+        }
         [self.specificationEditTextfield removeFromSuperview];
         [self.specificationEditTextfield resignFirstResponder];
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
         self.specification.hidden = NO;
-        self.navigationItem.rightBarButtonItem = nil;
+        UIViewController *vc = self.parentViewController? self.parentViewController:self;
+        vc.navigationItem.rightBarButtonItem = nil;
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
     }
@@ -881,20 +898,10 @@
     }else if (_isEmotionOpen)
         [self button_Emotionpress:nil];
     else {
-        switch (self.type) {
-            case 1:
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-            case 2:{
-                if (_photo) {
-                    BannerViewController* bannerView = [[BannerViewController alloc] init];
-                    bannerView.banner = self.photo;
-                    [self presentViewController:bannerView animated:YES completion:^{}];
-                }
-            }
-                break;
-            default:
-                break;
+        if (self.photo) {
+            BannerViewController* bannerView = [[BannerViewController alloc] init];
+            bannerView.banner = self.photo;
+            [self presentViewController:bannerView animated:YES completion:^{}];
         }
     }
 }
@@ -914,11 +921,7 @@
 
 -(void)back
 {
-    if (_controller) {
-        [self.navigationController popToViewController:self.controller animated:YES];
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)deleteLocalData
@@ -974,26 +977,30 @@
     if (indexPath.row == 0) {
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
-        [imageView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
+        if (!self.photoView) {
+            self.photoView = [[UIImageView alloc] init];
+        }
+        [self.photoView setFrame:CGRectMake(0, 0, 320,height)];
+
+        [self.photoView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
         
-        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:imageView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
+        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.photoView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
         [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 _photo = image;
-                [imageView setContentMode:UIViewContentModeScaleToFill];
+                [self.photoView setContentMode:UIViewContentModeScaleToFill];
             }else{
-                imageView.image = [UIImage imageNamed:@"加载失败"];
+                self.photoView.image = [UIImage imageNamed:@"加载失败"];
             }
         }];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
         
-        [cell addSubview:imageView];
+        [cell addSubview:self.photoView];
         [cell addSubview:label];
         
         UIButton* back = [UIButton buttonWithType:UIButtonTypeCustom];
-        [back setFrame:imageView.frame];
+        [back setFrame:self.photoView.frame];
         [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:back];
         
@@ -1455,12 +1462,7 @@
         }
             break;
         case 1:{
-            if (_controller) {
-                [self.navigationController popToViewController:self.controller animated:YES];
-            }else{
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            
+            [self.navigationController popViewControllerAnimated:YES];
         }
         default:
             break;

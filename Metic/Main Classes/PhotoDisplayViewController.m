@@ -506,8 +506,6 @@
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;
             nextViewController.eventName = _eventName;
-            nextViewController.controller = self.controller;
-            nextViewController.type = 1;
             nextViewController.canManage = self.canManage;
         }
         if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
