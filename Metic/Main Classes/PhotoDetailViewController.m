@@ -507,7 +507,7 @@
     if (!self.specificationEditTextfield) {
         //图片浏览页停止滑动
         PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
-        if (browser) {
+        if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
             [browser setTableViewScrollEnabled:NO];
         }
         [self hiddenCommentViewAndEmotionView];
@@ -522,7 +522,10 @@
             [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
         }
         UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
-        UIViewController *vc = self.parentViewController? self.parentViewController:self;
+        UIViewController *vc = self;
+        if ([vc.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+            vc = vc.parentViewController;
+        }
         vc.navigationItem.rightBarButtonItem = rightButtonItem;
         
         self.tableView.scrollEnabled = NO;
@@ -565,7 +568,7 @@
     } else {
         //图片浏览页恢复滑动
         PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
-        if (browser) {
+        if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
             [browser setTableViewScrollEnabled:YES];
         }
         [self.specificationEditTextfield removeFromSuperview];
@@ -573,7 +576,10 @@
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
         self.specification.hidden = NO;
-        UIViewController *vc = self.parentViewController? self.parentViewController:self;
+        UIViewController *vc = self;
+        if ([vc.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+            vc = vc.parentViewController;
+        }
         vc.navigationItem.rightBarButtonItem = nil;
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
