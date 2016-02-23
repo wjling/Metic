@@ -911,28 +911,9 @@
     NSMutableArray *comments = _comment_list[section-1];
     NSMutableDictionary *waitingComment = _comment_list[section-1][0];
     BOOL isZan = [[waitingComment valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    [dictionary setValue:((MCommentTableViewCell*)cell).commentid forKey:@"comment_id"];
-    [dictionary setValue:[NSNumber numberWithInt:isZan? 0:1]  forKey:@"operation"];
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                
-            }
-        }
-        else{
-            
-        }
-        
-    }];
+    //点赞 或取消点缀操作
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypeComment mediaId:((MCommentTableViewCell*)cell).commentid eventId:self.eventId like:!isZan finishBlock:NULL];
     
     [waitingComment setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     int zan_num = [[waitingComment valueForKey:@"good"] intValue];

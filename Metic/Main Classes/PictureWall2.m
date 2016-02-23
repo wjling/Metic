@@ -24,6 +24,7 @@
 #import "UploaderManager.h"
 #import "UploadManageViewController.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -163,7 +164,7 @@
 -(void)refreshPhotoInfoFromDB:(NSMutableArray*)photoInfos
 {
     [self deleteAllPhotoInfoFromDB:_eventId];
-    [PictureWall2 updatePhotoInfoToDB:photoInfos eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:photoInfos eventId:_eventId];
 }
 
 -(void)deleteAllPhotoInfoFromDB:(NSNumber*) eventId
@@ -173,20 +174,6 @@
     }
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-}
-
-+ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId
-{
-    for (int i = 0; i < photoInfos.count; i++) {
-        NSDictionary* photoInfo = [photoInfos objectAtIndex:i];
-        NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
-        photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
-        [[MTDatabaseHelper sharedInstance] insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-        
-    }
-    
 }
 
 - (void)pullPhotoInfosFromDB
@@ -506,7 +493,7 @@
                         [self deleteAllPhotoInfoFromDB:_eventId];
                     }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                        [PictureWall2 updatePhotoInfoToDB:newphoto_list eventId:_eventId];
+                        [MTDatabaseAffairs updatePhotoInfoToDB:newphoto_list eventId:_eventId];
                     });
 
                     [NotificationController visitPhotoWall:_eventId needClear:YES];

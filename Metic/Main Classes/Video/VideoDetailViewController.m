@@ -23,6 +23,7 @@
 #import "MTVideoPlayerViewController.h"
 #import "UIButton+MTWebCache.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 #import "SVProgressHUD.h"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
@@ -260,7 +261,7 @@
                 case NORMAL_REPLY:{
                     if(_videoInfo)[_videoInfo addEntriesFromDictionary:response1];
                     else _videoInfo = response1;
-                    [VideoWallViewController updateVideoInfoToDB:@[response1] eventId:_eventId];
+                    [MTDatabaseAffairs updateVideoInfoToDB:@[response1] eventId:_eventId];
                     [_tableView reloadData];
                 }
                     break;
@@ -282,7 +283,7 @@
     if(_controller && [_controller isKindOfClass:[VideoWallViewController class]]){
         [_controller.tableView reloadRowsAtIndexPaths:@[self.index] withRowAnimation:UITableViewRowAnimationNone];
     }
-    [VideoWallViewController updateVideoInfoToDB:@[self.videoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updateVideoInfoToDB:@[self.videoInfo] eventId:_eventId];
 }
 
 -(void)closeRJ

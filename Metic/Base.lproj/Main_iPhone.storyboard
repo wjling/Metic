@@ -4811,9 +4811,6 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted" image="图片评论_已赞"/>
-                                        <connections>
-                                            <action selector="good:" destination="vtf-A0-qgM" eventType="touchUpInside" id="gvA-5N-5Wt"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ygo-LO-AWi">
                                         <rect key="frame" x="80" y="0.0" width="80" height="45"/>
@@ -4883,7 +4880,6 @@
                     <connections>
                         <outlet property="controlView" destination="DBC-PM-woG" id="KAP-hY-HVa"/>
                         <outlet property="download_button" destination="CLr-x0-Y7a" id="vrd-CL-xYV"/>
-                        <outlet property="good_button" destination="pZT-L4-2hm" id="Pcs-y9-BHb"/>
                         <outlet property="tableView" destination="wJW-xi-MsO" id="d3J-vv-iVx"/>
                         <outletCollection property="buttons" destination="pZT-L4-2hm" id="b9j-Fx-rOr"/>
                         <outletCollection property="buttons" destination="Ygo-LO-AWi" id="rDT-X7-NpD"/>

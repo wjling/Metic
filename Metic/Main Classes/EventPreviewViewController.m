@@ -142,7 +142,6 @@
                         NSMutableDictionary* dictionary = [[NSMutableDictionary alloc]initWithDictionary:newphoto_list[i]];
                         newphoto_list[i] = dictionary;
                     }
-                    //[self updateVideoInfoToDB:newvideo_list];
                     
                     _bestPhotos = newphoto_list;
                     NSIndexPath* indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -156,8 +155,6 @@
         }else{
         }
     }];
-    
-    
 }
 
 -(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset

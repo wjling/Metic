@@ -28,7 +28,7 @@
 @property BOOL shouldReloadPhoto;
 
 //@property (strong,nonatomic) MJRefreshFooterView *footer;
-+ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId;
+
 - (IBAction)toBestPhotos:(id)sender;
 - (IBAction)addPhoto:(id)sender;
 -(void)calculateLRH;

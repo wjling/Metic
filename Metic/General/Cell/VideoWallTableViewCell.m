@@ -21,6 +21,7 @@
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
+#import "MTDatabaseAffairs.h"
 
 #define widthspace 10
 #define deepspace 4
@@ -235,28 +236,10 @@
         return;
     }
     
-
     BOOL isZan = [[_videoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[_videoInfo valueForKey:@"video_id"] forKey:@"video_id"];
-    [dictionary setValue:[NSNumber numberWithInt:isZan? 4:5]  forKey:@"operation"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        [self.good_button setEnabled:YES];
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == DATABASE_ERROR || [cmd intValue] == REQUEST_FAIL) {
-                
-            }
-        }
-    }];
 
+    //点赞 或取消点缀操作
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypeVideo mediaId:[_videoInfo valueForKey:@"video_id"] eventId:self.eventId like:!isZan finishBlock:NULL];
     
     [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
@@ -266,7 +249,7 @@
         zan_num ++;
     }
     [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-    [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
+    [MTDatabaseAffairs updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
     _controller.shouldFlash = NO;
     [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
     [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];

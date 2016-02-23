@@ -24,6 +24,7 @@
 #import "BOAlertController.h"
 #import "MTAutoHideButton.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 
 
 @interface VideoWallViewController ()
@@ -234,7 +235,7 @@
 {
     if (_eventId) {
         [self deleteAllVideoInfoFromDB:_eventId];
-        [VideoWallViewController updateVideoInfoToDB:videoInfos eventId:_eventId];
+        [MTDatabaseAffairs updateVideoInfoToDB:videoInfos eventId:_eventId];
     }
 }
 
@@ -246,19 +247,6 @@
 
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventVideo" withWhere:wheres];
-}
-
-+ (void)updateVideoInfoToDB:(NSArray*)videoInfos eventId:(NSNumber*)eventId
-{
-    for (int i = 0; i < videoInfos.count; i++) {
-        NSDictionary* videoInfo = [videoInfos objectAtIndex:i];
-        NSString *videoData = [NSString jsonStringWithDictionary:videoInfo];
-        videoData = [videoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'video_id'",@"'event_id'",@"'videoInfo'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[videoInfo valueForKey:@"video_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",videoData], nil];
-        [[MTDatabaseHelper sharedInstance] insertToTable:@"eventVideo" withColumns:columns andValues:values];
-    }
-//    [sql closeMyDB];
 }
 
 - (void)pullVideosInfosFromDB
@@ -334,14 +322,14 @@
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                             [self deleteAllVideoInfoFromDB:_eventId];
                             if (_eventId) {
-                                [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
+                                [MTDatabaseAffairs updateVideoInfoToDB:newvideo_list eventId:_eventId];
                             }
                         });
                         
                     }else{
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
                             if (_eventId) {
-                                [VideoWallViewController updateVideoInfoToDB:newvideo_list eventId:_eventId];
+                                [MTDatabaseAffairs updateVideoInfoToDB:newvideo_list eventId:_eventId];
                             }
                         });
                     }

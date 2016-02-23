@@ -22,6 +22,7 @@
 #import "NSString+JSON.h"
 #import "TMQuiltView.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 #import "SVProgressHUD.H"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
@@ -37,7 +38,7 @@
 @property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
-@property (strong, nonatomic) IBOutlet UIButton *good_button;
+@property (strong, nonatomic) UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
@@ -124,9 +125,7 @@
         [button setBackgroundImage:colorImage forState:UIControlStateHighlighted];
         [button resignFirstResponder];
     }
-    
 }
-
 
 -(void)initUI
 {
@@ -241,7 +240,7 @@
                     dispatch_barrier_async(dispatch_get_main_queue(), ^{
                         if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
                         else _photoInfo = response1;
-                        [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
+                        [MTDatabaseAffairs updatePhotoInfoToDB:@[response1] eventId:_eventId];
                         [_tableView reloadData];
                     });
                 }
@@ -331,8 +330,8 @@
 -(void) setGoodButton
 {
     if (_photoInfo && [[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
+        [self.good_button setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
+    }else [self.good_button setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
 }
 
 - (void)pullMainCommentFromAir
@@ -396,7 +395,7 @@
     int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
     comN ++;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (void)commentNumMinus
@@ -405,48 +404,27 @@
     comN --;
     if (comN < 0) comN = 0;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (IBAction)good:(id)sender {
     if(!_canManage) return;
     if(!_photoInfo) return;
-    [self.good_button setEnabled:NO];
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-        [self.good_button setEnabled:YES];
         return;
     }
     
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
-    [dictionary setValue:@"good"  forKey:@"item_id"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        if (rData) {
-            [self.good_button setEnabled:YES];
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            MTLOG(@"received Data: %@",temp);
-            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                
-            }else if([cmd integerValue] == PHOTO_NOT_EXIST){
-                if (!_shouldExit) {
-                    _shouldExit = YES;
-                    [self deleteLocalData];
-                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                    [alert setTag:1];
-                }
-                return ;
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:self.photoId eventId:self.eventId like:!iszan finishBlock:^(BOOL isValid) {
+        if (!isValid) {
+            if (!_shouldExit) {
+                _shouldExit = YES;
+                [self deleteLocalData];
+                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                [alert setTag:1];
             }
         }
     }];
@@ -458,9 +436,8 @@
     }else good ++;
     [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
     [self setGoodButton];
-    [self.good_button setEnabled:YES];
 }
 
 - (IBAction)comment:(id)sender {
@@ -600,7 +577,7 @@
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
         self.specification.text = newSpecification;
         [self.photoInfo setValue:newSpecification forKey:@"specification"];
-        [PictureWall2 updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
+        [MTDatabaseAffairs updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         [self editSpecification:nil];
     } failure:^(NSString *message) {
@@ -1059,19 +1036,28 @@
             [cell addSubview:self.edit_button];
         }
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
-            if (!self.delete_button) {
-                self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
-                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
-                [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
-                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-                [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
-            }
-            [self.delete_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 5, height + 3 + 2, 40, 40)];
-            [cell addSubview:self.delete_button];
+//        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
+//            if (!self.delete_button) {
+//                self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
+//                [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
+//                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
+//                [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
+//                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
+//                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
+//                [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
+//            }
+//            [self.delete_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 5, height + 3 + 2, 40, 40)];
+//            [cell addSubview:self.delete_button];
+//        }
+        //good button
+        if (!self.good_button) {
+            self.good_button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.good_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
+            [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
         }
+        [self.good_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 5, height + 3 + 2, 40, 40)];
+        [cell addSubview:self.good_button];
+        [self setGoodButton];
         
         UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];

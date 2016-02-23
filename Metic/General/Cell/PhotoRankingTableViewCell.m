@@ -14,6 +14,8 @@
 #import "FriendInfoViewController.h"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
+#import "MTOperation.h"
+#import "MTDatabaseAffairs.h"
 
 @implementation PhotoRankingTableViewCell
 #define widthspace 10
@@ -101,24 +103,7 @@
     }
     
     BOOL isZan = [[_photoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[_photoInfo valueForKey:@"photo_id"] forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:isZan? 2:3]  forKey:@"operation"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY) {
-                
-            }
-        }
-    }];
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:[_photoInfo valueForKey:@"photo_id"] eventId:self.eventId like:!isZan finishBlock:NULL];
     
     [_photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     int zan_num = [[_photoInfo valueForKey:@"good"] intValue];
@@ -128,6 +113,7 @@
         zan_num ++;
     }
     [_photoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[self.photoInfo] eventId:self.eventId];
     _controller.shouldFlash = NO;
     [_controller.tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
