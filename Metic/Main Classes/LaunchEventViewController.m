@@ -270,7 +270,7 @@ static NSString * const defaultDetail = @"输入活动描述，让其他人更�
 
 -(void)initInviteFriendsView
 {
-    _InviteFriendsView = [[UIView alloc]initWithFrame:CGRectMake(20, 625, 280, 70)];
+    _InviteFriendsView = [[UIView alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(self.detail_text.frame) + 35, CGRectGetWidth(self.view.frame) - 40, 70)];
     [_InviteFriendsView setBackgroundColor:[UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0]];
     _InviteFriendsView.layer.cornerRadius = 5;
     [_scrollView addSubview:_InviteFriendsView];
@@ -280,7 +280,7 @@ static NSString * const defaultDetail = @"输入活动描述，让其他人更�
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(5, 0, 270, 70) collectionViewLayout:flowLayout];
+    _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(5, 0, CGRectGetWidth(self.InviteFriendsView.frame) - 10, 70) collectionViewLayout:flowLayout];
     _collectionView.dataSource = self;
     _collectionView.delegate = self;
     [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"participantCell"];

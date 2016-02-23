@@ -238,10 +238,12 @@
             switch ([cmd intValue]) {
                 case NORMAL_REPLY:
                 {
-                    if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
-                    else _photoInfo = response1;
-                    [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
-                    [_tableView reloadData];
+                    dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                        if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
+                        else _photoInfo = response1;
+                        [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
+                        [_tableView reloadData];
+                    });
                 }
                     break;
                 case PHOTO_NOT_EXIST:
@@ -355,16 +357,16 @@
                 {
                     if ([response1 valueForKey:@"pcomment_list"]) {
                         NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
-                        if ([_sequence longValue] == sequence) {
-                            if (sequence == 0) [_pcomment_list removeAllObjects];
-                            [self.pcomment_list addObjectsFromArray:newComments];
-                            if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
-                            else self.sequence = [response1 valueForKey:@"sequence"];
-                        }
-                        _isLoading = NO;
-                        [self.tableView reloadData];
-                        //                        [self closeRJ];
-                        //
+                        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                            if ([_sequence longValue] == sequence) {
+                                if (sequence == 0) [_pcomment_list removeAllObjects];
+                                [self.pcomment_list addObjectsFromArray:newComments];
+                                if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                                else self.sequence = [response1 valueForKey:@"sequence"];
+                            }
+                            _isLoading = NO;
+                            [self.tableView reloadData];
+                        });
                     }
                 }
                     break;

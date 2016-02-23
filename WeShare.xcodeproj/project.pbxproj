@@ -269,6 +269,7 @@
 		F810B7B61B0107ED00843AAB /* EventEditLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */; };
 		F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */; };
 		F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7C01B0F679800843AAB /* EventLikeViewController.m */; };
+		F8114F0B1C7C1ED600A5E698 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */; };
 		F813B2D31BB3B9A70066BC37 /* SDWebImageManager+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D21BB3B9A70066BC37 /* SDWebImageManager+MJ.m */; };
 		F813B2F21BB3B9BA0066BC37 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D61BB3B9BA0066BC37 /* NSData+ImageContentType.m */; };
 		F813B2F31BB3B9BA0066BC37 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D81BB3B9BA0066BC37 /* SDImageCache.m */; };
@@ -1018,6 +1019,8 @@
 		F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditRemarkViewController.m; sourceTree = "<group>"; };
 		F810B7BF1B0F679800843AAB /* EventLikeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLikeViewController.h; sourceTree = "<group>"; };
 		F810B7C01B0F679800843AAB /* EventLikeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLikeViewController.m; sourceTree = "<group>"; };
+		F8114F091C7C1ED600A5E698 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
+		F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
 		F813B2D11BB3B9A70066BC37 /* SDWebImageManager+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDWebImageManager+MJ.h"; sourceTree = "<group>"; };
 		F813B2D21BB3B9A70066BC37 /* SDWebImageManager+MJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SDWebImageManager+MJ.m"; sourceTree = "<group>"; };
 		F813B2D51BB3B9BA0066BC37 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -2154,6 +2157,7 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F8114F081C7C1ED600A5E698 /* JGActionSheet */,
 				F8EA75511C0EAF9200190832 /* FXKeychain */,
 				F8EA73F21C0CC09900190832 /* TPKeyboardAvoiding */,
 				F8EA73BB1C0CBB2F00190832 /* Mantle */,
@@ -2524,6 +2528,15 @@
 				F810B7C01B0F679800843AAB /* EventLikeViewController.m */,
 			);
 			name = EventLike;
+			sourceTree = "<group>";
+		};
+		F8114F081C7C1ED600A5E698 /* JGActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				F8114F091C7C1ED600A5E698 /* JGActionSheet.h */,
+				F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */,
+			);
+			path = JGActionSheet;
 			sourceTree = "<group>";
 		};
 		F813B2D41BB3B9BA0066BC37 /* SDWebImage */ = {
@@ -3769,6 +3782,7 @@
 				F8A518CD1BEB325000743000 /* ContactsViewController.m in Sources */,
 				F813B2F61BB3B9BA0066BC37 /* SDWebImageDownloader.m in Sources */,
 				F8B5DDDD1BFB83EA00E1F713 /* PhotoRankingTableViewCell.m in Sources */,
+				F8114F0B1C7C1ED600A5E698 /* JGActionSheet.m in Sources */,
 				51F4CB1619E6307500E487F1 /* DDFileLogger.m in Sources */,
 				081B6DA81A7685D80044D623 /* mask.c in Sources */,
 				F8B5DDF21BFB83EA00E1F713 /* MTPhotoBrowser.m in Sources */,
