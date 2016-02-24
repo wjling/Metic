@@ -290,18 +290,18 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     double width = CGRectGetWidth(self.frame);
     
     NSString *zanLabelText = [NSString stringWithFormat:@"%ld",(long)_zanNum];
-    CGFloat zanTextWidth = zanLabelText.length * 10;
+    CGFloat zanTextWidth = zanLabelText.length * 7;
     self.zanLabelView.text = zanLabelText;
-    self.zanLabelView.frame = CGRectMake(width - zanTextWidth - 2, 0, zanTextWidth, DETAIL_VIEW_HEIGHT);
+    self.zanLabelView.frame = CGRectMake(width - zanTextWidth - 4, 0, zanTextWidth, DETAIL_VIEW_HEIGHT);
     
     self.zanImageView.frame = CGRectMake(CGRectGetMinX(self.zanLabelView.frame) - DETAIL_VIEW_HEIGHT, 0, DETAIL_VIEW_HEIGHT-3, DETAIL_VIEW_HEIGHT);
     [self.zanImageView setImage:isZan? [UIImage imageNamed:@"icon_like_yes"]:[UIImage imageNamed:@"icon_like_no"]];
     
     
     NSString *commentLabelText = [NSString stringWithFormat:@"%ld",(long)_commentNum];
-    CGFloat commentTextWidth = commentLabelText.length * 10;
+    CGFloat commentTextWidth = commentLabelText.length * 7;
     self.commentLabelView.text = commentLabelText;
-    self.commentLabelView.frame = CGRectMake(CGRectGetMinX(self.zanImageView.frame) - commentTextWidth - 5, 0, commentTextWidth, DETAIL_VIEW_HEIGHT);
+    self.commentLabelView.frame = CGRectMake(CGRectGetMinX(self.zanImageView.frame) - commentTextWidth - 7, 0, commentTextWidth, DETAIL_VIEW_HEIGHT);
     
     self.commentImageView.frame = CGRectMake(CGRectGetMinX(self.commentLabelView.frame) - DETAIL_VIEW_HEIGHT, 0, DETAIL_VIEW_HEIGHT-3, DETAIL_VIEW_HEIGHT);
     [self.commentImageView setImage:_commentNum > 0? [UIImage imageNamed:@"icon_comment_yes"]:[UIImage imageNamed:@"icon_comment_no"]];
