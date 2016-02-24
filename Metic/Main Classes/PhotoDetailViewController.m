@@ -28,6 +28,7 @@
 #import "MTImageGetter.h"
 #import "MTOperation.h"
 #import "SocialSnsApi.h"
+#import "JGActionSheet.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber *sequence;
@@ -110,6 +111,10 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc {
+    NSLog(@"dealloc");
 }
 
 //返回上一层
@@ -215,7 +220,6 @@
             });
         }
     }];
-    
 }
 
 -(void)pullPhotoInfoFromAir
@@ -887,8 +891,35 @@
             BannerViewController* bannerView = [[BannerViewController alloc] init];
             bannerView.banner = self.photo;
             [self presentViewController:bannerView animated:YES completion:^{}];
+            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
+            [bannerView.view addGestureRecognizer:longPress];
         }
     }
+}
+
+- (void)photoOptions:(UIGestureRecognizer*)sender
+{
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    
+    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:@"Title" message:@"Message" buttonTitles:@[@"Yes", @"No"] buttonStyle:JGActionSheetButtonStyleDefault];
+    JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel];
+    
+    NSArray *sections = @[section1, cancelSection];
+    
+    JGActionSheet *sheet = [JGActionSheet actionSheetWithSections:sections];
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
+        [sheet dismissAnimated:YES];
+    }];
+    
+    [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+        [sheet dismissAnimated:YES];
+    }];
+    
+    UIViewController *bannerViewController = self.presentedViewController;
+    
+    [sheet showInView:bannerViewController.view animated:YES];
+    
 }
 
 -(void)closeRJ

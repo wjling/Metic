@@ -259,15 +259,11 @@
             BOOL isMine = [[self.eventInfo valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
             if (isMine) {
                 UIButton *changeBannerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [changeBannerBtn setTitle:@"更换封面" forState:UIControlStateNormal];
-                [changeBannerBtn setTitleColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0] forState:UIControlStateNormal];
-                changeBannerBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+                
+                [changeBannerBtn setImage:[UIImage imageNamed:@"icon_change_banner"] forState:UIControlStateNormal];
+                [changeBannerBtn.imageView setContentMode:UIViewContentModeScaleAspectFit];
                 [changeBannerBtn addTarget:self action:@selector(changeBanner) forControlEvents:UIControlEventTouchUpInside];
-                [changeBannerBtn setBounds:CGRectMake(0, 0, 80, 40)];
-                changeBannerBtn.layer.borderColor = [UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0].CGColor;
-                changeBannerBtn.layer.borderWidth = 2;
-                changeBannerBtn.layer.masksToBounds = YES;
-                changeBannerBtn.layer.cornerRadius = 6;
+                [changeBannerBtn setBounds:CGRectMake(0, 0, 120, 40)];
                 
                 [bannerView setCustomView:changeBannerBtn];
             }
