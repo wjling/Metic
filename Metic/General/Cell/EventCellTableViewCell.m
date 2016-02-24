@@ -18,6 +18,12 @@
 
 #define MainFontSize 14
 
+@interface EventCellTableViewCell ()
+
+@property(nonatomic,strong) BannerViewController *bannerView;
+
+@end
+
 @implementation EventCellTableViewCell
 
 @synthesize launcherImg;
@@ -40,6 +46,7 @@
 @synthesize imgWall_icon;
 @synthesize videoWall_icon;
 @synthesize controller;
+@synthesize bannerView;
 
 
 #define widthspace 10
@@ -50,9 +57,6 @@
     if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
         
         // Initialization code
-        
-
-        
     }
     return self;
     
@@ -249,8 +253,24 @@
         }else if (self.controller.isEmotionOpen){
             [self.controller button_Emotionpress:nil];
         }else{
-            BannerViewController* bannerView = [[BannerViewController alloc] init];
+            bannerView = [[BannerViewController alloc] init];
             bannerView.banner = themePhoto.image;
+            
+            BOOL isMine = [[self.eventInfo valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue];
+            if (isMine) {
+                UIButton *changeBannerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [changeBannerBtn setTitle:@"更换封面" forState:UIControlStateNormal];
+                [changeBannerBtn setTitleColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0] forState:UIControlStateNormal];
+                changeBannerBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+                [changeBannerBtn addTarget:self action:@selector(changeBanner) forControlEvents:UIControlEventTouchUpInside];
+                [changeBannerBtn setBounds:CGRectMake(0, 0, 80, 40)];
+                changeBannerBtn.layer.borderColor = [UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0].CGColor;
+                changeBannerBtn.layer.borderWidth = 2;
+                changeBannerBtn.layer.masksToBounds = YES;
+                changeBannerBtn.layer.cornerRadius = 6;
+                
+                [bannerView setCustomView:changeBannerBtn];
+            }
             [self.controller presentViewController:bannerView animated:YES completion:^{}];
         }
     }else{
@@ -258,11 +278,16 @@
             [self.controller.inputTextView resignFirstResponder];
             return;
         }
-        BannerViewController* bannerView = [[BannerViewController alloc] init];
+        bannerView = [[BannerViewController alloc] init];
         bannerView.banner = themePhoto.image;
         [self.controller presentViewController:bannerView animated:YES completion:^{}];
     }
     
+}
+
+- (void)changeBanner {
+    [self.controller changeBanner];
+    [bannerView dismissViewControllerAnimated:YES completion:NULL];
 }
 
 -(void)drawOfficialFlag:(BOOL)isOfficial

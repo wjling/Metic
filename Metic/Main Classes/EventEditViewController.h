@@ -14,4 +14,5 @@
 
 @property NSInteger Bannercode;
 @property (nonatomic,strong) UIImage* uploadImage;
+
 @end

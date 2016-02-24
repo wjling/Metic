@@ -48,6 +48,7 @@
 - (void)delete_Comment:(id)sender;
 - (void)appreciate:(id)sender;
 - (void)readyforMainC;
+- (void)changeBanner;
 - (IBAction)more:(id)sender;
 
 
