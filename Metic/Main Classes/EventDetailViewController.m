@@ -371,27 +371,32 @@
                                                            action:@selector(show2Dcode:)],
                                              ]];
         }
+        
         if (_eventId && [_eventId intValue]!=0) {
+            BOOL islike = [[self.event valueForKey:@"islike"] boolValue];
             [menuItems addObjectsFromArray:@[
                                              
-                                            [KxMenuItem menuItem:@"举报活动"
+                                             [KxMenuItem menuItem:islike? @"取消收藏":@"收藏活动"
+                                                            image:nil
+                                                           target:self
+                                                           action:@selector(like:)],
+                                             ]];
+        }
+        if (_eventId && [_eventId intValue]!=0 && [[_event valueForKey:@"launcher_id"] intValue] != [[MTUser sharedInstance].userid intValue]) {
+            [menuItems addObjectsFromArray:@[
+                                             
+                                             [KxMenuItem menuItem:@"举报活动"
                                                             image:nil
                                                            target:self
                                                            action:@selector(report:)],
                                              ]];
         }
-        
         if ([[_event valueForKey:@"launcher_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
             [menuItems addObjectsFromArray:@[
                                              [KxMenuItem menuItem:@"编辑活动"
                                                             image:nil
                                                            target:self
                                                            action:@selector(editEvent)],
-                                             
-                                             //                                             [KxMenuItem menuItem:@"更换封面"
-                                             //                                                            image:nil
-                                             //                                                           target:self
-                                             //                                                           action:@selector(changeBanner)],
                                              
                                              [KxMenuItem menuItem:@"解散活动"
                                                             image:nil
@@ -799,7 +804,7 @@
 
 - (IBAction)like:(id)sender {
     if(_eventId && _event) {
-        __weak UIButton* likeBtn = sender;
+        __weak UIButton* likeBtn = self.likeBtn;
         __weak NSMutableDictionary* eventInfo = _event;
         
         NSNumber* eventId = [_eventId copy];
@@ -836,7 +841,6 @@
             }
         }];
     }
-    
 }
 
 - (void)delete_Comment:(id)sender {

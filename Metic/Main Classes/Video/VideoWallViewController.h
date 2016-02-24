@@ -31,6 +31,4 @@
 @property(nonatomic,strong) NSMutableDictionary* AVPlayerItems;
 @property(nonatomic,strong) NSMutableDictionary* AVPlayerLayers;
 @property(nonatomic,strong) NSMutableSet* loadingVideo;
-
-- (IBAction)uploadVideo:(id)sender;
 @end

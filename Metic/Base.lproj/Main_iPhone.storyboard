@@ -3604,7 +3604,7 @@
                     <navigationItem key="navigationItem" title="活动详情" id="OXK-As-Rk2">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="fKk-0f-s73">
                             <view key="customView" contentMode="scaleToFill" id="IM7-9o-9ay">
-                                <rect key="frame" x="0.0" y="0.0" width="71" height="33"/>
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AD-QB-sfd">
