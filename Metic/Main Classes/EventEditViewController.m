@@ -159,7 +159,6 @@ const NSInteger rowCount = 4;
             getter.mDelegate = self;
             [getter uploadBanner:_eventId];
         }
-        
     }
 }
 

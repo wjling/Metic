@@ -59,7 +59,9 @@
     [super viewWillAppear:animated];
     NSArray *cells = [self.quiltView visibleCells];
     for (PhotoTableViewCell *cell in cells) {
-        [cell reloadDetailView];
+        if ([cell isKindOfClass:[PhotoTableViewCell class]]) {
+            [cell reloadDetailView];
+        }
     }
 }
 

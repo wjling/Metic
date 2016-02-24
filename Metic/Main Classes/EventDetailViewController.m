@@ -116,7 +116,7 @@
             //上报封面修改信息
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             [dictionary setValue:_eventId forKey:@"event_id"];
-            [dictionary setValue:[NSNumber numberWithInt:_Bannercode] forKey:@"code"];
+            [dictionary setValue:[NSNumber numberWithInteger:_Bannercode] forKey:@"code"];
             _Bannercode = -1;
             [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
@@ -143,7 +143,6 @@
             getter.mDelegate = self;
             [getter uploadBanner:_eventId];
         }
-        
     }
 }
 -(void)viewWillDisappear:(BOOL)animated
