@@ -271,17 +271,11 @@
     _authorId = [_videoInfo valueForKey:@"author_id"];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [_controller.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = self.authorId;
-        [_controller.navigationController pushViewController:friendView animated:YES];
-    }
-	
+
+    FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+    friendView.fid = self.authorId;
+    [_controller.navigationController pushViewController:friendView animated:YES];
+
 }
 
 

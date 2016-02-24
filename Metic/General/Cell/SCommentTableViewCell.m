@@ -87,16 +87,11 @@
         {
             UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                      bundle: nil];
-            if ([_authorid intValue] == [[MTUser sharedInstance].userid intValue]) {
-                UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-                userInfoView.needPopBack = YES;
-                [_controller.navigationController pushViewController:userInfoView animated:YES];
-                
-            }else{
-                FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-                friendView.fid = _authorid;
-                [_controller.navigationController pushViewController:friendView animated:YES];
-            }
+
+            FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+            friendView.fid = _authorid;
+            [_controller.navigationController pushViewController:friendView animated:YES];
+            
 
             MTLOG(@"点击了用户%@",link);
         }

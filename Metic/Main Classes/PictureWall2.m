@@ -47,6 +47,7 @@
 @end
 
 @implementation PictureWall2
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
@@ -54,8 +55,15 @@
     // Do any additional setup after loading the view from its nib.
 }
 
--(void)dealloc
-{
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSArray *cells = [self.quiltView visibleCells];
+    for (PhotoTableViewCell *cell in cells) {
+        [cell reloadDetailView];
+    }
+}
+
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deletePhotoItem" object:nil];
     [_header free];
@@ -632,13 +640,9 @@
     
     
     if(indexPath.row >= _photo_list.count) return 0;
-    NSDictionary *a = _photo_list[indexPath.row];
+    NSDictionary *photoInfo = _photo_list[indexPath.row];
     
-    float width = [[a valueForKey:@"width"] floatValue];
-    float height = [[a valueForKey:@"height"] floatValue];
-    float RealHeight = height * 145.0f / width;
-    
-    return RealHeight + 33;
+    return [PhotoTableViewCell photoCellHeightForPhotoInfo:photoInfo];
 }
 
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath

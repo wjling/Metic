@@ -927,17 +927,11 @@
 - (void)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
-    if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [self.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = [self.photoInfo valueForKey:@"author_id"];
-        [self.navigationController pushViewController:friendView animated:YES];
-    }
-    
+
+    FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+    friendView.fid = [self.photoInfo valueForKey:@"author_id"];
+    [self.navigationController pushViewController:friendView animated:YES];
+
 }
 
 
