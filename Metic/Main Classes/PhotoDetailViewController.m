@@ -467,7 +467,10 @@
         if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
             [shareToSns addObject:UMShareToSms];
         }
-        [UMSocialSnsService presentSnsIconSheetView:self
+        UIViewController *vc = self.presentedViewController;
+        if (!vc)
+            vc = self;
+        [UMSocialSnsService presentSnsIconSheetView:vc
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
                                          shareImage:self.photo
@@ -479,8 +482,20 @@
 - (IBAction)download:(id)sender {
     if (_photo) {
         [self.download_button setEnabled:NO];
+        [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
         UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     }
+}
+
+- (void)report {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    ReportViewController *reportVC = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"];
+    
+    reportVC.photoId = self.photoId;
+    reportVC.eventId = self.eventId;
+    reportVC.event = self.eventName;
+    reportVC.type = 3;
+    [[SlideNavigationController sharedInstance] pushViewController:reportVC animated:YES];
 }
 
 -(void)editSpecification:(UIButton*)button
@@ -874,9 +889,9 @@
 - (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
     [self.download_button setEnabled:YES];
     if (error){
-        // Do anything needed to handle the error or display it to the user
+        [SVProgressHUD dismissWithSuccess:@"保存失败" afterDelay:.7f];
     }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithSuccess:@"保存成功" afterDelay:.7f];
     }
 }
 
@@ -901,15 +916,36 @@
 {
     if (sender.state != UIGestureRecognizerStateBegan) return;
     
-    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:@"Title" message:@"Message" buttonTitles:@[@"Yes", @"No"] buttonStyle:JGActionSheetButtonStyleDefault];
-    JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"Cancel"] buttonStyle:JGActionSheetButtonStyleCancel];
+    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"图片分享",@"保存图片", @"举报图片"] buttonStyle:JGActionSheetButtonStyleDefault];
+    JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"取消"] buttonStyle:JGActionSheetButtonStyleCancel];
     
     NSArray *sections = @[section1, cancelSection];
     
     JGActionSheet *sheet = [JGActionSheet actionSheetWithSections:sections];
     
     [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        [sheet dismissAnimated:YES];
+        switch (indexPath.row) {
+            case 0:{
+                [self share:nil];
+                [sheet dismissAnimated:YES];
+            }
+                break;
+            case 1:{
+                [self download:nil];
+                [sheet dismissAnimated:YES];
+            }
+                break;
+            case 2:{
+                [sheet dismissAnimated:YES];
+                [self.presentedViewController dismissViewControllerAnimated:YES completion:^{
+                    [self report];
+                }];
+            }
+                break;
+                
+            default:
+                break;
+        }
     }];
     
     [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
