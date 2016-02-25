@@ -31,7 +31,6 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 @property (nonatomic, strong) PhotoDetailView *detailView;
 @property (nonatomic, strong) UIButton *zanBtn;
 
-
 @end
 
 @implementation PhotoTableViewCell
@@ -47,10 +46,6 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     _infoView = [[UIView alloc]initWithFrame:CGRectZero];
     [_infoView setBackgroundColor:[UIColor whiteColor]];
     [self addSubview:_infoView];
-    
-//    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 145, 3)];
-//    [line setBackgroundColor:[UIColor colorWithRed:246.0/255.0 green:92.0/255.0 blue:35.0/255.0 alpha:1.0]];
-//    [_infoView addSubview:line];
     
     self.avatar = [[UIImageView alloc]initWithFrame:CGRectMake(5, 4, 22, 22)];
     self.avatar.layer.masksToBounds = YES;

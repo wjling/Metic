@@ -924,27 +924,29 @@
     JGActionSheet *sheet = [JGActionSheet actionSheetWithSections:sections];
     
     [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
-        switch (indexPath.row) {
-            case 0:{
-                [self share:nil];
-                [sheet dismissAnimated:YES];
+        if (indexPath.section == 0) {
+            switch (indexPath.row) {
+                case 0:{
+                    [sheet dismissAnimated:YES];
+                    [self share:nil];
+                }
+                    break;
+                case 1:{
+                    [sheet dismissAnimated:YES];
+                    [self download:nil];
+                }
+                    break;
+                case 2:{
+                    [sheet dismissAnimated:YES];
+                    [self.presentedViewController dismissViewControllerAnimated:YES completion:^{
+                        [self report];
+                    }];
+                }
+                    break;
+                    
+                default:
+                    break;
             }
-                break;
-            case 1:{
-                [self download:nil];
-                [sheet dismissAnimated:YES];
-            }
-                break;
-            case 2:{
-                [sheet dismissAnimated:YES];
-                [self.presentedViewController dismissViewControllerAnimated:YES completion:^{
-                    [self report];
-                }];
-            }
-                break;
-                
-            default:
-                break;
         }
     }];
     
@@ -960,14 +962,6 @@
 
 -(void)closeRJ
 {
-    //    if (_Headeropen) {
-    //        _Headeropen = NO;
-    //        [_header endRefreshing];
-    //    }
-    //    if (_Footeropen) {
-    //        _Footeropen = NO;
-    //        [_footer endRefreshing];
-    //    }
     [self.tableView reloadData];
 }
 

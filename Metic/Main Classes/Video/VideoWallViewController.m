@@ -434,6 +434,7 @@
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pauseVideo" object:nil userInfo:nil];
 }
+
 -(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"initLVideo"
@@ -530,7 +531,7 @@
     
     NSDictionary *dictionary = self.videoInfos[indexPath.row];
     NSString* text = [dictionary valueForKey:@"title"];
-    float height = [VideoWallTableViewCell calculateCellHeightwithText:text labelWidth:CGRectGetWidth(tableView.frame) - 20];
+    float height = [VideoWallTableViewCell calculateCellHeightwithText:text labelWidth:CGRectGetWidth(tableView.frame) - 10];
     return height;
     
 }
