@@ -577,7 +577,7 @@
             float preX = CGRectGetMinX(preCell.frame);
             float width = 300;
             float height = (preHeight != 50)? 50 : fabsf(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-40, width*4/6, 40)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-45, width*4/6, 40)];
             if (!_haveLoadedPhoto) {
                 label.text = @"正在加载 ...";
             }else if([self checkPhoNum]){

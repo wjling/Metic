@@ -39,6 +39,8 @@
 - (IBAction)download:(id)sender;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
+- (void)removeOptionBtn;
+- (void)tabbarButtonOption;
 - (void)commentNumMinus;
 - (void)commentNumPlus;
 @end

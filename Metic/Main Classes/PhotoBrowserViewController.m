@@ -21,8 +21,6 @@
 @property (nonatomic, strong) NSDictionary *eventInfo;
 @property (nonatomic) NSInteger showIndex;
 
-@property (nonatomic, strong) PhotoDetailViewController *seletedDetailViewController;
-
 @end
 
 @implementation PhotoBrowserViewController
@@ -49,7 +47,12 @@
         CGRect frame = self.view.bounds;
         self.swipeView.frame = frame;
         [self.view addSubview:self.swipeView];
+        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self swipeViewDidEndDecelerating:self.swipeView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,11 +75,8 @@
     self.swipeView.dataSource = self;
     self.swipeView.delegate = self;
     self.swipeView.pagingEnabled = YES;
-    
-    self.seletedDetailViewController = [self photoDetailVCwithIndex:self.showIndex];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
-    });
+    [self.swipeView reloadData];
+
 }
 
 - (void)setTableViewScrollEnabled:(BOOL)scrollEnabled {
@@ -84,10 +84,6 @@
 }
 
 - (PhotoDetailViewController *)photoDetailVCwithIndex:(NSInteger)index {
-    
-    if (self.seletedDetailViewController) {
-        return self.seletedDetailViewController;
-    }
 
     NSMutableDictionary *photoInfo = self.photos[index];
     
@@ -113,21 +109,10 @@
 
 - (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
-    PhotoDetailViewController *detailViewController;
-    
-    if (self.seletedDetailViewController) {
-        detailViewController = self.seletedDetailViewController;
-        if (index == self.showIndex) {
-            self.seletedDetailViewController = nil;
-        }
-    } else {
-        detailViewController = [self photoDetailVCwithIndex:index];
-    }
-    
+    PhotoDetailViewController *detailViewController = [self photoDetailVCwithIndex:index];
+    [self addChildViewController:detailViewController];
     CGRect frame = self.view.bounds;
     detailViewController.view.frame = frame;
-    
-    [self addChildViewController:detailViewController];
     [detailViewController didMoveToParentViewController:self];
     
     return detailViewController.view;
@@ -135,6 +120,7 @@
 
 #pragma mark SwipeView Delegate
 - (void)swipeViewWillBeginDragging:(SwipeView *)swipeView {
+
     for (PhotoDetailViewController *detailVC in self.childViewControllers) {
         if (detailVC && [detailVC respondsToSelector:@selector(inputTextView)]) {
             if (detailVC.inputTextView.isFirstResponder) {
@@ -145,10 +131,14 @@
 }
 
 - (void)swipeViewDidEndDecelerating:(SwipeView *)swipeView {
+
     for (PhotoDetailViewController *detailVC in self.childViewControllers) {
         if (![swipeView.visibleItemViews containsObject:detailVC.view]) {
             [detailVC.view removeFromSuperview];
             [detailVC removeFromParentViewController];
+        }else {
+            [detailVC tabbarButtonOption
+             ];
         }
     }
 }
