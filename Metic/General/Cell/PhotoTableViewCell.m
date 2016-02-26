@@ -191,6 +191,10 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 
 #pragma mark 点赞
 - (void)good {
+    if (![[self.PhotoWall.eventInfo valueForKey:@"isIn"]boolValue]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];

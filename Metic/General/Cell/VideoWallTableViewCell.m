@@ -124,7 +124,10 @@ static CGFloat DETAIL_VIEW_HEIGHT = 23;
 
 -(IBAction)good:(UIButton*)button
 {
-    if(![[_controller.eventInfo valueForKey:@"isIn"]boolValue])return;
+    if (![[self.controller.eventInfo valueForKey:@"isIn"]boolValue]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;

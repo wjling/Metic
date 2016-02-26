@@ -136,9 +136,11 @@
 {
     self.view.autoresizesSubviews = YES;
     
+    //右上角按钮
     if (![self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
         [self tabbarButtonOption];
     }
+    
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -416,7 +418,7 @@
 }
 
 - (IBAction)good:(id)sender {
-    if(!_canManage) return;
+    if (![self checkCanManaged]) return;
     if(!_photoInfo) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
@@ -448,8 +450,17 @@
     [self setGoodButton];
 }
 
+- (BOOL)checkCanManaged {
+    if (_canManage) {
+        return YES;
+    } else {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞和评论" WithDelegate:nil WithCancelTitle:@"确定"];
+        return NO;
+    }
+}
+
 - (IBAction)comment:(id)sender {
-    if (!_canManage) return;
+    if (![self checkCanManaged]) return;
     self.inputTextView.placeHolder = @"说点什么吧";
     [self.inputTextView becomeFirstResponder];
 }
@@ -683,7 +694,7 @@
 
 -(void)resendComment:(id)sender
 {
-    if (!_canManage) return;
+    if (![self checkCanManaged]) return;
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
@@ -801,6 +812,7 @@
 
 
 - (IBAction)publishComment:(id)sender {
+    if (![self checkCanManaged]) return;
     if (!_photoInfo) return;
     NSString *comment = self.inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {

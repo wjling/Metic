@@ -96,7 +96,11 @@
 
 - (IBAction)addGood:(id)button
 {
-    if (!_controller.canManage) return;
+    if (!_controller.canManage) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
+    
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
         return;
@@ -125,7 +129,6 @@
 - (IBAction)toUserInfo:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-
     FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
     friendView.fid = self.authorId;
     [_controller.navigationController pushViewController:friendView animated:YES];

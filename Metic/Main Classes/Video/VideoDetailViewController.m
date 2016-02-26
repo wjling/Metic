@@ -130,6 +130,14 @@
 -(void)initUI
 {
     self.view.autoresizesSubviews = YES;
+   
+    //右上角按钮
+    [self tabbarButtonOption];
+    
+    if (!_canManage) {
+        self.tableView.bounds = self.view.bounds;
+        return;
+    }
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -174,10 +182,7 @@
     _emotionKeyboard.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_emotionKeyboard];
     _emotionKeyboard.textView = _inputTextView;
-    
-    //右上角按钮
-    [self tabbarButtonOption];
-    
+
 }
 
 - (void)initData
@@ -726,8 +731,17 @@
     }
 }
 
+- (BOOL)checkCanManaged {
+    if (_canManage) {
+        return YES;
+    } else {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞和评论" WithDelegate:nil WithCancelTitle:@"确定"];
+        return NO;
+    }
+}
+
 - (IBAction)good:(id)sender {
-    if(!_canManage) return;
+    if(![self checkCanManaged]) return;
     if(!_videoInfo) return;
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
@@ -955,6 +969,7 @@
 }
 
 - (IBAction)publishComment:(id)sender {
+    if (![self checkCanManaged]) return;
     if (!_videoInfo) return;
     NSString *comment = self.inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
