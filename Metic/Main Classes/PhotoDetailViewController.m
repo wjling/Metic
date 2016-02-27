@@ -81,10 +81,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.inputTextView resignFirstResponder];
     [MobClick beginLogPageView:@"图片主页"];
-    self.sequence = @0;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self pullMainCommentFromAir];
-    });
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -200,9 +197,10 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_barrier_async(dispatch_get_main_queue(), ^{
         if (!_photoInfo) [self pullPhotoInfoFromDB];
         [self pullPhotoInfoFromAir];
+        [self pullMainCommentFromAir];
     });
 }
 
@@ -402,18 +400,18 @@
 
 - (void)commentNumPlus
 {
-    int comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
+    NSInteger comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
     comN ++;
-    [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [self.photoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
     [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (void)commentNumMinus
 {
-    int comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
+    NSInteger comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
     comN --;
     if (comN < 0) comN = 0;
-    [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
+    [self.photoInfo setValue:[NSNumber numberWithInteger:comN] forKey:@"comment_num"];
     [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
@@ -998,7 +996,13 @@
 {
     if (sender.state != UIGestureRecognizerStateBegan) return;
     
-    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"图片分享",@"保存图片", @"举报图片"] buttonStyle:JGActionSheetButtonStyleDefault];
+    NSArray *funtion = @[@"图片分享",@"保存图片", @"举报图片"];
+    
+    if ([self.eventLauncherId isEqualToNumber:[MTUser sharedInstance].userid]) {
+        funtion = [funtion subarrayWithRange:NSMakeRange(0, 2)];
+    }
+    
+    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:funtion buttonStyle:JGActionSheetButtonStyleDefault];
     JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"取消"] buttonStyle:JGActionSheetButtonStyleCancel];
     
     NSArray *sections = @[section1, cancelSection];
@@ -1029,6 +1033,8 @@
                 default:
                     break;
             }
+        } else {
+            [sheet dismissAnimated:YES];
         }
     }];
     

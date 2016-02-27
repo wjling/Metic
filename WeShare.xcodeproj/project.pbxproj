@@ -240,6 +240,8 @@
 		51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0319E6307500E487F1 /* HTTPRedirectResponse.m */; };
 		51F4CB2619E6307500E487F1 /* HTTPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0619E6307500E487F1 /* HTTPServer.m */; };
 		51F4CB2719E6307500E487F1 /* WebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 51F4CB0819E6307500E487F1 /* WebSocket.m */; };
+		F8029A391C81CEA400872739 /* PhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8029A371C81CEA400872739 /* PhotoBrowserViewController.m */; };
+		F8029A3A1C81CEA400872739 /* PhotoBrowserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8029A381C81CEA400872739 /* PhotoBrowserViewController.xib */; };
 		F80318001C5C974E008C1E49 /* UMSocialLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F80317D71C5C974E008C1E49 /* UMSocialLocalizable.strings */; };
 		F80318011C5C974E008C1E49 /* libUMSocial_Sdk_4.4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F80317E51C5C974E008C1E49 /* libUMSocial_Sdk_4.4.a */; };
 		F80318021C5C974E008C1E49 /* UMSCommentDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F80317E71C5C974E008C1E49 /* UMSCommentDetailController.xib */; };
@@ -436,7 +438,6 @@
 		F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */; };
 		F8C9CCA21C12C48A005E0A74 /* EnactiveAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */; };
 		F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */; };
-		F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */; };
 		F8DB8AD81C79D51500DAC951 /* PhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
@@ -954,6 +955,9 @@
 		51F4CB0619E6307500E487F1 /* HTTPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPServer.m; sourceTree = "<group>"; };
 		51F4CB0719E6307500E487F1 /* WebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket.h; sourceTree = "<group>"; };
 		51F4CB0819E6307500E487F1 /* WebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket.m; sourceTree = "<group>"; };
+		F8029A361C81CEA400872739 /* PhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserViewController.h; sourceTree = "<group>"; };
+		F8029A371C81CEA400872739 /* PhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserViewController.m; sourceTree = "<group>"; };
+		F8029A381C81CEA400872739 /* PhotoBrowserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoBrowserViewController.xib; sourceTree = "<group>"; };
 		F80317D81C5C974E008C1E49 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/UMSocialLocalizable.strings; sourceTree = "<group>"; };
 		F80317DA1C5C974E008C1E49 /* UMSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocial.h; sourceTree = "<group>"; };
 		F80317DB1C5C974E008C1E49 /* UMSocialAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialAccountManager.h; sourceTree = "<group>"; };
@@ -1340,8 +1344,6 @@
 		F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnactiveAccountViewController.h; path = "Login&Register/EnactiveAccountViewController.h"; sourceTree = "<group>"; };
 		F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnactiveAccountViewController.m; path = "Login&Register/EnactiveAccountViewController.m"; sourceTree = "<group>"; };
 		F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EnactiveAccountViewController.xib; path = "Login&Register/EnactiveAccountViewController.xib"; sourceTree = "<group>"; };
-		F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserViewController.h; sourceTree = "<group>"; };
-		F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserViewController.m; sourceTree = "<group>"; };
 		F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserCell.h; sourceTree = "<group>"; };
 		F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserCell.m; sourceTree = "<group>"; };
 		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
@@ -1705,10 +1707,11 @@
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
 				08905A701A2E096B0089CF08 /* PictureWall2.h */,
 				08905A711A2E096B0089CF08 /* PictureWall2.m */,
-				F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */,
-				F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */,
 				F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */,
 				F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */,
+				F8029A361C81CEA400872739 /* PhotoBrowserViewController.h */,
+				F8029A371C81CEA400872739 /* PhotoBrowserViewController.m */,
+				F8029A381C81CEA400872739 /* PhotoBrowserViewController.xib */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -3445,6 +3448,7 @@
 				F8B5DD271BFB83C000E1F713 /* MJRefresh.bundle in Resources */,
 				F82D60AC1C2A8BBF00B5AB1B /* PasswordSettingViewController.xib in Resources */,
 				04B6F89219A25D5C00229393 /* face03.png in Resources */,
+				F8029A3A1C81CEA400872739 /* PhotoBrowserViewController.xib in Resources */,
 				F8B5DDDA1BFB83EA00E1F713 /* nearbyEventTableViewCell.xib in Resources */,
 				F8B5DDD21BFB83EA00E1F713 /* EventInvitationTableViewCell.xib in Resources */,
 				04B6F8A419A25D5C00229393 /* face21.png in Resources */,
@@ -3759,6 +3763,7 @@
 				0878E85C1A3AC76F00E3C18C /* UIAlertView+Blocks.m in Sources */,
 				51F4CB1319E6307500E487F1 /* DDAbstractDatabaseLogger.m in Sources */,
 				F8B5DDF91BFB83EA00E1F713 /* MegUtils.m in Sources */,
+				F8029A391C81CEA400872739 /* PhotoBrowserViewController.m in Sources */,
 				08A68E2419FE62D000A9EB76 /* KxMenu.m in Sources */,
 				0435EF4E19B49DA2003BB2F6 /* NotificationsEventRequestTableViewCell.m in Sources */,
 				F82D608C1C1FE8E700B5AB1B /* FindPasswordViewController.m in Sources */,
@@ -3822,7 +3827,6 @@
 				F8A329DD1C07EFB5008FFB17 /* AFURLRequestSerialization.m in Sources */,
 				F8A329DB1C07EFB5008FFB17 /* AFSecurityPolicy.m in Sources */,
 				F8B5DE071BFB83EA00E1F713 /* NSString+PinYin4Cocoa.m in Sources */,
-				F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */,
 				08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */,
