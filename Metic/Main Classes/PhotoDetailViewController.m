@@ -10,6 +10,7 @@
 #import "PhotoDisplayViewController.h"
 #import "Friends/FriendInfoViewController.h"
 #import "UserInfoViewController.h"
+#import "PhotoBrowserViewController.h"
 #import "BannerViewController.h"
 #import "PcommentTableViewCell.h"
 #import "HomeViewController.h"
@@ -21,21 +22,27 @@
 #import "NSString+JSON.h"
 #import "TMQuiltView.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 #import "SVProgressHUD.H"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
 #import "SocialSnsApi.h"
+#import "JGActionSheet.h"
+#import "KxMenu.h"
 
 @interface PhotoDetailViewController ()
-@property (nonatomic,strong)NSNumber* sequence;
-@property (nonatomic,strong)UIButton * edit_button;
-@property (nonatomic,strong)UIButton * editFinishButton;
-@property (nonatomic,strong)UIButton * delete_button;
+@property (nonatomic,strong)NSNumber *sequence;
+@property (nonatomic,strong)UIImageView *photoView;
+@property (nonatomic,strong)UIImageView *avatarView;
+@property (nonatomic,strong)UIButton *edit_button;
+@property (nonatomic,strong)UIButton *editFinishButton;
+@property (nonatomic,strong)UIButton *optionButton;
+@property (nonatomic,strong)UIButton *shareButton;
 @property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
-@property (strong, nonatomic) IBOutlet UIButton *good_button;
+@property (strong, nonatomic) UIButton *good_button;
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
@@ -60,33 +67,32 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self initUI];
     [self initData];
     // Do any additional setup after loading the view.
 }
--(void)viewDidAppear:(BOOL)animated
-{
+
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self.inputTextView resignFirstResponder];
     [MobClick beginLogPageView:@"图片主页"];
-    self.sequence = [NSNumber numberWithInt:0];
-    [self pullMainCommentFromAir];
+    self.sequence = @0;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self pullMainCommentFromAir];
+    });
 }
 
--(void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"图片主页"];
 }
 
--(void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
@@ -107,8 +113,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc {
+    NSLog(@"dealloc");
+}
+
 //返回上一层
--(void)MTpopViewController{
+- (void)MTpopViewController{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -120,13 +130,17 @@
         [button setBackgroundImage:colorImage forState:UIControlStateHighlighted];
         [button resignFirstResponder];
     }
-    
 }
-
 
 -(void)initUI
 {
     self.view.autoresizesSubviews = YES;
+    
+    //右上角按钮
+    if (![self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+        [self tabbarButtonOption];
+    }
+    
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
@@ -172,12 +186,11 @@
     _emotionKeyboard.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:_emotionKeyboard];
     _emotionKeyboard.textView = _inputTextView;
-    [_emotionKeyboard initCollectionView];
 }
 
 -(void)initData
 {
-    self.sequence = [NSNumber numberWithInt:0];
+    self.sequence = @0;
     self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
@@ -187,8 +200,10 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    if (!_photoInfo) [self pullPhotoInfoFromDB];
-    [self pullPhotoInfoFromAir];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (!_photoInfo) [self pullPhotoInfoFromDB];
+        [self pullPhotoInfoFromAir];
+    });
 }
 
 -(void)setPhotoInfo:(NSMutableDictionary *)photoInfo
@@ -211,7 +226,6 @@
             });
         }
     }];
-    
 }
 
 -(void)pullPhotoInfoFromAir
@@ -230,13 +244,15 @@
             MTLOG(@"received Data: %@",temp);
             NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            switch ([cmd intValue]) {
+            switch ([cmd integerValue]) {
                 case NORMAL_REPLY:
                 {
-                    if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
-                    else _photoInfo = response1;
-                    [PictureWall2 updatePhotoInfoToDB:@[response1] eventId:_eventId];
-                    [_tableView reloadData];
+                    dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                        if(_photoInfo)[_photoInfo addEntriesFromDictionary:response1];
+                        else _photoInfo = response1;
+                        [MTDatabaseAffairs updatePhotoInfoToDB:@[response1] eventId:_eventId];
+                        [_tableView reloadData];
+                    });
                 }
                     break;
                 case PHOTO_NOT_EXIST:
@@ -296,25 +312,36 @@
 
 - (void)hiddenCommentViewAndEmotionView {
     _isEmotionOpen = NO;
+    [self clearCommentView];
+    
     CGRect containerFrame = self.commentView.frame;
+    containerFrame.size.height = 45.f;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    
+    CGRect inputViewFrame = self.inputTextView.frame;
+    inputViewFrame.size.height = 36.f;
+    
+    CGRect emotionFrame = _emotionKeyboard.frame;
+    emotionFrame.origin.y = self.view.frame.size.height;
+    
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:0.25];
     [UIView setAnimationCurve:7];
+    
     self.commentView.frame = containerFrame;
-    CGRect frame = _emotionKeyboard.frame;
-    frame.origin.y = self.view.frame.size.height;
-    [_emotionKeyboard setFrame:frame];
+    self.inputTextView.frame = inputViewFrame;
+    self.emotionKeyboard.frame = emotionFrame;
+    
     [UIView commitAnimations];
 }
 
 -(void) setGoodButton
 {
     if (_photoInfo && [[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_已赞"] forState:UIControlStateNormal];
-    }else [self.buttons[0] setImage:[UIImage imageNamed:@"图片评论_点赞图标"] forState:UIControlStateNormal];
+        [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_yes"] forState:UIControlStateNormal];
+    }else [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_no"] forState:UIControlStateNormal];
 }
 
 - (void)pullMainCommentFromAir
@@ -334,21 +361,21 @@
             MTLOG(@"received Data: %@",temp);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            switch ([cmd intValue]) {
+            switch ([cmd integerValue]) {
                 case NORMAL_REPLY:
                 {
                     if ([response1 valueForKey:@"pcomment_list"]) {
                         NSMutableArray *newComments = [[NSMutableArray alloc]initWithArray:[response1 valueForKey:@"pcomment_list"]];
-                        if ([_sequence longValue] == sequence) {
-                            if (sequence == 0) [_pcomment_list removeAllObjects];
-                            [self.pcomment_list addObjectsFromArray:newComments];
-                            if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
-                            else self.sequence = [response1 valueForKey:@"sequence"];
-                        }
-                        _isLoading = NO;
-                        [self.tableView reloadData];
-                        //                        [self closeRJ];
-                        //
+                        dispatch_barrier_async(dispatch_get_main_queue(), ^{
+                            if ([_sequence longValue] == sequence) {
+                                if (sequence == 0) [_pcomment_list removeAllObjects];
+                                [self.pcomment_list addObjectsFromArray:newComments];
+                                if(newComments.count < 10) _sequence = [NSNumber numberWithInteger:-1];
+                                else self.sequence = [response1 valueForKey:@"sequence"];
+                            }
+                            _isLoading = NO;
+                            [self.tableView reloadData];
+                        });
                     }
                 }
                     break;
@@ -375,78 +402,65 @@
 
 - (void)commentNumPlus
 {
-    int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+    int comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
     comN ++;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (void)commentNumMinus
 {
-    int comN = [[self.photoInfo valueForKey:@"comment_num"]intValue];
+    int comN = [[self.photoInfo valueForKey:@"comment_num"]integerValue];
     comN --;
     if (comN < 0) comN = 0;
     [self.photoInfo setValue:[NSNumber numberWithInt:comN] forKey:@"comment_num"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
 }
 
 - (IBAction)good:(id)sender {
-    if(!_canManage) return;
+    if (![self checkCanManaged]) return;
     if(!_photoInfo) return;
-    [self.good_button setEnabled:NO];
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0)
     {
         [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-        [self.good_button setEnabled:YES];
         return;
     }
     
     BOOL iszan = [[self.photoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:iszan? 2:3]  forKey:@"operation"];
-    [dictionary setValue:@"good"  forKey:@"item_id"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        if (rData) {
-            [self.good_button setEnabled:YES];
-            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-            MTLOG(@"received Data: %@",temp);
-            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-                
-            }else if([cmd integerValue] == PHOTO_NOT_EXIST){
-                if (!_shouldExit) {
-                    _shouldExit = YES;
-                    [self deleteLocalData];
-                    UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                    [alert setTag:1];
-                }
-                return ;
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:self.photoId eventId:self.eventId like:!iszan finishBlock:^(BOOL isValid) {
+        if (!isValid) {
+            if (!_shouldExit) {
+                _shouldExit = YES;
+                [self deleteLocalData];
+                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
+                [alert setTag:1];
             }
         }
     }];
     
     BOOL isZan = [[self.photoInfo valueForKey:@"isZan"]boolValue];
-    int good = [[self.photoInfo valueForKey:@"good"]intValue];
+    NSInteger good = [[self.photoInfo valueForKey:@"good"]integerValue];
     if (isZan) {
         good --;
     }else good ++;
     [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-    [self.photoInfo setValue:[NSNumber numberWithInt:good] forKey:@"good"];
-    [PictureWall2 updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
+    [self.photoInfo setValue:[NSNumber numberWithInteger:good] forKey:@"good"];
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
     [self setGoodButton];
-    [self.good_button setEnabled:YES];
+}
+
+- (BOOL)checkCanManaged {
+    if (_canManage) {
+        return YES;
+    } else {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞和评论" WithDelegate:nil WithCancelTitle:@"确定"];
+        return NO;
+    }
 }
 
 - (IBAction)comment:(id)sender {
-    if (!_canManage) return;
+    if (![self checkCanManaged]) return;
     self.inputTextView.placeHolder = @"说点什么吧";
     [self.inputTextView becomeFirstResponder];
 }
@@ -468,7 +482,10 @@
         if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
             [shareToSns addObject:UMShareToSms];
         }
-        [UMSocialSnsService presentSnsIconSheetView:self
+        UIViewController *vc = self.presentedViewController;
+        if (!vc)
+            vc = self;
+        [UMSocialSnsService presentSnsIconSheetView:vc
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
                                          shareImage:self.photo
@@ -480,8 +497,102 @@
 - (IBAction)download:(id)sender {
     if (_photo) {
         [self.download_button setEnabled:NO];
+        [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
         UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     }
+}
+
+- (void)report {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    ReportViewController *reportVC = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"];
+    
+    reportVC.photoId = self.photoId;
+    reportVC.eventId = self.eventId;
+    reportVC.event = self.eventName;
+    reportVC.type = 3;
+    [[SlideNavigationController sharedInstance] pushViewController:reportVC animated:YES];
+}
+
+- (void)tabbarButtonEdit {
+    if (!self.editFinishButton) {
+        self.editFinishButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.editFinishButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
+        [self.editFinishButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
+        [self.editFinishButton setTitle:@"确定" forState:UIControlStateNormal];
+        [self.editFinishButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        [self.editFinishButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
+        [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
+    }
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
+    UIViewController *vc = self;
+    if ([vc.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+        vc = vc.parentViewController;
+    }
+    vc.navigationItem.rightBarButtonItem = rightButtonItem;
+}
+
+- (void)tabbarButtonOption {
+    if(!_canManage)
+        return;
+    if (!self.optionButton) {
+        self.optionButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.optionButton setFrame:CGRectMake(0, 0, 70, 43)];
+        [self.optionButton setImageEdgeInsets:UIEdgeInsetsMake(4, 34, 4, -5)];
+        [self.optionButton setImage:[UIImage imageNamed:@"头部右上角图标-更多"] forState:UIControlStateNormal];
+        [self.optionButton.imageView setContentMode:UIViewContentModeScaleAspectFit];
+        [self.optionButton addTarget:self action:@selector(optionBtnPressed) forControlEvents:UIControlEventTouchUpInside];
+    }
+    UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.optionButton];
+    UIViewController *vc = self;
+    if ([vc.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+        vc = vc.parentViewController;
+    }
+    vc.navigationItem.rightBarButtonItem = rightButtonItem;
+}
+
+- (void)removeOptionBtn {
+    UIViewController *vc = self;
+    if ([vc.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+        vc = vc.parentViewController;
+    }
+    vc.navigationItem.rightBarButtonItem = nil;
+}
+- (void)optionBtnPressed {
+    if (!self || !self.photoInfo) {
+        return;
+    }
+    NSMutableArray *menuItems = [[NSMutableArray alloc]init];
+    
+    if ([[self.photoInfo valueForKey:@"author_id"] integerValue] == [[MTUser sharedInstance].userid integerValue] || [self.eventLauncherId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
+        [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"编辑描述"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(editSpecification:)],
+
+                                         [KxMenuItem menuItem:@"删除图片"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(deletePhoto:)],
+                                         ]];
+    }
+    
+    [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"保存图片"
+                                                    image:nil
+                                                   target:self
+                                                   action:@selector(download:)]]];
+
+    if ([[self.photoInfo valueForKey:@"author_id"] integerValue]  != [[MTUser sharedInstance].userid integerValue]) {
+        [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"举报图片"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(report)]]];
+    }
+
+    [KxMenu setTintColor:[UIColor whiteColor]];
+    [KxMenu setTitleFont:[UIFont systemFontOfSize:17]];
+    [KxMenu showMenuInView:self.navigationController.view
+                  fromRect:CGRectMake(self.view.bounds.size.width*0.9, 60, 0, 0)
+                 menuItems:menuItems];
 }
 
 -(void)editSpecification:(UIButton*)button
@@ -489,19 +600,15 @@
     if (!_canManage) return;
     //进入编辑模式
     if (!self.specificationEditTextfield) {
+        //图片浏览页停止滑动
+        PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
+        if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
+            [browser setTableViewScrollEnabled:NO];
+        }
         [self hiddenCommentViewAndEmotionView];
         self.specification.hidden = YES;
-        if (!self.editFinishButton) {
-            self.editFinishButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.editFinishButton setFrame:CGRectMake(10, 2.5f, 51, 28)];
-            [self.editFinishButton setBackgroundImage:[UIImage imageNamed:@"小按钮绿色"] forState:UIControlStateNormal];
-            [self.editFinishButton setTitle:@"确定" forState:UIControlStateNormal];
-            [self.editFinishButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
-            [self.editFinishButton.titleLabel setLineBreakMode:NSLineBreakByClipping];
-            [self.editFinishButton addTarget:self action:@selector(finishEdit) forControlEvents:UIControlEventTouchUpInside];
-        }
-        UIBarButtonItem *rightButtonItem=[[UIBarButtonItem alloc]initWithCustomView:self.editFinishButton];
-        self.navigationItem.rightBarButtonItem = rightButtonItem;
+        
+        [self tabbarButtonEdit];
         
         self.tableView.scrollEnabled = NO;
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
@@ -541,13 +648,18 @@
             self.specificationEditTextfield.hidden = NO;
         });
     } else {
-        
+        //图片浏览页恢复滑动
+        PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
+        if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
+            [browser setTableViewScrollEnabled:YES];
+        }
         [self.specificationEditTextfield removeFromSuperview];
         [self.specificationEditTextfield resignFirstResponder];
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
         self.specification.hidden = NO;
-        self.navigationItem.rightBarButtonItem = nil;
+
+        [self tabbarButtonOption];
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
     }
@@ -565,7 +677,7 @@
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
         self.specification.text = newSpecification;
         [self.photoInfo setValue:newSpecification forKey:@"specification"];
-        [PictureWall2 updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
+        [MTDatabaseAffairs updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         [self editSpecification:nil];
     } failure:^(NSString *message) {
@@ -582,7 +694,7 @@
 
 -(void)resendComment:(id)sender
 {
-    if (!_canManage) return;
+    if (![self checkCanManaged]) return;
     id cell = [sender superview];
     while (![cell isKindOfClass:[UITableViewCell class]] ) {
         cell = [cell superview];
@@ -625,7 +737,7 @@
                         }
                         return;
                     }
-                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+                    if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
                         [waitingComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
                         [waitingComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
                         [self commentNumPlus];
@@ -665,7 +777,7 @@
             if (rData) {
                 NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                 NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+                if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
                     NSString* token = [response1 valueForKey:@"token"];
                     @synchronized(self)
                     {
@@ -700,6 +812,7 @@
 
 
 - (IBAction)publishComment:(id)sender {
+    if (![self checkCanManaged]) return;
     if (!_photoInfo) return;
     NSString *comment = self.inputTextView.text;
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
@@ -710,13 +823,13 @@
     if (_isEmotionOpen) [self button_Emotionpress:nil];
     self.inputTextView.text = @"";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self textViewDidChange:nil];
+        [self textViewDidChange:self.inputTextView];
         self.inputTextView.text = @"";
     });
     MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
-    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
+    if (_repliedId && [_repliedId integerValue]!=[[MTUser sharedInstance].userid integerValue]){
         [dictionary setValue:_repliedId forKey:@"replied"];
         [newComment setValue:_repliedId forKey:@"replied"];
         [newComment setValue:_herName forKey:@"replier"];
@@ -752,6 +865,7 @@
     [_tableView beginUpdates];
     [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
+    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     self.inputTextView.text = @"";
     [self.inputTextView resignFirstResponder];
@@ -775,7 +889,7 @@
                         }
                         return;
                     }
-                    if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
+                    if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
                         {
                             [newComment setValue:[response1 valueForKey:@"pcomment_id"] forKey:@"pcomment_id"];
                             [newComment setValue:[response1 valueForKey:@"time"] forKey:@"time"];
@@ -814,7 +928,7 @@
             MTLOG(@"%@",content);
             NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
             NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
+            if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"token"]) {
                 NSString* token = [response1 valueForKey:@"token"];
                 @synchronized(self)
                 {
@@ -847,12 +961,19 @@
     }];
 }
 
+- (void)clearCommentView {
+    self.inputTextView.text = @"";
+    self.inputTextView.placeHolder = @"说点什么吧";
+    self.herName = @"";
+    self.repliedId = nil;
+}
+
 - (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
     [self.download_button setEnabled:YES];
     if (error){
-        // Do anything needed to handle the error or display it to the user
+        [SVProgressHUD dismissWithSuccess:@"保存失败" afterDelay:.7f];
     }else{
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"保存成功" WithDelegate:self WithCancelTitle:@"确定"];
+        [SVProgressHUD dismissWithSuccess:@"保存成功" afterDelay:.7f];
     }
 }
 
@@ -863,44 +984,72 @@
     }else if (_isEmotionOpen)
         [self button_Emotionpress:nil];
     else {
-        switch (self.type) {
-            case 1:
-                [self.navigationController popViewControllerAnimated:YES];
-                break;
-            case 2:{
-                if (_photo) {
-                    BannerViewController* bannerView = [[BannerViewController alloc] init];
-                    bannerView.banner = self.photo;
-                    [self presentViewController:bannerView animated:YES completion:^{}];
-                }
-            }
-                break;
-            default:
-                break;
+        if (self.photo) {
+            BannerViewController* bannerView = [[BannerViewController alloc] init];
+            bannerView.banner = self.photo;
+            [self presentViewController:bannerView animated:YES completion:^{}];
+            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
+            [bannerView.view addGestureRecognizer:longPress];
         }
     }
 }
 
+- (void)photoOptions:(UIGestureRecognizer*)sender
+{
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+    
+    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"图片分享",@"保存图片", @"举报图片"] buttonStyle:JGActionSheetButtonStyleDefault];
+    JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"取消"] buttonStyle:JGActionSheetButtonStyleCancel];
+    
+    NSArray *sections = @[section1, cancelSection];
+    
+    JGActionSheet *sheet = [JGActionSheet actionSheetWithSections:sections];
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
+        if (indexPath.section == 0) {
+            switch (indexPath.row) {
+                case 0:{
+                    [sheet dismissAnimated:YES];
+                    [self share:nil];
+                }
+                    break;
+                case 1:{
+                    [sheet dismissAnimated:YES];
+                    [self download:nil];
+                }
+                    break;
+                case 2:{
+                    [sheet dismissAnimated:YES];
+                    [self.presentedViewController dismissViewControllerAnimated:YES completion:^{
+                        [self report];
+                    }];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+    }];
+    
+    [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+        [sheet dismissAnimated:YES];
+    }];
+    
+    UIViewController *bannerViewController = self.presentedViewController;
+    
+    [sheet showInView:bannerViewController.view animated:YES];
+    
+}
+
 -(void)closeRJ
 {
-    //    if (_Headeropen) {
-    //        _Headeropen = NO;
-    //        [_header endRefreshing];
-    //    }
-    //    if (_Footeropen) {
-    //        _Footeropen = NO;
-    //        [_footer endRefreshing];
-    //    }
     [self.tableView reloadData];
 }
 
 -(void)back
 {
-    if (_controller) {
-        [self.navigationController popToViewController:self.controller animated:YES];
-    }else{
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)deleteLocalData
@@ -921,17 +1070,11 @@
 - (void)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
-    if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [self.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = [self.photoInfo valueForKey:@"author_id"];
-        [self.navigationController pushViewController:friendView animated:YES];
-    }
-    
+
+    FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+    friendView.fid = [self.photoInfo valueForKey:@"author_id"];
+    [self.navigationController pushViewController:friendView animated:YES];
+
 }
 
 
@@ -956,26 +1099,30 @@
     if (indexPath.row == 0) {
         float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
         cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320,height)];
-        [imageView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
+        if (!self.photoView) {
+            self.photoView = [[UIImageView alloc] init];
+        }
+        [self.photoView setFrame:CGRectMake(0, 0, 320,height)];
+
+        [self.photoView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
         
-        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:imageView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
+        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.photoView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
         [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             if (image) {
                 _photo = image;
-                [imageView setContentMode:UIViewContentModeScaleToFill];
+                [self.photoView setContentMode:UIViewContentModeScaleToFill];
             }else{
-                imageView.image = [UIImage imageNamed:@"加载失败"];
+                self.photoView.image = [UIImage imageNamed:@"加载失败"];
             }
         }];
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
         [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
         
-        [cell addSubview:imageView];
+        [cell addSubview:self.photoView];
         [cell addSubview:label];
         
         UIButton* back = [UIButton buttonWithType:UIButtonTypeCustom];
-        [back setFrame:imageView.frame];
+        [back setFrame:self.photoView.frame];
         [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:back];
         
@@ -1012,38 +1159,36 @@
         self.specification.text = [self.photoInfo valueForKey:@"specification"];
         [cell addSubview:self.specification];
         
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
-            if (!self.edit_button) {
-                self.edit_button = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.edit_button setImage:[UIImage imageNamed:@"图片视频描述修改"] forState:UIControlStateNormal];
-                [self.edit_button setImageEdgeInsets:UIEdgeInsetsMake(11, 13, 11, 9)];
-                [self.edit_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
-                [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-                [self.edit_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-                [self.edit_button addTarget:self action:@selector(editSpecification:) forControlEvents:UIControlEventTouchUpInside];
-            }
-            [self.edit_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 40 - 5, height + 3 + 2, 40, 40)];
-            [cell addSubview:self.edit_button];
+        //shareBtn
+        if (!self.shareButton) {
+            self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.shareButton setImage:[UIImage imageNamed:@"icon_detail_share"] forState:UIControlStateNormal];
+            [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(10, 12, 10, 8)];
+            [self.shareButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
+            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
+            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
+            [self.shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
-        if ([[self.photoInfo valueForKey:@"author_id"] intValue] == [[MTUser sharedInstance].userid intValue] || [self.eventLauncherId intValue] == [[MTUser sharedInstance].userid intValue]) {
-            if (!self.delete_button) {
-                self.delete_button = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.delete_button setImage:[UIImage imageNamed:@"图片视频描述删除"] forState:UIControlStateNormal];
-                [self.delete_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
-                [self.delete_button.titleLabel setFont:[UIFont systemFontOfSize:12]];
-                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-                [self.delete_button setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-                [self.delete_button addTarget:self action:@selector(deletePhoto:) forControlEvents:UIControlEventTouchUpInside];
-            }
-            [self.delete_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 5, height + 3 + 2, 40, 40)];
-            [cell addSubview:self.delete_button];
+        [self.shareButton setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 40, height + 3 + 2, 40, 40)];
+        [cell addSubview:self.shareButton];
+
+        //good button
+        if (!self.good_button) {
+            self.good_button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.good_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
+            [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
         }
+        [self.good_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 , height + 3 + 2, 40, 40)];
+        [cell addSubview:self.good_button];
+        [self setGoodButton];
         
-        UIImageView* avatar = [[UIImageView alloc]initWithFrame:CGRectMake(10, height+13, 30, 30)];
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[self.photoInfo valueForKey:@"author_id"]];
+        if (!self.avatarView) {
+            self.avatarView = [[UIImageView alloc] init];
+        }
+        self.avatarView.frame = CGRectMake(10, height+13, 30, 30);
+        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatarView authorId:[self.photoInfo valueForKey:@"author_id"]];
         [getter getAvatar];
-        [cell addSubview:avatar];
+        [cell addSubview:self.avatarView];
         
         UIButton* avatarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [avatarBtn setFrame:CGRectMake(0, height+13, 50, 50)];
@@ -1099,11 +1244,11 @@
         ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
         float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
-        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] == -1 ) {
+        if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -1 ) {
             commentWidth = 230;
             [((PcommentTableViewCell *)cell).waitView startAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
-        } else if([[Pcomment valueForKey:@"pcomment_id"] intValue] == -2 ){
+        } else if([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -2 ){
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
             commentWidth = 230;
             [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
@@ -1119,7 +1264,7 @@
         
         NSString* text = [Pcomment valueForKey:@"content"];
         NSString*alias2;
-        if ([[Pcomment valueForKey:@"replied"] intValue] != 0) {
+        if ([[Pcomment valueForKey:@"replied"] integerValue] != 0) {
             //显示备注名
             alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"replied"]]];
             if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
@@ -1191,7 +1336,7 @@
         NSString* commentText = [Pcomment valueForKey:@"content"];
         
         NSString*alias2;
-        if ([[Pcomment valueForKey:@"replied"] intValue] != 0) {
+        if ([[Pcomment valueForKey:@"replied"] integerValue] != 0) {
             //显示备注名
             alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"replied"]]];
             if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
@@ -1201,7 +1346,7 @@
         }
         
         
-        if ([[Pcomment valueForKey:@"pcomment_id"] intValue] > 0) {
+        if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] > 0) {
             commentWidth = 255;
         }else commentWidth = 230;
         
@@ -1249,12 +1394,12 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [cell.background setAlpha:1.0];
         });
-        if ([cell.pcomment_id intValue] < 0){
+        if ([cell.pcomment_id integerValue] < 0){
             [self resendComment: cell.resend_Button];
             return;
         }
         self.herName = cell.authorName;
-        if ([cell.authorId intValue] != [[MTUser sharedInstance].userid intValue]) {
+        if ([cell.authorId integerValue] != [[MTUser sharedInstance].userid integerValue]) {
             self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];
         }else self.inputTextView.placeHolder = @"说点什么吧";
         [self.inputTextView becomeFirstResponder];
@@ -1281,7 +1426,7 @@
 -(void) keyboardWillShow:(NSNotification *)note{
     self.isKeyBoard = YES;
     if (self.isEmotionOpen) {
-        [self button_Emotionpress:nil];
+        self.isEmotionOpen = NO;
     }
     if (self.specificationEditTextfield) {
         return;
@@ -1292,21 +1437,27 @@
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
+    if (CGRectGetHeight(keyboardBounds) == 0) {
+        return;
+    }
     // Need to translate the bounds to account for rotation.
     keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
     
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
     containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
+    
+    CGRect emotionFrame = _emotionKeyboard.frame;
+    emotionFrame.origin.y = self.view.frame.size.height;
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve intValue]];
+    [UIView setAnimationCurve:[curve integerValue]];
     
     // set views with new info
     self.commentView.frame = containerFrame;
-    
+    self.emotionKeyboard.frame = emotionFrame;
     
     // commit animations
     [UIView commitAnimations];
@@ -1317,22 +1468,31 @@
     if (self.specificationEditTextfield) {
         return;
     }
+    if(self.isEmotionOpen) {
+        return;
+    }
+    [self clearCommentView];
     //self.inputField.text = @"";
     NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
     
     // get a rect for the textView frame
     CGRect containerFrame = self.commentView.frame;
+    containerFrame.size.height = 45.f;
     containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
+    
+    CGRect inputViewFrame = self.inputTextView.frame;
+    inputViewFrame.size.height = 36.f;
     
     // animations settings
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve intValue]];
+    [UIView setAnimationCurve:[curve integerValue]];
     
     // set views with new info
     self.commentView.frame = containerFrame;
+    self.inputTextView.frame = inputViewFrame;
     
     // commit animations
     [UIView commitAnimations];
@@ -1391,7 +1551,7 @@
                         MTLOG(@"received Data: %@",temp);
                         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                         NSNumber *cmd = [response1 valueForKey:@"cmd"];
-                        switch ([cmd intValue]) {
+                        switch ([cmd integerValue]) {
                             case NORMAL_REPLY:
                             {
                                 //百度云 删除
@@ -1422,12 +1582,7 @@
         }
             break;
         case 1:{
-            if (_controller) {
-                [self.navigationController popToViewController:self.controller animated:YES];
-            }else{
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-            
+            [self.navigationController popViewControllerAnimated:YES];
         }
         default:
             break;

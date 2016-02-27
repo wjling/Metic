@@ -16,8 +16,10 @@
 #import "Reachability.h"
 #import "LCAlertView.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 #import "MegUtils.h"
 #import "MTImageGetter.h"
+#import "MTOperation.h"
 
 
 @interface PhotoDisplayViewController ()
@@ -176,15 +178,6 @@
         default:
             break;
     }
-}
-
-
-- (void)updatePhotoInfoToDB:(NSDictionary*)photoInfo
-{
-    NSString *photoInfoS = [NSString jsonStringWithDictionary:photoInfo];
-    NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-    NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",_eventId],[NSString stringWithFormat:@"'%@'",photoInfoS], nil];
-    [[MTDatabaseHelper sharedInstance]insertToTable:@"eventPhotos" withColumns:columns andValues:values];
 }
 
 -(void)refreshGood
@@ -425,21 +418,8 @@
 
     self.goodindex = self.scrollView.contentOffset.x/320;
     BOOL isZan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    if ([dictionary valueForKey:@"alasset"]) return;
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    [dictionary setValue:self.photoId forKey:@"photo_id"];
-    [dictionary setValue:[NSNumber numberWithInt:isZan? 2:3]  forKey:@"operation"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        if (rData) {
-            //
-        }
-    }];
+
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:self.photoId eventId:self.eventId like:!isZan finishBlock:NULL];
     
     NSMutableDictionary* dict = self.photo_list[self.goodindex];
     BOOL iszan = [[dict valueForKey:@"isZan"]boolValue];
@@ -455,8 +435,7 @@
     self.zan_num.text = [NSString stringWithFormat:@"%d",zan_number];
     [dict setValue:[NSNumber numberWithBool:!iszan] forKey:@"isZan"];
     [dict setValue:[NSNumber numberWithInt:zan_number] forKey:@"good"];
-    [self updatePhotoInfoToDB:dict];
-    
+    [MTDatabaseAffairs updatePhotoInfoToDB:@[dict] eventId:self.eventId];
 }
 
 - (IBAction)comment:(id)sender {
@@ -506,8 +485,6 @@
             nextViewController.photoInfo = self.photo_list[index];
             nextViewController.photoDisplayController = self;
             nextViewController.eventName = _eventName;
-            nextViewController.controller = self.controller;
-            nextViewController.type = 1;
             nextViewController.canManage = self.canManage;
         }
         if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {

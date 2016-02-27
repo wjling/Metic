@@ -140,4 +140,16 @@
     }
 }
 
+- (void)setCustomView:(UIView *)customView {
+    _customView = customView;
+    if (customView) {
+        CGRect frame = customView.bounds;
+        frame.origin.x = (CGRectGetWidth(self.view.frame)- CGRectGetWidth(customView.bounds)) / 2;
+        frame.origin.y = CGRectGetHeight(self.view.frame) - CGRectGetHeight(customView.bounds) - 5;
+        [customView setFrame:frame];
+        [self.view addSubview:customView];
+        [customView setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin];
+    }
+}
+
 @end

@@ -13,4 +13,5 @@
 @property (nonatomic,strong) UIImage* banner;
 @property (nonatomic,strong) NSString* url;
 @property (nonatomic,strong) NSString* path;
+@property (nonatomic,strong) UIView *customView;
 @end

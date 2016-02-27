@@ -17,12 +17,14 @@
 #import "PhotoDisplayViewController.h"
 #import "photoRankingViewController.h"
 #import "PhotoUploadViewController.h"
+#import "PhotoBrowserViewController.h"
 #import "SVProgressHUD.h"
 #import "NotificationController.h"
 #import "MTAutoHideButton.h"
 #import "UploaderManager.h"
 #import "UploadManageViewController.h"
 #import "MTDatabaseHelper.h"
+#import "MTDatabaseAffairs.h"
 
 #define photoNumPP 60
 #define photoNumToGet 100
@@ -45,6 +47,7 @@
 @end
 
 @implementation PictureWall2
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initUI];
@@ -52,8 +55,17 @@
     // Do any additional setup after loading the view from its nib.
 }
 
--(void)dealloc
-{
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    NSArray *cells = [self.quiltView visibleCells];
+    for (PhotoTableViewCell *cell in cells) {
+        if ([cell isKindOfClass:[PhotoTableViewCell class]]) {
+            [cell reloadDetailView];
+        }
+    }
+}
+
+- (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"photoUploadFinished" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deletePhotoItem" object:nil];
     [_header free];
@@ -162,7 +174,7 @@
 -(void)refreshPhotoInfoFromDB:(NSMutableArray*)photoInfos
 {
     [self deleteAllPhotoInfoFromDB:_eventId];
-    [PictureWall2 updatePhotoInfoToDB:photoInfos eventId:_eventId];
+    [MTDatabaseAffairs updatePhotoInfoToDB:photoInfos eventId:_eventId];
 }
 
 -(void)deleteAllPhotoInfoFromDB:(NSNumber*) eventId
@@ -172,20 +184,6 @@
     }
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", eventId],@"event_id", nil];
     [[MTDatabaseHelper sharedInstance] deleteTurpleFromTable:@"eventPhotos" withWhere:wheres];
-}
-
-+ (void)updatePhotoInfoToDB:(NSArray*)photoInfos eventId:(NSNumber*)eventId
-{
-    for (int i = 0; i < photoInfos.count; i++) {
-        NSDictionary* photoInfo = [photoInfos objectAtIndex:i];
-        NSString *photoData = [NSString jsonStringWithDictionary:photoInfo];
-        photoData = [photoData stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-        NSArray *columns = [[NSArray alloc]initWithObjects:@"'photo_id'",@"'event_id'",@"'photoInfo'", nil];
-        NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[photoInfo valueForKey:@"photo_id"]],[NSString stringWithFormat:@"%@",eventId],[NSString stringWithFormat:@"'%@'",photoData], nil];
-        [[MTDatabaseHelper sharedInstance] insertToTable:@"eventPhotos" withColumns:columns andValues:values];
-        
-    }
-    
 }
 
 - (void)pullPhotoInfosFromDB
@@ -505,7 +503,7 @@
                         [self deleteAllPhotoInfoFromDB:_eventId];
                     }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_global_queue(0, 0), ^{
-                        [PictureWall2 updatePhotoInfoToDB:newphoto_list eventId:_eventId];
+                        [MTDatabaseAffairs updatePhotoInfoToDB:newphoto_list eventId:_eventId];
                     });
 
                     [NotificationController visitPhotoWall:_eventId needClear:YES];
@@ -579,7 +577,7 @@
             float preX = CGRectGetMinX(preCell.frame);
             float width = 300;
             float height = (preHeight != 50)? 50 : fabsf(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-40, width*4/6, 40)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-45, width*4/6, 40)];
             if (!_haveLoadedPhoto) {
                 label.text = @"正在加载 ...";
             }else if([self checkPhoNum]){
@@ -644,13 +642,9 @@
     
     
     if(indexPath.row >= _photo_list.count) return 0;
-    NSDictionary *a = _photo_list[indexPath.row];
+    NSDictionary *photoInfo = _photo_list[indexPath.row];
     
-    float width = [[a valueForKey:@"width"] floatValue];
-    float height = [[a valueForKey:@"height"] floatValue];
-    float RealHeight = height * 145.0f / width;
-    
-    return RealHeight + 33;
+    return [PhotoTableViewCell photoCellHeightForPhotoInfo:photoInfo];
 }
 
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
@@ -658,6 +652,12 @@
     if (indexPath.row >= _showPhoNum) {
         return;
     }
+    
+    PhotoBrowserViewController *photoBrowser = [[PhotoBrowserViewController alloc] initWithEventInfo:self.eventInfo PhotoDists:[self.photo_list copy] showPhotoIndex:indexPath.row];
+    [self.navigationController pushViewController:photoBrowser animated:YES];
+    
+    
+    return;
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];

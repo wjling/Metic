@@ -45,17 +45,11 @@
 - (IBAction)pushToFriendView:(id)sender {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [_controller.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = self.authorId;
-        [_controller.navigationController pushViewController:friendView animated:YES];
-    }
-	
+
+    FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+    friendView.fid = self.authorId;
+    [_controller.navigationController pushViewController:friendView animated:YES];
+
 }
 
 -(void)showOption:(UIGestureRecognizer*)sender
@@ -156,13 +150,13 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                                  bundle: nil];
-        ReportViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"]; ;
+        ReportViewController *viewcontroller = [mainStoryboard instantiateViewControllerWithIdentifier: @"ReportViewController"];
         viewcontroller.eventId = _controller.eventId;
         viewcontroller.commentId = _commentid;
         viewcontroller.comment = _origincomment;
         viewcontroller.commentAuthor = self.author;
         viewcontroller.authorId = self.authorId;
-        viewcontroller.event = [self.controller.event valueForKey:@"subject"];;
+        viewcontroller.event = [self.controller.event valueForKey:@"subject"];
         
         viewcontroller.type = 2;
         [self.controller.navigationController pushViewController:viewcontroller animated:YES];

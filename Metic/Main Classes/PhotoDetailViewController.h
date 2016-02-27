@@ -29,8 +29,7 @@
 @property (nonatomic,strong) UIView* commentOptionView;
 @property (strong, nonatomic) IBOutlet UIView *commentView;
 @property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
-@property (strong, nonatomic) PictureWall2* controller;
-@property int type;
+
 @property BOOL isKeyBoard;
 @property BOOL isEmotionOpen;
 @property BOOL canManage;
@@ -40,6 +39,8 @@
 - (IBAction)download:(id)sender;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
+- (void)removeOptionBtn;
+- (void)tabbarButtonOption;
 - (void)commentNumMinus;
 - (void)commentNumPlus;
 @end

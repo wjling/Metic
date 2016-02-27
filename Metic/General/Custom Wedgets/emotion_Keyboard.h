@@ -10,7 +10,7 @@
 
 @interface emotion_Keyboard : UIView
 -(id)initWithPoint:(CGPoint)point;
--(void)initCollectionView;
+
 @property(nonatomic,strong) UITextField* textField;
 @property(nonatomic,strong) UITextView* textView;
 

@@ -9,10 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+NS_ENUM(NSInteger, MTMediaType) {
+    MTMediaTypeComment = -1,
+    MTMediaTypePhoto,
+    MTMediaTypeVideo,
+};
+
 @interface MTOperation : NSObject
 + (MTOperation *)sharedInstance;
 
 typedef void(^likeEventFinishBlock)(BOOL isSuccess,NSString* likeTime);
+
+typedef void(^likeMediaObjectFinishBlock)(BOOL isValid);
 
 typedef void(^modifySpecificationFinishBlock)(BOOL isSuccess,NSString* likeTime);
 
@@ -25,6 +33,9 @@ typedef void(^modifySpecificationFinishBlock)(BOOL isSuccess,NSString* likeTime)
 
 //收藏／取消收藏活动操作
 -(void)likeEventOperation:(NSArray*)eventIds like:(BOOL)islike finishBlock:(likeEventFinishBlock)finishBlock;
+
+//点赞/取消点赞操作
+-(void)likeOperationWithType:(enum MTMediaType)type mediaId:(NSNumber *)mediaId eventId:(NSNumber *)eventId like:(BOOL)isLike finishBlock:(likeMediaObjectFinishBlock)finishBlock;
 
 //修改图片描述操作
 -(void)modifyPhotoSpecification:(NSString *)specification

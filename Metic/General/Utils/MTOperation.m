@@ -215,6 +215,49 @@
     }];
 }
 
+#pragma 点赞/取消点赞图片操作
+//点赞/取消点赞操作
+-(void)likeOperationWithType:(enum MTMediaType)type mediaId:(NSNumber *)mediaId eventId:(NSNumber *)eventId like:(BOOL)isLike finishBlock:(likeMediaObjectFinishBlock)finishBlock {
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:@"good"  forKey:@"item_id"];
+    [dictionary setValue:eventId forKey:@"event_id"];
+    
+    switch (type) {
+        case MTMediaTypeComment:
+            [dictionary setValue:mediaId forKey:@"comment_id"];
+            [dictionary setValue:[NSNumber numberWithInt:isLike? 1:0]  forKey:@"operation"];
+            break;
+        case MTMediaTypePhoto:
+            [dictionary setValue:mediaId forKey:@"photo_id"];
+            [dictionary setValue:[NSNumber numberWithInt:isLike? 3:2]  forKey:@"operation"];
+            break;
+        case MTMediaTypeVideo:
+            [dictionary setValue:mediaId forKey:@"video_id"];
+            [dictionary setValue:[NSNumber numberWithInt:isLike? 5:4]  forKey:@"operation"];
+            break;
+            
+        default:
+            break;
+    }    
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
+            }else if([cmd integerValue] == PHOTO_NOT_EXIST){
+                finishBlock(NO);
+            }
+        } else {
+        }
+    }];
+}
+
 #pragma 修改图片描述操作
 -(void)modifyPhotoSpecification:(NSString *)specification withPhotoId:(NSNumber *)photoId
                         eventId:(NSNumber *)eventId

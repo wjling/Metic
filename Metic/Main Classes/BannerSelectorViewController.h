@@ -25,5 +25,4 @@
 - (IBAction)getMyBanner:(id)sender;
 - (IBAction)confirmBanner:(id)sender;
 
-
 @end

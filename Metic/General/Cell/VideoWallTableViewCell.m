@@ -21,9 +21,12 @@
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
+#import "MTDatabaseAffairs.h"
 
 #define widthspace 10
 #define deepspace 4
+
+static CGFloat DETAIL_VIEW_HEIGHT = 23;
 
 @interface VideoWallTableViewCell ()
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
@@ -41,20 +44,18 @@
 @property BOOL layerOn;
 @property BOOL isPlaying;
 
+@property (strong, nonatomic) IBOutlet VideoDetailView *videoDetailView;
+
 @end
 
 @implementation VideoWallTableViewCell
 
 - (void)awakeFromNib
 {
+    [self.videoDetailView reset];
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
-    [_good_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xe0e0e0]] forState:UIControlStateHighlighted];
-    [_comment_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0xe0e0e0]] forState:UIControlStateHighlighted];
-    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    
-    [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
-    [self.comment_button addTarget:self action:@selector(toDetail:) forControlEvents:UIControlEventTouchUpInside];
+
     UITapGestureRecognizer * tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(pushToFriendView:)];
     [self.avatar addGestureRecognizer:tapRecognizer];
     
@@ -67,9 +68,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(repeatPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     _isPlaying = NO;
     _layerOn = NO;
-    // Initialization code
-}
 
+}
 
 -(void)dealloc
 {
@@ -97,6 +97,63 @@
     
 }
 
+# pragma mark get Mathod
+- (NSNumber *)videoId {
+    return [self.videoInfo valueForKey:@"video_id"];
+}
+
+- (NSNumber *)authorId {
+    return [self.videoInfo valueForKey:@"author_id"];
+}
+
+- (NSString *)videoName {
+    return [self.videoInfo valueForKey:@"video_name"];
+}
+
+- (NSInteger)commentNum {
+    return [[self.videoInfo valueForKey:@"comment_num"] integerValue];
+}
+
+- (NSInteger)zanNum {
+    return [[self.videoInfo valueForKey:@"good"] integerValue];
+}
+
+- (BOOL)isZan {
+    return [[self.videoInfo valueForKey:@"isZan"] boolValue];
+}
+
+-(IBAction)good:(UIButton*)button
+{
+    if (![[self.controller.eventInfo valueForKey:@"isIn"]boolValue]) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"您尚未加入该活动中，无法点赞" WithDelegate:nil WithCancelTitle:@"确定"];
+        return;
+    }
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+        return;
+    }
+
+    BOOL isZan = [[_videoInfo valueForKey:@"isZan"] boolValue];
+    
+    //点赞 或取消点缀操作
+    [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypeVideo mediaId:[_videoInfo valueForKey:@"video_id"] eventId:self.eventId like:!isZan finishBlock:NULL];
+
+    [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
+    int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
+    if (isZan) {
+        zan_num --;
+    }else{
+        zan_num ++;
+    }
+    [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
+    [self.videoDetailView setupUIWithIsZan:self.isZan zanNum:self.zanNum commentNum:self.commentNum];
+    [MTDatabaseAffairs updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
+    _controller.shouldFlash = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _controller.shouldFlash = YES;
+    });
+}
+
 - (IBAction)play:(id)sender {
     NSString *videoName = [_videoInfo valueForKey:@"video_name"];
     [[MTOperation sharedInstance] getVideoUrlFromServerWith:videoName success:^(NSString *url) {
@@ -106,26 +163,6 @@
     } failure:^(NSString *message) {
         MTLOG(@"获取视频URL失败");
     }];
-}
-
--(void)setISZan:(BOOL)isZan
-{
-    self.isZan = isZan;
-    if (isZan) {
-        [self.good_button setImage:[UIImage imageNamed:@"活动详情_点赞图按下效果"] forState:UIControlStateNormal];
-    }else{
-        [self.good_button setImage:[UIImage imageNamed:@"活动详情_点赞图"] forState:UIControlStateNormal];
-    }
-}
-
--(void)setGood_buttonNum:(NSNumber *)num
-{
-    [self.good_button setTitle:[CommonUtils TextFromInt:[num intValue]] forState:UIControlStateNormal];
-}
-
--(void)setComment_buttonNum:(NSNumber *)num
-{
-    [self.comment_button setTitle:[CommonUtils TextFromInt:[num intValue]] forState:UIControlStateNormal];
 }
 
 - (void)applyData:(NSMutableDictionary *)data;
@@ -159,10 +196,7 @@
     NSString* text = [_videoInfo valueForKey:@"title"];
     self.title.text = text;
     
-    [self.good_button setEnabled:YES];
-    [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
-    [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
-    [self setComment_buttonNum:[_videoInfo valueForKey:@"comment_num"]];
+    [self.videoDetailView setupUIWithIsZan:self.isZan zanNum:self.zanNum commentNum:self.commentNum];
     
     [_video_button setImage:nil forState:UIControlStateNormal];
     [_video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
@@ -227,81 +261,16 @@
     [UIView commitAnimations];
 }
 
--(void)good:(UIButton*)button
-{
-    if(![[_controller.eventInfo valueForKey:@"isIn"]boolValue])return;
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-        return;
-    }
-    
-
-    BOOL isZan = [[_videoInfo valueForKey:@"isZan"] boolValue];
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[_videoInfo valueForKey:@"video_id"] forKey:@"video_id"];
-    [dictionary setValue:[NSNumber numberWithInt:isZan? 4:5]  forKey:@"operation"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    MTLOG(@"%@",[[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding]);
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:ADD_GOOD finshedBlock:^(NSData *rData) {
-        [self.good_button setEnabled:YES];
-        if (rData) {
-            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-            NSNumber *cmd = [response1 valueForKey:@"cmd"];
-            if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == DATABASE_ERROR || [cmd intValue] == REQUEST_FAIL) {
-                
-            }
-        }
-    }];
-
-    
-    [_videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
-    int zan_num = [[_videoInfo valueForKey:@"good"] intValue];
-    if (isZan) {
-        zan_num --;
-    }else{
-        zan_num ++;
-    }
-    [_videoInfo setValue:[NSNumber numberWithInt:zan_num] forKey:@"good"];
-    [VideoWallViewController updateVideoInfoToDB:[[NSMutableArray alloc]initWithObjects:_videoInfo, nil] eventId:_eventId];
-    _controller.shouldFlash = NO;
-    [self setGood_buttonNum:[_videoInfo valueForKey:@"good"]];
-    [self setISZan:[[_videoInfo valueForKey:@"isZan"] boolValue]];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _controller.shouldFlash = YES;
-    });
-}
-
--(void)toDetail:(UIButton*)button
-{
-    _controller.SeleVcell = self;
-    _controller.seleted_videoInfo = _videoInfo;
-    _controller.seleted_videoThumb = _videoThumb;
-    [self clearVideoRequest];
-    [_controller performSegueWithIdentifier:@"toVideoDetail" sender:_controller];
-}
-
 - (void)pushToFriendView:(id)sender {
     _authorId = [_videoInfo valueForKey:@"author_id"];
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
 															 bundle: nil];
-    if ([_authorId intValue] == [[MTUser sharedInstance].userid intValue]) {
-        UserInfoViewController* userInfoView = [mainStoryboard instantiateViewControllerWithIdentifier: @"UserInfoViewController"];
-        userInfoView.needPopBack = YES;
-        [_controller.navigationController pushViewController:userInfoView animated:YES];
-        
-    }else{
-        FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
-        friendView.fid = self.authorId;
-        [_controller.navigationController pushViewController:friendView animated:YES];
-    }
-	
+
+    FriendInfoViewController *friendView = [mainStoryboard instantiateViewControllerWithIdentifier: @"FriendInfoViewController"];
+    friendView.fid = self.authorId;
+    [_controller.navigationController pushViewController:friendView animated:YES];
+
 }
-
-
 
 - (void)downloadVideo:(NSString*)videoName url:(NSString*)url{
     NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
@@ -583,12 +552,94 @@
 
 + (float)calculateCellHeightwithText:(NSString *)text labelWidth:(float)labelWidth
 {
-    float height = [CommonUtils calculateTextHeight:text width:labelWidth fontSize:16.0f isEmotion:NO];
+    float height = [CommonUtils calculateTextHeight:text width:labelWidth fontSize:12.f isEmotion:NO];
     if (height > 60) height = 60;
     if ([text isEqualToString:@""]) height = 0;
     else height += 20;
-    return 321 + height;
+    return 266 + height;
 }
 
 @end
 
+@interface VideoDetailView ()
+
+@property (nonatomic, strong) UIImageView *commentImageView;
+@property (nonatomic, strong) UILabel *commentLabelView;
+
+@property (nonatomic, strong) UIImageView *zanImageView;
+@property (nonatomic, strong) UILabel *zanLabelView;
+
+@property (nonatomic) BOOL isZan;
+@property (nonatomic) NSInteger zanNum;
+@property (nonatomic) NSInteger commentNum;
+
+@end
+
+@implementation VideoDetailView
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [self reset];
+    }
+    return self;
+}
+
+- (void)reset {
+    [self setupData];
+    [self setupUI];
+}
+
+- (void)setupData {
+    self.isZan = NO;
+    self.zanNum = 0;
+}
+
+- (void)setupUI {
+    
+    self.zanLabelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, DETAIL_VIEW_HEIGHT)];
+    self.zanLabelView.font = [UIFont systemFontOfSize:13];
+    self.zanLabelView.textColor = [UIColor colorWithWhite:129.0/255.0f alpha:1.0f];
+    [self addSubview:self.zanLabelView];
+    
+    self.zanImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, DETAIL_VIEW_HEIGHT)];
+    self.zanImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:self.zanImageView];
+    
+    self.commentLabelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, DETAIL_VIEW_HEIGHT)];
+    self.commentLabelView.font = [UIFont systemFontOfSize:13];
+    self.commentLabelView.textColor = [UIColor colorWithWhite:129.0/255.0f alpha:1.0f];
+    [self addSubview:self.commentLabelView];
+    
+    self.commentImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, DETAIL_VIEW_HEIGHT)];
+    [self.commentImageView setImage:[UIImage imageNamed:@"icon_comment_yes"]];
+    self.commentImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addSubview:self.commentImageView];
+    
+}
+
+- (void)setupUIWithIsZan:(BOOL)isZan zanNum:(NSInteger)zanNum commentNum:(NSInteger)commentNum {
+
+    _isZan = isZan;
+    _zanNum = zanNum;
+    _commentNum = commentNum;
+    
+    double width = CGRectGetWidth(self.frame);
+    
+    NSString *zanLabelText = [NSString stringWithFormat:@"%ld",(long)_zanNum];
+    CGFloat zanTextWidth = zanLabelText.length * 8;
+    self.zanLabelView.text = zanLabelText;
+    self.zanLabelView.frame = CGRectMake(width - zanTextWidth - 4, 0, zanTextWidth, DETAIL_VIEW_HEIGHT);
+    
+    self.zanImageView.frame = CGRectMake(CGRectGetMinX(self.zanLabelView.frame) - DETAIL_VIEW_HEIGHT, 0, DETAIL_VIEW_HEIGHT-5, DETAIL_VIEW_HEIGHT);
+    [self.zanImageView setImage:isZan? [UIImage imageNamed:@"icon_like_yes"]:[UIImage imageNamed:@"icon_like_no"]];
+    
+    NSString *commentLabelText = [NSString stringWithFormat:@"%ld",(long)_commentNum];
+    CGFloat commentTextWidth = commentLabelText.length * 8;
+    self.commentLabelView.text = commentLabelText;
+    self.commentLabelView.frame = CGRectMake(CGRectGetMinX(self.zanImageView.frame) - commentTextWidth - 7, 0, commentTextWidth, DETAIL_VIEW_HEIGHT);
+    
+    self.commentImageView.frame = CGRectMake(CGRectGetMinX(self.commentLabelView.frame) - DETAIL_VIEW_HEIGHT, 0, DETAIL_VIEW_HEIGHT-3, DETAIL_VIEW_HEIGHT);
+}
+
+@end

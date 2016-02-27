@@ -269,6 +269,8 @@
 		F810B7B61B0107ED00843AAB /* EventEditLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B51B0107ED00843AAB /* EventEditLocationViewController.m */; };
 		F810B7B91B01080400843AAB /* EventEditRemarkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */; };
 		F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F810B7C01B0F679800843AAB /* EventLikeViewController.m */; };
+		F8114F0B1C7C1ED600A5E698 /* JGActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */; };
+		F8114F0F1C7DA82900A5E698 /* SwipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8114F0E1C7DA82900A5E698 /* SwipeView.m */; };
 		F813B2D31BB3B9A70066BC37 /* SDWebImageManager+MJ.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D21BB3B9A70066BC37 /* SDWebImageManager+MJ.m */; };
 		F813B2F21BB3B9BA0066BC37 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D61BB3B9BA0066BC37 /* NSData+ImageContentType.m */; };
 		F813B2F31BB3B9BA0066BC37 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = F813B2D81BB3B9BA0066BC37 /* SDImageCache.m */; };
@@ -434,6 +436,8 @@
 		F8B5DE1C1BFC2E4E00E1F713 /* MTPushMessageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B5DE1B1BFC2E4E00E1F713 /* MTPushMessageHandler.m */; };
 		F8C9CCA21C12C48A005E0A74 /* EnactiveAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */; };
 		F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */; };
+		F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */; };
+		F8DB8AD81C79D51500DAC951 /* PhotoBrowserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */; };
 		F8EA735E1C08C4BD00190832 /* VCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F8B5DD661BFB83EA00E1F713 /* VCommentTableViewCell.xib */; };
 		F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73601C0C61C000190832 /* MTAccountManager.m */; };
 		F8EA73E11C0CBB2F00190832 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F8EA73BF1C0CBB2F00190832 /* EXTRuntimeExtensions.m */; };
@@ -1016,6 +1020,10 @@
 		F810B7B81B01080400843AAB /* EventEditRemarkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditRemarkViewController.m; sourceTree = "<group>"; };
 		F810B7BF1B0F679800843AAB /* EventLikeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLikeViewController.h; sourceTree = "<group>"; };
 		F810B7C01B0F679800843AAB /* EventLikeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLikeViewController.m; sourceTree = "<group>"; };
+		F8114F091C7C1ED600A5E698 /* JGActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGActionSheet.h; sourceTree = "<group>"; };
+		F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGActionSheet.m; sourceTree = "<group>"; };
+		F8114F0D1C7DA82900A5E698 /* SwipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeView.h; sourceTree = "<group>"; };
+		F8114F0E1C7DA82900A5E698 /* SwipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeView.m; sourceTree = "<group>"; };
 		F813B2D11BB3B9A70066BC37 /* SDWebImageManager+MJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDWebImageManager+MJ.h"; sourceTree = "<group>"; };
 		F813B2D21BB3B9A70066BC37 /* SDWebImageManager+MJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SDWebImageManager+MJ.m"; sourceTree = "<group>"; };
 		F813B2D51BB3B9BA0066BC37 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -1332,6 +1340,10 @@
 		F8C9CC9F1C12C48A005E0A74 /* EnactiveAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnactiveAccountViewController.h; path = "Login&Register/EnactiveAccountViewController.h"; sourceTree = "<group>"; };
 		F8C9CCA01C12C48A005E0A74 /* EnactiveAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnactiveAccountViewController.m; path = "Login&Register/EnactiveAccountViewController.m"; sourceTree = "<group>"; };
 		F8C9CCA11C12C48A005E0A74 /* EnactiveAccountViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EnactiveAccountViewController.xib; path = "Login&Register/EnactiveAccountViewController.xib"; sourceTree = "<group>"; };
+		F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserViewController.h; sourceTree = "<group>"; };
+		F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserViewController.m; sourceTree = "<group>"; };
+		F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserCell.h; sourceTree = "<group>"; };
+		F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowserCell.m; sourceTree = "<group>"; };
 		F8EA735F1C0C61C000190832 /* MTAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAccountManager.h; sourceTree = "<group>"; };
 		F8EA73601C0C61C000190832 /* MTAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAccountManager.m; sourceTree = "<group>"; };
 		F8EA73BD1C0CBB2F00190832 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTKeyPathCoding.h; sourceTree = "<group>"; };
@@ -1693,6 +1705,10 @@
 				083FF6A219D06048001BB61E /* photoRankingViewController.m */,
 				08905A701A2E096B0089CF08 /* PictureWall2.h */,
 				08905A711A2E096B0089CF08 /* PictureWall2.m */,
+				F8DB8AD11C79A2DB00DAC951 /* PhotoBrowserViewController.h */,
+				F8DB8AD21C79A2DB00DAC951 /* PhotoBrowserViewController.m */,
+				F8DB8AD61C79D51500DAC951 /* PhotoBrowserCell.h */,
+				F8DB8AD71C79D51500DAC951 /* PhotoBrowserCell.m */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -2144,6 +2160,8 @@
 		51581D6B19335CDD00943606 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F8114F0C1C7DA82900A5E698 /* SwipeView */,
+				F8114F081C7C1ED600A5E698 /* JGActionSheet */,
 				F8EA75511C0EAF9200190832 /* FXKeychain */,
 				F8EA73F21C0CC09900190832 /* TPKeyboardAvoiding */,
 				F8EA73BB1C0CBB2F00190832 /* Mantle */,
@@ -2514,6 +2532,24 @@
 				F810B7C01B0F679800843AAB /* EventLikeViewController.m */,
 			);
 			name = EventLike;
+			sourceTree = "<group>";
+		};
+		F8114F081C7C1ED600A5E698 /* JGActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				F8114F091C7C1ED600A5E698 /* JGActionSheet.h */,
+				F8114F0A1C7C1ED600A5E698 /* JGActionSheet.m */,
+			);
+			path = JGActionSheet;
+			sourceTree = "<group>";
+		};
+		F8114F0C1C7DA82900A5E698 /* SwipeView */ = {
+			isa = PBXGroup;
+			children = (
+				F8114F0D1C7DA82900A5E698 /* SwipeView.h */,
+				F8114F0E1C7DA82900A5E698 /* SwipeView.m */,
+			);
+			path = SwipeView;
 			sourceTree = "<group>";
 		};
 		F813B2D41BB3B9BA0066BC37 /* SDWebImage */ = {
@@ -3616,6 +3652,7 @@
 				081B6DB01A76861F0044D623 /* QRCodeGenerator.m in Sources */,
 				F8EA73E21C0CBB2F00190832 /* EXTScope.m in Sources */,
 				F8EA73611C0C61C000190832 /* MTAccountManager.m in Sources */,
+				F8DB8AD81C79D51500DAC951 /* PhotoBrowserCell.m in Sources */,
 				08AB903F197BFA7E006E54CE /* showParticipatorsViewController.m in Sources */,
 				F8B5DDF41BFB83EA00E1F713 /* MTShowTextViewController.m in Sources */,
 				51581D341933575300943606 /* AppDelegate.m in Sources */,
@@ -3660,6 +3697,7 @@
 				0842A89A19588DA5003229A9 /* InviteFriendViewController.m in Sources */,
 				F810B7C11B0F679800843AAB /* EventLikeViewController.m in Sources */,
 				F82D60931C1FF63B00B5AB1B /* FindPwWithPhoneViewController.m in Sources */,
+				F8114F0F1C7DA82900A5E698 /* SwipeView.m in Sources */,
 				F813B2F31BB3B9BA0066BC37 /* SDImageCache.m in Sources */,
 				0878E84F1A3AC5F500E3C18C /* BOAlertController.m in Sources */,
 				F8A518D11BEC958700743000 /* NearbyPeopleViewController.m in Sources */,
@@ -3758,6 +3796,7 @@
 				F8A518CD1BEB325000743000 /* ContactsViewController.m in Sources */,
 				F813B2F61BB3B9BA0066BC37 /* SDWebImageDownloader.m in Sources */,
 				F8B5DDDD1BFB83EA00E1F713 /* PhotoRankingTableViewCell.m in Sources */,
+				F8114F0B1C7C1ED600A5E698 /* JGActionSheet.m in Sources */,
 				51F4CB1619E6307500E487F1 /* DDFileLogger.m in Sources */,
 				081B6DA81A7685D80044D623 /* mask.c in Sources */,
 				F8B5DDF21BFB83EA00E1F713 /* MTPhotoBrowser.m in Sources */,
@@ -3783,6 +3822,7 @@
 				F8A329DD1C07EFB5008FFB17 /* AFURLRequestSerialization.m in Sources */,
 				F8A329DB1C07EFB5008FFB17 /* AFSecurityPolicy.m in Sources */,
 				F8B5DE071BFB83EA00E1F713 /* NSString+PinYin4Cocoa.m in Sources */,
+				F8DB8AD41C79A2DB00DAC951 /* PhotoBrowserViewController.m in Sources */,
 				08BEE9C61A2DEFAA00132F18 /* TMQuiltViewController.m in Sources */,
 				51581D6519335A8700943606 /* HomeViewController.m in Sources */,
 				086AE6CE19B5954000EDF629 /* VideoDetailViewController.m in Sources */,
@@ -3931,7 +3971,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "956b6e5e-111c-4e4f-ad91-098d10c8433b";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -3954,8 +3994,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guangzhou Ezoul Network Technology Co., Ltd. (56ZKXR2BF7)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3970,7 +4010,7 @@
 				MACH_O_TYPE = mh_execute;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-all_load";
-				PROVISIONING_PROFILE = "956b6e5e-111c-4e4f-ad91-098d10c8433b";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3985,7 +4025,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dongsheng Yin (X5EXHSDV8J)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4088,7 +4128,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Guilin Ligang Network Technology Co., Ltd";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
