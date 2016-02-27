@@ -15,7 +15,8 @@
 
 @interface PhotoBrowserViewController () <SwipeViewDataSource, SwipeViewDelegate>
 
-@property (nonatomic, strong) SwipeView *swipeView;
+@property (nonatomic, strong) IBOutlet SwipeView *swipeView;
+@property (nonatomic, strong) PhotoDetailViewController *selectedPhotoDetailVC;
 
 @property (nonatomic, strong) NSArray *photos;
 @property (nonatomic, strong) NSDictionary *eventInfo;
@@ -43,16 +44,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (![self.swipeView isDescendantOfView:self.view]) {
-        CGRect frame = self.view.bounds;
-        self.swipeView.frame = frame;
-        [self.view addSubview:self.swipeView];
-        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [self swipeViewDidEndDecelerating:self.swipeView];
+    if (self.showIndex > 0) {
+        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
+        [self swipeViewDidEndDecelerating:self.swipeView];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,12 +69,10 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.swipeView = [[SwipeView alloc] initWithFrame:self.view.bounds];
     self.swipeView.dataSource = self;
     self.swipeView.delegate = self;
     self.swipeView.pagingEnabled = YES;
     [self.swipeView reloadData];
-
 }
 
 - (void)setTableViewScrollEnabled:(BOOL)scrollEnabled {
@@ -84,7 +80,17 @@
 }
 
 - (PhotoDetailViewController *)photoDetailVCwithIndex:(NSInteger)index {
-
+    
+    if (index < 0 || index >= self.photos.count) {
+        return nil;
+    }
+    
+    if (self.showIndex > 0 && self.selectedPhotoDetailVC) {
+        return self.selectedPhotoDetailVC;
+    } else if (self.showIndex > 0 && !self.selectedPhotoDetailVC) {
+        index = self.showIndex;
+    }
+    
     NSMutableDictionary *photoInfo = self.photos[index];
     
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
@@ -97,6 +103,9 @@
     detailViewController.eventName = self.eventInfo[@"subject"];
     detailViewController.canManage = [[self.eventInfo valueForKey:@"isIn"]boolValue];
     
+    if (self.showIndex > 0 && !self.selectedPhotoDetailVC) {
+        self.selectedPhotoDetailVC = detailViewController;
+    }
     return detailViewController;
 }
 
@@ -110,8 +119,12 @@
 - (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view
 {
     PhotoDetailViewController *detailViewController = [self photoDetailVCwithIndex:index];
+    if (self.showIndex == index) {
+        self.showIndex = -1;
+        self.selectedPhotoDetailVC = nil;
+    }
     [self addChildViewController:detailViewController];
-    CGRect frame = self.view.bounds;
+    CGRect frame = self.swipeView.bounds;
     detailViewController.view.frame = frame;
     [detailViewController didMoveToParentViewController:self];
     
@@ -120,7 +133,7 @@
 
 #pragma mark SwipeView Delegate
 - (void)swipeViewWillBeginDragging:(SwipeView *)swipeView {
-
+    
     for (PhotoDetailViewController *detailVC in self.childViewControllers) {
         if (detailVC && [detailVC respondsToSelector:@selector(inputTextView)]) {
             if (detailVC.inputTextView.isFirstResponder) {
@@ -131,15 +144,18 @@
 }
 
 - (void)swipeViewDidEndDecelerating:(SwipeView *)swipeView {
-
+    
+    PhotoDetailViewController *visibleVC;
     for (PhotoDetailViewController *detailVC in self.childViewControllers) {
         if (![swipeView.visibleItemViews containsObject:detailVC.view]) {
             [detailVC.view removeFromSuperview];
             [detailVC removeFromParentViewController];
-        }else {
-            [detailVC tabbarButtonOption
-             ];
+        } else {
+            visibleVC = detailVC;
         }
+    }
+    if (visibleVC) {
+        [visibleVC tabbarButtonOption];
     }
 }
 
