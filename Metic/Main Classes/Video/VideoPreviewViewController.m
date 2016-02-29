@@ -230,7 +230,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     CGFloat heightValue = videoTrack.naturalSize.height;
     
 //    CGFloat maxWidth = 640.0;
-    CGFloat maxHeight = 480;
+    CGFloat maxHeight = 720;
     
     CGFloat heightRatio;
     
@@ -246,6 +246,14 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     if (heightRatio < 1) {
         widthValue = ceil(widthValue * heightRatio);
         heightValue = ceil(heightValue * heightRatio);
+    }
+    
+    NSNumber *MTBitRateLow = @800000;
+    NSNumber *MTBitRateHigh = @1200000;
+    
+    NSNumber *bitRate = MTBitRateLow;
+    if (MIN(widthValue, heightValue) == maxHeight) {
+        bitRate = MTBitRateHigh;
     }
     
     if (_preViewImage.size.height > _preViewImage.size.width && videoTrack.naturalSize.height < videoTrack.naturalSize.width){
@@ -267,7 +275,7 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     AVVideoCompressionPropertiesKey: @
         {
         AVVideoAverageNonDroppableFrameRateKey:@15,
-        AVVideoAverageBitRateKey: @800000,
+        AVVideoAverageBitRateKey: bitRate,
         AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel,
         },
     };
@@ -279,6 +287,8 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     AVSampleRateKey: @44100,
     AVEncoderBitRateKey: @128000,
     };
+    
+    encoder.progress
     
     [encoder exportAsynchronouslyWithCompletionHandler:^
      {
