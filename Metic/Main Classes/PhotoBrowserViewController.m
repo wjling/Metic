@@ -47,10 +47,10 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if (self.showIndex > 0) {
+    if (self.showIndex >= 0 && self.showIndex < self.photos.count) {
         [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
-        [self swipeViewDidEndDecelerating:self.swipeView];
     }
+    [self swipeViewDidEndDecelerating:self.swipeView];
 }
 
 - (void)didReceiveMemoryWarning {

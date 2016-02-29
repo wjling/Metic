@@ -16,7 +16,7 @@
 #import "UIImageView+MTWebCache.h"
 #import "AtMeGoodTableViewCell.h"
 #import "AtMeTableViewCell.h"
-
+#import "MTImageGetter.h"
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
 @property(nonatomic,strong) NSNumber* selete_Eventid;
@@ -222,15 +222,24 @@ enum pos{
             UIImageView* img = cell.contentImage;
             UILabel* lab = cell.contentLabel;
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
+            NSString* object_name = [atMeInfo valueForKey:@"object_name"];
             if (cmd == NEW_VIDEO_COMMENT_REPLY || cmd == NEW_PHOTO_COMMENT_REPLY) {
                 lab.text = @"";
                 lab.hidden = YES;
                 img.hidden = NO;
-                if (object_content && img) {
+                if (object_name && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
-                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"] cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    
+                    MTImageGetterType type;
+                    if (cmd == NEW_PHOTO_COMMENT_REPLY) {
+                        type = MTImageGetterTypePhoto;
+                    } else if (cmd == NEW_VIDEO_COMMENT_REPLY) {
+                        type = MTImageGetterTypeVideoThumb;
+                    };
+                    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:img imageId:nil imageName:object_name type:type];
+                    [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
                             img.contentMode = UIViewContentModeScaleAspectFill;
                         }else{
@@ -261,16 +270,25 @@ enum pos{
             UIImageView* img = cell.contentImage;
             UILabel* lab = cell.contentLabel;
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
+            NSString* object_name = [atMeInfo valueForKey:@"object_name"];
             int operation = [[atMeInfo valueForKey:@"operation"] intValue];
             if (operation == 3 || operation == 5) {
                 lab.text = @"";
                 lab.hidden = YES;
                 img.hidden = NO;
-                if (object_content && img) {
+                if (object_name && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
                     img.contentMode = UIViewContentModeScaleAspectFit;
-                    [img sd_setImageWithURL:[NSURL URLWithString:object_content] placeholderImage:[UIImage imageNamed:@"活动图片的默认图片"]   cloudPath:@"" completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                    
+                    MTImageGetterType type;
+                    if (operation == 3) {
+                        type = MTImageGetterTypePhoto;
+                    } else if (operation == 5) {
+                        type = MTImageGetterTypeVideoThumb;
+                    };
+                    MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:img imageId:nil imageName:object_name type:type];
+                    [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                         if (image) {
                             img.contentMode = UIViewContentModeScaleAspectFill;
                         }else{
