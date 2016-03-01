@@ -288,8 +288,6 @@ static const CGSize progressViewSize = { 180.0f, 30.0f };
     AVEncoderBitRateKey: @128000,
     };
     
-    encoder.progress
-    
     [encoder exportAsynchronouslyWithCompletionHandler:^
      {
          NSString *path = [[_videoURL absoluteString] substringFromIndex:16];
