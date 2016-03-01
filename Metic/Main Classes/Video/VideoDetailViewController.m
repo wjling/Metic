@@ -803,7 +803,7 @@
             [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
             UISaveVideoAtPathToSavedPhotosAlbum(path, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
         } else {
-            [SVProgressHUD dismissWithError:@"视频尚未下载"];
+            [SVProgressHUD showErrorWithStatus:@"视频尚未下载"];
         }
     }
 }
