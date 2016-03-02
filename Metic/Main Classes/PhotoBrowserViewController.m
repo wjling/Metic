@@ -8,6 +8,7 @@
 
 #import "PhotoBrowserViewController.h"
 #import "PhotoDetailViewController.h"
+#import "PhotoDisplayViewController.h"
 #import "PictureWall2.h"
 #import "PhotoBrowserCell.h"
 #import "CommonUtils.h"
@@ -21,6 +22,11 @@
 @property (nonatomic, strong) NSArray *photos;
 @property (nonatomic, strong) NSDictionary *eventInfo;
 @property (nonatomic) NSInteger showIndex;
+
+@property (nonatomic, strong) NSNumber *eventId;
+@property (nonatomic, strong) NSNumber *eventLauncherId;
+@property (nonatomic, strong) NSString *eventName;
+@property (nonatomic) BOOL canManage;
 
 @end
 
@@ -44,13 +50,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.swipeView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if (self.showIndex > 0) {
-        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
-        [self swipeViewDidEndDecelerating:self.swipeView];
-    }
+    [self showPhotoInIndex:self.showIndex];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,6 +65,48 @@
 - (void)dealloc {
     self.swipeView.delegate = nil;
     self.swipeView.dataSource = nil;
+}
+
+#pragma mark - Navi
+- (void)showPhotos {
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
+                                                             bundle: nil];
+    PhotoDisplayViewController* photoDisplay = [mainStoryboard instantiateViewControllerWithIdentifier: @"PhotoDisplayViewController"];
+    
+    photoDisplay.photo_list = [NSMutableArray arrayWithArray:self.photos];
+    photoDisplay.photoIndex = self.swipeView.currentItemIndex;
+    photoDisplay.eventId = self.eventId;
+    photoDisplay.eventLauncherId = self.eventLauncherId;
+    photoDisplay.eventName = self.eventName;
+//    photoDisplay.controller = self;
+    photoDisplay.canManage = [[self.eventInfo valueForKey:@"isIn"]boolValue];
+    
+    [self.navigationController pushViewController:photoDisplay animated:YES];
+}
+
+#pragma mark - Get & Set
+- (NSNumber *)eventId {
+    return [self.eventInfo valueForKey:@"event_id"];
+}
+
+- (NSNumber *)eventName {
+    return [self.eventInfo valueForKey:@"subject"];
+}
+
+- (NSNumber *)eventLauncherId {
+    return [self.eventInfo valueForKey:@"launcher_id"];
+}
+
+- (BOOL)canManage {
+    return [[self.eventInfo valueForKey:@"isIn"]boolValue];
+}
+
+- (void)showPhotoInIndex:(NSInteger)index {
+    if (index >= 0 && index < self.photos.count) {
+        self.showIndex = index;
+        [self.swipeView scrollToItemAtIndex:self.showIndex duration:0];
+    }
+    [self swipeViewDidEndDecelerating:self.swipeView];
 }
 
 #pragma mark - UI setup

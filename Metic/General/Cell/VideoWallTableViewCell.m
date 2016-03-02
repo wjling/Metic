@@ -87,16 +87,6 @@ static CGFloat DETAIL_VIEW_HEIGHT = 23;
     // Configure the view for the selected state
 }
 
-- (void)setFrame:(CGRect)frame
-{
-    //frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    //frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
-    [super setFrame:frame];
-    
-}
-
 # pragma mark get Mathod
 - (NSNumber *)videoId {
     return [self.videoInfo valueForKey:@"video_id"];

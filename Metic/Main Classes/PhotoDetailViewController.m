@@ -197,7 +197,7 @@
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
     [self setGoodButton];
-    dispatch_barrier_async(dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!_photoInfo) [self pullPhotoInfoFromDB];
         [self pullPhotoInfoFromAir];
         [self pullMainCommentFromAir];
@@ -566,18 +566,23 @@
                                                         image:nil
                                                        target:self
                                                        action:@selector(editSpecification:)],
+                                         
+                                         [KxMenuItem menuItem:@"保存图片"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(download:)],
 
                                          [KxMenuItem menuItem:@"删除图片"
                                                         image:nil
                                                        target:self
                                                        action:@selector(deletePhoto:)],
                                          ]];
+    }else {
+        [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"保存图片"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(download:)]]];
     }
-    
-    [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"保存图片"
-                                                    image:nil
-                                                   target:self
-                                                   action:@selector(download:)]]];
 
     if ([[self.photoInfo valueForKey:@"author_id"] integerValue]  != [[MTUser sharedInstance].userid integerValue]) {
         [menuItems addObjectsFromArray:@[[KxMenuItem menuItem:@"举报图片"
@@ -983,11 +988,16 @@
         [self button_Emotionpress:nil];
     else {
         if (self.photo) {
-            BannerViewController* bannerView = [[BannerViewController alloc] init];
-            bannerView.banner = self.photo;
-            [self presentViewController:bannerView animated:YES completion:^{}];
-            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
-            [bannerView.view addGestureRecognizer:longPress];
+            if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+                PhotoBrowserViewController *browserVC = (PhotoBrowserViewController *)self.parentViewController;
+                [browserVC showPhotos];
+            } else {
+                BannerViewController* bannerView = [[BannerViewController alloc] init];
+                bannerView.banner = self.photo;
+                [self presentViewController:bannerView animated:YES completion:^{}];
+                UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
+                [bannerView.view addGestureRecognizer:longPress];
+            }
         }
     }
 }

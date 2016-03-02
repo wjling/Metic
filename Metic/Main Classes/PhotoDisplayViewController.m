@@ -8,6 +8,7 @@
 
 #import "PhotoDisplayViewController.h"
 #import "PhotoDetailViewController.h"
+#import "PhotoBrowserViewController.h"
 #import "ReportViewController.h"
 #import "MRZoomScrollView.h"
 #import "PhotoGetter.h"
@@ -20,16 +21,18 @@
 #import "MegUtils.h"
 #import "MTImageGetter.h"
 #import "MTOperation.h"
+#import "JGActionSheet.h"
+#import "SVProgressHUD.h"
+#import "SocialSnsApi.h"
 
-
-@interface PhotoDisplayViewController ()
+@interface PhotoDisplayViewController () <UMSocialUIDelegate>
 @property BOOL isZan;
 @property int goodindex;
 @property int lastViewIndex;
 @property int movedown;
-@property (nonatomic,strong)SDWebImageManager *manager;
 @property (nonatomic,strong)UIView* shadowView;
 @property (nonatomic,strong)UIView* optionView;
+@property (nonatomic,weak) UIImage* photo;
 @end
 
 @implementation PhotoDisplayViewController
@@ -49,7 +52,6 @@
     [CommonUtils addLeftButton:self isFirstPage:NO];
     //[self.navigationController setNavigationBarHidden:YES animated:NO];
     
-    //[self.InfoView setHidden:YES];
     self.view.autoresizesSubviews = YES;
     self.lastViewIndex = self.photoIndex;
     self.photos = [[NSMutableDictionary alloc]init];
@@ -64,8 +66,8 @@
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
-    _manager = [SDWebImageManager sharedManager];
-    [self.InfoView setHidden:NO];
+
+    [self.InfoView setHidden:YES];
     [self.view bringSubviewToFront:self.InfoView];
     //单击手势
     UITapGestureRecognizer * singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
@@ -81,6 +83,8 @@
     [self.scrollView addGestureRecognizer:longRecognizer];
     
     [self displaythreePhoto:self.photoIndex];
+    [self showInFullScreen];
+
     // Do any additional setup after loading the view.
 }
 
@@ -97,7 +101,9 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     [self fixUI];
+    [self showInFullScreen];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -105,6 +111,11 @@
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     UIDevice *device = [UIDevice currentDevice]; //Get the device object
     [nc removeObserver:self name:UIDeviceOrientationDidChangeNotification object:device];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self leaveFullScreen];
 }
 
 - (void)didReceiveMemoryWarning
@@ -234,25 +245,56 @@
     
 }
 
-
-
-
-
 -(void)handleSingleTap
 {
+    PhotoBrowserViewController *viewController = (PhotoBrowserViewController *)self.navigationController.viewControllers[self.navigationController.viewControllers.count - 2];
+    if ([viewController isKindOfClass:[PhotoBrowserViewController class]]) {
+        [viewController showPhotoInIndex:self.lastViewIndex];
+    }
+    [self leaveFullScreen];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)showInFullScreen {
+    [UIView animateWithDuration:0.5 animations:^{
+        if(self.navigationController.navigationBarHidden){
+            return ;
+            [self.navigationController setNavigationBarHidden:NO];
+            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+            [self rotation:0.0];
+            [self loadPictureDescription];
+//            [self.InfoView setHidden:NO];
+            [self.view bringSubviewToFront:self.InfoView];
+        }else{
+            [self.navigationController setNavigationBarHidden:YES];
+            [[UIApplication sharedApplication] setStatusBarHidden:YES];
+//            [self.InfoView setHidden:YES];
+            
+        }
+        for (NSString* key in [_photos keyEnumerator]) {
+            MRZoomScrollView* zoomView = [_photos valueForKey:key];
+            if (zoomView) {
+                [zoomView fitImageView];
+            }
+        }
+    }];
+}
+
+- (void)leaveFullScreen {
     [UIView animateWithDuration:0.5 animations:^{
         if(self.navigationController.navigationBarHidden){
             [self.navigationController setNavigationBarHidden:NO];
             [[UIApplication sharedApplication] setStatusBarHidden:NO];
             [self rotation:0.0];
             [self loadPictureDescription];
-            [self.InfoView setHidden:NO];
+//            [self.InfoView setHidden:NO];
             [self.view bringSubviewToFront:self.InfoView];
         }else{
+            return ;
             [self.navigationController setNavigationBarHidden:YES];
             [[UIApplication sharedApplication] setStatusBarHidden:YES];
-            [self.InfoView setHidden:YES];
-
+//            [self.InfoView setHidden:YES];
+            
         }
         for (NSString* key in [_photos keyEnumerator]) {
             MRZoomScrollView* zoomView = [_photos valueForKey:key];
@@ -269,21 +311,64 @@
 
 -(void)showOption:(UIGestureRecognizer*)sender
 {
+    if (sender.state != UIGestureRecognizerStateBegan) return;
+        
+    NSArray *funtion = @[@"图片分享",@"保存图片", @"举报图片"];
+    
+    if ([self.eventLauncherId isEqualToNumber:[MTUser sharedInstance].userid]) {
+        funtion = [funtion subarrayWithRange:NSMakeRange(0, 2)];
+    }
+    
+    JGActionSheetSection *section1 = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:funtion buttonStyle:JGActionSheetButtonStyleDefault];
+    JGActionSheetSection *cancelSection = [JGActionSheetSection sectionWithTitle:nil message:nil buttonTitles:@[@"取消"] buttonStyle:JGActionSheetButtonStyleCancel];
+    
+    NSArray *sections = @[section1, cancelSection];
+    
+    JGActionSheet *sheet = [JGActionSheet actionSheetWithSections:sections];
+    
+    [sheet setButtonPressedBlock:^(JGActionSheet *sheet, NSIndexPath *indexPath) {
+        if (indexPath.section == 0) {
+            switch (indexPath.row) {
+                case 0:{
+                    [sheet dismissAnimated:YES];
+                    [self share:nil];
+                }
+                    break;
+                case 1:{
+                    [sheet dismissAnimated:YES];
+                    [self download:nil];
+                }
+                    break;
+                case 2:{
+                    [sheet dismissAnimated:YES];
+                    [self report];
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        } else {
+            [sheet dismissAnimated:YES];
+        }
+    }];
+    
+    [sheet setOutsidePressBlock:^(JGActionSheet *sheet) {
+        [sheet dismissAnimated:YES];
+    }];
+    
+    [sheet showInView:self.view animated:YES];
+        
+    
+    
+    return;
+    
+    
     if (self.navigationController.navigationBarHidden) return;
     if (sender.state != UIGestureRecognizerStateBegan) return;
     int index = self.scrollView.contentOffset.x/320;
     NSNumber* authorId = [self.photo_list[index] valueForKey:@"author_id"];
     if ([authorId integerValue] == [[MTUser sharedInstance].userid integerValue]) {
-//        LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除",@"举报",nil];
-//        alert.alertAction = ^(NSInteger buttonIndex){
-//            if (buttonIndex == 1) {
-//                [self deleteComment];
-//            }
-//            if (buttonIndex == 2) {
-//                [self report];
-//            }
-//        };
-//        [alert show];
     }else{
         LCAlertView *alert = [[LCAlertView alloc]initWithTitle:@"操作" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"举报",nil];
         alert.alertAction = ^(NSInteger buttonIndex){
@@ -346,6 +431,7 @@
 -(void)report{
     MTLOG(@"匿名投诉");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self leaveFullScreen];
         [self performSegueWithIdentifier:@"photoToreport" sender:self];
     });
 }
@@ -380,6 +466,9 @@
     MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:zoomScrollView.imageView imageId:nil imageName:_photo_list[photoIndex][@"photo_name"] type:MTImageGetterTypePhoto];
     [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
+            if (photoIndex == self.lastViewIndex) {
+                self.photo = image;
+            }
             [zoomScrollView fitImageView];
         }else{
             zoomScrollView.imageView.image = [UIImage imageNamed:@"加载失败"];
@@ -452,22 +541,50 @@
     self.commentImg.image = [UIImage imageNamed:@"评论按下按钮icon"];
 }
 
-//#pragma mark - HttpSenderDelegate
-//
-//-(void)finishWithReceivedData:(NSData *)rData
-//{
-//    [self.goodButton setEnabled:YES];
-//    NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-//    MTLOG(@"received Data: %@",temp);
-//    NSMutableDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-//    NSNumber *cmd = [response1 valueForKey:@"cmd"];
-//    if ([cmd intValue] == NORMAL_REPLY || [cmd intValue] == REQUEST_FAIL || [cmd intValue] == DATABASE_ERROR) {
-//        
-//    }else{
-////        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
-//    }
-//
-//}
+#pragma mark - function 
+- (void)share:(id)sender {
+    if (self.photo) {
+        NSString *shareText = self.pictureDescription.text;
+        if (![shareText isKindOfClass:[NSString class]] || shareText.length == 0) {
+            shareText = @" ";
+        }
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeImage;
+        [UMSocialData defaultData].extConfig.qqData.title = @"【活动宝图片分享】";
+        [UMSocialData defaultData].extConfig.sinaData.urlResource = nil;
+        [UMSocialData defaultData].extConfig.smsData.urlResource = nil;
+        
+        [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline]];
+        NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+        if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+            [shareToSns addObject:UMShareToSms];
+        }
+        UIViewController *vc = self.presentedViewController;
+        if (!vc)
+            vc = self;
+        [UMSocialSnsService presentSnsIconSheetView:vc
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:shareText
+                                         shareImage:self.photo
+                                    shareToSnsNames:shareToSns
+                                           delegate:self];
+    }
+}
+
+- (void)download:(id)sender {
+    if (_photo) {
+        [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
+        UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+    }
+}
+
+- (void)downloadComplete:(UIImage *)image hasBeenSavedInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo{
+    if (error){
+        // Do anything needed to handle the error or display it to the user
+    }else{
+        [SVProgressHUD showSuccessWithStatus:@"保存成功" duration:0.7f];
+    }
+}
 
 #pragma mark 用segue跳转时传递参数eventid
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -500,6 +617,8 @@
         
     }
 }
+
+#pragma mark - UIGestureRecognizer Delegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     UIView* touchedView = [touch view];
@@ -511,5 +630,16 @@
     return YES;
 }
 
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        MTLOG(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
+    }
+}
 
 @end

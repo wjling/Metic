@@ -660,11 +660,21 @@
                                                        target:self
                                                        action:@selector(editSpecification:)],
                                          
+                                         [KxMenuItem menuItem:@"保存视频"
+                                                        image:nil
+                                                       target:self
+                                                       action:@selector(saveVideo)],
+                                         
                                          [KxMenuItem menuItem:@"删除视频"
                                                         image:nil
                                                        target:self
                                                        action:@selector(deleteVideo:)],
                                          ]];
+    } else {
+        [menuItems addObject: [KxMenuItem menuItem:@"保存视频"
+                                             image:nil
+                                            target:self
+                                            action:@selector(saveVideo)]];
     }
     
     if ([[self.videoInfo valueForKey:@"author_id"] integerValue]  != [[MTUser sharedInstance].userid integerValue]) {
@@ -777,6 +787,33 @@
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"确定要删除这段视频？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert setTag:100];
     [alert show];
+}
+
+- (void)saveVideo
+{
+    if(!_canManage)return;
+    NSString *videoName = [self.videoInfo valueForKey:@"video_name"];
+    if (videoName) {
+        NSString *CacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+        NSString *cachePath = [CacheDirectory stringByAppendingPathComponent:@"VideoCache"];
+        NSString *path = [cachePath stringByAppendingPathComponent:videoName];
+        //plan b 缓存视频
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:cachePath] && [fileManager fileExistsAtPath:path]) {
+            [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
+            UISaveVideoAtPathToSavedPhotosAlbum(path, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"视频尚未下载"];
+        }
+    }
+}
+
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo: (void *)contextInfo {
+    if (!error) {
+        [SVProgressHUD dismissWithSuccess:@"保存成功"];
+    } else {
+        [SVProgressHUD dismissWithError:@"保存失败"];
+    }
 }
 
 #pragma 长按菜单

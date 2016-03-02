@@ -31,7 +31,6 @@
 @property(nonatomic,strong) NSMutableArray* videoInfos;
 @property(nonatomic,strong) NSMutableArray* videoInfos_all;
 @property(nonatomic,strong) NSNumber* sequence;
-@property(nonatomic,strong) NSString* urlFormat;
 @property(nonatomic,strong) UIImage* preViewImage;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
@@ -85,12 +84,7 @@
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    [self.view addSubview:_tableView];
 
-//    _urlFormat = @"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@";//测试服
-//    _urlFormat = @"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@";//正式服
-    _urlFormat = @[@"http://bcs.duapp.com/metis201415/video/%@.thumb?sign=%@",@"http://bcs.duapp.com/whatsact/video/%@.thumb?sign=%@"][Server];
-    
     _videoInfos = [[NSMutableArray alloc]init];
     _videoInfos_all = [[NSMutableArray alloc]init];
     [self pullVideosInfosFromDB];
@@ -396,7 +390,7 @@
             imagePickerController.allowsEditing = NO;
             imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
             
-            imagePickerController.videoQuality = UIImagePickerControllerQualityType640x480;
+            imagePickerController.videoQuality = UIImagePickerControllerQualityTypeHigh;
             NSArray* availableMedia = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
             imagePickerController.mediaTypes = [NSArray arrayWithObject:availableMedia[1]];
             imagePickerController.videoMaximumDuration = 600;
