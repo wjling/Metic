@@ -988,11 +988,16 @@
         [self button_Emotionpress:nil];
     else {
         if (self.photo) {
-            BannerViewController* bannerView = [[BannerViewController alloc] init];
-            bannerView.banner = self.photo;
-            [self presentViewController:bannerView animated:YES completion:^{}];
-            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
-            [bannerView.view addGestureRecognizer:longPress];
+            if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+                PhotoBrowserViewController *browserVC = (PhotoBrowserViewController *)self.parentViewController;
+                [browserVC showPhotos];
+            } else {
+                BannerViewController* bannerView = [[BannerViewController alloc] init];
+                bannerView.banner = self.photo;
+                [self presentViewController:bannerView animated:YES completion:^{}];
+                UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
+                [bannerView.view addGestureRecognizer:longPress];
+            }
         }
     }
 }

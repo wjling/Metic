@@ -11,6 +11,8 @@
 @interface PhotoBrowserViewController : UIViewController
 
 - (instancetype)initWithEventInfo:(NSDictionary *)eventInfo PhotoDists:(NSArray *)photos showPhotoIndex:(NSInteger)index;
+- (void)showPhotoInIndex:(NSInteger)index;
 - (void)setTableViewScrollEnabled:(BOOL)scrollEnabled;
+- (void)showPhotos;
 
 @end
