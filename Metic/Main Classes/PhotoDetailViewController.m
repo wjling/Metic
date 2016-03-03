@@ -12,6 +12,7 @@
 #import "UserInfoViewController.h"
 #import "PhotoBrowserViewController.h"
 #import "BannerViewController.h"
+#import "MTMediaInfoView.h"
 #import "PcommentTableViewCell.h"
 #import "HomeViewController.h"
 #import "CommonUtils.h"
@@ -33,13 +34,12 @@
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber *sequence;
-@property (nonatomic,strong)UIImageView *photoView;
-@property (nonatomic,strong)UIImageView *avatarView;
+@property (nonatomic,strong)MTMediaInfoView *photoInfoView;
 @property (nonatomic,strong)UIButton *edit_button;
 @property (nonatomic,strong)UIButton *editFinishButton;
 @property (nonatomic,strong)UIButton *optionButton;
 @property (nonatomic,strong)UIButton *shareButton;
-@property (nonatomic,strong)UILabel *specification;
+//@property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
 @property (strong, nonatomic) UIButton *good_button;
@@ -196,7 +196,6 @@
     self.tableView.dataSource = self;
     self.pcomment_list = [[NSMutableArray alloc]init];
     //[self initButtons];
-    [self setGoodButton];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!_photoInfo) [self pullPhotoInfoFromDB];
         [self pullPhotoInfoFromAir];
@@ -335,13 +334,6 @@
     [UIView commitAnimations];
 }
 
--(void) setGoodButton
-{
-    if (_photoInfo && [[self.photoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_yes"] forState:UIControlStateNormal];
-    }else [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_no"] forState:UIControlStateNormal];
-}
-
 - (void)pullMainCommentFromAir
 {
     _isLoading = YES;
@@ -445,7 +437,7 @@
     [self.photoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     [self.photoInfo setValue:[NSNumber numberWithInteger:good] forKey:@"good"];
     [MTDatabaseAffairs updatePhotoInfoToDB:@[_photoInfo] eventId:_eventId];
-    [self setGoodButton];
+    [self.photoInfoView setupLikeButton];
 }
 
 - (BOOL)checkCanManaged {
@@ -464,7 +456,7 @@
 }
 
 - (IBAction)share:(id)sender {
-    if (_photo) {
+    if (self.photoInfoView.photo) {
         NSString *shareText = self.photoInfo[@"specification"];
         if (![shareText isKindOfClass:[NSString class]] || shareText.length == 0) {
             shareText = @" ";
@@ -486,17 +478,17 @@
         [UMSocialSnsService presentSnsIconSheetView:vc
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
-                                         shareImage:self.photo
+                                         shareImage:self.photoInfoView.photo
                                     shareToSnsNames:shareToSns
                                            delegate:self];
     }
 }
 
 - (IBAction)download:(id)sender {
-    if (_photo) {
+    if (self.photoInfoView.photo) {
         [self.download_button setEnabled:NO];
         [SVProgressHUD showWithStatus:@"正在保存" maskType:SVProgressHUDMaskTypeClear];
-        UIImageWriteToSavedPhotosAlbum(self.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
+        UIImageWriteToSavedPhotosAlbum(self.photoInfoView.photo,self, @selector(downloadComplete:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), nil);
     }
 }
 
@@ -609,13 +601,13 @@
             [browser setTableViewScrollEnabled:NO];
         }
         [self hiddenCommentViewAndEmotionView];
-        self.specification.hidden = YES;
-        
+        self.photoInfoView.descriptionLabel.hidden = YES;
+
         [self tabbarButtonEdit];
         
         self.tableView.scrollEnabled = NO;
-        float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
-        [self.tableView setContentOffset:CGPointMake(0, height) animated:YES];
+        float height = CGRectGetMaxY(self.photoInfoView.photoView.superview.frame);
+        [self.tableView setContentOffset:CGPointMake(0, height - 80) animated:YES];
         if (!self.shadow) {
             UIButton *shadow = [UIButton buttonWithType:UIButtonTypeCustom];
             shadow.frame = self.view.bounds;
@@ -626,12 +618,12 @@
         [self.view addSubview:self.shadow];
         
         if (!self.specificationEditTextfield) {
-            CGRect textfieldFrame = self.specification.frame;
+            CGRect textfieldFrame = self.photoInfoView.descriptionLabel.frame;
             textfieldFrame.size.height = 30;
-            textfieldFrame.origin.y = CGRectGetMinY(self.specification.frame) - height;
+            textfieldFrame.origin.y = 80 + 5;
             UITextField* specificationEditTextfield = [[UITextField alloc]initWithFrame:textfieldFrame];
             specificationEditTextfield.placeholder = @"请输入新的图片描述";
-            [specificationEditTextfield setFont:[UIFont systemFontOfSize:12]];
+            [specificationEditTextfield setFont:[UIFont systemFontOfSize:14]];
             specificationEditTextfield.text = [self.photoInfo valueForKey:@"specification"];
             [specificationEditTextfield setBackgroundColor:[UIColor whiteColor]];
             specificationEditTextfield.hidden = YES;
@@ -660,7 +652,7 @@
         [self.specificationEditTextfield resignFirstResponder];
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
-        self.specification.hidden = NO;
+        self.photoInfoView.descriptionLabel.hidden = NO;
 
         [self tabbarButtonOption];
         self.tableView.scrollEnabled = YES;
@@ -678,8 +670,11 @@
     [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [[MTOperation sharedInstance] modifyPhotoSpecification:newSpecification withPhotoId:self.photoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
-        self.specification.text = newSpecification;
         [self.photoInfo setValue:newSpecification forKey:@"specification"];
+        if (newSpecification.length == 0) {
+            self.photoInfoView.descriptionLabel.text = @"暂无描述";
+        }else
+            self.photoInfoView.descriptionLabel.text = newSpecification;
         [MTDatabaseAffairs updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         [self editSpecification:nil];
@@ -814,7 +809,7 @@
 }
 
 
-- (IBAction)publishComment:(id)sender {
+- (void)publishComment:(id)sender {
     if (![self checkCanManaged]) return;
     if (!_photoInfo) return;
     NSString *comment = self.inputTextView.text;
@@ -990,17 +985,15 @@
     }else if (_isEmotionOpen)
         [self button_Emotionpress:nil];
     else {
-        if (self.photo) {
-            if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
-                PhotoBrowserViewController *browserVC = (PhotoBrowserViewController *)self.parentViewController;
-                [browserVC showPhotos];
-            } else {
-                BannerViewController* bannerView = [[BannerViewController alloc] init];
-                bannerView.banner = self.photo;
-                [self presentViewController:bannerView animated:YES completion:^{}];
-                UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
-                [bannerView.view addGestureRecognizer:longPress];
-            }
+        if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+            PhotoBrowserViewController *browserVC = (PhotoBrowserViewController *)self.parentViewController;
+            [browserVC showPhotos];
+        } else if(self.photoInfoView.photo){
+            BannerViewController* bannerView = [[BannerViewController alloc] init];
+            bannerView.banner = self.photoInfoView.photo;
+            [self presentViewController:bannerView animated:YES completion:^{}];
+            UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(photoOptions:)];
+            [bannerView.view addGestureRecognizer:longPress];
         }
     }
 }
@@ -1116,109 +1109,21 @@
 {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
-        float height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
-        cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        if (!self.photoView) {
-            self.photoView = [[UIImageView alloc] init];
-        }
-        [self.photoView setFrame:CGRectMake(0, 0, 320,height)];
+        if (!self.photoInfoView) {
+            static NSString *CellIdentifier = @"pPhotoInfoView";
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([MTMediaInfoView class]) bundle:nil];
+            [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+            self.photoInfoView = (MTMediaInfoView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backToDisplay)];
+            [self.photoInfoView.photoView addGestureRecognizer:tap];
+            
+            [self.photoInfoView.likeBtn addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
+            [self.photoInfoView.shareBtn addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
 
-        [self.photoView setBackgroundColor:[UIColor colorWithWhite:204.0/255 alpha:1.0f]];
-        
-        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.photoView imageId:nil imageName:_photoInfo[@"photo_name"] type:MTImageGetterTypePhoto];
-        [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image) {
-                _photo = image;
-                [self.photoView setContentMode:UIViewContentModeScaleToFill];
-            }else{
-                self.photoView.image = [UIImage imageNamed:@"加载失败"];
-            }
-        }];
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
-        [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        
-        [cell addSubview:self.photoView];
-        [cell addSubview:label];
-        
-        UIButton* back = [UIButton buttonWithType:UIButtonTypeCustom];
-        [back setFrame:self.photoView.frame];
-        [back addTarget:self action:@selector(backToDisplay) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:back];
-        
-        //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_photoInfo valueForKey:@"author_id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [_photoInfo valueForKey:@"author"];
         }
+        [self.photoInfoView applyData:self.photoInfo type:MTMediaTypePhoto containerWidth:CGRectGetWidth(self.view.frame)];
         
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+11, 150, 17)];
-        [author setFont:[UIFont systemFontOfSize:14]];
-        [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
-        [author setBackgroundColor:[UIColor clearColor]];
-        author.text = alias;
-        [cell addSubview:author];
-        
-        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
-        [date setFont:[UIFont systemFontOfSize:11]];
-        [date setTextColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0]];
-        date.text = [self.photoInfo valueForKey:@"time"];
-        [date setBackgroundColor:[UIColor clearColor]];
-        [cell addSubview:date];
-        
-        MTLOG(@"%f",self.specificationHeight);
-        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
-        if (!self.specification) {
-            UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
-            [specification setFont:[UIFont systemFontOfSize:12]];
-            [specification setNumberOfLines:0];
-            [specification setBackgroundColor:[UIColor clearColor]];
-            self.specification = specification;
-        }
-        [self.specification setFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
-        self.specification.text = [self.photoInfo valueForKey:@"specification"];
-        [cell addSubview:self.specification];
-        
-        //shareBtn
-        if (!self.shareButton) {
-            self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.shareButton setImage:[UIImage imageNamed:@"icon_detail_share"] forState:UIControlStateNormal];
-            [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(10, 12, 10, 8)];
-            [self.shareButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
-            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            [self.shareButton addTarget:self action:@selector(share:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [self.shareButton setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 40, height + 3 + 2, 40, 40)];
-        [cell addSubview:self.shareButton];
-
-        //good button
-        if (!self.good_button) {
-            self.good_button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.good_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
-            [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [self.good_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 , height + 3 + 2, 40, 40)];
-        [cell addSubview:self.good_button];
-        [self setGoodButton];
-        
-        if (!self.avatarView) {
-            self.avatarView = [[UIImageView alloc] init];
-        }
-        self.avatarView.frame = CGRectMake(10, height+13, 30, 30);
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatarView authorId:[self.photoInfo valueForKey:@"author_id"]];
-        [getter getAvatar];
-        [cell addSubview:self.avatarView];
-        
-        UIButton* avatarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [avatarBtn setFrame:CGRectMake(0, height+13, 50, 50)];
-        [avatarBtn setBackgroundColor:[UIColor clearColor]];
-        [avatarBtn addTarget:self action:@selector(pushToFriendView:) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:avatarBtn];
-        
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
-        return cell;
-        
+        return self.photoInfoView;
         
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
@@ -1334,18 +1239,8 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
-        self.specificationHeight = _photoInfo? [CommonUtils calculateTextHeight:[self.photoInfo valueForKey:@"specification"] width:specificationWidth fontSize:12.0 isEmotion:NO]:0;
-        if (self.specificationHeight < 18) {
-            self.specificationHeight = 18;
-        }
-        MTLOG(@"%f",self.specificationHeight);
-        height = _photoInfo? ([[_photoInfo valueForKey:@"height"] longValue] *320.0/[[_photoInfo valueForKey:@"width"] longValue]):180;
-        height += 3;
-        height += 50;
-        height += self.specificationHeight;
-        height += 5;//margin
-
+        
+        height = [MTMediaInfoView calculateCellHeightwithMediaInfo:self.photoInfo type:MTMediaTypePhoto containerWidth:CGRectGetWidth(self.view.frame)];
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
             return 45;

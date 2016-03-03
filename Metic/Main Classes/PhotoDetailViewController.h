@@ -14,7 +14,6 @@
 #import "PictureWall2.h"
 
 @interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>
-@property (nonatomic,strong) UIImage* photo;
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSNumber* eventLauncherId;
