@@ -60,7 +60,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="emM-D1-vKN">
                         <rect key="frame" x="0.0" y="45" width="320" height="205"/>
                         <subviews>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vBM-Uy-DqY">
+                            <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vBM-Uy-DqY">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="205"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="视频按钮" translatesAutoresizingMaskIntoConstraints="NO" id="jh8-50-1hp">

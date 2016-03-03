@@ -15,6 +15,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (strong, nonatomic) IBOutlet UIButton *shareBtn;
 @property (strong, nonatomic) IBOutlet UIButton *likeBtn;
+@property (strong, nonatomic) IBOutlet UIImageView *playIcon;
+
 
 @property (strong, nonatomic) UIImage *photo;
 

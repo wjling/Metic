@@ -555,7 +555,6 @@
             nextViewController.eventLauncherId = self.eventLauncherId;
             nextViewController.eventName = self.eventName;
             nextViewController.videoInfo = self.seleted_videoInfo;
-            nextViewController.video_thumb = self.seleted_videoThumb;
             nextViewController.canManage = [[_eventInfo valueForKey:@"isIn"]boolValue];
         }
     }

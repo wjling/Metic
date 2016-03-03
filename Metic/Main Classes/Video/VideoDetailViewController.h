@@ -20,7 +20,7 @@
     unsigned long long Recordull;
     BOOL isReady;
 }
-@property (nonatomic,strong) UIImage* video_thumb;
+//@property (nonatomic,strong) UIImage* video_thumb;
 @property (nonatomic,strong) NSNumber* videoId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSNumber* eventLauncherId;
@@ -41,7 +41,6 @@
 @property BOOL canManage;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;
-- (IBAction)more:(id)sender;
 - (void)commentNumMinus;
 - (void)commentNumPlus;
 @end
