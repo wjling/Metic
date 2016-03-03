@@ -671,12 +671,8 @@
     [[MTOperation sharedInstance] modifyPhotoSpecification:newSpecification withPhotoId:self.photoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
         [self.photoInfo setValue:newSpecification forKey:@"specification"];
-        if (newSpecification.length == 0) {
-            self.photoInfoView.descriptionLabel.text = @"暂无描述";
-        }else
-            self.photoInfoView.descriptionLabel.text = newSpecification;
         [MTDatabaseAffairs updatePhotoInfoToDB:@[self.photoInfo] eventId:_eventId];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadData];
         [self editSpecification:nil];
     } failure:^(NSString *message) {
         [SVProgressHUD dismissWithError:message afterDelay:1.f];

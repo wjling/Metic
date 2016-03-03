@@ -85,8 +85,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2yR-Jp-g39">
                         <rect key="frame" x="0.0" y="250" width="320" height="136"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3b-KZ-gFc">
-                                <rect key="frame" x="10" y="10" width="300" height="116"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3b-KZ-gFc">
+                                <rect key="frame" x="10" y="5" width="300" height="126"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.50588235294117645" green="0.50588235294117645" blue="0.50588235294117645" alpha="1" colorSpace="calibratedRGB"/>
@@ -96,8 +96,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="c3b-KZ-gFc" secondAttribute="trailing" constant="10" id="038-hi-u15"/>
-                            <constraint firstItem="c3b-KZ-gFc" firstAttribute="top" secondItem="2yR-Jp-g39" secondAttribute="top" constant="10" id="NLu-vE-A4g"/>
-                            <constraint firstAttribute="bottom" secondItem="c3b-KZ-gFc" secondAttribute="bottom" constant="10" id="bc5-gv-HLr"/>
+                            <constraint firstItem="c3b-KZ-gFc" firstAttribute="top" secondItem="2yR-Jp-g39" secondAttribute="top" constant="5" id="NLu-vE-A4g"/>
+                            <constraint firstAttribute="bottom" secondItem="c3b-KZ-gFc" secondAttribute="bottom" constant="5" id="bc5-gv-HLr"/>
                             <constraint firstItem="c3b-KZ-gFc" firstAttribute="leading" secondItem="2yR-Jp-g39" secondAttribute="leading" constant="10" id="ph1-eK-u16"/>
                         </constraints>
                     </view>

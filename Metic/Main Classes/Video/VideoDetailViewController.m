@@ -40,14 +40,9 @@
 @property (nonatomic,strong) MTMediaInfoView *videoInfoView;
 @property BOOL isVideoReady;
 @property (nonatomic,strong)NSNumber* sequence;
-@property (nonatomic,strong)UIImageView *thumbView;
-@property (nonatomic,strong)UIImageView *avatarView;
-@property (nonatomic,strong)UIButton *edit_button;
 @property (nonatomic,strong)UIButton *editFinishButton;
-@property (nonatomic,strong)UIButton *shareButton;
 @property (nonatomic,strong)UIButton *optionButton;
 @property (nonatomic,strong)UIButton *delete_button;
-@property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
 @property (nonatomic,strong) UIButton *good_button;
@@ -57,8 +52,6 @@
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
-//@property (strong, nonatomic) UIButton *video_button;
-//@property (strong, nonatomic) UIImageView *videoPlayImg;
 @property __block unsigned long long receivedBytes;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
@@ -536,7 +529,7 @@
     //进入编辑模式
     if (!self.specificationEditTextfield) {
         [self hiddenCommentViewAndEmotionView];
-        self.specification.hidden = YES;
+        self.videoInfoView.descriptionLabel.hidden = YES;
         
         [self tabbarButtonEdit];
         self.tableView.scrollEnabled = NO;
@@ -582,7 +575,7 @@
         [self.specificationEditTextfield resignFirstResponder];
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
-        self.specification.hidden = NO;
+        self.videoInfoView.descriptionLabel.hidden = NO;
         [self tabbarButtonOption];
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
@@ -599,8 +592,8 @@
     [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [[MTOperation sharedInstance] modifyVideoSpecification:newSpecification withVideoId:self.videoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
-        self.specification.text = newSpecification;
         [self.videoInfo setValue:newSpecification forKey:@"title"];
+        [self.tableView reloadData];
         [self updateVideoInfo];
         [self editSpecification:nil];
     } failure:^(NSString *message) {
