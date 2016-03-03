@@ -303,7 +303,7 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     self.commentLabelView.frame = CGRectMake(CGRectGetMinX(self.zanImageView.frame) - commentTextWidth - 7, 0, commentTextWidth, DETAIL_VIEW_HEIGHT);
     
     self.commentImageView.frame = CGRectMake(CGRectGetMinX(self.commentLabelView.frame) - DETAIL_VIEW_HEIGHT, 0, DETAIL_VIEW_HEIGHT-3, DETAIL_VIEW_HEIGHT);
-    [self.commentImageView setImage:_commentNum > 0? [UIImage imageNamed:@"icon_comment_yes"]:[UIImage imageNamed:@"icon_comment_no"]];
+    [self.commentImageView setImage:[UIImage imageNamed:@"icon_comment_yes"]];
 
 }
 

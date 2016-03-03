@@ -818,6 +818,9 @@
     if (![self checkCanManaged]) return;
     if (!_photoInfo) return;
     NSString *comment = self.inputTextView.text;
+    NSString *herName = self.herName;
+    NSNumber *repliedId = self.repliedId;
+    
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.inputTextView.text = @"";
         return;
@@ -832,10 +835,10 @@
     MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
-    if (_repliedId && [_repliedId integerValue]!=[[MTUser sharedInstance].userid integerValue]){
-        [dictionary setValue:_repliedId forKey:@"replied"];
-        [newComment setValue:_repliedId forKey:@"replied"];
-        [newComment setValue:_herName forKey:@"replier"];
+    if (repliedId && ![repliedId isEqualToNumber:[MTUser sharedInstance].userid]){
+        [dictionary setValue:repliedId forKey:@"replied"];
+        [newComment setValue:repliedId forKey:@"replied"];
+        [newComment setValue:herName forKey:@"replier"];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.photoId forKey:@"photo_id"];
