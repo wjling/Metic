@@ -472,15 +472,18 @@
         if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
             [shareToSns addObject:UMShareToSms];
         }
-        UIViewController *vc = self.presentedViewController;
-        if (!vc)
-            vc = self;
-        [UMSocialSnsService presentSnsIconSheetView:vc
+        
+        UIViewController *delegate = self;
+        if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
+            delegate = self.parentViewController;
+        }
+
+        [UMSocialSnsService presentSnsIconSheetView:[SlideNavigationController sharedInstance]
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
                                          shareImage:self.photoInfoView.photo
                                     shareToSnsNames:shareToSns
-                                           delegate:self];
+                                           delegate:delegate];
     }
 }
 
@@ -1416,9 +1419,10 @@
     {
         //得到分享到的微博平台名
         MTLOG(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
-        [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"成功分享" WithDelegate:self WithCancelTitle:@"确定"];
+        [SVProgressHUD showSuccessWithStatus:@"分享成功" duration:2.f];
     }
 }
+
 #pragma mark - UITextView Delegate
 -(void)textViewDidChange:(UITextView *)textView
 {

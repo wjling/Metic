@@ -13,8 +13,9 @@
 #import "PhotoBrowserCell.h"
 #import "CommonUtils.h"
 #import "SwipeView.h"
+#import "SVProgressHUD.h"
 
-@interface PhotoBrowserViewController () <SwipeViewDataSource, SwipeViewDelegate>
+@interface PhotoBrowserViewController () <SwipeViewDataSource, SwipeViewDelegate, UMSocialUIDelegate>
 
 @property (nonatomic, strong) IBOutlet SwipeView *swipeView;
 @property (nonatomic, strong) PhotoDetailViewController *selectedPhotoDetailVC;
@@ -54,7 +55,12 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self showPhotoInIndex:self.showIndex];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -202,6 +208,18 @@
     }
     if (visibleVC) {
         [visibleVC tabbarButtonOption];
+    }
+}
+
+#pragma mark - UMSocialUIDelegate
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
+{
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        MTLOG(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+        [SVProgressHUD showSuccessWithStatus:@"分享成功" duration:2.f];
     }
 }
 
