@@ -94,7 +94,7 @@
 +(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime;
 
 //根据时间生成活动时间信息简述
-+(NSString*)calculateTimeStr:(NSString*)time;
++(NSString*)calculateTimeStr:(NSString*)time shortVersion:(BOOL)isShortVersion;
 
 //计算两经纬度间距离
 +(double)GetDistance:(double)lat1 lng1:(double)lng1 lat2:(double)lat2 lng2:(double)lng2;

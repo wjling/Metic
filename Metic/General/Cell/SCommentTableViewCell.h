@@ -20,6 +20,7 @@
 @property(strong,nonatomic) NSNumber* commentid;
 @property(strong,nonatomic) NSNumber* mainCommentId;
 @property(strong,nonatomic) NSString* originComment;
+@property (strong, nonatomic) IBOutlet UILabel *publishTimeLabel;
 @property (strong, nonatomic) IBOutlet MLEmojiLabel *comment;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *waitView;
 @property(nonatomic,weak) EventDetailViewController *controller;

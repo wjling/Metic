@@ -1573,16 +1573,19 @@
         if ([[subCom valueForKey:@"comment_id"] intValue] == -1 ) {
             [cell.waitView startAnimating];
             [cell.resend_Button setHidden:YES];
+            [cell.publishTimeLabel setHidden:YES];
         }else if([[subCom valueForKey:@"comment_id"] intValue] == -2){
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:NO];
+            [cell.publishTimeLabel setHidden:YES];
             [cell.resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         }else{
             [cell.waitView stopAnimating];
             [cell.resend_Button setHidden:YES];
+            [cell.publishTimeLabel setHidden:NO];
         }
         
-        float commentHeight = [CommonUtils calculateTextHeight:text width:265 fontSize:SubCFontSize isEmotion:YES];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:250 fontSize:SubCFontSize isEmotion:YES];
         if (commentHeight < 25) commentHeight = 25;
         CGRect frame = cell.frame;
         frame.size.height = commentHeight+0.5f;
@@ -1593,12 +1596,13 @@
         frame = shadow.frame;
         frame.size.height =  commentHeight;
         [shadow setFrame:frame];
-        [cell.comment setFrame:CGRectMake(10, 0, 265, commentHeight)];
+        [cell.comment setFrame:CGRectMake(10, 0, 250, commentHeight)];
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.mainCommentId = [mainCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
         cell.author = author;
         cell.controller = self;
+        cell.publishTimeLabel.text = [CommonUtils calculateTimeStr:subCom[@"time"] shortVersion:YES];
         
         return cell;
     }
@@ -1672,7 +1676,7 @@
             }
             text = [NSString stringWithFormat:@"%@: %@",alias1,text];
         }
-        float commentHeight = [CommonUtils calculateTextHeight:text width:265.0 fontSize:SubCFontSize isEmotion:YES] + 0.5;
+        float commentHeight = [CommonUtils calculateTextHeight:text width:250.0 fontSize:SubCFontSize isEmotion:YES] + 0.5;
         if (commentHeight < 25) commentHeight = 25;
         return commentHeight;
     }
