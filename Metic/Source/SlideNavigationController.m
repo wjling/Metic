@@ -121,6 +121,19 @@ static SlideNavigationController *singletonInstance;
     //    [self reconnect];
 }
 
+- (void)setEffection:(BOOL)isEffection {
+    if (isEffection) {
+        self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
+        self.view.layer.shadowRadius = 5;
+        self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
+        self.view.layer.shadowOpacity = 1;
+        self.view.layer.shouldRasterize = YES;
+        self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    } else {
+        self.view.layer.shadowColor = [UIColor clearColor].CGColor;
+    }
+}
+
 -(BOOL)shouldAutorotate
 {
     return NO;

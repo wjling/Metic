@@ -60,6 +60,7 @@ typedef  enum{
 - (void)setEnableSwipeGesture:(BOOL)markEnableSwipeGesture;
 - (void)showLeftBarButtonDian;
 - (void)hideLeftBarButtonDian;
+- (void)setEffection:(BOOL)isEffection;
 
 //- (void)reconnect;
 
