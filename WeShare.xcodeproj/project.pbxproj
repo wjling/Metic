@@ -323,6 +323,8 @@
 		F83369531AD00AE100B41435 /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F833694F1AD00AE100B41435 /* MBProgressHUD.bundle */; };
 		F83369541AD00AE100B41435 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F83369511AD00AE100B41435 /* MBProgressHUD.m */; };
 		F83614901ADB6A0F004CDEA1 /* EventPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */; };
+		F83E656D1C87E8CD008B0DE2 /* MTMediaInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = F83E656B1C87E8CD008B0DE2 /* MTMediaInfoView.m */; };
+		F83E656E1C87E8CD008B0DE2 /* MTMediaInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F83E656C1C87E8CD008B0DE2 /* MTMediaInfoView.xib */; };
 		F85966E51B13715F003B22EE /* EventEditTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F85966E41B13715F003B22EE /* EventEditTypeViewController.m */; };
 		F864C0F61AE0EC1A00E2EB23 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EC1AE0EC1A00E2EB23 /* FMDatabase.m */; };
 		F864C0F71AE0EC1A00E2EB23 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = F864C0EE1AE0EC1A00E2EB23 /* FMDatabaseAdditions.m */; };
@@ -1124,6 +1126,9 @@
 		F83369511AD00AE100B41435 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventPreviewViewController.h; sourceTree = "<group>"; };
 		F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventPreviewViewController.m; sourceTree = "<group>"; };
+		F83E656A1C87E8CD008B0DE2 /* MTMediaInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMediaInfoView.h; sourceTree = "<group>"; };
+		F83E656B1C87E8CD008B0DE2 /* MTMediaInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMediaInfoView.m; sourceTree = "<group>"; };
+		F83E656C1C87E8CD008B0DE2 /* MTMediaInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTMediaInfoView.xib; sourceTree = "<group>"; };
 		F85966E31B13715F003B22EE /* EventEditTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventEditTypeViewController.h; sourceTree = "<group>"; };
 		F85966E41B13715F003B22EE /* EventEditTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventEditTypeViewController.m; sourceTree = "<group>"; };
 		F864C0EB1AE0EC1A00E2EB23 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
@@ -1712,6 +1717,9 @@
 				F8029A361C81CEA400872739 /* PhotoBrowserViewController.h */,
 				F8029A371C81CEA400872739 /* PhotoBrowserViewController.m */,
 				F8029A381C81CEA400872739 /* PhotoBrowserViewController.xib */,
+				F83E656A1C87E8CD008B0DE2 /* MTMediaInfoView.h */,
+				F83E656B1C87E8CD008B0DE2 /* MTMediaInfoView.m */,
+				F83E656C1C87E8CD008B0DE2 /* MTMediaInfoView.xib */,
 			);
 			name = photo;
 			sourceTree = "<group>";
@@ -3502,6 +3510,7 @@
 				F8B5DDD01BFB83EA00E1F713 /* EventCellTableViewCell.xib in Resources */,
 				F8A329D41C07EFB5008FFB17 /* .cocoadocs.yml in Resources */,
 				519C65951989F61B00710B26 /* 3兜风.jpg in Resources */,
+				F83E656E1C87E8CD008B0DE2 /* MTMediaInfoView.xib in Resources */,
 				F80318081C5C974E008C1E49 /* UMSnsAccountViewController.xib in Resources */,
 				F8B5DE0A1BFB83EA00E1F713 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				04B6F89819A25D5C00229393 /* face09.png in Resources */,
@@ -3845,6 +3854,7 @@
 				5127DEDB198F21A100FB5A41 /* NearbyEventViewController.m in Sources */,
 				F8B5DDF61BFB83EA00E1F713 /* CommonUtils.m in Sources */,
 				F8B5DDE01BFB83EA00E1F713 /* SCommentTableViewCell.m in Sources */,
+				F83E656D1C87E8CD008B0DE2 /* MTMediaInfoView.m in Sources */,
 				043E1A751ADA24B400D1D39F /* SDBaseProgressView.m in Sources */,
 				51F4CB1D19E6307500E487F1 /* HTTPAsyncFileResponse.m in Sources */,
 				F8EA74D61C0DD63B00190832 /* RegisterWithPhoneViewController.m in Sources */,

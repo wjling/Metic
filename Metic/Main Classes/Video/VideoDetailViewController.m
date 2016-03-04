@@ -16,6 +16,7 @@
 #import "emotion_Keyboard.h"
 #import "UIImageView+MTWebCache.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "MTMediaInfoView.h"
 #import "MTMPMoviePlayerViewController.h"
 #import "FriendInfoViewController.h"
 #import "UserInfoViewController.h"
@@ -36,16 +37,12 @@
 @interface VideoDetailViewController ()<UMSocialUIDelegate>
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
 @property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
+@property (nonatomic,strong) MTMediaInfoView *videoInfoView;
 @property BOOL isVideoReady;
 @property (nonatomic,strong)NSNumber* sequence;
-@property (nonatomic,strong)UIImageView *thumbView;
-@property (nonatomic,strong)UIImageView *avatarView;
-@property (nonatomic,strong)UIButton *edit_button;
 @property (nonatomic,strong)UIButton *editFinishButton;
-@property (nonatomic,strong)UIButton *shareButton;
 @property (nonatomic,strong)UIButton *optionButton;
 @property (nonatomic,strong)UIButton *delete_button;
-@property (nonatomic,strong)UILabel *specification;
 @property (nonatomic,strong)UIButton *shadow;
 @property (nonatomic,strong)UITextField *specificationEditTextfield;
 @property (nonatomic,strong) UIButton *good_button;
@@ -55,8 +52,6 @@
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property (strong, nonatomic) DAProgressOverlayView *progressOverlayView;
-@property (strong, nonatomic) UIButton *video_button;
-@property (strong, nonatomic) UIImageView *videoPlayImg;
 @property __block unsigned long long receivedBytes;
 @property BOOL shouldExit;
 @property BOOL Footeropen;
@@ -444,18 +439,18 @@
 
 -(void)readyProgressOverlayView
 {
-    [self.videoPlayImg setHidden:YES];
+    [self.videoInfoView.playIcon setHidden:YES];
     if (!self.progressOverlayView)
-        self.progressOverlayView = [[DAProgressOverlayView alloc] initWithFrame:self.video_button.bounds];
+        self.progressOverlayView = [[DAProgressOverlayView alloc] initWithFrame:self.videoInfoView.photoView.bounds];
     [self.progressOverlayView setHidden:NO];
     self.progressOverlayView.progress = 0;
-    [self.video_button addSubview:self.progressOverlayView];
+    [self.videoInfoView.photoView addSubview:self.progressOverlayView];
     [self.progressOverlayView displayOperationWillTriggerAnimation];
 }
 
 -(void)closeProgressOverlayView
 {
-    [self.videoPlayImg setHidden:NO];
+    [self.videoInfoView.playIcon setHidden:NO];
     if (self.progressOverlayView) {
         [self.progressOverlayView displayOperationDidFinishAnimation];
         double delayInSeconds = self.progressOverlayView.stateChangeAnimationDuration;
@@ -534,12 +529,12 @@
     //进入编辑模式
     if (!self.specificationEditTextfield) {
         [self hiddenCommentViewAndEmotionView];
-        self.specification.hidden = YES;
+        self.videoInfoView.descriptionLabel.hidden = YES;
         
         [self tabbarButtonEdit];
         self.tableView.scrollEnabled = NO;
-        float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
-        [self.tableView setContentOffset:CGPointMake(0, height) animated:YES];
+        float height = CGRectGetMaxY(self.videoInfoView.photoView.superview.frame);
+        [self.tableView setContentOffset:CGPointMake(0, height - 80) animated:YES];
         if (!self.shadow) {
             UIButton *shadow = [UIButton buttonWithType:UIButtonTypeCustom];
             shadow.frame = self.view.bounds;
@@ -550,12 +545,12 @@
         [self.view addSubview:self.shadow];
         
         if (!self.specificationEditTextfield) {
-            CGRect textfieldFrame = self.specification.frame;
+            CGRect textfieldFrame = self.videoInfoView.descriptionLabel.frame;
             textfieldFrame.size.height = 30;
-            textfieldFrame.origin.y = CGRectGetMinY(self.specification.frame) - height;
+            textfieldFrame.origin.y = 80 + 5;
             UITextField* specificationEditTextfield = [[UITextField alloc]initWithFrame:textfieldFrame];
             specificationEditTextfield.placeholder = @"请输入新的视频描述";
-            [specificationEditTextfield setFont:[UIFont systemFontOfSize:12]];
+            [specificationEditTextfield setFont:[UIFont systemFontOfSize:14]];
             specificationEditTextfield.text = [self.videoInfo valueForKey:@"title"];
             [specificationEditTextfield setBackgroundColor:[UIColor whiteColor]];
             specificationEditTextfield.hidden = YES;
@@ -580,7 +575,7 @@
         [self.specificationEditTextfield resignFirstResponder];
         self.specificationEditTextfield = nil;
         [self.shadow removeFromSuperview];
-        self.specification.hidden = NO;
+        self.videoInfoView.descriptionLabel.hidden = NO;
         [self tabbarButtonOption];
         self.tableView.scrollEnabled = YES;
         [self.tableView setContentOffset:CGPointZero animated:YES];
@@ -597,8 +592,8 @@
     [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
     [[MTOperation sharedInstance] modifyVideoSpecification:newSpecification withVideoId:self.videoId eventId:self.eventId success:^{
         [SVProgressHUD dismissWithSuccess:@"修改成功" afterDelay:1.f];
-        self.specification.text = newSpecification;
         [self.videoInfo setValue:newSpecification forKey:@"title"];
+        [self.tableView reloadData];
         [self updateVideoInfo];
         [self editSpecification:nil];
     } failure:^(NSString *message) {
@@ -722,7 +717,7 @@
         [UMSocialSnsService presentSnsIconSheetView:self
                                              appKey:@"53bb542e56240ba6e80a4bfb"
                                           shareText:shareText
-                                         shareImage:self.video_thumb?self.video_thumb:[UIImage imageNamed:@"AppIcon57x57"]
+                                         shareImage:self.videoInfoView.photo?self.videoInfoView.photo:[UIImage imageNamed:@"AppIcon57x57"]
                                     shareToSnsNames:shareToSns
                                            delegate:self];
     };
@@ -771,14 +766,7 @@
     [self.videoInfo setValue:[NSNumber numberWithBool:!isZan] forKey:@"isZan"];
     [self.videoInfo setValue:[NSNumber numberWithInteger:good] forKey:@"good"];
     [MTDatabaseAffairs updateVideoInfoToDB:@[_videoInfo] eventId:_eventId];
-    [self setGoodButton];
-}
-
--(void) setGoodButton
-{
-    if (self.videoInfo && [[self.videoInfo valueForKey:@"isZan"] boolValue]) {
-        [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_yes"] forState:UIControlStateNormal];
-    }else [self.good_button setImage:[UIImage imageNamed:@"icon_detail_like_no"] forState:UIControlStateNormal];
+    [self.videoInfoView setupLikeButton];
 }
 
 -(void)deleteVideo:(UIButton*)button
@@ -1009,6 +997,9 @@
     if (![self checkCanManaged]) return;
     if (!_videoInfo) return;
     NSString *comment = self.inputTextView.text;
+    NSString *herName = self.herName;
+    NSNumber *repliedId = self.repliedId;
+    
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
         self.inputTextView.text = @"";
         return;
@@ -1023,10 +1014,10 @@
     MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
-    if (_repliedId && [_repliedId intValue]!=[[MTUser sharedInstance].userid intValue]){
-        [dictionary setValue:_repliedId forKey:@"replied"];
-        [newComment setValue:_repliedId forKey:@"replied"];
-        [newComment setValue:_herName forKey:@"replier"];
+    if (repliedId && ![repliedId isEqualToNumber:[MTUser sharedInstance].userid]){
+        [dictionary setValue:repliedId forKey:@"replied"];
+        [newComment setValue:repliedId forKey:@"replied"];
+        [newComment setValue:herName forKey:@"replier"];
     }
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
     [dictionary setValue:self.videoId forKey:@"video_id"];
@@ -1193,126 +1184,28 @@
     UITableViewCell *cell;
     if (indexPath.row == 0) {
         
-//        float height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
-        float height = CGRectGetWidth(self.tableView.frame) / 64.f * 41.f;
-
+        if (!self.videoInfoView) {
+            static NSString *CellIdentifier = @"pPhotoInfoView";
+            UINib *nib = [UINib nibWithNibName:NSStringFromClass([MTMediaInfoView class]) bundle:nil];
+            [tableView registerNib:nib forCellReuseIdentifier:CellIdentifier];
+            self.videoInfoView = (MTMediaInfoView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(play:)];
+            [self.videoInfoView.photoView addGestureRecognizer:tap];
+            
+            [self.videoInfoView.likeBtn addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
+            [self.videoInfoView.shareBtn addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
+            
+        }
+        [self.videoInfoView applyData:self.videoInfo type:MTMediaTypeVideo containerWidth:CGRectGetWidth(self.view.frame)];
+        
         if (videoRequest) {
             self.progressOverlayView.hidden = YES;
             [self closeProgressOverlayView];
             [videoRequest clearDelegatesAndCancel];
             videoRequest = nil;
         }
-        cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, self.specificationHeight)];
-        if (!self.video_button) {
-            self.video_button = [UIButton buttonWithType:UIButtonTypeCustom];
-        }
-        [self.video_button setFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.bounds),height)];
-        [self.video_button addTarget:self action:@selector(play:) forControlEvents:UIControlEventTouchUpInside];
-        if (!_video_thumb) {
-            [self.video_button setBackgroundImage:[CommonUtils createImageWithColor:[UIColor lightGrayColor]] forState:UIControlStateNormal];
-            [self.video_button setBackgroundImage:[CommonUtils createImageWithColor:[CommonUtils colorWithValue:0x909090]] forState:UIControlStateHighlighted];
-            
-        }
         
-        //长按手势
-//        UILongPressGestureRecognizer * longRecognizer = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showOption:)];
-//        [video addGestureRecognizer:longRecognizer];
-        
-        MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:self.video_button.imageView imageId:nil imageName:_videoInfo[@"video_name"] type:MTImageGetterTypeVideoThumb];
-        [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            if (image) {
-                _video_thumb = image;
-                [self.video_button setImage:image forState:UIControlStateNormal];
-                self.video_button.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            }
-        }];
-        
-        UIImageView* videoIc = [[UIImageView alloc]initWithFrame:CGRectMake((320-75)/2, (height-75)/2, 75,75)];
-        [videoIc setUserInteractionEnabled:NO];
-        videoIc.image = [UIImage imageNamed:@"视频按钮"];
-        _videoPlayImg = videoIc;
-        
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, height, 320, 3)];
-        [label setBackgroundColor:[UIColor colorWithRed:252/255.0 green:109/255.0 blue:67/255.0 alpha:1.0]];
-        
-        [cell addSubview:self.video_button];
-        [cell addSubview:videoIc];
-        [cell addSubview:label];
-        //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [_videoInfo valueForKey:@"author"];
-        }
-        
-        UILabel* author = [[UILabel alloc]initWithFrame:CGRectMake(50, height+11, 200, 17)];
-        [author setFont:[UIFont systemFontOfSize:14]];
-        [author setTextColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0]];
-        [author setBackgroundColor:[UIColor clearColor]];
-        author.text = alias;
-        [cell addSubview:author];
-        
-        UILabel* date = [[UILabel alloc]initWithFrame:CGRectMake(50, height+28, 150, 13)];
-        [date setFont:[UIFont systemFontOfSize:11]];
-        [date setTextColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1.0]];
-        date.text = [self.videoInfo valueForKey:@"time"];
-        [date setBackgroundColor:[UIColor clearColor]];
-        [cell addSubview:date];
-        
-        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
-        if (!self.specification) {
-            UILabel* specification = [[UILabel alloc]initWithFrame:CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15)];
-            [specification setFont:[UIFont systemFontOfSize:12]];
-            [specification setNumberOfLines:0];
-            [specification setBackgroundColor:[UIColor clearColor]];
-            self.specification = specification;
-        }
-        self.specification.frame = CGRectMake(50, CGRectGetMaxY(date.frame)+1, specificationWidth, self.specificationHeight+15);
-        self.specification.text = [self.videoInfo valueForKey:@"title"];
-        [cell addSubview:self.specification];
-
-        
-        //shareBtn
-        if (!self.shareButton) {
-            self.shareButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.shareButton setImage:[UIImage imageNamed:@"icon_detail_share"] forState:UIControlStateNormal];
-            [self.shareButton setImageEdgeInsets:UIEdgeInsetsMake(10, 12, 10, 8)];
-            [self.shareButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
-            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:1.0] forState:UIControlStateNormal];
-            [self.shareButton setTitleColor:[UIColor colorWithRed:0/255.0 green:133/255.0 blue:186/255.0 alpha:0.5] forState:UIControlStateHighlighted];
-            [self.shareButton addTarget:self action:@selector(shareVideo) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [self.shareButton setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 - 40, height + 3 + 2, 40, 40)];
-        [cell addSubview:self.shareButton];
-        
-        //good button
-        if (!self.good_button) {
-            self.good_button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.good_button setImageEdgeInsets:UIEdgeInsetsMake(10, 8, 10, 12)];
-            [self.good_button addTarget:self action:@selector(good:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [self.good_button setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 40 , height + 3 + 2, 40, 40)];
-        [cell addSubview:self.good_button];
-        [self setGoodButton];
-        
-        if (!self.avatarView) {
-            self.avatarView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        }
-        [self.avatarView setFrame:CGRectMake(10, height+13, 30, 30)];
-        [cell addSubview:self.avatarView];
-
-        PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatarView authorId:[self.videoInfo valueForKey:@"author_id"]];
-        [getter getAvatar];
-        
-        UIButton* avatarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [avatarBtn setFrame:CGRectMake(0, height+13, 50, 50)];
-        [avatarBtn setBackgroundColor:[UIColor clearColor]];
-        [avatarBtn addTarget:self action:@selector(pushToFriendView:) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:avatarBtn];
-        
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-        [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
-        return cell;
-        
+        return self.videoInfoView;
         
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
@@ -1424,17 +1317,7 @@
 {
     float height = 0;
     if (indexPath.row == 0) {
-        CGFloat specificationWidth = CGRectGetWidth(self.view.frame) - 10 - 50;
-        self.specificationHeight = _videoInfo? [CommonUtils calculateTextHeight:[self.videoInfo valueForKey:@"title"] width:specificationWidth fontSize:12.0 isEmotion:NO]:0;
-        if (self.specificationHeight < 18) {
-            self.specificationHeight = 18;
-        }
-//        height = _video_thumb? self.video_thumb.size.height *320.0/self.video_thumb.size.width:180;
-        height = CGRectGetWidth(self.tableView.frame) / 64.f * 41.f;
-        height += 3;
-        height += 50;
-        height += self.specificationHeight;
-        height += 5;//margin
+        height = [MTMediaInfoView calculateCellHeightwithMediaInfo:self.videoInfo type:MTMediaTypeVideo containerWidth:CGRectGetWidth(self.view.frame)];
         
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {

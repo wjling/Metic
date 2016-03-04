@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-NS_ENUM(NSInteger, MTMediaType) {
+typedef NS_ENUM(NSInteger, MTMediaType) {
     MTMediaTypeComment = -1,
     MTMediaTypePhoto,
     MTMediaTypeVideo,

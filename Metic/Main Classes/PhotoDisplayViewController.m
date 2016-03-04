@@ -121,9 +121,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-//
 
 //返回上一层
 -(void)MTpopViewController{

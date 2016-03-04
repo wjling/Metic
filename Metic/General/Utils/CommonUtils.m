@@ -382,7 +382,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSDate* end = [dateFormatter dateFromString:endTime];
     NSTimeInterval begins = [begin timeIntervalSince1970];
     NSTimeInterval ends = [end timeIntervalSince1970];
-    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@",[self calculateTimeStr:launchTime]];
+    NSString* launchInfo = [NSString stringWithFormat:@"创建于 %@",[self calculateTimeStr:launchTime shortVersion:NO]];
     int dis = ends-begins;
     if (dis > 0) {
         NSString* duration = @"";
@@ -410,7 +410,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 }
 
 //根据时间生成活动时间信息简述
-+(NSString*)calculateTimeStr:(NSString*)time
++(NSString*)calculateTimeStr:(NSString*)time shortVersion:(BOOL)isShortVersion
 {
     static NSDateFormatter* dateFormatter;
     if (!dateFormatter) {
@@ -424,15 +424,20 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSTimeInterval dateTimeInterval = [dateTime timeIntervalSince1970];
     NSTimeInterval nowInterval = [now timeIntervalSince1970];
     
-    [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+    if (isShortVersion) {
+        [dateFormatter setDateFormat:@"MM-dd"];
+    } else {
+        [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+    }
     NSString* timeInfo = [dateFormatter stringFromDate:dateTime];
     int dis = nowInterval - dateTimeInterval;
-    if (dis > 0) {
-        if (dis >= 31536000) {
-            [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
-            timeInfo = [dateFormatter stringFromDate:dateTime];
-        }else if (dis >= 2592000) {
-            [dateFormatter setDateFormat:@"MM月dd日"];
+    if (dis >= 0) {
+        if (dis >= 86400*7) {
+            if (isShortVersion) {
+                [dateFormatter setDateFormat:@"MM-dd"];
+            } else {
+                [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+            }
             timeInfo = [dateFormatter stringFromDate:dateTime];
         }else if (dis >= 86400*2) {
             timeInfo = [NSString stringWithFormat:@"%d天前",dis/86400];

@@ -216,7 +216,11 @@ enum pos{
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            cell.author.text = [atMeInfo valueForKey:@"author"];
+            NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[atMeInfo valueForKey:@"author_id"]]];
+            if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
+                alias = [atMeInfo valueForKey:@"author"];
+            }
+            cell.author.text = alias;
             cell.content.text = [atMeInfo valueForKey:@"content"];
             cell.time.text = [atMeInfo valueForKey:@"time"];
             UIImageView* img = cell.contentImage;
@@ -266,7 +270,11 @@ enum pos{
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            cell.author.text = [atMeInfo valueForKey:@"author"];
+            NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[atMeInfo valueForKey:@"author_id"]]];
+            if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
+                alias = [atMeInfo valueForKey:@"author"];
+            }
+            cell.author.text = alias;
             UIImageView* img = cell.contentImage;
             UILabel* lab = cell.contentLabel;
             NSString* object_content = [atMeInfo valueForKey:@"object_content"];
