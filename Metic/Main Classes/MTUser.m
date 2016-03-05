@@ -713,7 +713,7 @@ static MTUser *singletonInstance;
         NSMutableArray* friends = [NSMutableArray arrayWithArray:results];
         for (int i = 0; i < friends.count; i++) {
             NSDictionary* friend = [friends objectAtIndex:i];
-            NSString* fid = [friend objectForKey:@"id"];
+            NSString* fid = [NSString stringWithFormat:@"%@",[friend objectForKey:@"id"]];
             NSString* alias = [friend objectForKey:@"alias"];
             [self.alias_dic setValue:alias forKey:fid];
         }
