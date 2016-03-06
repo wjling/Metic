@@ -37,38 +37,10 @@
                                 <rect key="frame" x="0.0" y="133" width="320" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="06月08日" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fBo-KZ-mzm">
-                                        <rect key="frame" x="7" y="6" width="60" height="18"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XFM-bL-Tya" customClass="TTTAttributedLabel">
+                                        <rect key="frame" x="7" y="4" width="306" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20:47" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2ZB-c6-LH2">
-                                        <rect key="frame" x="65" y="8" width="35" height="14"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="07月09日" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="m7L-rG-TUL">
-                                        <rect key="frame" x="120" y="6" width="60" height="18"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="20:47" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pSg-0S-XRK">
-                                        <rect key="frame" x="178" y="8" width="35" height="14"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="－" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iCf-ft-hfW">
-                                        <rect key="frame" x="100" y="10" width="20" height="10"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -262,12 +234,9 @@
             <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
             <connections>
                 <outlet property="addPaticipator" destination="3uF-Mj-hNu" id="8bj-3P-QBW"/>
-                <outlet property="beginDate" destination="fBo-KZ-mzm" id="rRU-qF-plM"/>
-                <outlet property="beginTime" destination="2ZB-c6-LH2" id="o6B-DL-uXZ"/>
-                <outlet property="endDate" destination="m7L-rG-TUL" id="6ns-eK-Ns2"/>
-                <outlet property="endTime" destination="pSg-0S-XRK" id="AmS-e4-ClR"/>
                 <outlet property="eventDetail" destination="X0p-3x-5lK" id="mod-wM-wBw"/>
                 <outlet property="eventName" destination="Xs9-Vs-bte" id="AvR-zQ-nMG"/>
+                <outlet property="eventTime" destination="XFM-bL-Tya" id="U3R-y6-bho"/>
                 <outlet property="eventType" destination="NlB-tO-ImM" id="b3f-7V-dtw"/>
                 <outlet property="imgWall" destination="WaL-N2-884" id="UYx-GL-cPp"/>
                 <outlet property="imgWall_icon" destination="bvB-py-yVi" id="pLW-O5-TCK"/>
