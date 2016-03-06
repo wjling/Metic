@@ -15,6 +15,8 @@
 #import "SVProgressHUD.h"
 #import "MTShowTextViewController.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
+
 
 #define MainFontSize 14
 
@@ -107,10 +109,8 @@
         return mutableAttributedString;
     }];
     
-    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-    if (launcher == nil || [launcher isEqual:[NSNull null]] || [launcher isEqualToString:@""]) {
-        launcher = [data valueForKey:@"launcher"];
-    }
+    NSString* launcher = [MTOperation getAliasWithUserId:data[@"launcher_id"] userName:data[@"launcher"]];
+    
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
     NSInteger visibilityNum = [data[@"visibility"] integerValue];
     switch (visibilityNum) {

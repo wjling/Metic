@@ -181,7 +181,7 @@
     [name_label setBackgroundColor:[UIColor clearColor]];
     
     alias_label = [[UILabel alloc]initWithFrame:CGRectMake(85, 60, 200, 25)];
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
+    NSString* alias = [MTOperation getAliasWithUserId:fid userName:@"备注名"];
     alias_label.text = (alias && ![alias isEqual:[NSNull null]])?  alias : @"备注名";
     [alias_label setFont:[UIFont fontWithName:@"Helvetica" size:12]];
     alias_label.textColor = [UIColor whiteColor];
@@ -430,17 +430,12 @@
     NSNumber* gender = [friendInfo_dic objectForKey:@"gender"];
 //    NSString* email = [friendInfo_dic objectForKey:@"email"];
     NSString* sign = [friendInfo_dic objectForKey:@"sign"];
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
     
     MTLOG(@"friend info viewcontroler: name: %@", [friendInfo_dic objectForKey:@"name"]);
     name_label.text = name;
-    if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-        alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
-    }
-    else
-    {
-        alias_label.text = @"备注名: 无";
-    }
+    
+    NSString* alias = [MTOperation getAliasWithUserId:fid userName:@"无"];
+    alias_label.text = [NSString stringWithFormat:@"备注名: %@",alias];
     
     UIFont* font = [UIFont systemFontOfSize:15];
     CGSize sizeOfName = [name_label.text sizeWithFont:font constrainedToSize:CGSizeMake(MAXFLOAT, 30) lineBreakMode:NSLineBreakByCharWrapping];

@@ -12,6 +12,7 @@
 #import "SVProgressHUD.h"
 #import "UIImageView+MTWebCache.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
 
 @implementation CustomCellTableViewCell
 
@@ -129,11 +130,8 @@
         return mutableAttributedString;
     }];
     
-    
-    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-    if (launcher == nil || [launcher isEqual:[NSNull null]] || [launcher isEqualToString:@""]) {
-        launcher = [data valueForKey:@"launcher"];
-    }
+    NSString* launcher = [MTOperation getAliasWithUserId:data[@"launcher_id"] userName:data[@"launcher"]];
+
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
     NSInteger visibility = [data[@"visibility"] integerValue];
     switch (visibility) {

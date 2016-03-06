@@ -17,6 +17,7 @@
 #import "AtMeGoodTableViewCell.h"
 #import "AtMeTableViewCell.h"
 #import "MTImageGetter.h"
+#import "MTOperation.h"
 @interface DynamicViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) UIView *bar;
 @property(nonatomic,strong) NSNumber* selete_Eventid;
@@ -216,10 +217,9 @@ enum pos{
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[atMeInfo valueForKey:@"author_id"]]];
-            if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-                alias = [atMeInfo valueForKey:@"author"];
-            }
+            
+            NSString* alias = [MTOperation getAliasWithUserId:atMeInfo[@"author_id"] userName:atMeInfo[@"author"]];
+            
             cell.author.text = alias;
             cell.content.text = [atMeInfo valueForKey:@"content"];
             cell.time.text = [atMeInfo valueForKey:@"time"];
@@ -270,10 +270,9 @@ enum pos{
             avatar.layer.cornerRadius = 4;
             PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:avatar authorId:[atMeInfo valueForKey:@"author_id"]];
             [avatarGetter getAvatar];
-            NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[atMeInfo valueForKey:@"author_id"]]];
-            if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-                alias = [atMeInfo valueForKey:@"author"];
-            }
+            
+            NSString* alias = [MTOperation getAliasWithUserId:[atMeInfo valueForKey:@"author_id"] userName:[atMeInfo valueForKey:@"author"]];
+
             cell.author.text = alias;
             UIImageView* img = cell.contentImage;
             UILabel* lab = cell.contentLabel;

@@ -40,7 +40,7 @@ typedef NS_OPTIONS(NSUInteger, MLEmojiLabelLinkType) {
 @property (nonatomic, weak) id<MLEmojiLabelDelegate> emojiDelegate; //点击连接的代理方法
 
 @property (nonatomic, copy) NSString *emojiText; //设置处理文字
-@property int author1Length;
-@property int author2Length;
+@property NSUInteger author1Length;
+@property NSUInteger author2Length;
 
 @end

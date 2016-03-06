@@ -170,10 +170,8 @@ static CGFloat DETAIL_VIEW_HEIGHT = 23;
     }
 
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_videoInfo valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [_videoInfo valueForKey:@"author"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:self.videoInfo[@"author_id"] userName:self.videoInfo[@"author"]];
+
     self.author.text = alias;
     self.time.text = [[_videoInfo valueForKey:@"time"] substringToIndex:10];
     self.authorId = [_videoInfo valueForKey:@"author_id"];

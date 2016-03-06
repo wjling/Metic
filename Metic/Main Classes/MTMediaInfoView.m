@@ -87,10 +87,7 @@
 
     //author
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[self.mediaInfo valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [self.mediaInfo valueForKey:@"author"];
-    }
+    NSString* alias = [MTOperation getAliasWithUserId:self.mediaInfo[@"author_id"] userName:self.mediaInfo[@"author"]];
     self.authorLabel.text = alias;
     
     //time

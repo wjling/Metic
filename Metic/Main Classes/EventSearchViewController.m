@@ -17,6 +17,7 @@
 #import "EventPreviewViewController.h"
 #import "SVProgressHUD.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -318,10 +319,7 @@
     }];
 
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [a valueForKey:@"launcher"];
-    }
+    NSString* alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
     cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
     cell.eventId = [a valueForKey:@"event_id"];
     cell.nearbyEventViewController = self;

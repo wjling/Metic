@@ -229,18 +229,13 @@
     }
     self.pictureDescription.text = [dict valueForKey:@"specification"];
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [dict valueForKey:@"author"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:dict[@"author_id"] userName:dict[@"author"]];
     self.pictureAuthor.text = alias;
     self.publishTime.text = [[dict valueForKey:@"time"] substringToIndex:10];
     self.photoId = [dict valueForKey:@"photo_id"];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[dict valueForKey:@"author_id"]];
     [getter getAvatar];
-    
-    
-    
+
 }
 
 -(void)handleSingleTap

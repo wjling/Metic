@@ -1233,10 +1233,8 @@
         }
         cell = (VCommentTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         NSDictionary* Vcomment = ([_sequence integerValue] == -1)? self.vcomment_list[_vcomment_list.count - indexPath.row ]:self.vcomment_list[_vcomment_list.count - indexPath.row + 1];
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"author_id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [Vcomment valueForKey:@"author"];
-        }
+        NSString *alias = [MTOperation getAliasWithUserId:Vcomment[@"author_id"] userName:Vcomment[@"author"]];
+
         ((VCommentTableViewCell *)cell).VcommentDict = Vcomment;
         ((VCommentTableViewCell *)cell).author.text = alias;
         ((VCommentTableViewCell *)cell).authorName = alias;
@@ -1268,10 +1266,7 @@
         NSString*alias2;
         if ([[Vcomment valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
-            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-                alias2 = [Vcomment valueForKey:@"replier"];
-            }
+            alias2 = [MTOperation getAliasWithUserId:Vcomment[@"replied"] userName:Vcomment[@"replier"]];
             text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
         }
         
@@ -1330,10 +1325,7 @@
         NSString*alias2;
         if ([[Vcomment valueForKey:@"replied"] intValue] != 0) {
             //显示备注名
-            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Vcomment valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
-                alias2 = [Vcomment valueForKey:@"replier"];
-            }
+            alias2 = [MTOperation getAliasWithUserId:Vcomment[@"replied"] userName:Vcomment[@"replier"]];
             commentText = [NSString stringWithFormat:@"回复%@ : %@",alias2,commentText];
         }
         if ([[Vcomment valueForKey:@"vcomment_id"] intValue] > 0) {

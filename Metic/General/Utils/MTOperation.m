@@ -46,11 +46,8 @@
     NSString* names = @"";
     for (int i = 0; i < notFriendsList.count; i++) {
         NSNumber* fid = notFriendsList[i];
-        NSString* fname = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        if (fname == nil || [fname isEqual:[NSNull null]] || [fname isEqualToString:@""]) {
-            fname = [[MTUser sharedInstance].nameFromID_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        }
-        
+        NSString* fname = [MTOperation getAliasWithUserId:fid userName:nil];
+
         if (i == 0) {
             names = [names stringByAppendingString:[NSString stringWithFormat:@"%@",fname]];
         }else{
@@ -560,5 +557,26 @@
     }
 }
 
+
++ (NSString *)getAliasWithUserId:(NSNumber *)userId userName:(NSString *)name {
+    NSString *alias;
+    
+    if (userId && [userId isKindOfClass:[NSNumber class]]) {
+        alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",userId]];
+    }
+    
+    if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
+        return alias;
+    } else if(name && ![name isEqual:[NSNull null]] && ![name isEqualToString:@""]) {
+        return name;
+    } else {
+        name = [[MTUser sharedInstance].nameFromID_dic valueForKey:[NSString stringWithFormat:@"%@",userId]];
+        if (name && ![name isEqual:[NSNull null]] && ![name isEqualToString:@""]) {
+            return name;
+        } else {
+            return @"";
+        }
+    }
+}
 
 @end

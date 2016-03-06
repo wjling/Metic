@@ -666,11 +666,9 @@ static NSString * const defaultDetail = @"输入活动描述，让其他人更�
         [avatar.layer setCornerRadius:5];
         PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:_FriendsIds_array[indexPath.row] ];
         [getter getAvatar];
+        
         //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [[MTUser sharedInstance].nameFromID_dic valueForKey:[NSString stringWithFormat:@"%@",_FriendsIds_array[indexPath.row]]];
-        }
+        NSString* alias = [MTOperation getAliasWithUserId:self.FriendsIds_array[indexPath.row] userName:nil];
         name.text = alias;
         
     }else{
