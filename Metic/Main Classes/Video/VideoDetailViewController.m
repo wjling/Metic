@@ -1241,7 +1241,8 @@
         ((VCommentTableViewCell *)cell).authorId = [Vcomment valueForKey:@"author_id"];
         ((VCommentTableViewCell *)cell).origincomment = [Vcomment valueForKey:@"content"];
         ((VCommentTableViewCell *)cell).controller = self;
-        ((VCommentTableViewCell *)cell).date.text = [[Vcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((VCommentTableViewCell *)cell).date.text = [CommonUtils calculateTimeStr:Vcomment[@"time"] shortVersion:NO];
+    
         float commentWidth = 0;
         ((VCommentTableViewCell *)cell).vcomment_id = [Vcomment valueForKey:@"vcomment_id"];
         if ([[Vcomment valueForKey:@"vcomment_id"] intValue] == -1 ) {

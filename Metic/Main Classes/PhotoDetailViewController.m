@@ -1161,7 +1161,7 @@
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
         ((PcommentTableViewCell *)cell).origincomment = [Pcomment valueForKey:@"content"];
         ((PcommentTableViewCell *)cell).controller = self;
-        ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((PcommentTableViewCell *)cell).date.text = [CommonUtils calculateTimeStr:Pcomment[@"time"] shortVersion:NO];
         float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
         if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -1 ) {

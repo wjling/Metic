@@ -514,13 +514,27 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
     }
     NSString* timeInfo = [dateFormatter stringFromDate:dateTime];
+    
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSInteger unitFlags = NSYearCalendarUnit;
+    
+    NSDateComponents *compsDate  = [calendar components:unitFlags fromDate:dateTime];
+    NSDateComponents *compsNow  = [calendar components:unitFlags fromDate:now];
+    
     int dis = nowInterval - dateTimeInterval;
     if (dis >= 0) {
-        if (dis >= 86400*7) {
+        if (compsDate.year != compsNow.year) {
             if (isShortVersion) {
                 [dateFormatter setDateFormat:@"MM-dd"];
             } else {
                 [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+            }
+        } else if (dis >= 86400*7) {
+            if (isShortVersion) {
+                [dateFormatter setDateFormat:@"MM-dd"];
+            } else {
+                [dateFormatter setDateFormat:@"MM月dd日"];
             }
             timeInfo = [dateFormatter stringFromDate:dateTime];
         }else if (dis >= 86400*2) {
