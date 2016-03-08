@@ -1153,10 +1153,7 @@
         NSDictionary* Pcomment = ([_sequence integerValue] == -1)? self.pcomment_list[_pcomment_list.count - indexPath.row ]:self.pcomment_list[_pcomment_list.count - indexPath.row + 1];
         
         //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"author_id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [Pcomment valueForKey:@"author"];
-        }
+        NSString* alias = [MTOperation getAliasWithUserId:Pcomment[@"author_id"] userName:Pcomment[@"author"]];
         
         ((PcommentTableViewCell *)cell).PcommentDict = Pcomment;
         ((PcommentTableViewCell *)cell).author.text = alias;
@@ -1164,7 +1161,7 @@
         ((PcommentTableViewCell *)cell).authorId = [Pcomment valueForKey:@"author_id"];
         ((PcommentTableViewCell *)cell).origincomment = [Pcomment valueForKey:@"content"];
         ((PcommentTableViewCell *)cell).controller = self;
-        ((PcommentTableViewCell *)cell).date.text = [[Pcomment valueForKey:@"time"] substringWithRange:NSMakeRange(5, 11)];
+        ((PcommentTableViewCell *)cell).date.text = [CommonUtils calculateTimeStr:Pcomment[@"time"] shortVersion:NO];
         float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
         if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -1 ) {
@@ -1189,10 +1186,8 @@
         NSString*alias2;
         if ([[Pcomment valueForKey:@"replied"] integerValue] != 0) {
             //显示备注名
-            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
-                alias2 = [Pcomment valueForKey:@"replier"];
-            }
+            alias2 = [MTOperation getAliasWithUserId:Pcomment[@"replied"] userName:Pcomment[@"replier"]];
+
             text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
         }
         
@@ -1251,10 +1246,7 @@
         NSString*alias2;
         if ([[Pcomment valueForKey:@"replied"] integerValue] != 0) {
             //显示备注名
-            alias2 = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[Pcomment valueForKey:@"replied"]]];
-            if (alias2 == nil || [alias2 isEqual:[NSNull null]] || [alias2 isEqualToString:@""]) {
-                alias2 = [Pcomment valueForKey:@"replier"];
-            }
+            alias2 = [MTOperation getAliasWithUserId:Pcomment[@"replied"] userName:Pcomment[@"replier"]];
             commentText = [NSString stringWithFormat:@"回复%@ : %@",alias2,commentText];
         }
         

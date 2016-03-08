@@ -17,6 +17,7 @@
 #import "EventPreviewViewController.h"
 #import "SVProgressHUD.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
 
 @interface EventSearchViewController ()
 @property(nonatomic,strong) UITableView* tableView;
@@ -286,10 +287,9 @@
     cell.eventName.text = [a valueForKey:@"subject"];
     NSString* beginT = [a valueForKey:@"time"];
     NSString* endT = [a valueForKey:@"endTime"];
-    cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-    cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+
+    [CommonUtils generateEventContinuedInfoLabel:cell.eventTime beginTime:beginT endTime:endT];
+
     cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
     cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
     
@@ -318,10 +318,7 @@
     }];
 
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [a valueForKey:@"launcher"];
-    }
+    NSString* alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
     cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
     cell.eventId = [a valueForKey:@"event_id"];
     cell.nearbyEventViewController = self;

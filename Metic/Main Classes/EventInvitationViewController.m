@@ -15,6 +15,8 @@
 #import "SVProgressHUD.h"
 #import "MTDatabaseHelper.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
+
 
 @interface EventInvitationViewController ()
 {
@@ -217,10 +219,7 @@
     }];
     
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [a valueForKey:@"launcher"];
-    }
+    NSString* alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
     cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
     cell.inviteInfo.text = [[NSString alloc]initWithFormat:@"%@ 邀请你加入活动",alias];
     cell.eventId = [a valueForKey:@"event_id"];

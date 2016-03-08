@@ -153,10 +153,8 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 {
     self.photoInfo = data;
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [data valueForKey:@"author"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:data[@"author_id"] userName:data[@"author"]];
+
     self.author.text = alias;
     self.publish_date.text = [[data valueForKey:@"time"] substringToIndex:10];
 

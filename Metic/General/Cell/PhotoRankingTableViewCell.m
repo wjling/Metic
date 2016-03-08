@@ -47,10 +47,7 @@
 -(void)refresh
 {
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[_photoInfo valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [_photoInfo valueForKey:@"author"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:self.photoInfo[@"author_id"] userName:self.photoInfo[@"author"]];
     self.author.text = alias;
     self.time.text = [[_photoInfo valueForKey:@"time"] substringToIndex:10];
     self.authorId = [_photoInfo valueForKey:@"author_id"];

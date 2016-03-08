@@ -165,28 +165,34 @@
 }
 
 - (void)orientationChanged:(NSNotification *)note  {
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+    if (state != UIApplicationStateActive) return;
     if (!self.navigationController.navigationBarHidden) return;
     UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
+    static CGFloat angle = 0.f;
     switch (o) {
         case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
             MTLOG(@"UIDeviceOrientationPortrait");
-            [self rotation:0.0];
+            angle = 0.f;
             break;
         case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
             MTLOG(@"UIDeviceOrientationPortraitUpsideDown");
-            [self rotation:180.0];
+            angle = 180.f;
             break;
         case UIDeviceOrientationLandscapeLeft:      // Device oriented horizontally, home button on the right
             MTLOG(@"UIDeviceOrientationLandscapeLeft");
-            [self rotation:90.0];
+            angle = 90.f;
             break;
         case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
             MTLOG(@"UIDeviceOrientationLandscapeRight");
-            [self rotation:90.0*3];
+            angle = 270.f;
             break;
         default:
             break;
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self rotation:angle];
+    });
 }
 
 -(void)refreshGood
@@ -229,18 +235,13 @@
     }
     self.pictureDescription.text = [dict valueForKey:@"specification"];
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[dict valueForKey:@"author_id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [dict valueForKey:@"author"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:dict[@"author_id"] userName:dict[@"author"]];
     self.pictureAuthor.text = alias;
     self.publishTime.text = [[dict valueForKey:@"time"] substringToIndex:10];
     self.photoId = [dict valueForKey:@"photo_id"];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[dict valueForKey:@"author_id"]];
     [getter getAvatar];
-    
-    
-    
+
 }
 
 -(void)handleSingleTap

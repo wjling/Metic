@@ -57,6 +57,10 @@
 
 @property(nonatomic)bool logined;
 + (MTUser *)sharedInstance;
++ (void)loadUser;
++ (void)saveUser;
++ (void)deleteUser;
+
 - (void)getInfo:(NSNumber *) uid myid:(NSNumber *)myid delegateId:(id) aDelegate;
 - (void) synchronizeFriends;
 - (void) insertToFriendTable:(NSArray*)friends;

@@ -14,6 +14,7 @@
 #import "MTDatabaseHelper.h"
 #import "EventPreviewViewController.h"
 #import "EventDetailViewController.h"
+#import "MTOperation.h"
 
 #define MTUser_msgFromDB [MTUser sharedInstance].msgFromDB
 #define MTUser_eventRequestMsg [MTUser sharedInstance].eventRequestMsg
@@ -1155,15 +1156,8 @@ enum Response_Type
                 cell.context_weak = self;
                 cell.tag = [promoter_id integerValue];
                 
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",promoter_id]];
-                
-                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-                    cell.name_label.text = alias;
-                }
-                else
-                {
-                    cell.name_label.text = promoter;
-                }
+                NSString* alias = [MTOperation getAliasWithUserId:promoter_id userName:promoter];
+                cell.name_label.text = alias;
                 cell.text_label.text = @"邀请你加入";
 //                cell.text_label.text = [NSString stringWithFormat:@"邀请你加入%d",indexPath.row];
 //                [cell.event_name_button setTitle:subject forState:UIControlStateNormal];
@@ -1216,19 +1210,12 @@ enum Response_Type
                 NSString* fname = [msg_dic valueForKey:@"name"];
                 NSInteger ishandled = [[msg_dic objectForKey:@"ishandled"] integerValue];
                 NSString* confirm_msg = [msg_dic objectForKey:@"confirm_msg"];
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",uid]];
+                NSString* alias = [MTOperation getAliasWithUserId:uid userName:fname];
                 
                 cell.eventInfo_dic = msg_dic;
                 cell.context_weak = self;
                 cell.tag = [uid integerValue];
-                
-                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-                    cell.name_label.text = alias;
-                }
-                else
-                {
-                    cell.name_label.text = fname;
-                }
+                cell.name_label.text = alias;
 
                 cell.text_label.text = @"请求加入";
                 
@@ -1467,16 +1454,7 @@ enum Response_Type
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSNumber* fid = [msg_dic objectForKey:@"id"];
-                NSString* name;
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-                
-                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-                    name = alias;
-                }
-                else
-                {
-                    name = [msg_dic objectForKey:@"name"];
-                }
+                NSString* name = [MTOperation getAliasWithUserId:fid userName:msg_dic[@"name"]];
 
                 NSString* text = @"";
                 if (result) {
@@ -1494,18 +1472,10 @@ enum Response_Type
             case REQUEST_EVENT_RESPONSE:  //994
             {
                 NSInteger result = [[msg_dic objectForKey:@"result"] intValue];
-                NSString* launcher;
+
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSNumber* launcher_id = [msg_dic objectForKey:@"launcher_id"];
-                NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
-                
-                if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-                    launcher = alias;
-                }
-                else
-                {
-                    launcher = [msg_dic objectForKey:@"launcher"];
-                }
+                NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
 
                 NSString* text = @"";
                 if (result) {

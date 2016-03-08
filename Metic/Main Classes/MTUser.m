@@ -15,6 +15,7 @@
 #import "MTOperation.h"
 #import "MegUtils.h"
 #import "MTPushMessageHandler.h"
+#import "MenuViewController.h"
 
 
 @interface MTUser ()
@@ -168,7 +169,7 @@ static MTUser *singletonInstance;
             {
                 if ([response1 valueForKey:@"name"]) {//更新用户信息
                     [[MTUser sharedInstance] initWithData:response1];
-                    [AppDelegate refreshMenu];
+                    [[MenuViewController sharedInstance] refresh];
                 }
             }
         }
@@ -243,12 +244,10 @@ static MTUser *singletonInstance;
     [MTDatabaseHelper refreshDatabaseFile];
     [self initUserDir];
     
-    
     NSString *account = [NSString stringWithFormat:@"%@_hdb",[MTUser sharedInstance].userid];
     [XGPush setAccount:account];
     
-    
-     [MTPushMessageHandler registerPush];
+    [MTPushMessageHandler registerPush];
     
     [self systemSettingsInit:user_id];
     [self getAliasFromDB];
@@ -382,6 +381,7 @@ static MTUser *singletonInstance;
     self.phone = [mdictionary objectForKey:@"phone"] != [NSNull null]? [mdictionary objectForKey:@"phone"]:nil;
     self.location = [mdictionary objectForKey:@"location"] != [NSNull null]? [mdictionary objectForKey:@"location"]:nil;
     self.email = [mdictionary objectForKey:@"email"] != [NSNull null]? [mdictionary objectForKey:@"email"]:nil;
+    [MTUser saveUser];
 }
 
 -(void)systemSettingsInit:(NSNumber*)uid
@@ -713,7 +713,7 @@ static MTUser *singletonInstance;
         NSMutableArray* friends = [NSMutableArray arrayWithArray:results];
         for (int i = 0; i < friends.count; i++) {
             NSDictionary* friend = [friends objectAtIndex:i];
-            NSString* fid = [friend objectForKey:@"id"];
+            NSString* fid = [NSString stringWithFormat:@"%@",[friend objectForKey:@"id"]];
             NSString* alias = [friend objectForKey:@"alias"];
             [self.alias_dic setValue:alias forKey:fid];
         }
@@ -1004,5 +1004,59 @@ static MTUser *singletonInstance;
     getSynchronizeFriendResponse = YES;
 }
 
+#pragma User Manage
++ (void)saveUser {
+    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        if ([MTUser sharedInstance].name) {
+            [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
+        }
+    }
+}
 
++ (void)loadUser {
+    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
+    if ([userStatus isEqualToString:@"in"]) {
+        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        if([fileManager fileExistsAtPath:MtuserPath])
+        {
+            NSArray* users;
+            @try {
+                users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
+            }
+            @catch (NSException *exception) {
+            }
+            @finally {
+                if (!users || users.count == 0) {
+                    [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                    [self deleteUser];
+                }
+            }
+        }else{
+            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self deleteUser];
+        }
+        
+    }else{
+        [self deleteUser];
+    }
+}
+
++ (void)deleteUser {
+    MTUser *user = [[MTUser alloc]init];
+    singletonInstance = user;
+    [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
+    [fileManager removeItemAtPath:MtuserPath error:nil];
+}
+
++ (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath {
+    [NSKeyedArchiver archiveRootObject:markers toFile:filePath];
+}
 @end

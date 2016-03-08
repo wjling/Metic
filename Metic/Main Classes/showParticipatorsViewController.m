@@ -12,6 +12,7 @@
 #import "UserInfo/UserInfoViewController.h"
 #import "FriendInfoViewController.h"
 #import "AvatarCollectionViewCell.h"
+#import "MTOperation.h"
 
 @interface showParticipatorsViewController ()
 @property (nonatomic,strong) NSMutableSet *inviteFids;
@@ -192,10 +193,7 @@
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];
     [getter getAvatar];
     //显示备注名
-    NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[participant valueForKey:@"id"]]];
-    if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-        alias = [participant valueForKey:@"name"];
-    }
+    NSString *alias = [MTOperation getAliasWithUserId:participant[@"id"] userName:participant[@"name"]];
     name.text = alias;
     [cell.mask setHidden:NO];
     BOOL isMe = ([[participant valueForKey:@"id"] intValue] == [[MTUser sharedInstance].userid intValue]);

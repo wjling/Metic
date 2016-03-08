@@ -70,4 +70,6 @@ typedef void(^modifySpecificationFinishBlock)(BOOL isSuccess,NSString* likeTime)
                          success:(void (^)(NSString* url))success
                          failure:(void (^)(NSString* message))failure;
 
++(NSString *)getAliasWithUserId:(NSNumber *)userId userName:(NSString *)name;
+
 @end

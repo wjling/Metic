@@ -15,6 +15,8 @@
 #import "SVProgressHUD.h"
 #import "MTShowTextViewController.h"
 #import "MegUtils.h"
+#import "MTOperation.h"
+
 
 #define MainFontSize 14
 
@@ -32,10 +34,6 @@
 @synthesize eventDetail;
 @synthesize videoWall;
 @synthesize imgWall;
-@synthesize beginTime;
-@synthesize beginDate;
-@synthesize endTime;
-@synthesize endDate;
 @synthesize timeInfo;
 @synthesize location;
 @synthesize launcherinfo;
@@ -78,10 +76,9 @@
     self.eventName.text = [data valueForKey:@"subject"];
     NSString* beginT = [data valueForKey:@"time"];
     NSString* endT = [data valueForKey:@"endTime"];
-    self.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    self.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-    if (endT.length > 9)self.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-    if (endT.length > 15)self.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+    
+    [CommonUtils generateEventContinuedInfoLabel:self.eventTime beginTime:beginT endTime:endT];
+
     self.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[data valueForKey:@"launch_time"]];
     self.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[data valueForKey:@"location"] ];
     NSInteger participator_count = [[data valueForKey:@"member_count"] integerValue];
@@ -107,10 +104,8 @@
         return mutableAttributedString;
     }];
     
-    NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[data valueForKey:@"launcher_id"]]];
-    if (launcher == nil || [launcher isEqual:[NSNull null]] || [launcher isEqualToString:@""]) {
-        launcher = [data valueForKey:@"launcher"];
-    }
+    NSString* launcher = [MTOperation getAliasWithUserId:data[@"launcher_id"] userName:data[@"launcher"]];
+    
     self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",launcher];
     NSInteger visibilityNum = [data[@"visibility"] integerValue];
     switch (visibilityNum) {

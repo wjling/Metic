@@ -18,10 +18,6 @@
     IBOutlet UIImageView *avatar;
     IBOutlet UILabel *eventName;
     IBOutlet UIImageView *themePhoto;
-    IBOutlet UILabel *beginDate;
-    IBOutlet UILabel *beginTime;
-    IBOutlet UILabel *endDate;
-    IBOutlet UILabel *endTime;
 //    IBOutlet UILabel *eventDetail;
     IBOutlet UILabel *timeInfo;
     IBOutlet UIButton *imgWall;
@@ -45,10 +41,7 @@
 @property(nonatomic,strong) UILabel *eventName;
 @property(nonatomic,strong) UILabel *eventType;
 @property(nonatomic,strong) UIImageView *themePhoto;
-@property(nonatomic,strong) UILabel *beginDate;
-@property(nonatomic,strong) UILabel *endDate;
-@property(nonatomic,strong) UILabel *beginTime;
-@property(nonatomic,strong) UILabel *endTime;
+@property (strong, nonatomic) IBOutlet TTTAttributedLabel *eventTime;
 @property(nonatomic,strong) UILabel *timeInfo;
 @property(nonatomic,strong) UILabel *location;
 @property(nonatomic,strong) UILabel *launcherinfo;

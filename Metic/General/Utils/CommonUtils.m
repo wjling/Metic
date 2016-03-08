@@ -9,6 +9,7 @@
 #import "CommonUtils.h"
 #import "AppConstants.h"
 #import <CoreLocation/CLLocation.h>
+#import "TTTAttributedLabel.h"
 
 UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 
@@ -367,7 +368,90 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
             blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0];
 }
 
-+(NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime
++ (void)generateEventContinuedInfoLabel:(TTTAttributedLabel *)label beginTime:(NSString*)beginTime endTime:(NSString*)endTime {
+    NSString* timeInfo = @"";
+    static NSDateFormatter* dateFormatter;
+    if (!dateFormatter) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+        [dateFormatter setLocale:[NSLocale currentLocale]];
+    }
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+
+    
+    NSDate *begin = [dateFormatter dateFromString:beginTime];
+    NSDate *end = [dateFormatter dateFromString:endTime];
+    NSDate *now = [NSDate date];
+    
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSInteger unitFlags = NSYearCalendarUnit;
+    
+    NSDateComponents *compsBegin  = [calendar components:unitFlags fromDate:begin];
+    NSDateComponents *compsNow  = [calendar components:unitFlags fromDate:now];
+
+    if ([compsBegin year] != [compsNow year]) {
+        [dateFormatter setDateFormat:@"YYYY年MM月dd日 HH:mm"];
+    } else {
+        [dateFormatter setDateFormat:@"MM月dd日 HH:mm"];
+    }
+    
+    NSString *beginStr = [dateFormatter stringFromDate:begin];
+    NSString *endStr = [dateFormatter stringFromDate:end];
+
+    
+    timeInfo = [NSString stringWithFormat:@"%@ － %@", beginStr, endStr];
+    
+    [label setText:timeInfo afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
+        NSRange date1 = NSMakeRange(0, beginStr.length - 5);
+        NSRange time1 = NSMakeRange(date1.length, 5);
+        NSRange seperate = NSMakeRange(beginStr.length, 3);
+        NSRange date2 = NSMakeRange(seperate.location + seperate.length, endStr.length - 5);
+        NSRange time2 = NSMakeRange(date2.location + date2.length, 5);
+
+        UIFont *dateFont = [UIFont systemFontOfSize:13];
+        UIFont *timeFont = [UIFont systemFontOfSize:12];
+        UIFont *seperateFont = [UIFont systemFontOfSize:15];
+        
+        if (date1.location != NSNotFound) {
+
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)dateFont.fontName, dateFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:date1];
+            CFRelease(italicFont);
+        }
+        
+        if (date2.location != NSNotFound) {
+
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)dateFont.fontName, dateFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:date2];
+            CFRelease(italicFont);
+        }
+        if (time1.location != NSNotFound) {
+
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)timeFont.fontName, timeFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:time1];
+            CFRelease(italicFont);
+        }
+        
+        if (time2.location != NSNotFound) {
+
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)timeFont.fontName, timeFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:time2];
+            CFRelease(italicFont);
+        }
+        
+        if (seperate.location != NSNotFound) {
+
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)seperateFont.fontName, seperateFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:seperate];
+            CFRelease(italicFont);
+        }
+        
+        return mutableAttributedString;
+    }];
+}
+
++ (NSString*)calculateTimeInfo:(NSString*)beginTime endTime:(NSString*)endTime launchTime:(NSString*)launchTime
 {
     NSString* timeInfo = @"";
     static NSDateFormatter* dateFormatter;
@@ -430,13 +514,27 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
         [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
     }
     NSString* timeInfo = [dateFormatter stringFromDate:dateTime];
+    
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSInteger unitFlags = NSYearCalendarUnit;
+    
+    NSDateComponents *compsDate  = [calendar components:unitFlags fromDate:dateTime];
+    NSDateComponents *compsNow  = [calendar components:unitFlags fromDate:now];
+    
     int dis = nowInterval - dateTimeInterval;
     if (dis >= 0) {
-        if (dis >= 86400*7) {
+        if (compsDate.year != compsNow.year) {
             if (isShortVersion) {
                 [dateFormatter setDateFormat:@"MM-dd"];
             } else {
                 [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
+            }
+        } else if (dis >= 86400*7) {
+            if (isShortVersion) {
+                [dateFormatter setDateFormat:@"MM-dd"];
+            } else {
+                [dateFormatter setDateFormat:@"MM月dd日"];
             }
             timeInfo = [dateFormatter stringFromDate:dateTime];
         }else if (dis >= 86400*2) {

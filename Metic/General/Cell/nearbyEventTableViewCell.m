@@ -19,10 +19,6 @@
 @synthesize eventName;
 @synthesize themePhoto;
 //@synthesize eventDetail;
-@synthesize beginTime;
-@synthesize beginDate;
-@synthesize endTime;
-@synthesize endDate;
 @synthesize timeInfo;
 @synthesize location;
 @synthesize launcherinfo;

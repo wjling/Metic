@@ -253,17 +253,9 @@
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getAvatar];
         
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",fid]];
-        if (alias && ![alias isEqual:[NSNull null]] && ![alias isEqualToString:@""]) {
-            cell.title.text = alias;
-        }
-        else if (label) {
-            cell.title.text = label;
-        }
-        else
-        {
-            cell.title.text = @"default";
-        }
+        NSString* alias = [MTOperation getAliasWithUserId:fid userName:@"default"];
+        
+        cell.title.text = alias;
         
         cell.friendid = fid;
         

@@ -14,6 +14,7 @@
 #import "EventDetailViewController.h"
 #import "MegUtils.h"
 #import <AVFoundation/AVFoundation.h>
+#import "MTOperation.h"
 
 @interface ScanViewController ()<AVCaptureMetadataOutputObjectsDelegate>
 @property(nonatomic,strong) AVCaptureSession *session; // 二维码生成的绘画
@@ -460,19 +461,16 @@
         cell.eventName.text = [a valueForKey:@"subject"];
         NSString* beginT = [a valueForKey:@"time"];
         NSString* endT = [a valueForKey:@"endTime"];
-        cell.beginDate.text = [[[beginT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"] stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-        cell.beginTime.text = [beginT substringWithRange:NSMakeRange(11, 5)];
-        cell.endDate.text = [[[endT substringWithRange:NSMakeRange(5, 5)] stringByAppendingString:@"日"]  stringByReplacingOccurrencesOfString:@"-" withString:@"月"];
-        cell.endTime.text = [endT substringWithRange:NSMakeRange(11, 5)];
+        
+        [CommonUtils generateEventContinuedInfoLabel:cell.eventTime beginTime:beginT endTime:endT];
+
         cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
         cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
         int participator_count = [[a valueForKey:@"member_count"] intValue];
         cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
         //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"launcher_id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [a valueForKey:@"launcher"];
-        }
+        NSString *alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
+
         cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
         cell.eventId = [a valueForKey:@"event_id"];
         cell.avatar.layer.masksToBounds = YES;
@@ -530,10 +528,7 @@
             [_inButton setEnabled:YES];
         }
         //显示备注名
-        NSString* alias = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",[a valueForKey:@"id"]]];
-        if (alias == nil || [alias isEqual:[NSNull null]] || [alias isEqualToString:@""]) {
-            alias = [a valueForKey:@"name"];
-        }
+        NSString *alias = [MTOperation getAliasWithUserId:a[@"id"] userName:a[@"name"]];
 
         cell.name.text = alias;
         cell.signature.text = ([[a valueForKey:@"sign"] isEqual:[NSNull null]])?@"":[a valueForKey:@"sign"];

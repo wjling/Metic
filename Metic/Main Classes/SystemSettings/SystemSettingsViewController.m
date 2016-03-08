@@ -347,7 +347,7 @@
             MTLOG(@"切换账号");
             [XGPush unRegisterDevice];
             ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
-            [[MTUser alloc]init];
+            [MTUser deleteUser];
             [[MTAccount singleInstance] deleteAccount];
             [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
