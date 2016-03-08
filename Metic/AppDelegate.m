@@ -202,13 +202,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         //预先保存mtuser内容
-        NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-        if ([userStatus isEqualToString:@"in"]) {
-            NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-            if ([MTUser sharedInstance].name) {
-                [self saveMarkers:[[NSMutableArray alloc] initWithObjects:[MTUser sharedInstance],nil] toFilePath:MtuserPath];
-            }
-        }
+        [MTUser saveUser];
         [application endBackgroundTask:bgTask];
         bgTask = UIBackgroundTaskInvalid;
     });
@@ -383,42 +377,8 @@
 
 -(void)initApp
 {
-    NSString *userStatus = [[NSUserDefaults standardUserDefaults] objectForKey:@"MeticStatus"];
-    if ([userStatus isEqualToString:@"in"]) {
-        NSString* MtuserPath= [NSString stringWithFormat:@"%@/Documents/MTuser.txt", NSHomeDirectory()];
-        NSFileManager *fileManager=[NSFileManager defaultManager];
-        if([fileManager fileExistsAtPath:MtuserPath])
-        {
-            NSArray* users;
-            @try {
-                users = [NSKeyedUnarchiver unarchiveObjectWithFile:MtuserPath];
-            }
-            @catch (NSException *exception) {
-            }
-            @finally {
-                if (!users || users.count == 0) {
-                    [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                    [[MTUser alloc]init];
-                }
-            }
-        }else{
-            [[NSUserDefaults standardUserDefaults] setObject:@"out" forKey:@"MeticStatus"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [[MTUser alloc]init];
-        }
-        
-    }else{
-        [[MTUser alloc]init];
-    }
-
+    [MTUser loadUser];
 }
-
-+ (void)refreshMenu
-{
-    [(MenuViewController*)[SlideNavigationController sharedInstance].leftMenu refresh];
-}
-
 
 #pragma mark - Network Status Checking
 //================================Network Status Checking=====================================
@@ -597,8 +557,7 @@
     MTLOG(@"切换账号");
     [XGPush unRegisterDevice];
     ((AppDelegate*)[[UIApplication sharedApplication] delegate]).isLogined = NO;
-//    [((AppDelegate*)[[UIApplication sharedApplication] delegate]) disconnect];
-    [[MTUser alloc] init];
+    [MTUser deleteUser];
     [[NSUserDefaults standardUserDefaults] setValue:@"change" forKey:@"MeticStatus"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1065,25 +1024,6 @@
 {
     return  [UMSocialSnsService handleOpenURL:url];
 }
-
-- (NSMutableArray *)loadMarkersFromFilePath:(NSString *)filePath {
-    NSMutableArray *markers = nil;
-    if (filePath == nil || [filePath length] == 0 ||
-        [[NSFileManager defaultManager] fileExistsAtPath:filePath] == NO) {
-        markers = [[NSMutableArray alloc] init];
-    } else {
-        markers = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
-    }
-    return markers;
-}
-
-
-
-
-- (void)saveMarkers:(NSMutableArray *)markers toFilePath:(NSString *)filePath {
-    [NSKeyedArchiver archiveRootObject:markers toFile:filePath];
-}
-
 
 //=============================================================================================
 //视频缓存相关

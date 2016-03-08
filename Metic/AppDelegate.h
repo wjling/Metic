@@ -46,7 +46,6 @@
 @property (nonatomic) BOOL isInBackground;
 //-(void)initViews;
 -(void)initApp;
-+(void)refreshMenu;
 
 +(BOOL)isEnableWIFI;
 +(BOOL)isEnableGPRS;

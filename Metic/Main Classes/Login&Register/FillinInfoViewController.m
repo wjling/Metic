@@ -13,6 +13,7 @@
 #import "MTAccount.h"
 #import "SDWebImageManager.h"
 #import "BOAlertController.h"
+#import "MenuViewController.h"
 
 @interface FillinInfoViewController ()
 {
@@ -115,7 +116,7 @@
                     case NORMAL_REPLY:
                     {
                         [MTUser sharedInstance].name = self.ssUser.nickname;
-                        [AppDelegate refreshMenu];
+                        [[MenuViewController sharedInstance] refresh];
                         self.name = self.ssUser.nickname;
                         [self.info_tableview reloadData];
                         MTLOG(@"昵称修改成功");
@@ -145,7 +146,7 @@
                     case NORMAL_REPLY:
                     {
                         [MTUser sharedInstance].gender = ssGender;
-                        [AppDelegate refreshMenu];
+                        [[MenuViewController sharedInstance] refresh];
                         self.gender = gender;
                         newGender = [gender integerValue];
                         [self.info_tableview reloadData];

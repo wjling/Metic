@@ -8,6 +8,7 @@
 
 #import "NameSettingViewController.h"
 #import "FillinInfoViewController.h"
+#import "MenuViewController.h"
 #import "SVProgressHUD.h"
 
 @interface NameSettingViewController ()
@@ -150,7 +151,7 @@
         case NORMAL_REPLY:
         {
             [MTUser sharedInstance].name = newName;
-            [AppDelegate refreshMenu];
+            [[MenuViewController sharedInstance] refresh];
             [self synName:newName];
             MTLOG(@"昵称修改成功");
             [SVProgressHUD dismissWithSuccess:@"昵称修改成功" afterDelay:1.f];
