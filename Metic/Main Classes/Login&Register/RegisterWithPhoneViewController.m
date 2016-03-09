@@ -157,12 +157,6 @@
     }
     
     [SVProgressHUD showWithStatus:@"正在验证手机号，请稍候" maskType:SVProgressHUDMaskTypeBlack];
-    if([phoneNumber isEqualToString:@"13745678912"]) {
-        NSLog(@"验证成功");
-        [SVProgressHUD dismissWithSuccess:@"验证成功，请输入登录密码"];
-        [self.passwdInputView setHidden:NO];
-        return;
-    }
     [SMSSDK commitVerificationCode:verificationCode phoneNumber:self.phoneTextField.text zone:@"+86" result:^(NSError *error) {
         if (!error) {
             NSLog(@"验证成功");

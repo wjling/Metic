@@ -134,7 +134,7 @@
     CGFloat photoHeight = [self calculatePhotoHeightwithMediaInfo:mediaInfo type:type containerWidth:width];
     height += photoHeight;
     
-    height += 45 + 30 + 20;
+    height += 45 + 30 + 20 + 5;
     
     return height;
 }

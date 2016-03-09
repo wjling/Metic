@@ -462,9 +462,23 @@
 
     [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
     
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin;
+    indicatorView.frame = CGRectMake(0, 0, 60, 60);
+    indicatorView.center = self.view.center;
+    [zoomScrollView addSubview:indicatorView];
+    [indicatorView startAnimating];
+    zoomScrollView.imageView.alpha = 0;
+
     MTImageGetter *imageGetter = [[MTImageGetter alloc]initWithImageView:zoomScrollView.imageView imageId:nil imageName:_photo_list[photoIndex][@"photo_name"] type:MTImageGetterTypePhoto];
     [imageGetter getImageComplete:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         if (image) {
+            [UIView animateWithDuration:0.5 animations:^{
+                indicatorView.alpha = 0.f;
+                zoomScrollView.imageView.alpha = 1.f;
+            } completion:^(BOOL finished) {
+                [indicatorView removeFromSuperview];
+            }];
             if (photoIndex == self.lastViewIndex) {
                 self.photo = image;
             }

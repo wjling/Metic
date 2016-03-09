@@ -1007,10 +1007,10 @@
     [self.inputTextView resignFirstResponder];
     if (_isEmotionOpen) [self button_Emotionpress:nil];
     self.inputTextView.text = @"";
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self textViewDidChange:self.inputTextView];
-        self.inputTextView.text = @"";
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self textViewDidChange:self.inputTextView];
+//        self.inputTextView.text = @"";
+//    });
     MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
