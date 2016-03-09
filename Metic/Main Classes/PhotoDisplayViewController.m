@@ -465,7 +465,7 @@
     UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin;
     indicatorView.frame = CGRectMake(0, 0, 60, 60);
-    indicatorView.center = self.view.center;
+    indicatorView.center = CGPointMake(CGRectGetMidX(zoomScrollView.bounds), CGRectGetMidY(zoomScrollView.bounds));
     [zoomScrollView addSubview:indicatorView];
     [indicatorView startAnimating];
     zoomScrollView.imageView.alpha = 0;
