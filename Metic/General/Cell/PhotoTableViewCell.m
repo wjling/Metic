@@ -287,7 +287,7 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     double width = CGRectGetWidth(self.frame);
     
     NSString *zanLabelText = [NSString stringWithFormat:@"%ld",(long)_zanNum];
-    CGFloat zanTextWidth = zanLabelText.length * 7;
+    CGFloat zanTextWidth = zanLabelText.length * 8;
     self.zanLabelView.text = zanLabelText;
     self.zanLabelView.frame = CGRectMake(width - zanTextWidth - 4, 0, zanTextWidth, DETAIL_VIEW_HEIGHT);
     
@@ -296,7 +296,7 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     
     
     NSString *commentLabelText = [NSString stringWithFormat:@"%ld",(long)_commentNum];
-    CGFloat commentTextWidth = commentLabelText.length * 7;
+    CGFloat commentTextWidth = commentLabelText.length * 8;
     self.commentLabelView.text = commentLabelText;
     self.commentLabelView.frame = CGRectMake(CGRectGetMinX(self.zanImageView.frame) - commentTextWidth - 7, 0, commentTextWidth, DETAIL_VIEW_HEIGHT);
     
