@@ -87,7 +87,7 @@
 - (void)setVisibility:(NSInteger)visibility
 {
     _visibility = visibility;
-    NSArray *arr = @[@"公开（内容公开）", @"公开（内容不公开）",@"私人"];
+    NSArray *arr = @[@"公开（内容公开）", @"公开（内容不公开）",@"私人活动"];
     if (visibility >= 0 && visibility < arr.count) {
         NSString *title = arr[2-visibility];
         [self.eventType setTitle:title forState:UIControlStateNormal];
@@ -95,7 +95,7 @@
 }
 
 - (void)changeEventType:(id)sender {
-    NSArray *arr = @[@"公开活动（内容公开）", @"公开活动（内容不公开）",@"私人"];
+    NSArray *arr = @[@"公开活动（内容公开）", @"公开活动（内容不公开）",@"私人活动"];
     NSInteger index = 2 - _visibility;
     self.typeSelectView = [[SingleSelectionAlertView alloc]initWithContentSize:CGSizeMake(300, 400) withTitle:@"修改活动类型" withOptions:arr];
     self.typeSelectView.kDelegate = self;

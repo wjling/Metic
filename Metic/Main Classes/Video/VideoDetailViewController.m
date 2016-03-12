@@ -1046,9 +1046,11 @@
     if ([_sequence integerValue] != -1)
         row ++;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    [_tableView beginUpdates];
-    [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView endUpdates];
+    @synchronized(self) {
+        [_tableView beginUpdates];
+        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+    }
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     self.inputTextView.text = @"";

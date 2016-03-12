@@ -253,7 +253,7 @@
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:fid];
         [getter getAvatar];
         
-        NSString* alias = [MTOperation getAliasWithUserId:fid userName:@"default"];
+        NSString* alias = [MTOperation getAliasWithUserId:fid userName:nil];
         
         cell.title.text = alias;
         
@@ -290,8 +290,5 @@
     NSInteger sectionIndex = [sectionArray indexOfObject:[sectionTitlesArray objectAtIndex:index]];
     return sectionIndex;
 }
-
-
-
 
 @end

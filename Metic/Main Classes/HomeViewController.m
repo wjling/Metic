@@ -549,16 +549,6 @@
     }
     
     NSString * path = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//    [self.sql openMyDB:path];
-//
-//    NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
-//    NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
-//    NSMutableArray *result = [self.sql queryTable:@"event" withSelect:seletes andWhere:wheres];
-////    MTLOG(@"%@",result);
-//    
-//    [self.sql closeMyDB];
-    
-    
     NSArray *seletes = [[NSArray alloc]initWithObjects:@"event_id", nil];
     NSDictionary *wheres = [[NSDictionary alloc] initWithObjectsAndKeys:@"1 order by event_id desc",@"1", nil];
     
@@ -580,27 +570,6 @@
         }
 
     }];
-    //    MTLOG(@"%@",result);
-    
-//    [self.sql closeMyDB];
-    
-    //比较
-//    NSSet*eventIds = [[NSSet alloc]initWithArray:sequences];
-//    for (int i = 0; i < result.count; i++) {
-//        NSDictionary* res = [result objectAtIndex:i];
-//        NSString* sequence_S = [res valueForKey:@"event_id"];
-//        NSNumber* sequence = [CommonUtils NSNumberWithNSString:sequence_S];
-//        if (!sequence) continue;
-//        if (![eventIds containsObject:sequence]) {
-//            //删除
-//            NSString * path0 = [NSString stringWithFormat:@"%@/db",[MTUser sharedInstance].userid];
-//            MySqlite *sql0 = [[MySqlite alloc]init];
-//            [sql0 openMyDB:path0];
-//            NSDictionary *wheres0 = [[NSDictionary alloc] initWithObjectsAndKeys:[NSString stringWithFormat:@"%@", sequence],@"event_id", nil];
-//            [sql0 deleteTurpleFromTable:@"event" withWhere:wheres0];
-//            [sql0 closeMyDB];
-//        }
-//    }
 }
 
 

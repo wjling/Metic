@@ -523,7 +523,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSDateComponents *compsNow  = [calendar components:unitFlags fromDate:now];
     
     int dis = nowInterval - dateTimeInterval;
-    if (dis >= 0) {
+    if (dis >= - 60) {
         if (compsDate.year != compsNow.year) {
             if (isShortVersion) {
                 [dateFormatter setDateFormat:@"MM-dd"];
@@ -541,9 +541,10 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
             timeInfo = [NSString stringWithFormat:@"%d天前",dis/86400];
         }else if (dis >= 86400) {
             timeInfo = [NSString stringWithFormat:@"昨天"];
-        }else if (dis >= 3600) {
-            timeInfo = [NSString stringWithFormat:@"%d小时前",dis/3600];
-        }else if (dis >= 60*5) {
+        }else if (dis >= 60*9) {
+            [dateFormatter setDateFormat:@"HH:mm"];
+            timeInfo = [dateFormatter stringFromDate:dateTime];
+        }else if (dis >= 60*1) {
             timeInfo = [NSString stringWithFormat:@"%d分钟前",dis/60];
         }else{
             timeInfo = [NSString stringWithFormat:@"刚刚"];

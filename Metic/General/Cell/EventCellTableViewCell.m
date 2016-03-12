@@ -110,7 +110,7 @@
     NSInteger visibilityNum = [data[@"visibility"] integerValue];
     switch (visibilityNum) {
         case 0:
-            self.eventType.text = @"活动类型: 私人";
+            self.eventType.text = @"活动类型: 私人活动";
             break;
         case 1:
             self.eventType.text = @"活动类型: 公开(内容不可见)";

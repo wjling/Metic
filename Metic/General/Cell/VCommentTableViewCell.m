@@ -155,7 +155,8 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:DELETE_VCOMMENT finshedBlock:^(NSData *rData) {
         if (!rData) {
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
         }
         NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
         MTLOG(@"received Data: %@",temp);
