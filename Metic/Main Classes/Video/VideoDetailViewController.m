@@ -1273,7 +1273,7 @@
             text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
         }
         
-        int height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
+        float height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
         
         MLEmojiLabel* comment =((VCommentTableViewCell *)cell).comment;
         if (!comment){
