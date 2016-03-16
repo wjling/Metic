@@ -368,6 +368,10 @@
                     }
                 }
                     break;
+                case NOT_IN_EVENT:{
+                    failure(@"无法分享");
+                }
+                    break;
                 default:{
                     if (failure) {
                         failure(@"服务器异常");
@@ -376,6 +380,131 @@
                     break;
             }
         }else{
+            if (failure) {
+                failure(@"网络异常");
+            }
+        }
+    }];
+}
+
+//获取活动分享链接
+-(void)getEventShareLinkEventId:(NSNumber *)eventId
+                        success:(void (^)(NSString *shareLink))success
+                        failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:eventId forKey:@"event_id"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENT_SHARE finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    NSString *url = [response1 valueForKey:@"url"];
+                    if (url && success) {
+                        success(url);
+                    }else {
+                        if (failure) {
+                            failure(@"服务器异常");
+                        }
+                    }
+                }
+                    break;
+                case NOT_IN_EVENT:{
+                    failure(@"无法分享");
+                }
+                    break;
+                default:{
+                    if (failure) {
+                        failure(@"服务器异常");
+                    }
+                }
+                    break;
+            }
+        }else{
+            if (failure) {
+                failure(@"网络异常");
+            }
+        }
+    }];
+}
+
+//获取分享码信息
+-(void)getInfoFromShareCode:(NSString *)shareCode
+                    success:(void (^)(NSDictionary *codeInfo))success
+                    failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:shareCode forKey:@"invite_code"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:CHECK_INVITE_CODE finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
+            MTLOG(@"received Data: %@",temp);
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    success(response1);
+                }
+                    break;
+                default:{
+                    if (failure) {
+                        failure(@"邀请码不存在");
+                    }
+                }
+                    break;
+            }
+        }else{
+            if (failure) {
+                failure(@"网络异常");
+            }
+        }
+    }];
+}
+
+//获取活动信息
+-(void)getEventInfoWithEventId:(NSNumber *)eventId
+                       success:(void (^)(NSDictionary *eventInfo))success
+                       failure:(void (^)(NSString *message))failure
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:@[eventId] forKey:@"sequence"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:GET_EVENTS finshedBlock:^(NSData *rData) {
+        if (rData) {
+            NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableContainers error:nil];
+            NSNumber *cmd = [response1 valueForKey:@"cmd"];
+            switch ([cmd intValue]) {
+                case NORMAL_REPLY:{
+                    if (((NSArray*)[response1 valueForKey:@"event_list"]).count > 0) {
+                        NSDictionary* dict = [response1 valueForKey:@"event_list"][0];
+                        if (success) {
+                            success(dict);
+                        }
+                    }
+                }
+                    break;
+                default:
+                    if (failure) {
+                        failure(@"服务器异常");
+                    }
+                    break;
+            }
+            
+        } else {
             if (failure) {
                 failure(@"网络异常");
             }

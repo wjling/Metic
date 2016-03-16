@@ -862,9 +862,11 @@
     if ([_sequence integerValue] != -1)
         row ++;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    [_tableView beginUpdates];
-    [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    [_tableView endUpdates];
+    @synchronized(self) {
+        [_tableView beginUpdates];
+        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [_tableView endUpdates];
+    }
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
     self.inputTextView.text = @"";
@@ -1191,7 +1193,7 @@
             text = [NSString stringWithFormat:@"回复%@ : %@",alias2,text];
         }
         
-        int height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
+        float height = [CommonUtils calculateTextHeight:text width:commentWidth fontSize:12.0 isEmotion:YES];
         
         MLEmojiLabel* comment =((PcommentTableViewCell *)cell).comment;
         if (!comment){

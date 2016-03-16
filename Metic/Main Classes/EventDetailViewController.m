@@ -12,6 +12,7 @@
 #import "EventEditViewController.h"
 #import "BannerSelectorViewController.h"
 #import "HomeViewController.h"
+#import "EventCellTableViewCell.h"
 #import "MTUser.h"
 #import "PictureWall2.h"
 #import "VideoWallViewController.h"
@@ -31,20 +32,25 @@
 #import "MTDatabaseAffairs.h"
 #import "MTOperation.h"
 #import "MegUtils.h"
+#import "SocialSnsApi.h"
 //#import "ScanViewController.h"
 
 #define MainFontSize 14
 #define MainCFontSize 13
 #define SubCFontSize 12
 
-@interface EventDetailViewController ()<UITextViewDelegate>
+@interface EventDetailViewController ()<UITextViewDelegate, UMSocialUIDelegate>
 @property(nonatomic,strong) NSMutableArray *comment_list;
 @property(nonatomic,strong) UIAlertView *Alert;
 @property(nonatomic,strong) NSNumber* repliedId;
 @property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property(nonatomic,strong) NSString* herName;
 @property(nonatomic,strong) UIView* shadowView;
-@property(nonatomic,strong) IBOutlet UIButton* likeBtn;
+@property(nonatomic,strong) IBOutlet UIButton *likeBtn;
+@property(nonatomic,strong) IBOutlet UIButton *shareBtn;
+@property(nonatomic,strong) NSString *eventShareLink;
+@property(nonatomic,weak) UIImageView *themeImageView;
+
 
 @property BOOL visibility;
 @property BOOL isMine;
@@ -53,8 +59,6 @@
 @property BOOL isOpen;
 @property BOOL Headeropen;
 @property BOOL Footeropen;
-
-
 
 //@property(nonatomic) int cellcount;
 
@@ -182,6 +186,7 @@
     self.view.autoresizesSubviews = YES;
     [self setupBottomView];
     [self setupLikeState];
+    [self setupShareBtn];
 }
 
 -(void)initData
@@ -769,27 +774,80 @@
 
 - (IBAction)more:(id)sender {
     [self showMenu];
-    return;
-    
+}
+
+- (void)setupShareBtn {
+    self.shareBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.shareBtn.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
 }
 
 - (void)setupLikeState
 {
-    if (_event) {
-        if (![[_event valueForKey:@"isIn"] boolValue]) {
-            _likeBtn.hidden = YES;
-            return;
-        }else{
-            _likeBtn.hidden = NO;
+//    if (_event) {
+//        if (![[_event valueForKey:@"isIn"] boolValue]) {
+//            _likeBtn.hidden = YES;
+//            return;
+//        }else{
+//            _likeBtn.hidden = NO;
+//        }
+//        BOOL islike = [[_event valueForKey:@"islike"] boolValue];
+//        if (islike) {
+//            [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
+//        }else{
+//            [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
+//        }
+//    }else {
+//        _likeBtn.hidden = YES;
+//    }
+}
+
+- (IBAction)share:(id)sender {
+    [self.inputTextView resignFirstResponder];
+    void (^share)(NSString *shareLink) = ^(NSString *shareLink){
+        NSString *user = [MTUser sharedInstance].name;
+        if (!user || ![user isKindOfClass:[NSString class]]) {
+            user = @"";
+        } else {
+            user =  [NSString stringWithFormat:@"【%@】", user];
         }
-        BOOL islike = [[_event valueForKey:@"islike"] boolValue];
-        if (islike) {
-            [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
-        }else{
-            [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
+        NSString *shareText = [NSString stringWithFormat:@"%@分享了活动宝的一个活动给你，点击查看", user];
+        
+        [UMSocialData defaultData].extConfig.wechatSessionData.url = shareLink;
+        [UMSocialData defaultData].extConfig.wechatTimelineData.url = shareLink;
+        [UMSocialData defaultData].extConfig.wechatSessionData.title = @"【活动宝分享】";
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
+        [UMSocialData defaultData].extConfig.qqData.url = shareLink;
+        [UMSocialData defaultData].extConfig.qqData.title = @"【活动宝分享】";
+        [[UMSocialData defaultData].extConfig.sinaData setUrlResource:[[UMSocialUrlResource alloc] initWithSnsResourceType:UMSocialUrlResourceTypeVideo url:shareLink]];
+        [UMSocialData defaultData].extConfig.smsData.urlResource = nil;
+        [UMSocialData defaultData].extConfig.smsData.shareText = [NSString stringWithFormat:@"%@ %@",shareText,shareLink];
+        [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeWeb;
+        [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
+        
+        NSMutableArray *shareToSns = [[NSMutableArray alloc] initWithObjects:UMShareToWechatSession,UMShareToWechatTimeline,UMShareToQQ,UMShareToSina, nil];
+        if (![WXApi isWXAppInstalled] || ![WeiboSDK isWeiboAppInstalled] || ![QQApiInterface isQQInstalled]) {
+            [shareToSns addObject:UMShareToSms];
         }
-    }else {
-        _likeBtn.hidden = YES;
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:@"53bb542e56240ba6e80a4bfb"
+                                          shareText:shareText
+                                         shareImage:self.themeImageView.image?self.themeImageView.image:[UIImage imageNamed:@"AppIcon57x57"]
+                                    shareToSnsNames:shareToSns
+                                           delegate:self];
+    };
+    
+    if ([self.eventShareLink isKindOfClass:[NSString class]] && ![self.eventShareLink isEqualToString:@""]) {
+        share(self.eventShareLink);
+    } else {
+        [SVProgressHUD showWithStatus:@"请稍候" maskType:SVProgressHUDMaskTypeBlack];
+        [[MTOperation sharedInstance] getEventShareLinkEventId:self.eventId success:^(NSString *shareLink) {
+            self.eventShareLink = shareLink;
+            [SVProgressHUD dismiss];
+            share(shareLink);
+        } failure:^(NSString *message) {
+            [SVProgressHUD dismissWithError:message afterDelay:1.5f];
+        }];
     }
 }
 
@@ -864,10 +922,10 @@
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:DELETE_COMMENT finshedBlock:^(NSData *rData) {
         if (!rData) {
-            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+            [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
+            return;
         }
-        //        NSString* temp = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
-        //        MTLOG(@"received Data: %@",temp);
+
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
@@ -881,12 +939,12 @@
             case SERVER_ERROR:
             {
                 
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:self WithCancelTitle:@"确定"];
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"评论删除失败" WithDelegate:nil WithCancelTitle:@"确定"];
                 
             }
                 break;
             default:{
-                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:self WithCancelTitle:@"确定"];
+                [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
             }
         }
     }];
@@ -1095,13 +1153,16 @@
     }
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
-    [_tableView beginUpdates];
-    if (commentType == 0) {
-        [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
-    }else {
-        [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    @synchronized(self) {
+        [_tableView beginUpdates];
+        if (commentType == 0) {
+            [_tableView insertSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
+        }else {
+            [_tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        }
+        [_tableView endUpdates];
     }
-    [_tableView endUpdates];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     });
@@ -1401,6 +1462,7 @@
         
         MTTableViewCellBase *cell = (MTTableViewCellBase *)[tableView dequeueReusableCellWithIdentifier:cellClassName];
         cell.controller = self;
+        self.themeImageView = ((EventCellTableViewCell *)cell).themePhoto;
         if (self.event) {
             [cell applyData:_event];
         }

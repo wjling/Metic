@@ -212,6 +212,12 @@
             addition = 2;
             if (indexPath.row == 0) {
                 [self performSegueWithIdentifier:@"inviteFriends" sender:self];
+                if (self.isRemoving) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.isRemoving = !_isRemoving;
+                        [self.collectionView reloadData];
+                    });
+                }
                 return;
             }
             if (indexPath.row == 1) {
@@ -223,6 +229,12 @@
             addition = 1;
             if (indexPath.row == 0) {
                 [self performSegueWithIdentifier:@"inviteFriends" sender:self];
+                if (self.isRemoving) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.isRemoving = !_isRemoving;
+                        [self.collectionView reloadData];
+                    });
+                }
                 return;
             }
         }

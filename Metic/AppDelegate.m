@@ -16,13 +16,12 @@
 #import "MobClick.h"
 #import "HttpSender.h"
 #import "MenuViewController.h"
-#import "NotificationsViewController.h"
-#import "HomeViewController.h"
 #import "XGPush.h"
 #import "XGSetting.h"
 #import "MTDatabaseHelper.h"
 #import "SDWebImageManager.h"
 #import "MTPushMessageHandler.h"
+#import "MTEvent.h"
 
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKConnector/ShareSDKConnector.h>
@@ -167,6 +166,8 @@
         return path;
     };
     
+    [[MTEvent sharedInstance] analyzePasteboard];
+
     return YES;
 
 }
@@ -211,7 +212,15 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    //分析粘贴板
+    BOOL isSharing = [[MTEvent sharedInstance] analyzePasteboard];
+    
+    if (isSharing && [SlideNavigationController sharedInstance].viewControllers.lastObject == self.homeViewController) {
+        [self.homeViewController viewDidAppear:NO];
+    }
     
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
 //    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 1];
@@ -328,12 +337,16 @@
                 break;
             case UIApplicationStateInactive:
                 MTLOG(@"UIApplicationStateInactive");
+                //清除粘贴板
+                [[MTEvent sharedInstance] clearPasteBoard];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
                                                                     object:nil
                                                                   userInfo:nil];
                 break;
             case UIApplicationStateBackground:
                 MTLOG(@"UIApplicationStateBackground");
+                //清除粘贴板
+                [[MTEvent sharedInstance] clearPasteBoard];
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"PopToFirstPageAndTurnToNotificationPage"
                                                                     object:nil
                                                                   userInfo:nil];

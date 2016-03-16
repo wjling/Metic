@@ -3609,11 +3609,11 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8AD-QB-sfd">
                                         <rect key="frame" x="0.0" y="0.0" width="33" height="33"/>
-                                        <state key="normal" image="favor">
+                                        <state key="normal" image="video_share_btn">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="like:" destination="cGW-AM-0QH" eventType="touchUpInside" id="Qd8-Nw-8Uu"/>
+                                            <action selector="share:" destination="cGW-AM-0QH" eventType="touchUpInside" id="Hdt-D6-9aM"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zTP-PC-gW8">
@@ -3631,7 +3631,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="likeBtn" destination="8AD-QB-sfd" id="o0j-eo-Ont"/>
+                        <outlet property="shareBtn" destination="8AD-QB-sfd" id="DKm-bb-8YQ"/>
                         <outlet property="tableView" destination="sad-WS-38C" id="oOl-S3-hzG"/>
                         <segue destination="EfS-Jw-ePs" kind="push" identifier="toPictureWall" id="hB7-KS-rrK"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="showParticipators" id="QDz-81-eMP"/>
@@ -5498,11 +5498,11 @@
         <image name="6听课.jpg" width="640" height="245"/>
         <image name="7夜店.jpg" width="640" height="245"/>
         <image name="dian" width="32" height="44"/>
-        <image name="favor" width="20" height="20"/>
         <image name="ic_remove" width="31" height="31"/>
         <image name="img_about_logo" width="234" height="144"/>
         <image name="img_about_slogon" width="230" height="32"/>
         <image name="qq" width="68" height="68"/>
+        <image name="video_share_btn" width="26" height="36"/>
         <image name="weibo" width="68" height="68"/>
         <image name="weixin" width="68" height="68"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
@@ -5560,11 +5560,11 @@
         <segue reference="vrP-dE-x9J"/>
         <segue reference="EEO-gR-a4J"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="UXj-VV-omZ"/>
-        <segue reference="hB7-KS-rrK"/>
-        <segue reference="kIc-uU-eUg"/>
         <segue reference="QDz-81-eMP"/>
-        <segue reference="L2M-th-cr6"/>
+        <segue reference="hB7-KS-rrK"/>
+        <segue reference="06u-oh-4gy"/>
+        <segue reference="kIc-uU-eUg"/>
+        <segue reference="UXj-VV-omZ"/>
         <segue reference="z1d-kw-SOt"/>
         <segue reference="KQw-JA-BHy"/>
     </inferredMetricsTieBreakers>
