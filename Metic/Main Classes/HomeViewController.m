@@ -311,7 +311,9 @@
 //返回本页并跳转到消息页
 - (void)PopToHereAndTurnToNotificationPage:(id)sender {
     MTLOG(@"PopToHereAndTurnToNotificationPage  from  home");
-    
+    if ([[MTEvent sharedInstance] getValidPasteString]) {
+        return;
+    }
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
         MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
