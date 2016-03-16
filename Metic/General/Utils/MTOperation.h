@@ -57,6 +57,21 @@ typedef void(^modifySpecificationFinishBlock)(BOOL isSuccess,NSString* likeTime)
                         success:(void (^)(NSString *shareLink))success
                         failure:(void (^)(NSString *message))failure;
 
+//获取活动分享链接
+-(void)getEventShareLinkEventId:(NSNumber *)eventId
+                        success:(void (^)(NSString *shareLink))success
+                        failure:(void (^)(NSString *message))failure;
+
+//获取分享码信息
+-(void)getInfoFromShareCode:(NSString *)shareCode
+                    success:(void (^)(NSDictionary *codeInfo))success
+                    failure:(void (^)(NSString *message))failure;
+
+//获取活动信息
+-(void)getEventInfoWithEventId:(NSNumber *)eventId
+                  success:(void (^)(NSDictionary *eventInfo))success
+                  failure:(void (^)(NSString *message))failure;
+
 -(void)checkPhotoFromServer:(NSString*) path
                        size:(CGSize)size
                     success:(void (^)(NSString* scalePath))success

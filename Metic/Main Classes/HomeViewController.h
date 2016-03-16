@@ -26,9 +26,6 @@
 
 @interface HomeViewController : UIViewController <SlideNavigationControllerDelegate,HttpSenderDelegate,UITableViewDelegate,MJRefreshBaseViewDelegate,CloudOperationDelegate,NotificationDelegate>
 
-
-
-
 @property (strong, nonatomic) IBOutlet UIView *updateInfoView;
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
 @property (strong, nonatomic) IBOutlet UIView *ArrangementView;

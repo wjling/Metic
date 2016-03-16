@@ -8,6 +8,7 @@
 
 #import "CustomCellTableViewCell.h"
 #import "HomeViewController.h"
+#import "EventPreviewViewController.h"
 #import "MenuViewController.h"
 #import "NSString+JSON.h"
 #import "EventDetailViewController.h"
@@ -22,6 +23,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTDatabaseAffairs.h"
 #import "MTPackageControl.h"
+#import "MTOperation.h"
 #import "SVProgressHUD.h"
 
 @interface HomeViewController ()
@@ -138,13 +140,20 @@
     _firstAppear = NO;
     [self performSelector:@selector(adjustInfoView) withObject:nil afterDelay:0.3f];
     NSUserDefaults* userDf = [NSUserDefaults standardUserDefaults];
-    if (!_hasTurntoSquare && [userDf boolForKey:@"firstLaunched"]) {
+    NSString *shareCode = [[MTEvent sharedInstance] getValidPasteString];
+    if (shareCode) {
+        [self toEventPreview:shareCode];
+        [[MTEvent sharedInstance] clearPasteBoard];
+        self.hasTurntoSquare = YES;
+        [userDf setInteger:0 forKey:@"newNotificationCome"];
+        [userDf synchronize];
+    }else if (!_hasTurntoSquare && [userDf boolForKey:@"firstLaunched"]) {
         _hasTurntoSquare = YES;
-        [self ToSquare];
+        [self toSquare];
     }else if([userDf integerForKey:@"newNotificationCome"] > 0){
         [userDf setInteger:0 forKey:@"newNotificationCome"];
         [userDf synchronize];
-        [self ToNotificationCenter];
+        [self toNotificationCenter];
     }else [self initWelcomePage];
 }
 
@@ -300,24 +309,69 @@
 }
 
 //返回本页并跳转到消息页
--(void)PopToHereAndTurnToNotificationPage:(id)sender
-{
+- (void)PopToHereAndTurnToNotificationPage:(id)sender {
     MTLOG(@"PopToHereAndTurnToNotificationPage  from  home");
     
     if ([[SlideNavigationController sharedInstance].viewControllers containsObject:self]){
         MTLOG(@"Here");
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"shouldIgnoreTurnToNotifiPage"]) {
             [[SlideNavigationController sharedInstance] popToViewController:self animated:NO];
-            [self ToNotificationCenter];
+            [self toNotificationCenter];
         }
     }else{
         MTLOG(@"NotHere");
     }
 }
 
+- (void)toEventPreview:(NSString *)shareCode {
+    [SVProgressHUD showWithStatus:@"载入中" maskType:SVProgressHUDMaskTypeGradient];
+    [[MTOperation sharedInstance] getInfoFromShareCode:shareCode success:^(NSDictionary *codeInfo) {
+        NSNumber *shareId = codeInfo[@"share_id"];
+        NSNumber *eventId = codeInfo[@"event_id"];
+        if (eventId) {
+            //拉取活动
+            [[MTOperation sharedInstance] getEventInfoWithEventId:eventId success:^(NSDictionary *eventInfo) {
+                if (eventInfo) {
+                    if (![[eventInfo valueForKey:@"isIn"] boolValue] && [[eventInfo valueForKey:@"visibility"] integerValue] != 2) {
+                        //跳转到活动预览
+                        EventPreviewViewController *viewcontroller = [[EventPreviewViewController alloc]init];
+                        viewcontroller.eventInfo = eventInfo;
+                        viewcontroller.shareId = shareId;
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController pushViewController:viewcontroller animated:YES];
+                            [SVProgressHUD dismiss];
+                        });
 
--(void)ToSquare
-{
+                    }else{
+                        NSNumber* eventId = [CommonUtils NSNumberWithNSString:[eventInfo valueForKey:@"event_id"]];
+                        NSNumber* eventLauncherId = [CommonUtils NSNumberWithNSString:[eventInfo valueForKey:@"launcher_id"]];
+                        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+                        
+                        EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
+                        eventDetailView.eventId = eventId;
+                        eventDetailView.eventLauncherId = eventLauncherId;
+                        eventDetailView.event = [eventInfo mutableCopy];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [self.navigationController pushViewController:eventDetailView animated:YES];
+                            [SVProgressHUD dismiss];
+                        });
+                    }
+                } else {
+                    [SVProgressHUD dismiss];
+                }
+                
+            } failure:^(NSString *message) {
+                [SVProgressHUD dismissWithError:message afterDelay:2.f];
+            }];
+        } else {
+            [SVProgressHUD dismiss];
+        }
+    } failure:^(NSString *message) {
+        [SVProgressHUD dismissWithError:message afterDelay:2.f];
+    }];
+}
+
+- (void)toSquare {
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     UIViewController* vc = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventSquareViewController"];
@@ -325,8 +379,8 @@
     [[SlideNavigationController sharedInstance] openMenuAndSwitchToViewController:vc withCompletion:nil];
 }
 
--(void)ToNotificationCenter
-{
+- (void)toNotificationCenter{
+    
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
                                                              bundle: nil];
     UIViewController* vc = [MenuViewController sharedInstance].notificationsViewController;

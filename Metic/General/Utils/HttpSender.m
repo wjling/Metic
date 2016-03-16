@@ -275,6 +275,13 @@ static NSOperationQueue *requestQueue;
         case 68:
             resultCode = @"get_video_share";
             break;
+        case 69:
+            resultCode = @"get_event_share";
+            break;
+        case 70:
+            resultCode = @"check_invite_code";
+            break;
+            
         default:
             resultCode = @"json";
             break;

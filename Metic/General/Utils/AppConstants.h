@@ -117,6 +117,8 @@ enum Operation_Code
     CHANGE_PHOTO_TITLE = 66,
     CHANGE_VIDEO_TITLE = 67,
     GET_VIDEO_SHARE = 68,
+    GET_EVENT_SHARE = 69,
+    CHECK_INVITE_CODE = 70,
 };
 
 enum CloudOperation_Code

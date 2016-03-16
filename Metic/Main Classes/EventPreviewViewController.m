@@ -81,7 +81,7 @@
     }
     if (self.beingInvited){
         [self setupInviteView];
-    }else if (_visibility && ![_visibility boolValue])
+    }else if (_visibility && ![_visibility boolValue] && !self.shareId)
     {
         //此活动不允许陌生人参与
         [self setupBottomLabel:@"此活动不允许陌生人参与" textColor:[UIColor grayColor] offset:64];
@@ -424,13 +424,23 @@
         [sender setEnabled:NO];
     }
     NSString* confirmMsg = _inputTextView.text;
-    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:[NSNumber numberWithInt:REQUEST_EVENT] forKey:@"cmd"];
+    [dictionary setValue:confirmMsg forKey:@"confirm_msg"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    if (self.shareId) {
+        [dictionary setValue:self.shareId forKey:@"share_id"];
+    }
+
     MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
     [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
         [sender setEnabled:YES];
         if (!rData) {
+            [SVProgressHUD showErrorWithStatus:@"网络异常" duration:1.5f];
             return ;
         }
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
@@ -447,6 +457,9 @@
                 
             }
                 break;
+            default:{
+                
+            }
         }
     }];
 }
