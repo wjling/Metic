@@ -516,8 +516,6 @@
         [UIView commitAnimations];
         //[_emotionKeyboard removeFromSuperview];
     }
-    
-    
 }
 
 - (void)pullMainCommentFromAir
@@ -528,6 +526,8 @@
     [dictionary setValue:[NSNumber numberWithInt:0] forKey:@"master"];
     [dictionary setValue:self.master_sequence forKey:@"sequence"];
     [dictionary setValue:self.eventId forKey:@"event_id"];
+    if ([self.master_sequence isEqualToNumber:@0])
+        [dictionary setValue:@(YES) forKey:@"all"];
     MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     static NSInteger operationNum = 0;
