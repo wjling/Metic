@@ -5502,7 +5502,7 @@
         <image name="img_about_logo" width="234" height="144"/>
         <image name="img_about_slogon" width="230" height="32"/>
         <image name="qq" width="68" height="68"/>
-        <image name="video_share_btn" width="26" height="36"/>
+        <image name="video_share_btn" width="36" height="36"/>
         <image name="weibo" width="68" height="68"/>
         <image name="weixin" width="68" height="68"/>
         <image name="上传按钮按下效果" width="26" height="26"/>
