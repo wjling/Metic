@@ -156,7 +156,8 @@
             addition = 2;
             if (indexPath.row == 0) {
                 UIImageView* add = cell.avatar;
-                [add setImage:[UIImage imageNamed:@"添加图标"]];
+                [add setContentMode:UIViewContentModeScaleAspectFit];
+                [add setImage:[UIImage imageNamed:@"event_participate_add"]];
                 UILabel* name = cell.name;
                 name.text = @"";
                 [cell.deleteIcon setHidden:YES];//delete icon
@@ -164,8 +165,13 @@
                 return cell;
             }
             if (indexPath.row == 1) {
-                UIImageView* add = cell.avatar;
-                [add setImage:[UIImage imageNamed:@"删除图标"]];
+                UIImageView* remove = cell.avatar;
+                [remove setContentMode:UIViewContentModeScaleAspectFit];
+                if (self.isRemoving) {
+                    [remove setImage:[UIImage imageNamed:@"event_participate_removing"]];
+                } else {
+                    [remove setImage:[UIImage imageNamed:@"event_participate_remove"]];
+                }
                 UILabel* name = cell.name;
                 name.text = @"";
                 [cell.deleteIcon setHidden:YES];//delete icon
@@ -176,7 +182,8 @@
             addition = 1;
             if (indexPath.row == 0) {
                 UIImageView* add = cell.avatar;
-                [add setImage:[UIImage imageNamed:@"添加图标"]];
+                [add setContentMode:UIViewContentModeScaleAspectFit];
+                [add setImage:[UIImage imageNamed:@"event_participate_add"]];
                 UILabel* name = cell.name;
                 name.text = @"";
                 [cell.deleteIcon setHidden:YES];//delete icon
@@ -188,6 +195,8 @@
     
     NSDictionary* participant = _participants[indexPath.row - addition];
     UIImageView* avatar = cell.avatar;
+    [avatar setContentMode:UIViewContentModeScaleAspectFill];
+
     UILabel* name = cell.name;
     avatar.image = nil;
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:avatar authorId:[participant valueForKey:@"id"]];

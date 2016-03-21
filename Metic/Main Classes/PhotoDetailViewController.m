@@ -1131,6 +1131,7 @@
             
             UITableViewCell* cell = [[UITableViewCell alloc]init];
             cell.backgroundColor = [UIColor clearColor];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
             label.text = _isLoading? @"正在加载...":@"查看更早的评论";
@@ -1263,6 +1264,43 @@
     return height;
 }
 
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+    }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (self.isLoading) return;
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            [label setAlpha:0.5];
+            return ;
+        }
+        PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        [cell.background setAlpha:0.5];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    if (indexPath.row == 0) {
+    }else{
+        if ([_sequence integerValue] != -1 && indexPath.row == 1) {
+            if (self.isLoading) return;
+            UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+            UILabel* label = (UILabel*)[cell viewWithTag:555];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [label setAlpha:1.0];
+            });
+            return ;
+        }
+        PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [cell.background setAlpha:1.0];
+        });
+    }
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.isKeyBoard) {
@@ -1276,7 +1314,6 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0) {
-        //[self.navigationController popToViewController:self.photoDisplayController animated:YES];
     }else{
         if ([_sequence integerValue] != -1 && indexPath.row == 1) {
             if (_isLoading) return;
@@ -1291,16 +1328,11 @@
             if (label) {
                 label.text = @"正在加载...";
             }
-            
             return ;
         }
         if(!_canManage)return;
         MTLOG(@"aaa");
         PcommentTableViewCell *cell = (PcommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-        [cell.background setAlpha:0.5];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [cell.background setAlpha:1.0];
-        });
         if ([cell.pcomment_id integerValue] < 0){
             [self resendComment: cell.resend_Button];
             return;
