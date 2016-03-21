@@ -168,9 +168,9 @@
                 UIImageView* remove = cell.avatar;
                 [remove setContentMode:UIViewContentModeScaleAspectFit];
                 if (self.isRemoving) {
-                    [remove setImage:[UIImage imageNamed:@"event_participate_remove"]];
+                    [remove setImage:[UIImage imageNamed:@"event_participate_removing"]];
                 } else {
-                    [remove setImage:[UIImage imageNamed:@"删除图标"]];
+                    [remove setImage:[UIImage imageNamed:@"event_participate_remove"]];
                 }
                 UILabel* name = cell.name;
                 name.text = @"";

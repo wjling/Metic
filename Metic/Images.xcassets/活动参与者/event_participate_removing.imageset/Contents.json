@@ -2,15 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "删除图标.png"
+      "filename" : "event_participate_removing.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "event_participate_removing@2X.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "event_participate_removing@3X.png",
       "scale" : "3x"
     }
   ],
