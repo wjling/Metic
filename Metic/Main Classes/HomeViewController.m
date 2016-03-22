@@ -351,6 +351,7 @@
                         
                         EventDetailViewController* eventDetailView = [mainStoryboard instantiateViewControllerWithIdentifier: @"EventDetailViewController"];
                         eventDetailView.eventId = eventId;
+                        eventDetailView.shareId = shareId;
                         eventDetailView.eventLauncherId = eventLauncherId;
                         eventDetailView.event = [eventInfo mutableCopy];
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
