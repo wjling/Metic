@@ -1475,8 +1475,8 @@ enum Response_Type
 
                 NSString* subject = [msg_dic objectForKey:@"subject"];
                 NSNumber* launcher_id = [msg_dic objectForKey:@"launcher_id"];
-                NSString* launcher = [[MTUser sharedInstance].alias_dic objectForKey:[NSString stringWithFormat:@"%@",launcher_id]];
 
+                NSString* launcher = [MTOperation getAliasWithUserId:launcher_id userName:msg_dic[@"launcher"]];
                 NSString* text = @"";
                 if (result) {
                     text = [NSString stringWithFormat:@"%@ 同意你加入活动: %@ ",launcher,subject];
