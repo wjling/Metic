@@ -117,7 +117,7 @@ static SlideNavigationController *singletonInstance;
 	self.navigationBar.backgroundColor = [UIColor blackColor];
     self.view.backgroundColor = [UIColor blackColor];
 	[self setEnableSwipeGesture:YES];
-    
+    self.shouldIgnorePushingViewControllers = NO;
     //    [self reconnect];
 }
 
@@ -210,7 +210,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-        self.shouldIgnorePushingViewControllers = YES;
+//        self.shouldIgnorePushingViewControllers = YES;
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -228,7 +228,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-        self.shouldIgnorePushingViewControllers = YES;
+//        self.shouldIgnorePushingViewControllers = YES;
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -248,7 +248,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
-        self.shouldIgnorePushingViewControllers = YES;
+//        self.shouldIgnorePushingViewControllers = YES;
         return [super popViewControllerAnimated:animated];
     }
     return nil;
