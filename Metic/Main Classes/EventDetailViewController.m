@@ -2028,7 +2028,14 @@
         [sender setEnabled:NO];
     }
     NSString* confirmMsg = _inputTextView.text;
-    NSDictionary* dictionary = [CommonUtils packParamsInDictionary:[NSNumber numberWithInt:REQUEST_EVENT],@"cmd",[MTUser sharedInstance].userid,@"id",confirmMsg,@"confirm_msg", _eventId,@"event_id",nil];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:[NSNumber numberWithInt:REQUEST_EVENT] forKey:@"cmd"];
+    [dictionary setValue:confirmMsg forKey:@"confirm_msg"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    if (self.shareId) {
+        [dictionary setValue:self.shareId forKey:@"share_id"];
+    }
     MTLOG(@"%@",dictionary);
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
     HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
