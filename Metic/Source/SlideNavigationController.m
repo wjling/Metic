@@ -42,7 +42,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, assign) CGPoint draggingPoint;
 @property (nonatomic, assign) CGPoint beginPoint;
-@property (nonatomic, assign) BOOL shouldIgnorePushingViewControllers;
+@property (atomic, assign) BOOL shouldIgnorePushingViewControllers;
 
 @end
 
@@ -210,6 +210,7 @@ static SlideNavigationController *singletonInstance;
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
+        self.shouldIgnorePushingViewControllers = YES;
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -220,15 +221,14 @@ static SlideNavigationController *singletonInstance;
         {
             [super pushViewController:viewController animated:animated];
         }
-    }else
-    self.shouldIgnorePushingViewControllers = YES;
-	
+    }
 }
 
 - (NSArray *)popToViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (!self.shouldIgnorePushingViewControllers)
     {
+        self.shouldIgnorePushingViewControllers = YES;
         if ([self isMenuOpen])
         {
             [self closeMenuWithCompletion:^{
@@ -239,27 +239,18 @@ static SlideNavigationController *singletonInstance;
         {
             return [super popToViewController:viewController animated:animated];
         }
-        
         return nil;
-    }else
-    self.shouldIgnorePushingViewControllers = YES;
+    }
     return nil;
 }
 
 -(UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
-//    if ([self.viewControllers.lastObject isKindOfClass:[LaunchEventViewController class]]) {
-//        LaunchEventViewController* controller = self.viewControllers.lastObject;
-//        if (!controller.canLeave && [controller shouldDraft]) {
-//            [controller alertMakingDraft];
-//            return nil;
-//        }
-//    }
     if (!self.shouldIgnorePushingViewControllers)
     {
+        self.shouldIgnorePushingViewControllers = YES;
         return [super popViewControllerAnimated:animated];
-    }else
-    self.shouldIgnorePushingViewControllers = YES;
+    }
     return nil;
 }
 
