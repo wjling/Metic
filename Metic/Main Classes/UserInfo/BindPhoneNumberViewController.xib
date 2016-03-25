@@ -8,7 +8,9 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BindPhoneNumberViewController">
             <connections>
                 <outlet property="getVerificationCodeBtn" destination="Xoq-vO-UvB" id="VLt-LH-vYn"/>
+                <outlet property="passwordTextField" destination="jtS-iK-fbt" id="SrU-64-flk"/>
                 <outlet property="phoneTextField" destination="72b-yr-wyw" id="DcY-cb-LSD"/>
+                <outlet property="pwInputView" destination="Ihr-PL-2lf" id="lFc-v4-ur0"/>
                 <outlet property="verificationCodeTextField" destination="gk2-Y4-lZZ" id="du8-s3-PuG"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -59,7 +61,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="gOT-Oj-Ok4"/>
                             </constraints>
-                            <state key="normal" title="确定绑定" backgroundImage="登录界面按钮">
+                            <state key="normal" title="绑定" backgroundImage="登录界面按钮">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -86,11 +88,66 @@
                         <constraint firstAttribute="bottom" secondItem="72b-yr-wyw" secondAttribute="bottom" constant="300" id="yXB-Fh-FJY"/>
                     </constraints>
                 </scrollView>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ihr-PL-2lf" customClass="TPKeyboardAvoidingScrollView">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <subviews>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入密码，至少5位" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jtS-iK-fbt">
+                            <rect key="frame" x="15" y="80" width="290" height="38"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="38" id="D39-4q-b5M"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gXb-Qf-WO1">
+                            <rect key="frame" x="15" y="133" width="290" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="2q2-le-QJQ"/>
+                            </constraints>
+                            <state key="normal" title="确定" backgroundImage="登录界面按钮">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="selected" backgroundImage="登录界面按钮按下效果"/>
+                            <state key="highlighted" backgroundImage="登录界面按钮按下效果"/>
+                            <connections>
+                                <action selector="confirm:" destination="-1" eventType="touchUpInside" id="faO-RA-4FS"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你尚未设置登录密码，请输入密码，用于下次使用手机账户登录" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I71-Ts-DBl" userLabel="请输入登录密码">
+                            <rect key="frame" x="15" y="15" width="290" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="2RV-YW-8kP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.1690269344" green="0.1690269344" blue="0.1690269344" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="I71-Ts-DBl" secondAttribute="centerX" id="406-53-crH"/>
+                        <constraint firstAttribute="bottom" secondItem="gXb-Qf-WO1" secondAttribute="bottom" constant="100" id="A8L-h6-CLj"/>
+                        <constraint firstAttribute="trailing" secondItem="jtS-iK-fbt" secondAttribute="trailing" constant="15" id="EzG-cO-Owq"/>
+                        <constraint firstAttribute="trailing" secondItem="I71-Ts-DBl" secondAttribute="trailing" constant="15" id="YyY-XA-26S"/>
+                        <constraint firstItem="gXb-Qf-WO1" firstAttribute="top" secondItem="jtS-iK-fbt" secondAttribute="bottom" constant="15" id="hdN-Ko-HEo"/>
+                        <constraint firstItem="I71-Ts-DBl" firstAttribute="top" secondItem="Ihr-PL-2lf" secondAttribute="top" constant="15" id="kXI-xA-Mht"/>
+                        <constraint firstItem="jtS-iK-fbt" firstAttribute="top" secondItem="I71-Ts-DBl" secondAttribute="bottom" constant="15" id="lmX-QZ-641"/>
+                        <constraint firstItem="I71-Ts-DBl" firstAttribute="leading" secondItem="Ihr-PL-2lf" secondAttribute="leading" constant="15" id="mNU-JJ-Xts"/>
+                        <constraint firstItem="jtS-iK-fbt" firstAttribute="leading" secondItem="Ihr-PL-2lf" secondAttribute="leading" constant="15" id="swr-3d-lgZ"/>
+                        <constraint firstItem="gXb-Qf-WO1" firstAttribute="leading" secondItem="Ihr-PL-2lf" secondAttribute="leading" constant="15" id="vS1-he-egM"/>
+                        <constraint firstAttribute="trailing" secondItem="gXb-Qf-WO1" secondAttribute="trailing" constant="15" id="yvJ-ca-hOj"/>
+                    </constraints>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="Ihr-PL-2lf" secondAttribute="trailing" id="3ob-q1-CUO"/>
                 <constraint firstItem="ron-a6-Jv9" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="DSr-AB-trc"/>
                 <constraint firstItem="ron-a6-Jv9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Gzf-pK-zjz"/>
+                <constraint firstItem="Ihr-PL-2lf" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="X2W-Ij-hNs"/>
+                <constraint firstItem="Ihr-PL-2lf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="aQ7-p0-evZ"/>
+                <constraint firstAttribute="bottom" secondItem="Ihr-PL-2lf" secondAttribute="bottom" id="krE-HO-JZz"/>
                 <constraint firstAttribute="bottom" secondItem="ron-a6-Jv9" secondAttribute="bottom" id="pAX-zI-c2F"/>
                 <constraint firstAttribute="trailing" secondItem="ron-a6-Jv9" secondAttribute="trailing" id="tl8-xH-VFn"/>
             </constraints>

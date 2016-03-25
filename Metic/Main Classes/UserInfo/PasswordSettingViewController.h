@@ -11,6 +11,8 @@
 @interface PasswordSettingViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UITextField *passwordTextfield;
 @property (strong, nonatomic) NSString *verificatedPhone;
+@property (strong, nonatomic) NSString *salt;
+
 - (IBAction)confirm:(id)sender;
 
 @end

@@ -18,6 +18,8 @@
 
 @interface BindPhoneNumberViewController ()
 
+@property (nonatomic, strong) NSString *salt;
+
 @end
 
 @implementation BindPhoneNumberViewController
@@ -34,6 +36,7 @@
 - (void)setupUI {
     self.title = @"绑定手机";
     [CommonUtils addLeftButton:self isFirstPage:NO];
+    self.pwInputView.hidden = YES;
     
     UILabel *phoneLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 38)];
     phoneLeftView.text = @"手机号";
@@ -57,11 +60,25 @@
     self.verificationCodeTextField.layer.masksToBounds = YES;
     self.verificationCodeTextField.leftView = leftView;
     self.verificationCodeTextField.leftViewMode = UITextFieldViewModeAlways;
+    
+    UILabel *passwordLeftView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 38)];
+    passwordLeftView.text = @"密码";
+    passwordLeftView.font = [UIFont systemFontOfSize:15];
+    passwordLeftView.textAlignment = NSTextAlignmentCenter;
+    
+    self.passwordTextField.secureTextEntry = YES;
+    self.passwordTextField.layer.borderWidth = 1.f;
+    self.passwordTextField.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
+    self.passwordTextField.layer.cornerRadius = 5;
+    self.passwordTextField.layer.masksToBounds = YES;
+    self.passwordTextField.leftView = passwordLeftView;
+    self.passwordTextField.leftViewMode = UITextFieldViewModeAlways;
 }
 
 - (void)resignKeyboard
 {
     [self.phoneTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
     [self.verificationCodeTextField resignFirstResponder];
 }
 
@@ -143,7 +160,7 @@
         if (!error) {
             NSLog(@"验证成功");
             [SVProgressHUD showWithStatus:@"正在绑定手机，请稍候" maskType:SVProgressHUDMaskTypeBlack];
-            [self bindPhoneNumber:phoneNumber];
+            [self bindPhoneNumber:phoneNumber password:nil salt:nil];
         } else {
             NSLog(@"验证失败");
             [SVProgressHUD dismissWithError:@"验证码错误"];
@@ -151,8 +168,24 @@
     }];
 }
 
-- (void)bindPhoneNumber:(NSString *)phoneNumber {
-    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:nil toBind:MTPhoneBindSatausToBind success:^{
+- (IBAction)confirm:(id)sender {
+    [self resignKeyboard];
+    NSString *phoneNumber = self.phoneTextField.text;
+    NSString *password = self.passwordTextField.text;
+    if (![CommonUtils isPhoneNumberVaild:phoneNumber]) {
+        [SVProgressHUD showErrorWithStatus:@"手机号填写有误" duration:1.f];
+        self.pwInputView.hidden = YES;
+        return;
+    }else if ([password length] < 5) {
+        [SVProgressHUD showErrorWithStatus:@"密码长度请不要小于5位" duration:1.f];
+        return;
+    }
+    [SVProgressHUD showWithStatus:@"正在处理" maskType:SVProgressHUDMaskTypeBlack];
+    [self bindPhoneNumber:phoneNumber password:password salt:self.salt];
+}
+
+- (void)bindPhoneNumber:(NSString *)phoneNumber password:(NSString *)password salt:(NSString *)salt{
+    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:password salt:(NSString *)salt toBind:MTPhoneBindSatausToBind success:^{
         [SVProgressHUD dismissWithSuccess:@"绑定成功" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
@@ -161,12 +194,14 @@
         MTUser *user = [MTUser sharedInstance];
         user.phone = phoneNumber;
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(enum Return_Code errorCode, NSString *message) {
+    } failure:^(enum Return_Code errorCode, NSString *message, NSDictionary *info) {
         [SVProgressHUD dismissWithSuccess:message afterDelay:1.f];
         if (errorCode == PASSWD_NOT_SETTING) {
-            PasswordSettingViewController *vc = [[PasswordSettingViewController alloc] init];
-            vc.verificatedPhone = phoneNumber;
-            [self.navigationController pushViewController:vc animated:YES];
+            NSString *saltFromServer = info[@"salt"];
+            if (saltFromServer) {
+                self.salt = saltFromServer;
+            }
+            self.pwInputView.hidden = NO;
         }
     }];
 }
