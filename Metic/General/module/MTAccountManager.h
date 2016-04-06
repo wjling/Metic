@@ -98,9 +98,10 @@ NS_ENUM(NSInteger, MTPhoneBindSataus) {
 + (void)bindPhoneWithUserId:(NSNumber *)userId
                 phoneNumber:(NSString *)phoneNumber
                    password:(NSString *)password
+                       salt:(NSString *)salt
                      toBind:(enum MTPhoneBindSataus)toBind
                     success:(void (^)())success
-                    failure:(void (^)(enum Return_Code errorCode, NSString *message))failure;
+                    failure:(void (^)(enum Return_Code errorCode, NSString *message, NSDictionary *info))failure;
 
 
 /**

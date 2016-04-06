@@ -69,7 +69,6 @@
 
 -(void)getImageFitSize:(BOOL)fitSize Complete:(MTImageGetterCompletionBlock)completedBlock
 {
-    [self.imageView sd_cancelCurrentImageLoad];
     static UIImage *defaultPhotoImg;
     static UIImage *defaultPhotoFailImg;
     static UIImage *defaultAvatarImg;
@@ -118,6 +117,7 @@
     }
     
     if(![self.imageView.downloadName isEqualToString:self.imageName]){
+        [self.imageView sd_cancelCurrentImageLoad];
         self.imageView.image = placeHolder;
         self.imageView.downloadName = self.imageName;
         [self.imageView setContentMode:UIViewContentModeScaleAspectFit];

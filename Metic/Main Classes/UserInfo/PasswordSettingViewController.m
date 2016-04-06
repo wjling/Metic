@@ -57,7 +57,7 @@
     }
     
     [SVProgressHUD showWithStatus:@"正在绑定手机，请稍候" maskType:SVProgressHUDMaskTypeBlack];
-    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:self.verificatedPhone password:password toBind:MTPhoneBindSatausToBind success:^{
+    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:self.verificatedPhone password:password salt:self.salt toBind:MTPhoneBindSatausToBind success:^{
         [SVProgressHUD dismissWithSuccess:@"绑定成功" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
@@ -68,7 +68,7 @@
         user.phone = self.verificatedPhone;
         [self.navigationController popViewControllerAnimated:YES];
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(enum Return_Code errorCode, NSString *message) {
+    } failure:^(enum Return_Code errorCode, NSString *message, NSDictionary *info) {
         [SVProgressHUD dismissWithSuccess:message afterDelay:1.f];
     }];
 }

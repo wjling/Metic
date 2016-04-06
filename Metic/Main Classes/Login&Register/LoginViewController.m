@@ -79,6 +79,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setupThirdLoginBtn];
     [self checkPreUP];
 }
 
@@ -179,25 +180,49 @@
     self.textField_password.layer.borderColor = [CommonUtils colorWithValue:0xEEEEEE].CGColor;
     self.textField_password.layer.borderWidth = 2;
     self.textField_password.layer.masksToBounds = YES;
+}
+
+- (void)setupThirdLoginBtn {
     
     if ([WXApi isWXAppInstalled]) {
+        
         [self.weixinLoginBtn setImage:[UIImage imageNamed:@"loading_wechat"] forState:UIControlStateNormal];
+        self.weixinLoginBtn.hidden = NO;
+        
+        NSArray *constraints = self.view.constraints;
+        for (NSLayoutConstraint *constraint in constraints) {
+            if ([[constraint identifier] isEqualToString:@"qqBtnXAlign"]) {
+                constraint.constant = 80;
+            } else if ([[constraint identifier] isEqualToString:@"weiboBtnXAlign"]) {
+                constraint.constant = -80;
+            }
+        }
     } else {
+        
         [self.weixinLoginBtn setImage:[UIImage imageNamed:@"loading_wechat_gray"] forState:UIControlStateNormal];
+        self.weixinLoginBtn.hidden = YES;
+
+        NSArray *constraints = self.view.constraints;
+        for (NSLayoutConstraint *constraint in constraints) {
+            if ([[constraint identifier] isEqualToString:@"qqBtnXAlign"]) {
+                constraint.constant = 50;
+            } else if ([[constraint identifier] isEqualToString:@"weiboBtnXAlign"]) {
+                constraint.constant = -50;
+            }
+        }
     }
     
     if ([WeiboSDK isWeiboAppInstalled]) {
         [self.weiboLoginBtn setImage:[UIImage imageNamed:@"loading_weibo"] forState:UIControlStateNormal];
     } else {
-        [self.weiboLoginBtn setImage:[UIImage imageNamed:@"loading_weibo_gray"] forState:UIControlStateNormal];
+        [self.weiboLoginBtn setImage:[UIImage imageNamed:@"loading_weibo"] forState:UIControlStateNormal];
     }
     
     if ([QQApiInterface isQQInstalled]) {
         [self.qqLoginBtn setImage:[UIImage imageNamed:@"loading_qq"] forState:UIControlStateNormal];
     } else {
-        [self.qqLoginBtn setImage:[UIImage imageNamed:@"loading_qq_gray"] forState:UIControlStateNormal];
+        [self.qqLoginBtn setImage:[UIImage imageNamed:@"loading_qq"] forState:UIControlStateNormal];
     }
-    
 }
 
 -(void)forgetPSBtnClick:(id)sender
@@ -328,10 +353,7 @@
 }
 
 - (IBAction)QQLogin:(id)sender {
-    if (![QQApiInterface isQQInstalled]) {
-        [SVProgressHUD showErrorWithStatus:@"请先安装QQ客户端" duration:1.5f];
-        return;
-    }
+
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeQQ
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
@@ -367,11 +389,6 @@
 }
 
 - (IBAction)WeiBoLogin:(id)sender {
-    
-    if (![WeiboSDK isWeiboAppInstalled]) {
-        [SVProgressHUD showErrorWithStatus:@"请先安装微博客户端" duration:1.5f];
-        return;
-    }
     
     [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo

@@ -136,8 +136,8 @@
 }
 
 - (void)debindPhoneNumber:(NSString *)phoneNumber{
-    
-    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:nil toBind:MTPhoneBindSatausToDebind success:^{
+
+    [MTAccountManager bindPhoneWithUserId:[MTUser sharedInstance].userid phoneNumber:phoneNumber password:nil salt:nil toBind:MTPhoneBindSatausToDebind success:^{
         [SVProgressHUD dismissWithSuccess:@"解绑成功" afterDelay:1.f];
         //保存账户信息
         MTAccount *account = [MTAccount singleInstance];
@@ -149,7 +149,7 @@
         MTUser *user = [MTUser sharedInstance];
         user.phone = nil;
         [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(enum Return_Code errorCode, NSString *message) {
+    } failure:^(enum Return_Code errorCode, NSString *message, NSDictionary *info) {
         [SVProgressHUD dismissWithSuccess:message afterDelay:1.f];
     }];
 }
