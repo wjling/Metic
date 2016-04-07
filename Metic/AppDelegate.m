@@ -1144,7 +1144,7 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     [UMSocialData setAppKey:@"53bb542e56240ba6e80a4bfb"];
     [UMSocialWechatHandler setWXAppId:@"wx6f7ea17b99ab01e7" appSecret:@"975f26374a1ade1290b1d4dfa767ed1f" url:@"http://www.whatsact.com"];
     [UMSocialQQHandler setQQWithAppId:@"1102021463" appKey:@"9KXHG6HqBWrjonAd" url:@"http://www.whatsact.com"];
-    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"1312051023" RedirectURL:@"http://www.sina.com"];
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"1312051023" secret:@"6f39d1c54b182992680b4949a0c00c87" RedirectURL:@"http://www.sina.com"];
     [UMSocialConfig hiddenNotInstallPlatforms:@[UMShareToQQ,UMShareToSina,UMShareToWechatSession,UMShareToWechatFavorite,UMShareToWechatTimeline]];
     [UMSocialConfig setFinishToastIsHidden:YES position:UMSocialiToastPositionCenter];
     
