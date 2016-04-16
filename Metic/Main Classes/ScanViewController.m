@@ -858,26 +858,26 @@
 #pragma mark - UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage* img = [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    ZBarReaderController* reader = [[ZBarReaderController alloc]init];
-    ZBarSymbol *symbol = nil;
-    for (symbol in [reader scanImage:img.CGImage]) break;
-    
-    [picker dismissViewControllerAnimated:YES completion:^{
-        if (symbol) {
-            _result = symbol.data;
-            if (_isScaning) {
-                _isScaning = NO;
-                [self pause];
-            }
-            [_showView setHidden:NO];
-            [self resultAnalysis];
-        }else{
-            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"未识别到二维码" WithDelegate:self WithCancelTitle:@"确定"];
-            [alertView setTag:10];
-        }
-    }];
+//    UIImage* img = [info objectForKey:UIImagePickerControllerOriginalImage];
+//    
+//    ZBarReaderController* reader = [[ZBarReaderController alloc]init];
+//    ZBarSymbol *symbol = nil;
+//    for (symbol in [reader scanImage:img.CGImage]) break;
+//    
+//    [picker dismissViewControllerAnimated:YES completion:^{
+//        if (symbol) {
+//            _result = symbol.data;
+//            if (_isScaning) {
+//                _isScaning = NO;
+//                [self pause];
+//            }
+//            [_showView setHidden:NO];
+//            [self resultAnalysis];
+//        }else{
+//            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"未识别到二维码" WithDelegate:self WithCancelTitle:@"确定"];
+//            [alertView setTag:10];
+//        }
+//    }];
     
 }
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

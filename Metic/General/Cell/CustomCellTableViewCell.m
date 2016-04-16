@@ -45,12 +45,13 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    //frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    //frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
     [super setFrame:frame];
-    
+//    //frame.origin.x += widthspace;
+//    frame.origin.y += deepspace;
+//    //frame.size.width -= 2 * widthspace;
+//    frame.size.height -= 2 * deepspace;
+//    [super setFrame:frame];
+//    
 }
 
 -(void)drawOfficialFlag:(BOOL)isOfficial

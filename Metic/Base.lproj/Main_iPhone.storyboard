@@ -3205,15 +3205,15 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view alpha="0.0" tag="101" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wUd-vA-uNZ" customClass="UIButton">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            <view alpha="0.0" tag="101" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wUd-vA-uNZ" customClass="UIButton">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="CloseMenu:" destination="von-Oa-xrt" eventType="touchUpInside" id="x7X-kz-Uxk"/>
                                     <action selector="closeOptionView:" destination="von-Oa-xrt" eventType="touchDown" id="bDc-gw-jba"/>
                                 </connections>
                             </view>
-                            <view alpha="0.0" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ao0-ve-MK9">
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ao0-ve-MK9">
                                 <rect key="frame" x="80" y="-1" width="160" height="1"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AV3-h6-yac">
@@ -3247,8 +3247,12 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.98823535442352295" green="0.98823535442352295" blue="0.98823535442352295" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="Ep0-lX-Jo5"/>
+                                    <constraint firstAttribute="height" constant="1" id="RFb-Qo-aos"/>
+                                </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZLa-Nx-Oif">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZLa-Nx-Oif">
                                 <rect key="frame" x="175" y="0.0" width="135" height="80"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="发起活动icon" translatesAutoresizingMaskIntoConstraints="NO" id="qVw-XI-IhG">
@@ -3293,19 +3297,29 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="3y1-bG-Vv0"/>
+                                    <constraint firstAttribute="width" constant="135" id="xgc-Vq-LaP"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.94901967050000002" alpha="1" colorSpace="deviceRGB"/>
                         <constraints>
-                            <constraint firstItem="wUd-vA-uNZ" firstAttribute="top" secondItem="U1C-WT-wVb" secondAttribute="bottom" id="CKf-IS-Dh5"/>
-                            <constraint firstItem="R7f-cx-H5J" firstAttribute="top" secondItem="wUd-vA-uNZ" secondAttribute="bottom" id="Ngd-OR-40l"/>
+                            <constraint firstItem="wUd-vA-uNZ" firstAttribute="top" secondItem="U1C-WT-wVb" secondAttribute="bottom" id="27I-O8-F5x"/>
+                            <constraint firstAttribute="bottom" secondItem="wUd-vA-uNZ" secondAttribute="bottom" id="2Dr-ZN-0rs"/>
+                            <constraint firstItem="ZLa-Nx-Oif" firstAttribute="top" secondItem="U1C-WT-wVb" secondAttribute="bottom" id="CEq-mh-fzE"/>
+                            <constraint firstItem="Ao0-ve-MK9" firstAttribute="top" secondItem="G2D-IC-iNS" secondAttribute="top" constant="-1" id="K25-Jk-a6O"/>
+                            <constraint firstAttribute="trailing" secondItem="ZLa-Nx-Oif" secondAttribute="trailing" constant="10" id="MPc-qu-cjO"/>
+                            <constraint firstItem="Ao0-ve-MK9" firstAttribute="centerX" secondItem="G2D-IC-iNS" secondAttribute="centerX" id="h42-Qu-5Bn"/>
+                            <constraint firstAttribute="trailing" secondItem="wUd-vA-uNZ" secondAttribute="trailing" id="iHr-aW-PlR"/>
+                            <constraint firstItem="wUd-vA-uNZ" firstAttribute="leading" secondItem="G2D-IC-iNS" secondAttribute="leading" id="x5A-fN-6pF"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Q1r-io-uov">
                         <nil key="title"/>
                         <barButtonItem key="backBarButtonItem" title=" " id="oLm-FK-07p"/>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4sO-b5-kOY">
-                            <rect key="frame" x="96" y="6" width="128" height="33"/>
+                            <rect key="frame" x="96" y="5.5" width="128" height="33"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                             <state key="normal" title="我的活动">
@@ -4413,7 +4427,7 @@
                         <viewControllerLayoutGuide type="bottom" id="4Gl-Fe-oyc"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3ZT-9j-Wbx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pqB-KE-UOQ">
@@ -5553,17 +5567,17 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="5EZ-nf-AfT"/>
-        <segue reference="rIK-Ci-sAS"/>
-        <segue reference="wTn-dU-wbL"/>
-        <segue reference="mCC-Hp-8GT"/>
         <segue reference="vrP-dE-x9J"/>
-        <segue reference="EEO-gR-a4J"/>
+        <segue reference="cOi-1F-viY"/>
+        <segue reference="mCC-Hp-8GT"/>
+        <segue reference="wTn-dU-wbL"/>
+        <segue reference="5EZ-nf-AfT"/>
         <segue reference="fLJ-gw-aSw"/>
-        <segue reference="QDz-81-eMP"/>
-        <segue reference="hB7-KS-rrK"/>
+        <segue reference="EEO-gR-a4J"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="0y8-RS-ijM"/>
         <segue reference="06u-oh-4gy"/>
-        <segue reference="kIc-uU-eUg"/>
+        <segue reference="QDz-81-eMP"/>
         <segue reference="UXj-VV-omZ"/>
         <segue reference="z1d-kw-SOt"/>
         <segue reference="KQw-JA-BHy"/>
