@@ -326,7 +326,7 @@
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendBtn setTag:520];
     [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [sendBtn setFrame:CGRectMake(250, 5, 65, 35)];
+    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 70, 5, 65, 35)];
     [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
     [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
@@ -354,7 +354,7 @@
     
     [commentV addSubview:textView];
     
-    textView.frame = CGRectMake(5, 5, 240, 35);
+    textView.frame = CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 80, 35);
     textView.backgroundColor = [UIColor clearColor];
     textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     textView.layer.borderWidth = 0.65f;
