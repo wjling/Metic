@@ -260,7 +260,7 @@
     }
     
     //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
+    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, CGRectGetWidth(self.view.frame), 45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [commentV setBackgroundColor:[UIColor whiteColor]];
     _commentView = commentV;
@@ -276,7 +276,7 @@
     [commentV addSubview:emotionBtn];
     
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
+    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 38, 5, 35, 35)];
     [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
     [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
     [commentV addSubview:sendBtn];
@@ -296,7 +296,7 @@
     [self.commentView addSubview:textView];
     _inputTextView = textView;
     
-    _inputTextView.frame = CGRectMake(38, 5, 240, 35);
+    _inputTextView.frame = CGRectMake(38, 5, CGRectGetWidth(self.view.frame) - 80, 35);
     _inputTextView.backgroundColor = [UIColor clearColor];
     _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     _inputTextView.layer.borderWidth = 0.65f;
@@ -422,27 +422,6 @@
                   fromRect:CGRectMake(self.view.bounds.size.width*0.9, 60, 0, 0)
                  menuItems:menuItems];
 }
-
-
--(float)calculateTextWidth:(NSString*)text height:(float)height fontSize:(float)fsize
-{
-    float width = 0;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-    //设置自动行数与字符换行，为0标示无限制
-    [label setNumberOfLines:0];
-    label.lineBreakMode = NSLineBreakByWordWrapping;//换行方式
-    UIFont *font = [UIFont systemFontOfSize:fsize];
-    label.font = font;
-    
-    CGSize size = CGSizeMake(CGFLOAT_MAX,height);//LableWight标签宽度，固定的
-    //计算实际frame大小，并将label的frame变成实际大小
-    
-    CGSize labelsize = [text sizeWithFont:font constrainedToSize:size lineBreakMode:label.lineBreakMode];
-    width = labelsize.width;
-    return width;
-    
-}
-
 
 //返回上一层
 -(void)MTpopViewController{
@@ -1411,8 +1390,7 @@
         self.inputTextView.placeHolder = @"回复楼主:";
         self.repliedId = nil;
         self.mainCommentId = 0;
-    }
-    else if (indexPath.row == 0) {
+    } else if (indexPath.row == 0) {
         MCommentTableViewCell *cell = (MCommentTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
         if ([cell.commentid intValue] < 0 ) {
             [self resendComment: cell.resend_Button];
@@ -1423,7 +1401,7 @@
         self.mainCommentId = [cell.commentid longValue];
         self.Selete_section = indexPath.section;
         self.repliedId = nil;
-    }else{
+    } else {
         NSMutableArray *comments = self.comment_list[indexPath.section -1];
         if (indexPath.row > comments.count - 1) {
             NSDictionary* lastSubComment = [comments lastObject];
@@ -1503,26 +1481,14 @@
             text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
         }
         
-        float commentHeight = [CommonUtils calculateTextHeight:text width:280.0 fontSize:MainCFontSize isEmotion:YES];
-        if (commentHeight < 25) commentHeight = 25;
         [textView setDisableThreeCommon:YES];
-        CGRect frame = textView.frame;
-        frame.size.height = commentHeight;
-        [textView setFrame:frame];
-        
         textView.numberOfLines = 0;
         textView.font = [UIFont systemFontOfSize:MainCFontSize];
         textView.backgroundColor = [UIColor clearColor];
         textView.lineBreakMode = NSLineBreakByCharWrapping;
         textView.isNeedAtAndPoundSign = YES;
-        
         textView.emojiText = text;
-        
-        frame = cell.frame;
-        frame.size.height = 60 + commentHeight;
-        [cell setFrame:frame];
-        
-        
+
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.eventId = _eventId;
         cell.author = author;
@@ -1555,17 +1521,19 @@
         [avatarGetter getAvatar];
         
         return cell;
-    }
-    else
-    {
+    } else {
         NSMutableArray *comments = self.comment_list[indexPath.section -1];
         if (indexPath.row > comments.count - 1) {
-            UITableViewCell *cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+            UITableViewCell *cell = [[UITableViewCell alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 30)];
             [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:242/255.0]];
-            UIView *content = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 30)];
+            UIView *content = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kMainScreenWidth - 20, 30)];
             [content setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
             [cell addSubview:content];
-            UILabel* more = [[UILabel alloc]initWithFrame:CGRectMake(100, 0, 100, 30)];
+            
+            UIView* shadow = [cell viewWithTag:100];
+            [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe7e7e7]];
+            
+            UILabel* more = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth / 2 - 60, 0, 100, 30)];
             [more setBackgroundColor:[UIColor clearColor]];
             [more setText:@"查看更多评论"];
             [more setTextAlignment:NSTextAlignmentCenter];
@@ -1573,7 +1541,6 @@
             [content addSubview:more];
             [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
             return cell;
-            
         }
         
         BOOL nibsRegistered = NO;
@@ -1609,7 +1576,6 @@
         cell.comment.font = [UIFont systemFontOfSize:SubCFontSize];
         [cell.comment setNumberOfLines:0];
         [cell.comment setLineBreakMode:NSLineBreakByCharWrapping];
-        
         cell.comment.emojiText = text;
         //[((MLEmojiLabel*)cell.comment) setText:hintString1];
         
@@ -1627,19 +1593,10 @@
             [cell.resend_Button setHidden:YES];
             [cell.publishTimeLabel setHidden:NO];
         }
-        
-        float commentHeight = [CommonUtils calculateTextHeight:text width:250 fontSize:SubCFontSize isEmotion:YES];
-        if (commentHeight < 25) commentHeight = 25;
-        CGRect frame = cell.frame;
-        frame.size.height = commentHeight+0.5f;
-        [cell setFrame:frame];
-        
+
         UIView* shadow = [cell viewWithTag:100];
         [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe7e7e7]];
-        frame = shadow.frame;
-        frame.size.height =  commentHeight;
-        [shadow setFrame:frame];
-        [cell.comment setFrame:CGRectMake(10, 0, 250, commentHeight)];
+        
         cell.commentid = [subCom valueForKey:@"comment_id"];
         cell.mainCommentId = [mainCom valueForKey:@"comment_id"];
         cell.authorid = [subCom valueForKey:@"author_id"];
@@ -1678,22 +1635,19 @@
 {
     if (indexPath.section == 0) {
         NSString* text = [_event valueForKey:@"remark"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:kMainScreenWidth - 20 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-            //            commentHeight = 10;
         }else if(text) commentHeight += 5;
-        return 321.0 + commentHeight;
-    }
-    else if (indexPath.row == 0) {
+        return 128.0 + commentHeight + 158 * kMainScreenWidth / 320 + 31 * (kMainScreenWidth - 30) / 290.0f;
+    } else if (indexPath.row == 0) {
         NSDictionary *mainCom = self.comment_list[indexPath.section - 1][0];
         NSString* text = [mainCom valueForKey:@"content"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:280.0 fontSize:MainCFontSize isEmotion:YES];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:290.0 *  (kMainScreenWidth - 30) / 290.0f fontSize:MainCFontSize isEmotion:YES];
         if (commentHeight < 25.0f) commentHeight = 25.0f;
         return 65.0f + commentHeight;
         
-    }else
-    {
+    } else {
         NSMutableArray *comments = self.comment_list[indexPath.section -1];
         if (indexPath.row > comments.count - 1) {
             return 30;
@@ -1710,8 +1664,8 @@
             alias1 = [MTOperation getAliasWithUserId:subCom[@"author_id"] userName:subCom[@"author"]];
             text = [NSString stringWithFormat:@"%@: %@",alias1,text];
         }
-        float commentHeight = [CommonUtils calculateTextHeight:text width:250.0 fontSize:SubCFontSize isEmotion:YES] + 0.5;
-        if (commentHeight < 25) commentHeight = 25;
+        float commentHeight = [CommonUtils calculateTextHeight:text width:kMainScreenWidth - 70.0 fontSize:SubCFontSize isEmotion:YES] + 0.5f;
+        if (commentHeight < 25.5f) commentHeight = 25.5f;
         return commentHeight;
     }
 }
@@ -2008,7 +1962,7 @@
 
 -(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
 {
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 50, CGRectGetWidth(self.view.bounds), 50)];
     label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     label.text = content;
     label.textAlignment = NSTextAlignmentCenter;
@@ -2019,8 +1973,6 @@
     label.layer.borderColor = [UIColor colorWithWhite:220.0/255.0 alpha:1.0].CGColor;
     label.layer.borderWidth = 1;
 }
-
-
 
 -(void)apply:(id)sender
 {

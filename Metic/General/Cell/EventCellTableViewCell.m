@@ -127,19 +127,10 @@
         [self.addPaticipator setBackgroundImage:[UIImage imageNamed:@"活动邀请好友"] forState:UIControlStateNormal];
     }else [self.addPaticipator setBackgroundImage:[UIImage imageNamed:@"不能邀请好友"] forState:UIControlStateNormal];
     NSString* text = [data valueForKey:@"remark"];
-    float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
-    if (commentHeight < 25) commentHeight = 25;
     if (text && [text isEqualToString:@""]) {
         text = @"暂无活动描述";
-        //            commentHeight = 10;
-    }else if(text) commentHeight += 5;
+    }
     self.eventDetail.text = text;
-    CGRect frame = self.eventDetail.frame;
-    frame.size.height = commentHeight;
-    [self.eventDetail setFrame:frame];
-    frame = self.frame;
-    frame.size.height = 321 + commentHeight;
-    self.frame = frame;
     
     NSNumber* launcherId = [data valueForKey:@"launcher_id"];
     PhotoGetter* authorImgGetter = [[PhotoGetter alloc]initWithData:self.launcherImg authorId:launcherId];
@@ -159,8 +150,6 @@
     NSArray *memberids = [data valueForKey:@"member"];
     for (int i =0; i<4; i++) {
         UIImageView *tmp = self.avatarArray[i];
-        //tmp.layer.masksToBounds = YES;
-        //[tmp.layer setCornerRadius:5];
         if (i < participator_count) {
             PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
             [miniGetter getAvatar];
@@ -283,24 +272,24 @@
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
 {
-    if (isOfficial) {
-        if (_officialFlag) {
-            [self addSubview:_officialFlag];
+    if (YES || isOfficial) {
+        if (self.officialFlag) {
+            [self addSubview:self.officialFlag];
         }else{
-            float width = self.bounds.size.width;
-            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
-            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
+            float width = kMainScreenWidth;
+            self.officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width - 48, 0, 25.6, 28.4)];
+            self.officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 25.6, 28.4)];
             label.textAlignment = NSTextAlignmentCenter;
             label.text = @"官";
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor whiteColor];
-            [_officialFlag addSubview:label];
-            [self addSubview:_officialFlag];
+            [self.officialFlag addSubview:label];
+            [self addSubview:self.officialFlag];
         }
     }else{
-        if (_officialFlag) {
-            [_officialFlag removeFromSuperview];
+        if (self.officialFlag) {
+            [self.officialFlag removeFromSuperview];
         }
     }
 }

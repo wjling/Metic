@@ -838,6 +838,7 @@
 		2E21E6F51CB52EFE0036B69A /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2E21E6F61CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		2E21E6F71CB52EFE0036B69A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		2EEF9F5B1CC4E16300964647 /* MacroDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroDefinition.h; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		48151F1119493FD8009E156E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -3085,6 +3086,7 @@
 			isa = PBXGroup;
 			children = (
 				F8B5DD891BFB83EA00E1F713 /* AppConstants.h */,
+				2EEF9F5B1CC4E16300964647 /* MacroDefinition.h */,
 				F8B5DD8A1BFB83EA00E1F713 /* CloudOperation.h */,
 				F8B5DD8B1BFB83EA00E1F713 /* CloudOperation.m */,
 				F8B5DD8C1BFB83EA00E1F713 /* CommonUtils.h */,

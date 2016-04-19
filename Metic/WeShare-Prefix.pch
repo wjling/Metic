@@ -14,14 +14,15 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "AppConstants.h"
+    #import "MacroDefinition.h"
 
-#ifdef DEBUG
-#define MTLOG(...) NSLog(__VA_ARGS__);
-#define MTLOG_METHOD NSLog(@"%s", __func__);
-#else
-#define MTLOG(...) ;
-#define MTLOG_METHOD ;
-#endif
+//#ifdef DEBUG
+//#define MTLOG(...) NSLog(__VA_ARGS__);
+//#define MTLOG_METHOD NSLog(@"%s", __func__);
+//#else
+//#define MTLOG(...) ;
+//#define MTLOG_METHOD ;
+//#endif
 
 #endif
 
