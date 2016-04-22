@@ -272,7 +272,7 @@
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
 {
-    if (YES || isOfficial) {
+    if (isOfficial) {
         if (self.officialFlag) {
             [self addSubview:self.officialFlag];
         }else{
@@ -308,7 +308,7 @@
         UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
         if (!image) {
             image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
-            image.image = [UIImage imageNamed:@"选择点图标"];
+            image.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
             [imgWall addSubview:image];
             [image setTag:NEW_PHOTO_NOTIFICATION];
         }
@@ -326,7 +326,7 @@
         UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
         if (!image) {
             image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
-            image.image = [UIImage imageNamed:@"选择点图标"];
+            image.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
             [videoWall addSubview:image];
             [image setTag:NEW_VIDEO_NOTIFICATION];
         }

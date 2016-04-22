@@ -533,7 +533,7 @@
         cell.name.text = alias;
         cell.signature.text = ([[a valueForKey:@"sign"] isEqual:[NSNull null]])?@"":[a valueForKey:@"sign"];
         cell.location.text = ([[a valueForKey:@"location"] isEqual:[NSNull null]])?@"":[a valueForKey:@"location"];
-        cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"男icon"]:[UIImage imageNamed:@"女icon"];
+        cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"gender_male"]:[UIImage imageNamed:@"gender_female"];
         PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
         [avatarGetter getAvatar];
         [_resultView addSubview:cell];

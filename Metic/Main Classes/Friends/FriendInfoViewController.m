@@ -198,11 +198,11 @@
     gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 35, 17, 17)];
     NSNumber* gender = self.friendInfo_dic? [self.friendInfo_dic objectForKey:@"gender"] : [NSNumber numberWithInt:-1];
     if ([gender integerValue] == 0) {
-        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else if ([gender integerValue] == 1)
     {
-        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     
     
@@ -449,11 +449,11 @@
     }
     
     if (0 == [gender intValue]) {
-        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
-        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     
     if (![location isEqual:[NSNull null]]) {

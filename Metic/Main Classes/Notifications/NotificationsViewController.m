@@ -805,7 +805,7 @@ enum Response_Type
     UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
     UIView* view = [tab viewWithTag:233];
     if (!view) {
-        UIImage* img = [UIImage imageNamed:@"选择点图标"];
+        UIImage* img = [UIImage imageNamed:@"slidebar_icon_redpoint"];
         UIImageView* dian = [[UIImageView alloc]initWithFrame:CGRectMake(tab.frame.size.width - 30, tab.frame.origin.y + 5, 18, 18)];
         dian.image = img;
         dian.tag = 233;

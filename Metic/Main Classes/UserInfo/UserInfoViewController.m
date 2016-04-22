@@ -156,12 +156,12 @@
     self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     if ([gender integerValue] == 0) {
         MTLOG(@"性别女");
-        self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
         MTLOG(@"性别男");
-        self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     [self.banner_UIview addSubview:self.banner_imageView];
     [self.banner_UIview sendSubviewToBack:self.banner_imageView];
@@ -326,12 +326,12 @@
     }
     if ([gender integerValue] == 0) {
         MTLOG(@"性别女,gender: %@",gender);
-        self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
         MTLOG(@"性别男,gender: %@",gender);
-        self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     [self.info_tableView reloadData];
 }
@@ -794,11 +794,11 @@
         {
             [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
             if (newGender == 0) {
-                self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+                self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
             }
             else
             {
-                self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+                self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
             }
             MTLOG(@"性别修改成功");
         }
