@@ -69,10 +69,10 @@ const NSInteger rowCount = 4;
     self.view.backgroundColor = [UIColor colorWithWhite:0.95f alpha:1.0f];
     self.title = @"编辑活动";
     
-    UIView* bannerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 126)];
+    UIView* bannerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 126 * kMainScreenWidth / 320.f)];
     [self.view addSubview:bannerView];
     
-    _banner = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 123)];
+    _banner = [[UIImageView alloc]initWithFrame:bannerView.bounds];
     _banner.userInteractionEnabled = YES;
     [_banner setContentMode:UIViewContentModeScaleAspectFill];
     UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeBanner)];
@@ -85,11 +85,11 @@ const NSInteger rowCount = 4;
     NSString* bannerPath = [MegUtils bannerImagePathWithEventId:self.eventId];
     [bannerGetter getBanner:[_eventInfo valueForKey:@"code"] url:bannerURL path:bannerPath];
     
-    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 123, CGRectGetWidth(self.view.frame), 3)];
+    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(bannerView.frame), kMainScreenWidth, 3)];
     [line setBackgroundColor:[UIColor orangeColor]];
     [bannerView addSubview:line];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, 126, CGRectGetWidth(self.view.frame) - 20, 300)];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(10, CGRectGetMaxY(line.frame), kMainScreenWidth - 20, 300)];
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
@@ -270,7 +270,7 @@ const NSInteger rowCount = 4;
     content.textAlignment = NSTextAlignmentRight;
     content.font = [UIFont systemFontOfSize:15];
     content.textColor = [UIColor colorWithWhite:0.3f alpha:1.0f];
-    CGRect contentframe = CGRectMake(80, 0, 190, 0);
+    CGRect contentframe = CGRectMake(CGRectGetWidth(self.tableView.frame) - 240, 0, 190, 0);
     
     [cell addSubview:content];
     
