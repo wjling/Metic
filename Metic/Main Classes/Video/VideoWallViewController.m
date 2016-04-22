@@ -484,7 +484,7 @@
 {
     if (indexPath.row >= [_videoInfos count]) {
         UITableViewCell* cell = [[UITableViewCell alloc]init];
-        float width = 300;
+        float width = kMainScreenWidth - 20;
         float height = 60;
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(width/6, height-45, width*4/6, 30)];
         label.text = [_videoInfos count] > 0? @"没有更多了哦，去上传吧~":@"还没有视频哦，快去上传吧";
