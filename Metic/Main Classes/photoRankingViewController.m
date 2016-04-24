@@ -198,7 +198,7 @@
 {
     if(_photos.count==0){
         UITableViewCell* cell = [[UITableViewCell alloc]init];
-        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,300,80)];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0,0,kMainScreenWidth - 20,80)];
         cell.userInteractionEnabled = NO;
         cell.backgroundColor = [UIColor clearColor];
         
@@ -237,7 +237,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _photos.count == 0? 80:226;
+    return _photos.count == 0? 80:(46 + 180 * (kMainScreenWidth - 20) / 300);
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
