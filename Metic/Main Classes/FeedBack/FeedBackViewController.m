@@ -35,7 +35,7 @@
     // Do any additional setup after loading the view.
     self.content_textView.font = [UIFont systemFontOfSize:13];
     self.content_textView.delegate = self.rootView;
-    UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
+    UIColor *color = [CommonUtils colorWithValue:0xcfcfcf];
     self.content_textView.layer.borderColor = color.CGColor;
     self.content_textView.layer.borderWidth = 1;
     self.content_textView.layer.cornerRadius = 3.5;
@@ -50,6 +50,8 @@
     self.contact1_textField.placeholder = @"联系方式、手机或邮箱（选填）";
     self.contact1_textField.layer.cornerRadius = 3.5;
     self.contact1_textField.layer.masksToBounds = YES;
+    self.contact1_textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+    self.contact1_textField.leftViewMode = UITextFieldViewModeAlways;
     rootView.myDelegate = self;
     
 }
@@ -126,8 +128,6 @@
     UIFont *font = [UIFont systemFontOfSize:13.0];
     CGSize size = [textView.text sizeWithFont:font constrainedToSize:CGSizeMake(mFrame.size.width-16, 9999) lineBreakMode:NSLineBreakByWordWrapping];
     [textView setFrame:CGRectMake(mFrame.origin.x, mFrame.origin.y, mFrame.size.width, size.height+font.capHeight+16)];
-//    MTLOG(@"char height : %f",size.height);
-//    MTLOG(@"textview height: %f",textView.frame.size.height);
     return YES;
 }
 
