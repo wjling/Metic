@@ -610,7 +610,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
 }
 
 //计算label动态高度
-+(float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize isEmotion:(BOOL)isEmotion
++ (float)calculateTextHeight:(NSString*)text width:(float)width fontSize:(float)fsize isEmotion:(BOOL)isEmotion
 {
     float height = 0;
     UIFont *font = [UIFont systemFontOfSize:fsize];
