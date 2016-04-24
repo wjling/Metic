@@ -15,6 +15,6 @@
 
 @interface SystemSettingsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,SlideNavigationControllerDelegate,UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UIView *shadowView;
-@property (strong, nonatomic) UITableView *settings_tableview;
+@property (strong, nonatomic) IBOutlet UITableView *settings_tableview;
 
 @end
