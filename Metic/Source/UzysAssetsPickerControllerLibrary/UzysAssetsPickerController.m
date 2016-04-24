@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 
 @property (nonatomic, strong) UIView *noAssetView;
-@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) UzysWrapperPickerController *picker;
 @property (nonatomic, strong) UzysGroupPickerView *groupPicker;
 //@property (nonatomic, strong) UzysGroupPickerViewController *groupPicker;
@@ -102,15 +102,6 @@
     [self setupCollectionView];
     [self setupGroupPickerview];
     [self initNoAssetView];
-}
--(void)viewDidAppear:(BOOL)animated
-{
-    [self fixUI];
-}
-
--(void)fixUI
-{
-    [self.collectionView setFrame:CGRectMake(0, 64, 320, self.view.bounds.size.height - 64 -48)];
 }
 
 - (void)initVariable
@@ -257,7 +248,8 @@
     layout.minimumInteritemSpacing      = 1.0;
     layout.minimumLineSpacing           = 1.0;
 
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, 320, self.view.bounds.size.height - 64 -48) collectionViewLayout:layout];
+//    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, kMainScreenWidth, self.view.bounds.size.height - 64 - 48) collectionViewLayout:layout];
+    self.collectionView.collectionViewLayout = layout;
     self.collectionView.allowsMultipleSelection = YES;
     [self.collectionView registerClass:[UzysAssetsViewCell class]
             forCellWithReuseIdentifier:kAssetsViewCellIdentifier];
