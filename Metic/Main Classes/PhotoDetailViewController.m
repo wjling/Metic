@@ -151,7 +151,7 @@
     [commentV addSubview:emotionBtn];
     
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setFrame:CGRectMake(282, 5, 35, 35)];
+    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 38, 5, 35, 35)];
     [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
     [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
     [commentV addSubview:sendBtn];
@@ -172,7 +172,7 @@
     [self.commentView addSubview:textView];
     _inputTextView = textView;
     
-    _inputTextView.frame = CGRectMake(38, 5, 240, 35);
+    _inputTextView.frame = CGRectMake(38, 5, CGRectGetWidth(self.view.frame) - 80, 35);
     _inputTextView.backgroundColor = [UIColor clearColor];
     _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     _inputTextView.layer.borderWidth = 0.65f;
@@ -1133,7 +1133,7 @@
             cell.backgroundColor = [UIColor clearColor];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 300, 45)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, kMainScreenWidth - 20, 45)];
             label.text = _isLoading? @"正在加载...":@"查看更早的评论";
             label.textAlignment = NSTextAlignmentCenter;
             label.textColor = [UIColor colorWithWhite:0.2 alpha:1.0];
@@ -1168,16 +1168,16 @@
         float commentWidth = 0;
         ((PcommentTableViewCell *)cell).pcomment_id = [Pcomment valueForKey:@"pcomment_id"];
         if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -1 ) {
-            commentWidth = 230;
+            commentWidth = kMainScreenWidth - 90;
             [((PcommentTableViewCell *)cell).waitView startAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         } else if([[Pcomment valueForKey:@"pcomment_id"] integerValue] == -2 ){
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
-            commentWidth = 230;
+            commentWidth = kMainScreenWidth - 90;
             [((PcommentTableViewCell *)cell).resend_Button setHidden:NO];
             [((PcommentTableViewCell *)cell).resend_Button addTarget:self action:@selector(resendComment:) forControlEvents:UIControlEventTouchUpInside];
         } else{
-            commentWidth = 255;
+            commentWidth = kMainScreenWidth - 65;
             [((PcommentTableViewCell *)cell).waitView stopAnimating];
             [((PcommentTableViewCell *)cell).resend_Button setHidden:YES];
         }
@@ -1210,14 +1210,14 @@
         comment.emojiText = text;
         //[comment.layer setBackgroundColor:[UIColor clearColor].CGColor];
         [comment setBackgroundColor:[UIColor clearColor]];
-        [cell setFrame:CGRectMake(0, 0, 320, 32 + height)];
+        [cell setFrame:CGRectMake(0, 0, kMainScreenWidth, 32 + height)];
         
         UIView* backguand = ((PcommentTableViewCell *)cell).background;
         if (!backguand){
-            backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, 300, 32+height)];
+            backguand = [[UIView alloc]initWithFrame:CGRectMake(10, 0, kMainScreenWidth - 20, 32+height)];
             ((PcommentTableViewCell *)cell).background = backguand;
         }
-        else [backguand setFrame:CGRectMake(10, 0, 300, 32+height)];
+        else [backguand setFrame:CGRectMake(10, 0, kMainScreenWidth - 20, 32+height)];
         [backguand setBackgroundColor:[UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0]];
         [cell setBackgroundColor:[UIColor colorWithRed:242/255.0 green:242/255.0 blue:242/255.0 alpha:1.0]];
         [cell addSubview:backguand];
@@ -1255,8 +1255,8 @@
         
         
         if ([[Pcomment valueForKey:@"pcomment_id"] integerValue] > 0) {
-            commentWidth = 255;
-        }else commentWidth = 230;
+            commentWidth = kMainScreenWidth - 65;
+        }else commentWidth = kMainScreenWidth - 90;
         
         height = [CommonUtils calculateTextHeight:commentText width:commentWidth fontSize:12.0 isEmotion:YES];
         height += 32;
