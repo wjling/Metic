@@ -12,7 +12,7 @@
 #import "UIImageView+MTWebCache.h"
 #import "PictureWall2.h"
 
-@interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate,HttpSenderDelegate>
+@interface PhotoDisplayViewController : UIViewController<UIScrollViewDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
 //@property(nonatomic,strong)NSMutableDictionary *photoscache;//存放图片uiimage
 //@property(nonatomic,strong)NSMutableArray *photoPath_list;//存放图片路径
@@ -23,7 +23,7 @@
 @property(nonatomic,strong)NSNumber* eventLauncherId;
 @property(nonatomic,strong)NSString* eventName;
 @property (strong, nonatomic) PictureWall2* controller;
-@property long photoIndex;
+@property NSInteger photoIndex;
 @property BOOL canManage;
 
 @property (strong, nonatomic) IBOutlet UIView *InfoView;

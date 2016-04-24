@@ -27,8 +27,8 @@
 
 @interface PhotoDisplayViewController () <UMSocialUIDelegate>
 @property BOOL isZan;
-@property int goodindex;
-@property int lastViewIndex;
+@property NSInteger goodindex;
+@property NSInteger lastViewIndex;
 @property int movedown;
 @property (nonatomic,strong)UIView* shadowView;
 @property (nonatomic,strong)UIView* optionView;
@@ -61,8 +61,8 @@
     [self.scrollView setPagingEnabled:YES];
     self.scrollView.delegate = self;
     [self.scrollView setClipsToBounds:YES];
-    [self.scrollView setContentSize:CGSizeMake(320*self.photo_list.count, self.view.bounds.size.height)];
-    [self.scrollView setContentOffset:CGPointMake(320*self.photoIndex, 0)];
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetWidth(self.scrollView.bounds) * self.photo_list.count, self.view.bounds.size.height)];
+    [self.scrollView setContentOffset:CGPointMake(CGRectGetWidth(self.scrollView.bounds) * self.photoIndex, 0)];
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.scrollView setShowsVerticalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
@@ -136,11 +136,10 @@
             [zoomView fitImageView];
         }
     }
-    [self.scrollView setContentSize:CGSizeMake(320*self.photo_list.count, self.view.bounds.size.height)];
+    [self.scrollView setContentSize:CGSizeMake(CGRectGetWidth(self.scrollView.bounds) * self.photo_list.count, self.view.bounds.size.height)];
 }
 
 -(void)rotation:(float)n {
-    MTLOG(@"%dth",_lastViewIndex);
     float offsetX = (int)n%180 == 0? self.view.bounds.size.width:self.view.bounds.size.height;
     CGPoint contentOffset = CGPointMake(_lastViewIndex*offsetX, 0);
     [UIView animateWithDuration:0.5 animations:^{
@@ -158,7 +157,7 @@
         }
         
     } completion:^(BOOL finished) {
-        [self.scrollView setContentSize:CGSizeMake(_scrollView.bounds.size.width*self.photo_list.count, _scrollView.bounds.size.height)];
+        [self.scrollView setContentSize:CGSizeMake(CGRectGetWidth(self.scrollView.bounds) * self.photo_list.count, _scrollView.bounds.size.height)];
         
     }];
     
@@ -434,7 +433,7 @@
         [self performSegueWithIdentifier:@"photoToreport" sender:self];
     });
 }
--(void)displaythreePhoto:(int)photoIndex
+-(void)displaythreePhoto:(NSInteger)photoIndex
 {
     [self displaynthPhoto:photoIndex];
     [self loadPictureDescription];
@@ -448,9 +447,9 @@
     }
 }
 
--(void)displaynthPhoto:(int)photoIndex
+-(void)displaynthPhoto:(NSInteger)photoIndex
 {
-    MRZoomScrollView *photoScrollView = [self.photos valueForKey:[NSString stringWithFormat:@"%d",photoIndex]];
+    MRZoomScrollView *photoScrollView = [self.photos valueForKey:[NSString stringWithFormat:@"%ld",(long)photoIndex]];
     if (photoScrollView) {
         return;
     }
@@ -460,7 +459,7 @@
     float containerHeight = _scrollView.bounds.size.height;
     [zoomScrollView setFrame:CGRectMake(containerWidth*photoIndex+2,0,containerWidth - 4, containerHeight)];
 
-    [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%d",photoIndex]];
+    [self.photos setValue:zoomScrollView forKey:[NSString stringWithFormat:@"%ld",(long)photoIndex]];
     
     UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     indicatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin;
@@ -503,7 +502,7 @@
     float containerWidth = _scrollView.bounds.size.width;
     int position = self.scrollView.contentOffset.x/containerWidth;
     if (self.lastViewIndex != position) {
-        MRZoomScrollView *photoScrollView = [self.photos valueForKey:[NSString stringWithFormat:@"%d",self.lastViewIndex]];
+        MRZoomScrollView *photoScrollView = [self.photos valueForKey:[NSString stringWithFormat:@"%ld",(long)self.lastViewIndex]];
         [photoScrollView zoomToNormal];
     }
     self.lastViewIndex = position;
@@ -518,7 +517,7 @@
         return;
     }
 
-    self.goodindex = self.scrollView.contentOffset.x/320;
+    self.goodindex = self.lastViewIndex;
     BOOL isZan = [[self.photo_list[self.goodindex] valueForKey:@"isZan"]boolValue];
 
     [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:self.photoId eventId:self.eventId like:!isZan finishBlock:NULL];
@@ -543,7 +542,7 @@
 - (IBAction)comment:(id)sender {
     self.commentImg.image = [UIImage imageNamed:@"评论icon"];
 
-    int index = self.scrollView.contentOffset.x/320;
+    NSInteger index = self.lastViewIndex;
     NSDictionary* photoInfo = self.photo_list[index];
     if ([photoInfo valueForKey:@"alasset"]) return;
     [self performSegueWithIdentifier:@"displayTophotoDetail" sender:self];
@@ -607,7 +606,7 @@
         if ([segue.destinationViewController isKindOfClass:[PhotoDetailViewController class]]) {
             
             PhotoDetailViewController *nextViewController = segue.destinationViewController;
-            int index = self.scrollView.contentOffset.x/320;
+            int index = self.lastViewIndex;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
             nextViewController.eventLauncherId = self.eventLauncherId;
@@ -620,7 +619,7 @@
         if ([segue.destinationViewController isKindOfClass:[ReportViewController class]]) {
             
             ReportViewController *nextViewController = segue.destinationViewController;
-            int index = self.scrollView.contentOffset.x/320;
+            NSInteger index = self.lastViewIndex;
             
             nextViewController.photoId = [self.photo_list[index] valueForKey:@"photo_id"];
             nextViewController.eventId = _eventId;
