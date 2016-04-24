@@ -36,7 +36,9 @@
         [_cellSeperator setBackgroundColor:seperatorColor];
         [self addSubview:_cellSeperator];
     }
-
+    
+    self.avatar_imageview.layer.cornerRadius = 3;
+    self.avatar_imageview.layer.masksToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

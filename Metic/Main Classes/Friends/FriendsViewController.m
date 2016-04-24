@@ -132,7 +132,7 @@
     self.friendTableView.dataSource = self;
     self.searchFriendList = [[NSMutableArray alloc]init];
     
-    friendSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+    friendSearchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 40)];
     friendSearchBar.placeholder = @"本地搜索";
     friendSearchBar.delegate = self;
     [friendSearchBar setAutocapitalizationType:UITextAutocapitalizationTypeNone];
@@ -297,7 +297,7 @@
 {
     [self.friendTableView reloadData];
     @autoreleasepool {
-        UILabel* lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 20)];
+        UILabel* lab = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
         lab.textAlignment = NSTextAlignmentCenter;
         lab.textColor = [UIColor grayColor];
         lab.text = [NSString stringWithFormat:@"%lu位好友", (unsigned long)self.friendList.count];
@@ -828,7 +828,7 @@
         
         PhotoGetter* getter = [[PhotoGetter alloc]initWithData:imgV authorId:fid];
         [getter getAvatar];
-        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        cell.layer.borderColor = [UIColor colorWithWhite:0.85f alpha:1.0f].CGColor;
         cell.layer.borderWidth = 0.3f;
 //        cell.textLabel.text = name;
 //        MTLOG(@"cell of searched friend, name: %@",name);
