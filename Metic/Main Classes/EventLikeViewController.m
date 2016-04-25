@@ -73,7 +73,7 @@
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        [_tableView setRowHeight:166];
+        [_tableView setRowHeight:38 + 120 * (kMainScreenWidth - 20) / 300 + 4];
         [_tableView setShowsVerticalScrollIndicator:NO];
         [self.view addSubview:_tableView];
         [self.view sendSubviewToBack:_tableView];

@@ -391,7 +391,7 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSDateComponents *compsNow  = [calendar components:unitFlags fromDate:now];
 
     if ([compsBegin year] != [compsNow year]) {
-        [dateFormatter setDateFormat:@"YYYY年MM月dd日 HH:mm"];
+        [dateFormatter setDateFormat:@"YYYY年MM月dd日"];
     } else {
         [dateFormatter setDateFormat:@"MM月dd日 HH:mm"];
     }
@@ -399,15 +399,14 @@ UIAlertView* toast; //用在showToastWithTitle:withMessage:withDuaration
     NSString *beginStr = [dateFormatter stringFromDate:begin];
     NSString *endStr = [dateFormatter stringFromDate:end];
 
-    
     timeInfo = [NSString stringWithFormat:@"%@ － %@", beginStr, endStr];
     
     [label setText:timeInfo afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
-        NSRange date1 = NSMakeRange(0, beginStr.length - 5);
-        NSRange time1 = NSMakeRange(date1.length, 5);
+        NSRange date1 = NSMakeRange(0, beginStr.length - ([compsBegin year] != [compsNow year]? 0:5));
+        NSRange time1 = NSMakeRange(date1.length, ([compsBegin year] != [compsNow year])? 0:5);
         NSRange seperate = NSMakeRange(beginStr.length, 3);
-        NSRange date2 = NSMakeRange(seperate.location + seperate.length, endStr.length - 5);
-        NSRange time2 = NSMakeRange(date2.location + date2.length, 5);
+        NSRange date2 = NSMakeRange(seperate.location + seperate.length, endStr.length - ([compsBegin year] != [compsNow year]? 0:5));
+        NSRange time2 = NSMakeRange(date2.location + date2.length, ([compsBegin year] != [compsNow year])? 0:5);
 
         UIFont *dateFont = [UIFont systemFontOfSize:13];
         UIFont *timeFont = [UIFont systemFontOfSize:12];

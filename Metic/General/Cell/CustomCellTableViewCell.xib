@@ -48,8 +48,8 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6OF-bz-uZ0">
                                         <rect key="frame" x="0.0" y="90" width="300" height="30"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szP-dC-AJh" customClass="TTTAttributedLabel">
-                                                <rect key="frame" x="7" y="4" width="286" height="22"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="szP-dC-AJh" customClass="TTTAttributedLabel">
+                                                <rect key="frame" x="7" y="4" width="298" height="22"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -58,6 +58,10 @@
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.20000000000000001" colorSpace="deviceRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="Fgs-QI-P8L"/>
+                                            <constraint firstItem="szP-dC-AJh" firstAttribute="top" secondItem="6OF-bz-uZ0" secondAttribute="top" constant="4" id="Njn-CS-6XB"/>
+                                            <constraint firstAttribute="trailing" secondItem="szP-dC-AJh" secondAttribute="trailing" constant="-5" id="e5o-6g-Gkk"/>
+                                            <constraint firstAttribute="bottom" secondItem="szP-dC-AJh" secondAttribute="bottom" constant="4" id="liP-J3-o7U"/>
+                                            <constraint firstItem="szP-dC-AJh" firstAttribute="leading" secondItem="6OF-bz-uZ0" secondAttribute="leading" constant="7" id="zwX-nI-cKl"/>
                                         </constraints>
                                     </view>
                                 </subviews>
