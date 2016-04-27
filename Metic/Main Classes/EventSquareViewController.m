@@ -49,9 +49,6 @@
 
 @implementation EventSquareViewController
 
-
-
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -159,7 +156,7 @@
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
     
-    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 250)];
+    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, bannerHeight + 20 + CGRectGetWidth(frame)/4)];
     [_contentView setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0]];
     [_contentView setTag:112];
 //    _contentView.layer.borderColor = [UIColor redColor].CGColor;
@@ -386,10 +383,6 @@
         [_contentView addSubview:tmp];
     }
 }
-
-
-
-
 
 -(void)tapEvent:(UITapGestureRecognizer*)tap
 {
@@ -643,7 +636,7 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 260;
+            return bannerHeight + 20 + kMainScreenWidth/4 + 10;
             break;
         case 1:
         {
@@ -653,7 +646,7 @@
                     break;
                     
                 default:
-                    return 190;
+                    return 70 + 115 * (kMainScreenWidth - 20) / 300 +5;
                     break;
             }
         }
@@ -690,7 +683,7 @@
             [cell addSubview:label];
             
             UIButton* refreshBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-            [refreshBtn setFrame:CGRectMake(240, 0, 80, 31)];
+            [refreshBtn setFrame:CGRectMake(kMainScreenWidth - 80, 0, 80, 31)];
             refreshBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             refreshBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
             [refreshBtn setTitle:@"刷新" forState:UIControlStateNormal];
