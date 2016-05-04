@@ -150,8 +150,10 @@ enum Response_Type
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"消息中心"];
-    self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
-    self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
+//    self.content_scrollView.contentSize = CGSizeMake(kMainScreenWidth*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
+    CGSize size = self.content_scrollView.contentSize;
+    size.height = 1;
+    self.tabbar_scrollview.contentSize = CGSizeMake(kMainScreenWidth, 40);
     [self.view bringSubviewToFront:_shadowView];
     _shadowView.hidden = NO;
     
@@ -354,7 +356,6 @@ enum Response_Type
 - (void)initParams
 {
     selectedPath = [[NSIndexPath alloc]init];
-    DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     num_tabs = 3;
     
     self.friendRequest_tableView.delegate = self;
@@ -363,7 +364,6 @@ enum Response_Type
     self.eventRequest_tableView.dataSource = self;
     self.systemMessage_tableView.delegate = self;
     self.systemMessage_tableView.dataSource = self;
-    
     
     [functions_uiview setHidden:YES];
     UIColor* color1 = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
@@ -379,7 +379,7 @@ enum Response_Type
     CGRect frame = self.tabbar_scrollview.frame;
     
     int x = 0;
-    CGFloat width = frame.size.width/3;
+    CGFloat width = kMainScreenWidth/3;
     int height = frame.size.height;
     UIButton* eventR_button = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, height - 1)];
     UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height - 1)];
@@ -457,7 +457,7 @@ enum Response_Type
     tab_index = 0;
     clickTab = NO;
     
-    label0 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label0 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label0 setBackgroundColor:[UIColor clearColor]];
     label0.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label0.numberOfLines = 2;
@@ -465,7 +465,7 @@ enum Response_Type
     label0.textAlignment = NSTextAlignmentCenter;
     label0.font = [UIFont systemFontOfSize:13];
     
-    label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label1 setBackgroundColor:[UIColor clearColor]];
     label1.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label1.numberOfLines = 2;
@@ -473,7 +473,7 @@ enum Response_Type
     label1.textAlignment = NSTextAlignmentCenter;
     label1.font = [UIFont systemFontOfSize:13];
     
-    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label2 setBackgroundColor:[UIColor clearColor]];
     label2.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label2.numberOfLines = 2;
@@ -790,8 +790,6 @@ enum Response_Type
         [self.systemMessage_tableView reloadData];
         label2.hidden = NO;
     }
-//    [mySql closeMyDB];
-
 }
 
 - (void) refresh
