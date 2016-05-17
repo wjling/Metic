@@ -172,17 +172,19 @@
 {
     self.view.autoresizesSubviews = YES;
     if (!_updateInfoView) {
-        _updateInfoView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+        _updateInfoView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 40)];
         _updateInfoView.userInteractionEnabled = YES;
         _updateInfoView.backgroundColor = [UIColor clearColor];
         
         UIButton* toDynamicBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [toDynamicBtn setFrame:CGRectMake(10, 5, 300, 31)];
+        [toDynamicBtn setFrame:CGRectMake(10, 5, kMainScreenWidth - 20, 31)];
         [toDynamicBtn setImage:[UIImage imageNamed:@"新消息底块"] forState:UIControlStateNormal];
+        toDynamicBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        toDynamicBtn.contentVerticalAlignment = UIControlContentVerticalAlignmentFill;
         [toDynamicBtn addTarget:self action:@selector(toDynamic:) forControlEvents:UIControlEventTouchUpInside];
         [_updateInfoView addSubview:toDynamicBtn];
         
-        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(122, 10, 100, 21)];
+        UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth/2-42, 10, 100, 21)];
         label.backgroundColor = [UIColor clearColor];
         label.font = [UIFont systemFontOfSize:16];
         [label setTextColor:[UIColor whiteColor]];
@@ -191,11 +193,11 @@
         [_updateInfoView addSubview:label];
         
         UIImageView* littleCircle = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"新消息条数底块"]];
-        [littleCircle setFrame:CGRectMake(174, 8, 24, 24)];
+        [littleCircle setFrame:CGRectMake(kMainScreenWidth/2+10, 8, 24, 24)];
         [_updateInfoView addSubview:littleCircle];
         
         if (!_updateInfoNumLabel) {
-            _updateInfoNumLabel = [[UILabel alloc]initWithFrame:CGRectMake(173, 10, 26, 20)];
+            _updateInfoNumLabel = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth/2+10, 7.5f, 24, 24)];
             [_updateInfoNumLabel setTextColor:[UIColor colorWithRed:240.0/255.0 green:114.0/255.0 blue:52.0/255.0 alpha:1.0]];
             [_updateInfoNumLabel setFont:[UIFont systemFontOfSize:14]];
             [_updateInfoNumLabel setTextAlignment:NSTextAlignmentCenter];

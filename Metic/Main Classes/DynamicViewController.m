@@ -54,7 +54,7 @@ enum pos{
     _atMe_tableView.dataSource = self;
     
     if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
-        [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+        [_scrollView setContentOffset:CGPointMake(kMainScreenWidth, 0) animated:YES];
     }else if(_atMeEvents.count != 0){
         [self refreshRPoin:RIGHT];
     }
@@ -73,7 +73,7 @@ enum pos{
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"新动态"];
     if (_updateEventStatus.count == 0 && _atMeEvents.count != 0) {
-        [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+        [_scrollView setContentOffset:CGPointMake(kMainScreenWidth, 0) animated:YES];
     }
 }
 -(void)viewDidDisappear:(BOOL)animated
@@ -99,7 +99,7 @@ enum pos{
 
 - (void)createScrollingBar
 {
-    _bar = [[UIView alloc]initWithFrame:CGRectMake(0, 32, 160, 3)];
+    _bar = [[UIView alloc]initWithFrame:CGRectMake(0, kMainScreenWidth/2/53*11-1, kMainScreenWidth/2, 3)];
     [_bar setBackgroundColor:[UIColor colorWithRed:85/255.0 green:203/255.0 blue:171/255.0 alpha:1.0f]];
     [self.view addSubview:_bar];
 }
@@ -113,7 +113,7 @@ enum pos{
             }
             break;
         case RIGHT:
-            if (_scrollView.contentOffset.x != 320) {
+            if (_scrollView.contentOffset.x != kMainScreenWidth) {
                 _atMeRPoin.hidden = NO;
             }
             break;
@@ -121,7 +121,7 @@ enum pos{
             if (_scrollView.contentOffset.x != 0) {
                 _dynamicRPoin.hidden = NO;
             }
-            if (_scrollView.contentOffset.x != 320) {
+            if (_scrollView.contentOffset.x != kMainScreenWidth) {
                 _atMeRPoin.hidden = NO;
             }
             break;
@@ -134,7 +134,7 @@ enum pos{
 }
 
 - (IBAction)atMe_pressdown:(id)sender {
-    [_scrollView setContentOffset:CGPointMake(320, 0) animated:YES];
+    [_scrollView setContentOffset:CGPointMake(kMainScreenWidth, 0) animated:YES];
 }
 #pragma mark tableView DataSource
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -146,7 +146,7 @@ enum pos{
             NSArray *updateInfo = [_updateEventStatus objectForKey:[[_updateEventStatus keyEnumerator] allObjects][indexPath.row]];
             NSString* subject = updateInfo[0];
             
-            float restWidth = 310;
+            float restWidth = kMainScreenWidth-10;
             if ([updateInfo[1] boolValue]) {
                 restWidth -= 34;
                 UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_VIDEO_NOTIFICATION];
@@ -154,7 +154,7 @@ enum pos{
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_video"]];
                     [image setTag:NEW_VIDEO_NOTIFICATION];
                 }
-                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [image setFrame:CGRectMake(restWidth+10, 10, 24, 24)];
                 [cell addSubview:image];
             }else{
                 UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_VIDEO_NOTIFICATION];
@@ -168,7 +168,7 @@ enum pos{
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_photo"]];
                     [image setTag:NEW_PHOTO_NOTIFICATION];
                 }
-                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [image setFrame:CGRectMake(restWidth+10, 10, 24, 24)];
                 [cell addSubview:image];
             }else{
                 UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_PHOTO_NOTIFICATION];
@@ -182,14 +182,14 @@ enum pos{
                     image = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newmsg_comment"]];
                     [image setTag:NEW_COMMENT_NOTIFICATION];
                 }
-                [image setFrame:CGRectMake(restWidth+10, 13, 24, 24)];
+                [image setFrame:CGRectMake(restWidth+10, 10, 24, 24)];
                 [cell addSubview:image];
             }else{
                 UIImageView* image = (UIImageView*)[cell viewWithTag:NEW_COMMENT_NOTIFICATION];
                 [image removeFromSuperview];
             }
             
-            if (restWidth!= 310) {
+            if (restWidth!= kMainScreenWidth-10) {
                 restWidth-=10;
             }
             NSString* text = [NSString stringWithFormat:@"%@ 活动更新了",subject];
@@ -198,10 +198,10 @@ enum pos{
             
             TTTAttributedLabel *update_label = (TTTAttributedLabel*)[cell viewWithTag:131];
             if (!update_label) {
-                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 0, restWidth, 50)];
+                update_label = [[TTTAttributedLabel alloc]initWithFrame:CGRectMake(10, 0, restWidth, 44)];
                 [cell addSubview:update_label];
                 [update_label setTag:131];
-            }else [update_label setFrame:CGRectMake(10, 0, restWidth, 50)];
+            }else [update_label setFrame:CGRectMake(10, 0, restWidth, 44)];
             [update_label setNumberOfLines:0];
             [update_label setLineBreakMode:NSLineBreakByTruncatingTail];
             [update_label setText:hintString1];
@@ -234,7 +234,7 @@ enum pos{
                 if (object_name && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
-                    img.contentMode = UIViewContentModeScaleAspectFit;
+//                    img.contentMode = UIViewContentModeScaleAspectFit;
                     
                     MTImageGetterType type;
                     if (cmd == NEW_PHOTO_COMMENT_REPLY) {
@@ -286,7 +286,7 @@ enum pos{
                 if (object_name && img) {
                     img.layer.masksToBounds = YES;
                     img.layer.cornerRadius = 4;
-                    img.contentMode = UIViewContentModeScaleAspectFit;
+//                    img.contentMode = UIViewContentModeScaleAspectFit;
                     
                     MTImageGetterType type;
                     if (operation == 3) {
@@ -460,7 +460,7 @@ enum pos{
         CGRect frame =_bar.frame;
         frame.origin.x = scrollView.contentOffset.x / 2;
         [_bar setFrame:frame];
-        if (scrollView.contentOffset.x > 88) {
+        if (scrollView.contentOffset.x > kMainScreenWidth/4+8) {
             [_atMe_button setHighlighted:YES];
             [_dynamics_button setHighlighted:NO];
         }else{
@@ -470,12 +470,10 @@ enum pos{
         
         if (scrollView.contentOffset.x == 0) {
             _dynamicRPoin.hidden = YES;
-        }else if (scrollView.contentOffset.x == 320){
+        }else if (scrollView.contentOffset.x == kMainScreenWidth){
             _atMeRPoin.hidden = YES;
         }
-        
     }
-    
 }
 
 #pragma mark notificationDidReceive
