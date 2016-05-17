@@ -44,6 +44,8 @@
 -(void)setVideoWallpoint;
 @property (strong, nonatomic) IBOutlet UIView *mediaEntrance;
 @property(nonatomic,strong) NSDictionary* eventInfo;
+@property (weak, nonatomic) IBOutlet UIImageView *imgPoint;
+@property (weak, nonatomic) IBOutlet UIImageView *videoPoint;
 
 @property(nonatomic,strong) UIImageView* officialFlag;
 @property(nonatomic,strong) UIImageView* launcherImg;

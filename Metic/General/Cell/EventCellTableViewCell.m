@@ -304,38 +304,13 @@
 
 -(void)setImgWallpoint
 {
-    if ([NotificationController visitPhotoWall:_eventId needClear:NO]) {
-        UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
-        if (!image) {
-            image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
-            image.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
-            [imgWall addSubview:image];
-            [image setTag:NEW_PHOTO_NOTIFICATION];
-        }
-    }else{
-        UIImageView* image = (UIImageView*)[imgWall viewWithTag:NEW_PHOTO_NOTIFICATION];
-        if (image) {
-            [image removeFromSuperview];
-        }
-    }
+    
+    self.imgPoint.hidden = ![NotificationController visitPhotoWall:self.eventId needClear:NO];
 }
 
 -(void)setVideoWallpoint
 {
-    if ([NotificationController visitVideoWall:_eventId needClear:NO]) {
-        UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
-        if (!image) {
-            image = [[UIImageView alloc]initWithFrame:CGRectMake(135, 0, 10, 10)];
-            image.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
-            [videoWall addSubview:image];
-            [image setTag:NEW_VIDEO_NOTIFICATION];
-        }
-    }else{
-        UIImageView* image = (UIImageView*)[videoWall viewWithTag:NEW_VIDEO_NOTIFICATION];
-        if (image) {
-            [image removeFromSuperview];
-        }
-    }
+    self.videoPoint.hidden = ![NotificationController visitVideoWall:self.eventId needClear:NO];
 }
 
 - (void)dealloc {
