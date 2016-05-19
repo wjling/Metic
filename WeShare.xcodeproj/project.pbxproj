@@ -175,6 +175,7 @@
 		2E21E7081CB52EFE0036B69A /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E21E6F01CB52EFE0036B69A /* libSocialWechat.a */; };
 		2E21E7091CB52EFE0036B69A /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E21E6F11CB52EFE0036B69A /* libWeChatSDK.a */; };
 		2E21E70A1CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E21E6F61CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle */; };
+		2E66061C1CEDFBA400711983 /* EventPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */; };
 		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
 		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
@@ -838,6 +839,7 @@
 		2E21E6F51CB52EFE0036B69A /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2E21E6F61CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		2E21E6F71CB52EFE0036B69A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPreviewViewController.xib; sourceTree = "<group>"; };
 		2EEF9F5B1CC4E16300964647 /* MacroDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroDefinition.h; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		48151F1119493FD8009E156E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -2474,6 +2476,7 @@
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
 				F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */,
 				F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */,
+				2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */,
 				F810B7B01B0107A200843AAB /* EventEdit */,
 			);
 			name = Event;
@@ -3495,6 +3498,7 @@
 				04B6F89C19A25D5C00229393 /* face13.png in Resources */,
 				04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */,
 				04B6F89519A25D5C00229393 /* face06.png in Resources */,
+				2E66061C1CEDFBA400711983 /* EventPreviewViewController.xib in Resources */,
 				F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */,
 				04B6F8A219A25D5C00229393 /* face19.png in Resources */,
 				04B6F8A819A25D5C00229393 /* face25.png in Resources */,

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,58 +12,105 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="131"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="130"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="130.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="BFd-Gh-ZyT">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BFd-Gh-ZyT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" id="AcQ-NY-i8V">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" translatesAutoresizingMaskIntoConstraints="NO" id="AcQ-NY-i8V">
                                 <rect key="frame" x="10" y="10" width="60" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="AcQ-NY-i8V" secondAttribute="height" multiplier="1:1" id="NaL-If-1hF"/>
+                                </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" id="Pf2-WP-o1B">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" translatesAutoresizingMaskIntoConstraints="NO" id="Pf2-WP-o1B">
                                 <rect key="frame" x="80" y="10" width="60" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Pf2-WP-o1B" secondAttribute="height" multiplier="1:1" id="X8W-DQ-R5n"/>
+                                </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" id="hx4-uH-Z69">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" translatesAutoresizingMaskIntoConstraints="NO" id="hx4-uH-Z69">
                                 <rect key="frame" x="150" y="10" width="60" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="hx4-uH-Z69" secondAttribute="height" multiplier="1:1" id="eG0-5h-Em4"/>
+                                </constraints>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" id="XpC-SS-fje">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="活动图片的默认图片" translatesAutoresizingMaskIntoConstraints="NO" id="XpC-SS-fje">
                                 <rect key="frame" x="220" y="10" width="60" height="60"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="XpC-SS-fje" secondAttribute="height" multiplier="1:1" id="fHo-sM-Naa"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="AcQ-NY-i8V" firstAttribute="leading" secondItem="BFd-Gh-ZyT" secondAttribute="leading" constant="10" id="7u2-n4-y7U"/>
+                            <constraint firstAttribute="bottom" secondItem="Pf2-WP-o1B" secondAttribute="bottom" id="9g6-9X-wDi"/>
+                            <constraint firstItem="Pf2-WP-o1B" firstAttribute="top" secondItem="BFd-Gh-ZyT" secondAttribute="top" constant="10" id="AIz-wR-Rih"/>
+                            <constraint firstItem="hx4-uH-Z69" firstAttribute="leading" secondItem="Pf2-WP-o1B" secondAttribute="trailing" constant="10" id="Fry-wB-9ez"/>
+                            <constraint firstItem="AcQ-NY-i8V" firstAttribute="top" secondItem="BFd-Gh-ZyT" secondAttribute="top" constant="10" id="O9a-Bb-3z5"/>
+                            <constraint firstItem="XpC-SS-fje" firstAttribute="leading" secondItem="hx4-uH-Z69" secondAttribute="trailing" constant="10" id="V2b-5y-P54"/>
+                            <constraint firstItem="hx4-uH-Z69" firstAttribute="top" secondItem="BFd-Gh-ZyT" secondAttribute="top" constant="10" id="V3P-SM-Obc"/>
+                            <constraint firstAttribute="bottom" secondItem="hx4-uH-Z69" secondAttribute="bottom" id="bDu-03-0OM"/>
+                            <constraint firstItem="Pf2-WP-o1B" firstAttribute="leading" secondItem="AcQ-NY-i8V" secondAttribute="trailing" constant="10" id="lWz-sW-UQv"/>
+                            <constraint firstAttribute="bottom" secondItem="XpC-SS-fje" secondAttribute="bottom" id="mo6-t7-0mn"/>
+                            <constraint firstItem="XpC-SS-fje" firstAttribute="top" secondItem="BFd-Gh-ZyT" secondAttribute="top" constant="10" id="mze-IO-5M9"/>
+                            <constraint firstAttribute="width" secondItem="BFd-Gh-ZyT" secondAttribute="height" multiplier="32:7" id="qFd-vC-Hpl"/>
+                            <constraint firstAttribute="bottom" secondItem="AcQ-NY-i8V" secondAttribute="bottom" id="y9r-ce-Eu1"/>
+                        </constraints>
                     </view>
-                    <view contentMode="scaleToFill" id="h37-dD-o7x">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h37-dD-o7x">
                         <rect key="frame" x="0.0" y="80" width="320" height="51"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="dGQ-nS-xBR">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGQ-nS-xBR">
                                 <rect key="frame" x="0.0" y="25" width="95" height="1"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="dwn-eT-wJr"/>
+                                </constraints>
                             </view>
-                            <view contentMode="scaleToFill" id="eJD-k4-9O1">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eJD-k4-9O1">
                                 <rect key="frame" x="225" y="25" width="95" height="1"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="deviceRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="0sq-R3-knI"/>
+                                </constraints>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="加入活动后才可查看     评论、图片、视频等内容" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JCt-zj-mpc">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="加入活动后才可查看     评论、图片、视频等内容" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JCt-zj-mpc">
                                 <rect key="frame" x="105" y="10" width="110" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="mpu-SU-APS"/>
+                                    <constraint firstAttribute="width" constant="110" id="qd0-DM-zfk"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" red="0.57647061349999995" green="0.57647061349999995" blue="0.57647061349999995" alpha="1" colorSpace="deviceRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dGQ-nS-xBR" firstAttribute="centerY" secondItem="h37-dD-o7x" secondAttribute="centerY" id="6Og-sa-mUl"/>
+                            <constraint firstItem="dGQ-nS-xBR" firstAttribute="trailing" secondItem="JCt-zj-mpc" secondAttribute="leading" constant="-10" id="B1A-TK-BI7"/>
+                            <constraint firstAttribute="width" secondItem="h37-dD-o7x" secondAttribute="height" multiplier="320:51" id="Foc-Bs-iAB"/>
+                            <constraint firstAttribute="trailing" secondItem="eJD-k4-9O1" secondAttribute="trailing" id="JqP-RZ-7ol"/>
+                            <constraint firstItem="eJD-k4-9O1" firstAttribute="centerY" secondItem="h37-dD-o7x" secondAttribute="centerY" id="K2c-O8-ZKc"/>
+                            <constraint firstItem="JCt-zj-mpc" firstAttribute="centerX" secondItem="h37-dD-o7x" secondAttribute="centerX" id="QxV-QF-3V0"/>
+                            <constraint firstItem="dGQ-nS-xBR" firstAttribute="leading" secondItem="h37-dD-o7x" secondAttribute="leading" id="nhT-EQ-rTd"/>
+                            <constraint firstItem="JCt-zj-mpc" firstAttribute="centerY" secondItem="h37-dD-o7x" secondAttribute="centerY" id="s8g-Zk-7QL"/>
+                            <constraint firstItem="eJD-k4-9O1" firstAttribute="leading" secondItem="JCt-zj-mpc" secondAttribute="trailing" constant="10" id="yBj-v3-bZ3"/>
+                        </constraints>
                     </view>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="h37-dD-o7x" secondAttribute="bottom" id="8u5-Mi-kC3"/>
+                    <constraint firstAttribute="trailing" secondItem="h37-dD-o7x" secondAttribute="trailing" id="Azf-3z-WAH"/>
+                    <constraint firstItem="h37-dD-o7x" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="C1H-2g-eRi"/>
+                    <constraint firstItem="BFd-Gh-ZyT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="lqv-Cv-YqF"/>
+                    <constraint firstItem="BFd-Gh-ZyT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="nwo-Y7-AG2"/>
+                    <constraint firstAttribute="trailing" secondItem="BFd-Gh-ZyT" secondAttribute="trailing" id="v7p-cJ-ANy"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
@@ -78,9 +126,4 @@
     <resources>
         <image name="活动图片的默认图片" width="75" height="75"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

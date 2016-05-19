@@ -20,7 +20,8 @@
 
 
 @interface EventPreviewViewController ()<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,UIScrollViewDelegate>
-@property(nonatomic,strong) UITableView* tableView;
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property(nonatomic,strong) UIView* commentView;
 @property(nonatomic,strong) UITextView* inputTextView;
 @property(nonatomic,strong) NSArray* bestPhotos;
@@ -66,22 +67,20 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [CommonUtils addLeftButton:self isFirstPage:NO];
     [self.navigationItem setTitle:@"活动详情"];
-    if (!_tableView) {
-        CGRect frame = self.view.bounds;
-        frame.size.height -= 45;
-        _tableView = [[UITableView alloc]initWithFrame:frame];
+    if (_tableView) {
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         [_tableView setRowHeight:289];
         [_tableView setShowsVerticalScrollIndicator:NO];
-        [self.view addSubview:_tableView];
+
         _tableView.dataSource = self;
         _tableView.delegate = self;
         [_tableView reloadData];
     }
+    
     if (self.beingInvited){
         [self setupInviteView];
-    }else if (_visibility && ![_visibility boolValue] && !self.shareId)
+    }else if (YES || _visibility && ![_visibility boolValue] && !self.shareId)
     {
         //此活动不允许陌生人参与
         [self setupBottomLabel:@"此活动不允许陌生人参与" textColor:[UIColor grayColor] offset:64];
@@ -159,7 +158,7 @@
 
 -(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
 {
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, self.view.bounds.size.width, 50)];
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, self.view.bounds.size.height - 50, kMainScreenWidth, 50)];
     label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     label.text = content;
     label.textAlignment = NSTextAlignmentCenter;
@@ -182,7 +181,7 @@
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendBtn setTag:520];
     [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [sendBtn setFrame:CGRectMake(250, 5, 65, 35)];
+    [sendBtn setFrame:CGRectMake(kMainScreenWidth - 70, 5, 65, 35)];
     [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
     [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
@@ -210,7 +209,7 @@
     
     [commentV addSubview:textView];
     
-    textView.frame = CGRectMake(5, 5, 240, 35);
+    textView.frame = CGRectMake(5, 5, kMainScreenWidth - 80, 35);
     textView.backgroundColor = [UIColor clearColor];
     textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     textView.layer.borderWidth = 0.65f;
@@ -229,7 +228,7 @@
     UIButton *ignoreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [ignoreBtn setTag:520];
     [ignoreBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [ignoreBtn setFrame:CGRectMake(10, 5, CGRectGetWidth(self.view.frame)/2-15, 35)];
+    [ignoreBtn setFrame:CGRectMake(10, 5, kMainScreenWidth/2-15, 35)];
     [ignoreBtn setTitle:@"忽略邀请" forState:UIControlStateNormal];
     [ignoreBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [ignoreBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
@@ -242,7 +241,7 @@
     UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendBtn setTag:520];
     [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame)/2+5, 5, CGRectGetWidth(self.view.frame)/2-15, 35)];
+    [sendBtn setFrame:CGRectMake(kMainScreenWidth/2+5, 5, kMainScreenWidth/2-15, 35)];
     [sendBtn setTitle:@"同意邀请" forState:UIControlStateNormal];
     [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
@@ -500,7 +499,6 @@
         if (self.eventInfo) {
             [cell applyData:self.eventInfo];
         }
-        
         return cell;
     }else{
         BOOL nibsRegistered = NO;
@@ -542,26 +540,25 @@
         }
         return cell;
     }
-    
-    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        NSString* text = [_eventInfo valueForKey:@"remark"];
-        float commentHeight = [CommonUtils calculateTextHeight:text width:300.0 fontSize:MainFontSize isEmotion:NO];
+        
+        NSString* text = [self.eventInfo valueForKey:@"remark"];
+        float commentHeight = [CommonUtils calculateTextHeight:text width:kMainScreenWidth - 20 fontSize:MainFontSize isEmotion:NO];
         if (commentHeight < 25) commentHeight = 25;
         if (text && [text isEqualToString:@""]) {
-//            commentHeight = 10;
         }else if(text) commentHeight += 5;
-        return 280 + commentHeight;
+        return 128.0 + commentHeight + 158 * kMainScreenWidth / 320 + 31 * (kMainScreenWidth - 30) / 290.0f;
     }
     else {
-        if (_shouldShowPhoto && _bestPhotos.count > 0) return 131;
-        else return 51;
+        if (_shouldShowPhoto && _bestPhotos.count > 0)
+            return 121*kMainScreenWidth/320+10;
+        else return 51*kMainScreenWidth/320
+            ;
     }
-
 }
 
 #pragma mark - keyboard observer method
