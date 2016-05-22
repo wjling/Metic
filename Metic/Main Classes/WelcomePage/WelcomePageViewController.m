@@ -95,9 +95,11 @@
     if (bounds.size.height <= 480) {
         y = 40;
     }
-    else
-    {
+    else if(bounds.size.height <= 600) {
         y = 70;
+    }
+    else {
+        y = 90;
     }
 //    CGFloat view_width = bounds.size.width;
 //    CGFloat view_height = bounds.size.height;
@@ -109,7 +111,9 @@
     
     page1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
     UIImageView* imgV1_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
-    UIImageView* imgV1_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
+    imgV1_1.contentMode = UIViewContentModeScaleAspectFill;
+    UIImageView* imgV1_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 225 - 2 * y, view_width + 120, 385)];
+    imgV1_2.contentMode = UIViewContentModeScaleAspectFill;
 //    [page1 setBackgroundColor:[UIColor redColor]];
     [page1 setBackgroundColor:bgColor];
     imgV1_1.image = [UIImage imageNamed:@"splash_text1"];
@@ -120,7 +124,9 @@
     
     page2 = [[UIView alloc]initWithFrame:CGRectMake(view_width, 0, view_width, view_height)];
     UIImageView* imgV2_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
-    UIImageView* imgV2_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
+    imgV2_1.contentMode = UIViewContentModeScaleAspectFill;
+    UIImageView* imgV2_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 225 - 2 * y, view_width + 120, 385)];
+    imgV2_2.contentMode = UIViewContentModeScaleAspectFill;
 //    [page2 setBackgroundColor:[UIColor blueColor]];
     [page2 setBackgroundColor:bgColor];
     imgV2_1.image = [UIImage imageNamed:@"splash_text2"];
@@ -131,7 +137,9 @@
     
     page3 = [[UIView alloc]initWithFrame:CGRectMake(view_width * 2, 0, view_width, view_height)];
     UIImageView* imgV3_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
-    UIImageView* imgV3_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
+    UIImageView* imgV3_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 225 - 2 * y, view_width + 120, 385)];
+    imgV3_1.contentMode = UIViewContentModeScaleAspectFill;
+    imgV3_2.contentMode = UIViewContentModeScaleAspectFill;
 //    [page3 setBackgroundColor:[UIColor greenColor]];
     [page3 setBackgroundColor:bgColor];
     imgV3_1.image = [UIImage imageNamed:@"splash_text3"];
@@ -142,7 +150,9 @@
     
     page4 = [[UIView alloc]initWithFrame:CGRectMake(view_width * 3, 0, view_width, view_height)];
     UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
-    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
+    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 225 - 2 * y, view_width + 120, 385)];
+    imgV4_1.contentMode = UIViewContentModeScaleAspectFill;
+    imgV4_2.contentMode = UIViewContentModeScaleAspectFill;
 //    [page4 setBackgroundColor:[UIColor orangeColor]];
     [page4 setBackgroundColor:bgColor];
     imgV4_1.image = [UIImage imageNamed:@"splash_text4"];

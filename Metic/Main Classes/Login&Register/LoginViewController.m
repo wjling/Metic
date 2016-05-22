@@ -238,8 +238,10 @@
     CGFloat y;
     if (bounds.size.height <= 480) {
         y = 40;
-    } else {
+    } else if (bounds.size.height <= 600){
         y = 70;
+    } else {
+        y = 90;
     }
     CGFloat view_width = bounds.size.width;
     CGFloat view_height = bounds.size.height;
@@ -247,7 +249,9 @@
     launchV = [[UIViewController alloc]init];
     UIView* page4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, view_width, view_height)];
     UIImageView* imgV4_1 = [[UIImageView alloc]initWithFrame:CGRectMake(21, y, view_width - 42, 115)];
-    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 245 - 2 * y, view_width + 120, 385)];
+    UIImageView* imgV4_2 = [[UIImageView alloc]initWithFrame:CGRectMake(-60, view_height - 225 - 2 * y, view_width + 120, 385)];
+    imgV4_1.contentMode = UIViewContentModeScaleAspectFill;
+    imgV4_2.contentMode = UIViewContentModeScaleAspectFill;
     [page4 setBackgroundColor:bgColor];
     imgV4_1.image = [UIImage imageNamed:@"splash_text4"];
     imgV4_2.image = [UIImage imageNamed:@"splash_img4"];
@@ -487,7 +491,7 @@
         }
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
         
-        if (YES || !hadCompleteInfo) {
+        if (!hadCompleteInfo) {
             [self jumpToFillinInfo:nil];
         } else {
             [self jumpToMainView];
