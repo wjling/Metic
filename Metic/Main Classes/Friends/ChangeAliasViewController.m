@@ -54,7 +54,7 @@
     
     UIColor *color = [CommonUtils colorWithValue:0xbfbfbf];
     alias_view = [[UITextField alloc]init];
-    [alias_view setFrame:CGRectMake(20, 60, 280, 40)];
+    [alias_view setFrame:CGRectMake(20, 60, kMainScreenWidth - 40, 40)];
     alias_view.layer.borderWidth = 1.5;
     alias_view.layer.borderColor = color.CGColor;
     alias_view.layer.cornerRadius = 3.5;
