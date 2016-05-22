@@ -11,4 +11,5 @@
 
 @interface EventSearchViewController : UIViewController<UISearchBarDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate>
 @property (nonatomic,strong) NSNumber* selectedEventId;
+
 @end

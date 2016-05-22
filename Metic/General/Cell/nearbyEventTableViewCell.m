@@ -77,7 +77,7 @@
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
 {
-    if (YES || isOfficial) {
+    if (isOfficial) {
         if (self.officialFlag) {
             [self addSubview:self.officialFlag];
         }else{

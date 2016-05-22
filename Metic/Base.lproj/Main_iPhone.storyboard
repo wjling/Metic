@@ -5946,10 +5946,23 @@
                     <view key="view" contentMode="scaleToFill" id="fBZ-Gl-hix">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="B2F-3b-3NJ">
+                                <rect key="frame" x="10" y="44" width="300" height="372"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="B2F-3b-3NJ" firstAttribute="leading" secondItem="fBZ-Gl-hix" secondAttribute="leading" constant="10" id="2MQ-nm-P9J"/>
+                            <constraint firstItem="Ca0-tV-JTd" firstAttribute="top" secondItem="B2F-3b-3NJ" secondAttribute="bottom" id="5wx-q3-e2A"/>
+                            <constraint firstItem="B2F-3b-3NJ" firstAttribute="top" secondItem="ZxN-di-37o" secondAttribute="bottom" constant="44" id="axG-O6-YI6"/>
+                            <constraint firstAttribute="trailing" secondItem="B2F-3b-3NJ" secondAttribute="trailing" constant="10" id="j2d-X1-xUe"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="查找活动" id="O1P-R9-gbV"/>
                     <connections>
+                        <outlet property="tableView" destination="B2F-3b-3NJ" id="cPP-fD-BYU"/>
                         <segue destination="MVl-Wy-DVz" kind="push" identifier="searchToshowparticipant" id="Ntp-rU-rWO"/>
                     </connections>
                 </viewController>
@@ -6117,19 +6130,19 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="rIK-Ci-sAS"/>
         <segue reference="wTn-dU-wbL"/>
+        <segue reference="rIK-Ci-sAS"/>
         <segue reference="5EZ-nf-AfT"/>
-        <segue reference="YnG-LV-8dG"/>
-        <segue reference="vrP-dE-x9J"/>
-        <segue reference="ItJ-aD-aY9"/>
-        <segue reference="ib8-0I-OZA"/>
-        <segue reference="Bdm-ot-CYp"/>
-        <segue reference="KQw-JA-BHy"/>
-        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="a7Z-Ie-XBp"/>
         <segue reference="0y8-RS-ijM"/>
         <segue reference="UXj-VV-omZ"/>
         <segue reference="823-Eq-eYh"/>
+        <segue reference="Ntp-rU-rWO"/>
+        <segue reference="ib8-0I-OZA"/>
+        <segue reference="ItJ-aD-aY9"/>
+        <segue reference="vrP-dE-x9J"/>
+        <segue reference="8Lk-Kp-pHu"/>
+        <segue reference="KQw-JA-BHy"/>
+        <segue reference="Bdm-ot-CYp"/>
     </inferredMetricsTieBreakers>
 </document>
