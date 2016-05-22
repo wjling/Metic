@@ -74,8 +74,6 @@
     {
         [self.view setBackgroundColor:bgColor];
     }
-    
-    [self refresh];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -86,6 +84,8 @@
     _shadowView.hidden = NO;
     
     [self checkAvatarUpdate];
+    
+    [self refresh];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -131,7 +131,6 @@
 
 - (void)initParams
 {
-    self.banner_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.banner_UIview.frame.size.width, self.banner_UIview.frame.size.height - 3)];
     self.banner_imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.banner_imageView.clipsToBounds = YES;
     
@@ -334,6 +333,8 @@
         self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     [self.info_tableView reloadData];
+    
+    self.avatar_imageView.layer.cornerRadius = self.avatar_imageView.frame.size.width/2;
 }
 
 -(void)checkAvatarUpdate
