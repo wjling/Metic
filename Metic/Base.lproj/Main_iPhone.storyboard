@@ -5969,12 +5969,9 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" tag="111" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="S3o-ZY-H5h">
+                            <tableView clipsSubviews="YES" tag="111" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="S3o-ZY-H5h">
                                 <rect key="frame" x="10" y="0.0" width="300" height="416"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="IJw-hV-HNh"/>
-                                </constraints>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </tableView>
                         </subviews>
@@ -5982,6 +5979,8 @@
                         <constraints>
                             <constraint firstItem="Hud-jW-JyZ" firstAttribute="top" secondItem="S3o-ZY-H5h" secondAttribute="bottom" id="FWy-cl-pZP"/>
                             <constraint firstItem="S3o-ZY-H5h" firstAttribute="top" secondItem="MJM-1G-5Pn" secondAttribute="bottom" id="frk-zE-Cib"/>
+                            <constraint firstItem="S3o-ZY-H5h" firstAttribute="leading" secondItem="yza-mp-k9g" secondAttribute="leading" constant="10" id="ofc-yE-XPu"/>
+                            <constraint firstAttribute="trailing" secondItem="S3o-ZY-H5h" secondAttribute="trailing" constant="10" id="rbq-ok-Vyd"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="周边活动" id="b2O-GP-low">

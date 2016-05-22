@@ -12,7 +12,12 @@
 #import "HttpSender.h"
 #import "CommonUtils.h"
 #import "MTUser.h"
+#import "MTOperation.h"
 #import "AppConstants.h"
+#import "PhotoGetter.h"
+#import "MegUtils.h"
+#import "UIImageView+WebCache.h"
+
 
 @implementation nearbyEventTableViewCell
 @synthesize avatar;
@@ -44,12 +49,7 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    //frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    //frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
     [super setFrame:frame];
-    
 }
 
 - (IBAction)wantIn:(id)sender {
@@ -77,24 +77,24 @@
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
 {
-    if (isOfficial) {
-        if (_officialFlag) {
-            [self addSubview:_officialFlag];
+    if (YES || isOfficial) {
+        if (self.officialFlag) {
+            [self addSubview:self.officialFlag];
         }else{
-            float width = self.bounds.size.width;
-            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
-            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
+            float width = kMainScreenWidth;
+            self.officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width - 48 - 20, 4, 25.6, 28.4)];
+            self.officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 25.6, 28.4)];
             label.textAlignment = NSTextAlignmentCenter;
             label.text = @"官";
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor whiteColor];
-            [_officialFlag addSubview:label];
-            [self addSubview:_officialFlag];
+            [self.officialFlag addSubview:label];
+            [self addSubview:self.officialFlag];
         }
     }else{
-        if (_officialFlag) {
-            [_officialFlag removeFromSuperview];
+        if (self.officialFlag) {
+            [self.officialFlag removeFromSuperview];
         }
     }
 }
@@ -102,7 +102,96 @@
 -(void)dismissAlertView:(UIAlertView*) alertView
 {
     [alertView dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+- (void)applyData:(NSDictionary*)data {
     
+    self.dict = data;
+    self.eventName.text = [data valueForKey:@"subject"];
+    NSString* beginT = [data valueForKey:@"time"];
+    NSString* endT = [data valueForKey:@"endTime"];
+    [CommonUtils generateEventContinuedInfoLabel:self.eventTime beginTime:beginT endTime:endT];
+    
+    self.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[data valueForKey:@"launch_time"]];
+    self.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[data valueForKey:@"location"] ];
+    
+    NSInteger participator_count = [[data valueForKey:@"member_count"] integerValue];
+    NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
+    NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
+    
+    self.member_count.font = [UIFont systemFontOfSize:15];
+    self.member_count.numberOfLines = 0;
+    self.member_count.lineBreakMode = NSLineBreakByCharWrapping;
+    self.member_count.tintColor = [UIColor lightGrayColor];
+    [self.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
+        NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
+        UIFont *systemFont = [UIFont systemFontOfSize:18];
+        
+        if (redRange.location != NSNotFound) {
+            // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
+            [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
+            
+            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
+            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
+            CFRelease(italicFont);
+        }
+        return mutableAttributedString;
+    }];
+    
+    
+    
+    //显示备注名
+    NSString* alias = [MTOperation getAliasWithUserId:data[@"launcher_id"] userName:data[@"launcher"]];
+    self.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
+    NSInteger visibility = [data[@"visibility"] integerValue];
+    switch (visibility) {
+        case 0:
+            eventType.text = @"活动类型: 私人活动";
+            break;
+        case 1:
+            eventType.text = @"活动类型: 公开 (内容不可见)";
+            break;
+        case 2:
+            eventType.text = @"活动类型: 公开 (内容可见)";
+            break;
+        default:
+            break;
+    }
+
+    self.eventId = [data valueForKey:@"event_id"];
+    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"launcher_id"]];
+    [avatarGetter getAvatar];
+    [self drawOfficialFlag:[[data valueForKey:@"verify"] boolValue]];
+    PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:self.themePhoto authorId:[data valueForKey:@"event_id"]];
+    NSString* bannerURL = [data valueForKey:@"banner"];
+    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[data valueForKey:@"event_id"]];
+    [bannerGetter getBanner:[data valueForKey:@"code"] url:bannerURL path:bannerPath];
+    if ([[data valueForKey:@"isIn"] boolValue]) {
+        [self.statusLabel setHidden:NO];
+        self.statusLabel.text = @"已加入活动";
+        [self.wantInBtn setHidden:YES];
+    }else if ([[data valueForKey:@"visibility"] boolValue]) {
+        [self.statusLabel setHidden:YES];
+        [self.wantInBtn setHidden:NO];
+    }else{
+        [self.statusLabel setHidden:NO];
+        self.statusLabel.text = @"非公开活动";
+        [self.wantInBtn setHidden:YES];
+    }
+    
+    NSArray *memberids = [data valueForKey:@"member"];
+    
+    for (int i =3; i>=0; i--) {
+        UIImageView *tmp = self.avatarArray[i];
+        if (i < participator_count) {
+            PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
+            [miniGetter getAvatar];
+        }else{
+            [tmp sd_cancelCurrentImageLoad];
+            tmp.image = nil;
+        }
+    }
+    [self setBackgroundColor:[UIColor whiteColor]];
 }
 
 #pragma mark - UIAlertView Delegate

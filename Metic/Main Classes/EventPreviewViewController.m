@@ -80,7 +80,7 @@
     
     if (self.beingInvited){
         [self setupInviteView];
-    }else if (YES || _visibility && ![_visibility boolValue] && !self.shareId)
+    }else if (_visibility && ![_visibility boolValue] && !self.shareId)
     {
         //此活动不允许陌生人参与
         [self setupBottomLabel:@"此活动不允许陌生人参与" textColor:[UIColor grayColor] offset:64];
