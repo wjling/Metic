@@ -146,7 +146,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Nbj-yG-nIA">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="Nbj-yG-nIA">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                             </tableView>
@@ -154,6 +154,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Nbj-yG-nIA" firstAttribute="top" secondItem="8Db-1M-T3e" secondAttribute="bottom" id="GQQ-kx-mX8"/>
+                            <constraint firstItem="Nbj-yG-nIA" firstAttribute="leading" secondItem="ODZ-z7-Y29" secondAttribute="leading" id="NSa-mb-rL3"/>
+                            <constraint firstAttribute="trailing" secondItem="Nbj-yG-nIA" secondAttribute="trailing" id="Uqf-JH-nUm"/>
                             <constraint firstItem="8v9-qY-ugF" firstAttribute="top" secondItem="Nbj-yG-nIA" secondAttribute="bottom" id="adF-h6-ANg"/>
                         </constraints>
                     </view>
@@ -6220,19 +6222,19 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="wTn-dU-wbL"/>
         <segue reference="rIK-Ci-sAS"/>
-        <segue reference="5EZ-nf-AfT"/>
-        <segue reference="a7Z-Ie-XBp"/>
-        <segue reference="0y8-RS-ijM"/>
-        <segue reference="L2M-th-cr6"/>
-        <segue reference="UXj-VV-omZ"/>
-        <segue reference="823-Eq-eYh"/>
-        <segue reference="Ntp-rU-rWO"/>
+        <segue reference="wTn-dU-wbL"/>
+        <segue reference="vrP-dE-x9J"/>
         <segue reference="ib8-0I-OZA"/>
         <segue reference="ItJ-aD-aY9"/>
-        <segue reference="vrP-dE-x9J"/>
-        <segue reference="8Lk-Kp-pHu"/>
         <segue reference="KQw-JA-BHy"/>
+        <segue reference="8Lk-Kp-pHu"/>
+        <segue reference="Ntp-rU-rWO"/>
+        <segue reference="WvQ-QJ-tqt"/>
+        <segue reference="0y8-RS-ijM"/>
+        <segue reference="a7Z-Ie-XBp"/>
+        <segue reference="L2M-th-cr6"/>
+        <segue reference="823-Eq-eYh"/>
+        <segue reference="UXj-VV-omZ"/>
     </inferredMetricsTieBreakers>
 </document>

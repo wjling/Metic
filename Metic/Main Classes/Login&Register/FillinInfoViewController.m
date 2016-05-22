@@ -238,7 +238,7 @@
             }
             UIImageView* imageview = (UIImageView*)[cell viewWithTag:01];
             if (!imageview) {
-                imageview = [[UIImageView alloc]initWithFrame:CGRectMake(230, 5, 50, 50)];
+                imageview = [[UIImageView alloc]initWithFrame:CGRectMake(kMainScreenWidth - 90, 5, 50, 50)];
                 imageview.tag = 01;
                 [cell addSubview:imageview];
             }
@@ -261,7 +261,7 @@
             
             UILabel *label = (UILabel*)[cell.contentView viewWithTag:10];
             if (!label) {
-                label = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, 220, 30)];
+                label = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, kMainScreenWidth - 100, 30)];
                 label.tag = 10;
                 label.textAlignment = NSTextAlignmentRight;
                 [label setBackgroundColor:[UIColor clearColor]];
@@ -290,7 +290,7 @@
             
             UILabel *label = (UILabel*)[cell.contentView viewWithTag:11];
             if (!label) {
-                label = [[UILabel alloc]initWithFrame:CGRectMake(230, 5, 50, 30)];
+                label = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth - 90, 5, 50, 30)];
                 label.tag = 11;
                 label.textAlignment = NSTextAlignmentRight;
                 [label setBackgroundColor:[UIColor clearColor]];
@@ -320,7 +320,7 @@
             
             UILabel* label = (UILabel*)[cell.contentView viewWithTag:12];
             if (!label) {
-                label = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, 220, 30)];
+                label = [[UILabel alloc]initWithFrame:CGRectMake(60, 5, kMainScreenWidth - 100, 30)];
                 label.tag = 12;
                 label.textAlignment = NSTextAlignmentRight;
                 [label setBackgroundColor:[UIColor clearColor]];
@@ -358,7 +358,7 @@
             
             UILabel* label = (UILabel*)[cell.contentView viewWithTag:21];
             if (!label) {
-                label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 260, 90)];
+                label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, kMainScreenWidth - 60, 90)];
                 label.tag = 21;
 //                label.textAlignment = NSTextAlignmentRight;
                 [label setBackgroundColor:[UIColor clearColor]];

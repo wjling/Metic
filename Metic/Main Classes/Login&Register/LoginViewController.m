@@ -487,7 +487,7 @@
         }
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
         
-        if (!hadCompleteInfo) {
+        if (YES || !hadCompleteInfo) {
             [self jumpToFillinInfo:nil];
         } else {
             [self jumpToMainView];
