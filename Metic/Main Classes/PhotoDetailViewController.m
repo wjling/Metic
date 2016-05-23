@@ -46,7 +46,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *download_button;
 @property float specificationHeight;
 @property (strong, nonatomic) IBOutlet UIView *controlView;
-@property(nonatomic,strong) emotion_Keyboard *emotionKeyboard;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
 @property BOOL shouldExit;
@@ -77,11 +76,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [self.inputTextView resignFirstResponder];
     [MobClick beginLogPageView:@"图片主页"];
-
+    [self.textInputView addKeyboardObserver];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -91,32 +87,15 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    if (self.isKeyBoard) {
-        [self.inputTextView resignFirstResponder];
-        [self keyboardWillHide:nil];
-        return;
-    }
-    if (self.isEmotionOpen) {
-        [self button_Emotionpress:nil];
-        return;
-    }
+    
+    [self.textInputView dismissKeyboard];
+    [self.textInputView removeKeyboardObserver];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)dealloc {
-    NSLog(@"dealloc");
-}
-
-//返回上一层
-- (void)MTpopViewController{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) initButtons
@@ -138,57 +117,14 @@
         [self tabbarButtonOption];
     }
     
-    //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
-    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [commentV setBackgroundColor:[UIColor whiteColor]];
-    _commentView = commentV;
-    
-    UIButton *emotionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emotionBtn setFrame:CGRectMake(0, 0, 35, 45)];
-    [emotionBtn setImage:[UIImage imageNamed:@"button_emotion"] forState:UIControlStateNormal];
-    [emotionBtn addTarget:self action:@selector(button_Emotionpress:) forControlEvents:UIControlEventTouchUpInside];
-    [commentV addSubview:emotionBtn];
-    
-    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 38, 5, 35, 35)];
-    [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
-    [sendBtn addTarget:self action:@selector(publishComment:) forControlEvents:UIControlEventTouchUpInside];
-    [commentV addSubview:sendBtn];
-    
-    [self.view addSubview:commentV];
-    [self.view bringSubviewToFront:_controlView];
-    
-    // 初始化输入框
-    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
-    
-    // 这个是仿微信的一个细节体验
-    textView.returnKeyType = UIReturnKeySend;
-    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
-    
-    textView.placeHolder = @"发送新消息";
-    textView.delegate = self;
-    
-    [self.commentView addSubview:textView];
-    _inputTextView = textView;
-    
-    _inputTextView.frame = CGRectMake(38, 5, CGRectGetWidth(self.view.frame) - 80, 35);
-    _inputTextView.backgroundColor = [UIColor clearColor];
-    _inputTextView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    _inputTextView.layer.borderWidth = 0.65f;
-    _inputTextView.layer.cornerRadius = 6.0f;
-    
-    //初始化表情面板
-    _emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width,200)];
-    _emotionKeyboard.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [self.view addSubview:_emotionKeyboard];
-    _emotionKeyboard.textView = _inputTextView;
+    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45)];
+    self.textInputView.delegate = self;
+    [self.view addSubview:self.textInputView];
 }
 
 -(void)initData
 {
     self.sequence = @0;
-    self.isKeyBoard = NO;
     self.Footeropen = NO;
     self.shouldExit = NO;
     self.isLoading = YES;
@@ -272,66 +208,8 @@
     }];
 }
 
-- (IBAction)button_Emotionpress:(id)sender {
-    if(!_canManage)return;
-    if (!_emotionKeyboard) {
-        _emotionKeyboard = [[emotion_Keyboard alloc]initWithPoint:CGPointMake(0, self.view.frame.size.height - 200)];
-    }
-    if (!_isEmotionOpen) {
-        _isEmotionOpen = YES;
-        if (_isKeyBoard) {
-            [_inputTextView resignFirstResponder];
-        }
-        //[self.view bringSubviewToFront:_emotionKeyboard];
-        //[self.view addSubview:_emotionKeyboard];
-        CGRect keyboardBounds = _emotionKeyboard.frame;
-        // get a rect for the textView frame
-        CGRect containerFrame = self.commentView.frame;
-        containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
-        // animations settings
-        [UIView beginAnimations:nil context:NULL];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        [UIView setAnimationDuration:0.25];
-        [UIView setAnimationCurve:7];
-        
-        // set views with new info
-        self.commentView.frame = containerFrame;
-        CGRect frame = _emotionKeyboard.frame;
-        frame.origin.y = self.view.frame.size.height - frame.size.height;
-        [_emotionKeyboard setFrame:frame];
-        
-        // commit animations
-        [UIView commitAnimations];
-    }else {
-        [self hiddenCommentViewAndEmotionView];
-    }
-}
-
 - (void)hiddenCommentViewAndEmotionView {
-    _isEmotionOpen = NO;
-    [self clearCommentView];
-    
-    CGRect containerFrame = self.commentView.frame;
-    containerFrame.size.height = 45.f;
-    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-    
-    CGRect inputViewFrame = self.inputTextView.frame;
-    inputViewFrame.size.height = 36.f;
-    
-    CGRect emotionFrame = _emotionKeyboard.frame;
-    emotionFrame.origin.y = self.view.frame.size.height;
-    
-    // animations settings
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:0.25];
-    [UIView setAnimationCurve:7];
-    
-    self.commentView.frame = containerFrame;
-    self.inputTextView.frame = inputViewFrame;
-    self.emotionKeyboard.frame = emotionFrame;
-    
-    [UIView commitAnimations];
+    [self.textInputView dismissKeyboard];
 }
 
 - (void)pullMainCommentFromAir
@@ -451,8 +329,8 @@
 
 - (IBAction)comment:(id)sender {
     if (![self checkCanManaged]) return;
-    self.inputTextView.placeHolder = @"说点什么吧";
-    [self.inputTextView becomeFirstResponder];
+    self.textInputView.placeHolder = @"说点什么吧";
+    [self.textInputView openKeyboard];
 }
 
 - (IBAction)share:(id)sender {
@@ -807,25 +685,20 @@
     }
 }
 
-
 - (void)publishComment:(id)sender {
     if (![self checkCanManaged]) return;
     if (!_photoInfo) return;
-    NSString *comment = self.inputTextView.text;
+    NSString *comment = self.textInputView.text;
     NSString *herName = self.herName;
     NSNumber *repliedId = self.repliedId;
     
+    [self.textInputView clear];
+
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
-        self.inputTextView.text = @"";
+        [self.textInputView clear];
         return;
     }
-    [self.inputTextView resignFirstResponder];
-    if (_isEmotionOpen) [self button_Emotionpress:nil];
-    self.inputTextView.text = @"";
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self textViewDidChange:self.inputTextView];
-//        self.inputTextView.text = @"";
-//    });
+
     MTLOG(comment,nil);
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* newComment = [[NSMutableDictionary alloc]init];
@@ -869,8 +742,7 @@
     }
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
-    self.inputTextView.text = @"";
-    [self.inputTextView resignFirstResponder];
+    [self.textInputView clear];
     
     void (^sendCommentBlock)(void) = ^(void){
         //发送评论
@@ -964,8 +836,8 @@
 }
 
 - (void)clearCommentView {
-    self.inputTextView.text = @"";
-    self.inputTextView.placeHolder = @"说点什么吧";
+    [self.textInputView clear];
+    self.textInputView.placeHolder = @"说点什么吧";
     self.herName = @"";
     self.repliedId = nil;
 }
@@ -981,11 +853,7 @@
 
 -(void)backToDisplay
 {
-    if (_isKeyBoard) {
-        [self.inputTextView resignFirstResponder];
-    }else if (_isEmotionOpen)
-        [self button_Emotionpress:nil];
-    else {
+    if (![self.textInputView dismissKeyboard]) {
         if ([self.parentViewController isKindOfClass:[PhotoBrowserViewController class]]) {
             PhotoBrowserViewController *browserVC = (PhotoBrowserViewController *)self.parentViewController;
             [browserVC showPhotos];
@@ -1303,12 +1171,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.isKeyBoard) {
-        [self.inputTextView resignFirstResponder];
-        return;
-    }
-    if (self.isEmotionOpen) {
-        [self button_Emotionpress:nil];
+    if ([self.textInputView dismissKeyboard]) {
         return;
     }
     
@@ -1339,9 +1202,9 @@
         }
         self.herName = cell.authorName;
         if ([cell.authorId integerValue] != [[MTUser sharedInstance].userid integerValue]) {
-            self.inputTextView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];
-        }else self.inputTextView.placeHolder = @"说点什么吧";
-        [self.inputTextView becomeFirstResponder];
+            self.textInputView.placeHolder = [NSString stringWithFormat:@"回复%@:",_herName];
+        }else self.textInputView.placeHolder = @"说点什么吧";
+        [self.textInputView openKeyboard];
         self.repliedId = cell.authorId;
     }
 }
@@ -1360,82 +1223,6 @@
     _Footeropen = YES;
     [self pullMainCommentFromAir];
 }
-#pragma mark - keyboard observer method
-//Code from Brett Schumann
--(void) keyboardWillShow:(NSNotification *)note{
-    self.isKeyBoard = YES;
-    if (self.isEmotionOpen) {
-        self.isEmotionOpen = NO;
-    }
-    if (self.specificationEditTextfield) {
-        return;
-    }
-    // get keyboard size and loctaion
-    CGRect keyboardBounds;
-    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
-    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    
-    if (CGRectGetHeight(keyboardBounds) == 0) {
-        return;
-    }
-    // Need to translate the bounds to account for rotation.
-    keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
-    
-    // get a rect for the textView frame
-    CGRect containerFrame = self.commentView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
-    
-    CGRect emotionFrame = _emotionKeyboard.frame;
-    emotionFrame.origin.y = self.view.frame.size.height;
-    // animations settings
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve integerValue]];
-    
-    // set views with new info
-    self.commentView.frame = containerFrame;
-    self.emotionKeyboard.frame = emotionFrame;
-    
-    // commit animations
-    [UIView commitAnimations];
-}
-
--(void) keyboardWillHide:(NSNotification *)note{
-    self.isKeyBoard = NO;
-    if (self.specificationEditTextfield) {
-        return;
-    }
-    if(self.isEmotionOpen) {
-        return;
-    }
-    [self clearCommentView];
-    //self.inputField.text = @"";
-    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    
-    // get a rect for the textView frame
-    CGRect containerFrame = self.commentView.frame;
-    containerFrame.size.height = 45.f;
-    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-    
-    CGRect inputViewFrame = self.inputTextView.frame;
-    inputViewFrame.size.height = 36.f;
-    
-    // animations settings
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve integerValue]];
-    
-    // set views with new info
-    self.commentView.frame = containerFrame;
-    self.inputTextView.frame = inputViewFrame;
-    
-    // commit animations
-    [UIView commitAnimations];
-}
 
 #pragma mark - UMSocialUIDelegate
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
@@ -1448,22 +1235,6 @@
         [SVProgressHUD showSuccessWithStatus:@"分享成功" duration:2.f];
     }
 }
-
-#pragma mark - UITextView Delegate
--(void)textViewDidChange:(UITextView *)textView
-{
-    CGRect frame = _inputTextView.frame;
-    float change = _inputTextView.contentSize.height - frame.size.height;
-    if (change != 0 && _inputTextView.contentSize.height < 120) {
-        frame.size.height = _inputTextView.contentSize.height;
-        [_inputTextView setFrame:frame];
-        frame = _commentView.frame;
-        frame.origin.y -= change;
-        frame.size.height += change;
-        [_commentView setFrame:frame];
-    }
-}
-
 
 #pragma mark - UIAlertViewDelegate
 
@@ -1542,14 +1313,9 @@
     
 }
 
-#pragma mark - TextView view delegate
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"]) {
-        [self publishComment:nil];
-        return NO;
-    }
-    return YES;
+#pragma mark - MTTextInputView delegate
+- (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
+    [self publishComment:nil];
 }
 
 @end

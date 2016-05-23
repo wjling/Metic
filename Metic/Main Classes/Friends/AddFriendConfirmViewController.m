@@ -95,7 +95,6 @@
     {
         MTLOG(@"fid is string");
     }
-
 }
 
 #pragma mark - HttpSenderDelegate

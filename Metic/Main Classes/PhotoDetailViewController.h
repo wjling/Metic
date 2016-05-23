@@ -10,10 +10,10 @@
 #import "PhotoGetter.h"
 #import "MJRefreshFooterView.h"
 #import "UMSocial.h"
-#import "MTMessageTextView.h"
 #import "PictureWall2.h"
+#import "MTTextInputView.h"
 
-@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>
+@interface PhotoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UMSocialUIDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate, MTTextInputViewDelegate>
 @property (nonatomic,strong) NSNumber* photoId;
 @property (nonatomic,strong) NSNumber* eventId;
 @property (nonatomic,strong) NSNumber* eventLauncherId;
@@ -24,13 +24,9 @@
 @property (strong, nonatomic) UIViewController* photoDisplayController;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 //@property (strong, nonatomic) MJRefreshFooterView* footer;
+@property (nonatomic, strong) MTTextInputView *textInputView;
 @property (nonatomic,strong) UIView* optionShadowView;
-@property (nonatomic,strong) UIView* commentOptionView;
-@property (strong, nonatomic) IBOutlet UIView *commentView;
-@property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 
-@property BOOL isKeyBoard;
-@property BOOL isEmotionOpen;
 @property BOOL canManage;
 - (IBAction)good:(id)sender;
 - (IBAction)comment:(id)sender;

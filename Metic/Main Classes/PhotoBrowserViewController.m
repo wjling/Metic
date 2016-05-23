@@ -187,10 +187,8 @@
 - (void)swipeViewWillBeginDragging:(SwipeView *)swipeView {
     
     for (PhotoDetailViewController *detailVC in self.childViewControllers) {
-        if (detailVC && [detailVC respondsToSelector:@selector(inputTextView)]) {
-            if (detailVC.inputTextView.isFirstResponder) {
-                [detailVC.inputTextView resignFirstResponder];
-            }
+        if (detailVC && [detailVC respondsToSelector:@selector(textInputView)]) {
+            [detailVC.textInputView dismissKeyboard];
         }
     }
 }
