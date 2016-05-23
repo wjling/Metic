@@ -213,6 +213,12 @@ static MTUser *singletonInstance;
         [[MTDatabaseHelper sharedInstance] queryTable:@"avatar" withSelect:seletes andWhere:wheres completion:^(NSMutableArray *resultsArray) {
             NSMutableArray *results = resultsArray;
             if (!results.count) {
+                NSString*path = [MegUtils avatarImagePathWithUserId:dictionary[@"id"]];
+                [[SDImageCache sharedImageCache] removeImageForKey:path];
+                
+                NSString*path_HD = [MegUtils avatarHDImagePathWithUserId:dictionary[@"id"]];
+                [[SDImageCache sharedImageCache] removeImageForKey:path_HD];
+                
                 NSArray *columns = [[NSArray alloc]initWithObjects:@"'id'",@"'updatetime'", nil];
                 NSArray *values = [[NSArray alloc]initWithObjects:[NSString stringWithFormat:@"%@",[dictionary valueForKey:@"id"]],[NSString stringWithFormat:@"'%@'",[dictionary valueForKey:@"updatetime"]], nil];
                 [[MTDatabaseHelper sharedInstance]insertToTable:@"avatar" withColumns:columns andValues:values];
