@@ -695,7 +695,6 @@
     [self.textInputView clear];
 
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@""]) {
-        [self.textInputView clear];
         return;
     }
 
@@ -1310,7 +1309,15 @@
     }else{
         [SVProgressHUD dismissWithError:@"网络异常，请重试" afterDelay:1];
     }
-    
+}
+
+#pragma mark - UITextView Delegate
+-(BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if(!_canManage){
+        self.textInputView.placeHolder = @"请先加入活动";
+        return NO;
+    }else return YES;
 }
 
 #pragma mark - MTTextInputView delegate

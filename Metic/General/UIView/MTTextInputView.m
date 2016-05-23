@@ -250,6 +250,10 @@
     if (isEmotionOpen) {
         [self button_Emotionpress:nil];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(textViewShouldBeginEditing:)]) {
+        [(id <UITextViewDelegate>)self.delegate textViewShouldBeginEditing:textView];
+    }
     return YES;
 }
 
