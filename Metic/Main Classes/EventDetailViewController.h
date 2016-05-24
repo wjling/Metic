@@ -14,8 +14,8 @@
 #import "MJRefreshFooterView.h"
 #import "PhotoGetter.h"
 #import "MLEmojiLabel.h"
-#import "MTMessageTextView.h"
 #import "PhotoGetter.h"
+#import "MTTextInputView.h"
 
 @interface EventDetailViewController : UIViewController<UIScrollViewDelegate,UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,MJRefreshBaseViewDelegate,MLEmojiLabelDelegate,UIAlertViewDelegate,PhotoGetterDelegate>
 
@@ -24,37 +24,25 @@
 @property(nonatomic,strong) NSNumber* eventLauncherId;
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
-@property (strong, nonatomic) UIButton *comment_button;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) UIView *commentView;
-@property (strong, nonatomic) UIView *inputView;
-@property (strong, nonatomic) MTMessageTextView *inputTextView;
-@property (strong, nonatomic) UIButton *button_Emotion;
 @property (nonatomic,strong) NSNumber *master_sequence;
-@property (nonatomic,strong) UIView* optionShadowView;
-@property (nonatomic,strong) UIView* commentOptionView;
+@property (nonatomic, strong) MTTextInputView *textInputView;
 @property (nonatomic,strong) NSMutableDictionary *event;
 @property (nonatomic,strong) UIImage* uploadImage;
 @property NSInteger Bannercode;
 
 @property BOOL isFromQRCode;
 @property BOOL isPublish;
-@property BOOL isKeyBoard;
-@property BOOL isEmotionOpen;
-- (IBAction)button_Emotionpress:(id)sender;
+
 - (void)pullMainCommentFromAir;
-- (IBAction)publishComment:(id)sender;
-- (IBAction)show2Dcode:(id)sender;
-- (IBAction)report:(id)sender;
+- (void)publishComment:(id)sender;
+- (void)show2Dcode:(id)sender;
+- (void)report:(id)sender;
 - (void)delete_Comment:(id)sender;
 - (void)appreciate:(id)sender;
-- (void)readyforMainC;
 - (void)changeBanner;
 - (IBAction)more:(id)sender;
-
-
-
-
 
 
 @end

@@ -15,6 +15,7 @@
 #import "MTDatabaseHelper.h"
 #import "MTOperation.h"
 #import "MegUtils.h"
+#import "MTMessageTextView.h"
 
 #define MainFontSize 14
 

@@ -209,14 +209,11 @@
 
 - (IBAction)showParticipators:(id)sender {
     if ([controller isKindOfClass:[EventDetailViewController class]]) {
-        if (self.controller.isKeyBoard) {
-            [self.controller.inputTextView resignFirstResponder];
-        }else if (self.controller.isEmotionOpen){
-            [self.controller button_Emotionpress:nil];
-        } else [self.controller performSegueWithIdentifier:@"showParticipators" sender:self.controller];
+        if (![self.controller.textInputView dismissKeyboard]) {
+            [self.controller performSegueWithIdentifier:@"showParticipators" sender:self.controller];
+        }
     }else{
-        if (self.controller.isKeyBoard) {
-            [self.controller.inputTextView resignFirstResponder];
+        if ([self.controller.textInputView dismissKeyboard]) {
             return;
         }
         UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone"
@@ -232,11 +229,7 @@
 
 - (IBAction)showBanner:(id)sender {
     if ([self.controller isKindOfClass:[EventDetailViewController class]]) {
-        if (self.controller.isKeyBoard) {
-            [self.controller.inputTextView resignFirstResponder];
-        }else if (self.controller.isEmotionOpen){
-            [self.controller button_Emotionpress:nil];
-        }else{
+        if (![self.controller.textInputView dismissKeyboard]) {
             bannerView = [[BannerViewController alloc] init];
             bannerView.banner = themePhoto.image;
             
@@ -254,13 +247,12 @@
             [self.controller presentViewController:bannerView animated:YES completion:^{}];
         }
     }else{
-        if (self.controller.isKeyBoard) {
-            [self.controller.inputTextView resignFirstResponder];
-            return;
+        if (![self.controller.textInputView dismissKeyboard]) {
+            
+            bannerView = [[BannerViewController alloc] init];
+            bannerView.banner = themePhoto.image;
+            [self.controller presentViewController:bannerView animated:YES completion:^{}];
         }
-        bannerView = [[BannerViewController alloc] init];
-        bannerView.banner = themePhoto.image;
-        [self.controller presentViewController:bannerView animated:YES completion:^{}];
     }
     
 }
