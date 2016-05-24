@@ -63,7 +63,7 @@
 #define MENU_OFFSET (kMainScreenWidth * 0.1875f)
 #define MENU_SLIDE_ANIMATION_DURATION .3
 #define MENU_QUICK_SLIDE_ANIMATION_DURATION .1
-#define MENU_IMAGE @"头部左上角图标-侧边栏"
+#define MENU_IMAGE @"slide_icon"
 
 static SlideNavigationController *singletonInstance;
 
@@ -272,7 +272,7 @@ static SlideNavigationController *singletonInstance;
 - (UIBarButtonItem *)barButtonItemForMenu:(Menu)menu
 {
     if (!dian) {
-        dian = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+        dian = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 8, 8)];
         dian.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
         dian.tag = 111;
         
@@ -317,6 +317,8 @@ static SlideNavigationController *singletonInstance;
             UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [leftButton setFrame:CGRectMake(0, 0, 30, 30)];
             [leftButton setImage:image forState:UIControlStateNormal];
+            [leftButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+            [leftButton setContentMode:UIViewContentModeScaleAspectFit];
             [leftButton addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
             [dian removeFromSuperview];
             [leftButton addSubview:dian];
