@@ -222,7 +222,6 @@
         [self.view addSubview:_tableView];
         [self.view sendSubviewToBack:_tableView];
     }
-    
 }
 
 -(void)setSortType
@@ -548,9 +547,9 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
-        //[self.view bringSubviewToFront:self.shadowView];
+
         [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
-        //[((SlideNavigationController*)self.navigationController) setBarAlpha:distance/400.0];
+        
         self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
     }else{
         //self.shadowView.hidden = YES;
