@@ -551,6 +551,7 @@
         [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
         
         self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
+        
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

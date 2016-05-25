@@ -566,7 +566,7 @@
 -(void)animation
 {
     CGFloat length = kMainScreenWidth * radio;
-    CGFloat stdH = (kMainScreenHeight - 44 - length)/2 ;
+    CGFloat stdH = (kMainScreenHeight - 44 - length)/2 - 30;
     CGRect frame = _line.frame;
     if (_upOrdown && CGRectGetMaxY(frame) + 2 > stdH + length - 10 ) {
         _upOrdown = NO;
@@ -581,14 +581,11 @@
         frame.origin.y -= 2.0f;
         [_line setFrame:frame];
     }
-    
-    
 }
 
 -(void)dismissAlertView:(UIAlertView*) alertView
 {
     [alertView dismissWithClickedButtonIndex:0 animated:YES];
-    
 }
 #pragma mark - HttpSender Delegate -
 -(void)finishWithReceivedData:(NSData *)rData
@@ -831,26 +828,26 @@
 #pragma mark - UIImagePickerControllerDelegate
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-//    UIImage* img = [info objectForKey:UIImagePickerControllerOriginalImage];
-//    
-//    ZBarReaderController* reader = [[ZBarReaderController alloc]init];
-//    ZBarSymbol *symbol = nil;
-//    for (symbol in [reader scanImage:img.CGImage]) break;
-//    
-//    [picker dismissViewControllerAnimated:YES completion:^{
-//        if (symbol) {
-//            _result = symbol.data;
-//            if (_isScaning) {
-//                _isScaning = NO;
-//                [self pause];
-//            }
-//            [_showView setHidden:NO];
-//            [self resultAnalysis];
-//        }else{
-//            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"未识别到二维码" WithDelegate:self WithCancelTitle:@"确定"];
-//            [alertView setTag:10];
-//        }
-//    }];
+    UIImage* img = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    ZBarReaderController* reader = [[ZBarReaderController alloc]init];
+    ZBarSymbol *symbol = nil;
+    for (symbol in [reader scanImage:img.CGImage]) break;
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        if (symbol) {
+            _result = symbol.data;
+            if (_isScaning) {
+                _isScaning = NO;
+                [self pause];
+            }
+            [_showView setHidden:NO];
+            [self resultAnalysis];
+        }else{
+            UIAlertView* alertView = [CommonUtils showSimpleAlertViewWithTitle:@"系统消息" WithMessage:@"未识别到二维码" WithDelegate:self WithCancelTitle:@"确定"];
+            [alertView setTag:10];
+        }
+    }];
     
 }
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

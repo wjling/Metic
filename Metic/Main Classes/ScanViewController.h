@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "ZBarSDK.h"
+#import "ZBarSDK.h"
 #import "AppConstants.h"
 #import "HttpSender.h"
 #import "MenuViewController.h"
