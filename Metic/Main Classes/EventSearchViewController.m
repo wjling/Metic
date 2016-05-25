@@ -20,7 +20,7 @@
 #import "MTOperation.h"
 
 @interface EventSearchViewController ()
-@property(nonatomic,strong) UITableView* tableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property(nonatomic,strong) UISearchBar* searchBar;
 @property(nonatomic,strong) NSMutableArray* eventIds;
 @property(nonatomic,strong) NSMutableArray* events;
@@ -31,15 +31,6 @@
 @end
 
 @implementation EventSearchViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -53,12 +44,6 @@
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"活动搜索"];
-    CGRect frame = self.view.bounds;
-    frame.origin.x = frame.size.width * 1/32;
-    frame.origin.y = 44;
-    frame.size.width = frame.size.width * 15/16;
-    frame.size.height -= 44;
-    [_tableView setFrame:frame];
     if (_isFirst) {
         _isFirst = NO;
         [_searchBar becomeFirstResponder];
@@ -95,14 +80,6 @@
 -(void)initUI
 {
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    
-    CGRect frame = self.view.bounds;
-    frame.origin.x = frame.size.width * 1/32;
-    frame.origin.y = 44;
-    frame.size.width = frame.size.width * 15/16;
-    frame.size.height -= 44;
-    MTLOG(@"%f  %f",frame.origin.x,frame.size.width);
-    _tableView = [[UITableView alloc]initWithFrame:frame style:UITableViewStylePlain];
     [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
     [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tableView setShowsVerticalScrollIndicator:NO];
@@ -111,7 +88,6 @@
     _searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 44)];
     [_searchBar setPlaceholder:@"搜索"];
     _searchBar.delegate = self;
-    [self.view addSubview:_tableView];
     [self.view addSubview:_searchBar];
     [self.view setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0f]];
     //初始化上拉加载功能
@@ -261,7 +237,7 @@
 #pragma UITableView Delegate & DataSource
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 258;
+    return 112 + 8 + (CGRectGetWidth(self.view.frame) - 20) / 300 * 152;;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -272,7 +248,6 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    MTLOG(@"%d  %d",indexPath.row,_events.count);
     static NSString *CellIdentifier = @"nearbyEventCell";
     BOOL nibsRegistered = NO;
     if (!nibsRegistered) {
@@ -282,81 +257,10 @@
     }
     nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    NSDictionary *a = _events[indexPath.row];
-    cell.dict = a;
-    cell.eventName.text = [a valueForKey:@"subject"];
-    NSString* beginT = [a valueForKey:@"time"];
-    NSString* endT = [a valueForKey:@"endTime"];
-
-    [CommonUtils generateEventContinuedInfoLabel:cell.eventTime beginTime:beginT endTime:endT];
-
-    cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
-    cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-    
-    
-    NSInteger participator_count = [[a valueForKey:@"member_count"] integerValue];
-    NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
-    NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
-    
-    cell.member_count.font = [UIFont systemFontOfSize:15];
-    cell.member_count.numberOfLines = 0;
-    cell.member_count.lineBreakMode = NSLineBreakByCharWrapping;
-    cell.member_count.tintColor = [UIColor lightGrayColor];
-    [cell.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
-        NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
-        UIFont *systemFont = [UIFont systemFontOfSize:18];
-        
-        if (redRange.location != NSNotFound) {
-            // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
-            [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
-            
-            CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
-            [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
-            CFRelease(italicFont);
-        }
-        return mutableAttributedString;
-    }];
-
-    //显示备注名
-    NSString* alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
-    cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
-    cell.eventId = [a valueForKey:@"event_id"];
+    NSDictionary *data = _events[indexPath.row];
     cell.nearbyEventViewController = self;
-    PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-    [avatarGetter getAvatar];
-    [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
-    PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-    NSString* bannerURL = [a valueForKey:@"banner"];
-    NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
-    [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
-    
-    if ([[a valueForKey:@"isIn"] boolValue]) {
-        [cell.statusLabel setHidden:NO];
-        cell.statusLabel.text = @"已加入活动";
-        [cell.wantInBtn setHidden:YES];
-    }else if ([[a valueForKey:@"visibility"] boolValue]) {
-        [cell.statusLabel setHidden:YES];
-        [cell.wantInBtn setHidden:NO];
-    }else{
-        [cell.statusLabel setHidden:NO];
-        cell.statusLabel.text = @"非公开活动";
-        [cell.wantInBtn setHidden:YES];
-    }
-    
-    NSArray *memberids = [a valueForKey:@"member"];
-    
-    for (int i =3; i>=0; i--) {
-        UIImageView *tmp = cell.avatarArray[i];
-        if (i < participator_count) {
-            PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-            [miniGetter getAvatar];
-        }else{
-            [tmp sd_cancelCurrentImageLoad];
-            tmp.image = nil;
-        }
-    }
-    [cell setBackgroundColor:[UIColor whiteColor]];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell applyData:data];
+
     return cell;
 }
 

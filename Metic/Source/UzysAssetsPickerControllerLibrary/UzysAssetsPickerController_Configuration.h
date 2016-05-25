@@ -13,7 +13,7 @@ typedef void (^voidBlock)(void);
 #define kGroupViewCellIdentifier           @"groupViewCellIdentifier"
 #define kAssetsViewCellIdentifier           @"AssetsViewCellIdentifier"
 #define kAssetsSupplementaryViewIdentifier  @"AssetsSupplementaryViewIdentifier"
-#define kThumbnailLength    78.0f
+#define kThumbnailLength    ((kMainScreenWidth - 5) / 4)
 #define kThumbnailSize      CGSizeMake(kThumbnailLength, kThumbnailLength)
 
 #define kTagButtonClose 101

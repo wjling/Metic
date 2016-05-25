@@ -49,9 +49,6 @@
 
 @implementation EventSquareViewController
 
-
-
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -159,7 +156,7 @@
     _tableView.delegate = self;
     [self.view addSubview:_tableView];
     
-    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 250)];
+    _contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, bannerHeight + 20 + CGRectGetWidth(frame)/4)];
     [_contentView setBackgroundColor:[UIColor colorWithWhite:1.0f alpha:1.0]];
     [_contentView setTag:112];
 //    _contentView.layer.borderColor = [UIColor redColor].CGColor;
@@ -192,7 +189,7 @@
     [button1 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button1 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon1 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
-    icon1.image = [UIImage imageNamed:@"ic_recom_events_nearby"];
+    icon1.image = [UIImage imageNamed:@"square_icon_nearby"];
     [button1 addSubview:icon1];
     UILabel* label1 = [[UILabel alloc]initWithFrame:CGRectMake(height*0.1, height*0.6, height*0.8, height*0.4)];
     [label1 setTextAlignment:NSTextAlignmentCenter];
@@ -211,7 +208,7 @@
     [button2 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button2 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon2 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
-    icon2.image = [UIImage imageNamed:@"ic_recom_events_hot"];
+    icon2.image = [UIImage imageNamed:@"square_icon_hot"];
     [button2 addSubview:icon2];
     UILabel* label2 = [[UILabel alloc]initWithFrame:CGRectMake(height*0.1, height*0.6, height*0.8, height*0.4)];
     [label2 setTextAlignment:NSTextAlignmentCenter];
@@ -230,7 +227,7 @@
     [button3 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
     [button3 setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithWhite:0.84f alpha:1.0f]] forState:UIControlStateHighlighted];
     UIImageView* icon3 = [[UIImageView alloc]initWithFrame:CGRectMake(height*0.25, height*0.1, height*0.5, height*0.5)];
-    icon3.image = [UIImage imageNamed:@"ic_recom_events_search"];
+    icon3.image = [UIImage imageNamed:@"square_icon_search"];
     [button3 addSubview:icon3];
     UILabel* label3 = [[UILabel alloc]initWithFrame:CGRectMake(height*0.1, height*0.6, height*0.8, height*0.4)];
     [label3 setTextAlignment:NSTextAlignmentCenter];
@@ -386,10 +383,6 @@
         [_contentView addSubview:tmp];
     }
 }
-
-
-
-
 
 -(void)tapEvent:(UITapGestureRecognizer*)tap
 {
@@ -643,7 +636,7 @@
 {
     switch (indexPath.section) {
         case 0:
-            return 260;
+            return bannerHeight + 20 + kMainScreenWidth/4;
             break;
         case 1:
         {
@@ -653,7 +646,7 @@
                     break;
                     
                 default:
-                    return 190;
+                    return 70 + 115 * (kMainScreenWidth - 20) / 300 + 1;
                     break;
             }
         }
@@ -682,27 +675,31 @@
             UITableViewCell*cell = [[UITableViewCell alloc]init];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 7, 100, 23)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(10, 6, 100, 23)];
             label.text = @"最新活动";
             label.font = [UIFont systemFontOfSize:16];
             label.textAlignment = NSTextAlignmentLeft;
             label.textColor = [UIColor colorWithWhite:0.2f alpha:1.0];
             [cell addSubview:label];
             
-            UIButton* refreshBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-            [refreshBtn setFrame:CGRectMake(240, 0, 80, 31)];
+            UIButton* refreshBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [refreshBtn setFrame:CGRectMake(kMainScreenWidth - 84, 0, 80, 31)];
+            [refreshBtn setImageEdgeInsets:UIEdgeInsetsMake(8, 0, 8, 0)];
+            [refreshBtn.imageView setContentMode:UIViewContentModeScaleAspectFit];
+            [refreshBtn setImage:[UIImage imageNamed:@"square_icon_refresh"] forState:UIControlStateNormal];
             refreshBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             refreshBtn.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
             [refreshBtn setTitle:@"刷新" forState:UIControlStateNormal];
             [refreshBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
             [refreshBtn setTitleColor:[UIColor colorWithWhite:0.6f alpha:1.0f] forState:UIControlStateNormal];
+            [refreshBtn setTitleColor:[UIColor colorWithWhite:0.4f alpha:1.0f] forState:UIControlStateHighlighted];
             [refreshBtn addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventTouchUpInside];
             [cell addSubview:refreshBtn];
             
             
             UILabel* line = [[UILabel alloc]initWithFrame:CGRectMake(10, 31, CGRectGetWidth(tableView.frame) - 20, 1)];
             line.text = @"";
-            line.backgroundColor = [UIColor colorWithWhite:0.94f alpha:1.0];
+            line.backgroundColor = [UIColor colorWithWhite:0.9f alpha:1.0];
             [cell addSubview:line];
             
             return cell;
@@ -823,9 +820,13 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
+        
         [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
+        
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

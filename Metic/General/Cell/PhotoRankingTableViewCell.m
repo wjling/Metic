@@ -18,8 +18,6 @@
 #import "MTDatabaseAffairs.h"
 
 @implementation PhotoRankingTableViewCell
-#define widthspace 10
-#define deepspace 4
 
 - (void)awakeFromNib
 {
@@ -33,15 +31,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-- (void)setFrame:(CGRect)frame
-{
-    //frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    //frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
-    [super setFrame:frame];
-    
 }
 
 -(void)refresh

@@ -10,10 +10,6 @@
 //#import "../Cell/CustomCellTableViewCell.h"
 #import "MTTableViewCellBase.h"
 
-
-
-
-
 @implementation MTTableView
 
 
@@ -50,7 +46,6 @@
         cell.userInteractionEnabled = NO;
         cell.backgroundColor = [UIColor clearColor];
         
-        
         label.text = _emptyTips;
         label.numberOfLines = 1;
         label.backgroundColor = [UIColor clearColor];
@@ -58,7 +53,6 @@
         label.textColor = [UIColor colorWithWhite:147.0/255.0 alpha:1.0f];
         label.textAlignment = NSTextAlignmentCenter;
         [cell addSubview:label];
-        
         
         return cell;
     }

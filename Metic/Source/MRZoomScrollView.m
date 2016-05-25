@@ -21,6 +21,18 @@
 
 @synthesize imageView;
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.delegate = self;
+        self.frame = CGRectMake(0, 0, MRScreenWidth, MRScreenHeight);
+        [self setShowsHorizontalScrollIndicator:NO];
+        [self setShowsVerticalScrollIndicator:NO];
+        [self initImageView];
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -58,8 +70,8 @@
 -(void)fitImageView
 {
     [self zoomToNormal];
-    float containerWidth = self.frame.size.width;
-    float containerHeight = self.frame.size.height;
+    float containerWidth = MRScreenWidth;
+    float containerHeight = MRScreenHeight;
     [self setContentSize:CGSizeMake(containerWidth, containerHeight)];
     if (containerWidth/containerHeight < self.imageView.image.size.width / self.imageView.image.size.height) {
         float photoHeight = self.imageView.image.size.height*containerWidth/imageView.image.size.width;

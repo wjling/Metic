@@ -74,8 +74,6 @@
     {
         [self.view setBackgroundColor:bgColor];
     }
-    
-    [self refresh];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -86,6 +84,8 @@
     _shadowView.hidden = NO;
     
     [self checkAvatarUpdate];
+    
+    [self refresh];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -131,7 +131,6 @@
 
 - (void)initParams
 {
-    self.banner_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.banner_UIview.frame.size.width, self.banner_UIview.frame.size.height - 3)];
     self.banner_imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.banner_imageView.clipsToBounds = YES;
     
@@ -156,12 +155,12 @@
     self.gender_imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.name_label.frame.origin.x + sizeOfName.width + 5, self.name_label.frame.origin.y + 1, 18, 18)];
     if ([gender integerValue] == 0) {
         MTLOG(@"性别女");
-        self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
         MTLOG(@"性别男");
-        self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     [self.banner_UIview addSubview:self.banner_imageView];
     [self.banner_UIview sendSubviewToBack:self.banner_imageView];
@@ -326,14 +325,16 @@
     }
     if ([gender integerValue] == 0) {
         MTLOG(@"性别女,gender: %@",gender);
-        self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
         MTLOG(@"性别男,gender: %@",gender);
-        self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     [self.info_tableView reloadData];
+    
+    self.avatar_imageView.layer.cornerRadius = self.avatar_imageView.frame.size.width/2;
 }
 
 -(void)checkAvatarUpdate
@@ -794,11 +795,11 @@
         {
             [MTUser sharedInstance].gender = [NSNumber numberWithInteger:newGender];
             if (newGender == 0) {
-                self.gender_imageView.image = [UIImage imageNamed:@"女icon"];
+                self.gender_imageView.image = [UIImage imageNamed:@"gender_female"];
             }
             else
             {
-                self.gender_imageView.image = [UIImage imageNamed:@"男icon"];
+                self.gender_imageView.image = [UIImage imageNamed:@"gender_male"];
             }
             MTLOG(@"性别修改成功");
         }
@@ -829,9 +830,12 @@
     [moreFunction_view setHidden:YES];
     if (distance > 0) {
         self.shadowView.hidden = NO;
+        
         [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

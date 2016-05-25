@@ -57,9 +57,10 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
     _author.textColor = [UIColor colorWithWhite:51.0/255.0 alpha:1.0f];
     [_infoView addSubview:_author];
     
+    CGFloat photoWidth = (kMainScreenWidth - 30.f) / 2;
     _publish_date = [[UILabel alloc]initWithFrame:CGRectMake(30, 17, 110, 10)];
     _publish_date.font = [UIFont systemFontOfSize:9];
-    _publish_date.textColor = [UIColor colorWithWhite:145.0/255.0 alpha:1.0f];
+    _publish_date.textColor = [UIColor colorWithWhite:photoWidth/255.0 alpha:1.0f];
     [_infoView addSubview:_publish_date];
     
     UIButton *avatarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -160,13 +161,14 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 
     int width = [[data valueForKey:@"width"] intValue];
     int height = [[data valueForKey:@"height"] intValue];
-    float RealHeight = height * 145.0f / width;
+    CGFloat photoWidth = (kMainScreenWidth - 30.f) / 2;
+    float RealHeight = height * photoWidth / width;
     
-    [self.imgView setFrame:CGRectMake(0, INFO_VIEW_HEIGHT, 145, RealHeight)];
-    [self.infoView setFrame:CGRectMake(0, 0, 145, INFO_VIEW_HEIGHT)];
-    [self.detailView setFrame:CGRectMake(0, INFO_VIEW_HEIGHT + RealHeight - DETAIL_VIEW_HEIGHT, 145, DETAIL_VIEW_HEIGHT)];
+    [self.imgView setFrame:CGRectMake(0, INFO_VIEW_HEIGHT, photoWidth, RealHeight)];
+    [self.infoView setFrame:CGRectMake(0, 0, photoWidth, INFO_VIEW_HEIGHT)];
+    [self.detailView setFrame:CGRectMake(0, INFO_VIEW_HEIGHT + RealHeight - DETAIL_VIEW_HEIGHT, photoWidth, DETAIL_VIEW_HEIGHT)];
     [self.detailView setupUIWithIsZan:self.isZan zanNum:self.zanNum commentNum:self.commentNum];
-    [self.zanBtn setFrame:CGRectMake(145.f / 2.f, INFO_VIEW_HEIGHT + RealHeight - DETAIL_VIEW_HEIGHT * 2.f, 145.f / 2.f, DETAIL_VIEW_HEIGHT * 2.f)];
+    [self.zanBtn setFrame:CGRectMake(photoWidth / 2.f, INFO_VIEW_HEIGHT + RealHeight - DETAIL_VIEW_HEIGHT * 2.f, photoWidth / 2.f, DETAIL_VIEW_HEIGHT * 2.f)];
     
     PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:self.avatar authorId:[data valueForKey:@"author_id"]];
     [avatarGetter getAvatar];
@@ -216,8 +218,8 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 + (CGFloat)photoCellHeightForPhotoInfo:(NSDictionary *)photoInfo {
     float width = [[photoInfo valueForKey:@"width"] floatValue];
     float height = [[photoInfo valueForKey:@"height"] floatValue];
-    float RealHeight = height * 145.0f / width;
-    
+    CGFloat photoWidth = (kMainScreenWidth - 30.f) / 2;
+    float RealHeight = height * photoWidth / width;
     return RealHeight + INFO_VIEW_HEIGHT;
 }
 
@@ -256,8 +258,8 @@ static CGFloat DETAIL_VIEW_HEIGHT = 17;
 }
 
 - (void)setupUI {
-    
-    self.frame = CGRectMake(0, 0, 145, DETAIL_VIEW_HEIGHT);
+    CGFloat photoWidth = (kMainScreenWidth - 30.f) / 2;
+    self.frame = CGRectMake(0, 0, photoWidth, DETAIL_VIEW_HEIGHT);
     
     self.zanLabelView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, DETAIL_VIEW_HEIGHT)];
     self.zanLabelView.font = [UIFont systemFontOfSize:11];

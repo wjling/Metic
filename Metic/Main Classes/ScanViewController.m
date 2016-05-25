@@ -16,6 +16,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import "MTOperation.h"
 
+#define radio 0.675f
+
 @interface ScanViewController ()<AVCaptureMetadataOutputObjectsDelegate>
 @property(nonatomic,strong) AVCaptureSession *session; // 二维码生成的绘画
 @property(nonatomic,strong) AVCaptureVideoPreviewLayer *previewLayer;  // 二维码生成的图层
@@ -126,8 +128,9 @@
 
 - (void) initUI
 {
-    float stdH = (self.view.bounds.size.height - 64)/2 - 108;
-    float wid = self.view.bounds.size.width;
+    CGFloat length = kMainScreenWidth * radio;
+    CGFloat stdH = (kMainScreenHeight - 44 - length)/2 - 30;
+    CGFloat wid = kMainScreenWidth;
     MTLOG(@"作图起始高度：%f",stdH);
     
     UIView* up = [[UIView alloc]initWithFrame:CGRectMake(0, 0, wid, stdH)];
@@ -135,75 +138,75 @@
     up.alpha = 0.7;
     [_GUI addSubview:up];
     
-    UIView* left = [[UIView alloc]initWithFrame:CGRectMake(0, stdH, 47, 216)];
+    UIView* left = [[UIView alloc]initWithFrame:CGRectMake(0, stdH, wid/2-length/2, length)];
     left.backgroundColor =[UIColor blackColor];
     left.alpha = 0.7;
     [_GUI addSubview:left];
     
-    UIView* right = [[UIView alloc]initWithFrame:CGRectMake(wid -47, stdH, 47, 216)];
+    UIView* right = [[UIView alloc]initWithFrame:CGRectMake(wid/2 + length/2, stdH, wid/2-length/2, length)];
     right.backgroundColor =[UIColor blackColor];
     right.alpha = 0.7;
     [_GUI addSubview:right];
     
-    UIView* down = [[UIView alloc]initWithFrame:CGRectMake(0, stdH + 216, wid, stdH)];
+    UIView* down = [[UIView alloc]initWithFrame:CGRectMake(0, stdH + length, wid, kMainScreenHeight - stdH - length)];
     down.backgroundColor =[UIColor blackColor];
     down.alpha = 0.7;
     [_GUI addSubview:down];
     
-    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(60, 10, 200, 21)];
+    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth/2-100, 10, 200, 21)];
     label1.text = @"请将取景器对准";
     label1.textAlignment = NSTextAlignmentCenter;
     label1.textColor = [UIColor colorWithWhite:232.0/255.0 alpha:1.0f];
     label1.font = [UIFont systemFontOfSize:14];
     [down addSubview:label1];
     
-    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(40, 30, 240, 21)];
+    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(kMainScreenWidth/2-120, 30, 240, 21)];
     label2.text = @"活动宝网站或活动宝App提供的二维码";
     label2.textAlignment = NSTextAlignmentCenter;
     label2.textColor = [UIColor colorWithWhite:232.0/255.0 alpha:1.0f];
     label2.font = [UIFont systemFontOfSize:14];
     [down addSubview:label2];
     
+    CGFloat borderLength = kMainScreenWidth * 30 / 320;
+    CGFloat borderWidth = 3;
+    CGFloat borderPadding = -1;
+    UIColor *angleColor = [UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];
     
-    
-    
-    
-    UIView* leftup = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH - 2, 3, 30)];
-    leftup.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* leftup = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(left.frame) - borderWidth - borderPadding, CGRectGetMaxY(up.frame) - borderWidth - borderPadding, borderWidth, borderLength)];
+    leftup.backgroundColor = angleColor;
     [_GUI addSubview:leftup];
     
-    UIView* leftdown = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH + 216 - 30 + 2, 3, 30)];
-    leftdown.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* leftdown = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(left.frame) - borderWidth - borderPadding, CGRectGetMinY(down.frame) - borderLength + borderPadding, borderWidth, borderLength)];
+    leftdown.backgroundColor = angleColor;
     [_GUI addSubview:leftdown];
     
-    UIView* rightup = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -1, stdH - 2, 3, 30)];
-    rightup.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* rightup = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMinX(right.frame) + borderPadding, CGRectGetMaxY(up.frame) - borderWidth - borderPadding, borderWidth, borderLength)];
+    rightup.backgroundColor = angleColor;
     [_GUI addSubview:rightup];
     
-    UIView* rightdown = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -1, stdH + 216 - 30 + 2, 3, 30)];
-    rightdown.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* rightdown = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMinX(right.frame) + borderPadding, CGRectGetMinY(down.frame) - borderLength + borderPadding, borderWidth, borderLength)];
+    rightdown.backgroundColor = angleColor;
     [_GUI addSubview:rightdown];
     
-    UIView* upleft = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH - 2, 30, 3)];
-    upleft.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* upleft = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(left.frame) - borderWidth - borderPadding, CGRectGetMaxY(up.frame) - borderWidth - borderPadding, borderLength, borderWidth)];
+    upleft.backgroundColor = angleColor;
     [_GUI addSubview:upleft];
     
-    UIView* upright = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 -30 + 2, stdH - 2, 30, 3)];
-    upright.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* upright = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMinX(right.frame) - borderLength + borderWidth + borderPadding, CGRectGetMaxY(up.frame) - borderWidth - borderPadding, borderLength, borderWidth)];
+    upright.backgroundColor = angleColor;
     [_GUI addSubview:upright];
     
-    UIView* downleft = [[UIView alloc]initWithFrame:CGRectMake(47 - 2, stdH + 216 - 1, 30, 3)];
-    downleft.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* downleft = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(left.frame) - borderWidth - borderPadding, CGRectGetMinY(down.frame) + borderPadding, borderLength, borderWidth)];
+    downleft.backgroundColor = angleColor;
     [_GUI addSubview:downleft];
     
-    UIView* downright = [[UIView alloc]initWithFrame:CGRectMake(wid - 47 - 30 + 2, stdH + 216 - 1, 30, 3)];
-    downright.backgroundColor =[UIColor colorWithRed:85.0/255.0 green:203.0/255.0 blue:171.0/255.0 alpha:1.0f];;
+    UIView* downright = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMinX(right.frame) - borderLength + borderWidth + borderPadding, CGRectGetMinY(down.frame) + borderPadding, borderLength, borderWidth)];
+    downright.backgroundColor = angleColor;
     [_GUI addSubview:downright];
     
-    
-    
-    
-    _line = [[UIImageView alloc] initWithFrame:CGRectMake(57, stdH + 10, 206, 2)];
+    _line = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(left.frame) + 5, CGRectGetMaxY(up.frame) + 10, length - 10, 2)];
+    _line.clipsToBounds = NO;
+    _line.contentMode = UIViewContentModeScaleAspectFill;
     _line.image = [UIImage imageNamed:@"line.png"];
     [_GUI addSubview:_line];
     //定时器，设定时间过1.5秒，
@@ -440,16 +443,15 @@
 
 -(void)showResult
 {
-    
     if ([_type isEqualToString: @"event"]) {
         NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"CustomCellTableViewCell" owner:self options:nil];
         [[_resultView viewWithTag:151] removeFromSuperview];
         [[_resultView viewWithTag:152] removeFromSuperview];
         CustomCellTableViewCell *cell = [nib objectAtIndex:0];
         [cell setTag:151];
-        [cell setFrame:CGRectMake(0, 46, 300, 250)];
-        NSDictionary *a = _events;
-        if ([[a valueForKey:@"isIn"] intValue] == 1){
+        [cell setFrame:CGRectMake(0, 46, 300, 268)];
+        NSDictionary *data = _events;
+        if ([[data valueForKey:@"isIn"] intValue] == 1){
             [_inButton setTitle:@"已加入" forState:UIControlStateNormal];
             [_inButton setHighlighted:YES];
             [_inButton setEnabled:NO];
@@ -458,54 +460,21 @@
             [_inButton setHighlighted:NO];
             [_inButton setEnabled:YES];
         }
-        cell.eventName.text = [a valueForKey:@"subject"];
-        NSString* beginT = [a valueForKey:@"time"];
-        NSString* endT = [a valueForKey:@"endTime"];
         
-        [CommonUtils generateEventContinuedInfoLabel:cell.eventTime beginTime:beginT endTime:endT];
-
-        cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
-        cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-        int participator_count = [[a valueForKey:@"member_count"] intValue];
-        cell.member_count.text = [[NSString alloc] initWithFormat:@"已有 %d 人参加",participator_count];
-        //显示备注名
-        NSString *alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
-
-        cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
-        cell.eventId = [a valueForKey:@"event_id"];
-        cell.avatar.layer.masksToBounds = YES;
-        [cell.avatar.layer setCornerRadius:15];
+        [cell applyData:data];
         
-        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-        [avatarGetter getAvatar];
-        
-        PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-        NSString* bannerURL = [a valueForKey:@"banner"];
-        NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
-        [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
-        
-        //cell.homeController = self.homeController;
-        
-        NSArray *memberids = [a valueForKey:@"member"];
-        
-        for (int i =3; i>=0; i--) {
-            UIImageView *tmp = cell.avatarArray[i];
-            tmp.layer.masksToBounds = YES;
-            [tmp.layer setCornerRadius:5];
-            if (i < participator_count) {
-                PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                [miniGetter getAvatar];
-            }else tmp.image = nil;
-            
-        }
         CGRect frame = _resultView.frame;
-        frame.origin.y = (self.view.frame.size.height - 292 - _controlView.frame.size.height)/2;
-        frame.size.height = 292;
+        frame.origin.y = (CGRectGetHeight(self.view.frame) - 50 - CGRectGetHeight(cell.frame) - CGRectGetHeight(self.controlView.frame))/2;
+        frame.size.height = 314;
+        frame.origin.x = CGRectGetWidth(_showView.frame)/2 - 150;
+        frame.size.width = 300;
         [_resultView setFrame:frame];
         [_resultView addSubview:cell];
+        [_resultView sendSubviewToBack:cell];
         [_resultView setHidden:NO];
-        [_showView setHidden:NO];
+//        [_showView setHidden:NO];
         frame = _controlView.frame;
+        frame.origin.x = CGRectGetMinX(_resultView.frame);
         frame.origin.y = CGRectGetMaxY(_resultView.frame);
         _controlView.frame = frame;
         [_controlView setHidden:NO];
@@ -517,8 +486,10 @@
         UserTableViewCell *cell = [nib objectAtIndex:0];
         [cell setTag:152];
         [cell setFrame:CGRectMake(0, 50, 300, 160)];
-        NSDictionary *a = _friend;
-        if ([[a valueForKey:@"isFriend"] boolValue] == YES){
+        NSDictionary *data = _friend;
+        [cell applyData:data];
+        
+        if ([[data valueForKey:@"isFriend"] boolValue] == YES){
             [_inButton setTitle:@"已是好友" forState:UIControlStateNormal];
             [_inButton setHighlighted:YES];
             [_inButton setEnabled:NO];
@@ -527,30 +498,27 @@
             [_inButton setHighlighted:NO];
             [_inButton setEnabled:YES];
         }
-        //显示备注名
-        NSString *alias = [MTOperation getAliasWithUserId:a[@"id"] userName:a[@"name"]];
-
-        cell.name.text = alias;
-        cell.signature.text = ([[a valueForKey:@"sign"] isEqual:[NSNull null]])?@"":[a valueForKey:@"sign"];
-        cell.location.text = ([[a valueForKey:@"location"] isEqual:[NSNull null]])?@"":[a valueForKey:@"location"];
-        cell.genderImg.image = ([[a valueForKey:@"gender"] intValue] == 1)? [UIImage imageNamed:@"男icon"]:[UIImage imageNamed:@"女icon"];
-        PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"id"]];
-        [avatarGetter getAvatar];
+        
         [_resultView addSubview:cell];
         
         CGRect frame = _resultView.frame;
+        frame.origin.x = CGRectGetWidth(_showView.frame)/2 - 150;
         frame.size.height = 210;
-        frame.origin.y = (self.view.frame.size.height - 210 - _controlView.frame.size.height)/2;
+        frame.origin.y = (CGRectGetHeight(self.view.frame) - 50 - CGRectGetHeight(cell.frame) - CGRectGetHeight(self.controlView.frame))/2;
         [_resultView setFrame:frame];
         [_resultView setHidden:NO];
-        [_showView setHidden:NO];
+        //        [_showView setHidden:NO];
         frame = _controlView.frame;
-        frame.origin.y = CGRectGetMaxY(_resultView.frame);;
+        frame.origin.x = CGRectGetMinX(_resultView.frame);
+        frame.origin.y = CGRectGetMaxY(_resultView.frame);
         _controlView.frame = frame;
         [_controlView setHidden:NO];
+        
     }
     
-    
+    [UIView animateWithDuration:1.f animations:^{
+        [_showView setHidden:NO];
+    }];
 }
 
 -(void)resultAnalysis
@@ -597,9 +565,10 @@
 
 -(void)animation
 {
-    float stdH = (self.view.bounds.size.height)/2 - 108;
+    CGFloat length = kMainScreenWidth * radio;
+    CGFloat stdH = (kMainScreenHeight - 44 - length)/2 - 30;
     CGRect frame = _line.frame;
-    if (_upOrdown && CGRectGetMaxY(frame) + 2 > stdH + 216 - 10 ) {
+    if (_upOrdown && CGRectGetMaxY(frame) + 2 > stdH + length - 10 ) {
         _upOrdown = NO;
     }else if(!_upOrdown && CGRectGetMinY(frame) - 2 < stdH + 10){
         _upOrdown = YES;
@@ -612,14 +581,11 @@
         frame.origin.y -= 2.0f;
         [_line setFrame:frame];
     }
-    
-    
 }
 
 -(void)dismissAlertView:(UIAlertView*) alertView
 {
     [alertView dismissWithClickedButtonIndex:0 animated:YES];
-    
 }
 #pragma mark - HttpSender Delegate -
 -(void)finishWithReceivedData:(NSData *)rData
@@ -763,10 +729,14 @@
 {
 
     if (distance > 0) {
-        _shadowView.hidden = NO;
+        self.shadowView.hidden = NO;
+        
         [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
+        
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

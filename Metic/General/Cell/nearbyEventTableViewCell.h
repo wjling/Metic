@@ -17,12 +17,15 @@
     IBOutlet UILabel *timeInfo;
     IBOutlet UILabel *location;
     IBOutlet UILabel *launcherinfo;
+    IBOutlet UILabel *eventType;
     IBOutlet TTTAttributedLabel *member_count;
     IBOutlet UILabel *statusLabel;
     IBOutlet UIButton *wantInBtn;
 }
+
 - (IBAction)showParticipant:(id)sender;
--(void)drawOfficialFlag:(BOOL)isOfficial;
+- (void)drawOfficialFlag:(BOOL)isOfficial;
+- (void)applyData:(NSDictionary*)data;
 
 @property(atomic,strong) UIImageView *avatar;
 @property(nonatomic,strong) UILabel *eventName;

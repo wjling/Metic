@@ -131,11 +131,11 @@
 {
     [self getfriendInfoFromDB];
     CGRect screen = [UIScreen mainScreen].bounds;
-    contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 135)];
+    contentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, screen.size.width, 135*kMainScreenWidth/320)];
     contentView.clipsToBounds = YES;
     [contentView setBackgroundColor:[UIColor clearColor]];
     
-    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 132, screen.size.width, 3)];
+    UIView* line = [[UIView alloc]initWithFrame:CGRectMake(0, 135*kMainScreenWidth/320-3, screen.size.width, 3)];
     [line setBackgroundColor:[UIColor orangeColor]];
     
     sView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, contentView.frame.size.width, contentView.frame.size.height-3)];
@@ -198,11 +198,11 @@
     gender_imageView = [[UIImageView alloc] initWithFrame:CGRectMake(185, 35, 17, 17)];
     NSNumber* gender = self.friendInfo_dic? [self.friendInfo_dic objectForKey:@"gender"] : [NSNumber numberWithInt:-1];
     if ([gender integerValue] == 0) {
-        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else if ([gender integerValue] == 1)
     {
-        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     
     
@@ -226,6 +226,7 @@
     
     UIColor* btn_color = [UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.6];
     self.friend_alias_button = [[UIButton alloc]initWithFrame:CGRectMake(self.fInfoView.frame.size.width - 65, self.fInfoView.frame.size.height/3, 70, 25)];
+    self.friend_alias_button.center = CGPointMake(self.friend_alias_button.center.x, self.fInfoView.center.y);
     [friend_alias_button setBackgroundColor:btn_color];
     friend_alias_button.layer.cornerRadius = 5;
     friend_alias_button.layer.masksToBounds = YES;
@@ -449,11 +450,11 @@
     }
     
     if (0 == [gender intValue]) {
-        gender_imageView.image = [UIImage imageNamed:@"女icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_female"];
     }
     else
     {
-        gender_imageView.image = [UIImage imageNamed:@"男icon"];
+        gender_imageView.image = [UIImage imageNamed:@"gender_male"];
     }
     
     if (![location isEqual:[NSNull null]]) {
@@ -708,14 +709,15 @@
     cell.launcher_label.text = [event objectForKey:@"launcher"];
     NSString* remark = [event objectForKey:@"remark"];
     if (![remark isEqualToString:@""]) {
-        cell.remark_textView.text = remark;
+        cell.remark_label.text = remark;
     }else{
-        cell.remark_textView.text = @"主人好懒都懒得描述的说～";
+        cell.remark_label.text = @"主人好懒都懒得描述的说～";
     }
+    
     cell.numOfMember_label.text = [CommonUtils NSStringWithNSNumber:[event objectForKey:@"member_count"]];
     
     if (!cell.stretch_button) {
-        cell.stretch_button = [[UIImageView alloc]initWithFrame:CGRectMake(155, 90, 10, 10)];
+        cell.stretch_button = [[UIImageView alloc]initWithFrame:CGRectMake(kMainScreenWidth/2-5, 90, 10, 10)];
         [cell.stretch_button setImage:[UIImage imageNamed:@"箭头icon"]];
         [cell.contentView addSubview:cell.stretch_button];
     }
@@ -723,12 +725,14 @@
     NSNumber* rowHeight = rowHeights[indexPath.section];
     if ([rowHeight floatValue] == 225) {
         cell.isExpanded = YES;
-        cell.stretch_button.frame = CGRectMake(155, 200, 10, 10);
+        cell.remark_label.hidden = NO;
+        cell.stretch_button.frame = CGRectMake(kMainScreenWidth/2-5, 200, 10, 10);
         [cell.stretch_button setTransform:CGAffineTransformMakeRotation(3.14)];
         
     }else if([rowHeight floatValue] == 110) {
         cell.isExpanded = NO;
-        cell.stretch_button.frame = CGRectMake(155, 90, 10, 10);
+        cell.remark_label.hidden = YES;
+        cell.stretch_button.frame = CGRectMake(kMainScreenWidth/2-5, 90, 10, 10);
         [cell.stretch_button setTransform:CGAffineTransformMakeRotation(0)];
     }
     

@@ -328,7 +328,7 @@
         
         if(!_uploadManageBtn){
             _uploadManageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
+            _uploadManageBtn.frame = CGRectMake(0, 0, kMainScreenWidth, 0);
             [_uploadManageBtn setBackgroundColor:[UIColor whiteColor]];
             [_uploadManageBtn setTitle:@"" forState:UIControlStateNormal];
             [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
@@ -340,13 +340,13 @@
             _uploadManageBtn.clipsToBounds = YES;
             [self.view addSubview:_uploadManageBtn];
             
-            UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(260, 2.5f, 25, 25)];//指定进度轮的大小
+            UIActivityIndicatorView* activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(kMainScreenWidth - 60, 2.5f, 25, 25)];//指定进度轮的大小
             activity.transform = CGAffineTransformMakeScale(1, 1);
             [activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];//设置进度轮显示类型
             [activity startAnimating];
             [_uploadManageBtn addSubview:activity];
             
-            UIImageView* turn_icon = [[UIImageView alloc]initWithFrame:CGRectMake(292.5, 5, 15, 20)];
+            UIImageView* turn_icon = [[UIImageView alloc]initWithFrame:CGRectMake(kMainScreenWidth - 27.5f, 5, 15, 20)];
             turn_icon.image = [UIImage imageNamed:@"箭头icon"];
             [turn_icon setTransform:CGAffineTransformMakeRotation(-1*M_PI_2)];
             [_uploadManageBtn addSubview:turn_icon];
@@ -355,7 +355,7 @@
             [_uploadManageBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
             [UIView animateWithDuration:1 animations:^{
                 [_uploadManageBtn setAlpha:1.0f];
-                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                _uploadManageBtn.frame = CGRectMake(0, 0, kMainScreenWidth, 30);
                 [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成，有%ld张图片上传失败",(long)uploadTaskCount] forState:UIControlStateNormal];
                 CGRect frame = self.quiltView.frame;
                 if (CGRectGetMinY(frame) != 30) {
@@ -368,7 +368,7 @@
             [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
             [UIView animateWithDuration:1 animations:^{
                 [_uploadManageBtn setAlpha:1.0f];
-                _uploadManageBtn.frame = CGRectMake(0, 0, 320, 30);
+                _uploadManageBtn.frame = CGRectMake(0, 0, kMainScreenWidth, 30);
                 [_uploadManageBtn setTitle:[NSString stringWithFormat:@"有%ld张图片正在上传中...",(long)uploadTaskCount] forState:UIControlStateNormal];
                 CGRect frame = self.quiltView.frame;
                 if (CGRectGetMinY(frame) != 30) {
@@ -384,7 +384,7 @@
         [_uploadManageBtn setTitleColor:[CommonUtils colorWithValue:0x939393] forState:UIControlStateNormal];
         [UIView animateWithDuration:1 animations:^{
             [_uploadManageBtn setAlpha:0.0f];
-            _uploadManageBtn.frame = CGRectMake(0, 0, 320, 0);
+            _uploadManageBtn.frame = CGRectMake(0, 0, kMainScreenWidth, 0);
             [_uploadManageBtn setTitle:[NSString stringWithFormat:@"图片上传完成"] forState:UIControlStateNormal];
             CGRect frame = self.quiltView.frame;
             if (CGRectGetMinY(frame) != 0) {
@@ -547,13 +547,12 @@
     NSArray* tmp = [_photo_list subarrayWithRange:NSMakeRange(0, _showPhoNum)];
     for (int i = 0; i < tmp.count; i++) {
         NSDictionary* dict = [tmp objectAtIndex:i];
-        float width = [[dict valueForKey:@"width"] floatValue];
-        float height = [[dict valueForKey:@"height"] floatValue];
-        float RealHeight = height * 145.0f / width + 43;
+        CGFloat realHeight = [PhotoTableViewCell photoCellHeightForPhotoInfo:dict];
+
         if (lH <= rH) {
-            lH += RealHeight;
+            lH += realHeight;
         }else{
-            rH += RealHeight;
+            rH += realHeight;
         }
     }
     MTLOG(@"lH: %f , rH: %f",lH,rH);
@@ -575,9 +574,9 @@
             TMQuiltViewCell* preCell = [quiltView cellAtIndexPath:[NSIndexPath indexPathForRow:_showPhoNum inSection:0]];
             float preHeight = CGRectGetHeight(preCell.frame);
             float preX = CGRectGetMinX(preCell.frame);
-            float width = 300;
+            float width = kMainScreenWidth - 20;
             float height = (preHeight != 50)? 50 : fabsf(_h1) + 50;
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 155):width/6, height-45, width*4/6, 40)];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake((preX == 10)? (width/6 - 10 - (width-10)/2):width/6, height-45, width*4/6, 40)];
             if (!_haveLoadedPhoto) {
                 label.text = @"正在加载 ...";
             }else if([self checkPhoNum]){

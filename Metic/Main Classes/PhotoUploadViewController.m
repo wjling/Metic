@@ -95,19 +95,19 @@ static const NSInteger MaxUploadCount = 20;
     [self drawLeftButton];
     self.scrollView.delegate = self;
     
-    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, 290, 36)];
+    _textView = [[UIView alloc] initWithFrame:CGRectMake(15, 15, kMainScreenWidth - 30, 36)];
     [_textView setBackgroundColor:[UIColor whiteColor]];
     _textView.layer.cornerRadius = 5;
     _textView.layer.masksToBounds = YES;
     [self.scrollView addSubview:_textView];
     
-    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, 274, 36)];
+    self.textInput = [[UITextView alloc]initWithFrame:CGRectMake(8, 0, CGRectGetWidth(self.textView.frame) - 16, 36)];
     self.textInput.delegate = self;
     [self.textInput setBackgroundColor:[UIColor clearColor]];
     [self.textInput setFont:[UIFont systemFontOfSize:16]];
     [_textView addSubview:self.textInput];
     
-    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, 274, 36)];
+    self.preLabel = [[UITextField alloc]initWithFrame:CGRectMake(15, 0, CGRectGetWidth(self.textView.frame) - 30, 36)];
     [self.preLabel setPlaceholder:@"这一刻的想法"];
     [self.preLabel setBackgroundColor:[UIColor clearColor]];
     [self.preLabel setEnabled:NO];
@@ -120,7 +120,7 @@ static const NSInteger MaxUploadCount = 20;
     flowLayout.minimumLineSpacing = 0;
     flowLayout.minimumInteritemSpacing = 0;
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
-    self.imgCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(self.textView.frame) + 15, 290, 80) collectionViewLayout:flowLayout];
+    self.imgCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(self.textView.frame) + 15, kMainScreenWidth - 30, 80) collectionViewLayout:flowLayout];
     self.imgCollectionView.layer.cornerRadius = 5;
     self.imgCollectionView.layer.masksToBounds = YES;
     [self.imgCollectionView setBackgroundColor:[UIColor colorWithRed:227.0/255 green:227.0/255 blue:227.0/255 alpha:1]];
@@ -327,7 +327,8 @@ static const NSInteger MaxUploadCount = 20;
     CGRect frame = _imgCollectionView.frame;
     float count = _uploadImgs.count+1;
     if (count > MaxUploadCount) count = MaxUploadCount;
-    frame.size.height = ceilf(count/4)*70 + 10;
+    NSInteger numPerRow = (CGRectGetWidth(_imgCollectionView.frame) - 10) / 60;
+    frame.size.height = ceilf(count/numPerRow)*70 + 10;
     while (CGRectGetMaxY(frame) > CGRectGetMaxY(self.scrollView.frame) ) {
         frame.size.height -= 70;
     }

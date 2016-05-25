@@ -15,4 +15,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *location;
 @property (strong, nonatomic) IBOutlet UILabel *signature;
 
+- (void)applyData:(NSDictionary *)data ;
+
 @end

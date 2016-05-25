@@ -46,11 +46,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PopToHereAndTurnToNotificationPage:) name: @"PopToFirstPageAndTurnToNotificationPage" object:nil];
     // Do any additional setup after loading the view.
     [CommonUtils addLeftButton:self isFirstPage:YES];
-    settings_tableview = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
+
     settings_tableview.delegate = self;
     settings_tableview.dataSource = self;
     numOfSections = 4;
-    [self.view addSubview:settings_tableview];
     
     [self initParams];
     
@@ -427,7 +426,7 @@
     if (section == 0) {
         if (row == 0) {
             cell.textLabel.text = @"通知栏提醒";
-            UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(225, 8, 30, 30)];
+            UISwitch* nSwitch1 = [[UISwitch alloc]initWithFrame:CGRectMake(kMainScreenWidth - 85, 8, 30, 30)];
             [nSwitch1 addTarget:self action:@selector(switch1Clicked:) forControlEvents:UIControlEventValueChanged];
             nSwitch1.on = [statusOfSwitch1 boolValue];
             nSwitch1.tag = 1;
@@ -453,6 +452,7 @@
         label.text = @"退出";
         [cell setBackgroundColor:[UIColor redColor]];
         label.center = cell.center;
+        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [cell.contentView addSubview:label];
     }
 
@@ -578,9 +578,12 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
+        
         [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-    self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
     }else{
         self.shadowView.hidden = YES;
         [self.view sendSubviewToBack:self.shadowView];

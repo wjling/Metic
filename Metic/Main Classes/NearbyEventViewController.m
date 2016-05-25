@@ -124,7 +124,7 @@
 -(void)initUI
 {
     [CommonUtils addLeftButton:self isFirstPage:NO];
-    _emptyAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, self.nearbyTableView.frame.size.width, 50)];
+    _emptyAlert = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 50)];
     [_emptyAlert setFont:[UIFont systemFontOfSize:15]];
     [_emptyAlert setTextAlignment:NSTextAlignmentCenter];
     [_emptyAlert setTextColor:[UIColor colorWithRed:145.0/255.0 green:145.0/255.0 blue:145.0/255.0 alpha:1]];
@@ -307,7 +307,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int tag = [tableView tag];
+    NSInteger tag = [tableView tag];
     UITableViewCell* useless_cell;
     switch (tag) {
         case 111:{
@@ -320,83 +320,10 @@
             }
             nearbyEventTableViewCell *cell = (nearbyEventTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             
-            NSDictionary *a = _nearbyEvents[indexPath.row];
-            cell.dict = a;
-            cell.eventName.text = [a valueForKey:@"subject"];
-            NSString* beginT = [a valueForKey:@"time"];
-            NSString* endT = [a valueForKey:@"endTime"];
-            [CommonUtils generateEventContinuedInfoLabel:cell.eventTime beginTime:beginT endTime:endT];
-
-            cell.timeInfo.text = [CommonUtils calculateTimeInfo:beginT endTime:endT launchTime:[a valueForKey:@"launch_time"]];
-            cell.location.text = [[NSString alloc]initWithFormat:@"活动地点: %@",[a valueForKey:@"location"] ];
-            
-            NSInteger participator_count = [[a valueForKey:@"member_count"] integerValue];
-            NSString* partiCount_Str = [NSString stringWithFormat:@"%ld",(long)participator_count];
-            NSString* participator_Str = [NSString stringWithFormat:@"已有 %@ 人参加",partiCount_Str];
-            
-            cell.member_count.font = [UIFont systemFontOfSize:15];
-            cell.member_count.numberOfLines = 0;
-            cell.member_count.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.member_count.tintColor = [UIColor lightGrayColor];
-            [cell.member_count setText:participator_Str afterInheritingLabelAttributesAndConfiguringWithBlock:^(NSMutableAttributedString *mutableAttributedString) {
-                NSRange redRange = [participator_Str rangeOfString:partiCount_Str];
-                UIFont *systemFont = [UIFont systemFontOfSize:18];
-                
-                if (redRange.location != NSNotFound) {
-                    // Core Text APIs use C functions without a direct bridge to UIFont. See Apple's "Core Text Programming Guide" to learn how to configure string attributes.
-                    [mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(id)[CommonUtils colorWithValue:0xef7337].CGColor range:redRange];
-                    
-                    CTFontRef italicFont = CTFontCreateWithName((__bridge CFStringRef)systemFont.fontName, systemFont.pointSize, NULL);
-                    [mutableAttributedString addAttribute:(NSString *)kCTFontAttributeName value:(__bridge id)italicFont range:redRange];
-                    CFRelease(italicFont);
-                }
-                return mutableAttributedString;
-            }];
-            
-            
-            
-            //显示备注名
-            NSString* alias = [MTOperation getAliasWithUserId:a[@"launcher_id"] userName:a[@"launcher"]];
-            cell.launcherinfo.text = [[NSString alloc]initWithFormat:@"发起人: %@",alias];
-            cell.eventId = [a valueForKey:@"event_id"];
+            NSDictionary *data = _nearbyEvents[indexPath.row];
             cell.nearbyEventViewController = self;
-            PhotoGetter* avatarGetter = [[PhotoGetter alloc]initWithData:cell.avatar authorId:[a valueForKey:@"launcher_id"]];
-            [avatarGetter getAvatar];
-            [cell drawOfficialFlag:[[a valueForKey:@"verify"] boolValue]];
-            PhotoGetter* bannerGetter = [[PhotoGetter alloc]initWithData:cell.themePhoto authorId:[a valueForKey:@"event_id"]];
-            NSString* bannerURL = [a valueForKey:@"banner"];
-            NSString* bannerPath = [MegUtils bannerImagePathWithEventId:[a valueForKey:@"event_id"]];
-            [bannerGetter getBanner:[a valueForKey:@"code"] url:bannerURL path:bannerPath];
-            if ([[a valueForKey:@"isIn"] boolValue]) {
-                [cell.statusLabel setHidden:NO];
-                cell.statusLabel.text = @"已加入活动";
-                [cell.wantInBtn setHidden:YES];
-            }else if ([[a valueForKey:@"visibility"] boolValue]) {
-                [cell.statusLabel setHidden:YES];
-                [cell.wantInBtn setHidden:NO];
-            }else{
-                [cell.statusLabel setHidden:NO];
-                cell.statusLabel.text = @"非公开活动";
-                [cell.wantInBtn setHidden:YES];
-            }
-            
-            NSArray *memberids = [a valueForKey:@"member"];
-            
-            for (int i =3; i>=0; i--) {
-                UIImageView *tmp = cell.avatarArray[i];
-                if (i < participator_count) {
-                    PhotoGetter* miniGetter = [[PhotoGetter alloc]initWithData:tmp authorId:memberids[i]];
-                    [miniGetter getAvatar];
-                }else{
-                    [tmp sd_cancelCurrentImageLoad];
-                    tmp.image = nil;
-                }
-            }
-            [cell setBackgroundColor:[UIColor whiteColor]];
+            [cell applyData:data];
             return cell;
-            
-            
-            
         }
             break;
         default:
@@ -429,12 +356,13 @@
     
     
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int tag = [tableView tag];
+    NSInteger tag = [tableView tag];
     switch (tag) {
         case 111:{
-            return 258;
+            return 112 + 8 + (CGRectGetWidth(self.view.frame) - 20) / 300 * 152;
         }
             break;
         default:return 0;

@@ -175,6 +175,9 @@
 		2E21E7081CB52EFE0036B69A /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E21E6F01CB52EFE0036B69A /* libSocialWechat.a */; };
 		2E21E7091CB52EFE0036B69A /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E21E6F11CB52EFE0036B69A /* libWeChatSDK.a */; };
 		2E21E70A1CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2E21E6F61CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle */; };
+		2E66061C1CEDFBA400711983 /* EventPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */; };
+		2E8321481CF1C4E600A86779 /* BannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2E8321471CF1C4E600A86779 /* BannerViewController.xib */; };
+		2E83214B1CF2DC6700A86779 /* MTTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E83214A1CF2DC6700A86779 /* MTTextInputView.m */; };
 		48151F0E19493FA1009E156E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F0D19493FA1009E156E /* Security.framework */; };
 		48151F1219493FD8009E156E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48151F1119493FD8009E156E /* CFNetwork.framework */; };
 		483E01F41935C76F00418A58 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 483E01F31935C76F00418A58 /* libsqlite3.dylib */; };
@@ -838,6 +841,11 @@
 		2E21E6F51CB52EFE0036B69A /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		2E21E6F61CB52EFE0036B69A /* UMSocialSDKResourcesNew.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMSocialSDKResourcesNew.bundle; sourceTree = "<group>"; };
 		2E21E6F71CB52EFE0036B69A /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/UMSocialLocalizable.strings"; sourceTree = "<group>"; };
+		2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPreviewViewController.xib; sourceTree = "<group>"; };
+		2E8321471CF1C4E600A86779 /* BannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BannerViewController.xib; sourceTree = "<group>"; };
+		2E8321491CF2DC6700A86779 /* MTTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTextInputView.h; sourceTree = "<group>"; };
+		2E83214A1CF2DC6700A86779 /* MTTextInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTextInputView.m; sourceTree = "<group>"; };
+		2EEF9F5B1CC4E16300964647 /* MacroDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MacroDefinition.h; sourceTree = "<group>"; };
 		48151F0D19493FA1009E156E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		48151F1119493FD8009E156E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		483E01F31935C76F00418A58 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -2244,6 +2252,7 @@
 				51E55C731987389000D62C36 /* BannerSelectorViewController.m */,
 				04B6F8B019A25FCC00229393 /* BannerViewController.h */,
 				04B6F8B119A25FCC00229393 /* BannerViewController.m */,
+				2E8321471CF1C4E600A86779 /* BannerViewController.xib */,
 				51DDBF7819A328010051B88C /* AdViewController.h */,
 				51DDBF7919A328010051B88C /* AdViewController.m */,
 			);
@@ -2473,6 +2482,7 @@
 				5148121B19372B4200DBBED7 /* EventDetailViewController.m */,
 				F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */,
 				F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */,
+				2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */,
 				F810B7B01B0107A200843AAB /* EventEdit */,
 			);
 			name = Event;
@@ -3077,6 +3087,8 @@
 				F8B5DD851BFB83EA00E1F713 /* MTPhotoToolbar.m */,
 				F8B5DD861BFB83EA00E1F713 /* MTShowTextViewController.h */,
 				F8B5DD871BFB83EA00E1F713 /* MTShowTextViewController.m */,
+				2E8321491CF2DC6700A86779 /* MTTextInputView.h */,
+				2E83214A1CF2DC6700A86779 /* MTTextInputView.m */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -3085,6 +3097,7 @@
 			isa = PBXGroup;
 			children = (
 				F8B5DD891BFB83EA00E1F713 /* AppConstants.h */,
+				2EEF9F5B1CC4E16300964647 /* MacroDefinition.h */,
 				F8B5DD8A1BFB83EA00E1F713 /* CloudOperation.h */,
 				F8B5DD8B1BFB83EA00E1F713 /* CloudOperation.m */,
 				F8B5DD8C1BFB83EA00E1F713 /* CommonUtils.h */,
@@ -3492,7 +3505,9 @@
 				04B6F8AB19A25D5C00229393 /* ic_content_backspace.png in Resources */,
 				04B6F89C19A25D5C00229393 /* face13.png in Resources */,
 				04B6F85C199E6DDA00229393 /* 1星空.jpg in Resources */,
+				2E8321481CF1C4E600A86779 /* BannerViewController.xib in Resources */,
 				04B6F89519A25D5C00229393 /* face06.png in Resources */,
+				2E66061C1CEDFBA400711983 /* EventPreviewViewController.xib in Resources */,
 				F8C9CCA31C12C48A005E0A74 /* EnactiveAccountViewController.xib in Resources */,
 				04B6F8A219A25D5C00229393 /* face19.png in Resources */,
 				04B6F8A819A25D5C00229393 /* face25.png in Resources */,
@@ -3651,6 +3666,7 @@
 				0435EF4219B471AB003BB2F6 /* UserQRCodeViewController.m in Sources */,
 				51F4CB2519E6307500E487F1 /* HTTPRedirectResponse.m in Sources */,
 				F8B5DE021BFB83EA00E1F713 /* NotificationController.m in Sources */,
+				2E83214B1CF2DC6700A86779 /* MTTextInputView.m in Sources */,
 				04B6F86119A0ADB300229393 /* FriendRecommendationViewController.m in Sources */,
 				F82D60AB1C2A8BBF00B5AB1B /* PasswordSettingViewController.m in Sources */,
 				0435EF5119B49DA2003BB2F6 /* NotificationsViewController.m in Sources */,
@@ -4024,7 +4040,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",
@@ -4132,7 +4148,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
 				INFOPLIST_FILE = "Metic/WeShare-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Metic/Source/UMSocial_Sdk_4.0",

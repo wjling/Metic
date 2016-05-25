@@ -143,10 +143,10 @@ static MenuViewController *singletonInstance;
         _gender = [[UIImageView alloc]initWithFrame:CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20)];
         [self.UserInfoView addSubview:_gender];
     }
-    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 10, 20, 20, 20);
+    _gender.frame = CGRectMake(userNameLength+_userName.frame.origin.x + 10, 22.5f, 15, 15);
     if ([[MTUser sharedInstance].gender intValue] == 1) {
-        [self.gender setImage:[UIImage imageNamed:@"男icon"]];
-    }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"女icon"]];
+        [self.gender setImage:[UIImage imageNamed:@"gender_male"]];
+    }else if([[MTUser sharedInstance].gender intValue] == 0) [self.gender setImage:[UIImage imageNamed:@"gender_female"]];
     PhotoGetter *getter = [[PhotoGetter alloc]initWithData:self.img authorId:[MTUser sharedInstance].userid];
     [_tableView reloadData];
     MTLOG(@"menu Uid: %@",[MTUser sharedInstance].userid);
@@ -246,18 +246,13 @@ static MenuViewController *singletonInstance;
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    float val = 21.0/255.0;
+    float val = 0.0f/255.0;
     [cell setBackgroundColor:[UIColor colorWithRed:val green:val blue:val alpha:1.0f]];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [cell setBackgroundColor:[UIColor clearColor]];});
 }
 
-//-(void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    [cell setBackgroundColor:[UIColor clearColor]];
-//}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return numberOfMenus;
@@ -271,43 +266,39 @@ static MenuViewController *singletonInstance;
 		case 0:
             
 			((UILabel*)[cell viewWithTag:2]).text = @"我的活动";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标1"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_activity"]];
 			break;
 			
 		case 1:
 			((UILabel*)[cell viewWithTag:2]).text = @"收藏活动";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标2"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_collection"]];
 			break;
 			
         case 2:
 			((UILabel*)[cell viewWithTag:2]).text = @"活动广场";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标7"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_square"]];
 			break;
 
 		case 3:
 			((UILabel*)[cell viewWithTag:2]).text = @"好友中心";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标3"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_friends"]];
 			break;
         case 4:
 			((UILabel*)[cell viewWithTag:2]).text = @"消息中心";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标6"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_notification"]];
 			break;
         case 5:
 			((UILabel*)[cell viewWithTag:2]).text = @"扫一扫";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标8"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_scan"]];
 			break;
         case 6:
 			((UILabel*)[cell viewWithTag:2]).text = @"意见反馈";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标9"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_feedback"]];
 			break;
         case 7:
 			((UILabel*)[cell viewWithTag:2]).text = @"系统设置";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
+            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"slidebar_icon_settings"]];
 			break;
-        case 8:
-            ((UILabel*)[cell viewWithTag:2]).text = @"收藏活动";
-            [((UIImageView*)[cell viewWithTag:1]) setImage:[UIImage imageNamed:@"icon图标4"]];
-            break;
 	}
     
     UIImageView* dian = (UIImageView*)[cell viewWithTag:88];
@@ -316,10 +307,9 @@ static MenuViewController *singletonInstance;
         NSString* text = label.text;
         UIFont* font = label.font;
         CGSize sizeOfText = [text sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 25) lineBreakMode:NSLineBreakByWordWrapping];
-        dian = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"选择点图标.png"]];
+        dian = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"slidebar_icon_redpoint"]];
         dian.tag = 88;
-//        [dian setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"选择点图标.png"]]];
-        dian.frame = CGRectMake(label.frame.origin.x + sizeOfText.width + 5, label.frame.origin.y, 10, 10);
+        dian.frame = CGRectMake(label.frame.origin.x + sizeOfText.width + 4, label.frame.origin.y + 2, 10, 10);
         [cell addSubview:dian];
     }
     BOOL flag = [[notificationSigns_arr objectAtIndex:indexPath.row] boolValue];

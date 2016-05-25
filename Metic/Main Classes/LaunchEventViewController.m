@@ -300,11 +300,12 @@ static NSString * const defaultDetail = @"输入活动描述，让其他人更�
 {
     CGRect frame = _collectionView.frame;
     float count = _FriendsIds_array.count+1;
-    frame.size.height = ceilf(count/5)*70;
+    NSInteger numPerRow = CGRectGetWidth(self.collectionView.frame) / 50;
+    frame.size.height = ceilf(count/numPerRow)*70;
     _collectionView.frame = frame;
     
     frame = _InviteFriendsView.frame;
-    frame.size.height = ceilf(count/5)*70;
+    frame.size.height = ceilf(count/numPerRow)*70;
     _InviteFriendsView.frame = frame;
     
     if (CGRectGetMaxY(self.InviteFriendsView.frame) + 15 != _scrollView.contentSize.height) {

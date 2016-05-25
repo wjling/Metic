@@ -73,7 +73,7 @@
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [_tableView setBackgroundColor:[UIColor colorWithWhite:242.0/255.0 alpha:1.0]];
         [_tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        [_tableView setRowHeight:166];
+        [_tableView setRowHeight:38 + 120 * (kMainScreenWidth - 20) / 300 + 4];
         [_tableView setShowsVerticalScrollIndicator:NO];
         [self.view addSubview:_tableView];
         [self.view sendSubviewToBack:_tableView];
@@ -435,10 +435,10 @@
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
-        //[self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-        //[((SlideNavigationController*)self.navigationController) setBarAlpha:distance/400.0];
-        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
     }else{
         //self.shadowView.hidden = YES;
         //[self.view sendSubviewToBack:self.shadowView];

@@ -124,10 +124,10 @@
     }
     NSString* path = [MegUtils avatarImagePathWithUserId:self.avatarId];
     self.imageView.downloadId = self.avatarId;
+    [[SDImageCache sharedImageCache] removeImageForKey:path];
     [[MTOperation sharedInstance]getUrlFromServer:path success:^(NSString *url) {
         if (!self.avatarId || ![self.imageView.downloadId isEqualToNumber:self.avatarId])
             return ;
-        [[SDImageCache sharedImageCache] removeImageForKey:path];
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"默认用户头像"] cloudPath:path options:SDWebImageRetryFailed completed:completion];
     } failure:^(NSString *message) {
         if (!self.avatarId || ![self.imageView.downloadId isEqualToNumber:self.avatarId])

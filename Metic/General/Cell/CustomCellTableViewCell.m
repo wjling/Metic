@@ -45,34 +45,35 @@
 
 - (void)setFrame:(CGRect)frame
 {
-    //frame.origin.x += widthspace;
-    frame.origin.y += deepspace;
-    //frame.size.width -= 2 * widthspace;
-    frame.size.height -= 2 * deepspace;
     [super setFrame:frame];
-    
+//    //frame.origin.x += widthspace;
+//    frame.origin.y += deepspace;
+//    //frame.size.width -= 2 * widthspace;
+//    frame.size.height -= 2 * deepspace;
+//    [super setFrame:frame];
+//    
 }
 
 -(void)drawOfficialFlag:(BOOL)isOfficial
 {
     if (isOfficial) {
-        if (_officialFlag) {
-            [self addSubview:_officialFlag];
+        if (self.officialFlag) {
+            [self addSubview:self.officialFlag];
         }else{
-            float width = self.bounds.size.width;
-            _officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width*0.85, 0, width*0.08, width*0.8/9)];
-            _officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
-            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, width*0.08, width*0.08)];
+            float width = kMainScreenWidth;
+            self.officialFlag = [[UIImageView alloc]initWithFrame:CGRectMake(width - 48 - 20, 4, 25.6, 28.4)];
+            self.officialFlag.image = [UIImage imageNamed:@"flag.jpg"];
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 25.6, 28.4)];
             label.textAlignment = NSTextAlignmentCenter;
             label.text = @"官";
             label.font = [UIFont systemFontOfSize:15];
             label.textColor = [UIColor whiteColor];
-            [_officialFlag addSubview:label];
-            [self addSubview:_officialFlag];
+            [self.officialFlag addSubview:label];
+            [self addSubview:self.officialFlag];
         }
     }else{
-        if (_officialFlag) {
-            [_officialFlag removeFromSuperview];
+        if (self.officialFlag) {
+            [self.officialFlag removeFromSuperview];
         }
     }
 }

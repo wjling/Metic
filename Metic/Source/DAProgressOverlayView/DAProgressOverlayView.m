@@ -23,7 +23,7 @@ typedef enum {
 @end
 
 
-CGFloat const DAUpdateUIFrequency = 1. / 25.;
+CGFloat const MTUpdateUIFrequency = 1. / 25.;
 
 
 @implementation DAProgressOverlayView
@@ -66,14 +66,14 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
 {
     self.state = DAProgressOverlayViewStateOperationFinished;
     self.animationProggress = 0.;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:DAUpdateUIFrequency target:self selector:@selector(update) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:MTUpdateUIFrequency target:self selector:@selector(update) userInfo:nil repeats:YES];
 }
 
 - (void)displayOperationWillTriggerAnimation
 {
     self.state = DAProgressOverlayViewStateWaiting;
     self.animationProggress = 0.;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:DAUpdateUIFrequency target:self selector:@selector(update) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:MTUpdateUIFrequency target:self selector:@selector(update) userInfo:nil repeats:YES];
 }
 
 #pragma mark * Overwritten methods
@@ -160,7 +160,7 @@ CGFloat const DAUpdateUIFrequency = 1. / 25.;
 
 - (void)update
 {
-    CGFloat animationProggress = self.animationProggress + DAUpdateUIFrequency / self.stateChangeAnimationDuration;
+    CGFloat animationProggress = self.animationProggress + MTUpdateUIFrequency / self.stateChangeAnimationDuration;
     if (animationProggress >= 1.) {
         self.animationProggress = 1.;
         [self.timer invalidate];

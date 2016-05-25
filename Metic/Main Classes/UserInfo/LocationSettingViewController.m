@@ -96,7 +96,7 @@
     selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
     MTLOG(@"selected_city_array: %@",selected_city_array);
     [self.city_tableView reloadData];
-    CGPoint p = CGPointMake(320, 0);
+    CGPoint p = CGPointMake(kMainScreenWidth, 0);
     [self.content_scrollView setContentOffset:p animated:YES];
     navigationItem.title = @"请选择城市";
     [left_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -187,7 +187,7 @@
         selected_city_array = [[location_arr objectAtIndex:selected_province_index] objectForKey:@"cities"];
         MTLOG(@"selected_city_array: %@",selected_city_array);
         [self.city_tableView reloadData];
-        CGPoint p = CGPointMake(320, 0);
+        CGPoint p = CGPointMake(kMainScreenWidth, 0);
         [self.content_scrollView setContentOffset:p animated:YES];
         navigationItem.title = @"请选择城市";
         [left_barButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -249,7 +249,7 @@
         case NORMAL_REPLY:
         {
             MTLOG(@"所在地修改成功");
-            [SVProgressHUD dismissWithSuccess:@"地址修改成功" afterDelay:2];
+            [SVProgressHUD dismissWithSuccess:@"地址修改成功" afterDelay:1];
             [MTUser sharedInstance].location = newLocation;
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -258,7 +258,6 @@
         default:
             MTLOG(@"所在地修改失败");
             [SVProgressHUD dismissWithSuccess:@"地址修改失败" afterDelay:2];
-//            [CommonUtils showSimpleAlertViewWithTitle:@"系统提示" WithMessage:@"由于网络原因所在地修改失败" WithDelegate:self WithCancelTitle:@"O.O ||"];
             break;
     }
     

@@ -150,8 +150,10 @@ enum Response_Type
 {
     [super viewDidAppear:animated];
     [MobClick beginLogPageView:@"消息中心"];
-    self.content_scrollView.contentSize = CGSizeMake(320*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
-    self.tabbar_scrollview.contentSize = CGSizeMake(960, 40);
+//    self.content_scrollView.contentSize = CGSizeMake(kMainScreenWidth*self.tabs.count, self.content_scrollView.frame.size.height); //不设这个contentSize的话scrollRectToVisible方法无效
+    CGSize size = self.content_scrollView.contentSize;
+    size.height = 1;
+    self.tabbar_scrollview.contentSize = CGSizeMake(kMainScreenWidth, 40);
     [self.view bringSubviewToFront:_shadowView];
     _shadowView.hidden = NO;
     
@@ -354,7 +356,6 @@ enum Response_Type
 - (void)initParams
 {
     selectedPath = [[NSIndexPath alloc]init];
-    DB_path = [[NSString alloc]initWithFormat:@"%@/db",[MTUser sharedInstance].userid];
     num_tabs = 3;
     
     self.friendRequest_tableView.delegate = self;
@@ -363,7 +364,6 @@ enum Response_Type
     self.eventRequest_tableView.dataSource = self;
     self.systemMessage_tableView.delegate = self;
     self.systemMessage_tableView.dataSource = self;
-    
     
     [functions_uiview setHidden:YES];
     UIColor* color1 = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1];
@@ -379,7 +379,7 @@ enum Response_Type
     CGRect frame = self.tabbar_scrollview.frame;
     
     int x = 0;
-    CGFloat width = frame.size.width/3;
+    CGFloat width = kMainScreenWidth/3;
     int height = frame.size.height;
     UIButton* eventR_button = [[UIButton alloc]initWithFrame:CGRectMake(x, 0, width, height - 1)];
     UIButton* friendR_button = [[UIButton alloc]initWithFrame:CGRectMake(x+width, 0, width, height - 1)];
@@ -457,7 +457,7 @@ enum Response_Type
     tab_index = 0;
     clickTab = NO;
     
-    label0 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label0 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label0 setBackgroundColor:[UIColor clearColor]];
     label0.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label0.numberOfLines = 2;
@@ -465,7 +465,7 @@ enum Response_Type
     label0.textAlignment = NSTextAlignmentCenter;
     label0.font = [UIFont systemFontOfSize:13];
     
-    label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label1 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label1 setBackgroundColor:[UIColor clearColor]];
     label1.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label1.numberOfLines = 2;
@@ -473,7 +473,7 @@ enum Response_Type
     label1.textAlignment = NSTextAlignmentCenter;
     label1.font = [UIFont systemFontOfSize:13];
     
-    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, self.content_scrollView.frame.size.height/3, 320, 50)];
+    label2 = [[UILabel alloc]initWithFrame:CGRectMake(0, kMainScreenHeight/3, kMainScreenWidth, 50)];
     [label2 setBackgroundColor:[UIColor clearColor]];
     label2.text = @"暂时没有消息，\n多和好友互动才有消息来哦！";
     label2.numberOfLines = 2;
@@ -790,8 +790,6 @@ enum Response_Type
         [self.systemMessage_tableView reloadData];
         label2.hidden = NO;
     }
-//    [mySql closeMyDB];
-
 }
 
 - (void) refresh
@@ -805,7 +803,7 @@ enum Response_Type
     UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
     UIView* view = [tab viewWithTag:233];
     if (!view) {
-        UIImage* img = [UIImage imageNamed:@"选择点图标"];
+        UIImage* img = [UIImage imageNamed:@"slidebar_icon_redpoint"];
         UIImageView* dian = [[UIImageView alloc]initWithFrame:CGRectMake(tab.frame.size.width - 30, tab.frame.origin.y + 5, 18, 18)];
         dian.image = img;
         dian.tag = 233;
@@ -2245,9 +2243,12 @@ enum Response_Type
 {
     if (distance > 0) {
         self.shadowView.hidden = NO;
+        
         [self.view bringSubviewToFront:self.shadowView];
-        [self.shadowView setAlpha:distance/400.0];
-        self.navigationController.navigationBar.alpha = 1 - distance/400.0;
+        
+        [self.shadowView setAlpha:distance/(kMainScreenWidth * 1.2f)];
+        
+        self.navigationController.navigationBar.alpha = 1 - distance/(kMainScreenWidth * 1.2f);
     }else{
         self.shadowView.hidden = YES;
         [self.view sendSubviewToBack:self.shadowView];

@@ -14,8 +14,9 @@
 #import "ASIHTTPRequest.h"
 #import "VideoWallTableViewCell.h"
 #import "VideoWallViewController.h"
+#import "MTTextInputView.h"
 
-@interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate>{
+@interface VideoDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate,MJRefreshBaseViewDelegate,UITextViewDelegate,UIAlertViewDelegate,MTTextInputViewDelegate>{
     ASIHTTPRequest *videoRequest;
     unsigned long long Recordull;
     BOOL isReady;
@@ -33,11 +34,8 @@
 @property (weak, nonatomic) VideoWallViewController* controller;
 @property (nonatomic,strong) UIView* optionShadowView;
 @property (nonatomic,strong) UIView* commentOptionView;
-@property (strong, nonatomic) IBOutlet UIView *commentView;
-@property (strong, nonatomic) IBOutlet MTMessageTextView *inputTextView;
 @property (strong, nonatomic) IBOutlet UIButton *moreBtn;
-@property BOOL isKeyBoard;
-@property BOOL isEmotionOpen;
+@property (nonatomic, strong) MTTextInputView *textInputView;
 @property BOOL canManage;
 - (IBAction)publishComment:(id)sender;
 - (IBAction)button_Emotionpress:(id)sender;

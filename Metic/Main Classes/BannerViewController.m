@@ -15,7 +15,7 @@
 #import "MTOperation.h"
 
 @interface BannerViewController ()
-@property (nonatomic,strong)MRZoomScrollView* zoomScrollview;
+@property (nonatomic,strong) IBOutlet MRZoomScrollView* zoomScrollview;
 @end
 
 @implementation BannerViewController
@@ -43,8 +43,17 @@
     doubleTapRecognizer.numberOfTapsRequired=2;
     [tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
     [self.view addGestureRecognizer:doubleTapRecognizer];
+    _zoomScrollview.imageView.alpha = 0;
     
     // Do any additional setup after loading the view.
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [_zoomScrollview fitImageView];
+    [UIView animateWithDuration:0.3f animations:^{
+        _zoomScrollview.imageView.alpha = 1;
+    }];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -69,19 +78,18 @@
     _zoomScrollview.frame=self.view.bounds;
     [_zoomScrollview fitImageView];
     
-    
-    return;
-    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        _zoomScrollview.frame=self.view.bounds;
-        [_zoomScrollview fitImageView];
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation ==  UIInterfaceOrientationLandscapeRight) {
+        CGRect frame = self.customView.bounds;
+        frame.origin.x = (CGRectGetWidth(self.view.frame) - CGRectGetWidth(self.customView.bounds)) / 2;
+        frame.origin.y =(CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.customView.bounds)) * 0.95;
+        [self.customView setFrame:frame];
+    } else {
+        CGRect frame = self.customView.bounds;
+        frame.origin.x = (CGRectGetWidth(self.view.frame) - CGRectGetWidth(self.customView.bounds)) / 2;
+        frame.origin.y =(CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.customView.bounds)) * 0.9;
+        [self.customView setFrame:frame];
     }
-    else
-    {
-        _zoomScrollview.frame=self.view.bounds;
-        [_zoomScrollview fitImageView];
-    }
+
 }
 
 -(void)back{
@@ -94,11 +102,6 @@
 -(void)initIMG
 {
     if (_banner) {
-        if (!_zoomScrollview) {
-            _zoomScrollview = [[MRZoomScrollView alloc]initWithFrame:self.view.bounds];
-            [self.view addSubview:_zoomScrollview];
-            _zoomScrollview.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin |UIViewAutoresizingFlexibleRightMargin;
-        }
         
         _zoomScrollview.imageView.image = _banner;
         [_zoomScrollview fitImageView];
@@ -143,10 +146,10 @@
 - (void)setCustomView:(UIView *)customView {
     _customView = customView;
     if (customView) {
-        CGRect frame = customView.bounds;
-        frame.origin.x = (CGRectGetWidth(self.view.frame)- CGRectGetWidth(customView.bounds)) / 2;
-        frame.origin.y = CGRectGetHeight(self.view.frame) - CGRectGetHeight(customView.bounds) - 5;
-        [customView setFrame:frame];
+        CGRect frame = self.customView.bounds;
+        frame.origin.x = (CGRectGetWidth(self.view.frame) - CGRectGetWidth(self.customView.bounds)) / 2;
+        frame.origin.y =(CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.customView.bounds)) * 0.97;
+        [self.customView setFrame:frame];
         [self.view addSubview:customView];
         [customView setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin];
     }

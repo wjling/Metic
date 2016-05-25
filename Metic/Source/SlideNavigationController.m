@@ -60,10 +60,10 @@
 @synthesize enableSwipeGesture;
 
 #define PAN_EDGE_THRESHOLD 20
-#define MENU_OFFSET 60
+#define MENU_OFFSET (kMainScreenWidth * 0.1875f)
 #define MENU_SLIDE_ANIMATION_DURATION .3
 #define MENU_QUICK_SLIDE_ANIMATION_DURATION .1
-#define MENU_IMAGE @"头部左上角图标-侧边栏"
+#define MENU_IMAGE @"slide_icon"
 
 static SlideNavigationController *singletonInstance;
 
@@ -107,13 +107,7 @@ static SlideNavigationController *singletonInstance;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleUIApplicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
      if ([[[UIDevice currentDevice] systemVersion] floatValue] < 7.0) {
          [self.navigationBar setTintColor:[UIColor colorWithRed:86/255.0f green:202/255.0f  blue:171/255.0f alpha:1.0f]];
-     }else [self.navigationBar setTintColor:[UIColor whiteColor]];
-	self.view.layer.shadowColor = [UIColor darkGrayColor].CGColor;
-	self.view.layer.shadowRadius = 5;
-	self.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.bounds].CGPath;
-	self.view.layer.shadowOpacity = 1;
-	self.view.layer.shouldRasterize = YES;
-	self.view.layer.rasterizationScale = [UIScreen mainScreen].scale;
+     } else [self.navigationBar setTintColor:[UIColor whiteColor]];
 	self.navigationBar.backgroundColor = [UIColor blackColor];
     self.view.backgroundColor = [UIColor blackColor];
 	[self setEnableSwipeGesture:YES];
@@ -278,8 +272,8 @@ static SlideNavigationController *singletonInstance;
 - (UIBarButtonItem *)barButtonItemForMenu:(Menu)menu
 {
     if (!dian) {
-        dian = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
-        dian.image = [UIImage imageNamed:@"选择点图标"];
+        dian = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 8, 8)];
+        dian.image = [UIImage imageNamed:@"slidebar_icon_redpoint"];
         dian.tag = 111;
         
         NSString* key = [NSString stringWithFormat:@"USER%@",[MTUser sharedInstance].userid];
@@ -323,6 +317,8 @@ static SlideNavigationController *singletonInstance;
             UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [leftButton setFrame:CGRectMake(0, 0, 30, 30)];
             [leftButton setImage:image forState:UIControlStateNormal];
+            [leftButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+            [leftButton setContentMode:UIViewContentModeScaleAspectFit];
             [leftButton addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
             [dian removeFromSuperview];
             [leftButton addSubview:dian];
@@ -655,9 +651,6 @@ static SlideNavigationController *singletonInstance;
             
         }
     });
-    
-    
-    
 }
 
 #pragma mark - UIGestureRecognizer Delegate

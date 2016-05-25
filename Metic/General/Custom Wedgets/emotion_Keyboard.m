@@ -35,7 +35,7 @@
 
 -(id)initWithPoint:(CGPoint)point
 {
-    CGRect frame = CGRectMake(point.x, point.y, 320, 200);
+    CGRect frame = CGRectMake(point.x, point.y, kMainScreenWidth, 200);
     self = [super initWithFrame:frame];
     if (self) {
         [self initCollectionView];
@@ -54,7 +54,7 @@
     flowLayout.minimumInteritemSpacing = 0;
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    _emotionCollection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 320, 200) collectionViewLayout:flowLayout];
+    _emotionCollection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, kMainScreenWidth, 200) collectionViewLayout:flowLayout];
     
     _emotionCollection.delegate = self;
     _emotionCollection.dataSource = self;
