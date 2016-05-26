@@ -454,6 +454,8 @@
         return;
     }
     MRZoomScrollView* zoomScrollView = [[MRZoomScrollView alloc]init];
+    zoomScrollView.layer.borderColor = [UIColor redColor].CGColor;
+    zoomScrollView.layer.borderWidth = 1;
     zoomScrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleBottomMargin;
     float containerWidth = _scrollView.bounds.size.width;
     float containerHeight = _scrollView.bounds.size.height;

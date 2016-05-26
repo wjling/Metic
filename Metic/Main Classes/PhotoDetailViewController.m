@@ -476,12 +476,13 @@
     if (!_canManage) return;
     //进入编辑模式
     if (!self.specificationEditTextfield) {
+        [self.textInputView dismissKeyboard];
+        [self.textInputView removeKeyboardObserver];
         //图片浏览页停止滑动
         PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
         if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
             [browser setTableViewScrollEnabled:NO];
         }
-        [self hiddenCommentViewAndEmotionView];
         self.photoInfoView.descriptionLabel.hidden = YES;
 
         [self tabbarButtonEdit];
@@ -524,6 +525,8 @@
             self.specificationEditTextfield.hidden = NO;
         });
     } else {
+        [self.textInputView addKeyboardObserver];
+
         //图片浏览页恢复滑动
         PhotoBrowserViewController *browser = (PhotoBrowserViewController *)self.parentViewController;
         if (browser && [browser isKindOfClass:[PhotoBrowserViewController class]]) {
@@ -1323,6 +1326,11 @@
 #pragma mark - MTTextInputView delegate
 - (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
     [self publishComment:nil];
+}
+
+#pragma mark - ScrollView Delegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.textInputView dismissKeyboard];
 }
 
 @end

@@ -203,7 +203,7 @@
     textView.returnKeyType = UIReturnKeySend;
     textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
     if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-        textView.text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+        textView.text = [NSString stringWithFormat:@"我是%@,我想申请加入您的活动。",[MTUser sharedInstance].name];
     }else textView.placeHolder = @"请输入申请理由";
 
     textView.delegate = self;

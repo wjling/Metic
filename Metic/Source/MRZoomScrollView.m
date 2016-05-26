@@ -70,8 +70,8 @@
 -(void)fitImageView
 {
     [self zoomToNormal];
-    float containerWidth = MRScreenWidth;
-    float containerHeight = MRScreenHeight;
+    float containerWidth = self.frame.size.width;
+    float containerHeight = self.frame.size.height;
     [self setContentSize:CGSizeMake(containerWidth, containerHeight)];
     if (containerWidth/containerHeight < self.imageView.image.size.width / self.imageView.image.size.height) {
         float photoHeight = self.imageView.image.size.height*containerWidth/imageView.image.size.width;

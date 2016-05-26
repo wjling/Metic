@@ -413,7 +413,8 @@
     if (!_canManage) return;
     //进入编辑模式
     if (!self.specificationEditTextfield) {
-        [self hiddenCommentViewAndEmotionView];
+        [self.textInputView dismissKeyboard];
+        [self.textInputView removeKeyboardObserver];
         self.videoInfoView.descriptionLabel.hidden = YES;
         
         [self tabbarButtonEdit];
@@ -455,6 +456,7 @@
             self.specificationEditTextfield.hidden = NO;
         });
     } else {
+        [self.textInputView addKeyboardObserver];
         
         [self.specificationEditTextfield removeFromSuperview];
         [self.specificationEditTextfield resignFirstResponder];
@@ -1486,5 +1488,9 @@
     [self publishComment:nil];
 }
 
+#pragma mark - ScrollView Delegate
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.textInputView dismissKeyboard];
+}
 @end
 

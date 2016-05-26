@@ -856,7 +856,7 @@
             confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
             confirmAlert.tag = 244;
             if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-                [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+                [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@,我想申请加入您的活动。",[MTUser sharedInstance].name];
             }
             [confirmAlert show];
         }
