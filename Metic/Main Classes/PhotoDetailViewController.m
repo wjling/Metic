@@ -31,6 +31,7 @@
 #import "SocialSnsApi.h"
 #import "JGActionSheet.h"
 #import "KxMenu.h"
+#import "BOAlertController.h"
 
 @interface PhotoDetailViewController ()
 @property (nonatomic,strong)NSNumber *sequence;
@@ -48,7 +49,7 @@
 @property (strong, nonatomic) IBOutlet UIView *controlView;
 @property (nonatomic,strong) NSNumber* repliedId;
 @property (nonatomic,strong) NSString* herName;
-@property BOOL shouldExit;
+
 @property BOOL Footeropen;
 @property BOOL isLoading;
 @property long Selete_section;
@@ -126,7 +127,6 @@
 {
     self.sequence = @0;
     self.Footeropen = NO;
-    self.shouldExit = NO;
     self.isLoading = YES;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -190,12 +190,7 @@
                     break;
                 case PHOTO_NOT_EXIST:
                 {
-                    if (!_shouldExit) {
-                        _shouldExit = YES;
-                        [self deleteLocalData];
-                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                        [alert setTag:1];
-                    }
+                    [self photoNotExist];
                     break;
                 }
                 default:
@@ -249,12 +244,7 @@
                     break;
                 case PHOTO_NOT_EXIST:
                 {
-                    if (!_shouldExit) {
-                        _shouldExit = YES;
-                        [self deleteLocalData];
-                        UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                        [alert setTag:1];
-                    }
+                    [self photoNotExist];
                     break;
                 }
                 default:
@@ -298,12 +288,7 @@
     
     [[MTOperation sharedInstance] likeOperationWithType:MTMediaTypePhoto mediaId:self.photoId eventId:self.eventId like:!iszan finishBlock:^(BOOL isValid) {
         if (!isValid) {
-            if (!_shouldExit) {
-                _shouldExit = YES;
-                [self deleteLocalData];
-                UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                [alert setTag:1];
-            }
+            [self photoNotExist];
         }
     }];
     
@@ -471,7 +456,27 @@
                  menuItems:menuItems];
 }
 
--(void)editSpecification:(UIButton*)button
+- (void)photoNotExist {
+    
+    static NSString *photoName = nil;
+    NSString *curPhotoName = self.photoInfo[@"photo_name"];
+
+    if ([curPhotoName isEqualToString:photoName]) {
+        return;
+    }
+    photoName = curPhotoName;
+    [self deleteLocalData];
+    
+    BOAlertController *alertView = [[BOAlertController alloc] initWithTitle:@"系统消息" message:@"图片已删除" viewController:[SlideNavigationController sharedInstance]];
+    RIButtonItem *okItem = [RIButtonItem itemWithLabel:@"确定" action:^{
+        [[SlideNavigationController sharedInstance] popViewControllerAnimated:YES];
+    }];
+    [alertView addButton:okItem type:RIButtonItemType_Other];
+    [alertView show];
+    
+}
+
+- (void)editSpecification:(UIButton*)button
 {
     if (!_canManage) return;
     //进入编辑模式
@@ -607,12 +612,7 @@
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd integerValue] == PHOTO_NOT_EXIST) {
-                        if (!_shouldExit) {
-                            _shouldExit = YES;
-                            [self deleteLocalData];
-                            UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                            [alert setTag:1];
-                        }
+                        [self photoNotExist];
                         return;
                     }
                     if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {
@@ -757,12 +757,7 @@
                     NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
                     NSNumber *cmd = [response1 valueForKey:@"cmd"];
                     if ([cmd integerValue] == PHOTO_NOT_EXIST) {
-                        if (!_shouldExit) {
-                            _shouldExit = YES;
-                            [self deleteLocalData];
-                            UIAlertView *alert = [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"图片已删除" WithDelegate:self WithCancelTitle:@"确定"];
-                            [alert setTag:1];
-                        }
+                        [self photoNotExist];
                         return;
                     }
                     if ([cmd integerValue] == NORMAL_REPLY && [response1 valueForKey:@"pcomment_id"]) {

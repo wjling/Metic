@@ -26,6 +26,7 @@
 @property(nonatomic,strong) NSMutableArray* events;
 @property(nonatomic,strong) UIActivityIndicatorView* indicator;
 @property(nonatomic,strong) MJRefreshFooterView* footer;
+@property(nonatomic,strong) UILabel *emptyLabel;
 @property BOOL Footeropen;
 @property BOOL isFirst;
 @end
@@ -96,6 +97,24 @@
     _footer.scrollView = self.tableView;
 }
 
+- (void)showEmptyLabel:(BOOL)isShow {
+    if (isShow) {
+        if (!self.emptyLabel) {
+            self.emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
+            self.emptyLabel.center = CGPointMake(kMainScreenWidth/2, kMainScreenHeight/2 - 40);
+            self.emptyLabel.text = @"没有相关搜索结果";
+            self.emptyLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
+            self.emptyLabel.font = [UIFont systemFontOfSize:18];
+            self.emptyLabel.textAlignment = NSTextAlignmentCenter;
+            [self.view addSubview:self.emptyLabel];
+        }
+        self.emptyLabel.hidden = NO;
+        [self.view bringSubviewToFront:self.emptyLabel];
+    } else {
+        self.emptyLabel.hidden = YES;
+    }
+}
+
 -(void)search_eventIds
 {
     NSString* text = self.searchBar.text;
@@ -144,8 +163,9 @@
 
 -(void)get_events
 {
-    int restNum = MIN(20, _eventIds.count - _events.count);
+    NSInteger restNum = MIN(20, _eventIds.count - _events.count);
     if (restNum == 0){
+        [self showEmptyLabel:self.events.count == 0];
         [SVProgressHUD dismiss];
         [self closeRJ];
         return;
@@ -179,6 +199,7 @@
                     
                     [SVProgressHUD dismiss];
                     [_tableView reloadData];
+                    [self showEmptyLabel:self.events.count == 0];
                     [self closeRJ];
                 }
                     break;

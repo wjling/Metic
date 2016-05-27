@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *addContacts_button;
 @property (strong, nonatomic) IBOutlet UIView *hasUpload_view;
 @property (strong, nonatomic) IBOutlet UITableView *contacts_tableview;
+@property (strong, nonatomic) UILabel *emptyLabel;
 
 @property (strong, nonatomic) NSMutableArray* contacts_arr;
 @property (strong, nonatomic) NSMutableArray* contactFriends_arr;
@@ -146,6 +147,24 @@
     return tels;
 }
 
+- (void)showEmptyLabel:(BOOL)isShow {
+    if (isShow) {
+        if (!self.emptyLabel) {
+            self.emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
+            self.emptyLabel.center = CGPointMake(kMainScreenWidth/2, kMainScreenHeight/2 - 40);
+            self.emptyLabel.text = @"暂时无法找到通讯录好友";
+            self.emptyLabel.textColor = [UIColor colorWithWhite:0.5f alpha:1.0f];
+            self.emptyLabel.font = [UIFont systemFontOfSize:18];
+            self.emptyLabel.textAlignment = NSTextAlignmentCenter;
+            [self.view addSubview:self.emptyLabel];
+        }
+        self.emptyLabel.hidden = NO;
+        [self.view bringSubviewToFront:self.emptyLabel];
+    } else {
+        self.emptyLabel.hidden = YES;
+    }
+}
+
 -(void)addFriendBtnClicked:(UIButton*)sender
 {
     UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
@@ -198,6 +217,7 @@
             MTLOG(@"contact friend array: %@",contactFriends_arr);
             if (contactFriends_arr) {
                 [contacts_tableview reloadData];
+                [self showEmptyLabel:contactFriends_arr.count == 0];
             }
         }
         [SVProgressHUD dismiss];
@@ -327,6 +347,7 @@
                     {
                         contactFriends_arr = [response1 objectForKey:@"friend_recom"];
                         [contacts_tableview reloadData];
+                        [self showEmptyLabel:contactFriends_arr.count == 0];
                     }
                     
                 };
