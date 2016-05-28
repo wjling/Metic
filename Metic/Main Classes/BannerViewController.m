@@ -89,7 +89,6 @@
         frame.origin.y =(CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.customView.bounds)) * 0.9;
         [self.customView setFrame:frame];
     }
-
 }
 
 -(void)back{
@@ -97,6 +96,7 @@
 }
 
 -(void)doubleTap{
+    
 }
 
 -(void)initIMG

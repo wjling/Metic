@@ -14,6 +14,8 @@
     CGRect mFrame;
 }
 
+@property (nonatomic, strong) UIButton *finishBtn;
+
 @end
 
 @implementation FeedBackViewController
@@ -97,13 +99,15 @@
 }
 
 
-- (IBAction)confrim_button:(id)sender {
+- (IBAction)confrim_button:(UIButton *)sender {
+    self.finishBtn = sender;
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
     NSString* content = self.content_textView.text;
     if ([content isEqualToString:@""]) {
         [CommonUtils showSimpleAlertViewWithTitle:@"温馨提示" WithMessage:@"请输入你的宝贵意见" WithDelegate:self WithCancelTitle:@"OK"];
         return;
     }
+    sender.enabled = NO;
     NSString* contact = self.contact1_textField.text;
     
     NSString* message = [NSString stringWithFormat:@"%@\n\nContact: %@\nUID: %@\nUser Name: %@\n(FROM IOS CLIENT)",
@@ -134,6 +138,7 @@
 #pragma mark - HttpSenderDelegate
 -(void)finishWithReceivedData:(NSData*) rData
 {
+    self.finishBtn.enabled = YES;
     NSString* temp1 = [[NSString alloc]initWithData:rData encoding:NSUTF8StringEncoding];
     NSString* temp2 = [temp1 stringByReplacingOccurrencesOfString:@"'" withString:@"\""];
     rData = [temp2 dataUsingEncoding:NSUTF8StringEncoding];

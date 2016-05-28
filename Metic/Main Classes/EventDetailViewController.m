@@ -33,7 +33,6 @@
 #import "MTOperation.h"
 #import "MegUtils.h"
 #import "SocialSnsApi.h"
-#import "MTMessageTextView.h"
 //#import "ScanViewController.h"
 
 #define MainFontSize 14
@@ -51,7 +50,6 @@
 @property(nonatomic,strong) IBOutlet UIButton *shareBtn;
 @property(nonatomic,strong) NSString *eventShareLink;
 @property(nonatomic,weak) UIImageView *themeImageView;
-@property(nonatomic,strong) MTMessageTextView *inputTextView;
 
 @property BOOL visibility;
 @property BOOL isMine;
@@ -152,7 +150,7 @@
     [super viewWillDisappear:animated];
     [self.textInputView dismissKeyboard];
     [self.textInputView removeKeyboardObserver];
-
+    
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -236,69 +234,33 @@
 
 -(void)setupCommentView
 {
-    if (_commentView && _commentView.tag == 2) {
-        [_commentView removeFromSuperview];
-        _commentView = nil;
-    }else if (self.textInputView){
+    if (self.textInputView && self.textInputView.style == MTInputSytleApply) {
+        [self.textInputView removeKeyboardObserver];
+        [self.textInputView removeFromSuperview];
+        self.textInputView = nil;
+    }else if(_commentView && self.textInputView.style == MTInputSytleComment){
         return;
     }
     
-    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45)];
+    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45) style:MTInputSytleComment];
     self.textInputView.delegate = self;
     [self.view addSubview:self.textInputView];
 }
 
 -(void)setupApplyTextView
 {
-    if (self.textInputView) {
+    if (self.textInputView && self.textInputView.style == MTInputSytleComment) {
+        [self.textInputView removeKeyboardObserver];
         [self.textInputView removeFromSuperview];
         self.textInputView = nil;
-    }else if(_commentView && self.commentView.tag == 2){
+    }else if(_commentView && self.textInputView.style == MTInputSytleApply){
         return;
     }
-    //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
-    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    _commentView = commentV;
-    _commentView.tag = 2;
-    [commentV setBackgroundColor:[UIColor whiteColor]];
     
-    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setTag:520];
-    [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [sendBtn setFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 70, 5, 65, 35)];
-    [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
-    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
-    [sendBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f]] forState:UIControlStateNormal];
-    sendBtn.layer.cornerRadius = 3;
-    sendBtn.layer.masksToBounds = YES;
-    [sendBtn addTarget:self action:@selector(apply:) forControlEvents:UIControlEventTouchUpInside];
-    [commentV addSubview:sendBtn];
+    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45) style:MTInputSytleApply];
+    self.textInputView.delegate = self;
+    [self.view addSubview:self.textInputView];
     
-    [self.view addSubview:commentV];
-    
-    // 初始化输入框
-    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
-    _inputTextView = textView;
-    textView.font = [UIFont systemFontOfSize:16];
-    textView.textColor = [UIColor colorWithWhite:80.0/255.0 alpha:1.0f];
-    // 这个是仿微信的一个细节体验
-    textView.returnKeyType = UIReturnKeySend;
-    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
-    if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-        textView.text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
-    }else textView.placeHolder = @"请输入申请理由";
-    
-    textView.delegate = self;
-    
-    [commentV addSubview:textView];
-    
-    textView.frame = CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 80, 35);
-    textView.backgroundColor = [UIColor clearColor];
-    textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    textView.layer.borderWidth = 0.65f;
-    textView.layer.cornerRadius = 6.0f;
 }
 
 -(void)showMenu
@@ -634,27 +596,26 @@
 
 - (void)setupLikeState
 {
-//    if (_event) {
-//        if (![[_event valueForKey:@"isIn"] boolValue]) {
-//            _likeBtn.hidden = YES;
-//            return;
-//        }else{
-//            _likeBtn.hidden = NO;
-//        }
-//        BOOL islike = [[_event valueForKey:@"islike"] boolValue];
-//        if (islike) {
-//            [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
-//        }else{
-//            [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
-//        }
-//    }else {
-//        _likeBtn.hidden = YES;
-//    }
+    //    if (_event) {
+    //        if (![[_event valueForKey:@"isIn"] boolValue]) {
+    //            _likeBtn.hidden = YES;
+    //            return;
+    //        }else{
+    //            _likeBtn.hidden = NO;
+    //        }
+    //        BOOL islike = [[_event valueForKey:@"islike"] boolValue];
+    //        if (islike) {
+    //            [_likeBtn setImage:[UIImage imageNamed:@"favored"] forState:UIControlStateNormal];
+    //        }else{
+    //            [_likeBtn setImage:[UIImage imageNamed:@"favor"] forState:UIControlStateNormal];
+    //        }
+    //    }else {
+    //        _likeBtn.hidden = YES;
+    //    }
 }
 
 - (IBAction)share:(id)sender {
     [self.textInputView dismissKeyboard];
-    [self.inputTextView resignFirstResponder];
     void (^share)(NSString *shareLink) = ^(NSString *shareLink){
         NSString *user = [MTUser sharedInstance].name;
         if (!user || ![user isKindOfClass:[NSString class]]) {
@@ -771,7 +732,7 @@
             [CommonUtils showSimpleAlertViewWithTitle:@"信息" WithMessage:@"网络异常" WithDelegate:nil WithCancelTitle:@"确定"];
             return;
         }
-
+        
         NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
         NSNumber *cmd = [response1 valueForKey:@"cmd"];
         switch ([cmd intValue]) {
@@ -940,9 +901,9 @@
 
 - (IBAction)publishComment:(id)sender {
     NSString *comment = self.textInputView.text;
-
+    
     [self.textInputView clear];
-
+    
     if ([[comment stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
         return;
     }
@@ -1120,6 +1081,58 @@
         [self.navigationController pushViewController:eventEditVc animated:YES];
     }
 }
+
+-(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
+{
+    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 50, CGRectGetWidth(self.view.bounds), 50)];
+    label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    label.text = content;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = color;
+    label.font = [UIFont systemFontOfSize:16];
+    [self.view addSubview:label];
+    label.backgroundColor = [UIColor colorWithWhite:252.0/255.0 alpha:1.0];
+    label.layer.borderColor = [UIColor colorWithWhite:220.0/255.0 alpha:1.0].CGColor;
+    label.layer.borderWidth = 1;
+}
+
+-(void)apply:(id)sender
+{
+    if (sender) {
+        [sender setEnabled:NO];
+    }
+    NSString* confirmMsg = self.textInputView.text;
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
+    [dictionary setValue:[NSNumber numberWithInt:REQUEST_EVENT] forKey:@"cmd"];
+    [dictionary setValue:confirmMsg forKey:@"confirm_msg"];
+    [dictionary setValue:self.eventId forKey:@"event_id"];
+    if (self.shareId) {
+        [dictionary setValue:self.shareId forKey:@"share_id"];
+    }
+    MTLOG(@"%@",dictionary);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
+    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
+    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
+        [sender setEnabled:YES];
+        if (!rData) {
+            return ;
+        }
+        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
+        NSNumber *cmd = [response1 valueForKey:@"cmd"];
+        
+        switch ([cmd intValue]) {
+            case NORMAL_REPLY:
+            {
+                [self.textInputView clear];
+                [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
+                
+            }
+                break;
+        }
+    }];
+}
+
 
 -(void)changeBanner
 {
@@ -1336,7 +1349,7 @@
             //显示备注名
             alias1 = [MTOperation getAliasWithUserId:mainCom[@"author_id"] userName:mainCom[@"author"]];
             alias2 = [MTOperation getAliasWithUserId:mainCom[@"replied"] userName:mainCom[@"replier"]];
-
+            
             text = [NSString stringWithFormat:@"%@ 回复%@ : %@",alias1,alias2,text];
         }
         
@@ -1347,7 +1360,7 @@
         textView.lineBreakMode = NSLineBreakByCharWrapping;
         textView.isNeedAtAndPoundSign = YES;
         textView.emojiText = text;
-
+        
         cell.commentid = [mainCom valueForKey:@"comment_id"];
         cell.eventId = _eventId;
         cell.author = author;
@@ -1452,7 +1465,7 @@
             [cell.resend_Button setHidden:YES];
             [cell.publishTimeLabel setHidden:NO];
         }
-
+        
         UIView* shadow = [cell viewWithTag:100];
         [shadow setBackgroundColor:[CommonUtils colorWithValue:0xe7e7e7]];
         
@@ -1714,68 +1727,11 @@
 
 #pragma mark - MTTextInputView delegate
 - (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
-    [self publishComment:nil];
-}
-
-@end
-
-
-@interface EventDetailViewController(apply)
-
-@end
-
-@implementation EventDetailViewController (apply)
-
--(void)setupBottomLabel:(NSString*)content textColor:(UIColor*)color offset:(NSInteger)offset
-{
-    UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 50, CGRectGetWidth(self.view.bounds), 50)];
-    label.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    label.text = content;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = color;
-    label.font = [UIFont systemFontOfSize:16];
-    [self.view addSubview:label];
-    label.backgroundColor = [UIColor colorWithWhite:252.0/255.0 alpha:1.0];
-    label.layer.borderColor = [UIColor colorWithWhite:220.0/255.0 alpha:1.0].CGColor;
-    label.layer.borderWidth = 1;
-}
-
--(void)apply:(id)sender
-{
-    if (sender) {
-        [sender setEnabled:NO];
+    if (textInputView.style == MTInputSytleComment) {
+        [self publishComment:nil];
+    } else if (textInputView.style == MTInputSytleApply) {
+        [self apply:nil];
     }
-    NSString* confirmMsg = _inputTextView.text;
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
-    [dictionary setValue:[NSNumber numberWithInt:REQUEST_EVENT] forKey:@"cmd"];
-    [dictionary setValue:confirmMsg forKey:@"confirm_msg"];
-    [dictionary setValue:self.eventId forKey:@"event_id"];
-    if (self.shareId) {
-        [dictionary setValue:self.shareId forKey:@"share_id"];
-    }
-    MTLOG(@"%@",dictionary);
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:nil];
-    HttpSender *httpSender = [[HttpSender alloc]initWithDelegate:self];
-    [httpSender sendMessage:jsonData withOperationCode:PARTICIPATE_EVENT finshedBlock:^(NSData *rData) {
-        [sender setEnabled:YES];
-        if (!rData) {
-            return ;
-        }
-        NSDictionary *response1 = [NSJSONSerialization JSONObjectWithData:rData options:NSJSONReadingMutableLeaves error:nil];
-        NSNumber *cmd = [response1 valueForKey:@"cmd"];
-        
-        switch ([cmd intValue]) {
-            case NORMAL_REPLY:
-            {
-                [_inputTextView resignFirstResponder];
-                [_inputTextView removeFromSuperview];
-                [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
-                
-            }
-                break;
-        }
-    }];
 }
 
 @end

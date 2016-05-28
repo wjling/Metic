@@ -414,7 +414,9 @@ static NSOperationQueue *requestQueue;
             [self.mDelegate finishWithReceivedData:responseObject];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        if ([self.mDelegate respondsToSelector:@selector(finishWithReceivedData:)]) {
+            [self.mDelegate finishWithReceivedData:nil];
+        }
     }];
     [requestQueue addOperation:requestOperation];
 }

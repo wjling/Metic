@@ -279,7 +279,7 @@
             UIAlertView* confirmAlert = [[UIAlertView alloc]initWithTitle:@"系统消息" message:@"请输入申请加入信息：" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
             confirmAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
             if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-                [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
+                [confirmAlert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@,我想申请加入您的活动。",[MTUser sharedInstance].name];
             }
             [confirmAlert show];
         }else{
@@ -359,7 +359,6 @@
         }
         [confirmAlert show];
     }
-
 }
 
 - (void)toEventDetail:(NSNumber*)eventId

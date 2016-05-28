@@ -73,7 +73,6 @@
             [alert textFieldAtIndex:0].text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
         }
         
-        
         void (^block)(NSInteger) = ^(NSInteger buttonIndex){
             if(buttonIndex == 0){
                 

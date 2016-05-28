@@ -15,21 +15,19 @@
 #import "MTDatabaseHelper.h"
 #import "MTOperation.h"
 #import "MegUtils.h"
-#import "MTMessageTextView.h"
+#import "MTTextInputView.h"
 
 #define MainFontSize 14
 
 
-@interface EventPreviewViewController ()<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,UIScrollViewDelegate>
+@interface EventPreviewViewController ()<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,UIScrollViewDelegate,MTTextInputViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property(nonatomic,strong) UIView* commentView;
-@property(nonatomic,strong) UITextView* inputTextView;
+@property (nonatomic, strong) MTTextInputView *textInputView;
 @property(nonatomic,strong) NSArray* bestPhotos;
 @property(nonatomic,strong) NSNumber* visibility;
 @property(nonatomic,strong) NSNumber* eventId;
 @property BOOL shouldShowPhoto;
-@property BOOL isKeyBoard;
 
 @end
 
@@ -45,17 +43,13 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textChangedExt:) name:UITextViewTextDidChangeNotification object:nil];
+    [self.textInputView addKeyboardObserver];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [self.textInputView dismissKeyboard];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,7 +86,6 @@
 
 - (void)initData
 {
-    _isKeyBoard = NO;
     _eventId = [_eventInfo valueForKey:@"event_id"];
     _visibility = [_eventInfo valueForKey:@"visibility"];
     if (_visibility && [_visibility boolValue] && [[Reachability reachabilityForInternetConnection] currentReachabilityStatus]!= 0) {
@@ -173,48 +166,14 @@
 
 -(void)setupApplyTextView
 {
-    //初始化评论框
-    UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
-    commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    _commentView = commentV;
-    [commentV setBackgroundColor:[UIColor whiteColor]];
+    if (self.textInputView && self.textInputView.style == MTInputSytleApply) {
+        return;
+    }
     
-    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setTag:520];
-    [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
-    [sendBtn setFrame:CGRectMake(kMainScreenWidth - 70, 5, 65, 35)];
-    [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
-    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
-    [sendBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f]] forState:UIControlStateNormal];
-    sendBtn.layer.cornerRadius = 3;
-    sendBtn.layer.masksToBounds = YES;
-    [sendBtn addTarget:self action:@selector(apply:) forControlEvents:UIControlEventTouchUpInside];
-    [commentV addSubview:sendBtn];
-    
-    [self.view addSubview:commentV];
-    
-    // 初始化输入框
-    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
-    _inputTextView = textView;
-    textView.font = [UIFont systemFontOfSize:16];
-    textView.textColor = [UIColor colorWithWhite:80.0/255.0 alpha:1.0f];
-    // 这个是仿微信的一个细节体验
-    textView.returnKeyType = UIReturnKeySend;
-    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
-    if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
-        textView.text = [NSString stringWithFormat:@"我是%@",[MTUser sharedInstance].name];
-    }else textView.placeHolder = @"请输入申请理由";
-
-    textView.delegate = self;
-    
-    [commentV addSubview:textView];
-    
-    textView.frame = CGRectMake(5, 5, kMainScreenWidth - 80, 35);
-    textView.backgroundColor = [UIColor clearColor];
-    textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    textView.layer.borderWidth = 0.65f;
-    textView.layer.cornerRadius = 6.0f;
+    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45) style:MTInputSytleApply];
+    self.textInputView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+    self.textInputView.delegate = self;
+    [self.view addSubview:self.textInputView];
 
 }
 
@@ -223,7 +182,6 @@
     //初始化评论框
     UIView *commentV = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height - 45, self.view.frame.size.width,45)];
     commentV.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    _commentView = commentV;
     [commentV setBackgroundColor:[UIColor whiteColor]];
     
     UIButton *ignoreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -423,7 +381,7 @@
     if (sender) {
         [sender setEnabled:NO];
     }
-    NSString* confirmMsg = _inputTextView.text;
+    NSString* confirmMsg = self.textInputView.text;
     
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[MTUser sharedInstance].userid forKey:@"id"];
@@ -449,12 +407,12 @@
         switch ([cmd intValue]) {
             case NORMAL_REPLY:
             {
-                if (_isKeyBoard) {
-                    [_inputTextView resignFirstResponder];
-                }
-                [_inputTextView removeFromSuperview];
-                [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
+                [self.textInputView dismissKeyboard];
+                [self.textInputView removeFromSuperview];
+                [self.textInputView removeKeyboardObserver];
+                self.textInputView = nil;
                 
+                [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
             }
                 break;
             default:{
@@ -562,87 +520,18 @@
     }
 }
 
-#pragma mark - keyboard observer method
-//Code from Brett Schumann
--(void) keyboardWillShow:(NSNotification *)note{
-    self.isKeyBoard = YES;
-    // get keyboard size and loctaion
-    CGRect keyboardBounds;
-    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
-    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    // Need to translate the bounds to account for rotation.
-    keyboardBounds = [self.view convertRect:keyboardBounds toView:nil];
-    
-    // get a rect for the textView frame
-    CGRect containerFrame = self.commentView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height - (keyboardBounds.size.height + containerFrame.size.height);
-    // animations settings
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve intValue]];
-    
-    // set views with new info
-    self.commentView.frame = containerFrame;
-    
-    
-    // commit animations
-    [UIView commitAnimations];
-    
-}
-
--(void) keyboardWillHide:(NSNotification *)note{
-    self.isKeyBoard = NO;
-    NSNumber *duration = [note.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSNumber *curve = [note.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey];
-    
-    // get a rect for the textView frame
-    CGRect containerFrame = self.commentView.frame;
-    containerFrame.origin.y = self.view.bounds.size.height - containerFrame.size.height;
-    
-    // animations settings
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:[duration doubleValue]];
-    [UIView setAnimationCurve:[curve intValue]];
-    
-    // set views with new info
-    self.commentView.frame = containerFrame;
-    // commit animations
-    [UIView commitAnimations];
-}
-
-#pragma mark - TextView view delegate
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if ([text isEqualToString:@"\n"]) {
-        [self apply:[_commentView viewWithTag:520]];
-        return NO;
-    }
-    return YES;
-}
-
--(void)textChangedExt:(NSNotification *)notification
-{
-    CGRect frame = _inputTextView.frame;
-    float change = _inputTextView.contentSize.height - frame.size.height;
-    if (change != 0 && _inputTextView.contentSize.height < 90) {
-        frame.size.height = _inputTextView.contentSize.height;
-        [_inputTextView setFrame:frame];
-        frame = _commentView.frame;
-        frame.origin.y -= change;
-        frame.size.height += change;
-        [_commentView setFrame:frame];
-    }
-}
-
 #pragma mark - Scroll view delegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    if (_isKeyBoard) {
-        [self.inputTextView resignFirstResponder];
+    [self.textInputView dismissKeyboard];
+}
+
+#pragma mark - MTTextInputView delegate
+- (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
+    if (textInputView.style == MTInputSytleApply) {
+        [self apply:nil];
     }
 }
+
 
 @end
