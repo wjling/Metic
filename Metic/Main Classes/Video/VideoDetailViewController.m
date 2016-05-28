@@ -122,8 +122,9 @@
         self.tableView.bounds = self.view.bounds;
         return;
     }
-    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45)];
+    self.textInputView = [[MTTextInputView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - 45, kMainScreenWidth, 45) style:MTInputSytleComment];
     self.textInputView.delegate = self;
+    self.textInputView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     [self.view addSubview:self.textInputView];
 }
 
