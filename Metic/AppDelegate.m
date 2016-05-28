@@ -23,9 +23,6 @@
 #import "MTPushMessageHandler.h"
 #import "MTEvent.h"
 
-#import <ShareSDK/ShareSDK.h>
-#import <ShareSDKConnector/ShareSDKConnector.h>
-
 //腾讯开放平台（对应QQ和QQ空间）SDK头文件
 #import <TencentOpenAPI/TencentOAuth.h>
 #import <TencentOpenAPI/QQApiInterface.h>
@@ -109,7 +106,7 @@
     [self initUmeng];
     
     // 初始化ShareSDK
-    [self initShareSDK];
+//    [self initShareSDK];
     
     //初始化ShareSDK SMS
     [self initShareSDKSMS];
@@ -1150,58 +1147,58 @@ supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     
 }
 
-#pragma mark - shareSDK Init
-- (void)initShareSDK
-{
-    [ShareSDK registerApp:@"ce2c74fa5630"
-     
-          activePlatforms:@[
-                            @(SSDKPlatformTypeSinaWeibo),
-                            @(SSDKPlatformTypeWechat),
-                            @(SSDKPlatformTypeQQ),]
-                 onImport:^(SSDKPlatformType platformType)
-     {
-         switch (platformType)
-         {
-             case SSDKPlatformTypeWechat:
-                 [ShareSDKConnector connectWeChat:[WXApi class]];
-                 break;
-             case SSDKPlatformTypeQQ:
-                 [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
-                 break;
-             case SSDKPlatformTypeSinaWeibo:
-                 [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-                 break;
-             default:
-                 break;
-         }
-     }
-          onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
-     {
-         
-         switch (platformType)
-         {
-             case SSDKPlatformTypeSinaWeibo:
-                 //设置新浪微博应用信息,其中authType设置为使用SSO＋Web形式授权
-                 [appInfo SSDKSetupSinaWeiboByAppKey:@"1312051023"
-                                           appSecret:@"6f39d1c54b182992680b4949a0c00c87"
-                                         redirectUri:@"http://www.sina.com"
-                                            authType:SSDKAuthTypeBoth];
-                 break;
-             case SSDKPlatformTypeWechat:
-                 [appInfo SSDKSetupWeChatByAppId:@"wx6f7ea17b99ab01e7"
-                                       appSecret:@"975f26374a1ade1290b1d4dfa767ed1f"];
-                 break;
-             case SSDKPlatformTypeQQ:
-                 [appInfo SSDKSetupQQByAppId:@"1102021463"
-                                      appKey:@"9KXHG6HqBWrjonAd"
-                                    authType:SSDKAuthTypeBoth];
-                 break;
-             default:
-                 break;
-         }
-     }];
-}
+//#pragma mark - shareSDK Init
+//- (void)initShareSDK
+//{
+//    [ShareSDK registerApp:@"ce2c74fa5630"
+//     
+//          activePlatforms:@[
+//                            @(SSDKPlatformTypeSinaWeibo),
+//                            @(SSDKPlatformTypeWechat),
+//                            @(SSDKPlatformTypeQQ),]
+//                 onImport:^(SSDKPlatformType platformType)
+//     {
+//         switch (platformType)
+//         {
+//             case SSDKPlatformTypeWechat:
+//                 [ShareSDKConnector connectWeChat:[WXApi class]];
+//                 break;
+//             case SSDKPlatformTypeQQ:
+//                 [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
+//                 break;
+//             case SSDKPlatformTypeSinaWeibo:
+//                 [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }
+//          onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
+//     {
+//         
+//         switch (platformType)
+//         {
+//             case SSDKPlatformTypeSinaWeibo:
+//                 //设置新浪微博应用信息,其中authType设置为使用SSO＋Web形式授权
+//                 [appInfo SSDKSetupSinaWeiboByAppKey:@"1312051023"
+//                                           appSecret:@"6f39d1c54b182992680b4949a0c00c87"
+//                                         redirectUri:@"http://www.sina.com"
+//                                            authType:SSDKAuthTypeBoth];
+//                 break;
+//             case SSDKPlatformTypeWechat:
+//                 [appInfo SSDKSetupWeChatByAppId:@"wx6f7ea17b99ab01e7"
+//                                       appSecret:@"975f26374a1ade1290b1d4dfa767ed1f"];
+//                 break;
+//             case SSDKPlatformTypeQQ:
+//                 [appInfo SSDKSetupQQByAppId:@"1102021463"
+//                                      appKey:@"9KXHG6HqBWrjonAd"
+//                                    authType:SSDKAuthTypeBoth];
+//                 break;
+//             default:
+//                 break;
+//         }
+//     }];
+//}
 
 #pragma mark - shareSDK SMS Init
 - (void)initShareSDKSMS {

@@ -15,7 +15,7 @@
 #import "LocationSettingViewController.h"
 #import "SignSetttingViewController.h"
 #import "SingleSelectionAlertView.h"
-#import <ShareSDK/ShareSDK.h>
+#import "MTThridAccount.h"
 
 @interface FillinInfoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PECropViewControllerDelegate,SingleSelectionAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *info_tableview;
@@ -26,7 +26,7 @@
 @property (strong, nonatomic) NSNumber *gender;
 @property (strong, nonatomic) NSString* location;
 @property (strong, nonatomic) NSString* sign;
-@property (strong, nonatomic) SSDKUser *ssUser;
+@property (strong, nonatomic) MTThridAccount *thirdAccount;
 
 - (IBAction)okBtnClicked:(id)sender;
 @end

@@ -16,9 +16,9 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "MTAccountManager.h"
 #import "SVProgressHUD.h"
-#import <ShareSDK/ShareSDK.h>
-#import <ShareSDKConnector/ShareSDKConnector.h>
 #import "SocialSnsApi.h"
+#import "MTThridAccount.h"
+#import "WeiboUser.h"
 
 @interface LoginViewController ()
 {
@@ -123,16 +123,17 @@
     [self performSegueWithIdentifier:@"LoginToRegister" sender:self];
 }
 
--(void)jumpToFillinInfo:(SSDKUser *)user
+-(void)jumpToFillinInfo:(MTThridAccount *)thirdAccount
 {
-    if (![user isKindOfClass:[SSDKUser class]]) {
-        user = nil;
+    if (![thirdAccount isKindOfClass:[MTThridAccount class]]) {
+        thirdAccount = nil;
     }
     UIStoryboard* mainStoryBoard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     FillinInfoViewController *vc = [mainStoryBoard instantiateViewControllerWithIdentifier:@"FillinInfoViewController"];
-    vc.gender = user.gender == SSDKGenderMale? @1:@0;
-    vc.name = user.nickname;
-    vc.ssUser = user;
+    
+    vc.gender = thirdAccount.gender;
+    vc.name = thirdAccount.nickname;
+    vc.thirdAccount = thirdAccount;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -357,19 +358,26 @@
 }
 
 - (IBAction)QQLogin:(id)sender {
-
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [ShareSDK getUserInfo:SSDKPlatformTypeQQ
-           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
-     {
-         if (state == SSDKResponseStateSuccess) {
-             user.icon = user.rawData[@"figureurl_qq_2"];
-             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeQQ];
-         } else {
-             NSLog(@"%@",error);
-             [SVProgressHUD dismissWithError:@"第三方登录失败"];
-         }
-     }];
+    
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToQQ];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            
+            NSDictionary *dict = [UMSocialAccountManager socialAccountDictionary];
+            UMSocialAccountEntity *snsAccount = [dict valueForKey:UMShareToQQ];
+            
+            MTThridAccount *account = [[MTThridAccount alloc] init];
+            account.openID = snsAccount.usid;
+            account.gender = [response.thirdPlatformUserProfile[@"gender"] isEqualToString:@"男"]? @1:@0;
+            account.iconUrl = snsAccount.iconURL;
+            account.nickname = snsAccount.userName;
+            
+            [self thirdPartyLoginWithOpenId:account type:MTAccountTypeQQ];
+            
+        }
+    });
 }
 
 - (IBAction)WeiXinLogin:(id)sender {
@@ -379,38 +387,52 @@
         return;
     }
     
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [ShareSDK getUserInfo:SSDKPlatformTypeWechat
-           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
-     {
-         if (state == SSDKResponseStateSuccess) {
-             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeWeChat];
-         } else {
-             NSLog(@"%@",error);
-             [SVProgressHUD dismissWithError:@"第三方登录失败"];
-         }
-     }];
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToWechatSession];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            
+            NSDictionary *dict = [UMSocialAccountManager socialAccountDictionary];
+            UMSocialAccountEntity *snsAccount = [dict valueForKey:UMShareToWechatSession];
+            
+            MTThridAccount *account = [[MTThridAccount alloc] init];
+            account.openID = snsAccount.usid;
+            account.gender = [response.thirdPlatformUserProfile[@"sex"] isEqual: @1]? @1:@0;
+            account.iconUrl = snsAccount.iconURL;
+            account.nickname = snsAccount.userName;
+            
+            [self thirdPartyLoginWithOpenId:account type:MTAccountTypeWeChat];
+        }
+    });
 }
 
 - (IBAction)WeiBoLogin:(id)sender {
     
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [ShareSDK getUserInfo:SSDKPlatformTypeSinaWeibo
-           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
-     {
-         if (state == SSDKResponseStateSuccess) {
-             [self thirdPartyLoginWithOpenId:user type:MTAccountTypeWeiBo];
-         } else {
-             NSLog(@"%@",error);
-             [SVProgressHUD dismissWithError:@"第三方登录失败"];
-         }
-     }];
+    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:UMShareToSina];
+    
+    snsPlatform.loginClickHandler(self,[UMSocialControllerService defaultControllerService],YES,^(UMSocialResponseEntity *response){
+        if (response.responseCode == UMSResponseCodeSuccess) {
+            
+            NSDictionary *dict = [UMSocialAccountManager socialAccountDictionary];
+            UMSocialAccountEntity *snsAccount = [dict valueForKey:UMShareToSina];
+            
+            MTThridAccount *account = [[MTThridAccount alloc] init];
+            account.openID = snsAccount.usid;
+            account.iconUrl = snsAccount.iconURL;
+            account.nickname = snsAccount.userName;
+            WeiboUser *user = response.thirdPlatformUserProfile;
+            account.gender = [user.gender isEqualToString:@"m"]? @1:@0;
+            
+            [self thirdPartyLoginWithOpenId:account type:MTAccountTypeWeiBo];
+        }
+    });
 }
 
 #pragma mark - Login
-- (void)thirdPartyLoginWithOpenId:(SSDKUser *)ssUser type:(enum MTAccountType)type {
+- (void)thirdPartyLoginWithOpenId:(MTThridAccount *)thirdAccount type:(enum MTAccountType)type {
     [SVProgressHUD showWithStatus:@"正在登录，请稍候" maskType:SVProgressHUDMaskTypeBlack];
-    NSString *openId = ssUser.uid;
+    NSString *openId = thirdAccount.openID;
     [MTAccountManager thirdPartyLoginWithOpenId:openId type:type success:^(MTLoginResponse *user) {
         MTLOG(@"login succeeded");
         ((AppDelegate*)([UIApplication sharedApplication].delegate)).isLogined = YES;
@@ -442,7 +464,7 @@
         [SVProgressHUD dismissWithSuccess:@"登录成功" afterDelay:1.f];
         
         if (!hadCompleteInfo) {
-            [self jumpToFillinInfo:ssUser];
+            [self jumpToFillinInfo:thirdAccount];
         } else {
             [self jumpToMainView];
         }
