@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, MTInputSytle) {
+    MTInputSytleComment,
+    MTInputSytleApply,
+};
+
 @class MTTextInputView;
 
 @protocol MTTextInputViewDelegate <NSObject>
@@ -21,9 +26,13 @@
 
 @property (nonatomic, weak) id<MTTextInputViewDelegate> delegate;
 
+@property (nonatomic) MTInputSytle style;
+
 @property (nonatomic, strong) NSString *placeHolder;
 
 @property (nonatomic, strong) NSString *text;
+
+- (instancetype)initWithFrame:(CGRect)frame style:(MTInputSytle)style;
 
 - (void)openKeyboard;
 

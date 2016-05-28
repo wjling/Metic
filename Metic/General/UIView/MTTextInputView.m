@@ -9,6 +9,8 @@
 #import "MTTextInputView.h"
 #import "MTMessageTextView.h"
 #import "emotion_Keyboard.h"
+#import "CommonUtils.h"
+#import "MTUser.h"
 
 @interface MTTextInputView()<UITextViewDelegate>
 @property (strong, nonatomic) UIButton *emotionBtn;
@@ -28,11 +30,15 @@
 @synthesize isKeyBoardOpen;
 @synthesize textViewHeight;
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame style:(MTInputSytle)style {
     self = [super initWithFrame:frame];
     if (self) {
+        self.style = style;
         [self setupData];
         [self setupView];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self textChangedExt:nil];
+        });
         [self addKeyboardObserver];
     }
     
@@ -52,44 +58,84 @@
 
 - (void)setupView {
     
-    [self setBackgroundColor:[UIColor whiteColor]];
-    self.autoresizesSubviews = YES;
-    [self setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
+    if (self.style == MTInputSytleComment) {
     
-    UIButton *emotionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [emotionBtn setFrame:CGRectMake(0, 0, 35, textViewHeight)];
-    [emotionBtn setImage:[UIImage imageNamed:@"button_emotion"] forState:UIControlStateNormal];
-    [emotionBtn addTarget:self action:@selector(button_Emotionpress:) forControlEvents:UIControlEventTouchUpInside];
-    self.emotionBtn = emotionBtn;
-    
-    UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [sendBtn setFrame:CGRectMake(kMainScreenWidth - 38, 5, 35, 35)];
-    [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
-    [sendBtn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-    self.sendBtn = sendBtn;
-    
-    // 初始化输入框
-    MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
-    
-    // 这个是仿微信的一个细节体验
-    textView.returnKeyType = UIReturnKeySend;
-    textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
-    textView.placeHolder = @"发送新消息";
-    textView.delegate = self;
-    
-    textView.frame = CGRectMake(38, 5, kMainScreenWidth - 80, 35);
-    textView.backgroundColor = [UIColor clearColor];
-    textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    textView.layer.borderWidth = 0.65f;
-    textView.layer.cornerRadius = 6.0f;
-    self.inputTextView = textView;
+        [self setBackgroundColor:[UIColor whiteColor]];
+        self.autoresizesSubviews = YES;
+        [self setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
+        
+        UIButton *emotionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [emotionBtn setFrame:CGRectMake(0, 0, 35, textViewHeight)];
+        [emotionBtn setImage:[UIImage imageNamed:@"button_emotion"] forState:UIControlStateNormal];
+        [emotionBtn addTarget:self action:@selector(button_Emotionpress:) forControlEvents:UIControlEventTouchUpInside];
+        self.emotionBtn = emotionBtn;
+        
+        UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sendBtn setFrame:CGRectMake(kMainScreenWidth - 38, 5, 35, 35)];
+        [sendBtn setImage:[UIImage imageNamed:@"输入框"] forState:UIControlStateNormal];
+        [sendBtn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
+        self.sendBtn = sendBtn;
+        
+        // 初始化输入框
+        MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
+        
+        // 这个是仿微信的一个细节体验
+        textView.returnKeyType = UIReturnKeySend;
+        textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
+        textView.placeHolder = @"发送新消息";
+        textView.delegate = self;
+        
+        textView.frame = CGRectMake(38, 5, kMainScreenWidth - 80, 35);
+        textView.backgroundColor = [UIColor clearColor];
+        textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        textView.layer.borderWidth = 0.65f;
+        textView.layer.cornerRadius = 6.0f;
+        self.inputTextView = textView;
 
-    
-    //初始化表情面板
-    emotion_Keyboard * emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, 45, kMainScreenWidth,200)];
-//    [emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
-    emotionKeyboard.textView = self.inputTextView;
-    self.emotionKeyboard = emotionKeyboard;
+        //初始化表情面板
+        emotion_Keyboard * emotionKeyboard = [[emotion_Keyboard alloc]initWithFrame:CGRectMake(0, 45, kMainScreenWidth,200)];
+    //    [emotionKeyboard setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin];
+        emotionKeyboard.textView = self.inputTextView;
+        self.emotionKeyboard = emotionKeyboard;
+    } else if (self.style == MTInputSytleApply) {
+        [self setBackgroundColor:[UIColor whiteColor]];
+        UIButton *sendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sendBtn addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
+        [sendBtn setTag:520];
+        [sendBtn setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin];
+        [sendBtn setFrame:CGRectMake(kMainScreenWidth - 70, 5, 65, 35)];
+        [sendBtn setTitle:@"申请加入" forState:UIControlStateNormal];
+        [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [sendBtn.titleLabel setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14]];
+        [sendBtn setBackgroundImage:[CommonUtils createImageWithColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f]] forState:UIControlStateNormal];
+        sendBtn.layer.cornerRadius = 3;
+        sendBtn.layer.masksToBounds = YES;
+        self.sendBtn = sendBtn;
+        [self addSubview:sendBtn];
+        
+        // 初始化输入框
+        MTMessageTextView *textView = [[MTMessageTextView  alloc] initWithFrame:CGRectZero];
+        textView.frame = CGRectMake(38, 5, kMainScreenWidth - 80, 35);
+        textView.font = [UIFont systemFontOfSize:16];
+        textView.textColor = [UIColor colorWithWhite:80.0/255.0 alpha:1.0f];
+        // 这个是仿微信的一个细节体验
+        textView.returnKeyType = UIReturnKeySend;
+        textView.enablesReturnKeyAutomatically = YES; // UITextView内部判断send按钮是否可以用
+        if ([MTUser sharedInstance].name && ![[MTUser sharedInstance].name isEqual:[NSNull null]]) {
+            textView.text = [NSString stringWithFormat:@"我是%@,我想申请加入您的活动。",[MTUser sharedInstance].name];
+        }else textView.placeHolder = @"请输入申请理由";
+        
+        textView.delegate = self;
+        
+        [self addSubview:textView];
+        
+        textView.frame = CGRectMake(5, 5, kMainScreenWidth - 80, 35);
+        textView.backgroundColor = [UIColor clearColor];
+        textView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        textView.layer.borderWidth = 0.65f;
+        textView.layer.cornerRadius = 6.0f;
+        self.inputTextView = textView;
+    }
 }
 
 - (void)addKeyboardObserver {
