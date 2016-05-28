@@ -8,7 +8,8 @@
 
 #import "MTAccount.h"
 #import "FXKeychain.h"
-#import <ShareSDK/ShareSDK.h>
+#import "UMSocialDataService.h"
+#import "UMSocialSnsPlatformManager.h"
 
 #pragma mark KeyChain Configuration
 static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
@@ -99,9 +100,19 @@ static NSString * const MTACCOUNT_KEYCHAIN = @"MTAccount20151202";
     
     [[FXKeychain defaultKeychain] removeObjectForKey:MTACCOUNT_KEYCHAIN];
     
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeSinaWeibo];
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeWechat];
-    [ShareSDK cancelAuthorize:SSDKPlatformTypeQQ];
+    [[UMSocialDataService defaultDataService] requestUnOauthWithType:UMShareToSina  completion:^(UMSocialResponseEntity *response){
+//        NSLog(@"response is %@",response);
+    }];
+    
+    [[UMSocialDataService defaultDataService] requestUnOauthWithType:UMShareToWechatSession  completion:^(UMSocialResponseEntity *response){
+//        NSLog(@"response is %@",response);
+    }];
+
+    
+    [[UMSocialDataService defaultDataService] requestUnOauthWithType:UMShareToQQ  completion:^(UMSocialResponseEntity *response){
+//        NSLog(@"response is %@",response);
+    }];
+
 }
 
 @end

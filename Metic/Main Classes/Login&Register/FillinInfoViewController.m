@@ -100,10 +100,10 @@
 }
 
 - (void)preLoadingUserInfo{
-    if (self.ssUser) {
+    if (self.thirdAccount) {
         //修改用户名
         [SVProgressHUD showWithStatus:@"正在加载..." maskType:SVProgressHUDMaskTypeBlack];
-        NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",self.ssUser.nickname,@"name",nil  ];
+        NSDictionary* json = [CommonUtils packParamsInDictionary:[MTUser sharedInstance].userid,@"id",self.thirdAccount.nickname,@"name",nil  ];
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:nil];
         HttpSender* http = [[HttpSender alloc]initWithDelegate:self];
         [http sendMessage:jsonData withOperationCode:CHANGE_SETTINGS finshedBlock:^(NSData *rData) {
@@ -115,9 +115,9 @@
                 switch ([cmd integerValue]) {
                     case NORMAL_REPLY:
                     {
-                        [MTUser sharedInstance].name = self.ssUser.nickname;
+                        [MTUser sharedInstance].name = self.thirdAccount.nickname;
                         [[MenuViewController sharedInstance] refresh];
-                        self.name = self.ssUser.nickname;
+                        self.name = self.thirdAccount.nickname;
                         [self.info_tableview reloadData];
                         MTLOG(@"昵称修改成功");
                     }
@@ -130,7 +130,7 @@
         }];
         
         //设置性别
-        NSNumber *ssGender = self.ssUser.gender == SSDKGenderMale? @1:@0;
+        NSNumber *ssGender = self.thirdAccount.gender;
         NSDictionary* dict = [CommonUtils packParamsInDictionary:ssGender,@"gender",[MTUser sharedInstance].userid,@"id",
                               nil];
         MTLOG(@"gender modify json: %@",dict);
@@ -160,7 +160,7 @@
             }
         }];
         //上传图片
-        NSString *iconURL = self.ssUser.icon;
+        NSString *iconURL = self.thirdAccount.iconUrl;
         [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:iconURL] options:SDWebImageHighPriority progress:^(NSInteger receivedSize, NSInteger expectedSize) {
             //
         } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
