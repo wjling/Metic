@@ -834,9 +834,7 @@
 //        UITextPosition* pos = [[UITextPosition alloc]init];
 //        [textField selectAll:textField];
     }
-    MTLOG(@"yayyayayayayyayayyayayayyy");
 }
-
 
 #pragma mark - Navigation
 
