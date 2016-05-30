@@ -84,7 +84,11 @@ enum Response_Type
     
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [KxMenu dismissMenu];
 
+}
 
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -92,6 +96,7 @@ enum Response_Type
     [MobClick endLogPageView:@"消息中心"];
     MTLOG(@"消息中心viewdidDisappear");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pull_message" object:nil];
+    
 }
 //返回上一层
 -(void)MTpopViewController{

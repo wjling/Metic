@@ -150,7 +150,7 @@
     [super viewWillDisappear:animated];
     [self.textInputView dismissKeyboard];
     [self.textInputView removeKeyboardObserver];
-    
+    [KxMenu dismissMenu];
 }
 -(void)viewDidDisappear:(BOOL)animated
 {

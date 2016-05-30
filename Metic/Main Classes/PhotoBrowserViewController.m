@@ -60,7 +60,6 @@
     [super viewDidAppear:animated];
     [self showPhotoInIndex:self.showIndex];
 
-    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([self.navigationController.viewControllers.lastObject isEqual:self]) {
             [self swipeViewDidEndDecelerating:self.swipeView];
