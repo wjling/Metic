@@ -188,7 +188,7 @@
     self.tableView.dataSource = self;
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.textInputView.placeHolder = @"回复楼主";
-    [self.view bringSubviewToFront:self.commentView];
+    
     [self.view bringSubviewToFront:self.emotionKeyboard];
     [self pullEventFromDB];
     [self pullMainCommentFromAir];
@@ -238,7 +238,7 @@
         [self.textInputView removeKeyboardObserver];
         [self.textInputView removeFromSuperview];
         self.textInputView = nil;
-    }else if(_commentView && self.textInputView.style == MTInputSytleComment){
+    }else if(self.textInputView && self.textInputView.style == MTInputSytleComment){
         return;
     }
     
@@ -254,7 +254,7 @@
         [self.textInputView removeKeyboardObserver];
         [self.textInputView removeFromSuperview];
         self.textInputView = nil;
-    }else if(_commentView && self.textInputView.style == MTInputSytleApply){
+    }else if(self.textInputView && self.textInputView.style == MTInputSytleApply){
         return;
     }
     

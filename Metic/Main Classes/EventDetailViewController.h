@@ -25,7 +25,7 @@
 @property (strong,nonatomic) MJRefreshHeaderView *header;
 @property (strong,nonatomic) MJRefreshFooterView *footer;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) UIView *commentView;
+//@property (strong, nonatomic) UIView *commentView;
 @property (nonatomic,strong) NSNumber *master_sequence;
 @property (nonatomic, strong) MTTextInputView *textInputView;
 @property (nonatomic,strong) NSMutableDictionary *event;

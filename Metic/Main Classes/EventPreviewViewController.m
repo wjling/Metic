@@ -408,9 +408,9 @@
             case NORMAL_REPLY:
             {
                 [self.textInputView dismissKeyboard];
-                [self.textInputView removeFromSuperview];
                 [self.textInputView removeKeyboardObserver];
-                self.textInputView = nil;
+                [self.textInputView removeFromSuperview];
+//                self.textInputView = nil;
                 
                 [self setupBottomLabel:@"已申请加入" textColor:[UIColor colorWithRed:85.0/255 green:203.0/255 blue:171.0/255 alpha:1.0f] offset:0];
             }
