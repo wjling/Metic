@@ -48,6 +48,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    friendQRcode = [CommonUtils convertViewToImage:mainView];
     [MobClick beginLogPageView:@"好友二维码"];
 }
 
@@ -107,7 +108,6 @@
     QRcode_imageview.image = [QRCodeGenerator qrImageForString:QRCODE_STRING imageSize:1000];
 //    QRcode_imageview.image = [QREncoder encode:QRCODE_STRING];
     [QRcode_imageview layer].magnificationFilter = kCAFilterNearest;
-    friendQRcode = [CommonUtils convertViewToImage:mainView];
 }
 
 

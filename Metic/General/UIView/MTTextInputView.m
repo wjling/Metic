@@ -265,7 +265,7 @@
 {
     CGRect frame = self.inputTextView.frame;
     float change = self.inputTextView.contentSize.height - frame.size.height;
-    if (change != 0 && self.inputTextView.contentSize.height < 120) {
+    if (change != 0 && self.inputTextView.contentSize.height < 120 && (textViewHeight + change >= 45)) {
         frame.size.height = self.inputTextView.contentSize.height;
         [self.inputTextView setFrame:frame];
         

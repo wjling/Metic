@@ -40,6 +40,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    self.event2Dcode = [CommonUtils convertViewToImage:self.mainView];
     [MobClick beginLogPageView:@"活动二维码"];
 }
 
@@ -89,8 +90,8 @@
     _TwodCode.image = [QRCodeGenerator qrImageForString:QRCODE_STRING imageSize:1000];
 //    _TwodCode.image = [QREncoder encode:QRCODE_STRING];
     [_TwodCode layer].magnificationFilter = kCAFilterNearest;
-    _event2Dcode = [CommonUtils convertViewToImage:_mainView];
 }
+
 - (IBAction)shareQRcode:(id)sender {
     if (_event2Dcode) {
 

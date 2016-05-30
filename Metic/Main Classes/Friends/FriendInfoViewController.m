@@ -89,6 +89,9 @@
     {
         [self.navigationItem setTitle:@"好友信息"];
         self.navigationItem.rightBarButtonItem = nil;
+    } else if ([[MTUser sharedInstance].userid isEqualToNumber:fid]){
+        [self.navigationItem setTitle:@"个人信息"];
+        self.navigationItem.rightBarButtonItem = nil;
     }
     else
     {
@@ -831,9 +834,7 @@
 //        UITextPosition* pos = [[UITextPosition alloc]init];
 //        [textField selectAll:textField];
     }
-    MTLOG(@"yayyayayayayyayayyayayayyy");
 }
-
 
 #pragma mark - Navigation
 
