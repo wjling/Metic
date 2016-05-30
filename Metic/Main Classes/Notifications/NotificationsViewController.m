@@ -799,12 +799,12 @@ enum Response_Type
 
 -(void)showDian:(NSInteger)indexOfTab
 {
-    MTLOG(@"显示tab红点： %d", indexOfTab);
+    MTLOG(@"显示tab红点： %ld", (long)indexOfTab);
     UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
     UIView* view = [tab viewWithTag:233];
     if (!view) {
         UIImage* img = [UIImage imageNamed:@"slidebar_icon_redpoint"];
-        UIImageView* dian = [[UIImageView alloc]initWithFrame:CGRectMake(tab.frame.size.width - 30, tab.frame.origin.y + 5, 18, 18)];
+        UIImageView* dian = [[UIImageView alloc]initWithFrame:CGRectMake(tab.frame.size.width - 27, tab.frame.origin.y + 8, 12, 12)];
         dian.image = img;
         dian.tag = 233;
         [tab addSubview:dian];
@@ -813,7 +813,7 @@ enum Response_Type
 
 -(void)hideDian:(NSInteger)indexOfTab
 {
-    MTLOG(@"隐藏tab红点： %d", indexOfTab);
+    MTLOG(@"隐藏tab红点： %ld", (long)indexOfTab);
     UIButton* tab = [self.tabs objectAtIndex:indexOfTab];
     UIImageView* dian = (UIImageView*)[tab viewWithTag:233];
     if (dian) {
