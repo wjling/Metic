@@ -91,6 +91,8 @@
     
     [self.textInputView dismissKeyboard];
     [self.textInputView removeKeyboardObserver];
+    
+    [KxMenu dismissMenu];
 }
 
 - (void)didReceiveMemoryWarning
