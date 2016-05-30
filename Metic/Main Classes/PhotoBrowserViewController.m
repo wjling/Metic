@@ -14,6 +14,7 @@
 #import "CommonUtils.h"
 #import "SwipeView.h"
 #import "SVProgressHUD.h"
+#import "KxMenu.h"
 
 @interface PhotoBrowserViewController () <SwipeViewDataSource, SwipeViewDelegate, UMSocialUIDelegate>
 
@@ -67,6 +68,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationItem.rightBarButtonItem = nil;
+    [KxMenu dismissMenu];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
