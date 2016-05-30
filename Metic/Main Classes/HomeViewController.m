@@ -28,8 +28,6 @@
 
 @interface HomeViewController ()
 
-
-
 @property (strong, nonatomic) IBOutlet UILabel *updateInfoNumLabel;
 @property (nonatomic,strong) NSMutableDictionary* updateEventStatus;
 @property (nonatomic,strong) NSMutableArray* atMeEvents;
@@ -42,9 +40,6 @@
 @property BOOL hasTurntoSquare;
 @property BOOL firstAppear;
 @end
-
-
-
 
 @implementation HomeViewController
 @synthesize listenerDelegate;
@@ -126,6 +121,10 @@
     [MTPushMessageHandler sharedInstance].notificationDelegate = self;
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -161,6 +160,7 @@
 {
     [super viewDidDisappear:animated];
     [MobClick endLogPageView:@"活动主页"];
+    [self closeOptionView:nil];
 }
 
 //返回上一层
@@ -684,6 +684,10 @@
 -(void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
     //[self.tableView reloadData];
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self closeOptionView:nil];
 }
 
 
