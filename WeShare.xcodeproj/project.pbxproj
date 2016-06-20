@@ -2453,6 +2453,7 @@
 		F810B7A81B00B03200843AAB /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				F810B7B01B0107A200843AAB /* EventEdit */,
 				085E7A0B19828AAA001E99E4 /* DynamicViewController.h */,
 				085E7A0C19828AAA001E99E4 /* DynamicViewController.m */,
 				51581D5E19335A8700943606 /* HomeViewController.h */,
@@ -2462,7 +2463,6 @@
 				F836148E1ADB6A0F004CDEA1 /* EventPreviewViewController.h */,
 				F836148F1ADB6A0F004CDEA1 /* EventPreviewViewController.m */,
 				2E66061B1CEDFBA400711983 /* EventPreviewViewController.xib */,
-				F810B7B01B0107A200843AAB /* EventEdit */,
 			);
 			name = Event;
 			sourceTree = "<group>";
