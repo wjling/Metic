@@ -836,8 +836,8 @@
 }
 
 - (void)clearCommentView {
-    [self.textInputView clear];
     self.textInputView.placeHolder = @"说点什么吧";
+    self.textInputView.text = @"";
     self.herName = @"";
     self.repliedId = nil;
 }
@@ -1324,6 +1324,10 @@
 #pragma mark - MTTextInputView delegate
 - (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
     [self publishComment:nil];
+}
+
+-(void)textInputViewDidDismissKeyboard {
+    [self clearCommentView];
 }
 
 #pragma mark - ScrollView Delegate

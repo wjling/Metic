@@ -181,6 +181,10 @@
     self.inputTextView.placeHolder = placeHolder;
 }
 
+- (void)setText:(NSString *)text {
+    self.inputTextView.text = text;
+}
+
 - (NSString *)text {
     return self.inputTextView.text;
 }
@@ -196,9 +200,14 @@
         [self.inputTextView resignFirstResponder];
         done = YES;
     }
+    
     if (isEmotionOpen) {
         [self button_Emotionpress:nil];
         done = YES;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(textInputViewDidDismissKeyboard)]) {
+        [self.delegate textInputViewDidDismissKeyboard];
     }
     return done;
 }

@@ -16,9 +16,12 @@ typedef NS_ENUM(NSUInteger, MTInputSytle) {
 @class MTTextInputView;
 
 @protocol MTTextInputViewDelegate <NSObject>
+@optional
+- (void)textInputViewDidDismissKeyboard;
 
 @required
 - (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message;
+
 
 @end
 
