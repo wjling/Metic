@@ -33,7 +33,6 @@
 #import "SocialSnsApi.h"
 #import "KxMenu.h"
 
-#define chooseArray @[@[@"举报视频"]]
 @interface VideoDetailViewController ()<UMSocialUIDelegate>
 @property (nonatomic,strong) MTMPMoviePlayerViewController* movie;
 @property (nonatomic,strong) MTMPMoviePlayerViewController *playerViewController;
@@ -1029,8 +1028,8 @@
 }
 
 - (void)clearCommentView {
-    [self.textInputView clear];
     self.textInputView.placeHolder = @"说点什么吧";
+    self.textInputView.text = @"";
     self.herName = @"";
     self.repliedId = nil;
 }
@@ -1489,6 +1488,10 @@
 #pragma mark - MTTextInputView delegate
 - (void)textInputView:(MTTextInputView *)textInputView sendMessage:(NSString *)message {
     [self publishComment:nil];
+}
+
+-(void)textInputViewDidDismissKeyboard {
+    [self clearCommentView];
 }
 
 #pragma mark - ScrollView Delegate

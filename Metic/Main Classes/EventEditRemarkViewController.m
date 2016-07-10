@@ -190,7 +190,6 @@ const float keyboardleft = 0;
 -(void)textViewDidChangeSelection:(UITextView *)textView
 {
     [self observeValueForKeyPath:@"contentSize" ofObject:_textView change:nil context:nil];
-    MTLOG(@"sdfadf");
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -242,6 +241,10 @@ const float keyboardleft = 0;
         CGRect cursorPosition = [view caretRectForPosition:view.selectedTextRange.start];
         
         // 光标相对顶层视图（scrollView）frame的坐标高度
+        
+        if (CGRectIsEmpty(cursorPosition)) {
+            return;
+        }
         
         CGFloat height = cursorPosition.origin.y + view.frame.origin.y - _scrollView.contentOffset.y;
         
